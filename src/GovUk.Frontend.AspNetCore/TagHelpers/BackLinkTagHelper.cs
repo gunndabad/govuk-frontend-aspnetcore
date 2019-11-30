@@ -21,7 +21,8 @@ namespace GovUk.AspNetCore.TagHelpers
 
             await base.ProcessAsync(context, output);
 
-            if (output.Content.IsEmptyOrWhiteSpace)
+            var childContent = await output.GetChildContentAsync();
+            if (childContent.IsEmptyOrWhiteSpace)
             {
                 output.Content.Append("Back");
             }

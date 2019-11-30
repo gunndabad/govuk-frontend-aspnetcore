@@ -30,6 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("My custom link content");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
             output.Content.SetContent("My custom link content");
