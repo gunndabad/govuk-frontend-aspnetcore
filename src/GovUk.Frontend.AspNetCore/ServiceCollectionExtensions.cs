@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -6,6 +7,8 @@ namespace GovUk.Frontend.AspNetCore
     {
         public static IServiceCollection AddGovUkFrontend(this IServiceCollection services)
         {
+            services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
+
             return services;
         }
     }
