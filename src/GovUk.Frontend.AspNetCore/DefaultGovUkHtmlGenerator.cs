@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -90,6 +91,38 @@ namespace GovUk.Frontend.AspNetCore
             var tagBuilder = new TagBuilder("span");
             tagBuilder.AddCssClass("govuk-hint");
             tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
+        public TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content)
+        {
+            if (tag == null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-phase-banner");
+
+            var contentTagBuilder = new TagBuilder("p");
+            contentTagBuilder.AddCssClass("govuk-phase-banner__content");
+
+            var tagTagBuilder = GenerateTag(new StringHtmlContent(tag));
+            tagTagBuilder.AddCssClass("govuk-phase-banner__content__tag");
+            contentTagBuilder.InnerHtml.AppendHtml(tagTagBuilder);
+
+            var textTagBuilder = new TagBuilder("span");
+            textTagBuilder.AddCssClass("govuk-phase-banner__text");
+            textTagBuilder.InnerHtml.AppendHtml(content);
+            contentTagBuilder.InnerHtml.AppendHtml(textTagBuilder);
+
+            tagBuilder.InnerHtml.AppendHtml(contentTagBuilder);
 
             return tagBuilder;
         }

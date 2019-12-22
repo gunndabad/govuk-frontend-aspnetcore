@@ -20,6 +20,8 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateHint(IHtmlContent content);
 
+        TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
+
         TagBuilder GenerateTag(IHtmlContent content);
     }
 }
