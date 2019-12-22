@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -16,9 +14,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IdAttibuteName = "id";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
         
-        private readonly IHtmlGenerator _htmlGenerator;
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        public ErrorMessageTagHelper(IHtmlGenerator htmlGenerator)
+        public ErrorMessageTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
             _htmlGenerator = htmlGenerator;
         }
@@ -45,38 +43,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"Cannot specify both content and the '{AspForAttributeName}' attribute.");
             }
 
-            IHtmlContent content;
-            if (AspFor != null)
-            {
-                var validationMessage = _htmlGenerator.GenerateValidationMessage(
-                    ViewContext,
-                    AspFor.ModelExplorer,
-                    AspFor.Name,
-                    message: null,
-                    tag: null,
-                    htmlAttributes: null);
-                content = validationMessage.InnerHtml;
-            }
-            else
-            {
-                content = childContent;
-            }
+            var visuallyHiddenText = VisuallyHiddenText ?? "Error";
+
+            var tagBuilder = AspFor != null ?
+                _htmlGenerator.GenerateErrorMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name, Id, visuallyHiddenText) :
+                _htmlGenerator.GenerateErrorMessage(Id, visuallyHiddenText, childContent);
 
             output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("govuk-error-message", HtmlEncoder.Default);
 
-            if (!string.IsNullOrEmpty(Id))
-            {
-                output.Attributes.Add("id", Id);
-            }
-
-            var vht = new TagBuilder("span");
-            vht.AddCssClass("govuk-visually-hidden");
-            vht.InnerHtml.Append(!string.IsNullOrEmpty(VisuallyHiddenText) ? VisuallyHiddenText : "Error");
-            output.Content.AppendHtml(vht);
-
-            output.Content.AppendHtml(content);
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
     }
 }
