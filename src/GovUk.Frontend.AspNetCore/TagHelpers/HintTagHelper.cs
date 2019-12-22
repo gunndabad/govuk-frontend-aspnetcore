@@ -1,4 +1,4 @@
-﻿using System.Text.Encodings.Web;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -8,14 +8,24 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-hint", TagStructure = TagStructure.Unspecified)]
     public class HintTagHelper : TagHelper
     {
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
+
+        public HintTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+        }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "span";
-            output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("govuk-hint", HtmlEncoder.Default);
-
             var childContent = await output.GetChildContentAsync();
-            output.Content.AppendHtml(childContent);
+
+            var tagBuilder = _htmlGenerator.GenerateHint(childContent);
+
+            output.TagName = tagBuilder.TagName;
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
     }
 }

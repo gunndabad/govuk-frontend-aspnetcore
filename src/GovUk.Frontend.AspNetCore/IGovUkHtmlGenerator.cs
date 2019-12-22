@@ -18,6 +18,8 @@ namespace GovUk.Frontend.AspNetCore
             string visuallyHiddenText,
             IHtmlContent content);
 
+        TagBuilder GenerateHint(IHtmlContent content);
+
         TagBuilder GenerateTag(IHtmlContent content);
     }
 }

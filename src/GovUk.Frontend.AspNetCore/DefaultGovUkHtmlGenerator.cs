@@ -80,6 +80,20 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public TagBuilder GenerateHint(IHtmlContent content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("span");
+            tagBuilder.AddCssClass("govuk-hint");
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateTag(IHtmlContent content)
         {
             if (content == null)
