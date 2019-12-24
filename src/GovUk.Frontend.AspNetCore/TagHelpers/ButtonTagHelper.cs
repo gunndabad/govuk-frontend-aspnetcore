@@ -12,46 +12,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public enum ButtonTagHelperElementType { Anchor, Button }
 
     [HtmlTargetElement("govuk-button")]
-    public class ButtonTagHelper : TagHelper
+    public class ButtonTagHelper : LinkTagHelperBase
     {
         private const string DisabledAttributeName = "disabled";
         private const string ElementAttributeName = "element";
-        private const string HrefAttributeName = "href";
         private const string IsStartButtonAttributeName = "is-start-button";
         private const string NameAttributeName = "name";
         private const string PreventDoubleClickAttributeName = "prevent-double-click";
         private const string TypeAttributeName = "type";
         private const string ValueAttributeName = "value";
 
-        // Duplicate attributes for anchor tag pass through
-        private const string ActionAttributeName = "asp-action";
-        private const string ControllerAttributeName = "asp-controller";
-        private const string AreaAttributeName = "asp-area";
-        private const string PageAttributeName = "asp-page";
-        private const string PageHandlerAttributeName = "asp-page-handler";
-        private const string FragmentAttributeName = "asp-fragment";
-        private const string HostAttributeName = "asp-host";
-        private const string ProtocolAttributeName = "asp-protocol";
-        private const string RouteAttributeName = "asp-route";
-        private const string RouteValuesDictionaryName = "asp-all-route-data";
-        private const string RouteValuesPrefix = "asp-route-";
-        private IDictionary<string, string> _routeValues;
-
-        private readonly IHtmlGenerator _htmlGenerator;
-
         public ButtonTagHelper(IHtmlGenerator htmlGenerator)
+            : base(htmlGenerator)
         {
-            _htmlGenerator = htmlGenerator;
         }
-
-        [HtmlAttributeName(ActionAttributeName)]
-        public string Action { get; set; }
-
-        [HtmlAttributeName(AreaAttributeName)]
-        public string Area { get; set; }
-
-        [HtmlAttributeName(ControllerAttributeName)]
-        public string Controller { get; set; }
 
         [HtmlAttributeName(DisabledAttributeName)]
         public bool Disabled { get; set; } = false;
@@ -59,63 +33,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(ElementAttributeName)]
         public ButtonTagHelperElementType? Element { get; set; }
 
-        [HtmlAttributeName(FragmentAttributeName)]
-        public string Fragment { get; set; }
-
-        [HtmlAttributeName(HostAttributeName)]
-        public string Host { get; set; }
-
-        [HtmlAttributeName(HrefAttributeName)]
-        public string Href { get; set; }
-
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = false;
 
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
 
-        [HtmlAttributeName(PageAttributeName)]
-        public string Page { get; set; }
-
-        [HtmlAttributeName(PageHandlerAttributeName)]
-        public string PageHandler { get; set; }
-
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
         public bool PreventDoubleClick { get; set; } = false;
-
-        [HtmlAttributeName(ProtocolAttributeName)]
-        public string Protocol { get; set; }
-
-        [HtmlAttributeName(RouteAttributeName)]
-        public string Route { get; set; }
-
-        [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
-        public IDictionary<string, string> RouteValues
-        {
-            get
-            {
-                if (_routeValues == null)
-                {
-                    _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                }
-
-                return _routeValues;
-            }
-            set
-            {
-                _routeValues = value;
-            }
-        }
 
         [HtmlAttributeName(TypeAttributeName)]
         public string Type { get; set; }  // TODO Make this an enum?
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
-
-        [HtmlAttributeNotBound]
-        [ViewContext]
-        public ViewContext ViewContext { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -129,7 +60,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Protocol != null ||
                 Host != null ||
                 Fragment != null ||
-                (_routeValues != null && _routeValues.Count > 0);
+                RouteValues.Count > 0;
 
             string element = GetTagNameFromElementType(
                 Element ??
@@ -157,7 +88,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             output.TagName = element;
-            output.TagMode = TagMode.SelfClosing;
+            output.TagMode = TagMode.StartTagAndEndTag;
 
             output.AddClass("govuk-button", HtmlEncoder.Default);
 
@@ -199,30 +130,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (element == "a")
             {
-                output.TagMode = TagMode.StartTagAndEndTag;
+                var anchorTagBuilder = CreateAnchorTagBuilder();
 
-                if (Href != null)
-                {
-                    output.Attributes.Add("href", Href);
-                }
-
-                var anchorTagHelper = new AnchorTagHelper(_htmlGenerator)
-                {
-                    Action = Action,
-                    Area = Area,
-                    Controller = Controller,
-                    Fragment = Fragment,
-                    Host = Host,
-                    Page = Page,
-                    PageHandler = PageHandler,
-                    Protocol = Protocol,
-                    Route = Route,
-                    RouteValues = RouteValues,
-                    ViewContext = ViewContext
-                };
-
-                await anchorTagHelper.ProcessAsync(context, output);
-
+                output.MergeAttributes(anchorTagBuilder);
                 output.Attributes.SetAttribute("role", "button");
                 output.Attributes.SetAttribute("draggable", "false");
 
@@ -235,8 +145,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
             else if (element == "button")
             {
-                output.TagMode = TagMode.StartTagAndEndTag;
-
                 if (Name != null)
                 {
                     output.Attributes.Add("name", Name);
