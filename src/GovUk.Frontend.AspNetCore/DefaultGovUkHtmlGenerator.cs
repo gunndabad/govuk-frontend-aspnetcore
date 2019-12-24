@@ -95,6 +95,57 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public TagBuilder GenerateLabel(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression,
+            bool isPageHeading,
+            IHtmlContent content)
+        {
+            var innerBuilder = _htmlGenerator.GenerateLabel(
+                viewContext,
+                modelExplorer,
+                expression,
+                labelText: null,
+                htmlAttributes: null);
+
+            var @for = innerBuilder.Attributes["for"];
+
+            return GenerateLabel(@for, isPageHeading, content ?? innerBuilder.InnerHtml);
+        }
+
+        public TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content)
+        {
+            if (@for == null)
+            {
+                throw new ArgumentNullException(nameof(@for));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("label");
+            tagBuilder.AddCssClass("govuk-label");
+            tagBuilder.Attributes.Add("for", @for);
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            if (isPageHeading)
+            {
+                var heading = new TagBuilder("h1");
+                heading.AddCssClass("govuk-label-wrapper");
+
+                heading.InnerHtml.AppendHtml(tagBuilder);
+
+                return heading;
+            }
+            else
+            {
+                return tagBuilder;
+            }
+        }
+
         public TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content)
         {
             if (tag == null)

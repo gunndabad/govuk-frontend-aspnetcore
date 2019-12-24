@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -16,9 +14,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AspForAttributeName = "asp-for";
         private const string ForAttributeName = "for";
 
-        private readonly IHtmlGenerator _htmlGenerator;
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        public LabelTagHelper(IHtmlGenerator htmlGenerator)
+        public LabelTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
             _htmlGenerator = htmlGenerator;
         }
@@ -43,47 +41,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"Cannot specify both the '{AspForAttributeName}' and '{ForAttributeName}' attributes.");
             }
 
-            output.TagName = "label";
+            var childContent = await output.GetChildContentAsync();
+            var content = childContent.IsEmptyOrWhiteSpace ? null : childContent;
+
+            var tagBuilder = AspFor != null ?
+                _htmlGenerator.GenerateLabel(ViewContext, AspFor.ModelExplorer, AspFor.Name, IsPageHeading, content) :
+                _htmlGenerator.GenerateLabel(For, IsPageHeading, content);
+
+            output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
 
-            var childContent = await output.GetChildContentAsync();
-
-            IHtmlContent content = childContent;
-            string @for = For;
-
-            if (AspFor != null)
-            {
-                var label = _htmlGenerator.GenerateLabel(
-                    ViewContext,
-                    AspFor.ModelExplorer,
-                    AspFor.Name,
-                    labelText: null,
-                    htmlAttributes: null);
-
-                if (childContent.IsEmptyOrWhiteSpace)
-                {
-                    content = label.InnerHtml;
-                }
-
-                if (For == null)
-                {
-                    @for = label.Attributes["for"];
-                }
-            }
-
-            output.AddClass("govuk-label", HtmlEncoder.Default);
-            output.Attributes.Add("for", @for);
-
-            if (IsPageHeading)
-            {
-                var header = new TagBuilder("h1");
-                header.AddCssClass("govuk-label-wrapper");
-
-                output.PreElement.AppendHtml(header.RenderStartTag());
-                output.PostElement.AppendHtml(header.RenderEndTag());
-            }
-
-            output.Content.AppendHtml(content);
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
     }
 }

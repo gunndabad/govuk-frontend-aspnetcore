@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         /*htmlAttributes: */It.IsAny<object>()))
                 .Returns(new TagBuilder("label"));
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
             {
                 For = "some-input-id"
             };
@@ -100,7 +100,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
             {
                 AspFor = new ModelExpression("Foo", modelExplorer)
             };
@@ -155,7 +155,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
             {
                 AspFor = new ModelExpression("Foo", modelExplorer)
             };
@@ -202,7 +202,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         /*htmlAttributes: */It.IsAny<object>()))
                 .Returns(new TagBuilder("label"));
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
             {
                 For = "some-input-id",
                 IsPageHeading = true
@@ -212,8 +212,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("<h1 class=\"govuk-label-wrapper\">", output.PreElement.GetContent());
-            Assert.Equal("</h1>", output.PostElement.GetContent());
+            Assert.Equal("h1", output.TagName);
+            Assert.Equal("govuk-label-wrapper", output.Attributes["class"].Value);
+            Assert.Equal("<label class=\"govuk-label\" for=\"some-input-id\">Label content</label>", output.Content.GetContent());
         }
 
         [Fact]
@@ -239,7 +240,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 For = "some-input-id"
