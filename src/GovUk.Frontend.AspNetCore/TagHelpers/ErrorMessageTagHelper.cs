@@ -47,11 +47,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 _htmlGenerator.GenerateErrorMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name, visuallyHiddenText) :
                 _htmlGenerator.GenerateErrorMessage(visuallyHiddenText, childContent);
 
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
+            if (tagBuilder != null)
+            {
+                output.TagName = tagBuilder.TagName;
+                output.TagMode = TagMode.StartTagAndEndTag;
 
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                output.MergeAttributes(tagBuilder);
+                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            }
+            else
+            {
+                output.SuppressOutput();
+            }
         }
     }
 }

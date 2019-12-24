@@ -43,6 +43,12 @@ namespace GovUk.Frontend.AspNetCore
                 message: null,
                 tag: null,
                 htmlAttributes: null);
+
+            if (validationMessage == null)
+            {
+                return null;
+            }
+
             var content = validationMessage.InnerHtml;
 
             return GenerateErrorMessage(visuallyHiddenText, content);

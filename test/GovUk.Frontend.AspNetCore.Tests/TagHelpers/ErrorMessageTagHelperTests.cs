@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -177,6 +178,52 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
             Assert.Equal("Cannot specify both content and the 'asp-for' attribute.", ex.Message);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_NoMessageGeneratesNoOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-message",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-message",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<IHtmlGenerator>();
+            htmlGenerator
+                .Setup(
+                    mock => mock.GenerateValidationMessage(
+                        /*viewContext: */It.IsAny<ViewContext>(),
+                        /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                        /*expression: */It.IsAny<string>(),
+                        /*message: */It.IsAny<string>(),
+                        /*tag: */It.IsAny<string>(),
+                        /*htmlAttributes: */It.IsAny<IDictionary<string, object>>()))
+                .Returns(() => null);
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
+            {
+                AspFor = new ModelExpression("Foo", modelExplorer),
+                ViewContext = new ViewContext()
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal("", output.Content.GetContent());
         }
 
         public class Model
