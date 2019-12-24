@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -47,46 +46,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal("span", output.TagName);
             Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
             Assert.False(output.Attributes.ContainsName("id"));
-            Assert.Equal("govuk-error-message", output.Attributes["class"].Value);
-            Assert.Equal("<span class=\"govuk-visually-hidden\">Error</span>An error!", output.Content.GetContent());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithIdSpecifiedGeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-message",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-message",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("An error!");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
-
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(htmlGenerator.Object))
-            {
-                Id = "some-id"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal("span", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("some-id", output.Attributes["id"].Value);
             Assert.Equal("govuk-error-message", output.Attributes["class"].Value);
             Assert.Equal("<span class=\"govuk-visually-hidden\">Error</span>An error!", output.Content.GetContent());
         }

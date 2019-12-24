@@ -19,7 +19,6 @@ namespace GovUk.Frontend.AspNetCore
             ViewContext viewContext,
             ModelExplorer modelExplorer,
             string expression,
-            string id,
             string visuallyHiddenText)
         {
             if (viewContext == null)
@@ -46,11 +45,10 @@ namespace GovUk.Frontend.AspNetCore
                 htmlAttributes: null);
             var content = validationMessage.InnerHtml;
 
-            return GenerateErrorMessage(id, visuallyHiddenText, content);
+            return GenerateErrorMessage(visuallyHiddenText, content);
         }
 
         public TagBuilder GenerateErrorMessage(
-            string id,
             string visuallyHiddenText,
             IHtmlContent content)
         {
@@ -61,11 +59,6 @@ namespace GovUk.Frontend.AspNetCore
 
             var tagBuilder = new TagBuilder("span");
             tagBuilder.AddCssClass("govuk-error-message");
-
-            if (!string.IsNullOrEmpty(id))
-            {
-                tagBuilder.Attributes.Add("id", id);
-            }
 
             if (!string.IsNullOrEmpty(visuallyHiddenText))
             {

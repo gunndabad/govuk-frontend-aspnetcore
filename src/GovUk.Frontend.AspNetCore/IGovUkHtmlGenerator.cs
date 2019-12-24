@@ -10,11 +10,9 @@ namespace GovUk.Frontend.AspNetCore
             ViewContext viewContext,
             ModelExplorer modelExplorer,
             string expression,
-            string id,
             string visuallyHiddenText);
 
         TagBuilder GenerateErrorMessage(
-            string id,
             string visuallyHiddenText,
             IHtmlContent content);
 
