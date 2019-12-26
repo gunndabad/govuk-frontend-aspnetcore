@@ -56,11 +56,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("a", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("http://foo.com", output.Attributes["href"].Value);
-            Assert.Equal("govuk-back-link", output.Attributes["class"].Value);
-            Assert.Equal("My custom link content", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<a href=\"http://foo.com\" class=\"govuk-back-link\">My custom link content</a>", html);
         }
 
         [Fact]
@@ -107,11 +104,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("a", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("http://foo.com", output.Attributes["href"].Value);
-            Assert.Equal("govuk-back-link", output.Attributes["class"].Value);
-            Assert.Equal("Back", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<a href=\"http://foo.com\" class=\"govuk-back-link\">Back</a>", html);
         }
     }
 }

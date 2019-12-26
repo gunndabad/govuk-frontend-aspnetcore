@@ -38,15 +38,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("div", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-phase-banner", output.Attributes["class"].Value);
+            var html = output.AsString();
             Assert.Equal(
+                "<div class=\"govuk-phase-banner\">" +
                 "<p class=\"govuk-phase-banner__content\">" +
                 "<strong class=\"govuk-phase-banner__content__tag govuk-tag\">Alpha</strong>" +
                 "<span class=\"govuk-phase-banner__text\">Phase message</span>" +
-                "</p>",
-                output.Content.GetContent());
+                "</p>" +
+                "</div>",
+                html);
         }
 
         [Fact]

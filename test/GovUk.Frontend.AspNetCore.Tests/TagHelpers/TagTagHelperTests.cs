@@ -34,10 +34,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("strong", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-tag", output.Attributes["class"].Value);
-            Assert.Equal("A tag", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<strong class=\"govuk-tag\">A tag</strong>", html);
         }
     }
 }

@@ -39,16 +39,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("div", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-warning-text", output.Attributes["class"].Value);
+            var html = output.AsString();
             Assert.Equal(
+                "<div class=\"govuk-warning-text\">" +
                 "<span aria-hidden=\"true\" class=\"govuk-warning-text__icon\">!</span>" +
                 "<strong class=\"govuk-warning-text__text\">" +
                 "<span class=\"govuk-warning-text__assistive\">Danger</span>" +
                 "Warning message" +
-                "</strong>",
-                output.Content.GetContent());
+                "</strong>" +
+                "</div>",
+                html);
         }
 
         [Fact]

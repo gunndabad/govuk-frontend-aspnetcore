@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -58,11 +56,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("a", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("http://foo.com", output.Attributes["href"].Value);
-            Assert.Equal("govuk-skip-link", output.Attributes["class"].Value);
-            Assert.Equal("My custom link content", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<a href=\"http://foo.com\" class=\"govuk-skip-link\">My custom link content</a>", html);
         }
     }
 }

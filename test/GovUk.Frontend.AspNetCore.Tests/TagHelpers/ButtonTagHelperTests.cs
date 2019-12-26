@@ -56,10 +56,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("a", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-button", output.Attributes["class"].Value);
-            Assert.Equal("Button text", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal(
+                "<a class=\"govuk-button\" data-module=\"govuk-button\" role=\"button\" draggable=\"false\">" +
+                "Button text" +
+                "</a>",
+                html);
         }
 
         [Fact]
@@ -93,10 +95,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("button", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-button", output.Attributes["class"].Value);
-            Assert.Equal("Button text", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal(
+                "<button class=\"govuk-button\" data-module=\"govuk-button\">" +
+                "Button text" +
+                "</button>",
+                html);
         }
 
         [Theory]
@@ -191,8 +195,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.Equal("a", output.TagName);
-            Assert.Equal("button", output.Attributes["role"].Value);
-            Assert.Equal("false", output.Attributes["draggable"].Value);
         }
 
         [Fact]
