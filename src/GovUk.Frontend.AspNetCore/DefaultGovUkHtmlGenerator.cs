@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -7,6 +9,39 @@ namespace GovUk.Frontend.AspNetCore
 {
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
+        public virtual TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem)
+        {
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-breadcrumbs");
+
+            var ol = new TagBuilder("ol");
+            ol.AddCssClass("govuk-breadcrumbs__list");
+
+            foreach (var item in items)
+            {
+                var li = new TagBuilder("li");
+                li.AddCssClass("govuk-breadcrumbs__list-item");
+
+                if (item == currentPageItem)
+                {
+                    li.Attributes.Add("aria-current", "page");
+                }
+
+                li.InnerHtml.AppendHtml(item);
+
+                ol.InnerHtml.AppendHtml(li);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(ol);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateErrorMessage(string visuallyHiddenText, IHtmlContent content)
         {
             if (content == null)
