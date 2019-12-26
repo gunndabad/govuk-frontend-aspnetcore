@@ -45,6 +45,20 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateInsetText(IHtmlContent content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-inset-text");
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content)
         {
             if (@for == null)
