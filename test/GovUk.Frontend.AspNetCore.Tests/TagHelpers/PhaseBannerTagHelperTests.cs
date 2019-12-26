@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -31,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new PhaseBannerTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IHtmlGenerator>()))
+            var tagHelper = new PhaseBannerTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Tag = "Alpha"
             };
@@ -71,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new PhaseBannerTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IHtmlGenerator>()));
+            var tagHelper = new PhaseBannerTagHelper(new DefaultGovUkHtmlGenerator());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
