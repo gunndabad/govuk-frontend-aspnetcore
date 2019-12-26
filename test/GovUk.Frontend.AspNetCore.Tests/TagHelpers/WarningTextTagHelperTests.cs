@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new WarningTextTagHelper()
+            var tagHelper = new WarningTextTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IconFallbackText = "Danger"
             };
@@ -71,7 +71,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new WarningTextTagHelper();
+            var tagHelper = new WarningTextTagHelper(new DefaultGovUkHtmlGenerator());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));

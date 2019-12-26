@@ -209,5 +209,33 @@ namespace GovUk.Frontend.AspNetCore
 
             return tagBuilder;
         }
+
+        public virtual TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText)
+        {
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-warning-text");
+
+            var icon = new TagBuilder("span");
+            icon.AddCssClass("govuk-warning-text__icon");
+            icon.Attributes.Add("aria-hidden", "true");
+            icon.InnerHtml.Append("!");
+
+            tagBuilder.InnerHtml.AppendHtml(icon);
+
+            var text = new TagBuilder("strong");
+            text.AddCssClass("govuk-warning-text__text");
+
+            var iconFallback = new TagBuilder("span");
+            iconFallback.AddCssClass("govuk-warning-text__assistive");
+            iconFallback.InnerHtml.Append(iconFallbackText);
+
+            text.InnerHtml.AppendHtml(iconFallback);
+
+            text.InnerHtml.AppendHtml(content);
+
+            tagBuilder.InnerHtml.AppendHtml(text);
+
+            return tagBuilder;
+        }
     }
 }
