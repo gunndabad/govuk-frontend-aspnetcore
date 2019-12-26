@@ -7,6 +7,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, IHtmlContent content);
         TagBuilder GenerateHint(IHtmlContent content);
+        TagBuilder GenerateInsetText(IHtmlContent content);
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
         TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
         TagBuilder GenerateTag(IHtmlContent content);
