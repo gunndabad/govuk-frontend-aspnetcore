@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
     {
         public static string AsString(this TagHelperOutput output)
         {
-            var writer = new StringWriter();
+            using var writer = new StringWriter();
             output.WriteTo(writer, HtmlEncoder.Default);
             return writer.ToString();
         }
