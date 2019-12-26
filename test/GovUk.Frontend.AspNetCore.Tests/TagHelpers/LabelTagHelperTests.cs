@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -47,11 +46,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("label", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-label", output.Attributes["class"].Value);
-            Assert.Equal("some-input-id", output.Attributes["for"].Value);
-            Assert.Equal("Label content", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<label class=\"govuk-label\" for=\"some-input-id\">Label content</label>", html);
         }
 
         [Fact]
@@ -94,11 +90,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("label", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-label", output.Attributes["class"].Value);
-            Assert.Equal("Foo", output.Attributes["for"].Value);
-            Assert.Equal("Generated label", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<label class=\"govuk-label\" for=\"Foo\">Generated label</label>", html);
         }
 
         [Fact]
@@ -142,11 +135,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("label", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-label", output.Attributes["class"].Value);
-            Assert.Equal("Foo", output.Attributes["for"].Value);
-            Assert.Equal("Specific content", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal("<label class=\"govuk-label\" for=\"Foo\">Specific content</label>", html);
         }
 
         [Fact]
@@ -181,9 +171,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("h1", output.TagName);
-            Assert.Equal("govuk-label-wrapper", output.Attributes["class"].Value);
-            Assert.Equal("<label class=\"govuk-label\" for=\"some-input-id\">Label content</label>", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal(
+                "<h1 class=\"govuk-label-wrapper\">" +
+                "<label class=\"govuk-label\" for=\"some-input-id\">Label content</label>" +
+                "</h1>",
+                html);
         }
 
         public class Model

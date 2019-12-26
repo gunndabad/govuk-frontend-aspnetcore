@@ -44,10 +44,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("span", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-error-message", output.Attributes["class"].Value);
-            Assert.Equal("<span class=\"govuk-visually-hidden\">Error</span>An error!", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal(
+                "<span class=\"govuk-error-message\">" +
+                "<span class=\"govuk-visually-hidden\">Error</span>" +
+                "An error!" +
+                "</span>",
+                html);
         }
 
         [Fact]
@@ -83,11 +86,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("span", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
             Assert.Equal("some-id", output.Attributes["id"].Value);
-            Assert.Equal("govuk-error-message", output.Attributes["class"].Value);
-            Assert.Equal("<span class=\"govuk-visually-hidden\">Error</span>An error!", output.Content.GetContent());
         }
 
         [Fact]
@@ -123,11 +122,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("span", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.False(output.Attributes.ContainsName("id"));
-            Assert.Equal("govuk-error-message", output.Attributes["class"].Value);
-            Assert.Equal("<span class=\"govuk-visually-hidden\">Overriden</span>An error!", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal(
+                "<span class=\"govuk-error-message\">" +
+                "<span class=\"govuk-visually-hidden\">Overriden</span>" +
+                "An error!" +
+                "</span>",
+                html);
         }
 
         [Fact]
@@ -171,10 +172,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("span", output.TagName);
-            Assert.Equal(TagMode.StartTagAndEndTag, output.TagMode);
-            Assert.Equal("govuk-error-message", output.Attributes["class"].Value);
-            Assert.Equal("<span class=\"govuk-visually-hidden\">Error</span>An error!", output.Content.GetContent());
+            var html = output.AsString();
+            Assert.Equal(
+                "<span class=\"govuk-error-message\">" +
+                "<span class=\"govuk-visually-hidden\">Error</span>" +
+                "An error!" +
+                "</span>",
+                html);
         }
 
         public class Model
