@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -38,6 +37,45 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             tagBuilder.InnerHtml.AppendHtml(ol);
+
+            return tagBuilder;
+        }
+
+        public TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text)
+        {
+            if (summary == null)
+            {
+                throw new ArgumentNullException(nameof(summary));
+            }
+
+            if (text == null)
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
+
+            var tagBuilder = new TagBuilder("details");
+            tagBuilder.AddCssClass("govuk-details");
+            tagBuilder.Attributes.Add("data-module", "govuk-details");
+
+            if (open)
+            {
+                tagBuilder.Attributes.Add("open", "true");
+            }
+
+            var summaryTagBuilder = new TagBuilder("summary");
+            summaryTagBuilder.AddCssClass("govuk-details__summary");
+
+            var summaryTextTagBuilder = new TagBuilder("span");
+            summaryTextTagBuilder.AddCssClass("govuk-details__summary-text");
+            summaryTextTagBuilder.InnerHtml.AppendHtml(summary);
+            summaryTagBuilder.InnerHtml.AppendHtml(summaryTextTagBuilder);
+
+            tagBuilder.InnerHtml.AppendHtml(summaryTagBuilder);
+
+            var textTagBuilder = new TagBuilder("div");
+            textTagBuilder.AddCssClass("govuk-details__text");
+            textTagBuilder.InnerHtml.AppendHtml(text);
+            tagBuilder.InnerHtml.AppendHtml(textTagBuilder);
 
             return tagBuilder;
         }
