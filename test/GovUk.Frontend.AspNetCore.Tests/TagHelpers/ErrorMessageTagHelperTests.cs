@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
@@ -38,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), htmlHelper.Object);
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object);
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -77,7 +76,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), htmlHelper.Object)
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
             {
                 Id = "some-id"
             };
@@ -113,7 +112,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), htmlHelper.Object)
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
             {
                 VisuallyHiddenText = "Overriden"
             };
@@ -162,7 +161,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), htmlHelper.Object)
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()

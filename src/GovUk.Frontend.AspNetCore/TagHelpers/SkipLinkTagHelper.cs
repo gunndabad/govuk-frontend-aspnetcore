@@ -1,6 +1,5 @@
 ﻿using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -8,7 +7,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-skip-link", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class SkipLinkTagHelper : LinkTagHelperBase
     {
-        public SkipLinkTagHelper(IHtmlGenerator generator)
+        public SkipLinkTagHelper(IGovUkHtmlGenerator generator)
             : base(generator)
         {
         }

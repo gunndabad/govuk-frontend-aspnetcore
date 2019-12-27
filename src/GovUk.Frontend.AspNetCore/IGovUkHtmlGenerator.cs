@@ -6,6 +6,10 @@ namespace GovUk.Frontend.AspNetCore
 {
     public interface IGovUkHtmlGenerator
     {
+        TagBuilder GenerateLink(string href);
+        TagBuilder GenerateActionLink(ViewContext viewContext, string action, string controller, object values, string protocol, string host, string fragment);
+        TagBuilder GeneratePageLink(ViewContext viewContext, string pageName, string pageHandler, object values, string protocol, string host, string fragment);
+        TagBuilder GenerateRouteLink(ViewContext viewContext, string routeName, object values, string protocol, string host, string fragment);
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, IHtmlContent content);

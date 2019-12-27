@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -32,24 +33,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-            htmlGenerator
-                .Setup(
-                    mock => mock.GenerateActionLink(
-                        /*viewContext: */It.IsAny<ViewContext>(),
-                        /*linkText: */It.IsAny<string>(),
-                        /*actionName: */It.IsAny<string>(),
-                        /*controllerName: */It.IsAny<string>(),
-                        /*protocol: */It.IsAny<string>(),
-                        /*hostname: */It.IsAny<string>(),
-                        /*fragment: */It.IsAny<string>(),
-                        /*routeValues: */It.IsAny<IDictionary<string, object>>(),
-                        /*htmlAttributes: */It.IsAny<object>()))
-                .Returns(new TagBuilder("a"));
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
-                Element = ButtonTagHelperElementType.Anchor
+                Element = ButtonTagHelperElementType.Anchor,
+                Href = "http://foo.com"
             };
 
             // Act
@@ -58,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.AsString();
             Assert.Equal(
-                "<a class=\"govuk-button\" data-module=\"govuk-button\" role=\"button\" draggable=\"false\">" +
+                "<a class=\"govuk-button\" data-module=\"govuk-button\" href=\"http://foo.com\" role=\"button\" draggable=\"false\">" +
                 "Button text" +
                 "</a>",
                 html);
@@ -84,9 +71,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button
             };
@@ -135,44 +120,49 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
+            var htmlGenerator = new Mock<IGovUkHtmlGenerator>();
+
             htmlGenerator
-                .Setup(
-                    mock => mock.GenerateActionLink(
-                        /*viewContext: */It.IsAny<ViewContext>(),
-                        /*linkText: */It.IsAny<string>(),
-                        /*actionName: */It.IsAny<string>(),
-                        /*controllerName: */It.IsAny<string>(),
-                        /*protocol: */It.IsAny<string>(),
-                        /*hostname: */It.IsAny<string>(),
-                        /*fragment: */It.IsAny<string>(),
-                        /*routeValues: */It.IsAny<IDictionary<string, object>>(),
-                        /*htmlAttributes: */It.IsAny<object>()))
+                .Setup(mock => mock
+                    .GenerateLink(/*href: */It.IsAny<string>()))
                 .Returns(new TagBuilder("a"));
+
             htmlGenerator
-                .Setup(
-                    mock => mock.GeneratePageLink(
+                .Setup(mock => mock
+                    .GenerateActionLink(
                         /*viewContext: */It.IsAny<ViewContext>(),
-                        /*linkText: */It.IsAny<string>(),
+                        /*action: */It.IsAny<string>(),
+                        /*controller: */It.IsAny<string>(),
+                        /*values: */It.IsAny<object>(),
+                        /*protocol: */It.IsAny<string>(),
+                        /*host: */It.IsAny<string>(),
+                        /*fragment: */It.IsAny<string>()
+                    ))
+                .Returns(new TagBuilder("a"));
+
+            htmlGenerator
+                .Setup(mock => mock
+                    .GeneratePageLink(
+                        /*viewContext: */It.IsAny<ViewContext>(),
                         /*pageName: */It.IsAny<string>(),
                         /*pageHandler: */It.IsAny<string>(),
+                        /*values: */It.IsAny<object>(),
                         /*protocol: */It.IsAny<string>(),
-                        /*hostname: */It.IsAny<string>(),
-                        /*fragment: */It.IsAny<string>(),
-                        /*routeValues: */It.IsAny<IDictionary<string, object>>(),
-                        /*htmlAttributes: */It.IsAny<object>()))
+                        /*host: */It.IsAny<string>(),
+                        /*fragment: */It.IsAny<string>()
+                    ))
                 .Returns(new TagBuilder("a"));
+
             htmlGenerator
-                .Setup(
-                    mock => mock.GenerateRouteLink(
+                .Setup(mock => mock
+                    .GenerateRouteLink(
                         /*viewContext: */It.IsAny<ViewContext>(),
-                        /*linkText: */It.IsAny<string>(),
                         /*routeName: */It.IsAny<string>(),
+                        /*values: */It.IsAny<object>(),
                         /*protocol: */It.IsAny<string>(),
-                        /*hostname: */It.IsAny<string>(),
-                        /*fragment: */It.IsAny<string>(),
-                        /*routeValues: */It.IsAny<IDictionary<string, object>>(),
-                        /*htmlAttributes: */It.IsAny<object>()))
+                        /*host: */It.IsAny<string>(),
+                        /*fragment: */It.IsAny<string>()
+                    ))
                 .Returns(new TagBuilder("a"));
 
             var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
@@ -187,7 +177,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 PageHandler = pageHandler,
                 Protocol = protocol,
                 Route = route,
-                RouteValues = routeValues,
+                RouteValues = routeValues
             };
 
             // Act
@@ -217,9 +207,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button,
                 IsStartButton = true
@@ -253,9 +241,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button,
                 Disabled = true
@@ -291,9 +277,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Anchor,
                 Disabled = true,
@@ -328,9 +312,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button,
                 Value = "some value"
@@ -363,9 +345,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button,
                 Type = "submit"
@@ -398,9 +378,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button,
                 Name = "Some name"
@@ -433,9 +411,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Button,
                 PreventDoubleClick = true
@@ -468,9 +444,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Anchor,
                 Href = "https://place.com",
@@ -502,9 +476,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Anchor,
                 Href = "https://place.com",
@@ -536,9 +508,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Anchor,
                 Value = "Some value",
@@ -570,9 +540,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-
-            var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Element = ButtonTagHelperElementType.Anchor,
                 PreventDoubleClick = true,

@@ -1,13 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
+        private readonly IUrlHelperFactory _urlHelperFactory;
+
+        public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory)
+        {
+            _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
+        }
+
+        public TagBuilder GenerateLink(string href)
+        {
+            if (href == null)
+            {
+                throw new ArgumentNullException(nameof(href));
+            }
+
+            var tagBuilder = new TagBuilder("a");
+            tagBuilder.Attributes.Add("href", href);
+
+            return tagBuilder;
+        }
+
+        public TagBuilder GenerateActionLink(
+            ViewContext viewContext,
+            string action,
+            string controller,
+            object values,
+            string protocol,
+            string host,
+            string fragment)
+        {
+            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
+            var href = urlHelper.Action(action, controller, values, protocol, host, fragment);
+
+            return GenerateLink(href);
+        }
+
+        public TagBuilder GeneratePageLink(
+            ViewContext viewContext,
+            string pageName,
+            string pageHandler,
+            object values,
+            string protocol,
+            string host,
+            string fragment)
+        {
+            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
+            var href = urlHelper.Page(pageName, pageHandler, values, protocol, host, fragment);
+
+            return GenerateLink(href);
+        }
+
+        public TagBuilder GenerateRouteLink(
+            ViewContext viewContext,
+            string routeName,
+            object values,
+            string protocol,
+            string host,
+            string fragment)
+        {
+            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
+            var href = urlHelper.RouteUrl(routeName, values, protocol, host, fragment);
+
+            return GenerateLink(href);
+        }
+
         public virtual TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem)
         {
             if (items == null)

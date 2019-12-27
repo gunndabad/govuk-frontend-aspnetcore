@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -23,10 +22,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var output = new TagHelperOutput(
                 "govuk-skip-link",
-                attributes: new TagHelperAttributeList()
-                {
-                    { "href", "http://foo.com" }
-                },
+                attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -35,22 +31,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var htmlGenerator = new Mock<IHtmlGenerator>();
-            htmlGenerator
-                .Setup(
-                    mock => mock.GenerateActionLink(
-                        /*viewContext: */It.IsAny<ViewContext>(),
-                        /*linkText: */It.IsAny<string>(),
-                        /*actionName: */It.IsAny<string>(),
-                        /*controllerName: */It.IsAny<string>(),
-                        /*protocol: */It.IsAny<string>(),
-                        /*hostname: */It.IsAny<string>(),
-                        /*fragment: */It.IsAny<string>(),
-                        /*routeValues: */It.IsAny<IDictionary<string, object>>(),
-                        /*htmlAttributes: */It.IsAny<object>()))
-                .Returns(new TagBuilder("a"));
-
-            var tagHelper = new SkipLinkTagHelper(htmlGenerator.Object);
+            var tagHelper = new SkipLinkTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            {
+                Href = "http://foo.com"
+            };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
