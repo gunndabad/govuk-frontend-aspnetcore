@@ -1,7 +1,6 @@
 ﻿using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -9,8 +8,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-back-link", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class BackLinkTagHelper : LinkTagHelperBase
     {
-        public BackLinkTagHelper(IHtmlGenerator generator)
-            : base(generator)
+        public BackLinkTagHelper(IGovUkHtmlGenerator htmlGenerator)
+            : base(htmlGenerator)
         {
         }
 

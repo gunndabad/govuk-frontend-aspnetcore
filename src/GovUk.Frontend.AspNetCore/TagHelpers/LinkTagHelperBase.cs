@@ -25,12 +25,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private IDictionary<string, string> _routeValues;
 
-        public LinkTagHelperBase(IHtmlGenerator htmlGenerator)
-        {
-            Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
-        }
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        protected IHtmlGenerator Generator { get; }
+        public LinkTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+        }
 
         [HtmlAttributeName(ActionAttributeName)]
         public string Action { get; set; }
@@ -95,7 +95,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 throw new InvalidOperationException(
                     $"Cannot determine the 'href' attribute for <a>. The following attributes are mutually exclusive:\n" +
-                    $"{Href}\n" +
+                    $"{HrefAttributeName}\n" +
                     $"{RouteAttributeName}\n" +
                     $"{ControllerAttributeName}, {ActionAttributeName}\n" +
                     $"{PageAttributeName}, {PageHandlerAttributeName}");
@@ -117,49 +117,22 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 routeValues["area"] = Area;
             }
 
-            TagBuilder tagBuilder;
+            TagBuilder tagBuilder = null;
             if (hrefLink)
             {
-                tagBuilder = new TagBuilder("a");
-                tagBuilder.Attributes.Add("href", Href);
+                tagBuilder = _htmlGenerator.GenerateLink(Href);
             }
             else if (pageLink)
             {
-                tagBuilder = Generator.GeneratePageLink(
-                    ViewContext,
-                    linkText: string.Empty,
-                    pageName: Page,
-                    pageHandler: PageHandler,
-                    protocol: Protocol,
-                    hostname: Host,
-                    fragment: Fragment,
-                    routeValues: routeValues,
-                    htmlAttributes: null);
+                tagBuilder = _htmlGenerator.GeneratePageLink(ViewContext, Page, PageHandler, RouteValues, Protocol, Host, Fragment);
             }
             else if (routeLink)
             {
-                tagBuilder = Generator.GenerateRouteLink(
-                    ViewContext,
-                    linkText: string.Empty,
-                    routeName: Route,
-                    protocol: Protocol,
-                    hostName: Host,
-                    fragment: Fragment,
-                    routeValues: routeValues,
-                    htmlAttributes: null);
+                tagBuilder = _htmlGenerator.GenerateRouteLink(ViewContext, Route, RouteValues, Protocol, Host, Fragment);
             }
-            else
+            else // if (actionLink)
             {
-                tagBuilder = Generator.GenerateActionLink(
-                   ViewContext,
-                   linkText: string.Empty,
-                   actionName: Action,
-                   controllerName: Controller,
-                   protocol: Protocol,
-                   hostname: Host,
-                   fragment: Fragment,
-                   routeValues: routeValues,
-                   htmlAttributes: null);
+                tagBuilder = _htmlGenerator.GenerateActionLink(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
             }
 
             return tagBuilder;
