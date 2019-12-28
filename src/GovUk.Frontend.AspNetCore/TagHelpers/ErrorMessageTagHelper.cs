@@ -36,17 +36,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var childContent = await output.GetChildContentAsync();
+            var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var tagBuilder = AspFor != null || childContent.IsEmptyOrWhiteSpace ?
+            var tagBuilder = childContent == null ?
                 _htmlGenerator.GenerateErrorMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name, VisuallyHiddenText, Id) :
-                _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, childContent);
+                !childContent.IsEmptyOrWhiteSpace ?
+                _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, childContent) :
+                null;
 
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
+            if (tagBuilder != null)
+            {
+                output.TagName = tagBuilder.TagName;
+                output.TagMode = TagMode.StartTagAndEndTag;
 
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                output.MergeAttributes(tagBuilder);
+                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            }
+            else
+            {
+                output.SuppressOutput();
+            }
         }
     }
 }
