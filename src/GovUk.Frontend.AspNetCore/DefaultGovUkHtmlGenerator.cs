@@ -13,10 +13,12 @@ namespace GovUk.Frontend.AspNetCore
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
 
         private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IHtmlGenerator _innerGenerator;
 
-        public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory)
+        public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory, IHtmlGenerator innerGenerator)
         {
             _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
+            _innerGenerator = innerGenerator ?? throw new ArgumentNullException(nameof(innerGenerator));
         }
 
         public TagBuilder GenerateLink(string href)

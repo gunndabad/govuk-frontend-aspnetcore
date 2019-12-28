@@ -38,7 +38,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 .Setup(mock => mock.Id(It.IsAny<string>()))
                 .Returns("another-id");
 
-            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new LabelTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 For = "some-input-id"
             };
@@ -82,7 +84,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new LabelTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer)
             };
@@ -127,7 +131,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new LabelTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer)
             };
@@ -162,7 +168,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var htmlHelper = new Mock<IHtmlHelper>();
 
-            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new LabelTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 For = "some-input-id",
                 IsPageHeading = true
