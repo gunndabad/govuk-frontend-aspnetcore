@@ -37,7 +37,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object);
+            var tagHelper = new ErrorMessageTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object);
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -76,7 +78,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new ErrorMessageTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 Id = "some-id"
             };
@@ -112,7 +116,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new ErrorMessageTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 VisuallyHiddenText = "Overriden"
             };
@@ -161,7 +167,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()), htmlHelper.Object)
+            var tagHelper = new ErrorMessageTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
+                htmlHelper.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
