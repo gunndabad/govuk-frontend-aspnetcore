@@ -66,6 +66,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
+            output.TagMode = TagMode.SelfClosing;
 
             var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
             {

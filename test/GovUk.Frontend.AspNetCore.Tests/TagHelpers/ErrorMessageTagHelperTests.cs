@@ -152,6 +152,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
+            output.TagMode = TagMode.SelfClosing;
 
             var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
             {
@@ -184,6 +185,86 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "An error!" +
                 "</span>",
                 html);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_AspForSpecifiedButNoErrorGeneratesNoOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-message",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-message",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+            output.TagMode = TagMode.SelfClosing;
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetValidationMessage(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns((TagBuilder)null);
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+
+            var tagHelper = new ErrorMessageTagHelper(htmlGenerator.Object)
+            {
+                AspFor = new ModelExpression("Foo", modelExplorer),
+                ViewContext = new ViewContext()
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Null(output.TagName);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithEmptyChildContentGeneratesNoOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-message",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-message",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlHelper = new Mock<IHtmlHelper>();
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+
+            var tagHelper = new ErrorMessageTagHelper(
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()));
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Null(output.TagName);
         }
 
         public class Model

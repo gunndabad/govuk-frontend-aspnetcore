@@ -1,5 +1,4 @@
 ﻿using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -13,15 +12,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            var originalTagMode = output.TagMode;
+
             var tagBuilder = CreateAnchorTagBuilder();
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
 
-            var childContent = await output.GetChildContentAsync();
-            if (childContent.IsEmptyOrWhiteSpace)
+            if (originalTagMode == TagMode.SelfClosing)
             {
                 output.Content.Append("Back");
             }
