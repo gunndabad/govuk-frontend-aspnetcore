@@ -46,17 +46,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 _htmlHelper.ValidationMessage(AspFor.Name) :
                 childContent;
 
-            var visuallyHiddenText = VisuallyHiddenText ?? "Error";
-
-            var tagBuilder = _htmlGenerator.GenerateErrorMessage(visuallyHiddenText, content);
+            var tagBuilder = _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, content);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
-
-            if (!string.IsNullOrEmpty(Id))
-            {
-                output.Attributes.Add("id", Id);
-            }
 
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);

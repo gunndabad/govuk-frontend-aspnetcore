@@ -10,6 +10,8 @@ namespace GovUk.Frontend.AspNetCore
 {
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
+        public const string DefaultErrorMessageVisuallyHiddenText = "Error";
+
         private readonly IUrlHelperFactory _urlHelperFactory;
 
         public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory)
@@ -146,7 +148,7 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateErrorMessage(string visuallyHiddenText, IHtmlContent content)
+        public virtual TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content)
         {
             if (content == null)
             {
@@ -156,14 +158,21 @@ namespace GovUk.Frontend.AspNetCore
             var tagBuilder = new TagBuilder("span");
             tagBuilder.AddCssClass("govuk-error-message");
 
-            if (!string.IsNullOrEmpty(visuallyHiddenText))
+            if (!string.IsNullOrEmpty(id))
             {
-                var vht = new TagBuilder("span");
-                vht.AddCssClass("govuk-visually-hidden");
-                vht.InnerHtml.Append(visuallyHiddenText);
-
-                tagBuilder.InnerHtml.AppendHtml(vht);
+                tagBuilder.Attributes.Add("id", id);
             }
+
+            if (string.IsNullOrEmpty(visuallyHiddenText))
+            {
+                visuallyHiddenText = DefaultErrorMessageVisuallyHiddenText;
+            }
+
+            var vht = new TagBuilder("span");
+            vht.AddCssClass("govuk-visually-hidden");
+            vht.InnerHtml.Append(visuallyHiddenText);
+
+            tagBuilder.InnerHtml.AppendHtml(vht);
 
             tagBuilder.InnerHtml.AppendHtml(content);
 
