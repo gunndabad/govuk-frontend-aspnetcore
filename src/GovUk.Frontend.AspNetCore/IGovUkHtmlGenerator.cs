@@ -15,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
         TagBuilder GenerateErrorMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression, string visuallyHiddenText, string id);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
-        TagBuilder GenerateHint(IHtmlContent content);
+        TagBuilder GenerateHint(string id, IHtmlContent content);
         TagBuilder GenerateInsetText(IHtmlContent content);
         TagBuilder GenerateLabel(ViewContext viewContext, ModelExplorer modelExplorer, string expression, bool isPageHeading, IHtmlContent content);
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
