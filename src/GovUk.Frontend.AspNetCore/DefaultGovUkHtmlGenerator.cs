@@ -150,6 +150,33 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateErrorMessage(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression,
+            string visuallyHiddenText,
+            string id)
+        {
+            if (viewContext == null)
+            {
+                throw new ArgumentNullException(nameof(viewContext));
+            }
+
+            if (modelExplorer == null)
+            {
+                throw new ArgumentNullException(nameof(modelExplorer));
+            }
+
+            if (expression == null)
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
+
+            var content = GetValidationMessage(viewContext, modelExplorer, expression);
+
+            return GenerateErrorMessage(visuallyHiddenText, id, content);
+        }
+
         public virtual TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content)
         {
             if (content == null)
@@ -343,7 +370,10 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual IHtmlContent GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
+        public virtual IHtmlContent GetDisplayName(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression)
         {
             // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
             // that is accessible then pull out the value
@@ -352,13 +382,34 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder.InnerHtml;
         }
 
-        public virtual string GetId(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
+        public virtual string GetId(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression)
         {
             // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
             // that is accessible then pull out the value
 
             var tagBuilder = _innerGenerator.GenerateLabel(viewContext, modelExplorer, expression, null, null);
             return tagBuilder.Attributes["for"];
+        }
+
+        public virtual IHtmlContent GetValidationMessage(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression)
+        {
+            // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
+            // that is accessible then pull out the value
+
+            var tagBuilder = _innerGenerator.GenerateValidationMessage(
+                viewContext,
+                modelExplorer,
+                expression,
+                null,
+                null,
+                null);
+            return tagBuilder.InnerHtml;
         }
     }
 }

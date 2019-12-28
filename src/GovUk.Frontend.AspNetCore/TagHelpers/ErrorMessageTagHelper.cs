@@ -15,12 +15,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
         
         private readonly IGovUkHtmlGenerator _htmlGenerator;
-        private readonly IHtmlHelper _htmlHelper;
 
-        public ErrorMessageTagHelper(IGovUkHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper)
+        public ErrorMessageTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
-            _htmlHelper = htmlHelper ?? throw new ArgumentNullException(nameof(htmlHelper));
         }
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -38,15 +36,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            (_htmlHelper as IViewContextAware)?.Contextualize(ViewContext);
-
             var childContent = await output.GetChildContentAsync();
 
-            var content = childContent.IsEmptyOrWhiteSpace && AspFor != null ?
-                _htmlHelper.ValidationMessage(AspFor.Name) :
-                childContent;
-
-            var tagBuilder = _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, content);
+            var tagBuilder = AspFor != null || childContent.IsEmptyOrWhiteSpace ?
+                _htmlGenerator.GenerateErrorMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name, VisuallyHiddenText, Id) :
+                _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, childContent);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
