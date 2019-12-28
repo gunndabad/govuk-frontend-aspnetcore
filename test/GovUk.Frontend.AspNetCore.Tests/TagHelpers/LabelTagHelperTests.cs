@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -33,14 +34,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlHelper = new Mock<IHtmlHelper>();
-            htmlHelper
-                .Setup(mock => mock.Id(It.IsAny<string>()))
-                .Returns("another-id");
-
             var tagHelper = new LabelTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
-                htmlHelper.Object)
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()))
             {
                 For = "some-input-id"
             };
@@ -72,23 +67,31 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlHelper = new Mock<IHtmlHelper>();
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
+            {
+                CallBase = true
+            };
 
-            htmlHelper
-                .Setup(mock => mock.Id(It.IsAny<string>()))
+            htmlGenerator
+                .Setup(mock => mock.GetId(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
-            htmlHelper
-                .Setup(mock => mock.DisplayName(It.IsAny<string>()))
-                .Returns("Generated label");
+            htmlGenerator
+                .Setup(mock => mock.GetDisplayName(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns(new HtmlString("Generated label"));
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
-                htmlHelper.Object)
+            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
             {
-                AspFor = new ModelExpression("Foo", modelExplorer)
+                AspFor = new ModelExpression("Foo", modelExplorer),
+                ViewContext = new ViewContext()
             };
 
             // Act
@@ -119,23 +122,31 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlHelper = new Mock<IHtmlHelper>();
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
+            {
+                CallBase = true
+            };
 
-            htmlHelper
-                .Setup(mock => mock.Id(It.IsAny<string>()))
+            htmlGenerator
+                .Setup(mock => mock.GetId(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
-            htmlHelper
-                .Setup(mock => mock.DisplayName(It.IsAny<string>()))
-                .Returns("Generated label");
+            htmlGenerator
+                .Setup(mock => mock.GetDisplayName(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns(new HtmlString("Generated label"));
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
-                htmlHelper.Object)
+            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
             {
-                AspFor = new ModelExpression("Foo", modelExplorer)
+                AspFor = new ModelExpression("Foo", modelExplorer),
+                ViewContext = new ViewContext()
             };
 
             // Act
@@ -166,11 +177,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlHelper = new Mock<IHtmlHelper>();
-
             var tagHelper = new LabelTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()),
-                htmlHelper.Object)
+                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()))
             {
                 For = "some-input-id",
                 IsPageHeading = true
