@@ -208,7 +208,7 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateHint(IHtmlContent content)
+        public virtual TagBuilder GenerateHint(string id, IHtmlContent content)
         {
             if (content == null)
             {
@@ -217,6 +217,12 @@ namespace GovUk.Frontend.AspNetCore
 
             var tagBuilder = new TagBuilder("span");
             tagBuilder.AddCssClass("govuk-hint");
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                tagBuilder.Attributes.Add("id", id);
+            }
+
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
