@@ -13,6 +13,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateRouteLink(ViewContext viewContext, string routeName, object values, string protocol, string host, string fragment);
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
+        TagBuilder GenerateErrorMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression, string visuallyHiddenText, string id);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
         TagBuilder GenerateHint(IHtmlContent content);
         TagBuilder GenerateInsetText(IHtmlContent content);
