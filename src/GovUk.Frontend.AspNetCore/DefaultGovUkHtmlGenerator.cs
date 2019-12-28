@@ -209,6 +209,34 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateLabel(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression,
+            bool isPageHeading,
+            IHtmlContent content)
+        {
+            if (viewContext == null)
+            {
+                throw new ArgumentNullException(nameof(viewContext));
+            }
+
+            if (modelExplorer == null)
+            {
+                throw new ArgumentNullException(nameof(modelExplorer));
+            }
+
+            if (expression == null)
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
+
+            var resolvedFor = GetId(viewContext, modelExplorer, expression);
+            var resolvedContent = content ?? GetDisplayName(viewContext, modelExplorer, expression);
+
+            return GenerateLabel(resolvedFor, isPageHeading, resolvedContent);
+        }
+
         public virtual TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content)
         {
             if (@for == null)
@@ -313,6 +341,24 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.InnerHtml.AppendHtml(text);
 
             return tagBuilder;
+        }
+
+        public virtual IHtmlContent GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
+        {
+            // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
+            // that is accessible then pull out the value
+
+            var tagBuilder = _innerGenerator.GenerateLabel(viewContext, modelExplorer, expression, null, null);
+            return tagBuilder.InnerHtml;
+        }
+
+        public virtual string GetId(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
+        {
+            // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
+            // that is accessible then pull out the value
+
+            var tagBuilder = _innerGenerator.GenerateLabel(viewContext, modelExplorer, expression, null, null);
+            return tagBuilder.Attributes["for"];
         }
     }
 }
