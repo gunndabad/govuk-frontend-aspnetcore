@@ -174,6 +174,11 @@ namespace GovUk.Frontend.AspNetCore
 
             var content = GetValidationMessage(viewContext, modelExplorer, expression);
 
+            if (content == null)
+            {
+                return null;
+            }
+
             return GenerateErrorMessage(visuallyHiddenText, id, content);
         }
 
