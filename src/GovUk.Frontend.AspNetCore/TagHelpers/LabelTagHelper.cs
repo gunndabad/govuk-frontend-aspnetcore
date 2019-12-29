@@ -41,10 +41,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"Cannot determine 'for' attribute for <label>.");
             }
 
-            var childContent = await output.GetChildContentAsync();
+            var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var tagBuilder = AspFor != null ?
-                _htmlGenerator.GenerateLabel(ViewContext, AspFor.ModelExplorer, AspFor.Name, IsPageHeading, !childContent.IsEmptyOrWhiteSpace ? childContent : null) :
+                _htmlGenerator.GenerateLabel(ViewContext, AspFor.ModelExplorer, AspFor.Name, IsPageHeading, childContent) :
                 _htmlGenerator.GenerateLabel(For, IsPageHeading, childContent);
 
             output.TagName = tagBuilder.TagName;
