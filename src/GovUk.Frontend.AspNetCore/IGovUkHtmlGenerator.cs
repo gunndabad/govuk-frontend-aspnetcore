@@ -17,6 +17,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
         TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
         TagBuilder GenerateTag(IHtmlContent content);
+        TagBuilder GenerateTextArea(bool haveError, string id, string name, int? rows, string describedBy, string autocomplete, IHtmlContent content);
         TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText);
 
         string GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
