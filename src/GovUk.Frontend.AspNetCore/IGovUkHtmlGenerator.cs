@@ -11,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
+        TagBuilder GenerateFormGroup(bool haveContent, IHtmlContent label, IHtmlContent hint, IHtmlContent errorMessage, IHtmlContent element);
         TagBuilder GenerateHint(string id, IHtmlContent content);
         TagBuilder GenerateInsetText(IHtmlContent content);
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
