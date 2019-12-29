@@ -16,6 +16,7 @@ namespace GovUk.Frontend.AspNetCore
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
+        public const int DefaultTextAreaRows = 5;
 
         private readonly IUrlHelperFactory _urlHelperFactory;
 
@@ -306,6 +307,57 @@ namespace GovUk.Frontend.AspNetCore
 
             var tagBuilder = new TagBuilder("strong");
             tagBuilder.AddCssClass("govuk-tag");
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
+        public virtual TagBuilder GenerateTextArea(
+            bool haveError,
+            string id,
+            string name,
+            int? rows,
+            string describedBy,
+            string autocomplete,
+            IHtmlContent content)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("textarea");
+            tagBuilder.AddCssClass("govuk-textarea");
+
+            if (haveError)
+            {
+                tagBuilder.AddCssClass("govuk-textarea--error");
+            }
+
+            tagBuilder.Attributes.Add("id", id);
+            tagBuilder.Attributes.Add("name", name);
+            tagBuilder.Attributes.Add("rows", (rows ?? DefaultTextAreaRows).ToString());
+
+            if (describedBy != null)
+            {
+                tagBuilder.Attributes.Add("aria-describedby", describedBy);
+            }
+
+            if (autocomplete != null)
+            {
+                tagBuilder.Attributes.Add("autocomplete", autocomplete);
+            }
+
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
