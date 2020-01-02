@@ -19,11 +19,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Setup .NET Core
+
+    - name: Setup .NET Core 2.1
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.1.607
+
+    - name: Setup .NET Core 3.0
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.0.100
+
+    - name: .NET SxS
+      run: |
+        rsync -a ${DOTNET_ROOT/3.0.100/2.1.607}/* $DOTNET_ROOT/
+
     - name: Build
       run: dotnet build --configuration Release
+
     - name: Test
       run: dotnet test --configuration Release
