@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+#if netstandard2
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+#endif
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -15,13 +20,30 @@ namespace GovUk.Frontend.AspNetCore
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IHtmlGenerator _innerGenerator;
 
+        private static readonly GetFullHtmlFieldNameDelegate s_getFullHtmlFieldNameDelegate;
+
+        static DefaultGovUkHtmlGenerator()
+        {
+            s_getFullHtmlFieldNameDelegate =
+#if netstandard2
+                NameAndIdProvider.GetFullHtmlFieldName;
+#else
+                (GetFullHtmlFieldNameDelegate)typeof(IHtmlGenerator).Assembly
+                    .GetType("Microsoft.AspNetCore.Mvc.ViewFeatures.NameAndIdProvider", throwOnError: true)
+                    .GetMethod("GetFullHtmlFieldName", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+                    .CreateDelegate(typeof(GetFullHtmlFieldNameDelegate));
+#endif
+        }
+
         public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory, IHtmlGenerator innerGenerator)
         {
             _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
             _innerGenerator = innerGenerator ?? throw new ArgumentNullException(nameof(innerGenerator));
         }
 
-        public TagBuilder GenerateLink(string href)
+        private delegate string GetFullHtmlFieldNameDelegate(ViewContext viewContext, string expression);
+
+        public TagBuilder GenerateAnchor(string href)
         {
             if (href == null)
             {
@@ -32,50 +54,6 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.Attributes.Add("href", href);
 
             return tagBuilder;
-        }
-
-        public TagBuilder GenerateActionLink(
-            ViewContext viewContext,
-            string action,
-            string controller,
-            object values,
-            string protocol,
-            string host,
-            string fragment)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
-            var href = urlHelper.Action(action, controller, values, protocol, host, fragment);
-
-            return GenerateLink(href);
-        }
-
-        public TagBuilder GeneratePageLink(
-            ViewContext viewContext,
-            string pageName,
-            string pageHandler,
-            object values,
-            string protocol,
-            string host,
-            string fragment)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
-            var href = urlHelper.Page(pageName, pageHandler, values, protocol, host, fragment);
-
-            return GenerateLink(href);
-        }
-
-        public TagBuilder GenerateRouteLink(
-            ViewContext viewContext,
-            string routeName,
-            object values,
-            string protocol,
-            string host,
-            string fragment)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
-            var href = urlHelper.RouteUrl(routeName, values, protocol, host, fragment);
-
-            return GenerateLink(href);
         }
 
         public virtual TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem)
@@ -150,38 +128,6 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateErrorMessage(
-            ViewContext viewContext,
-            ModelExplorer modelExplorer,
-            string expression,
-            string visuallyHiddenText,
-            string id)
-        {
-            if (viewContext == null)
-            {
-                throw new ArgumentNullException(nameof(viewContext));
-            }
-
-            if (modelExplorer == null)
-            {
-                throw new ArgumentNullException(nameof(modelExplorer));
-            }
-
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            var content = GetValidationMessage(viewContext, modelExplorer, expression);
-
-            if (content == null)
-            {
-                return null;
-            }
-
-            return GenerateErrorMessage(visuallyHiddenText, id, content);
-        }
-
         public virtual TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content)
         {
             if (content == null)
@@ -245,34 +191,6 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
-        }
-
-        public virtual TagBuilder GenerateLabel(
-            ViewContext viewContext,
-            ModelExplorer modelExplorer,
-            string expression,
-            bool isPageHeading,
-            IHtmlContent content)
-        {
-            if (viewContext == null)
-            {
-                throw new ArgumentNullException(nameof(viewContext));
-            }
-
-            if (modelExplorer == null)
-            {
-                throw new ArgumentNullException(nameof(modelExplorer));
-            }
-
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
-
-            var resolvedFor = GetId(viewContext, modelExplorer, expression);
-            var resolvedContent = content ?? GetDisplayName(viewContext, modelExplorer, expression);
-
-            return GenerateLabel(resolvedFor, isPageHeading, resolvedContent);
         }
 
         public virtual TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content)
@@ -381,46 +299,93 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual IHtmlContent GetDisplayName(
+        public virtual string GetActionLinkHref(
             ViewContext viewContext,
-            ModelExplorer modelExplorer,
-            string expression)
+            string action,
+            string controller,
+            object values,
+            string protocol,
+            string host,
+            string fragment)
         {
-            // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
-            // that is accessible then pull out the value
-
-            var tagBuilder = _innerGenerator.GenerateLabel(viewContext, modelExplorer, expression, null, null);
-            return tagBuilder.InnerHtml;
+            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
+            return urlHelper.Action(action, controller, values, protocol, host, fragment);
         }
 
-        public virtual string GetId(
+        public virtual string GetPageLinkHref(
             ViewContext viewContext,
-            ModelExplorer modelExplorer,
-            string expression)
+            string pageName,
+            string pageHandler,
+            object values,
+            string protocol,
+            string host,
+            string fragment)
         {
-            // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
-            // that is accessible then pull out the value
-
-            var tagBuilder = _innerGenerator.GenerateLabel(viewContext, modelExplorer, expression, null, null);
-            return tagBuilder.Attributes["for"];
+            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
+            return urlHelper.Page(pageName, pageHandler, values, protocol, host, fragment);
         }
 
-        public virtual IHtmlContent GetValidationMessage(
+        public virtual string GetRouteLinkHref(
+            ViewContext viewContext,
+            string routeName,
+            object values,
+            string protocol,
+            string host,
+            string fragment)
+        {
+            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
+            return urlHelper.RouteUrl(routeName, values, protocol, host, fragment);
+        }
+
+        public virtual string GetDisplayName(
             ViewContext viewContext,
             ModelExplorer modelExplorer,
             string expression)
         {
-            // HACK: We can't easily get at the internal NameAndIdProvider so we delegate to a method that uses it 
-            // that is accessible then pull out the value
+            // See https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.ViewFeatures/src/DefaultHtmlGenerator.cs#L427
 
-            var tagBuilder = _innerGenerator.GenerateValidationMessage(
-                viewContext,
-                modelExplorer,
-                expression,
-                null,
-                null,
-                null);
-            return tagBuilder.InnerHtml;
+            var displayName = modelExplorer.Metadata.DisplayName ?? modelExplorer.Metadata.PropertyName;
+
+            if (displayName != null && expression != null)
+            {
+                displayName = displayName.Split('.').Last();
+            }
+
+            return displayName;
+        }
+
+        public virtual string GetFullHtmlFieldName(ViewContext viewContext, string expression) =>
+            s_getFullHtmlFieldNameDelegate(viewContext, expression);
+
+        public virtual string GetValidationMessage(
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
+            string expression)
+        {
+            // See https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.ViewFeatures/src/DefaultHtmlGenerator.cs#L795
+
+            var fullName = GetFullHtmlFieldName(viewContext, expression);
+
+            if (!viewContext.ViewData.ModelState.ContainsKey(fullName))
+            {
+                return null;
+            }
+
+            var tryGetModelStateResult = viewContext.ViewData.ModelState.TryGetValue(fullName, out var entry);
+            var modelErrors = tryGetModelStateResult ? entry.Errors : null;
+
+            ModelError modelError = null;
+            if (modelErrors != null && modelErrors.Count != 0)
+            {
+                modelError = modelErrors.FirstOrDefault(m => !string.IsNullOrEmpty(m.ErrorMessage)) ?? modelErrors[0];
+            }
+
+            if (modelError == null)
+            {
+                return null;
+            }
+
+            return modelError.ErrorMessage;
         }
     }
 }

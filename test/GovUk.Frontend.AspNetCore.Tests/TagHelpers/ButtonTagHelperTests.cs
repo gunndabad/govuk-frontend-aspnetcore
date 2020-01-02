@@ -127,12 +127,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             htmlGenerator
                 .Setup(mock => mock
-                    .GenerateLink(/*href: */It.IsAny<string>()))
+                    .GenerateAnchor(/*href: */It.IsAny<string>()))
                 .Returns(new TagBuilder("a"));
 
             htmlGenerator
                 .Setup(mock => mock
-                    .GenerateActionLink(
+                    .GetActionLinkHref(
                         /*viewContext: */It.IsAny<ViewContext>(),
                         /*action: */It.IsAny<string>(),
                         /*controller: */It.IsAny<string>(),
@@ -141,11 +141,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         /*host: */It.IsAny<string>(),
                         /*fragment: */It.IsAny<string>()
                     ))
-                .Returns(new TagBuilder("a"));
+                .Returns("http://place.com");
 
             htmlGenerator
                 .Setup(mock => mock
-                    .GeneratePageLink(
+                    .GetPageLinkHref(
                         /*viewContext: */It.IsAny<ViewContext>(),
                         /*pageName: */It.IsAny<string>(),
                         /*pageHandler: */It.IsAny<string>(),
@@ -154,11 +154,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         /*host: */It.IsAny<string>(),
                         /*fragment: */It.IsAny<string>()
                     ))
-                .Returns(new TagBuilder("a"));
+                .Returns("http://place.com");
 
             htmlGenerator
                 .Setup(mock => mock
-                    .GenerateRouteLink(
+                    .GetRouteLinkHref(
                         /*viewContext: */It.IsAny<ViewContext>(),
                         /*routeName: */It.IsAny<string>(),
                         /*values: */It.IsAny<object>(),
@@ -166,7 +166,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         /*host: */It.IsAny<string>(),
                         /*fragment: */It.IsAny<string>()
                     ))
-                .Returns(new TagBuilder("a"));
+                .Returns("http://place.com");
 
             var tagHelper = new ButtonTagHelper(htmlGenerator.Object)
             {

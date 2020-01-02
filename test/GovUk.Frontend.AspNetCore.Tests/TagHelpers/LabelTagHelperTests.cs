@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -74,9 +73,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             htmlGenerator
-                .Setup(mock => mock.GetId(
+                .Setup(mock => mock.GetFullHtmlFieldName(
                     /*viewContext: */It.IsAny<ViewContext>(),
-                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
@@ -85,7 +83,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
-                .Returns(new HtmlString("Generated label"));
+                .Returns("Generated label");
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
@@ -129,9 +127,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             htmlGenerator
-                .Setup(mock => mock.GetId(
+                .Setup(mock => mock.GetFullHtmlFieldName(
                     /*viewContext: */It.IsAny<ViewContext>(),
-                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
@@ -140,7 +137,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
-                .Returns(new HtmlString("Generated label"));
+                .Returns("Generated label");
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
