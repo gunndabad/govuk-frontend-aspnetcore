@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -164,7 +163,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
-                .Returns(new HtmlString("An error!"));
+                .Returns("An error!");
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
@@ -217,7 +216,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
-                .Returns((TagBuilder)null);
+                .Returns((string)null);
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
@@ -226,39 +225,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
             };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Null(output.TagName);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithEmptyChildContentGeneratesNoOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-message",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-message",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var htmlHelper = new Mock<IHtmlHelper>();
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
-
-            var tagHelper = new ErrorMessageTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()));
 
             // Act
             await tagHelper.ProcessAsync(context, output);

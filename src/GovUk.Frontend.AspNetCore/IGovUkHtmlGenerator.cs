@@ -7,20 +7,23 @@ namespace GovUk.Frontend.AspNetCore
 {
     public interface IGovUkHtmlGenerator
     {
-        TagBuilder GenerateLink(string href);
-        TagBuilder GenerateActionLink(ViewContext viewContext, string action, string controller, object values, string protocol, string host, string fragment);
-        TagBuilder GeneratePageLink(ViewContext viewContext, string pageName, string pageHandler, object values, string protocol, string host, string fragment);
-        TagBuilder GenerateRouteLink(ViewContext viewContext, string routeName, object values, string protocol, string host, string fragment);
+        TagBuilder GenerateAnchor(string href);
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
-        TagBuilder GenerateErrorMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression, string visuallyHiddenText, string id);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
         TagBuilder GenerateHint(string id, IHtmlContent content);
         TagBuilder GenerateInsetText(IHtmlContent content);
-        TagBuilder GenerateLabel(ViewContext viewContext, ModelExplorer modelExplorer, string expression, bool isPageHeading, IHtmlContent content);
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
         TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
         TagBuilder GenerateTag(IHtmlContent content);
         TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText);
+
+        string GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
+        string GetFullHtmlFieldName(ViewContext viewContext, string expression);
+        string GetValidationMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
+
+        string GetActionLinkHref(ViewContext viewContext, string action, string controller, object values, string protocol, string host, string fragment);
+        string GetPageLinkHref(ViewContext viewContext, string pageName, string pageHandler, object values, string protocol, string host, string fragment);
+        string GetRouteLinkHref(ViewContext viewContext, string routeName, object values, string protocol, string host, string fragment);
     }
 }

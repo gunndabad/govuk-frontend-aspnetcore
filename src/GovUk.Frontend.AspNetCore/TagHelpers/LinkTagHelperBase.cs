@@ -117,25 +117,25 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 routeValues["area"] = Area;
             }
 
-            TagBuilder tagBuilder = null;
+            string href = null;
             if (hrefLink)
             {
-                tagBuilder = _htmlGenerator.GenerateLink(Href);
+                href = Href;
             }
             else if (pageLink)
             {
-                tagBuilder = _htmlGenerator.GeneratePageLink(ViewContext, Page, PageHandler, RouteValues, Protocol, Host, Fragment);
+                href = _htmlGenerator.GetPageLinkHref(ViewContext, Page, PageHandler, RouteValues, Protocol, Host, Fragment);
             }
             else if (routeLink)
             {
-                tagBuilder = _htmlGenerator.GenerateRouteLink(ViewContext, Route, RouteValues, Protocol, Host, Fragment);
+                href = _htmlGenerator.GetRouteLinkHref(ViewContext, Route, RouteValues, Protocol, Host, Fragment);
             }
             else // if (actionLink)
             {
-                tagBuilder = _htmlGenerator.GenerateActionLink(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
+                href = _htmlGenerator.GetActionLinkHref(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
             }
 
-            return tagBuilder;
+            return _htmlGenerator.GenerateAnchor(href);
         }
     }
 }

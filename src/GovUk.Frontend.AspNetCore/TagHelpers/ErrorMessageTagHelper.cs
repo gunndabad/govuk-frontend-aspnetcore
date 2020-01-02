@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -38,14 +39,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var tagBuilder = childContent == null ?
-                _htmlGenerator.GenerateErrorMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name, VisuallyHiddenText, Id) :
-                !childContent.IsEmptyOrWhiteSpace ?
-                _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, childContent) :
-                null;
-
-            if (tagBuilder != null)
+            if (childContent == null && AspFor == null)
             {
+                throw new InvalidOperationException($"Cannot determine content.");
+            }
+
+            var resolvedContent = (IHtmlContent)childContent;
+            if (resolvedContent == null && AspFor != null)
+            {
+                var validationMessage = _htmlGenerator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
+
+                if (validationMessage != null)
+                {
+                    resolvedContent = new HtmlString(validationMessage);
+                }
+            }
+
+            if (resolvedContent != null)
+            {
+                var tagBuilder = _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, resolvedContent);
+
                 output.TagName = tagBuilder.TagName;
                 output.TagMode = TagMode.StartTagAndEndTag;
 

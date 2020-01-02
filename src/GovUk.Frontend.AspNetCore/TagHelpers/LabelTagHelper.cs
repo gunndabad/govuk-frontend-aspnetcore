@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -43,9 +44,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var tagBuilder = AspFor != null ?
-                _htmlGenerator.GenerateLabel(ViewContext, AspFor.ModelExplorer, AspFor.Name, IsPageHeading, childContent) :
-                _htmlGenerator.GenerateLabel(For, IsPageHeading, childContent);
+            var resolvedFor = For ?? _htmlGenerator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+
+            var resolvedContent = (IHtmlContent)childContent ??
+                new HtmlString(_htmlGenerator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
+
+            var tagBuilder = _htmlGenerator.GenerateLabel(resolvedFor, IsPageHeading, resolvedContent);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
