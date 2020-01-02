@@ -221,7 +221,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Contains("govuk-button--start", output.Attributes["class"].Value.ToString().Split(" "));
+            Assert.Contains("govuk-button--start", output.Attributes["class"].Value.ToString().Split(' '));
             Assert.Contains("<svg class=\"govuk-button__start-icon\"", output.Content.GetContent());
         }
 
@@ -257,7 +257,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.Equal("button", output.TagName);
-            Assert.Contains("govuk-button--disabled", output.Attributes["class"].Value.ToString().Split(" "));
+            Assert.Contains("govuk-button--disabled", output.Attributes["class"].Value.ToString().Split(' '));
             Assert.Equal("disabled", output.Attributes["disabled"].Value);
             Assert.Equal("true", output.Attributes["aria-disabled"].Value);
         }
@@ -295,7 +295,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.Equal("a", output.TagName);
-            Assert.Contains("govuk-button--disabled", output.Attributes["class"].Value.ToString().Split(" "));
+            Assert.Contains("govuk-button--disabled", output.Attributes["class"].Value.ToString().Split(' '));
         }
 
         [Fact]
