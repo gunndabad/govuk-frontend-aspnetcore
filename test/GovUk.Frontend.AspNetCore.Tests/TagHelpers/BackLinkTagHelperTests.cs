@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -32,8 +31,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var tagHelper = new BackLinkTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()))
+            var tagHelper = new BackLinkTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Href = "http://foo.com"
             };
@@ -66,8 +64,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new BackLinkTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()))
+            var tagHelper = new BackLinkTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Href = "http://foo.com"
             };

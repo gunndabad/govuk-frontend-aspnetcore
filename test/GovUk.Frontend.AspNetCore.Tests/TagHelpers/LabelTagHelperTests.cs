@@ -33,8 +33,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new LabelTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()))
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 For = "some-input-id"
             };
@@ -67,7 +66,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
             {
                 CallBase = true
             };
@@ -121,7 +120,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
             {
                 CallBase = true
             };
@@ -175,8 +174,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new LabelTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>(), Mock.Of<IHtmlGenerator>()))
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 For = "some-input-id",
                 IsPageHeading = true
