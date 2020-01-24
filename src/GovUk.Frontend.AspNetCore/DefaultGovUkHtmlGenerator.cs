@@ -18,7 +18,6 @@ namespace GovUk.Frontend.AspNetCore
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
 
         private readonly IUrlHelperFactory _urlHelperFactory;
-        private readonly IHtmlGenerator _innerGenerator;
 
         private static readonly GetFullHtmlFieldNameDelegate s_getFullHtmlFieldNameDelegate;
 
@@ -35,10 +34,9 @@ namespace GovUk.Frontend.AspNetCore
 #endif
         }
 
-        public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory, IHtmlGenerator innerGenerator)
+        public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory)
         {
             _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
-            _innerGenerator = innerGenerator ?? throw new ArgumentNullException(nameof(innerGenerator));
         }
 
         private delegate string GetFullHtmlFieldNameDelegate(ViewContext viewContext, string expression);
