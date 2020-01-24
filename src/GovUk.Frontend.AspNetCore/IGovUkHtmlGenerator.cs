@@ -21,6 +21,7 @@ namespace GovUk.Frontend.AspNetCore
 
         string GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
         string GetFullHtmlFieldName(ViewContext viewContext, string expression);
+        string GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
         string GetValidationMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
 
         string GetActionLinkHref(ViewContext viewContext, string action, string controller, object values, string protocol, string host, string fragment);
