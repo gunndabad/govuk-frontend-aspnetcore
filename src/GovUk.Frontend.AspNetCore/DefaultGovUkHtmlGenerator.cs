@@ -397,6 +397,42 @@ namespace GovUk.Frontend.AspNetCore
         public virtual string GetFullHtmlFieldName(ViewContext viewContext, string expression) =>
             s_getFullHtmlFieldNameDelegate(viewContext, expression);
 
+        public virtual string GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
+        {
+            if (viewContext == null)
+            {
+                throw new ArgumentNullException(nameof(viewContext));
+            }
+
+            if (modelExplorer == null)
+            {
+                throw new ArgumentNullException(nameof(modelExplorer));
+            }
+
+            if (expression == null)
+            {
+                throw new ArgumentNullException(nameof(expression));
+            }
+
+            var fullName = GetFullHtmlFieldName(viewContext, expression);
+
+            // See https://github.com/dotnet/aspnetcore/blob/9a3aacb56af7221bfb29d851ee6b7c883650ddf6/src/Mvc/Mvc.ViewFeatures/src/DefaultHtmlGenerator.cs#L714-L724
+
+            viewContext.ViewData.ModelState.TryGetValue(fullName, out var entry);
+
+            var value = string.Empty;
+            if (entry != null && entry.AttemptedValue != null)
+            {
+                value = entry.AttemptedValue;
+            }
+            else if (modelExplorer.Model != null)
+            {
+                value = modelExplorer.Model.ToString();
+            }
+
+            return value;
+        }
+
         public virtual string GetValidationMessage(
             ViewContext viewContext,
             ModelExplorer modelExplorer,
