@@ -16,6 +16,7 @@ namespace GovUk.Frontend.AspNetCore
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
+        public const string DefaultInputType = "text";
         public const int DefaultTextAreaRows = 5;
 
         private readonly IUrlHelperFactory _urlHelperFactory;
@@ -230,6 +231,67 @@ namespace GovUk.Frontend.AspNetCore
             var tagBuilder = new TagBuilder("div");
             tagBuilder.AddCssClass("govuk-inset-text");
             tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
+        public virtual TagBuilder GenerateInput(
+            bool haveError,
+            string id,
+            string name,
+            string type,
+            string value,
+            string describedBy,
+            string autocomplete,
+            string pattern,
+            string inputMode)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            var tagBuilder = new TagBuilder("input");
+            tagBuilder.AddCssClass("govuk-input");
+
+            if (haveError)
+            {
+                tagBuilder.AddCssClass("govuk-input--error");
+            }
+
+            tagBuilder.Attributes.Add("id", id);
+            tagBuilder.Attributes.Add("name", name);
+            tagBuilder.Attributes.Add("type", type ?? DefaultInputType);
+
+            if (value != null)
+            {
+                tagBuilder.Attributes.Add("value", value);
+            }
+
+            if (describedBy != null)
+            {
+                tagBuilder.Attributes.Add("aria-describedby", describedBy);
+            }
+
+            if (autocomplete != null)
+            {
+                tagBuilder.Attributes.Add("autocomplete", autocomplete);
+            }
+
+            if (pattern != null)
+            {
+                tagBuilder.Attributes.Add("pattern", pattern);
+            }
+
+            if (inputMode != null)
+            {
+                tagBuilder.Attributes.Add("inputmode", inputMode);
+            }
 
             return tagBuilder;
         }
