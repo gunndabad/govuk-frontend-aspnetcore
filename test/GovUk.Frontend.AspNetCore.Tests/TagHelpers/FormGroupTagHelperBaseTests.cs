@@ -17,35 +17,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class FormGroupTagHelperBaseTests
     {
         [Fact]
-        public async Task ProcessAsync_NoIdOrAspForThrowsInvalidOperationException()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-test-formgroup",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-test-formgroup",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TestFormGroupTagHelper(Mock.Of<IGovUkHtmlGenerator>())
-            {
-                Name = "my-element-name"
-            };
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("At least one of the 'id' and 'asp-for' attributes must be specified.", ex.Message);
-        }
-
-        [Fact]
         public async Task ProcessAsync_NoNameOrAspForThrowsInvalidOperationException()
         {
             // Arrange
