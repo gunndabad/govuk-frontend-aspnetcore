@@ -47,8 +47,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            var resolvedId = Id ??
-                TagBuilder.CreateSanitizedId(Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name), Constants.IdAttributeDotReplacement);
+            var resolvedName = Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+            var resolvedId = Id ?? TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
 
             var builder = CreateFormGroupBuilder();
             context.Items.Add(FormGroupBuilder.ContextName, builder);
@@ -94,7 +94,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 describedBy = string.Join(" ", describedByParts);
             }
 
-            var elementCtx = new FormGroupElementContext(resolvedId, haveError, describedBy);
+            var elementCtx = new FormGroupElementContext(resolvedId, resolvedName, haveError, describedBy);
             var element = CreateElement(builder, elementCtx);
 
             var tagBuilder = Generator.GenerateFormGroup(haveError, label, hint, errorMessage, element);
@@ -292,15 +292,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class FormGroupElementContext
     {
-        public FormGroupElementContext(string elementId, bool haveError, string describedBy)
+        public FormGroupElementContext(string elementId, string elementName, bool haveError, string describedBy)
         {
             ElementId = elementId ?? throw new ArgumentNullException(nameof(elementId));
+            ElementName = elementName ?? throw new ArgumentNullException(nameof(elementName));
             HaveError = haveError;
             DescribedBy = describedBy;
         }
 
         public string DescribedBy { get; }
         public string ElementId { get; }
+        public string ElementName { get; }
         public bool HaveError { get; }
     }
 }
