@@ -41,19 +41,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (Id == null && AspFor == null)
-            {
-                throw new InvalidOperationException(
-                    $"At least one of the '{IdAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
-            }
-
             if (Name == null && AspFor == null)
             {
                 throw new InvalidOperationException(
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            var resolvedId = Id ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+            var resolvedId = Id ??
+                TagBuilder.CreateSanitizedId(Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name), Constants.IdAttributeDotReplacement);
 
             var builder = CreateFormGroupBuilder();
             context.Items.Add(FormGroupBuilder.ContextName, builder);

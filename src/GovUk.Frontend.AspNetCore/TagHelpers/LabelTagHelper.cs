@@ -44,7 +44,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var resolvedFor = For ?? _htmlGenerator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+            var resolvedFor = For ??
+                TagBuilder.CreateSanitizedId(_htmlGenerator.GetFullHtmlFieldName(ViewContext, AspFor.Name), Constants.IdAttributeDotReplacement);
 
             var resolvedContent = (IHtmlContent)childContent ??
                 new HtmlString(_htmlGenerator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
