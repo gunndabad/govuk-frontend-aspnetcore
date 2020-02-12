@@ -36,12 +36,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = textAreaBuilder.Content ??
                 new HtmlString(Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
-            var resolvedName = Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
-
             return Generator.GenerateTextArea(
                 context.HaveError,
                 context.ElementId,
-                resolvedName,
+                context.ElementName,
                 Rows,
                 context.DescribedBy,
                 Autocomplete,
