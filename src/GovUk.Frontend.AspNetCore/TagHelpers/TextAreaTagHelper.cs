@@ -65,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-textarea-element", ParentTag = "govuk-textarea")]
-    public class TextAreaElementTagHelper : FormGroupErrorMessageTagHelperBase
+    public class TextAreaElementTagHelper : TagHelper
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
