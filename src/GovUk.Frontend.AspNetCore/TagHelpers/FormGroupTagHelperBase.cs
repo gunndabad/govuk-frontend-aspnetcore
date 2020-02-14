@@ -97,7 +97,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var elementCtx = new FormGroupElementContext(resolvedId, resolvedName, haveError, describedBy);
             var element = CreateElement(builder, elementCtx);
 
-            var tagBuilder = Generator.GenerateFormGroup(haveError, label, hint, errorMessage, element);
+            var tagBuilder = AdaptFormGroup(
+                Generator.GenerateFormGroup(haveError, label, hint, errorMessage, element),
+                elementCtx);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -140,6 +142,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     null;
             }
         }
+
+        private protected virtual TagBuilder AdaptFormGroup(TagBuilder tagBuilder, FormGroupElementContext context) =>
+            tagBuilder;
 
         private protected abstract IHtmlContent CreateElement(FormGroupBuilder builder, FormGroupElementContext context);
 
