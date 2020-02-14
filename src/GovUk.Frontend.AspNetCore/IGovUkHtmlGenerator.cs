@@ -9,6 +9,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         TagBuilder GenerateAnchor(string href);
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
+        TagBuilder GenerateCharacterCount(string elementId, int? maxLength, int? maxWords, decimal? threshold, IHtmlContent formGroup);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
         TagBuilder GenerateFormGroup(bool haveContent, IHtmlContent label, IHtmlContent hint, IHtmlContent errorMessage, IHtmlContent element);
