@@ -88,6 +88,59 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateCharacterCount(
+            string elementId,
+            int? maxLength,
+            int? maxWords,
+            decimal? threshold,
+            IHtmlContent formGroup)
+        {
+            if (elementId == null)
+            {
+                throw new ArgumentNullException(nameof(elementId));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-character-count");
+            tagBuilder.Attributes.Add("data-module", "govuk-character-count");
+
+            if (maxLength.HasValue)
+            {
+                tagBuilder.Attributes.Add("data-maxlength", maxLength.Value.ToString());
+            }
+
+            if (threshold.HasValue)
+            {
+                tagBuilder.Attributes.Add("data-threshold", threshold.Value.ToString());
+            }
+
+            if (maxWords.HasValue)
+            {
+                tagBuilder.Attributes.Add("data-maxwords", maxWords.Value.ToString());
+            }
+            
+            tagBuilder.InnerHtml.AppendHtml(formGroup);
+            tagBuilder.InnerHtml.AppendHtml(GetHint());
+
+            return tagBuilder;
+
+            IHtmlContent GetHint()
+            {
+                var content = maxWords.HasValue ?
+                    $"You can enter up to {maxWords.Value} words" :
+                    $"You can enter up to {maxLength.Value} characters";
+
+                var hintId = $"{elementId}-info";
+                var hintContent = new HtmlString(content);
+                var generatedHint = GenerateHint(hintId, hintContent);
+
+                generatedHint.AddCssClass("govuk-character-count__message");
+                generatedHint.Attributes.Add("aria-live", "polite");
+
+                return generatedHint;
+            }
+        }
+
         public TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text)
         {
             if (summary == null)

@@ -1,0 +1,80 @@
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+
+namespace GovUk.Frontend.AspNetCore.TagHelpers
+{
+    [HtmlTargetElement("govuk-character-count")]
+    [RestrictChildren("govuk-character-count-label", "govuk-character-count-hint", "govuk-character-count-error-message", "govuk-character-count-element")]
+    public class CharacterCountTagHelper : TextAreaTagHelper
+    {
+        private const string MaxLengthAttributeName = "max-length";
+        private const string MaxWordsLengthAttributeName = "max-words";
+        private const string ThresholdAttributeName = "threshold";
+
+        public CharacterCountTagHelper(IGovUkHtmlGenerator htmlGenerator)
+            : base(htmlGenerator)
+        {
+        }
+
+        [HtmlAttributeName(MaxLengthAttributeName)]
+        public int? MaxLength { get; set; }
+
+        [HtmlAttributeName(MaxWordsLengthAttributeName)]
+        public int? MaxWords { get; set; }
+
+        [HtmlAttributeName(ThresholdAttributeName)]
+        public decimal? Threshold { get; set; }
+
+        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            if (MaxLength.HasValue && MaxWords.HasValue)
+            {
+                throw new InvalidOperationException($"The '{MaxLengthAttributeName}' and '{MaxWordsLengthAttributeName}' attributes are mutually exclusive.");
+            }
+            else if (!MaxLength.HasValue && !MaxWords.HasValue)
+            {
+                throw new InvalidOperationException($"One of the '{MaxLengthAttributeName}' and '{MaxWordsLengthAttributeName}' attributes must be specified.");
+            }
+
+            if (Threshold.HasValue && (Threshold.Value < 0 || Threshold.Value > 100))
+            {
+                throw new InvalidOperationException($"The '{ThresholdAttributeName}' attribute is invalid.");
+            }
+
+            return base.ProcessAsync(context, output);
+        }
+
+        private protected override IHtmlContent CreateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        {
+            var textArea = base.CreateElement(builder, context);
+            ((TagBuilder)textArea).AddCssClass("govuk-js-character-count");  // HACK - FIXME once we have a way of passing class
+            return textArea;
+        }
+
+        private protected override TagBuilder AdaptFormGroup(TagBuilder tagBuilder, FormGroupElementContext context) =>
+            Generator.GenerateCharacterCount(context.ElementId, MaxLength, MaxWords, Threshold, tagBuilder);
+    }
+
+    [HtmlTargetElement("govuk-character-count-label", ParentTag = "govuk-character-count")]
+    public class CharacterCountLabelTagHelper : TextAreaLabelTagHelper
+    {
+    }
+
+    [HtmlTargetElement("govuk-character-count-hint", ParentTag = "govuk-character-count")]
+    public class CharacterCountHintTagHelper : TextAreaHintTagHelper
+    {
+    }
+
+    [HtmlTargetElement("govuk-character-count-error-message", ParentTag = "govuk-character-count")]
+    public class CharacterCountErrorMessageTagHelper : TextAreaErrorMessageTagHelper
+    {
+    }
+
+    [HtmlTargetElement("govuk-character-count-element", ParentTag = "govuk-character-count")]
+    public class CharacterCountElementTagHelper : TextAreaElementTagHelper
+    {
+    }
+}
