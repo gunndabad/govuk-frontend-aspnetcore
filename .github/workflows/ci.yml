@@ -39,3 +39,12 @@ jobs:
 
     - name: Test
       run: dotnet test --configuration Release
+
+    - name: Package
+      run: dotnet pack --configuration Release --include-symbols --version-suffix pre-${GITHUB_RUN_NUMBER}
+    
+    - name: Publish pre-release package
+      if: github.ref == 'refs/heads/master'
+      run: dotnet nuget push src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg --api-key ${NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
+      env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }} 

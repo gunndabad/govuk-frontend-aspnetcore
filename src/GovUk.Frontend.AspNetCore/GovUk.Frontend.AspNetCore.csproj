@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <Copyright>Copyright © 2020 James Gunn</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>aspnetcore, taghelpers, gds, gov.uk</PackageTags>
+    <VersionPrefix>0.1.0</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
