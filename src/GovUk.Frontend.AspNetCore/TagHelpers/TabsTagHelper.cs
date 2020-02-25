@@ -1,0 +1,104 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+
+namespace GovUk.Frontend.AspNetCore.TagHelpers
+{
+    [HtmlTargetElement("govuk-tabs", TagStructure = TagStructure.NormalOrSelfClosing)]
+    [RestrictChildren("govuk-tabs-item")]
+    public class TabsTagHelper : TagHelper
+    {
+        internal const string IdPrefixAttributeName = "id-prefix";
+        private const string IdAttributeName = "id";
+        private const string TitleAttributeName = "title";
+
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
+
+        public TabsTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+        }
+
+        [HtmlAttributeName(IdAttributeName)]
+        public string Id { get; set; }
+
+        [HtmlAttributeName(IdPrefixAttributeName)]
+        public string IdPrefix { get; set; }
+
+        [HtmlAttributeName(TitleAttributeName)]
+        public string Title { get; set; }
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            var tabsContext = new TabsContext(IdPrefix);
+            context.Items.Add(TabsContext.ContextName, tabsContext);
+
+            await output.GetChildContentAsync();
+
+            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, tabsContext.Items);
+
+            output.TagName = tagBuilder.TagName;
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        }
+    }
+
+    [HtmlTargetElement("govuk-tabs-item", ParentTag = "govuk-tabs", TagStructure = TagStructure.NormalOrSelfClosing)]
+    public class TabsItemTagHelper : TagHelper
+    {
+        private const string IdAttributeName = "id";
+        private const string LabelAttributeName = "label";
+
+        [HtmlAttributeName(IdAttributeName)]
+        public string Id { get; set; }
+
+        [HtmlAttributeName(LabelAttributeName)]
+        public string Label { get; set; }
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            if (Label == null)
+            {
+                throw new InvalidOperationException($"The '{LabelAttributeName}' attribute must be specified.");
+            }
+
+            var tabsContext = (TabsContext)context.Items[TabsContext.ContextName];
+
+            if (Id == null && tabsContext.IdPrefix == null)
+            {
+                throw new InvalidOperationException(
+                    $"Item must have the '{IdAttributeName}' attribute specified when its parent doesn't specify the '{TabsTagHelper.IdPrefixAttributeName}' attribute.");
+            }
+
+            var index = tabsContext.Items.Count;
+            var resolvedId = Id ?? $"{tabsContext.IdPrefix}-{index}";
+
+            var content = await output.GetChildContentAsync();
+
+            // We have to copy the content here since something in the underlying structure gets re-used
+            // before we've had a change to consume it.
+            var copiedContent = new HtmlString(content.GetContent());
+
+            tabsContext.Items.Add((resolvedId, Label, copiedContent));
+        }
+    }
+
+    internal class TabsContext
+    {
+        public const string ContextName = nameof(TabsContext);
+
+        public TabsContext(string idPrefix)
+        {
+            IdPrefix = idPrefix;
+            Items = new List<(string id, string label, IHtmlContent content)>();
+        }
+
+        public string IdPrefix { get; }
+        public List<(string id, string label, IHtmlContent content)> Items { get; }
+    }
+}

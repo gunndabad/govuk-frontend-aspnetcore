@@ -17,6 +17,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultInputType = "text";
+        public const string DefaultTabsTitle = "Contents";
         public const int DefaultTextAreaRows = 5;
 
         private readonly IUrlHelperFactory _urlHelperFactory;
@@ -379,6 +380,68 @@ namespace GovUk.Frontend.AspNetCore
             {
                 return tagBuilder;
             }
+        }
+
+        public virtual TagBuilder GenerateTabs(
+            string id,
+            string title,
+            IEnumerable<(string id, string label, IHtmlContent content)> items)
+        {
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-tabs");
+            tagBuilder.Attributes.Add("data-module", "govuk-tabs");
+
+            if (id != null)
+            {
+                tagBuilder.Attributes.Add("id", id);
+            }
+
+            var h2 = new TagBuilder("h2");
+            h2.AddCssClass("govuk-tabs__title");
+            h2.InnerHtml.Append(title ?? DefaultTabsTitle);
+            tagBuilder.InnerHtml.AppendHtml(h2);
+
+            var ul = new TagBuilder("ul");
+            ul.AddCssClass("govuk-tabs__list");
+
+            foreach (var item in items)
+            {
+                var li = new TagBuilder("li");
+                li.AddCssClass("govuk-tabs__list-item");
+
+                if (item == items.First())
+                {
+                    li.AddCssClass("govuk-tabs__list-item--selected");
+                }
+
+                var a = new TagBuilder("a");
+                a.AddCssClass("govuk-tabs__tab");
+                a.Attributes.Add("href", $"#{item.id}");
+                a.InnerHtml.Append(item.label);
+                li.InnerHtml.AppendHtml(a);
+
+                ul.InnerHtml.AppendHtml(li);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(ul);
+
+            foreach (var item in items)
+            {
+                var section = new TagBuilder("section");
+                section.AddCssClass("govuk-tabs__panel");
+                section.Attributes.Add("id", item.id);
+
+                if (item != items.First())
+                {
+                    section.AddCssClass("govuk-tabs__panel--hidden");
+                }
+
+                section.InnerHtml.AppendHtml(item.content);
+
+                tagBuilder.InnerHtml.AppendHtml(section);
+            }
+
+            return tagBuilder;
         }
 
         public virtual TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content)
