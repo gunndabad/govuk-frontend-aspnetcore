@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     describedByParts.Add(errorId);
                 }
 
-                describedBy = string.Join(" ", describedByParts);
+                describedBy = describedByParts.Count > 0 ? string.Join(" ", describedByParts) : null;
             }
 
             var elementCtx = new FormGroupElementContext(resolvedId, resolvedName, haveError, describedBy);
