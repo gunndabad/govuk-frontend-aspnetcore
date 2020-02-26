@@ -30,8 +30,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tabsContext = (TabsContext)context.Items[TabsContext.ContextName];
-                    tabsContext.Items.Add(("first", "First", new HtmlString("First panel content")));
-                    tabsContext.Items.Add(("second", "Second", new HtmlString("Second panel content")));
+                    tabsContext.AddItem(new TabsItem("first", "First", new HtmlString("First panel content")));
+                    tabsContext.AddItem(new TabsItem("second", "Second", new HtmlString("Second panel content")));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -77,8 +77,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tabsContext = (TabsContext)context.Items[TabsContext.ContextName];
-                    tabsContext.Items.Add(("first", "First", new HtmlString("First panel content")));
-                    tabsContext.Items.Add(("second", "Second", new HtmlString("Second panel content")));
+                    tabsContext.AddItem(new TabsItem("first", "First", new HtmlString("First panel content")));
+                    tabsContext.AddItem(new TabsItem("second", "Second", new HtmlString("Second panel content")));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -112,8 +112,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 uniqueId: "test");
 
             var tabsContext = new TabsContext(idPrefix: "myprefix");
-            tabsContext.Items.Add(("first", "First", new HtmlString("First panel content")));
-            tabsContext.Items.Add(("second", "Second", new HtmlString("Second panel content")));
+            tabsContext.AddItem(new TabsItem("first", "First", new HtmlString("First panel content")));
+            tabsContext.AddItem(new TabsItem("second", "Second", new HtmlString("Second panel content")));
             context.Items.Add(TabsContext.ContextName, tabsContext);
 
             var output = new TagHelperOutput(
@@ -134,7 +134,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("myprefix-2", tabsContext.Items.Last().id);
+            Assert.Equal("myprefix-2", tabsContext.Items.Last().Id);
         }
 
         [Fact]
@@ -167,6 +167,37 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
             Assert.Equal("Item must have the 'id' attribute specified when its parent doesn't specify the 'id-prefix' attribute.", ex.Message);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_LabelNotSpecifiedThrowsInvalidOperationException()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-tabs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var tabsContext = new TabsContext(idPrefix: null);
+            context.Items.Add(TabsContext.ContextName, tabsContext);
+
+            var output = new TagHelperOutput(
+                "govuk-tabs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new TabsItemTagHelper()
+            {
+            };
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("The 'label' attribute must be specified.", ex.Message);
         }
     }
 }

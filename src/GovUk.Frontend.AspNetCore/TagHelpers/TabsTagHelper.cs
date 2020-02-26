@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -80,11 +79,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            // We have to copy the content here since something in the underlying structure gets re-used
-            // before we've had a change to consume it.
-            var copiedContent = new HtmlString(content.GetContent());
+            tabsContext.AddItem(new TabsItem(resolvedId, Label, content.Snapshot()));
 
-            tabsContext.Items.Add((resolvedId, Label, copiedContent));
+            output.SuppressOutput();
         }
     }
 
@@ -92,13 +89,25 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public const string ContextName = nameof(TabsContext);
 
+        private readonly List<TabsItem> _items;
+
         public TabsContext(string idPrefix)
         {
             IdPrefix = idPrefix;
-            Items = new List<(string id, string label, IHtmlContent content)>();
+            _items = new List<TabsItem>();
         }
 
         public string IdPrefix { get; }
-        public List<(string id, string label, IHtmlContent content)> Items { get; }
+        public IReadOnlyList<TabsItem> Items => _items;
+
+        public void AddItem(TabsItem item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            _items.Add(item);
+        }
     }
 }
