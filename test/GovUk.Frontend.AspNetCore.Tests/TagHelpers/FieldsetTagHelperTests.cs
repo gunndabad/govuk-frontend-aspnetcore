@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
@@ -25,8 +26,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var fieldsetContext = (FieldsetContext)context.Items[FieldsetContext.ContextName];
+                    fieldsetContext.TrySetLegendContent(new HtmlString("Legend text"));
+
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Legend text");
+                    tagHelperContent.SetContent("Main content");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
@@ -46,6 +50,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<legend class=\"govuk-fieldset__legend\">" +
                 "Legend text" +
                 "</legend>" +
+                "Main content" +
                 "</fieldset>",
                 html);
         }
@@ -65,8 +70,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var fieldsetContext = (FieldsetContext)context.Items[FieldsetContext.ContextName];
+                    fieldsetContext.TrySetLegendContent(new HtmlString("Legend text"));
+
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Legend text");
+                    tagHelperContent.SetContent("Main text");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
@@ -87,6 +95,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<legend class=\"govuk-fieldset__legend\">" +
                 "<h1 class=\"govuk-fieldset__heading\">Legend text</h1>" +
                 "</legend>" +
+                "Main text" +
                 "</fieldset>",
                 html);
         }

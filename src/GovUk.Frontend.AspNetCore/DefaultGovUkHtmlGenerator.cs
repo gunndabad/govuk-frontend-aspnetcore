@@ -217,6 +217,7 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool isPageHeading,
             string role,
+            IHtmlContent legendContent,
             IHtmlContent content)
         {
             var tagBuilder = new TagBuilder("fieldset");
@@ -239,15 +240,16 @@ namespace GovUk.Frontend.AspNetCore
             {
                 var h1 = new TagBuilder("h1");
                 h1.AddCssClass("govuk-fieldset__heading");
-                h1.InnerHtml.AppendHtml(content);
+                h1.InnerHtml.AppendHtml(legendContent);
                 legend.InnerHtml.AppendHtml(h1);
             }
             else
             {
-                legend.InnerHtml.AppendHtml(content);
+                legend.InnerHtml.AppendHtml(legendContent);
             }
 
             tagBuilder.InnerHtml.AppendHtml(legend);
+            tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
         }
