@@ -13,7 +13,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         protected const string AspForAttributeName = "asp-for";
         protected const string DescribedByAttributeName = "described-by";
-        protected const string IdAttributeName = "id";
         private const string NameAttributeName = "name";
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -22,9 +21,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
 
-        [HtmlAttributeName(IdAttributeName)]
-        public string Id { get; set; }
-
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
 
@@ -32,12 +28,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
+        protected IGovUkHtmlGenerator Generator { get; }
+
         private protected FormGroupTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
         {
             Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        protected IGovUkHtmlGenerator Generator { get; }
+        private protected abstract string GetIdPrefix();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -48,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var resolvedName = Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
-            var resolvedId = Id ?? TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
+            var resolvedId = GetIdPrefix() ?? TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
 
             var builder = CreateFormGroupBuilder();
             context.Items.Add(FormGroupBuilder.ContextName, builder);
