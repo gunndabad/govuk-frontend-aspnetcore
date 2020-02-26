@@ -254,21 +254,11 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateFormGroup(
-            bool haveError,
-            IHtmlContent label,
-            IHtmlContent hint,
-            IHtmlContent errorMessage,
-            IHtmlContent element)
+        public virtual TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content)
         {
-            if (label == null)
+            if (content == null)
             {
-                throw new ArgumentNullException(nameof(label));
-            }
-
-            if (element == null)
-            {
-                throw new ArgumentNullException(nameof(element));
+                throw new ArgumentNullException(nameof(content));
             }
 
             var tagBuilder = new TagBuilder("div");
@@ -279,19 +269,7 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.AddCssClass("govuk-form-group--error");
             }
 
-            tagBuilder.InnerHtml.AppendHtml(label);
-
-            if (hint != null)
-            {
-                tagBuilder.InnerHtml.AppendHtml(hint);
-            }
-
-            if (errorMessage != null)
-            {
-                tagBuilder.InnerHtml.AppendHtml(errorMessage);
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(element);
+            tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
         }
