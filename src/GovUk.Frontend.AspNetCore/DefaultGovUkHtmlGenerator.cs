@@ -495,6 +495,135 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateRadios(bool isConditional, IHtmlContent content)
+        {
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-radios");
+
+            if (isConditional)
+            {
+                tagBuilder.AddCssClass("govuk-radios--conditional");
+                tagBuilder.Attributes.Add("data-module", "govuk-radios");
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
+        public virtual TagBuilder GenerateRadioItem(
+            string id,
+            string name,
+            string value,
+            bool @checked,
+            bool disabled,
+            IHtmlContent content,
+            string conditionalId,
+            IHtmlContent conditionalContent,
+            string hintId,
+            IHtmlContent hintContent)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (conditionalId == null && conditionalContent != null)
+            {
+                throw new ArgumentNullException(
+                    nameof(conditionalId),
+                    $"{nameof(conditionalId)} must be provided when {nameof(conditionalContent)} is specified.");
+            }
+
+            if (hintId == null && hintContent != null)
+            {
+                throw new ArgumentNullException(
+                    nameof(hintId),
+                    $"{nameof(hintId)} must be provided when {nameof(hintContent)} is specified.");
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-radios__item");
+
+            var input = new TagBuilder("input");
+            input.AddCssClass("govuk-radios__input");
+            input.Attributes.Add("id", id);
+            input.Attributes.Add("name", name);
+            input.Attributes.Add("type", "radio");
+            input.Attributes.Add("value", value);
+
+            if (@checked)
+            {
+                input.Attributes.Add("checked", "checked");
+            }
+
+            if (disabled)
+            {
+                input.Attributes.Add("disabled", "disabled");
+            }
+
+            if (conditionalContent != null)
+            {
+                input.Attributes.Add("data-aria-controls", conditionalId);
+            }
+
+            if (hintContent != null)
+            {
+                input.Attributes.Add("aria-describedby", hintId);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(input);
+
+            var label = GenerateLabel(id, isPageHeading: false, content);
+            label.AddCssClass("govuk-radios__label");
+            tagBuilder.InnerHtml.AppendHtml(label);
+
+            if (hintContent != null)
+            {
+                var hint = GenerateHint(hintId, hintContent);
+                hint.AddCssClass("govuk-radios__hint");
+                tagBuilder.InnerHtml.AppendHtml(hint);
+            }
+
+            if (conditionalContent != null)
+            {
+                var conditional = new TagBuilder("div");
+                conditional.AddCssClass("govuk-radios__conditional");
+
+                if (!@checked)
+                {
+                    conditional.AddCssClass("govuk-radios__conditional--hidden");
+                }
+
+                conditional.Attributes.Add("id", conditionalId);
+
+                conditional.InnerHtml.AppendHtml(conditionalContent);
+
+                tagBuilder.InnerHtml.AppendHtml(conditional);
+            }
+
+            return tagBuilder;
+        }
+
+        public virtual TagBuilder GenerateRadioItemDivider(IHtmlContent content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-radios__divider");
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateTag(IHtmlContent content)
         {
             if (content == null)

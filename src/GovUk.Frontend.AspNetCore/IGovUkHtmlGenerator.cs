@@ -18,6 +18,9 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateInsetText(IHtmlContent content);
         TagBuilder GenerateInput(bool haveError, string id, string name, string type, string value, string describedBy, string autocomplete, string pattern, string inputMode);
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
+        TagBuilder GenerateRadios(bool isConditional, IHtmlContent content);
+        TagBuilder GenerateRadioItem(string id, string name, string value, bool @checked, bool disabled, IHtmlContent content, string conditionalId, IHtmlContent conditionalContent, string hintId, IHtmlContent hintContent);
+        TagBuilder GenerateRadioItemDivider(IHtmlContent content);
         TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
         TagBuilder GenerateTabs(string id, string title, IEnumerable<(string id, string label, IHtmlContent content)> items);
         TagBuilder GenerateTag(IHtmlContent content);
