@@ -12,6 +12,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateCharacterCount(string elementId, int? maxLength, int? maxWords, decimal? threshold, IHtmlContent formGroup);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
+        TagBuilder GenerateFieldset(string describedBy, bool isPageHeading, string role, IHtmlContent content);
         TagBuilder GenerateFormGroup(bool haveContent, IHtmlContent label, IHtmlContent hint, IHtmlContent errorMessage, IHtmlContent element);
         TagBuilder GenerateHint(string id, IHtmlContent content);
         TagBuilder GenerateInsetText(IHtmlContent content);

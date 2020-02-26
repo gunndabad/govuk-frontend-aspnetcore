@@ -213,6 +213,45 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateFieldset(
+            string describedBy,
+            bool isPageHeading,
+            string role,
+            IHtmlContent content)
+        {
+            var tagBuilder = new TagBuilder("fieldset");
+            tagBuilder.AddCssClass("govuk-fieldset");
+
+            if (role != null)
+            {
+                tagBuilder.Attributes.Add("role", role);
+            }
+
+            if (describedBy != null)
+            {
+                tagBuilder.Attributes.Add("aria-describedby", describedBy);
+            }
+
+            var legend = new TagBuilder("legend");
+            legend.AddCssClass("govuk-fieldset__legend");
+
+            if (isPageHeading)
+            {
+                var h1 = new TagBuilder("h1");
+                h1.AddCssClass("govuk-fieldset__heading");
+                h1.InnerHtml.AppendHtml(content);
+                legend.InnerHtml.AppendHtml(h1);
+            }
+            else
+            {
+                legend.InnerHtml.AppendHtml(content);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(legend);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateFormGroup(
             bool haveError,
             IHtmlContent label,
