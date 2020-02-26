@@ -1424,15 +1424,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         public string Id { get; set; }
 
-        private protected override IHtmlContent CreateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        private protected override IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var tagBuilder = new TagBuilder("dummy");
-            tagBuilder.Attributes.Add("id", context.ElementId);
+            tagBuilder.Attributes.Add("id", ResolvedId);
             tagBuilder.Attributes.Add("have-error", context.HaveError.ToString());
 
-            if (!string.IsNullOrEmpty(context.DescribedBy))
+            if (!string.IsNullOrEmpty(DescribedBy))
             {
-                tagBuilder.Attributes.Add("described-by", context.DescribedBy);
+                tagBuilder.Attributes.Add("described-by", DescribedBy);
             }
 
             return tagBuilder;
