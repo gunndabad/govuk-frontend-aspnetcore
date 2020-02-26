@@ -8,6 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class InputTagHelper : FormGroupTagHelperBase
     {
         private const string AutocompleteAttributeName = "autocomplete";
+        private const string IdAttributeName = "id";
         private const string InputModeAttributeName = "inputmode";
         private const string PatternAttributeName = "pattern";
         private const string TypeAttributeName = "type";
@@ -20,6 +21,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
+
+        [HtmlAttributeName(IdAttributeName)]
+        public string Id { get; set; }
 
         [HtmlAttributeName(InputModeAttributeName)]
         public string InputMode { get; set; }
@@ -49,6 +53,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Pattern,
                 InputMode);
         }
+
+        private protected override string GetIdPrefix() => Id;
     }
 
     [HtmlTargetElement("govuk-input-label", ParentTag = "govuk-input")]

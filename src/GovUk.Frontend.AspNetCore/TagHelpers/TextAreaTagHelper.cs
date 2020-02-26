@@ -10,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class TextAreaTagHelper : FormGroupTagHelperBase
     {
         private const string AutocompleteAttributeName = "autocomplete";
+        private const string IdAttributeName = "id";
         private const string RowsAttributeName = "rows";
 
         public TextAreaTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -19,6 +20,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
+
+        [HtmlAttributeName(IdAttributeName)]
+        public string Id { get; set; }
 
         [HtmlAttributeName(RowsAttributeName)]
         public int? Rows { get; set; }
@@ -47,6 +51,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         private protected override FormGroupBuilder CreateFormGroupBuilder() => new TextAreaBuilder();
+
+        private protected override string GetIdPrefix() => Id;
     }
 
     [HtmlTargetElement("govuk-textarea-label", ParentTag = "govuk-textarea")]
