@@ -27,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(RowsAttributeName)]
         public int? Rows { get; set; }
 
-        private protected override IHtmlContent CreateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        private protected override IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var textAreaBuilder = (TextAreaBuilder)builder;
 
@@ -42,10 +42,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             return Generator.GenerateTextArea(
                 context.HaveError,
-                context.ElementId,
-                context.ElementName,
+                ResolvedId,
+                ResolvedName,
                 Rows,
-                context.DescribedBy,
+                DescribedBy,
                 Autocomplete,
                 resolvedContent);
         }

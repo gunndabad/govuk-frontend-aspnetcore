@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         protected const string AspForAttributeName = "asp-for";
         protected const string DescribedByAttributeName = "described-by";
-        private const string NameAttributeName = "name";
+        protected const string NameAttributeName = "name";
 
         [HtmlAttributeName(AspForAttributeName)]
         public ModelExpression AspFor { get; set; }
@@ -30,6 +29,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected IGovUkHtmlGenerator Generator { get; }
 
+        protected string ResolvedId => GetIdPrefix() ?? TagBuilder.CreateSanitizedId(ResolvedName, Constants.IdAttributeDotReplacement);
+
+        protected string ResolvedName => Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+
         private protected FormGroupTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
         {
             Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
@@ -45,14 +48,41 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            var resolvedName = Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
-            var resolvedId = GetIdPrefix() ?? TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
-
             var builder = CreateFormGroupBuilder();
             context.Items.Add(FormGroupBuilder.ContextName, builder);
 
             await output.GetChildContentAsync();
 
+            var tagBuilder = GenerateContent(context, builder);
+
+            output.TagName = tagBuilder.TagName;
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        }
+
+        private protected void AppendToDescribedBy(string value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            if (DescribedBy == null)
+            {
+                DescribedBy = value;
+            }
+            else
+            {
+                DescribedBy += $" {value}";
+            }
+        }
+
+        private protected virtual FormGroupBuilder CreateFormGroupBuilder() => new FormGroupBuilder();
+
+        private protected virtual TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
+        {
             // We need some content for the label; if AspFor is null then label content must have been specified
             if (AspFor == null && (!builder.Label.HasValue || builder.Label.Value.content == null))
             {
@@ -60,93 +90,90 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");
             }
 
-            var label = CreateLabel();
+            var contentBuilder = new HtmlContentBuilder();
 
-            var hintId = $"{resolvedId}-hint";
-            var hint = CreateHint();
+            var label = GenerateLabel(builder);
+            contentBuilder.AppendHtml(label);
 
-            var errorId = $"{resolvedId}-error";
-            var errorMessage = CreateErrorMessage();
+            var hint = GenerateHint(builder);
+            if (hint != null)
+            {
+                contentBuilder.AppendHtml(hint);
+            }
+
+            var errorMessage = GenerateErrorMessage(builder);
+            if (errorMessage != null)
+            {
+                contentBuilder.AppendHtml(errorMessage);
+            }
 
             var haveError = errorMessage != null;
 
-            string describedBy;
+            var elementCtx = new FormGroupElementContext(haveError);
+            var element = GenerateElement(builder, elementCtx);
+
+            contentBuilder.AppendHtml(element);
+
+            return Generator.GenerateFormGroup(haveError, contentBuilder);
+        }
+
+        private protected virtual IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        {
+            // For deriving classes to implement when required
+            throw new NotImplementedException();
+        }
+
+        private protected IHtmlContent GenerateErrorMessage(FormGroupBuilder builder)
+        {
+            var visuallyHiddenText = builder.ErrorMessage?.visuallyHiddenText;
+            var content = builder.ErrorMessage?.content;
+
+            if (content == null && AspFor != null)
             {
-                var describedByParts = new List<string>();
+                var validationMessage = Generator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
 
-                if (DescribedBy != null)
+                if (validationMessage != null)
                 {
-                    describedByParts.Add(DescribedBy);
+                    content = new HtmlString(validationMessage);
                 }
-
-                if (hint != null)
-                {
-                    describedByParts.Add(hintId);
-                }
-
-                if (haveError)
-                {
-                    describedByParts.Add(errorId);
-                }
-
-                describedBy = describedByParts.Count > 0 ? string.Join(" ", describedByParts) : null;
             }
 
-            var elementCtx = new FormGroupElementContext(resolvedId, resolvedName, haveError, describedBy);
-            var element = CreateElement(builder, elementCtx);
-
-            var tagBuilder = AdaptFormGroup(
-                Generator.GenerateFormGroup(haveError, label, hint, errorMessage, element),
-                elementCtx);
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-
-            TagBuilder CreateLabel()
+            if (content != null)
             {
-                var isPageHeading = builder.Label?.isPageHeading ?? false;
-                var content = builder.Label?.content;
-
-                var resolvedContent = (IHtmlContent)content ??
-                    new HtmlString(Generator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
-
-                return Generator.GenerateLabel(resolvedId, isPageHeading, resolvedContent);
+                var errorId = ResolvedId + "-error";
+                AppendToDescribedBy(errorId);
+                return Generator.GenerateErrorMessage(visuallyHiddenText, errorId, content);
             }
-
-            TagBuilder CreateHint() => builder.Hint != null ?
-                Generator.GenerateHint(hintId, builder.Hint) :
-                null;
-
-            TagBuilder CreateErrorMessage()
+            else
             {
-                var visuallyHiddenText = builder.ErrorMessage?.visuallyHiddenText;
-                var content = builder.ErrorMessage?.content;
-
-                if (content == null && AspFor != null)
-                {
-                    var validationMessage = Generator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
-
-                    if (validationMessage != null)
-                    {
-                        content = new HtmlString(validationMessage);
-                    }
-                }
-
-                return content != null ?
-                    Generator.GenerateErrorMessage(visuallyHiddenText, errorId, content) :
-                    null;
+                return null;
             }
         }
 
-        private protected virtual TagBuilder AdaptFormGroup(TagBuilder tagBuilder, FormGroupElementContext context) =>
-            tagBuilder;
+        private protected virtual TagBuilder GenerateHint(FormGroupBuilder builder)
+        {
+            if (builder.Hint != null)
+            {
+                var hintId = ResolvedId + "-hint";
+                AppendToDescribedBy(hintId);
+                return Generator.GenerateHint(hintId, builder.Hint);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-        private protected abstract IHtmlContent CreateElement(FormGroupBuilder builder, FormGroupElementContext context);
+        private protected virtual IHtmlContent GenerateLabel(FormGroupBuilder builder)
+        {
+            var isPageHeading = builder.Label?.isPageHeading ?? false;
+            var content = builder.Label?.content;
 
-        private protected virtual FormGroupBuilder CreateFormGroupBuilder() => new FormGroupBuilder();
+            var resolvedContent = content ??
+                new HtmlString(Generator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
+
+            return Generator.GenerateLabel(ResolvedId, isPageHeading, resolvedContent);
+        }
     }
 
     public abstract class FormGroupLabelTagHelperBase : TagHelper
@@ -295,17 +322,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class FormGroupElementContext
     {
-        public FormGroupElementContext(string elementId, string elementName, bool haveError, string describedBy)
+        public FormGroupElementContext(bool haveError)
         {
-            ElementId = elementId ?? throw new ArgumentNullException(nameof(elementId));
-            ElementName = elementName ?? throw new ArgumentNullException(nameof(elementName));
             HaveError = haveError;
-            DescribedBy = describedBy;
         }
 
-        public string DescribedBy { get; }
-        public string ElementId { get; }
-        public string ElementName { get; }
         public bool HaveError { get; }
     }
 }
