@@ -10,28 +10,31 @@ namespace GovUk.Frontend.AspNetCore
     {
         public static IServiceCollection AddGovUkFrontend(this IServiceCollection services)
         {
-            return AddGovUkFrontend(services, _ => { });
+            return AddGovUkFrontend(services, new GovUkFrontendAspNetCoreOptions());
         }
 
         public static IServiceCollection AddGovUkFrontend(
             this IServiceCollection services,
-            Action<GovUkFrontendAspNetCoreOptions> setupAction)
+            GovUkFrontendAspNetCoreOptions options)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (setupAction == null)
+            if (options == null)
             {
-                throw new ArgumentNullException(nameof(setupAction));
+                throw new ArgumentNullException(nameof(options));
             }
+
+            services.AddSingleton(options);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
 
-            services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
-
-            services.Configure(setupAction);
+            if (options.AddImportsToHtml)
+            {
+                services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
+            }
 
             return services;
         }
