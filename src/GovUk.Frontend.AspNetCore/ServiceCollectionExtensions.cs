@@ -1,4 +1,6 @@
 ﻿using System;
+using GovUk.Frontend.AspNetCore.TagHelperComponents;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -26,6 +28,8 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
+
+            services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
 
             services.Configure(setupAction);
 
