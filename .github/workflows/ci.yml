@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - master
+    - release
   pull_request:
     branches:
     - master
@@ -43,8 +44,8 @@ jobs:
     - name: Package
       run: dotnet pack --configuration Release --include-symbols --version-suffix pre-${GITHUB_RUN_NUMBER}
     
-    - name: Publish pre-release package
-      if: github.ref == 'refs/heads/master'
+    - name: Publish package
+      if: github.ref == 'refs/heads/release'
       run: dotnet nuget push src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg --api-key ${NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
       env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }} 
