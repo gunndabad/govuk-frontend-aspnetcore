@@ -29,27 +29,28 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var detailsContext = new DetailsContext();
-            context.Items.Add(DetailsContext.ContextName, detailsContext);
-
-            await output.GetChildContentAsync();
-
-            detailsContext.ThrowIfStagesIncomplete();
-
-            var tagBuilder = _htmlGenerator.GenerateDetails(
-                Open,
-                detailsContext.Summary,
-                detailsContext.Text);
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            if (!string.IsNullOrEmpty(Id))
+            using (context.SetScopedContextItem(DetailsContext.ContextName, detailsContext))
             {
-                output.Attributes.Add("id", Id);
-            }
+                await output.GetChildContentAsync();
 
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                detailsContext.ThrowIfStagesIncomplete();
+
+                var tagBuilder = _htmlGenerator.GenerateDetails(
+                    Open,
+                    detailsContext.Summary,
+                    detailsContext.Text);
+
+                output.TagName = tagBuilder.TagName;
+                output.TagMode = TagMode.StartTagAndEndTag;
+
+                if (!string.IsNullOrEmpty(Id))
+                {
+                    output.Attributes.Add("id", Id);
+                }
+
+                output.MergeAttributes(tagBuilder);
+                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            }
         }
     }
 
