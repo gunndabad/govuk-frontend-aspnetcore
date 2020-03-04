@@ -37,7 +37,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First"),
                         Disabled = false,
                         Id = "first",
-                        Name = "testradios",
                         Value = "first"
                     });
 
@@ -53,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -97,7 +96,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First"),
                         Disabled = false,
                         Id = "first",
-                        Name = "testradios",
                         Value = "first"
                     });
 
@@ -114,7 +112,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -150,7 +148,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First"),
                         Disabled = true,
                         Id = "first",
-                        Name = "testradios",
                         Value = "first"
                     });
 
@@ -167,7 +164,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -205,7 +202,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -247,7 +244,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -289,7 +286,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         HintContent = new HtmlString("Item hint"),
                         HintId = "first-hint",
                         Id = "first",
-                        Name = "testradios",
                         Value = "first"
                     });
 
@@ -300,7 +296,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -346,7 +342,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First"),
                         Disabled = false,
                         Id = "first",
-                        Name = "testradios",
                         Value = "first"
                     });
 
@@ -359,7 +354,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -405,7 +400,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First"),
                         Disabled = false,
                         Id = "first",
-                        Name = "testradios",
                         Value = "first"
                     });
 
@@ -418,7 +412,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -499,7 +493,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 DescribedBy = "describedby",
                 IdPrefix = "my-id",
-                Name = "my-id"
+                Name = "testradios"
             };
 
             // Act
@@ -679,7 +673,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     i.Content.AsString() == "Label" &&
                     !i.Disabled &&
                     i.Id == "id" &&
-                    i.Name == "myradios" &&
                     i.Value == "V" &&
                     i.ConditionalContent.AsString() == "Conditional" &&
                     i.HintContent.AsString() == "Hint");

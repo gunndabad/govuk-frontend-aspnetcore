@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var haveError = errorMessage != null;
 
-            var tagBuilder = Generator.GenerateRadios(radiosContext.IsConditional, radiosContext.Items);
+            var tagBuilder = Generator.GenerateRadios(ResolvedName, radiosContext.IsConditional, radiosContext.Items);
 
             if (radiosContext.Fieldset != null)
             {
@@ -162,7 +162,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 HintContent = itemContext.HintContent,
                 HintId = hintId,
                 Id = resolvedId,
-                Name = radiosContext.ResolvedName,
                 Value = Value
             });
 

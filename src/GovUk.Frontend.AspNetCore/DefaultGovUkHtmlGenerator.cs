@@ -492,7 +492,7 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateRadios(bool isConditional, IEnumerable<RadiosItemBase> items)
+        public virtual TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items)
         {
             if (items == null)
             {
@@ -565,7 +565,7 @@ namespace GovUk.Frontend.AspNetCore
                 input.TagRenderMode = TagRenderMode.SelfClosing;
                 input.AddCssClass("govuk-radios__input");
                 input.Attributes.Add("id", item.Id);
-                input.Attributes.Add("name", item.Name);
+                input.Attributes.Add("name", name);
                 input.Attributes.Add("type", "radio");
                 input.Attributes.Add("value", item.Value);
 
