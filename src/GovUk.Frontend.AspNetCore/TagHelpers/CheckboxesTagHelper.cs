@@ -62,20 +62,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 checkboxesContext.IsConditional,
                 resolvedDescribedBy,
                 checkboxesContext.Items);
+            contentBuilder.AppendHtml(tagBuilder);
 
+            IHtmlContent content = contentBuilder;
             if (checkboxesContext.Fieldset != null)
             {
-                tagBuilder = Generator.GenerateFieldset(
+                content = Generator.GenerateFieldset(
                     DescribedBy,
                     checkboxesContext.Fieldset.IsPageHeading,
                     role: null,
                     legendContent: checkboxesContext.Fieldset.LegendContent,
-                    content: tagBuilder);
+                    content: content);
             }
 
-            contentBuilder.AppendHtml(tagBuilder);
-
-            return Generator.GenerateFormGroup(haveError, contentBuilder);
+            return Generator.GenerateFormGroup(haveError, content);
         }
 
         private protected override string GetIdPrefix() => IdPrefix ?? Name;

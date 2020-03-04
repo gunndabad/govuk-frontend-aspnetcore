@@ -56,20 +56,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var haveError = errorMessage != null;
 
             var tagBuilder = Generator.GenerateRadios(ResolvedName, radiosContext.IsConditional, radiosContext.Items);
+            contentBuilder.AppendHtml(tagBuilder);
 
+            IHtmlContent content = contentBuilder;
             if (radiosContext.Fieldset != null)
             {
-                tagBuilder = Generator.GenerateFieldset(
+                content = Generator.GenerateFieldset(
                     DescribedBy,
                     radiosContext.Fieldset.IsPageHeading,
                     role: null,
                     legendContent: radiosContext.Fieldset.LegendContent,
-                    content: tagBuilder);
+                    content: content);
             }
 
-            contentBuilder.AppendHtml(tagBuilder);
-
-            return Generator.GenerateFormGroup(haveError, contentBuilder);
+            return Generator.GenerateFormGroup(haveError, content);
         }
 
         private protected override string GetIdPrefix() => IdPrefix ?? Name;
