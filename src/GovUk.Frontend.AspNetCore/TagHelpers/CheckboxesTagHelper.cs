@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-checkboxes", TagStructure = TagStructure.NormalOrSelfClosing)]
-    [RestrictChildren("govuk-checkboxes-fieldset", "govuk-checkboxes-item")]
+    [RestrictChildren("govuk-checkboxes-fieldset", "govuk-checkboxes-item", "govuk-checkboxes-hint", "govuk-checkboxes-error-message")]
     public class CheckboxesTagHelper : FormGroupTagHelperBase
     {
         private const string IdPrefixAttributeName = "id-prefix";
@@ -194,6 +194,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             itemContext.SetHintContent(content.Snapshot());
         }
+    }
+
+    [HtmlTargetElement("govuk-checkboxes-hint", ParentTag = "govuk-checkboxes")]
+    public class CheckboxesHintTagHelper : FormGroupHintTagHelperBase
+    {
+    }
+
+    [HtmlTargetElement("govuk-checkboxes-error-message", ParentTag = "govuk-checkboxes")]
+    public class CheckboxesErrorMessageTagHelper : FormGroupErrorMessageTagHelperBase
+    {
     }
 
     internal class CheckboxesContext
