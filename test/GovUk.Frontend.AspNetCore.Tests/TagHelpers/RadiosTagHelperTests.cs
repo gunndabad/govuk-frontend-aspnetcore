@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -519,7 +522,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_AddsItemToContext()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "r");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "r",
+                viewContext: null,
+                @for: null);
             
             var context = new TagHelperContext(
                 tagName: "govuk-radios-divider",
@@ -556,7 +563,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_SetsFieldsetOnContext()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "r");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "r",
+                viewContext: null,
+                @for: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-fieldset",
@@ -597,7 +608,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ValueNotSpecifiedThrowsNotSupportedException()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "r");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "r",
+                viewContext: null,
+                @for: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-item",
@@ -618,7 +633,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper();
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -629,7 +644,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_AddsItemToContext()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "myradios");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "r",
+                viewContext: null,
+                @for: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-item",
@@ -654,7 +673,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper()
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Checked = true,
                 Id = "id",
@@ -682,7 +701,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ComputesCorrectIdForFirstItemWhenNotSpecified()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "myradios");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "myradios",
+                viewContext: null,
+                @for: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-item",
@@ -703,7 +726,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper()
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Checked = true,
                 Value = "V"
@@ -722,7 +745,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ComputesCorrectIdForSubsequentItemsWhenNotSpecified()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "myradios");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "myradios",
+                viewContext: null,
+                @for: null);
             radiosContext.AddItem(new RadiosItemDivider() { Content = new HtmlString("Divider") });
 
             var context = new TagHelperContext(
@@ -744,7 +771,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper()
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Checked = true,
                 Value = "V"
@@ -763,7 +790,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ConditionalContentSpecifiedSetsIsConditional()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "myradios");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "myradios",
+                viewContext: null,
+                @for: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-item",
@@ -787,7 +818,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper()
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Checked = true,
                 Value = "V"
@@ -804,7 +835,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ConditionalContentNotSpecifiedDoesNotSetIsConditional()
         {
             // Arrange
-            var radiosContext = new RadiosContext(idPrefix: "prefix", resolvedName: "myradios");
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "myradios",
+                viewContext: null,
+                @for: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-item",
@@ -825,7 +860,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper()
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
                 Checked = true,
                 Value = "V"
@@ -836,6 +871,112 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.False(radiosContext.IsConditional);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_CheckedNullButModelValueEqualsValueSetsCheckedAttribute()
+        {
+            // Arrange
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+            var viewContext = new ViewContext();
+
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "myradios",
+                viewContext: viewContext,
+                @for: new ModelExpression("Foo", modelExplorer));
+
+            var context = new TagHelperContext(
+                tagName: "govuk-radios-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { RadiosContext.ContextName, radiosContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-radios-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.AppendHtml(new HtmlString("Label"));
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetModelValue(viewContext, modelExplorer, "Foo"))
+                .Returns("bar");
+
+            var tagHelper = new RadiosItemTagHelper(htmlGenerator.Object)
+            {
+                Value = "bar"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.True(radiosContext.Items.OfType<RadiosItem>().Single().Checked);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_CheckedNullAndModelValueDoesEqualsValueDoesNotSetCheckedAttribute()
+        {
+            // Arrange
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+            var viewContext = new ViewContext();
+
+            var radiosContext = new RadiosContext(
+                idPrefix: "prefix",
+                resolvedName: "myradios",
+                viewContext: viewContext,
+                @for: new ModelExpression("Foo", modelExplorer));
+
+            var context = new TagHelperContext(
+                tagName: "govuk-radios-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { RadiosContext.ContextName, radiosContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-radios-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.AppendHtml(new HtmlString("Label"));
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetModelValue(viewContext, modelExplorer, "Foo"))
+                .Returns("bar");
+
+            var tagHelper = new RadiosItemTagHelper(htmlGenerator.Object)
+            {
+                Value = "baz"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.False(radiosContext.Items.OfType<RadiosItem>().Single().Checked);
         }
     }
 

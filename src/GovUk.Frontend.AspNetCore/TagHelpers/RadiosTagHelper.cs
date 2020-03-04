@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -29,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            var radiosContext = new RadiosContext(ResolvedId, ResolvedName);
+            var radiosContext = new RadiosContext(ResolvedId, ResolvedName, ViewContext, AspFor);
             using (context.SetScopedContextItem(RadiosContext.ContextName, radiosContext))
             {
                 await base.ProcessAsync(context, output);
@@ -126,8 +127,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IdAttributeName = "id";
         private const string ValueAttributeName = "value";
 
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
+
+        public RadiosItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+        }
+
         [HtmlAttributeName(CheckedAttributeName)]
-        public bool Checked { get; set; }
+        public bool? Checked { get; set; }
 
         [HtmlAttributeName(DisabledAttributeName)]
         public bool Disabled { get; set; }
@@ -145,6 +153,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{ValueAttributeName}' attribute must be specified.");
             }
 
+            // REVIEW Consider throwing if Checked is null && there is no AspFor
+
             var itemContext = new RadiosItemContext();
             using (context.SetScopedContextItem(RadiosItemContext.ContextName, itemContext))
             {
@@ -155,11 +165,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 var conditionalId = "conditional-" + resolvedId;
                 var hintId = resolvedId + "-item-hint";
 
+                var resolvedChecked = Checked ??
+                    (radiosContext.HaveModelExpression ?
+                        _htmlGenerator.GetModelValue(
+                            radiosContext.ViewContext,
+                            radiosContext.AspFor.ModelExplorer,
+                            radiosContext.AspFor.Name) == Value :
+                     false);
+
                 var childContent = await output.GetChildContentAsync();
 
                 radiosContext.AddItem(new RadiosItem()
                 {
-                    Checked = Checked,
+                    Checked = resolvedChecked,
                     ConditionalContent = itemContext.ConditionalContent,
                     ConditionalId = conditionalId,
                     Content = childContent.Snapshot(),
@@ -226,10 +244,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private readonly List<RadiosItemBase> _items;
 
-        public RadiosContext(string idPrefix, string resolvedName)
+        public RadiosContext(
+            string idPrefix,
+            string resolvedName,
+            ViewContext viewContext,
+            ModelExpression @for)
         {
             IdPrefix = idPrefix ?? throw new ArgumentNullException(nameof(idPrefix));
             ResolvedName = resolvedName ?? throw new ArgumentNullException(nameof(resolvedName));
+            ViewContext = viewContext;
+            AspFor = @for;
             _items = new List<RadiosItemBase>();
         }
 
@@ -238,7 +262,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public bool IsConditional { get; private set; }
         public IReadOnlyCollection<RadiosItemBase> Items => _items;
         public string ResolvedName { get; }
+        public ViewContext ViewContext { get; }
+        public ModelExpression AspFor { get; }
 
+        public bool HaveModelExpression => AspFor != null;
         public void AddItem(RadiosItemBase item)
         {
             if (item == null)
