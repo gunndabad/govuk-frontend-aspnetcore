@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-radios", TagStructure = TagStructure.NormalOrSelfClosing)]
-    [RestrictChildren("govuk-radios-divider", "govuk-radios-fieldset", "govuk-radios-item")]
+    [RestrictChildren("govuk-radios-divider", "govuk-radios-fieldset", "govuk-radios-item", "govuk-radios-hint", "govuk-radios-error-message")]
     public class RadiosTagHelper : FormGroupTagHelperBase
     {
         private const string IdPrefixAttributeName = "id-prefix";
@@ -198,6 +198,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             itemContext.SetHintContent(content.Snapshot());
         }
+    }
+
+    [HtmlTargetElement("govuk-radios-hint", ParentTag = "govuk-radios")]
+    public class RadiosHintTagHelper : FormGroupHintTagHelperBase
+    {
+    }
+
+    [HtmlTargetElement("govuk-radios-error-message", ParentTag = "govuk-radios")]
+    public class RadiosErrorMessageTagHelper : FormGroupErrorMessageTagHelperBase
+    {
     }
 
     internal class RadiosContext
