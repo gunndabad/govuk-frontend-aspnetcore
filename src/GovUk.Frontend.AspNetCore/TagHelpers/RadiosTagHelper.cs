@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
 
-        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (Name == null && AspFor == null)
             {
@@ -30,9 +30,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var radiosContext = new RadiosContext(ResolvedId, ResolvedName);
-            context.Items.Add(RadiosContext.ContextName, radiosContext);
-
-            return base.ProcessAsync(context, output);
+            using (context.SetScopedContextItem(RadiosContext.ContextName, radiosContext))
+            {
+                await base.ProcessAsync(context, output);
+            }
         }
 
         private protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
@@ -141,36 +142,37 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var itemContext = new RadiosItemContext();
-            context.Items.Add(RadiosItemContext.ContextName, itemContext);
-
-            var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
-
-            var index = radiosContext.Items.Count;
-            var resolvedId = Id ?? (index == 0 ? radiosContext.IdPrefix : $"{radiosContext.IdPrefix}-{index}");
-            var conditionalId = "conditional-" + resolvedId;
-            var hintId = resolvedId + "-item-hint";
-
-            var childContent = await output.GetChildContentAsync();
-
-            radiosContext.AddItem(new RadiosItem()
+            using (context.SetScopedContextItem(RadiosItemContext.ContextName, itemContext))
             {
-                Checked = Checked,
-                ConditionalContent = itemContext.ConditionalContent,
-                ConditionalId = conditionalId,
-                Content = childContent.Snapshot(),
-                Disabled = Disabled,
-                HintContent = itemContext.HintContent,
-                HintId = hintId,
-                Id = resolvedId,
-                Value = Value
-            });
+                var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
 
-            if (itemContext.ConditionalContent != null)
-            {
-                radiosContext.SetIsConditional();
+                var index = radiosContext.Items.Count;
+                var resolvedId = Id ?? (index == 0 ? radiosContext.IdPrefix : $"{radiosContext.IdPrefix}-{index}");
+                var conditionalId = "conditional-" + resolvedId;
+                var hintId = resolvedId + "-item-hint";
+
+                var childContent = await output.GetChildContentAsync();
+
+                radiosContext.AddItem(new RadiosItem()
+                {
+                    Checked = Checked,
+                    ConditionalContent = itemContext.ConditionalContent,
+                    ConditionalId = conditionalId,
+                    Content = childContent.Snapshot(),
+                    Disabled = Disabled,
+                    HintContent = itemContext.HintContent,
+                    HintId = hintId,
+                    Id = resolvedId,
+                    Value = Value
+                });
+
+                if (itemContext.ConditionalContent != null)
+                {
+                    radiosContext.SetIsConditional();
+                }
+
+                output.SuppressOutput();
             }
-
-            output.SuppressOutput();
         }
     }
 

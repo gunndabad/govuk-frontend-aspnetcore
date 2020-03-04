@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
 
-        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (Name == null && AspFor == null)
             {
@@ -30,9 +30,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var checkboxesContext = new CheckboxesContext(ResolvedId, ResolvedName);
-            context.Items.Add(CheckboxesContext.ContextName, checkboxesContext);
-
-            return base.ProcessAsync(context, output);
+            using (context.SetScopedContextItem(CheckboxesContext.ContextName, checkboxesContext))
+            {
+                await base.ProcessAsync(context, output);
+            }
         }
 
         private protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
@@ -136,37 +137,38 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var itemContext = new CheckboxesItemContext();
-            context.Items.Add(CheckboxesItemContext.ContextName, itemContext);
-
-            var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
-
-            var index = checkboxesContext.Items.Count;
-            var resolvedId = Id ?? (index == 0 ? checkboxesContext.IdPrefix : $"{checkboxesContext.IdPrefix}-{index}");
-            var conditionalId = "conditional-" + resolvedId;
-            var hintId = resolvedId + "-item-hint";
-
-            var childContent = await output.GetChildContentAsync();
-
-            checkboxesContext.AddItem(new CheckboxesItem()
+            using (context.SetScopedContextItem(CheckboxesItemContext.ContextName, itemContext))
             {
-                Checked = Checked,
-                ConditionalContent = itemContext.ConditionalContent,
-                ConditionalId = conditionalId,
-                Content = childContent.Snapshot(),
-                Disabled = Disabled,
-                HintContent = itemContext.HintContent,
-                HintId = hintId,
-                Id = resolvedId,
-                Name = checkboxesContext.ResolvedName,
-                Value = Value
-            });
+                var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
 
-            if (itemContext.ConditionalContent != null)
-            {
-                checkboxesContext.SetIsConditional();
+                var index = checkboxesContext.Items.Count;
+                var resolvedId = Id ?? (index == 0 ? checkboxesContext.IdPrefix : $"{checkboxesContext.IdPrefix}-{index}");
+                var conditionalId = "conditional-" + resolvedId;
+                var hintId = resolvedId + "-item-hint";
+
+                var childContent = await output.GetChildContentAsync();
+
+                checkboxesContext.AddItem(new CheckboxesItem()
+                {
+                    Checked = Checked,
+                    ConditionalContent = itemContext.ConditionalContent,
+                    ConditionalId = conditionalId,
+                    Content = childContent.Snapshot(),
+                    Disabled = Disabled,
+                    HintContent = itemContext.HintContent,
+                    HintId = hintId,
+                    Id = resolvedId,
+                    Name = checkboxesContext.ResolvedName,
+                    Value = Value
+                });
+
+                if (itemContext.ConditionalContent != null)
+                {
+                    checkboxesContext.SetIsConditional();
+                }
+
+                output.SuppressOutput();
             }
-
-            output.SuppressOutput();
         }
     }
 

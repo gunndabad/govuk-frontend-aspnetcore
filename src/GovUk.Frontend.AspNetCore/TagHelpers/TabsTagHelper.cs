@@ -33,17 +33,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var tabsContext = new TabsContext(IdPrefix);
-            context.Items.Add(TabsContext.ContextName, tabsContext);
+            using (context.SetScopedContextItem(TabsContext.ContextName, tabsContext))
+            {
+                await output.GetChildContentAsync();
 
-            await output.GetChildContentAsync();
+                var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, tabsContext.Items);
 
-            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, tabsContext.Items);
+                output.TagName = tagBuilder.TagName;
+                output.TagMode = TagMode.StartTagAndEndTag;
 
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                output.MergeAttributes(tagBuilder);
+                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            }
         }
     }
 

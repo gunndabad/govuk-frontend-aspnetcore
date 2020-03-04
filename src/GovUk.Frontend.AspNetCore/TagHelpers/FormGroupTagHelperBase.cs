@@ -49,17 +49,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var builder = CreateFormGroupBuilder();
-            context.Items.Add(FormGroupBuilder.ContextName, builder);
+            using (context.SetScopedContextItem(FormGroupBuilder.ContextName, builder))
+            {
+                await output.GetChildContentAsync();
 
-            await output.GetChildContentAsync();
+                var tagBuilder = GenerateContent(context, builder);
 
-            var tagBuilder = GenerateContent(context, builder);
+                output.TagName = tagBuilder.TagName;
+                output.TagMode = TagMode.StartTagAndEndTag;
 
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                output.MergeAttributes(tagBuilder);
+                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            }
         }
 
         private protected void AppendToDescribedBy(string value)
