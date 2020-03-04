@@ -10,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateAnchor(string href);
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
         TagBuilder GenerateCharacterCount(string elementId, int? maxLength, int? maxWords, decimal? threshold, IHtmlContent formGroup);
+        TagBuilder GenerateCheckboxes(string name, bool isConditional, string describedBy, IEnumerable<CheckboxesItem> items);
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
         TagBuilder GenerateFieldset(string describedBy, bool isPageHeading, string role, IHtmlContent legendContent, IHtmlContent content);
