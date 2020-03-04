@@ -106,6 +106,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 IsPageHeading = IsPageHeading,
                 LegendContent = content.Snapshot()
             });
+
+            output.SuppressOutput();
         }
     }
 
@@ -182,6 +184,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var content = await output.GetChildContentAsync();
 
             itemContext.SetConditionalContent(content.Snapshot());
+
+            output.SuppressOutput();
         }
     }
 
@@ -195,6 +199,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var content = await output.GetChildContentAsync();
 
             itemContext.SetHintContent(content.Snapshot());
+
+            output.SuppressOutput();
         }
     }
 
