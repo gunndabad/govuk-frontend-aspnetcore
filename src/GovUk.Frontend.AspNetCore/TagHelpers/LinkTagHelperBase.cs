@@ -86,6 +86,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected TagBuilder CreateAnchorTagBuilder()
         {
+            var href = ResolveHref();
+
+            return _htmlGenerator.GenerateAnchor(href);
+        }
+
+        protected string ResolveHref()
+        {
             var hrefLink = Href != null;
             var routeLink = Route != null;
             var actionLink = Controller != null || Action != null;
@@ -135,7 +142,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 href = _htmlGenerator.GetActionLinkHref(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
             }
 
-            return _htmlGenerator.GenerateAnchor(href);
+            return href;
         }
     }
 }
