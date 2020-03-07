@@ -7,6 +7,8 @@ namespace GovUk.Frontend.AspNetCore
 {
     public interface IGovUkHtmlGenerator
     {
+        TagBuilder GenerateAccordion(string id, IEnumerable<AccordionItem> items);
+
         TagBuilder GenerateAnchor(string href);
 
         TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
