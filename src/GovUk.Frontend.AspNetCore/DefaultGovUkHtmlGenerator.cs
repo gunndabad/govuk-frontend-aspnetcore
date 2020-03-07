@@ -15,6 +15,7 @@ namespace GovUk.Frontend.AspNetCore
 {
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
+        public const int DefaultAccordionItemHeadingLevel = 2;
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultInputType = "text";
         public const string DefaultTabsTitle = "Contents";
@@ -43,6 +44,79 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         private delegate string GetFullHtmlFieldNameDelegate(ViewContext viewContext, string expression);
+
+        public virtual TagBuilder GenerateAccordion(
+            string id,
+            IEnumerable<AccordionItem> items)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-accordion");
+            tagBuilder.Attributes.Add("data-module", "govuk-accordion");
+            tagBuilder.Attributes.Add("id", id);
+
+            var index = 0;
+            foreach (var item in items)
+            {
+                var section = new TagBuilder("div");
+                section.AddCssClass("govuk-accordion__section");
+
+                if (item.Expanded)
+                {
+                    section.AddCssClass("govuk-accordion__section--expanded");
+                }
+
+                var header = new TagBuilder("div");
+                header.AddCssClass("govuk-accordion__section-header");
+
+                // REVIEW Validate heading level?
+
+                var headingId = $"{id}-heading-{index}";
+                var heading = new TagBuilder($"h{item.HeadingLevel ?? DefaultAccordionItemHeadingLevel}");
+                heading.AddCssClass("govuk-accordion__section-heading");
+                var headingContent = new TagBuilder("span");
+                headingContent.AddCssClass("govuk-accordion__section-button");
+                headingContent.Attributes.Add("id", headingId);
+                headingContent.InnerHtml.AppendHtml(item.HeadingContent);
+                heading.InnerHtml.AppendHtml(headingContent);
+                header.InnerHtml.AppendHtml(heading);
+
+                if (item.Summary != null)
+                {
+                    var summaryId = $"{id}-summary-{index}";
+                    var summary = new TagBuilder("div");
+                    summary.AddCssClass("govuk-accordion__section-summary");
+                    summary.AddCssClass("govuk-body");
+                    summary.Attributes.Add("id", summaryId);
+                    header.InnerHtml.AppendHtml(summary);
+                }
+
+                section.InnerHtml.AppendHtml(header);
+
+                var contentId = $"{id}-content-{index}";
+                var contentDiv = new TagBuilder("div");
+                contentDiv.AddCssClass("govuk-accordion__section-content");
+                contentDiv.Attributes.Add("id", contentId);
+                contentDiv.Attributes.Add("aria-labelledby", headingId);
+                contentDiv.InnerHtml.AppendHtml(item.Content);
+                section.InnerHtml.AppendHtml(contentDiv);
+
+                tagBuilder.InnerHtml.AppendHtml(section);
+
+                index++;
+            }
+
+            return tagBuilder;
+        }
 
         public TagBuilder GenerateAnchor(string href)
         {
