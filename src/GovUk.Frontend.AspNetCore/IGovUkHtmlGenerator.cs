@@ -30,6 +30,11 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
 
+        TagBuilder GenerateErrorSummary(
+            IHtmlContent title,
+            IHtmlContent description,
+            IEnumerable<ErrorSummaryItem> items);
+
         TagBuilder GenerateFieldset(
             string describedBy,
             bool isPageHeading,

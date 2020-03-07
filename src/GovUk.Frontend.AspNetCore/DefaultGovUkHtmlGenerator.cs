@@ -416,6 +416,62 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateErrorSummary(
+            IHtmlContent title,
+            IHtmlContent description,
+            IEnumerable<ErrorSummaryItem> items)
+        {
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-error-summary");
+            tagBuilder.Attributes.Add("aria-labelledby", "error-summary-title");
+            tagBuilder.Attributes.Add("role", "alert");
+            tagBuilder.Attributes.Add("tabindex", "-1");
+            tagBuilder.Attributes.Add("data-module", "govuk-error-summary");
+
+            var heading = new TagBuilder("h2");
+            heading.AddCssClass("govuk-error-summary__title");
+            heading.Attributes.Add("id", "error-summary-title");
+            heading.InnerHtml.AppendHtml(title);
+            tagBuilder.InnerHtml.AppendHtml(heading);
+
+            var body = new TagBuilder("div");
+            body.AddCssClass("govuk-error-summary__body");
+
+            if (description != null)
+            {
+                var p = new TagBuilder("p");
+                p.InnerHtml.AppendHtml(description);
+                body.InnerHtml.AppendHtml(p);
+            }
+
+            var ul = new TagBuilder("ul");
+            ul.AddCssClass("govuk-list");
+            ul.AddCssClass("govuk-error-summary__list");
+
+            foreach (var item in items)
+            {
+                var li = new TagBuilder("li");
+                li.InnerHtml.AppendHtml(item.Content);
+                ul.InnerHtml.AppendHtml(li);
+            }
+
+            body.InnerHtml.AppendHtml(ul);
+
+            tagBuilder.InnerHtml.AppendHtml(body);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateFieldset(
             string describedBy,
             bool isPageHeading,
