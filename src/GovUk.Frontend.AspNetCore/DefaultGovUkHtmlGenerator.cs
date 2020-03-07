@@ -833,6 +833,92 @@ namespace GovUk.Frontend.AspNetCore
             }
         }
 
+        public virtual TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows)
+        {
+            if (rows == null)
+            {
+                throw new ArgumentNullException(nameof(rows));
+            }
+
+            var anyRowHasActions = rows.Any(r => r.Actions.Any());
+
+            var tagBuilder = new TagBuilder("dl");
+            tagBuilder.AddCssClass("govuk-summary-list");
+
+            foreach (var row in rows)
+            {
+                var rowTagBuilder = new TagBuilder("div");
+                rowTagBuilder.AddCssClass("govuk-summary-list__row");
+
+                var dt = new TagBuilder("dt");
+                dt.AddCssClass("govuk-summary-list__key");
+                dt.InnerHtml.AppendHtml(row.Key);
+                rowTagBuilder.InnerHtml.AppendHtml(dt);
+
+                var dd = new TagBuilder("dt");
+                dd.AddCssClass("govuk-summary-list__value");
+                dd.InnerHtml.AppendHtml(row.Value);
+                rowTagBuilder.InnerHtml.AppendHtml(dd);
+
+                if (row.Actions.Any())
+                {
+                    var actionsDd = new TagBuilder("dd");
+                    actionsDd.AddCssClass("govuk-summary-list__actions");
+
+                    if (row.Actions.Count() == 1)
+                    {
+                        actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Single()));
+                    }
+                    else
+                    {
+                        var ul = new TagBuilder("ul");
+                        ul.AddCssClass("govuk-summary-list__actions-list");
+
+                        foreach (var action in row.Actions)
+                        {
+                            var li = new TagBuilder("li");
+                            li.AddCssClass("govuk-summary-list__actions-list-item");
+                            li.InnerHtml.AppendHtml(GenerateLink(action));
+
+                            ul.InnerHtml.AppendHtml(li);
+                        }
+
+                        actionsDd.InnerHtml.AppendHtml(ul);
+                    }
+
+                    rowTagBuilder.InnerHtml.AppendHtml(actionsDd);
+                }
+                else
+                {
+                    var span = new TagBuilder("span");
+                    span.AddCssClass("govuk-summary-list__actions");
+                    rowTagBuilder.InnerHtml.AppendHtml(span);
+                }
+
+                tagBuilder.InnerHtml.AppendHtml(rowTagBuilder);
+            }
+
+            return tagBuilder;
+
+            TagBuilder GenerateLink(SummaryListRowAction action)
+            {
+                var anchor = new TagBuilder("a");
+                anchor.AddCssClass("govuk-link");
+                anchor.Attributes.Add("href", action.Href);
+                anchor.InnerHtml.AppendHtml(action.Content);
+
+                if (action.VisuallyHiddenText != null)
+                {
+                    var vht = new TagBuilder("span");
+                    vht.AddCssClass("govuk-visually-hidden");
+                    vht.InnerHtml.Append(action.VisuallyHiddenText);
+                    anchor.InnerHtml.AppendHtml(vht);
+                }
+
+                return anchor;
+            }
+        }
+
         public virtual TagBuilder GenerateTag(IHtmlContent content)
         {
             if (content == null)

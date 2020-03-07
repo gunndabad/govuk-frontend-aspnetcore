@@ -56,9 +56,11 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
 
+        TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
+
         TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items);
 
-        TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
+        TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows);
 
         TagBuilder GenerateTabs(string id, string title, IEnumerable<TabsItem> items);
 
