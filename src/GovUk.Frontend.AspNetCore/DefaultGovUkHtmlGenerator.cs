@@ -18,6 +18,7 @@ namespace GovUk.Frontend.AspNetCore
         public const int DefaultAccordionItemHeadingLevel = 2;
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultInputType = "text";
+        public const int DefaultPanelHeadingLevel = 1;
         public const string DefaultTabsTitle = "Contents";
         public const int DefaultTextAreaRows = 5;
 
@@ -601,6 +602,36 @@ namespace GovUk.Frontend.AspNetCore
             {
                 return tagBuilder;
             }
+        }
+
+        public virtual TagBuilder GeneratePanel(
+            int? titleHeadingLevel,
+            IHtmlContent titleContent,
+            IHtmlContent content)
+        {
+            if (titleContent == null)
+            {
+                throw new ArgumentNullException(nameof(titleContent));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.AddCssClass("govuk-panel");
+            tagBuilder.AddCssClass("govuk-panel--confirmation");
+
+            var heading = new TagBuilder($"h{titleHeadingLevel ?? DefaultPanelHeadingLevel}");
+            heading.AddCssClass("govuk-panel__title");
+            heading.InnerHtml.AppendHtml(titleContent);
+            tagBuilder.InnerHtml.AppendHtml(heading);
+
+            if (content != null)
+            {
+                var body = new TagBuilder("div");
+                body.AddCssClass("govuk-panel__body");
+                body.InnerHtml.AppendHtml(content);
+                tagBuilder.InnerHtml.AppendHtml(body);
+            }
+
+            return tagBuilder;
         }
 
         public virtual TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content)
