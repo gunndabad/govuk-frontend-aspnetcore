@@ -25,11 +25,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private IDictionary<string, string> _routeValues;
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
-
         public LinkTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
         [HtmlAttributeName(ActionAttributeName)]
@@ -84,6 +82,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
+        protected IGovUkHtmlGenerator Generator { get; }
+
         protected bool HasLinkAttributes =>
             Action != null ||
             Area != null ||
@@ -101,7 +101,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var href = ResolveHref();
 
-            return _htmlGenerator.GenerateAnchor(href);
+            return Generator.GenerateAnchor(href);
         }
 
         protected string ResolveHref()
@@ -144,15 +144,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
             else if (pageLink)
             {
-                href = _htmlGenerator.GetPageLinkHref(ViewContext, Page, PageHandler, RouteValues, Protocol, Host, Fragment);
+                href = Generator.GetPageLinkHref(ViewContext, Page, PageHandler, RouteValues, Protocol, Host, Fragment);
             }
             else if (routeLink)
             {
-                href = _htmlGenerator.GetRouteLinkHref(ViewContext, Route, RouteValues, Protocol, Host, Fragment);
+                href = Generator.GetRouteLinkHref(ViewContext, Route, RouteValues, Protocol, Host, Fragment);
             }
             else // if (actionLink)
             {
-                href = _htmlGenerator.GetActionLinkHref(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
+                href = Generator.GetActionLinkHref(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
             }
 
             return href;
