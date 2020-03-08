@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -82,17 +84,35 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-error-summary-item", ParentTag = "govuk-error-summary")]
-    public class ErrorSummaryItemTagHelper : TagHelper
+    public class ErrorSummaryItemTagHelper : LinkTagHelperBase
     {
+        protected const string AspForAttributeName = "asp-for";
+
+        public ErrorSummaryItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
+            : base(htmlGenerator)
+        {
+        }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
 
             var childContent = await output.GetChildContentAsync();
 
+            var itemContent = childContent.Snapshot();
+
+            // If there are link attributes specified then wrap content in a link
+            if (HasLinkAttributes)
+            {
+                var link = CreateAnchorTagBuilder();
+                link.InnerHtml.AppendHtml(itemContent);
+
+                itemContent = link;
+            }
+
             errorSummaryContext.AddItem(new ErrorSummaryItem()
             {
-                Content = childContent.Snapshot()
+                Content = itemContent
             });
 
             output.SuppressOutput();
