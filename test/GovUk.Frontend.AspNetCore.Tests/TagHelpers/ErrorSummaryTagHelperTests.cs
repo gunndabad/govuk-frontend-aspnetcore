@@ -336,7 +336,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
             {
-                Href = "link"
+                For = "field"
             };
 
             // Act
@@ -346,7 +346,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"link\">An error message</a>", firstItem.Content.AsString());
+            Assert.Equal("<a href=\"#field\">An error message</a>", firstItem.Content.AsString());
         }
 
         [Fact]
