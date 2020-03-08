@@ -261,7 +261,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper();
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
 
             // Act
             await tagHelper.ProcessAsync(context, output);
