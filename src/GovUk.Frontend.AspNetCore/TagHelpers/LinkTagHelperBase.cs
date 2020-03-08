@@ -84,6 +84,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
+        protected bool HasLinkAttributes =>
+            Action != null ||
+            Area != null ||
+            Controller != null ||
+            Fragment != null ||
+            Host != null ||
+            Href != null ||
+            Page != null ||
+            PageHandler != null ||
+            Protocol != null ||
+            Route != null ||
+            RouteValues.Count > 0;
+
         protected TagBuilder CreateAnchorTagBuilder()
         {
             var href = ResolveHref();
