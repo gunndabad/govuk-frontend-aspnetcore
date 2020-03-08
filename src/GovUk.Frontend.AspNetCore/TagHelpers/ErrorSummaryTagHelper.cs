@@ -93,18 +93,50 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
+        [HtmlAttributeName(AspForAttributeName)]
+        public ModelExpression AspFor { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            if (output.TagMode == TagMode.SelfClosing && AspFor == null)
+            {
+                throw new InvalidOperationException(
+                    $"Content is required when the '{AspForAttributeName}' attribute is not specified.");
+            }
+
             var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
 
             var childContent = await output.GetChildContentAsync();
 
-            var itemContent = childContent.Snapshot();
+            IHtmlContent itemContent;
 
-            // If there are link attributes specified then wrap content in a link
-            if (HasLinkAttributes)
+            if (output.TagMode == TagMode.StartTagAndEndTag)
             {
-                var link = CreateAnchorTagBuilder();
+                itemContent = childContent.Snapshot();
+            }
+            else
+            {
+                var validationMessage = Generator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
+
+                if (validationMessage == null)
+                {
+                    return;
+                }
+
+                itemContent = new HtmlString(validationMessage);
+            }
+
+            // If there are link attributes or AspFor specified then wrap content in a link
+            if (HasLinkAttributes || AspFor != null)
+            {
+                var resolvedHref = HasLinkAttributes ?
+                    ResolveHref() :
+                    "#" + TagBuilder.CreateSanitizedId(
+                        Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name),
+                        Constants.IdAttributeDotReplacement);
+
+                var link = new TagBuilder("a");
+                link.Attributes.Add("href", resolvedHref);
                 link.InnerHtml.AppendHtml(itemContent);
 
                 itemContent = link;

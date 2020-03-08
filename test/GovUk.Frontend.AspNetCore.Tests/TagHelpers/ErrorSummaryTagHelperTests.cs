@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -271,6 +274,140 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var firstItem = errorSummaryContext.Items.First();
             Assert.Equal("An error message", firstItem.Content.AsString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_NoContentAndNoAspForThrowsInvalidOperationException()
+        {
+            // Arrange
+            var errorSummaryContext = new ErrorSummaryContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-error-summary-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-summary-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("An error message");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+            output.TagMode = TagMode.SelfClosing;
+
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("Content is required when the 'asp-for' attribute is not specified.", ex.Message);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_LinkAttributesSpecifiedGeneratesExpectedContent()
+        {
+            // Arrange
+            var errorSummaryContext = new ErrorSummaryContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-error-summary-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-summary-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("An error message");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            {
+                Href = "link"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal(1, errorSummaryContext.Items.Count);
+
+            var firstItem = errorSummaryContext.Items.First();
+            Assert.Equal("<a href=\"link\">An error message</a>", firstItem.Content.AsString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_AspForSpecifiedGeneratesExpectedContent()
+        {
+            // Arrange
+            var errorSummaryContext = new ErrorSummaryContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-error-summary-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-summary-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+            output.TagMode = TagMode.SelfClosing;
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetFullHtmlFieldName(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns("Foo");
+
+            htmlGenerator
+                .Setup(mock => mock.GetValidationMessage(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns("Generated error");
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+
+            var tagHelper = new ErrorSummaryItemTagHelper(htmlGenerator.Object)
+            {
+                AspFor = new ModelExpression("Foo", modelExplorer),
+                ViewContext = new ViewContext()
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal(1, errorSummaryContext.Items.Count);
+
+            var firstItem = errorSummaryContext.Items.First();
+            Assert.Equal("<a href=\"#Foo\">Generated error</a>", firstItem.Content.AsString());
         }
     }
 }
