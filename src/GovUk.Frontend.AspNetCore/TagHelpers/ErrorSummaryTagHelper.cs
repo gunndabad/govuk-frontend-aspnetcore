@@ -84,17 +84,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-error-summary-item", ParentTag = "govuk-error-summary")]
-    public class ErrorSummaryItemTagHelper : LinkTagHelperBase
+    public class ErrorSummaryItemTagHelper : TagHelper
     {
-        protected const string AspForAttributeName = "asp-for";
+        private const string AspForAttributeName = "asp-for";
+        private const string ForAttributeName = "for";
+
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public ErrorSummaryItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
         {
+            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
         [HtmlAttributeName(AspForAttributeName)]
         public ModelExpression AspFor { get; set; }
+
+        [HtmlAttributeName(ForAttributeName)]
+        public string For { get; set; }
+
+        [HtmlAttributeNotBound]
+        [ViewContext]
+        public ViewContext ViewContext { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -116,7 +126,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
             else
             {
-                var validationMessage = Generator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
+                var validationMessage = _htmlGenerator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
 
                 if (validationMessage == null)
                 {
@@ -127,12 +137,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             // If there are link attributes or AspFor specified then wrap content in a link
-            if (HasLinkAttributes || AspFor != null)
+            if (For != null || AspFor != null)
             {
-                var resolvedHref = HasLinkAttributes ?
-                    ResolveHref() :
+                var resolvedHref = For != null ?
+                    "#" + For :
                     "#" + TagBuilder.CreateSanitizedId(
-                        Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name),
+                        _htmlGenerator.GetFullHtmlFieldName(ViewContext, AspFor.Name),
                         Constants.IdAttributeDotReplacement);
 
                 var link = new TagBuilder("a");
