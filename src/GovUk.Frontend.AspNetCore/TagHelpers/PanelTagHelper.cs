@@ -20,7 +20,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var panelContext = new PanelContext();
 
-            TagHelperContent childContent;
+            IHtmlContent childContent;
             using (context.SetScopedContextItem(PanelContext.ContextName, panelContext))
             {
                 childContent = await output.GetChildContentAsync();

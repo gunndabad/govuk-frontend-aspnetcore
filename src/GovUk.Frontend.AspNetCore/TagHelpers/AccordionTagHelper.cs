@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             using (context.SetScopedContextItem(AccordionContext.ContextName, accordionContext))
             {
-                var childContent = await output.GetChildContentAsync();
+                await output.GetChildContentAsync();
             }
 
             var tagBuilder = _htmlGenerator.GenerateAccordion(Id, accordionContext.Items);

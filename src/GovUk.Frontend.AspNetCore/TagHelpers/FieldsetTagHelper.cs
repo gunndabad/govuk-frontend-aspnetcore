@@ -32,24 +32,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var fieldsetContext = new FieldsetContext();
+
+            IHtmlContent childContent;
             using (context.SetScopedContextItem(FieldsetContext.ContextName, fieldsetContext))
             {
-                var childContent = await output.GetChildContentAsync();
-
-                var tagBuilder = _htmlGenerator.GenerateFieldset(
-                    DescribedBy,
-                    IsPageHeading,
-                    Role,
-                    fieldsetContext.LegendContent,
-                    childContent);
-
-                output.TagName = tagBuilder.TagName;
-                output.TagMode = TagMode.StartTagAndEndTag;
-
-                output.Attributes.Clear();
-                output.MergeAttributes(tagBuilder);
-                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                childContent = await output.GetChildContentAsync();
             }
+
+            var tagBuilder = _htmlGenerator.GenerateFieldset(
+                DescribedBy,
+                IsPageHeading,
+                Role,
+                fieldsetContext.LegendContent,
+                childContent);
+
+            output.TagName = tagBuilder.TagName;
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            output.Attributes.Clear();
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
     }
 
