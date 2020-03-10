@@ -30,6 +30,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var checkboxesContext = new CheckboxesContext(ResolvedId, ResolvedName);
+
             using (context.SetScopedContextItem(CheckboxesContext.ContextName, checkboxesContext))
             {
                 await base.ProcessAsync(context, output);

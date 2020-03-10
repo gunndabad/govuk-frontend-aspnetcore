@@ -36,16 +36,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             using (context.SetScopedContextItem(TabsContext.ContextName, tabsContext))
             {
                 await output.GetChildContentAsync();
-
-                var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, tabsContext.Items);
-
-                output.TagName = tagBuilder.TagName;
-                output.TagMode = TagMode.StartTagAndEndTag;
-
-                output.Attributes.Clear();
-                output.MergeAttributes(tagBuilder);
-                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
             }
+
+            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, tabsContext.Items);
+
+            output.TagName = tagBuilder.TagName;
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            output.Attributes.Clear();
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
     }
 

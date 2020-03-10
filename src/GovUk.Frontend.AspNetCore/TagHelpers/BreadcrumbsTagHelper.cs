@@ -21,19 +21,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var bcContext = new BreadcrumbsContext();
+
             using (context.SetScopedContextItem(BreadcrumbsContext.ContextName, bcContext))
             {
                 await output.GetChildContentAsync();
-
-                var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(bcContext.Items, bcContext.CurrentPageItem);
-
-                output.TagName = tagBuilder.TagName;
-                output.TagMode = TagMode.StartTagAndEndTag;
-
-                output.Attributes.Clear();
-                output.MergeAttributes(tagBuilder);
-                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
             }
+
+            var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(bcContext.Items, bcContext.CurrentPageItem);
+
+            output.TagName = tagBuilder.TagName;
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            output.Attributes.Clear();
+            output.MergeAttributes(tagBuilder);
+            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
     }
 
