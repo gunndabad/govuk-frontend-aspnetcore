@@ -57,7 +57,8 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             string autocomplete,
             string pattern,
-            string inputMode);
+            string inputMode,
+            bool disabled);
 
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
 
@@ -80,6 +81,7 @@ namespace GovUk.Frontend.AspNetCore
             int? rows,
             string describedBy,
             string autocomplete,
+            bool disabled,
             IHtmlContent content);
 
         TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText);
