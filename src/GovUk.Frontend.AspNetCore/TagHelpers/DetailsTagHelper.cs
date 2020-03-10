@@ -43,6 +43,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 output.TagName = tagBuilder.TagName;
                 output.TagMode = TagMode.StartTagAndEndTag;
 
+                output.Attributes.Clear();
+
                 if (!string.IsNullOrEmpty(Id))
                 {
                     output.Attributes.Add("id", Id);

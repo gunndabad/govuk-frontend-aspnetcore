@@ -89,6 +89,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.TagName = element;
             output.TagMode = TagMode.StartTagAndEndTag;
 
+            output.Attributes.Clear();
+
             output.AddClass("govuk-button", HtmlEncoder.Default);
 
             if (Disabled)

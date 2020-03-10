@@ -26,6 +26,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 output.Content.Append("Back");
             }
 
+            output.Attributes.Clear();
             output.MergeAttributes(tagBuilder);
             output.AddClass("govuk-back-link", HtmlEncoder.Default);
         }
