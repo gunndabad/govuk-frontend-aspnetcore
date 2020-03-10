@@ -32,6 +32,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
 
+            output.Attributes.Clear();
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
