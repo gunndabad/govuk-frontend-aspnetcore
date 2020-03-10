@@ -576,7 +576,8 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             string autocomplete,
             string pattern,
-            string inputMode)
+            string inputMode,
+            bool disabled)
         {
             if (id == null)
             {
@@ -623,6 +624,11 @@ namespace GovUk.Frontend.AspNetCore
             if (inputMode != null)
             {
                 tagBuilder.Attributes.Add("inputmode", inputMode);
+            }
+
+            if (disabled)
+            {
+                tagBuilder.Attributes.Add("disabled", "disabled");
             }
 
             return tagBuilder;
@@ -1027,6 +1033,7 @@ namespace GovUk.Frontend.AspNetCore
             int? rows,
             string describedBy,
             string autocomplete,
+            bool disabled,
             IHtmlContent content)
         {
             if (id == null)
@@ -1064,6 +1071,11 @@ namespace GovUk.Frontend.AspNetCore
             if (autocomplete != null)
             {
                 tagBuilder.Attributes.Add("autocomplete", autocomplete);
+            }
+
+            if (disabled)
+            {
+                tagBuilder.Attributes.Add("disabled", "disabled");
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);

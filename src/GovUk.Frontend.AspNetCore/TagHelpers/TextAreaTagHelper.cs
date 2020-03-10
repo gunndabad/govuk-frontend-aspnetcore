@@ -10,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class TextAreaTagHelper : FormGroupTagHelperBase
     {
         private const string AutocompleteAttributeName = "autocomplete";
+        private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
         private const string RowsAttributeName = "rows";
 
@@ -20,6 +21,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
+
+        [HtmlAttributeName(DisabledAttributeName)]
+        public bool Disabled { get; set; }
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -47,6 +51,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Rows,
                 DescribedBy,
                 Autocomplete,
+                Disabled,
                 resolvedContent);
         }
 
