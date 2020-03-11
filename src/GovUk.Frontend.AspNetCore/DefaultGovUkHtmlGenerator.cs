@@ -553,7 +553,7 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateInsetText(IHtmlContent content)
+        public virtual TagBuilder GenerateInsetText(string id, IHtmlContent content)
         {
             if (content == null)
             {
@@ -562,6 +562,12 @@ namespace GovUk.Frontend.AspNetCore
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.AddCssClass("govuk-inset-text");
+
+            if (id != null)
+            {
+                tagBuilder.Attributes.Add("id", id);
+            }
+
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;

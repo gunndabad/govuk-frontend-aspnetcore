@@ -30,14 +30,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InsetTextTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
+            var tagHelper = new InsetTextTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            {
+                Id = "my-id"
+            };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
             var html = output.AsString();
-            Assert.Equal("<div class=\"govuk-inset-text\">Inset text</div>", html);
+            Assert.Equal("<div class=\"govuk-inset-text\" id=\"my-id\">Inset text</div>", html);
         }
     }
 }

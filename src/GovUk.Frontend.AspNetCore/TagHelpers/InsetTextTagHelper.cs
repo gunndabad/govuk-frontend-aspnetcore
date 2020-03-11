@@ -8,6 +8,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-inset-text", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class InsetTextTagHelper : TagHelper
     {
+        private const string IdAttributeName = "id";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public InsetTextTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -15,11 +17,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(IdAttributeName)]
+        public string Id { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var childContent = await output.GetChildContentAsync();
 
-            var tagBuilder = _htmlGenerator.GenerateInsetText(childContent);
+            var tagBuilder = _htmlGenerator.GenerateInsetText(Id, childContent);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
