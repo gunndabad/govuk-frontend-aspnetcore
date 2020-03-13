@@ -86,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GeneratePanel(int? titleHeadingLevel, IHtmlContent titleContent, IHtmlContent content);
 
-        TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content);
+        TagBuilder GeneratePhaseBanner(string tag, IDictionary<string, string> attributes, IHtmlContent content);
 
         TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items);
 
