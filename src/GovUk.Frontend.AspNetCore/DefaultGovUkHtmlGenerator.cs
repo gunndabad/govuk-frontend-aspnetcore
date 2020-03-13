@@ -244,7 +244,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 var hintId = $"{elementId}-info";
                 var hintContent = new HtmlString(content);
-                var generatedHint = GenerateHint(hintId, hintContent);
+                var generatedHint = GenerateHint(hintId, attributes: null, hintContent);
 
                 generatedHint.AddCssClass("govuk-character-count__message");
                 generatedHint.Attributes.Add("aria-live", "polite");
@@ -358,7 +358,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 if (item.HintContent != null)
                 {
-                    var hint = GenerateHint(item.HintId, item.HintContent);
+                    var hint = GenerateHint(item.HintId, item.HintAttributes, item.HintContent);
                     hint.AddCssClass("govuk-checkboxes__hint");
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
@@ -591,7 +591,7 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateHint(string id, IHtmlContent content)
+        public virtual TagBuilder GenerateHint(string id, IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -599,6 +599,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("span");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-hint");
 
             if (!string.IsNullOrEmpty(id))
@@ -897,7 +898,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 if (item.HintContent != null)
                 {
-                    var hint = GenerateHint(item.HintId, item.HintContent);
+                    var hint = GenerateHint(item.HintId, item.HintAttributes, item.HintContent);
                     hint.AddCssClass("govuk-radios__hint");
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }

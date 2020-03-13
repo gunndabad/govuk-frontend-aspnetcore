@@ -216,7 +216,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 ConditionalId = conditionalId,
                 Content = childContent.Snapshot(),
                 Disabled = Disabled,
-                HintContent = itemContext.HintContent,
+                HintAttributes = itemContext.Hint?.attributes,
+                HintContent = itemContext.Hint?.content,
                 HintId = hintId,
                 Id = resolvedId,
                 Name = checkboxesContext.ResolvedName,
@@ -252,6 +253,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-checkboxes-item-hint", ParentTag = "govuk-checkboxes-item")]
     public class CheckboxesItemHintTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "hint-";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             output.ThrowIfOutputHasAttributes();
@@ -260,7 +266,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            itemContext.SetHintContent(content.Snapshot());
+            itemContext.SetHint(Attributes, content.Snapshot());
 
             output.SuppressOutput();
         }
@@ -351,7 +357,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public const string ContextName = nameof(CheckboxesItemContext);
 
         public IHtmlContent ConditionalContent { get; private set; }
-        public IHtmlContent HintContent { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
 
         public void SetConditionalContent(IHtmlContent content)
         {
@@ -368,19 +374,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             ConditionalContent = content;
         }
 
-        public void SetHintContent(IHtmlContent content)
+        public void SetHint(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
                 throw new ArgumentNullException(nameof(content));
             }
 
-            if (HintContent != null)
+            if (Hint != null)
             {
                 throw new InvalidOperationException("Hint content has already been set.");
             }
 
-            HintContent = content;
+            Hint = (attributes, content);
         }
     }
 
