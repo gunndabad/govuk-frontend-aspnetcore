@@ -548,7 +548,10 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content)
+        public virtual TagBuilder GenerateFormGroup(
+            bool haveError,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (content == null)
             {
@@ -556,6 +559,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-form-group");
 
             if (haveError)
