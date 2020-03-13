@@ -196,7 +196,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetHint(new HtmlString("The hint"));
+                    formGroupContext.TrySetHint(attributes: null, content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -707,7 +707,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
-                    itemContext.SetHintContent(new HtmlString("Hint"));
+                    itemContext.SetHint(attributes: null, content: new HtmlString("Hint"));
                     itemContext.SetConditionalContent(new HtmlString("Conditional"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -1092,7 +1092,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Hint", itemContext.HintContent.AsString());
+            Assert.Equal("Hint", itemContext.Hint?.content.AsString());
         }
     }
 }

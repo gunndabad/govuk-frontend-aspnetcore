@@ -167,7 +167,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var hintId = ResolvedId + "-hint";
                 AppendToDescribedBy(hintId);
-                return Generator.GenerateHint(hintId, builder.Hint);
+                return Generator.GenerateHint(hintId, builder.Hint.Value.attributes, builder.Hint.Value.content);
             }
             else
             {
@@ -216,6 +216,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public abstract class FormGroupHintTagHelperBase : TagHelper
     {
+        private const string AttributesPrefix = "hint-";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         private protected FormGroupHintTagHelperBase()
         {
         }
@@ -227,7 +232,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetHint(childContent))
+            if (!formGroupContext.TrySetHint(Attributes, childContent))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -282,7 +287,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public (string visuallyHiddenText, IDictionary<string, string> attributes, IHtmlContent content)? ErrorMessage { get; private set; }
 
-        public IHtmlContent Hint { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
 
         public (bool isPageHeading, IHtmlContent content)? Label { get; private set; }
 
@@ -305,7 +310,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return true;
         }
 
-        public bool TrySetHint(IHtmlContent content)
+        public bool TrySetHint(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (RenderStage >= FormGroupRenderStage.Hint)
             {
@@ -313,7 +318,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             RenderStage = FormGroupRenderStage.Hint;
-            Hint = content;
+            Hint = (attributes, content);
 
             return true;
         }

@@ -861,7 +861,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
                     formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
-                    formGroupContext.TrySetHint(new HtmlString("The hint"));
+                    formGroupContext.TrySetHint(attributes: null, content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -1011,7 +1011,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
                     formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
-                    formGroupContext.TrySetHint(new HtmlString("Hint"));
+                    formGroupContext.TrySetHint(attributes: null, content: new HtmlString("Hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -1048,7 +1048,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
                     formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
-                    formGroupContext.TrySetHint(new HtmlString("Hint"));
+                    formGroupContext.TrySetHint(attributes: null, content: new HtmlString("Hint"));
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -1149,7 +1149,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The hint content", formGroupContext.Hint.AsString());
+            Assert.Equal("The hint content", formGroupContext.Hint?.content.AsString());
             Assert.Null(output.TagName);
         }
     }
@@ -1248,7 +1248,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetHint(new HtmlString("Existing hint")));
+            Assert.True(ctx.TrySetHint(attributes: null, content: new HtmlString("Existing hint")));
             var oldStage = ctx.RenderStage;
 
             // Act
@@ -1283,13 +1283,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var content = new HtmlString("Hint");
 
             // Act
-            var result = ctx.TrySetHint(content);
+            var result = ctx.TrySetHint(attributes: null, content: content);
 
             // Assert
             Assert.True(result);
             Assert.Equal(FormGroupRenderStage.Hint, ctx.RenderStage);
             Assert.NotNull(ctx.Hint);
-            Assert.Same(content, ctx.Hint);
+            Assert.Equal("Hint", ctx.Hint?.content.AsString());
         }
 
         [Fact]
@@ -1301,13 +1301,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var content = new HtmlString("Hint");
 
             // Act
-            var result = ctx.TrySetHint(content);
+            var result = ctx.TrySetHint(attributes: null, content);
 
             // Assert
             Assert.True(result);
             Assert.Equal(FormGroupRenderStage.Hint, ctx.RenderStage);
             Assert.NotNull(ctx.Hint);
-            Assert.Same(content, ctx.Hint);
+            Assert.Equal("Hint", ctx.Hint?.content.AsString());
         }
 
         [Fact]
@@ -1315,11 +1315,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetHint(new HtmlString("Existing hint")));
+            Assert.True(ctx.TrySetHint(attributes: null, new HtmlString("Existing hint")));
             var oldStage = ctx.RenderStage;
 
             // Act
-            var result = ctx.TrySetHint(new HtmlString("Hint"));
+            var result = ctx.TrySetHint(attributes: null, new HtmlString("Hint"));
 
             // Assert
             Assert.False(result);
@@ -1335,7 +1335,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var oldStage = ctx.RenderStage;
 
             // Act
-            var result = ctx.TrySetHint(new HtmlString("Hint"));
+            var result = ctx.TrySetHint(attributes: null, new HtmlString("Hint"));
 
             // Assert
             Assert.False(result);
@@ -1386,7 +1386,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetHint(new HtmlString("Hint")));
+            Assert.True(ctx.TrySetHint(attributes: null, new HtmlString("Hint")));
             var content = new HtmlString("Hint");
             var visuallyHiddenText = "VHT";
 
@@ -1425,7 +1425,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Act & Assert
             Assert.True(ctx.TrySetLabel(isPageHeading: false, new HtmlString("Label")));
-            Assert.True(ctx.TrySetHint(new HtmlString("Hint")));
+            Assert.True(ctx.TrySetHint(attributes: null, new HtmlString("Hint")));
             Assert.True(ctx.TrySetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("The error")));
         }
     }

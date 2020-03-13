@@ -14,6 +14,7 @@ namespace GovUk.Frontend.AspNetCore
         public string ConditionalId { get; set; }
         public IHtmlContent ConditionalContent { get; set; }
         public string HintId { get; set; }
+        public IDictionary<string, string> HintAttributes { get; set; }
         public IHtmlContent HintContent { get; set; }
         public IDictionary<string, string> Attributes { get; set; }
     }
