@@ -16,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateBackLink(string href, IDictionary<string, string> attributes, IHtmlContent content);
 
-        TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem);
+        TagBuilder GenerateBreadcrumbs(IDictionary<string, string> attributes, IEnumerable<BreadcrumbsItem> items);
 
         TagBuilder GenerateCharacterCount(
             string elementId,

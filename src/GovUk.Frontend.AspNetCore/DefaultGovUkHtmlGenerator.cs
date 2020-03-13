@@ -149,7 +149,9 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem)
+        public virtual TagBuilder GenerateBreadcrumbs(
+            IDictionary<string, string> attributes,
+            IEnumerable<BreadcrumbsItem> items)
         {
             if (items == null)
             {
@@ -157,6 +159,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-breadcrumbs");
 
             var ol = new TagBuilder("ol");
@@ -167,12 +170,27 @@ namespace GovUk.Frontend.AspNetCore
                 var li = new TagBuilder("li");
                 li.AddCssClass("govuk-breadcrumbs__list-item");
 
-                if (item == currentPageItem)
+                if (item.IsCurrentPage)
                 {
                     li.Attributes.Add("aria-current", "page");
                 }
 
-                li.InnerHtml.AppendHtml(item);
+                IHtmlContent itemContent;
+
+                if (item.Href != null)
+                {
+                    var itemLink = new TagBuilder("a");
+                    itemLink.AddCssClass("govuk-breadcrumbs__link");
+                    itemLink.Attributes.Add("href", item.Href);
+                    itemLink.InnerHtml.AppendHtml(item.Content);
+                    itemContent = itemLink;
+                }
+                else
+                {
+                    itemContent = item.Content;
+                }
+
+                li.InnerHtml.AppendHtml(itemContent);
 
                 ol.InnerHtml.AppendHtml(li);
             }
