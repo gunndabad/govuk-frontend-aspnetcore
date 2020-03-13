@@ -642,7 +642,8 @@ namespace GovUk.Frontend.AspNetCore
             string autocomplete,
             string pattern,
             string inputMode,
-            bool disabled)
+            bool disabled,
+            IDictionary<string, string> attributes)
         {
             if (id == null)
             {
@@ -655,6 +656,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("input");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-input");
 
             if (haveError)
