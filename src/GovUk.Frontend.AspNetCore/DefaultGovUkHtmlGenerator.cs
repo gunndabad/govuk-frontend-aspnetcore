@@ -257,6 +257,7 @@ namespace GovUk.Frontend.AspNetCore
             string name,
             bool isConditional,
             string describedBy,
+            IDictionary<string, string> attributes,
             IEnumerable<CheckboxesItem> items)
         {
             if (items == null)
@@ -265,6 +266,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-checkboxes");
 
             if (isConditional)
@@ -314,6 +316,7 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.AddCssClass("govuk-checkboxes__item");
 
                 var input = new TagBuilder("input");
+                input.MergeAttributes(item.Attributes);
                 input.TagRenderMode = TagRenderMode.SelfClosing;
                 input.AddCssClass("govuk-checkboxes__input");
                 input.Attributes.Add("id", item.Id);

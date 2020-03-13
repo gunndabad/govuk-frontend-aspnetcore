@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -14,5 +15,6 @@ namespace GovUk.Frontend.AspNetCore
         public IHtmlContent ConditionalContent { get; set; }
         public string HintId { get; set; }
         public IHtmlContent HintContent { get; set; }
+        public IDictionary<string, string> Attributes { get; set; }
     }
 }

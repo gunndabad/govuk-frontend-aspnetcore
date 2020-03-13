@@ -11,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-checkboxes-fieldset", "govuk-checkboxes-item", "govuk-checkboxes-hint", "govuk-checkboxes-error-message")]
     public class CheckboxesTagHelper : FormGroupTagHelperBase
     {
+        private const string AttributesPrefix = "input-";
         private const string IdPrefixAttributeName = "id-prefix";
 
         public CheckboxesTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -18,11 +19,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             if (Name == null && AspFor == null)
             {
                 throw new InvalidOperationException(
@@ -63,6 +69,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 ResolvedName,
                 checkboxesContext.IsConditional,
                 resolvedDescribedBy,
+                Attributes,
                 checkboxesContext.Items);
             contentBuilder.AppendHtml(tagBuilder);
 
@@ -115,10 +122,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-checkboxes-item", ParentTag = "govuk-checkboxes")]
     public class CheckboxesItemTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "checkboxes-item-";
         private const string CheckedAttributeName = "checked";
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
         private const string ValueAttributeName = "value";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(CheckedAttributeName)]
         public bool Checked { get; set; }
@@ -153,6 +164,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 checkboxesContext.AddItem(new CheckboxesItem()
                 {
+                    Attributes = Attributes,
                     Checked = Checked,
                     ConditionalContent = itemContext.ConditionalContent,
                     ConditionalId = conditionalId,
