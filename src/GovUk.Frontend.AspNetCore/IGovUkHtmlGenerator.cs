@@ -94,6 +94,8 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items);
 
+        TagBuilder GenerateSkipLink(string href, IDictionary<string, string> attributes, IHtmlContent content);
+
         TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows);
 
         TagBuilder GenerateTabs(string id, string title, IEnumerable<TabsItem> items);

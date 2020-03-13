@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var html = output.AsString();
-            Assert.Equal("<a href=\"http://foo.com\" class=\"govuk-skip-link\">My custom link content</a>", html);
+            Assert.Equal("<a class=\"govuk-skip-link\" href=\"http://foo.com\">My custom link content</a>", html);
         }
     }
 }

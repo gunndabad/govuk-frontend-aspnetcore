@@ -949,6 +949,30 @@ namespace GovUk.Frontend.AspNetCore
             }
         }
 
+        public virtual TagBuilder GenerateSkipLink(
+            string href,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
+        {
+            if (href == null)
+            {
+                throw new ArgumentNullException(nameof(href));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("a");
+            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.AddCssClass("govuk-skip-link");
+            tagBuilder.Attributes.Add("href", href);
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows)
         {
             if (rows == null)
