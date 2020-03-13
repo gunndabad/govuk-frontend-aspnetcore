@@ -125,6 +125,30 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateBackLink(
+            string href,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
+        {
+            if (href == null)
+            {
+                throw new ArgumentNullException(nameof(href));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("a");
+            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.AddCssClass("govuk-back-link");
+            tagBuilder.Attributes.Add("href", href);
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateBreadcrumbs(IEnumerable<IHtmlContent> items, IHtmlContent currentPageItem)
         {
             if (items == null)

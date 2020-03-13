@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var html = output.AsString();
-            Assert.Equal("<a href=\"http://foo.com\" class=\"govuk-back-link\">My custom link content</a>", html);
+            Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">My custom link content</a>", html);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var html = output.AsString();
-            Assert.Equal("<a href=\"http://foo.com\" class=\"govuk-back-link\">Back</a>", html);
+            Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">Back</a>", html);
         }
     }
 }
