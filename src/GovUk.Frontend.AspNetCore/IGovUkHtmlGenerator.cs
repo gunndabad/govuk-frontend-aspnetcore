@@ -78,7 +78,11 @@ namespace GovUk.Frontend.AspNetCore
             bool disabled,
             IDictionary<string, string> attributes);
 
-        TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
+        TagBuilder GenerateLabel(
+            string @for,
+            bool isPageHeading,
+            IDictionary<string, string> attributes,
+            IHtmlContent content);
 
         TagBuilder GeneratePanel(int? titleHeadingLevel, IHtmlContent titleContent, IHtmlContent content);
 

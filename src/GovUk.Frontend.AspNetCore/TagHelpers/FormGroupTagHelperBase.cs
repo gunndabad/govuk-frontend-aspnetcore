@@ -179,21 +179,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var isPageHeading = builder.Label?.isPageHeading ?? false;
             var content = builder.Label?.content;
+            var attributes = builder.Label?.attributes;
 
             var resolvedContent = content ??
                 new HtmlString(Generator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
-            return Generator.GenerateLabel(ResolvedId, isPageHeading, resolvedContent);
+            return Generator.GenerateLabel(ResolvedId, isPageHeading, attributes, resolvedContent);
         }
     }
 
     public abstract class FormGroupLabelTagHelperBase : TagHelper
     {
+        private const string AttributesPrefix = "label-";
         private const string IsPageHeadingAttributeName = "is-page-heading";
 
         private protected FormGroupLabelTagHelperBase()
         {
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
@@ -205,7 +210,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetLabel(IsPageHeading, childContent))
+            if (!formGroupContext.TrySetLabel(IsPageHeading, Attributes, childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -232,7 +237,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetHint(Attributes, childContent))
+            if (!formGroupContext.TrySetHint(Attributes, childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -263,7 +268,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, Attributes, childContent))
+            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, Attributes, childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -289,7 +294,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
 
-        public (bool isPageHeading, IHtmlContent content)? Label { get; private set; }
+        public (bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)? Label { get; private set; }
 
         // Internal for testing
         internal FormGroupRenderStage RenderStage { get; private set; } = FormGroupRenderStage.None;
@@ -323,7 +328,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return true;
         }
 
-        public bool TrySetLabel(bool isPageHeading, IHtmlContent content)
+        public bool TrySetLabel(bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (RenderStage >= FormGroupRenderStage.Label)
             {
@@ -331,7 +336,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             RenderStage = FormGroupRenderStage.Label;
-            Label = (isPageHeading, content);
+            Label = (isPageHeading, attributes, content);
 
             return true;
         }
