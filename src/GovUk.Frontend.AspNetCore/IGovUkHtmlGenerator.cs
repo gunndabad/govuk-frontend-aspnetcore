@@ -29,6 +29,7 @@ namespace GovUk.Frontend.AspNetCore
             string name,
             bool isConditional,
             string describedBy,
+            IDictionary<string, string> attributes,
             IEnumerable<CheckboxesItem> items);
 
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
