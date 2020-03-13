@@ -39,6 +39,7 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateAccordion(
             string id,
+            IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items)
         {
             if (id == null)
@@ -52,6 +53,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-accordion");
             tagBuilder.Attributes.Add("data-module", "govuk-accordion");
             tagBuilder.Attributes.Add("id", id);

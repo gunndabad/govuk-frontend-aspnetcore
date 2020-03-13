@@ -7,7 +7,10 @@ namespace GovUk.Frontend.AspNetCore
 {
     public interface IGovUkHtmlGenerator
     {
-        TagBuilder GenerateAccordion(string id, IEnumerable<AccordionItem> items);
+        TagBuilder GenerateAccordion(
+            string id,
+            IDictionary<string, string> attributes,
+            IEnumerable<AccordionItem> items);
 
         TagBuilder GenerateAnchor(string href);
 
