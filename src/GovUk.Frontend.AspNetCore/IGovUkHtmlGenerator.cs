@@ -33,7 +33,11 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
 
-        TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content);
+        TagBuilder GenerateErrorMessage(
+            string visuallyHiddenText,
+            string id,
+            IDictionary<string, string> attributes,
+            IHtmlContent content);
 
         TagBuilder GenerateErrorSummary(
             IHtmlContent title,

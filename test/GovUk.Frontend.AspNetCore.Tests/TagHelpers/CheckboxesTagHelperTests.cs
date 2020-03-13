@@ -218,7 +218,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, new HtmlString("A error"));
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: new HtmlString("A error"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);

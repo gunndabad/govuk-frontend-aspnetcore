@@ -234,7 +234,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, content: new HtmlString("Boom!"));
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: new HtmlString("Boom!"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -655,7 +658,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, content: null);
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: null);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -718,7 +724,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, content: null);
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: null);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -783,7 +792,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: "Bang", content: new HtmlString("Boom!"));
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: "Bang",
+                        attributes: null,
+                        content: new HtmlString("Boom!"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -959,7 +971,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
                     formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, new HtmlString("An error"));
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        new HtmlString("An error"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -1034,7 +1049,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
                     formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
                     formGroupContext.TrySetHint(new HtmlString("Hint"));
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, new HtmlString("An error"));
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: new HtmlString("An error"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -1246,7 +1264,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetErrorMessage(null, new HtmlString("Error message")));
+            Assert.True(ctx.TrySetErrorMessage(null, null, new HtmlString("Error message")));
             var oldStage = ctx.RenderStage;
 
             // Act
@@ -1313,7 +1331,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetErrorMessage(null, new HtmlString("Existing hint")));
+            Assert.True(ctx.TrySetErrorMessage(null, null, new HtmlString("Existing hint")));
             var oldStage = ctx.RenderStage;
 
             // Act
@@ -1333,7 +1351,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var visuallyHiddenText = "VHT";
 
             // Act
-            var result = ctx.TrySetErrorMessage(visuallyHiddenText, content);
+            var result = ctx.TrySetErrorMessage(visuallyHiddenText, attributes: null, content);
 
             // Assert
             Assert.True(result);
@@ -1353,7 +1371,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var visuallyHiddenText = "VHT";
 
             // Act
-            var result = ctx.TrySetErrorMessage(visuallyHiddenText, content);
+            var result = ctx.TrySetErrorMessage(visuallyHiddenText, attributes: null, content);
 
             // Assert
             Assert.True(result);
@@ -1373,7 +1391,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var visuallyHiddenText = "VHT";
 
             // Act
-            var result = ctx.TrySetErrorMessage(visuallyHiddenText, content);
+            var result = ctx.TrySetErrorMessage(visuallyHiddenText, attributes: null, content);
 
             // Assert
             Assert.True(result);
@@ -1388,11 +1406,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetErrorMessage(null, new HtmlString("Existing error")));
+            Assert.True(ctx.TrySetErrorMessage(null, attributes: null, new HtmlString("Existing error")));
             var oldStage = ctx.RenderStage;
 
             // Act
-            var result = ctx.TrySetErrorMessage(null, new HtmlString("New error"));
+            var result = ctx.TrySetErrorMessage(null, attributes: null, new HtmlString("New error"));
 
             // Assert
             Assert.False(result);
@@ -1408,7 +1426,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Act & Assert
             Assert.True(ctx.TrySetLabel(isPageHeading: false, new HtmlString("Label")));
             Assert.True(ctx.TrySetHint(new HtmlString("Hint")));
-            Assert.True(ctx.TrySetErrorMessage(visuallyHiddenText: null, new HtmlString("The error")));
+            Assert.True(ctx.TrySetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("The error")));
         }
     }
 
