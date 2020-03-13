@@ -973,7 +973,9 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows)
+        public virtual TagBuilder GenerateSummaryList(
+            IDictionary<string, string> attributes,
+            IEnumerable<SummaryListRow> rows)
         {
             if (rows == null)
             {
@@ -983,11 +985,13 @@ namespace GovUk.Frontend.AspNetCore
             var anyRowHasActions = rows.Any(r => r.Actions.Any());
 
             var tagBuilder = new TagBuilder("dl");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-summary-list");
 
             foreach (var row in rows)
             {
                 var rowTagBuilder = new TagBuilder("div");
+                rowTagBuilder.MergeAttributes(row.Attributes);
                 rowTagBuilder.AddCssClass("govuk-summary-list__row");
 
                 var dt = new TagBuilder("dt");
