@@ -745,6 +745,7 @@ namespace GovUk.Frontend.AspNetCore
         public virtual TagBuilder GeneratePanel(
             int? titleHeadingLevel,
             IHtmlContent titleContent,
+            IDictionary<string, string> attributes,
             IHtmlContent content)
         {
             if (titleContent == null)
@@ -753,6 +754,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-panel");
             tagBuilder.AddCssClass("govuk-panel--confirmation");
 

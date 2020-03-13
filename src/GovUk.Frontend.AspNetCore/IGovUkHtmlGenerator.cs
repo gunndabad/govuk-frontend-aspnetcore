@@ -84,7 +84,11 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IHtmlContent content);
 
-        TagBuilder GeneratePanel(int? titleHeadingLevel, IHtmlContent titleContent, IHtmlContent content);
+        TagBuilder GeneratePanel(
+            int? titleHeadingLevel,
+            IHtmlContent titleContent,
+            IDictionary<string, string> attributes,
+            IHtmlContent content);
 
         TagBuilder GeneratePhaseBanner(string tag, IDictionary<string, string> attributes, IHtmlContent content);
 
