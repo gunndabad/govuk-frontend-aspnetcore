@@ -120,7 +120,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return Generator.GenerateFormGroup(haveError, contentBuilder);
         }
 
-        private protected virtual IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        private protected virtual TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             // For deriving classes to implement when required
             throw new NotImplementedException();
