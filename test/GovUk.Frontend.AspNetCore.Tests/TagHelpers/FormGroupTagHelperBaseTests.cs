@@ -60,7 +60,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -118,7 +121,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -322,7 +328,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -433,7 +442,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -542,7 +554,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: true, content: null);
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: true,
+                        attributes: null,
+                        content: null);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -600,7 +615,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: true, content: new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: true,
+                        attributes: null,
+                        content: new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -860,7 +878,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
                     formGroupContext.TrySetHint(attributes: null, content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -897,7 +918,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -933,7 +957,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -970,7 +997,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -1010,7 +1040,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
                     formGroupContext.TrySetHint(attributes: null, content: new HtmlString("Hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -1047,7 +1080,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(isPageHeading: false, new HtmlString("The label"));
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        new HtmlString("The label"));
                     formGroupContext.TrySetHint(attributes: null, content: new HtmlString("Hint"));
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
@@ -1217,7 +1253,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var content = new HtmlString("New label");
 
             // Act
-            var result = ctx.TrySetLabel(true, content);
+            var result = ctx.TrySetLabel(isPageHeading: true, attributes: null, content);
 
             // Assert
             Assert.True(result);
@@ -1232,11 +1268,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetLabel(false, new HtmlString("Existing label")));
+            Assert.True(ctx.TrySetLabel(isPageHeading: false, attributes: null, new HtmlString("Existing label")));
             var oldStage = ctx.RenderStage;
 
             // Act
-            var result = ctx.TrySetLabel(true, new HtmlString("New label"));
+            var result = ctx.TrySetLabel(isPageHeading: true, attributes: null, content: new HtmlString("New label"));
 
             // Assert
             Assert.False(result);
@@ -1252,7 +1288,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var oldStage = ctx.RenderStage;
 
             // Act
-            var result = ctx.TrySetLabel(true, new HtmlString("New label"));
+            var result = ctx.TrySetLabel(isPageHeading: true, attributes: null, content: new HtmlString("New label"));
 
             // Assert
             Assert.False(result);
@@ -1268,7 +1304,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var oldStage = ctx.RenderStage;
 
             // Act
-            var result = ctx.TrySetLabel(true, new HtmlString("New label"));
+            var result = ctx.TrySetLabel(isPageHeading: true, attributes: null, content: new HtmlString("New label"));
 
             // Assert
             Assert.False(result);
@@ -1297,7 +1333,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetLabel(false, new HtmlString("Label")));
+            Assert.True(ctx.TrySetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Label")));
             var content = new HtmlString("Hint");
 
             // Act
@@ -1366,7 +1402,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new FormGroupBuilder();
-            Assert.True(ctx.TrySetLabel(false, new HtmlString("Label")));
+            Assert.True(ctx.TrySetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Label")));
             var content = new HtmlString("Hint");
             var visuallyHiddenText = "VHT";
 
@@ -1424,7 +1460,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var ctx = new FormGroupBuilder();
 
             // Act & Assert
-            Assert.True(ctx.TrySetLabel(isPageHeading: false, new HtmlString("Label")));
+            Assert.True(ctx.TrySetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Label")));
             Assert.True(ctx.TrySetHint(attributes: null, new HtmlString("Hint")));
             Assert.True(ctx.TrySetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("The error")));
         }

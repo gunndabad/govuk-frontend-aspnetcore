@@ -352,7 +352,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 tagBuilder.InnerHtml.AppendHtml(input);
 
-                var label = GenerateLabel(item.Id, isPageHeading: false, item.Content);
+                var label = GenerateLabel(item.Id, isPageHeading: false, attributes: null, item.Content);
                 label.AddCssClass("govuk-checkboxes__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
@@ -705,7 +705,11 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content)
+        public virtual TagBuilder GenerateLabel(
+            string @for,
+            bool isPageHeading,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (@for == null)
             {
@@ -718,6 +722,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("label");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-label");
             tagBuilder.Attributes.Add("for", @for);
             tagBuilder.InnerHtml.AppendHtml(content);
@@ -898,7 +903,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 tagBuilder.InnerHtml.AppendHtml(input);
 
-                var label = GenerateLabel(item.Id, isPageHeading: false, item.Content);
+                var label = GenerateLabel(item.Id, isPageHeading: false, attributes: null, item.Content);
                 label.AddCssClass("govuk-radios__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
