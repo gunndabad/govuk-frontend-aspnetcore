@@ -12,6 +12,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-summary-list-row")]
     public class SummaryListTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "summary-list-";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public SummaryListTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -19,8 +21,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var summaryListContext = new SummaryListContext();
 
             using (context.SetScopedContextItem(SummaryListContext.ContextName, summaryListContext))
@@ -28,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateSummaryList(summaryListContext.Rows);
+            var tagBuilder = _htmlGenerator.GenerateSummaryList(Attributes, summaryListContext.Rows);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -43,8 +50,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-summary-list-row-key", "govuk-summary-list-row-value", "govuk-summary-list-row-actions")]
     public class SummaryListRowTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "row-";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var summaryListContext = (SummaryListContext)context.Items[SummaryListContext.ContextName];
 
             var rowContext = new SummaryListRowContext();
@@ -57,6 +71,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             summaryListContext.AddRow(new SummaryListRow()
             {
                 Actions = rowContext.Actions,
+                Attributes = Attributes,
                 Key = rowContext.Key,
                 Value = rowContext.Value
             });
@@ -70,6 +85,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var summaryListRowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
 
             var content = await output.GetChildContentAsync();
@@ -88,6 +105,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var summaryListRowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
 
             var content = await output.GetChildContentAsync();
@@ -106,6 +125,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             await output.GetChildContentAsync();
 
             output.SuppressOutput();
@@ -127,6 +148,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var summaryListRowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
 
             var href = ResolveHref();

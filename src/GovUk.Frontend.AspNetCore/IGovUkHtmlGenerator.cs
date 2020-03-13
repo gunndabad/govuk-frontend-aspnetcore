@@ -96,7 +96,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateSkipLink(string href, IDictionary<string, string> attributes, IHtmlContent content);
 
-        TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows);
+        TagBuilder GenerateSummaryList(IDictionary<string, string> attributes, IEnumerable<SummaryListRow> rows);
 
         TagBuilder GenerateTabs(string id, string title, IEnumerable<TabsItem> items);
 
