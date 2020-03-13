@@ -25,7 +25,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var fieldsetContext = (FieldsetContext)context.Items[FieldsetContext.ContextName];
-                    fieldsetContext.TrySetLegendContent(new HtmlString("Legend text"));
+                    fieldsetContext.TrySetLegend(
+                        attributes: null,
+                        content: new HtmlString("Legend text"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Main content");
@@ -69,7 +71,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var fieldsetContext = (FieldsetContext)context.Items[FieldsetContext.ContextName];
-                    fieldsetContext.TrySetLegendContent(new HtmlString("Legend text"));
+                    fieldsetContext.TrySetLegend(
+                        attributes: null,
+                        content: new HtmlString("Legend text"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Main text");

@@ -12,12 +12,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-radios-divider", "govuk-radios-fieldset", "govuk-radios-item", "govuk-radios-hint", "govuk-radios-error-message")]
     public class RadiosTagHelper : FormGroupTagHelperBase
     {
+        private const string AttributesPrefix = "radios-";
         private const string IdPrefixAttributeName = "id-prefix";
 
         public RadiosTagHelper(IGovUkHtmlGenerator htmlGenerator)
             : base(htmlGenerator)
         {
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
@@ -67,7 +71,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     DescribedBy,
                     radiosContext.Fieldset.IsPageHeading,
                     role: null,
+                    attributes: Attributes,
                     legendContent: radiosContext.Fieldset.LegendContent,
+                    legendAttributes: radiosContext.Fieldset.LegendAttributes,
                     content: content);
             }
 
@@ -96,24 +102,63 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-radios-fieldset", ParentTag = "govuk-radios", TagStructure = TagStructure.NormalOrSelfClosing)]
+    [RestrictChildren("govuk-radios-fieldset-legend")]
     public class RadiosFieldsetTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "fieldset-";
         private const string IsPageHeadingAttributeName = "is-page-heading";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
 
-            var content = await output.GetChildContentAsync();
+            var fieldsetContext = new RadiosFieldsetContext();
+
+            using (context.SetScopedContextItem(RadiosFieldsetContext.ContextName, fieldsetContext))
+            {
+                await output.GetChildContentAsync();
+            }
 
             radiosContext.SetFieldset(new RadiosFieldset()
             {
+                Attributes = Attributes,
                 IsPageHeading = IsPageHeading,
-                LegendContent = content.Snapshot()
+                LegendContent = fieldsetContext.Legend?.content,
+                LegendAttributes = fieldsetContext.Legend?.attributes
             });
+
+            output.SuppressOutput();
+        }
+    }
+
+    [HtmlTargetElement("govuk-radios-fieldset-legend", ParentTag = "govuk-radios-fieldset")]
+    public class RadiosFieldsetLegendTagHelper : TagHelper
+    {
+        private const string AttributesPrefix = "legend-*";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            output.ThrowIfOutputHasAttributes();
+
+            var fieldsetContext = (RadiosFieldsetContext)context.Items[RadiosFieldsetContext.ContextName];
+
+            var childContent = await output.GetChildContentAsync();
+
+            if (!fieldsetContext.TrySetLegend(Attributes, childContent.Snapshot()))
+            {
+                throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
+            }
 
             output.SuppressOutput();
         }
@@ -148,6 +193,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             if (Value == null)
             {
                 throw new InvalidOperationException($"The '{ValueAttributeName}' attribute must be specified.");
@@ -155,46 +202,48 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             // REVIEW Consider throwing if Checked is null && there is no AspFor
 
+            var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+
+            var index = radiosContext.Items.Count;
+            var resolvedId = Id ?? (index == 0 ? radiosContext.IdPrefix : $"{radiosContext.IdPrefix}-{index}");
+            var conditionalId = "conditional-" + resolvedId;
+            var hintId = resolvedId + "-item-hint";
+
+            var resolvedChecked = Checked ??
+                (radiosContext.HaveModelExpression ?
+                    _htmlGenerator.GetModelValue(
+                        radiosContext.ViewContext,
+                        radiosContext.AspFor.ModelExplorer,
+                        radiosContext.AspFor.Name) == Value :
+                 false);
+
             var itemContext = new RadiosItemContext();
+
+            TagHelperContent childContent;
             using (context.SetScopedContextItem(RadiosItemContext.ContextName, itemContext))
             {
-                var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
-
-                var index = radiosContext.Items.Count;
-                var resolvedId = Id ?? (index == 0 ? radiosContext.IdPrefix : $"{radiosContext.IdPrefix}-{index}");
-                var conditionalId = "conditional-" + resolvedId;
-                var hintId = resolvedId + "-item-hint";
-
-                var resolvedChecked = Checked ??
-                    (radiosContext.HaveModelExpression ?
-                        _htmlGenerator.GetModelValue(
-                            radiosContext.ViewContext,
-                            radiosContext.AspFor.ModelExplorer,
-                            radiosContext.AspFor.Name) == Value :
-                     false);
-
-                var childContent = await output.GetChildContentAsync();
-
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = resolvedChecked,
-                    ConditionalContent = itemContext.ConditionalContent,
-                    ConditionalId = conditionalId,
-                    Content = childContent.Snapshot(),
-                    Disabled = Disabled,
-                    HintContent = itemContext.HintContent,
-                    HintId = hintId,
-                    Id = resolvedId,
-                    Value = Value
-                });
-
-                if (itemContext.ConditionalContent != null)
-                {
-                    radiosContext.SetIsConditional();
-                }
-
-                output.SuppressOutput();
+                childContent = await output.GetChildContentAsync();
             }
+
+            radiosContext.AddItem(new RadiosItem()
+            {
+                Checked = resolvedChecked,
+                ConditionalContent = itemContext.ConditionalContent,
+                ConditionalId = conditionalId,
+                Content = childContent.Snapshot(),
+                Disabled = Disabled,
+                HintContent = itemContext.HintContent,
+                HintId = hintId,
+                Id = resolvedId,
+                Value = Value
+            });
+
+            if (itemContext.ConditionalContent != null)
+            {
+                radiosContext.SetIsConditional();
+            }
+
+            output.SuppressOutput();
         }
     }
 
@@ -203,6 +252,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
 
             var content = await output.GetChildContentAsync();
@@ -218,6 +269,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
 
             var content = await output.GetChildContentAsync();
@@ -294,6 +347,29 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public void SetIsConditional() => IsConditional = true;
     }
 
+    internal class RadiosFieldsetContext
+    {
+        public const string ContextName = nameof(CheckboxesFieldsetContext);
+
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+
+        public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            if (Legend != null)
+            {
+                return false;
+            }
+
+            Legend = (attributes, content);
+            return true;
+        }
+    }
+
     internal class RadiosItemContext
     {
         public const string ContextName = nameof(RadiosItemContext);
@@ -335,6 +411,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     internal class RadiosFieldset
     {
         public bool IsPageHeading { get; set; }
+        public IDictionary<string, string> Attributes { get; set; }
         public IHtmlContent LegendContent { get; set; }
+        public IDictionary<string, string> LegendAttributes { get; set; }
     }
 }

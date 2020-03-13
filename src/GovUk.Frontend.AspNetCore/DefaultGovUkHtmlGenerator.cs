@@ -526,10 +526,13 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool isPageHeading,
             string role,
+            IDictionary<string, string> attributes,
             IHtmlContent legendContent,
+            IDictionary<string, string> legendAttributes,
             IHtmlContent content)
         {
             var tagBuilder = new TagBuilder("fieldset");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-fieldset");
 
             if (role != null)
@@ -543,6 +546,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var legend = new TagBuilder("legend");
+            legend.MergeAttributes(legendAttributes);
             legend.AddCssClass("govuk-fieldset__legend");
 
             if (isPageHeading)

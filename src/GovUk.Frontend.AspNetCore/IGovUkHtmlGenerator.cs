@@ -54,7 +54,9 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool isPageHeading,
             string role,
+            IDictionary<string, string> attributes,
             IHtmlContent legendContent,
+            IDictionary<string, string> legendAttributes,
             IHtmlContent content);
 
         TagBuilder GenerateFormGroup(bool haveError, IDictionary<string, string> attributes, IHtmlContent content);
