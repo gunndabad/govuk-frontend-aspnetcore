@@ -75,7 +75,8 @@ namespace GovUk.Frontend.AspNetCore
             string autocomplete,
             string pattern,
             string inputMode,
-            bool disabled);
+            bool disabled,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content);
 

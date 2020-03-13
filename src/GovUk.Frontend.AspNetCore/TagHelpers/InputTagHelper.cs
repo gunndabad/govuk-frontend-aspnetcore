@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -8,6 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-input-label", "govuk-input-hint", "govuk-input-error-message")]
     public class InputTagHelper : FormGroupTagHelperBase
     {
+        private const string AttributesPrefix = "input-";
         private const string AutocompleteAttributeName = "autocomplete";
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
@@ -20,6 +21,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             : base(htmlGenerator)
         {
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
@@ -57,7 +61,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Autocomplete,
                 Pattern,
                 InputMode,
-                Disabled);
+                Disabled,
+                Attributes);
         }
 
         private protected override string GetIdPrefix() => Id;
