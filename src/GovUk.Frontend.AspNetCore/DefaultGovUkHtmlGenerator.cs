@@ -384,7 +384,11 @@ namespace GovUk.Frontend.AspNetCore
             }
         }
 
-        public TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text)
+        public TagBuilder GenerateDetails(
+            bool open,
+            IHtmlContent summary,
+            IHtmlContent text,
+            IDictionary<string, string> attributes)
         {
             if (summary == null)
             {
@@ -397,6 +401,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("details");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-details");
             tagBuilder.Attributes.Add("data-module", "govuk-details");
 

@@ -32,7 +32,11 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IEnumerable<CheckboxesItem> items);
 
-        TagBuilder GenerateDetails(bool open, IHtmlContent summary, IHtmlContent text);
+        TagBuilder GenerateDetails(
+            bool open,
+            IHtmlContent summary,
+            IHtmlContent text,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,

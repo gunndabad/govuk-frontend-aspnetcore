@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -10,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-details-summary", "govuk-details-text")]
     public class DetailsTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "details-";
         private const string IdAttributeName = "id";
         private const string OpenAttributeName = "open";
 
@@ -20,6 +22,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
@@ -28,6 +33,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var detailsContext = new DetailsContext();
 
             using (context.SetScopedContextItem(DetailsContext.ContextName, detailsContext))
@@ -40,7 +47,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var tagBuilder = _htmlGenerator.GenerateDetails(
                 Open,
                 detailsContext.Summary,
-                detailsContext.Text);
+                detailsContext.Text,
+                Attributes);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
