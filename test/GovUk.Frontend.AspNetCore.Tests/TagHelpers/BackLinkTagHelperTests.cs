@@ -31,7 +31,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var tagHelper = new BackLinkTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new BackLinkTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"
             };
@@ -64,7 +66,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new BackLinkTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new BackLinkTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"
             };

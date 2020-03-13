@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
@@ -37,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -76,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "some-id"
             };
@@ -112,7 +111,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 VisuallyHiddenText = "Overriden"
             };
@@ -150,7 +149,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -203,7 +202,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };

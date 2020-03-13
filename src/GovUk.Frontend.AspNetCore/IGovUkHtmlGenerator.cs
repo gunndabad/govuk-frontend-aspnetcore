@@ -93,31 +93,5 @@ namespace GovUk.Frontend.AspNetCore
         string GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
 
         string GetValidationMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
-
-        string GetActionLinkHref(
-            ViewContext viewContext,
-            string action,
-            string controller,
-            object values,
-            string protocol,
-            string host,
-            string fragment);
-
-        string GetPageLinkHref(
-            ViewContext viewContext,
-            string pageName,
-            string pageHandler,
-            object values,
-            string protocol,
-            string host,
-            string fragment);
-        
-        string GetRouteLinkHref(
-            ViewContext viewContext,
-            string routeName,
-            object values,
-            string protocol,
-            string host,
-            string fragment);
     }
 }

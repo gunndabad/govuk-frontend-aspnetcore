@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -116,8 +117,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
-        public SummaryListRowActionTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public SummaryListRowActionTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
+            : base(htmlGenerator, urlHelperFactory)
         {
         }
 

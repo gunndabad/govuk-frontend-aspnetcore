@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -43,8 +44,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private const string IsCurrentPageAttributeName = "is-current-page";
 
-        public BreadcrumbsItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public BreadcrumbsItemTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
+            : base(htmlGenerator, urlHelperFactory)
         {
         }
 

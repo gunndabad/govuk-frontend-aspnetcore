@@ -6,7 +6,6 @@ using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
@@ -67,7 +66,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -125,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -179,7 +178,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -241,7 +240,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -293,7 +292,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "element-id",
                 Name = "element-name"
@@ -326,7 +325,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -380,7 +379,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -437,7 +436,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -490,7 +489,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -546,7 +545,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -604,7 +603,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -662,7 +661,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -725,7 +724,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -790,7 +789,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -856,7 +855,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "element-id",
                 Name = "element-name"
@@ -892,7 +891,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "element-id",
                 Name = "element-name"
@@ -928,7 +927,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 DescribedBy = "other-thing",
                 Id = "element-id",
@@ -966,7 +965,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "element-id",
                 Name = "element-name"
@@ -1003,7 +1002,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "element-id",
                 Name = "element-name"
@@ -1041,7 +1040,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new TestFormGroupTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "element-id",
                 DescribedBy = "other-thing",

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -21,8 +22,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string TypeAttributeName = "type";
         private const string ValueAttributeName = "value";
 
-        public ButtonTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public ButtonTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
+            : base(htmlGenerator, urlHelperFactory)
         {
         }
 

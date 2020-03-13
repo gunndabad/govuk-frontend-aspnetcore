@@ -62,7 +62,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new SummaryListTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
+            var tagHelper = new SummaryListTagHelper(new DefaultGovUkHtmlGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -335,11 +335,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new SummaryListRowActionTagHelper(
-                new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
-                {
-                    Href = "href",
-                    VisuallyHiddenText = "vht"
-                };
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                Href = "href",
+                VisuallyHiddenText = "vht"
+            };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
