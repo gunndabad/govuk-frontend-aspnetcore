@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateHint(string id, IDictionary<string, string> attributes, IHtmlContent content);
 
-        TagBuilder GenerateInsetText(string id, IHtmlContent content);
+        TagBuilder GenerateInsetText(string id, IDictionary<string, string> attributes, IHtmlContent content);
 
         TagBuilder GenerateInput(
             bool haveError,
