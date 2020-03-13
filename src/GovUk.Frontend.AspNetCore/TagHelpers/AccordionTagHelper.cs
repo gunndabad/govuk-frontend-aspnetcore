@@ -11,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-accordion-items")]
     public class AccordionTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "accordion-";
         private const string IdAttributeName = "id";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -20,11 +21,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             if (Id == null)
             {
                 throw new InvalidOperationException($"The '{IdAttributeName}' attribute must be specified.");
@@ -37,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateAccordion(Id, accordionContext.Items);
+            var tagBuilder = _htmlGenerator.GenerateAccordion(Id, Attributes, accordionContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
