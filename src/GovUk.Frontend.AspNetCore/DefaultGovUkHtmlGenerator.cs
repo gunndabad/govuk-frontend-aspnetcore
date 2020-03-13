@@ -467,6 +467,7 @@ namespace GovUk.Frontend.AspNetCore
         public virtual TagBuilder GenerateErrorSummary(
             IHtmlContent title,
             IHtmlContent description,
+            IDictionary<string, string> attributes,
             IEnumerable<ErrorSummaryItem> items)
         {
             if (title == null)
@@ -480,6 +481,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-error-summary");
             tagBuilder.Attributes.Add("aria-labelledby", "error-summary-title");
             tagBuilder.Attributes.Add("role", "alert");

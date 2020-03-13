@@ -47,6 +47,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateErrorSummary(
             IHtmlContent title,
             IHtmlContent description,
+            IDictionary<string, string> attributes,
             IEnumerable<ErrorSummaryItem> items);
 
         TagBuilder GenerateFieldset(
