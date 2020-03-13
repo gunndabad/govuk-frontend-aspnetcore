@@ -11,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class TabsTagHelper : TagHelper
     {
         internal const string IdPrefixAttributeName = "id-prefix";
+        private const string AttributesPrefix = "tabs-";
         private const string IdAttributeName = "id";
         private const string TitleAttributeName = "title";
 
@@ -20,6 +21,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -32,13 +36,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var tabsContext = new TabsContext(IdPrefix);
+
             using (context.SetScopedContextItem(TabsContext.ContextName, tabsContext))
             {
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, tabsContext.Items);
+            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, Attributes, tabsContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -54,6 +61,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private const string IdAttributeName = "id";
         private const string LabelAttributeName = "label";
+        private const string PanelAttributesPrefix = "item-panel-";
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -61,8 +69,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(LabelAttributeName)]
         public string Label { get; set; }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = PanelAttributesPrefix)]
+        public IDictionary<string, string> PanelAttributes { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             if (Label == null)
             {
                 throw new InvalidOperationException($"The '{LabelAttributeName}' attribute must be specified.");
@@ -81,7 +94,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            tabsContext.AddItem(new TabsItem(resolvedId, Label, content.Snapshot()));
+            tabsContext.AddItem(new TabsItem()
+            {
+                Id = resolvedId,
+                Label = Label,
+                PanelAttributes = PanelAttributes,
+                PanelContent = content.Snapshot()
+            });
 
             output.SuppressOutput();
         }

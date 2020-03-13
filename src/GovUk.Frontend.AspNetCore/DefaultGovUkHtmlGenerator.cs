@@ -1063,9 +1063,24 @@ namespace GovUk.Frontend.AspNetCore
             }
         }
 
-        public virtual TagBuilder GenerateTabs(string id, string title, IEnumerable<TabsItem> items)
+        public virtual TagBuilder GenerateTabs(
+            string id,
+            string title,
+            IDictionary<string, string> attributes,
+            IEnumerable<TabsItem> items)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-tabs");
             tagBuilder.Attributes.Add("data-module", "govuk-tabs");
 
@@ -1106,6 +1121,7 @@ namespace GovUk.Frontend.AspNetCore
             foreach (var item in items)
             {
                 var section = new TagBuilder("section");
+                section.MergeAttributes(item.PanelAttributes);
                 section.AddCssClass("govuk-tabs__panel");
                 section.Attributes.Add("id", item.Id);
 
@@ -1114,7 +1130,7 @@ namespace GovUk.Frontend.AspNetCore
                     section.AddCssClass("govuk-tabs__panel--hidden");
                 }
 
-                section.InnerHtml.AppendHtml(item.Content);
+                section.InnerHtml.AppendHtml(item.PanelContent);
 
                 tagBuilder.InnerHtml.AppendHtml(section);
             }

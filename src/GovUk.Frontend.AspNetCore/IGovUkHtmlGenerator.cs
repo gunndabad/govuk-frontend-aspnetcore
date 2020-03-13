@@ -98,7 +98,11 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateSummaryList(IDictionary<string, string> attributes, IEnumerable<SummaryListRow> rows);
 
-        TagBuilder GenerateTabs(string id, string title, IEnumerable<TabsItem> items);
+        TagBuilder GenerateTabs(
+            string id,
+            string title,
+            IDictionary<string, string> attributes,
+            IEnumerable<TabsItem> items);
 
         TagBuilder GenerateTag(IHtmlContent content);
 
