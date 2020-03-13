@@ -13,6 +13,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-error-summary-title", "govuk-error-summary-description", "govuk-error-summary-item")]
     public class ErrorSummaryTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "error-summary-";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public ErrorSummaryTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -20,8 +22,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var errorSummaryContext = new ErrorSummaryContext();
 
             using (context.SetScopedContextItem(ErrorSummaryContext.ContextName, errorSummaryContext))
@@ -37,6 +44,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var tagBuilder = _htmlGenerator.GenerateErrorSummary(
                 errorSummaryContext.Title,
                 errorSummaryContext.Description,
+                Attributes,
                 errorSummaryContext.Items);
 
             output.TagName = tagBuilder.TagName;
@@ -88,6 +96,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class ErrorSummaryItemTagHelper : TagHelper
     {
         private const string AspForAttributeName = "asp-for";
+        private const string AttributesPrefix = "error-summary-item-";
         private const string ForAttributeName = "for";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -99,6 +108,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(AspForAttributeName)]
         public ModelExpression AspFor { get; set; }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(ForAttributeName)]
         public string For { get; set; }
@@ -155,7 +167,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             errorSummaryContext.AddItem(new ErrorSummaryItem()
             {
-                Content = itemContent
+                Content = itemContent,
+                Attributes = Attributes
             });
 
             output.SuppressOutput();
