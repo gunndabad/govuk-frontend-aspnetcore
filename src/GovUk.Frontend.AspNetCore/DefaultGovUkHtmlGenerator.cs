@@ -420,7 +420,11 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateErrorMessage(string visuallyHiddenText, string id, IHtmlContent content)
+        public virtual TagBuilder GenerateErrorMessage(
+            string visuallyHiddenText,
+            string id,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (content == null)
             {
@@ -428,6 +432,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("span");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-error-message");
 
             if (!string.IsNullOrEmpty(id))

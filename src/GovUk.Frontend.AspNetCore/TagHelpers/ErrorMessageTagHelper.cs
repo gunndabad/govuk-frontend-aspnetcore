@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class ErrorMessageTagHelper : TagHelper
     {
         private const string AspForAttributeName = "asp-for";
+        private const string AttributesPrefix = "error-message-*";
         private const string IdAttibuteName = "id";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
         
@@ -25,6 +27,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(AspForAttributeName)]
         public ModelExpression AspFor { get; set; }
 
+        [HtmlAttributeName(AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         [HtmlAttributeName(IdAttibuteName)]
         public string Id { get; set; }
 
@@ -37,6 +42,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             if (childContent == null && AspFor == null)
@@ -57,7 +64,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (resolvedContent != null)
             {
-                var tagBuilder = _htmlGenerator.GenerateErrorMessage(VisuallyHiddenText, Id, resolvedContent);
+                var tagBuilder = _htmlGenerator.GenerateErrorMessage(
+                    VisuallyHiddenText,
+                    Id,
+                    Attributes,
+                    resolvedContent);
 
                 output.TagName = tagBuilder.TagName;
                 output.TagMode = TagMode.StartTagAndEndTag;

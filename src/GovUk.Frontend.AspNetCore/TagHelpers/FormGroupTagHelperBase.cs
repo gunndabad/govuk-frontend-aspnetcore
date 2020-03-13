@@ -137,6 +137,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var visuallyHiddenText = builder.ErrorMessage?.visuallyHiddenText;
             var content = builder.ErrorMessage?.content;
+            var attributes = builder.ErrorMessage?.attributes;
 
             if (content == null && AspFor != null)
             {
@@ -152,7 +153,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var errorId = ResolvedId + "-error";
                 AppendToDescribedBy(errorId);
-                return Generator.GenerateErrorMessage(visuallyHiddenText, errorId, content);
+                return Generator.GenerateErrorMessage(visuallyHiddenText, errorId, attributes, content);
             }
             else
             {
@@ -233,21 +234,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public abstract class FormGroupErrorMessageTagHelperBase : TagHelper
     {
+        private const string AttributesPrefix = "error-message-";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
         private protected FormGroupErrorMessageTagHelperBase()
         {
         }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
         public string VisuallyHiddenText { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, childContent))
+            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, Attributes, childContent))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -269,7 +276,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public const string ContextName = nameof(FormGroupBuilder);
 
-        public (string visuallyHiddenText, IHtmlContent content)? ErrorMessage { get; private set; }
+        public (string visuallyHiddenText, IDictionary<string, string> attributes, IHtmlContent content)? ErrorMessage { get; private set; }
 
         public IHtmlContent Hint { get; private set; }
 
@@ -278,7 +285,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         // Internal for testing
         internal FormGroupRenderStage RenderStage { get; private set; } = FormGroupRenderStage.None;
 
-        public bool TrySetErrorMessage(string visuallyHiddenText, IHtmlContent content)
+        public bool TrySetErrorMessage(
+            string visuallyHiddenText,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (RenderStage >= FormGroupRenderStage.ErrorMessage)
             {
@@ -286,7 +296,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             RenderStage = FormGroupRenderStage.ErrorMessage;
-            ErrorMessage = (visuallyHiddenText, content);
+            ErrorMessage = (visuallyHiddenText, attributes, content);
 
             return true;
         }

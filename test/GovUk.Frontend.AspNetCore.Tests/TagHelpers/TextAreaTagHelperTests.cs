@@ -110,7 +110,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var formGroupContext = (TextAreaBuilder)context.Items[FormGroupBuilder.ContextName];
                     formGroupContext.TrySetLabel(isPageHeading: false, content: new HtmlString("The label"));
-                    formGroupContext.TrySetErrorMessage(visuallyHiddenText: null, content: new HtmlString("Error"));
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: new HtmlString("Error"));
                     formGroupContext.TrySetElementContent(new HtmlString("The content"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
