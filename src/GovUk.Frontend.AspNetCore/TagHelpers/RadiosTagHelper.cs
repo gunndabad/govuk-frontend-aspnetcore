@@ -71,7 +71,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     content: content);
             }
 
-            return Generator.GenerateFormGroup(haveError, content);
+            return Generator.GenerateFormGroup(haveError, FormGroupAttributes, content);
         }
 
         private protected override string GetIdPrefix() => IdPrefix ?? Name;

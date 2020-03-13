@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         protected const string AspForAttributeName = "asp-for";
         protected const string DescribedByAttributeName = "described-by";
+        protected const string FormGroupAttributesPrefix = "form-group-";
         protected const string NameAttributeName = "name";
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -19,6 +21,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = FormGroupAttributesPrefix)]
+        public IDictionary<string, string> FormGroupAttributes { get; set; }
 
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
@@ -42,6 +47,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             if (Name == null && AspFor == null)
             {
                 throw new InvalidOperationException(
@@ -117,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             contentBuilder.AppendHtml(element);
 
-            return Generator.GenerateFormGroup(haveError, contentBuilder);
+            return Generator.GenerateFormGroup(haveError, FormGroupAttributes, contentBuilder);
         }
 
         private protected virtual TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)

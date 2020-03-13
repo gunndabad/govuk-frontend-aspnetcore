@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent legendContent,
             IHtmlContent content);
 
-        TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content);
+        TagBuilder GenerateFormGroup(bool haveError, IDictionary<string, string> attributes, IHtmlContent content);
 
         TagBuilder GenerateHint(string id, IHtmlContent content);
 
