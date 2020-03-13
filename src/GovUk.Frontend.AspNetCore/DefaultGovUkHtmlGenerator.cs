@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-#if netstandard2
+#if NETSTANDARD2_0
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 #endif
 
@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore
         static DefaultGovUkHtmlGenerator()
         {
             s_getFullHtmlFieldNameDelegate =
-#if netstandard2
+#if NETSTANDARD2_0
                 NameAndIdProvider.GetFullHtmlFieldName;
 #else
                 (GetFullHtmlFieldNameDelegate)typeof(IHtmlGenerator).Assembly
