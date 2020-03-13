@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -9,12 +10,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-panel")]
     public class PanelTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "panel-";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public PanelTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -34,6 +40,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var tagBuilder = _htmlGenerator.GeneratePanel(
                 panelContext.Title.Value.headingLevel,
                 panelContext.Title.Value.content,
+                Attributes,
                 childContent);
 
             output.TagName = tagBuilder.TagName;
