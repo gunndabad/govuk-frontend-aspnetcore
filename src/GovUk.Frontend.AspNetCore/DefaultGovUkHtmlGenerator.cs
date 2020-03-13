@@ -1079,6 +1079,7 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             string autocomplete,
             bool disabled,
+            IDictionary<string, string> attributes,
             IHtmlContent content)
         {
             if (id == null)
@@ -1097,6 +1098,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("textarea");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-textarea");
 
             if (haveError)
