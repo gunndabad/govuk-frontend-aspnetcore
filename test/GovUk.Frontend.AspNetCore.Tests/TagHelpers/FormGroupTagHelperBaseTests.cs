@@ -1423,7 +1423,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         public string Id { get; set; }
 
-        private protected override IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var tagBuilder = new TagBuilder("dummy");
             tagBuilder.Attributes.Add("id", ResolvedId);

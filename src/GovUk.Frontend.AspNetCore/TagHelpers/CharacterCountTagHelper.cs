@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -47,10 +46,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return base.ProcessAsync(context, output);
         }
 
-        private protected override IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var textArea = base.GenerateElement(builder, context);
-            ((TagBuilder)textArea).AddCssClass("govuk-js-character-count");  // HACK - FIXME once we have a way of passing class
+            textArea.AddCssClass("govuk-js-character-count");
             return textArea;
         }
 

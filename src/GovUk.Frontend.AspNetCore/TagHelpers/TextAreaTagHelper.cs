@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -31,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(RowsAttributeName)]
         public int? Rows { get; set; }
 
-        private protected override IHtmlContent GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var textAreaBuilder = (TextAreaBuilder)builder;
 
