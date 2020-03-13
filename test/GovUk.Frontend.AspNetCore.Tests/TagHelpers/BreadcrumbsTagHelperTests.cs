@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -26,14 +30,23 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var bcContext = (BreadcrumbsContext)context.Items["BreadcrumbsContext"];
 
-                    var item1 = new HtmlString("<a href=\"first\" class=\"govuk-breadcrumbs__link\">First</a>");
-                    bcContext.AddItem(item1);
+                    bcContext.AddItem(new BreadcrumbsItem()
+                    {
+                        Href = "first",
+                        Content = new HtmlString("First")
+                    });
 
-                    var item2 = new HtmlString("<a href=\"second\" class=\"govuk-breadcrumbs__link\">Second</a>");
-                    bcContext.AddItem(item2);
+                    bcContext.AddItem(new BreadcrumbsItem()
+                    {
+                        Href = "second",
+                        Content = new HtmlString("Second")
+                    });
 
-                    var item3 = new HtmlString("Last");
-                    bcContext.AddCurrentPageItem(item3);
+                    bcContext.AddItem(new BreadcrumbsItem()
+                    {
+                        Content = new HtmlString("Last"),
+                        IsCurrentPage = true
+                    });
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -49,8 +62,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(
                 "<div class=\"govuk-breadcrumbs\">" +
                 "<ol class=\"govuk-breadcrumbs__list\">" +
-                "<li class=\"govuk-breadcrumbs__list-item\"><a href=\"first\" class=\"govuk-breadcrumbs__link\">First</a></li>" +
-                "<li class=\"govuk-breadcrumbs__list-item\"><a href=\"second\" class=\"govuk-breadcrumbs__link\">Second</a></li>" +
+                "<li class=\"govuk-breadcrumbs__list-item\"><a class=\"govuk-breadcrumbs__link\" href=\"first\">First</a></li>" +
+                "<li class=\"govuk-breadcrumbs__list-item\"><a class=\"govuk-breadcrumbs__link\" href=\"second\">Second</a></li>" +
                 "<li aria-current=\"page\" class=\"govuk-breadcrumbs__list-item\">Last</li>" +
                 "</ol>" +
                 "</div>",
@@ -74,14 +87,22 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var bcContext = (BreadcrumbsContext)context.Items["BreadcrumbsContext"];
 
-                    var item1 = new HtmlString("<a href=\"first\" class=\"govuk-breadcrumbs__link\">First</a>");
-                    bcContext.AddItem(item1);
+                    bcContext.AddItem(new BreadcrumbsItem()
+                    {
+                        Href = "first",
+                        Content = new HtmlString("First")
+                    });
 
-                    var item2 = new HtmlString("<a href=\"second\" class=\"govuk-breadcrumbs__link\">Second</a>");
-                    bcContext.AddItem(item2);
+                    bcContext.AddItem(new BreadcrumbsItem()
+                    {
+                        Href = "second",
+                        Content = new HtmlString("Second")
+                    });
 
-                    var item3 = new HtmlString("Last");
-                    bcContext.AddItem(item3);
+                    bcContext.AddItem(new BreadcrumbsItem()
+                    {
+                        Content = new HtmlString("Last")
+                    });
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -97,12 +118,257 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(
                 "<div class=\"govuk-breadcrumbs\">" +
                 "<ol class=\"govuk-breadcrumbs__list\">" +
-                "<li class=\"govuk-breadcrumbs__list-item\"><a href=\"first\" class=\"govuk-breadcrumbs__link\">First</a></li>" +
-                "<li class=\"govuk-breadcrumbs__list-item\"><a href=\"second\" class=\"govuk-breadcrumbs__link\">Second</a></li>" +
+                "<li class=\"govuk-breadcrumbs__list-item\"><a class=\"govuk-breadcrumbs__link\" href=\"first\">First</a></li>" +
+                "<li class=\"govuk-breadcrumbs__list-item\"><a class=\"govuk-breadcrumbs__link\" href=\"second\">Second</a></li>" +
                 "<li class=\"govuk-breadcrumbs__list-item\">Last</li>" +
                 "</ol>" +
                 "</div>",
                 html);
+        }
+    }
+
+    public class BreadcrumbsItemTagHelperTests
+    {
+        [Fact]
+        public async Task ProcessAsync_NoLinkAddsItemToContext()
+        {
+            // Arrange
+            var bcContext = new BreadcrumbsContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-breadcrumbs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { BreadcrumbsContext.ContextName, bcContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-breadcrumbs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("The item");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new BreadcrumbsItemTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>());
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var lastItem = bcContext.Items.Last();
+            Assert.Null(lastItem.Href);
+            Assert.False(lastItem.IsCurrentPage);
+            Assert.Equal("The item", lastItem.Content.AsString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithLinkAddsItemToContext()
+        {
+            // Arrange
+            var bcContext = new BreadcrumbsContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-breadcrumbs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { BreadcrumbsContext.ContextName, bcContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-breadcrumbs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("The item");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new BreadcrumbsItemTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                Href = "place.com"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var lastItem = bcContext.Items.Last();
+            Assert.Equal("place.com", lastItem.Href);
+            Assert.False(lastItem.IsCurrentPage);
+            Assert.Equal("The item", lastItem.Content.AsString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_CurrentPageItemAddsItemToContext()
+        {
+            // Arrange
+            var bcContext = new BreadcrumbsContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-breadcrumbs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { BreadcrumbsContext.ContextName, bcContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-breadcrumbs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("The item");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new BreadcrumbsItemTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                IsCurrentPage = true
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var lastItem = bcContext.Items.Last();
+            Assert.Null(lastItem.Href);
+            Assert.True(lastItem.IsCurrentPage);
+            Assert.Equal("The item", lastItem.Content.AsString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_AlreadyGotCurrentPageItemThrowsInvalidOperation()
+        {
+            // Arrange
+            var bcContext = new BreadcrumbsContext();
+            bcContext.AddItem(new BreadcrumbsItem()
+            {
+                Content = new HtmlString("Existing item"),
+                IsCurrentPage = true
+            });
+
+            var context = new TagHelperContext(
+                tagName: "govuk-breadcrumbs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { BreadcrumbsContext.ContextName, bcContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-breadcrumbs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("The item");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new BreadcrumbsItemTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                IsCurrentPage = true
+            };
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAnyAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("Only one item with the 'is-current-page' attribute set to 'true' can be specified.", ex.Message);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_ItemAfterCurrentPageItemThrowsInvalidOperation()
+        {
+            // Arrange
+            var bcContext = new BreadcrumbsContext();
+            bcContext.AddItem(new BreadcrumbsItem()
+            {
+                Content = new HtmlString("Existing item"),
+                IsCurrentPage = true
+            });
+
+            var context = new TagHelperContext(
+                tagName: "govuk-breadcrumbs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { BreadcrumbsContext.ContextName, bcContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-breadcrumbs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("The item");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new BreadcrumbsItemTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>());
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAnyAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("Items cannot be added after the item representing the current page has been added.", ex.Message);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_CurrentPageItemHasLinkThrowsInvalidOperation()
+        {
+            // Arrange
+            var bcContext = new BreadcrumbsContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-breadcrumbs-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { BreadcrumbsContext.ContextName, bcContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-breadcrumbs-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("The item");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new BreadcrumbsItemTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                Href = "place.com",
+                IsCurrentPage = true
+            };
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAnyAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("The item representing the current page cannot be a link.", ex.Message);
         }
     }
 }

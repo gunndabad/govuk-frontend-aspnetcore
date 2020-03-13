@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -12,6 +13,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-breadcrumbs-item")]
     public class BreadcrumbsTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "breadcrumbs-";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public BreadcrumbsTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -19,8 +22,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var bcContext = new BreadcrumbsContext();
 
             using (context.SetScopedContextItem(BreadcrumbsContext.ContextName, bcContext))
@@ -28,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(bcContext.Items, bcContext.CurrentPageItem);
+            var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(Attributes, bcContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -54,40 +62,37 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var isLink = Href != null ||
-                Route != null ||
-                Controller != null ||
-                Action != null ||
-                Page != null ||
-                PageHandler != null;
-
-            var childContent = await output.GetChildContentAsync();
-
-            IHtmlContent content;
-            if (isLink)
-            {
-                var link = CreateAnchorTagBuilder();
-                link.AddCssClass("govuk-breadcrumbs__link");
-
-                link.InnerHtml.AppendHtml(childContent);
-
-                content = link;
-            }
-            else
-            {
-                content = childContent;
-            }
+            output.ThrowIfOutputHasAttributes();
 
             var bcContext = (BreadcrumbsContext)context.Items[BreadcrumbsContext.ContextName];
 
-            if (IsCurrentPage)
+            if (bcContext.HasCurrentPageItem)
             {
-                bcContext.AddCurrentPageItem(content);
+                if (IsCurrentPage)
+                {
+                    throw new InvalidOperationException($"Only one item with the '{IsCurrentPageAttributeName}' attribute set to 'true' can be specified.");
+                }
+                else
+                {
+                    throw new InvalidOperationException("Items cannot be added after the item representing the current page has been added.");
+                }
             }
-            else
+
+            if (IsCurrentPage && HasLinkAttributes)
             {
-                bcContext.AddItem(content);
+                throw new InvalidOperationException("The item representing the current page cannot be a link.");
             }
+
+            var childContent = await output.GetChildContentAsync();
+
+            var href = HasLinkAttributes ? ResolveHref() : null;
+
+            bcContext.AddItem(new BreadcrumbsItem()
+            {
+                Href = href,
+                Content = childContent.Snapshot(),
+                IsCurrentPage = IsCurrentPage
+            });
 
             output.SuppressOutput();
         }
@@ -97,38 +102,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public const string ContextName = nameof(BreadcrumbsContext);
 
-        private readonly List<IHtmlContent> _items;
+        private readonly List<BreadcrumbsItem> _items;
 
         public BreadcrumbsContext()
         {
-            _items = new List<IHtmlContent>();
+            _items = new List<BreadcrumbsItem>();
         }
 
-        public IHtmlContent CurrentPageItem { get; private set; }
+        public bool HasCurrentPageItem => Items.Any(i => i.IsCurrentPage);
 
-        public IReadOnlyCollection<IHtmlContent> Items => _items;
+        public IReadOnlyCollection<BreadcrumbsItem> Items => _items;
 
-        public void AddItem(IHtmlContent item)
+        public void AddItem(BreadcrumbsItem item)
         {
-            ThrowIfHaveCurrentPageItem();
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
 
-            _items.Add(item);
-        }
-
-        public void AddCurrentPageItem(IHtmlContent item)
-        {
-            ThrowIfHaveCurrentPageItem();
-
-            CurrentPageItem = item;
-            _items.Add(item);
-        }
-
-        private void ThrowIfHaveCurrentPageItem()
-        {
-            if (CurrentPageItem != null)
+            if (item.IsCurrentPage && HasCurrentPageItem)
             {
                 throw new InvalidOperationException("An item representing the current page has already been added.");
             }
+
+            _items.Add(item);
         }
     }
 }
