@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-textarea-label", "govuk-textarea-hint", "govuk-textarea-error-message", "govuk-textarea-element")]
     public class TextAreaTagHelper : FormGroupTagHelperBase
     {
+        private const string AttributesPrefix = "textarea-";
         private const string AutocompleteAttributeName = "autocomplete";
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
@@ -19,6 +21,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             : base(htmlGenerator)
         {
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
@@ -53,6 +58,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 DescribedBy,
                 Autocomplete,
                 Disabled,
+                Attributes,
                 resolvedContent);
         }
 

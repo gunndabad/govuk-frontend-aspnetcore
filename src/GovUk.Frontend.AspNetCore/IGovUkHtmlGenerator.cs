@@ -87,6 +87,7 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             string autocomplete,
             bool disabled,
+            IDictionary<string, string> attributes,
             IHtmlContent content);
 
         TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText);
