@@ -20,6 +20,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelperComponents
             {
                 output.AddClass("govuk-template__body", HtmlEncoder.Default);
 
+                output.PreContent.AppendHtml(HtmlSnippets.BodyInitScript);
                 output.PostContent.AppendHtml(HtmlSnippets.ScriptImports);
             }
 

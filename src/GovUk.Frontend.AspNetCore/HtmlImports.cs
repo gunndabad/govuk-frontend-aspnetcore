@@ -4,6 +4,10 @@
     {
         public const string GdsLibraryVersion = "3.6.0";
 
+        public const string BodyInitScript = @"<script>
+    document.body.className = document.body.className + ' js-enabled';
+</script>";
+
         public const string ScriptImports = @"<script src=""/govuk-frontend-3.6.0.min.js""></script>
 <script>window.GOVUKFrontend.initAll()</script>";
 
