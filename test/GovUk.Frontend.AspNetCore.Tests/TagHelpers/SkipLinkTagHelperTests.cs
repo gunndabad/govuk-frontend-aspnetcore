@@ -31,7 +31,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var tagHelper = new SkipLinkTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new SkipLinkTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"
             };

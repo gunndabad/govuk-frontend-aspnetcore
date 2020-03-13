@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
@@ -24,10 +26,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string HrefAttributeName = "href";
 
         private IDictionary<string, string> _routeValues;
+        private readonly IUrlHelperFactory _urlHelperFactory;
 
-        public LinkTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
+        public LinkTagHelperBase(
+            IGovUkHtmlGenerator htmlGenerator,
+            IUrlHelperFactory urlHelperFactory)
         {
             Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _urlHelperFactory = urlHelperFactory;
         }
 
         [HtmlAttributeName(ActionAttributeName)]
@@ -137,6 +143,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 routeValues["area"] = Area;
             }
 
+            var urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
+
             string href = null;
             if (hrefLink)
             {
@@ -144,15 +152,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
             else if (pageLink)
             {
-                href = Generator.GetPageLinkHref(ViewContext, Page, PageHandler, RouteValues, Protocol, Host, Fragment);
+                href = urlHelper.Page(Page, PageHandler, RouteValues, Protocol, Host, Fragment);
             }
             else if (routeLink)
             {
-                href = Generator.GetRouteLinkHref(ViewContext, Route, RouteValues, Protocol, Host, Fragment);
+                href = urlHelper.RouteUrl(Route, RouteValues, Protocol, Host, Fragment);
             }
             else // if (actionLink)
             {
-                href = Generator.GetActionLinkHref(ViewContext, Action, Controller, RouteValues, Protocol, Host, Fragment);
+                href = urlHelper.Action(Action, Controller, RouteValues, Protocol, Host, Fragment);
             }
 
             return href;

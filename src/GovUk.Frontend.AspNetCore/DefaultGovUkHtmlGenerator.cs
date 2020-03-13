@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 #if netstandard2
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
@@ -22,8 +20,6 @@ namespace GovUk.Frontend.AspNetCore
         public const string DefaultTabsTitle = "Contents";
         public const int DefaultTextAreaRows = 5;
 
-        private readonly IUrlHelperFactory _urlHelperFactory;
-
         private static readonly GetFullHtmlFieldNameDelegate s_getFullHtmlFieldNameDelegate;
 
         static DefaultGovUkHtmlGenerator()
@@ -37,11 +33,6 @@ namespace GovUk.Frontend.AspNetCore
                     .GetMethod("GetFullHtmlFieldName", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
                     .CreateDelegate(typeof(GetFullHtmlFieldNameDelegate));
 #endif
-        }
-
-        public DefaultGovUkHtmlGenerator(IUrlHelperFactory urlHelperFactory)
-        {
-            _urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
         }
 
         private delegate string GetFullHtmlFieldNameDelegate(ViewContext viewContext, string expression);
@@ -1115,44 +1106,6 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.InnerHtml.AppendHtml(text);
 
             return tagBuilder;
-        }
-
-        public virtual string GetActionLinkHref(
-            ViewContext viewContext,
-            string action,
-            string controller,
-            object values,
-            string protocol,
-            string host,
-            string fragment)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
-            return urlHelper.Action(action, controller, values, protocol, host, fragment);
-        }
-
-        public virtual string GetPageLinkHref(
-            ViewContext viewContext,
-            string pageName,
-            string pageHandler,
-            object values,
-            string protocol,
-            string host,
-            string fragment)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
-            return urlHelper.Page(pageName, pageHandler, values, protocol, host, fragment);
-        }
-
-        public virtual string GetRouteLinkHref(
-            ViewContext viewContext,
-            string routeName,
-            object values,
-            string protocol,
-            string host,
-            string fragment)
-        {
-            var urlHelper = _urlHelperFactory.GetUrlHelper(viewContext);
-            return urlHelper.RouteUrl(routeName, values, protocol, host, fragment);
         }
 
         public virtual string GetDisplayName(

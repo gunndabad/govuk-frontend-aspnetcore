@@ -52,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testradios"
@@ -111,7 +111,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -163,7 +163,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -202,7 +202,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testradios"
@@ -244,7 +244,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testradios"
@@ -296,7 +296,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testradios"
@@ -354,7 +354,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testradios"
@@ -412,7 +412,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testradios"
@@ -492,7 +492,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 DescribedBy = "describedby",
                 IdPrefix = "my-id",
@@ -633,7 +633,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()));
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -673,7 +673,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Id = "id",
@@ -726,7 +726,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -771,7 +771,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -818,7 +818,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -860,7 +860,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -905,7 +905,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };
@@ -958,7 +958,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>(Mock.Of<IUrlHelperFactory>())
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
             {
                 CallBase = true
             };

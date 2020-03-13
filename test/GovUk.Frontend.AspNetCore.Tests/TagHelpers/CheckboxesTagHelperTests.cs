@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -44,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -97,7 +96,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -144,7 +143,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -183,7 +182,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -225,7 +224,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -277,7 +276,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -335,7 +334,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -393,7 +392,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -474,7 +473,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(Mock.Of<IUrlHelperFactory>()))
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 DescribedBy = "describedby",
                 IdPrefix = "my-id",
