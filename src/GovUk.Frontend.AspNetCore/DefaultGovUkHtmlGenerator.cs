@@ -772,7 +772,10 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GeneratePhaseBanner(string tag, IHtmlContent content)
+        public virtual TagBuilder GeneratePhaseBanner(
+            string tag,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (tag == null)
             {
@@ -785,6 +788,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-phase-banner");
 
             var contentTagBuilder = new TagBuilder("p");
