@@ -586,8 +586,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var fieldsetContext = (RadiosFieldsetContext)context.Items[RadiosFieldsetContext.ContextName];
+                    fieldsetContext.TrySetLegend(attributes: null, content: new HtmlString("Legend"));
+
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Legend"));
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
@@ -602,6 +604,43 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             Assert.True(radiosContext.Fieldset.IsPageHeading);
             Assert.Equal("Legend", radiosContext.Fieldset.LegendContent.AsString());
+        }
+    }
+
+    public class RadiosFieldsetLegendTagHelperTests
+    {
+        [Fact]
+        public async Task ProcessAsync_SetsLegendOnContext()
+        {
+            // Arrange
+            var fieldsetContext = new RadiosFieldsetContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-radios-fieldset-legend",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { RadiosFieldsetContext.ContextName, fieldsetContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-radios-fieldset-legend",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent(new HtmlString("Legend"));
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new RadiosFieldsetLegendTagHelper();
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal("Legend", fieldsetContext.Legend?.content?.AsString());
         }
     }
 

@@ -80,7 +80,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     DescribedBy,
                     checkboxesContext.Fieldset.IsPageHeading,
                     role: null,
+                    attributes: Attributes,
                     legendContent: checkboxesContext.Fieldset.LegendContent,
+                    legendAttributes: checkboxesContext.Fieldset.LegendAttributes,
                     content: content);
             }
 
@@ -91,10 +93,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-checkboxes-fieldset", ParentTag = "govuk-checkboxes", TagStructure = TagStructure.NormalOrSelfClosing)]
+    [RestrictChildren("govuk-checkboxes-fieldset-legend")]
     public class CheckboxesFieldsetTagHelper : TagHelper
     {
+        private const string AttributesPrefix = "fieldset-";
         private const string DescribedByAttributeName = "described-by";
         private const string IsPageHeadingAttributeName = "is-page-heading";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
@@ -104,16 +111,50 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
 
-            var content = await output.GetChildContentAsync();
+            var fieldsetContext = new CheckboxesFieldsetContext();
+
+            using (context.SetScopedContextItem(CheckboxesFieldsetContext.ContextName, fieldsetContext))
+            {
+                await output.GetChildContentAsync();
+            }
 
             checkboxesContext.SetFieldset(new CheckboxesFieldset()
             {
+                Attributes = Attributes,
                 DescribedBy = DescribedBy,
                 IsPageHeading = IsPageHeading,
-                LegendContent = content.Snapshot()
+                LegendContent = fieldsetContext.Legend?.content,
+                LegendAttributes = fieldsetContext.Legend?.attributes
             });
+
+            output.SuppressOutput();
+        }
+    }
+
+    [HtmlTargetElement("govuk-checkboxes-fieldset-legend", ParentTag = "govuk-checkboxes-fieldset")]
+    public class CheckboxesFieldsetLegendTagHelper : TagHelper
+    {
+        private const string AttributesPrefix = "legend-*";
+
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        public IDictionary<string, string> Attributes { get; set; }
+
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        {
+            output.ThrowIfOutputHasAttributes();
+
+            var fieldsetContext = (CheckboxesFieldsetContext)context.Items[CheckboxesFieldsetContext.ContextName];
+
+            var childContent = await output.GetChildContentAsync();
+
+            if (!fieldsetContext.TrySetLegend(Attributes, childContent.Snapshot()))
+            {
+                throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
+            }
 
             output.SuppressOutput();
         }
@@ -145,45 +186,49 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             if (Value == null)
             {
                 throw new InvalidOperationException($"The '{ValueAttributeName}' attribute must be specified.");
             }
 
+            var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+
+            var index = checkboxesContext.Items.Count;
+            var resolvedId = Id ?? (index == 0 ? checkboxesContext.IdPrefix : $"{checkboxesContext.IdPrefix}-{index}");
+            var conditionalId = "conditional-" + resolvedId;
+            var hintId = resolvedId + "-item-hint";
+
             var itemContext = new CheckboxesItemContext();
+
+            TagHelperContent childContent;
             using (context.SetScopedContextItem(CheckboxesItemContext.ContextName, itemContext))
             {
-                var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
-
-                var index = checkboxesContext.Items.Count;
-                var resolvedId = Id ?? (index == 0 ? checkboxesContext.IdPrefix : $"{checkboxesContext.IdPrefix}-{index}");
-                var conditionalId = "conditional-" + resolvedId;
-                var hintId = resolvedId + "-item-hint";
-
-                var childContent = await output.GetChildContentAsync();
-
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Attributes = Attributes,
-                    Checked = Checked,
-                    ConditionalContent = itemContext.ConditionalContent,
-                    ConditionalId = conditionalId,
-                    Content = childContent.Snapshot(),
-                    Disabled = Disabled,
-                    HintContent = itemContext.HintContent,
-                    HintId = hintId,
-                    Id = resolvedId,
-                    Name = checkboxesContext.ResolvedName,
-                    Value = Value
-                });
-
-                if (itemContext.ConditionalContent != null)
-                {
-                    checkboxesContext.SetIsConditional();
-                }
-
-                output.SuppressOutput();
+                childContent = await output.GetChildContentAsync();
             }
+
+            checkboxesContext.AddItem(new CheckboxesItem()
+            {
+                Attributes = Attributes,
+                Checked = Checked,
+                ConditionalContent = itemContext.ConditionalContent,
+                ConditionalId = conditionalId,
+                Content = childContent.Snapshot(),
+                Disabled = Disabled,
+                HintContent = itemContext.HintContent,
+                HintId = hintId,
+                Id = resolvedId,
+                Name = checkboxesContext.ResolvedName,
+                Value = Value
+            });
+
+            if (itemContext.ConditionalContent != null)
+            {
+                checkboxesContext.SetIsConditional();
+            }
+
+            output.SuppressOutput();
         }
     }
 
@@ -192,6 +237,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
 
             var content = await output.GetChildContentAsync();
@@ -207,6 +254,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.ThrowIfOutputHasAttributes();
+
             var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
 
             var content = await output.GetChildContentAsync();
@@ -274,6 +323,29 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public void SetIsConditional() => IsConditional = true;
     }
 
+    internal class CheckboxesFieldsetContext
+    {
+        public const string ContextName = nameof(CheckboxesFieldsetContext);
+
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+
+        public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            if (Legend != null)
+            {
+                return false;
+            }
+
+            Legend = (attributes, content);
+            return true;
+        }
+    }
+
     internal class CheckboxesItemContext
     {
         public const string ContextName = nameof(CheckboxesItemContext);
@@ -315,7 +387,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     internal class CheckboxesFieldset
     {
         public bool IsPageHeading { get; set; }
+        public IDictionary<string, string> Attributes { get; set; }
         public IHtmlContent LegendContent { get; set; }
+        public IDictionary<string, string> LegendAttributes { get; set; }
         public string DescribedBy { get; set; }
     }
 }

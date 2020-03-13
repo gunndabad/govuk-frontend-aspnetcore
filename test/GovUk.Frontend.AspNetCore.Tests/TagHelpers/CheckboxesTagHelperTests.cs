@@ -522,8 +522,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var fieldsetContext = (CheckboxesFieldsetContext)context.Items[CheckboxesFieldsetContext.ContextName];
+                    fieldsetContext.TrySetLegend(attributes: null, content: new HtmlString("Legend"));
+
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Legend"));
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
@@ -540,6 +542,43 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.True(checkboxesContext.Fieldset.IsPageHeading);
             Assert.Equal("Legend", checkboxesContext.Fieldset.LegendContent.AsString());
             Assert.Equal("fieldsetdescribedby", checkboxesContext.Fieldset.DescribedBy);
+        }
+    }
+
+    public class CheckboxesFieldsetLegendTagHelperTests
+    {
+        [Fact]
+        public async Task ProcessAsync_SetsLegendOnContext()
+        {
+            // Arrange
+            var fieldsetContext = new CheckboxesFieldsetContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-checkboxes-fieldset-legend",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { CheckboxesFieldsetContext.ContextName, fieldsetContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-checkboxes-fieldset-legend",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent(new HtmlString("Legend"));
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new CheckboxesFieldsetLegendTagHelper();
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal("Legend", fieldsetContext.Legend?.content?.AsString());
         }
     }
 
