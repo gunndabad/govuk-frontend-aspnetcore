@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-inset-text", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class InsetTextTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "inset-text-*";
+        private const string AttributesPrefix = "inset-text-";
         private const string IdAttributeName = "id";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
