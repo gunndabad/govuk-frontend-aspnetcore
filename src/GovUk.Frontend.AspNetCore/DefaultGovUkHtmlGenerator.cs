@@ -1215,9 +1215,23 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText)
+        public virtual TagBuilder GenerateWarningText(
+            IDictionary<string, string> attributes,
+            IHtmlContent content,
+            string iconFallbackText)
         {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            if (iconFallbackText == null)
+            {
+                throw new ArgumentNullException(nameof(iconFallbackText));
+            }
+
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-warning-text");
 
             var icon = new TagBuilder("span");

@@ -121,7 +121,10 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IHtmlContent content);
 
-        TagBuilder GenerateWarningText(IHtmlContent content, string iconFallbackText);
+        TagBuilder GenerateWarningText(
+            IDictionary<string, string> attributes,
+            IHtmlContent content,
+            string iconFallbackText);
 
         string GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
 
