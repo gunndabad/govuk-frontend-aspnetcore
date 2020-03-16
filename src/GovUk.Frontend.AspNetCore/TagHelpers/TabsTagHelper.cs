@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -70,7 +70,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string Label { get; set; }
 
         [HtmlAttributeName(DictionaryAttributePrefix = PanelAttributesPrefix)]
-        public IDictionary<string, string> PanelAttributes { get; set; }
+        public IDictionary<string, string> PanelAttributes { get; set; } = new Dictionary<string, string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

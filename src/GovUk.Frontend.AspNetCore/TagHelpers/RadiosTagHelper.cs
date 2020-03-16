@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
@@ -109,7 +109,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IsPageHeadingAttributeName = "is-page-heading";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
@@ -145,7 +145,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AttributesPrefix = "legend-";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -271,7 +271,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AttributesPrefix = "hint-";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

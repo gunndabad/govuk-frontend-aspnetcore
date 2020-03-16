@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
@@ -70,7 +70,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AttributesPrefix = "fieldset-legend-";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string DescribedBy { get; set; }
 
         [HtmlAttributeName(DictionaryAttributePrefix = FormGroupAttributesPrefix)]
-        public IDictionary<string, string> FormGroupAttributes { get; set; }
+        public IDictionary<string, string> FormGroupAttributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
@@ -198,7 +198,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
@@ -224,7 +224,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AttributesPrefix = "hint-";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         private protected FormGroupHintTagHelperBase()
         {
@@ -256,7 +256,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
         public string VisuallyHiddenText { get; set; }
