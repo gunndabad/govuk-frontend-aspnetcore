@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class ErrorMessageTagHelper : TagHelper
     {
         private const string AspForAttributeName = "asp-for";
-        private const string AttributesPrefix = "error-message-*";
+        private const string AttributesPrefix = "error-message-";
         private const string IdAttibuteName = "id";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
         

@@ -142,7 +142,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-radios-fieldset-legend", ParentTag = "govuk-radios-fieldset")]
     public class RadiosFieldsetLegendTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "legend-*";
+        private const string AttributesPrefix = "legend-";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
         public IDictionary<string, string> Attributes { get; set; }

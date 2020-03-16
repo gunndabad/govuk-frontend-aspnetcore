@@ -138,7 +138,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-checkboxes-fieldset-legend", ParentTag = "govuk-checkboxes-fieldset")]
     public class CheckboxesFieldsetLegendTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "legend-*";
+        private const string AttributesPrefix = "legend-";
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
         public IDictionary<string, string> Attributes { get; set; }
