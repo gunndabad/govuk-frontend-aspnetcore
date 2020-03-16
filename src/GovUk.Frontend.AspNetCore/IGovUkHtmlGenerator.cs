@@ -90,7 +90,11 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IHtmlContent content);
 
-        TagBuilder GeneratePhaseBanner(string tag, IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GeneratePhaseBanner(
+            IDictionary<string, string> tabAttributes,
+            IHtmlContent tagContent,
+            IDictionary<string, string> attributes,
+            IHtmlContent content);
 
         TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items);
 
@@ -104,7 +108,7 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IEnumerable<TabsItem> items);
 
-        TagBuilder GenerateTag(IHtmlContent content);
+        TagBuilder GenerateTag(IDictionary<string, string> attributes, IHtmlContent content);
 
         TagBuilder GenerateTextArea(
             bool haveError,

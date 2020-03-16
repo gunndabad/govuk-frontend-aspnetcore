@@ -775,13 +775,14 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GeneratePhaseBanner(
-            string tag,
+            IDictionary<string, string> tabAttributes,
+            IHtmlContent tagContent,
             IDictionary<string, string> attributes,
             IHtmlContent content)
         {
-            if (tag == null)
+            if (tagContent == null)
             {
-                throw new ArgumentNullException(nameof(tag));
+                throw new ArgumentNullException(nameof(tagContent));
             }
 
             if (content == null)
@@ -796,7 +797,7 @@ namespace GovUk.Frontend.AspNetCore
             var contentTagBuilder = new TagBuilder("p");
             contentTagBuilder.AddCssClass("govuk-phase-banner__content");
 
-            var tagTagBuilder = GenerateTag(new StringHtmlContent(tag));
+            var tagTagBuilder = GenerateTag(tabAttributes, tagContent);
             tagTagBuilder.AddCssClass("govuk-phase-banner__content__tag");
             contentTagBuilder.InnerHtml.AppendHtml(tagTagBuilder);
 
@@ -1138,7 +1139,9 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateTag(IHtmlContent content)
+        public virtual TagBuilder GenerateTag(
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (content == null)
             {
@@ -1146,6 +1149,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("strong");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-tag");
             tagBuilder.InnerHtml.AppendHtml(content);
 
