@@ -1070,11 +1070,6 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IEnumerable<TabsItem> items)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
             if (items == null)
             {
                 throw new ArgumentNullException(nameof(items));
