@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-checkboxes-fieldset", "govuk-checkboxes-item", "govuk-checkboxes-hint", "govuk-checkboxes-error-message")]
     public class CheckboxesTagHelper : FormGroupTagHelperBase
     {
-        private const string AttributesPrefix = "input-";
+        private const string AttributesPrefix = "checkboxes-";
         private const string IdPrefixAttributeName = "id-prefix";
 
         public CheckboxesTagHelper(IGovUkHtmlGenerator htmlGenerator)
