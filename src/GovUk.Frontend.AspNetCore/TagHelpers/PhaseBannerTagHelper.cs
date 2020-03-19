@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-phase-banner", TagStructure = TagStructure.NormalOrSelfClosing)]
-    [RestrictChildren("govuk-phase-banner-tag")]
     public class PhaseBannerTagHelper : TagHelper
     {
         private const string AttributesPrefix = "phase-banner-";
