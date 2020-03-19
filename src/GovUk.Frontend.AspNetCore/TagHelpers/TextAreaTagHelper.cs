@@ -37,7 +37,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(RowsAttributeName)]
         public int? Rows { get; set; }
 
-        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override FormGroupBuilder CreateFormGroupBuilder() => new TextAreaBuilder();
+
+        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var textAreaBuilder = (TextAreaBuilder)builder;
 
@@ -62,9 +64,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 resolvedContent);
         }
 
-        private protected override FormGroupBuilder CreateFormGroupBuilder() => new TextAreaBuilder();
-
-        private protected override string GetIdPrefix() => Id;
+        protected override string GetIdPrefix() => Id;
     }
 
     [HtmlTargetElement("govuk-textarea-label", ParentTag = "govuk-textarea")]

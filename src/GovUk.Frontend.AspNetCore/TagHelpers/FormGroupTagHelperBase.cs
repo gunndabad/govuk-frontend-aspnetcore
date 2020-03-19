@@ -38,12 +38,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected string ResolvedName => Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
 
-        private protected FormGroupTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
+        protected FormGroupTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
         {
             Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
-
-        private protected abstract string GetIdPrefix();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -72,7 +70,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
 
-        private protected void AppendToDescribedBy(string value)
+        protected void AppendToDescribedBy(string value)
         {
             if (value == null)
             {
@@ -89,9 +87,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        private protected virtual FormGroupBuilder CreateFormGroupBuilder() => new FormGroupBuilder();
+        protected virtual FormGroupBuilder CreateFormGroupBuilder() => new FormGroupBuilder();
 
-        private protected virtual TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
+        protected virtual TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
         {
             // We need some content for the label; if AspFor is null then label content must have been specified
             if (AspFor == null && (!builder.Label.HasValue || builder.Label.Value.content == null))
@@ -127,11 +125,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return Generator.GenerateFormGroup(haveError, FormGroupAttributes, contentBuilder);
         }
 
-        private protected virtual TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected virtual TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             // For deriving classes to implement when required
             throw new NotImplementedException();
         }
+
+        protected abstract string GetIdPrefix();
 
         private protected IHtmlContent GenerateErrorMessage(FormGroupBuilder builder)
         {
@@ -286,9 +286,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         Element = 4
     }
 
-    internal class FormGroupBuilder
+    public class FormGroupBuilder
     {
         public const string ContextName = nameof(FormGroupBuilder);
+
+        internal FormGroupBuilder()
+        {
+        }
 
         public (string visuallyHiddenText, IDictionary<string, string> attributes, IHtmlContent content)? ErrorMessage { get; private set; }
 
@@ -354,9 +358,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
     }
 
-    internal class FormGroupElementContext
+    public class FormGroupElementContext
     {
-        public FormGroupElementContext(bool haveError)
+        internal FormGroupElementContext(bool haveError)
         {
             HaveError = haveError;
         }

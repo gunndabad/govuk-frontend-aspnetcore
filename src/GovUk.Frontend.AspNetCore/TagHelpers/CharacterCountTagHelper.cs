@@ -46,14 +46,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return base.ProcessAsync(context, output);
         }
 
-        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var textArea = base.GenerateElement(builder, context);
             textArea.AddCssClass("govuk-js-character-count");
             return textArea;
         }
 
-        private protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
+        protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
         {
             var generated = base.GenerateContent(context, builder);
             return Generator.GenerateCharacterCount(ResolvedId, MaxLength, MaxWords, Threshold, generated);

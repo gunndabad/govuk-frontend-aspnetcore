@@ -1477,7 +1477,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         public string Id { get; set; }
 
-        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var tagBuilder = new TagBuilder("dummy");
             tagBuilder.Attributes.Add("id", ResolvedId);
@@ -1491,7 +1491,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             return tagBuilder;
         }
 
-        private protected override string GetIdPrefix() => Id;
+        protected override string GetIdPrefix() => Id;
     }
 
     [HtmlTargetElement("govuk-test-formgroup-label", ParentTag = "govuk-test-formgroup")]

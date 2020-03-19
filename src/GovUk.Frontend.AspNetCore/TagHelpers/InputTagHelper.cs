@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
 
-        private protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
         {
             var resolvedValue = Value ??
                 (AspFor != null ? Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : null);
@@ -65,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Attributes);
         }
 
-        private protected override string GetIdPrefix() => Id;
+        protected override string GetIdPrefix() => Id;
     }
 
     [HtmlTargetElement("govuk-input-label", ParentTag = "govuk-input")]

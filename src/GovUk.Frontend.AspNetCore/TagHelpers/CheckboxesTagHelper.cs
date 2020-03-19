@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        private protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
+        protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
         {
             var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
 
@@ -89,7 +89,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return Generator.GenerateFormGroup(haveError, FormGroupAttributes, content);
         }
 
-        private protected override string GetIdPrefix() => IdPrefix ?? Name;
+        protected override string GetIdPrefix() => IdPrefix ?? Name;
     }
 
     [HtmlTargetElement("govuk-checkboxes-fieldset", ParentTag = "govuk-checkboxes", TagStructure = TagStructure.NormalOrSelfClosing)]
