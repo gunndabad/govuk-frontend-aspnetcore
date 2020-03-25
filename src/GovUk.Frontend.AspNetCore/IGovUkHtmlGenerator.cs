@@ -18,6 +18,23 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateBreadcrumbs(IDictionary<string, string> attributes, IEnumerable<BreadcrumbsItem> items);
 
+        TagBuilder GenerateButton(
+            string name,
+            string type,
+            string value,
+            bool isStartButton,
+            bool disabled,
+            bool preventDoubleClick,
+            IDictionary<string, string> attributes,
+            IHtmlContent content);
+
+        TagBuilder GenerateButtonLink(
+            string href,
+            bool isStartButton,
+            bool disabled,
+            IDictionary<string, string> attributes,
+            IHtmlContent content);
+
         TagBuilder GenerateCharacterCount(
             string elementId,
             int? maxLength,
