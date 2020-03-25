@@ -200,6 +200,109 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
+        public virtual TagBuilder GenerateButton(
+            string name,
+            string type,
+            string value,
+            bool isStartButton,
+            bool disabled,
+            bool preventDoubleClick,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
+        {
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("button");
+            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.AddCssClass("govuk-button");
+            tagBuilder.Attributes.Add("data-module", "govuk-button");
+
+            if (disabled)
+            {
+                tagBuilder.AddCssClass("govuk-button--disabled");
+                tagBuilder.Attributes.Add("disabled", "disabled");
+                tagBuilder.Attributes.Add("aria-disabled", "true");
+            }
+
+            if (name != null)
+            {
+                tagBuilder.Attributes.Add("name", name);
+            }
+
+            if (preventDoubleClick)
+            {
+                tagBuilder.Attributes.Add("data-prevent-double-click", "true");
+            }
+
+            if (value != null)
+            {
+                tagBuilder.Attributes.Add("value", value);
+            }
+
+            if (type != null)
+            {
+                tagBuilder.Attributes.Add("type", type);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            if (isStartButton)
+            {
+                tagBuilder.AddCssClass("govuk-button--start");
+
+                var icon = GenerateStartButton();
+                tagBuilder.InnerHtml.AppendHtml(icon);
+            }
+
+            return tagBuilder;
+        }
+
+        public virtual TagBuilder GenerateButtonLink(
+            string href,
+            bool isStartButton,
+            bool disabled,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
+        {
+            if (href == null)
+            {
+                throw new ArgumentNullException(nameof(href));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("a");
+            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.AddCssClass("govuk-button");
+            tagBuilder.Attributes.Add("data-module", "govuk-button");
+            tagBuilder.Attributes.Add("role", "button");
+            tagBuilder.Attributes.Add("draggable", "false");
+            tagBuilder.Attributes.Add("href", href);
+
+            if (disabled)
+            {
+                tagBuilder.AddCssClass("govuk-button--disabled");
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            if (isStartButton)
+            {
+                tagBuilder.AddCssClass("govuk-button--start");
+
+                var icon = GenerateStartButton();
+                tagBuilder.InnerHtml.AppendHtml(icon);
+            }
+
+            return tagBuilder;
+        }
+
         public virtual TagBuilder GenerateCharacterCount(
             string elementId,
             int? maxLength,
@@ -1337,6 +1440,32 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             return modelError.ErrorMessage;
+        }
+
+        private static TagBuilder GenerateStartButton()
+        {
+            var icon = new TagBuilder("svg");
+            icon.AddCssClass("govuk-button__start-icon");
+            icon.MergeAttributes(new Dictionary<string, string>()
+                {
+                    { "xmlns", "http://www.w3.org/2000/svg" },
+                    { "width", "17.5" },
+                    { "height", "19" },
+                    { "viewBox", "0 0 33 40" },
+                    { "role", "presentation" },
+                    { "focusable", "false" }
+                });
+
+            var path = new TagBuilder("path");
+            path.MergeAttributes(new Dictionary<string, string>()
+                {
+                    { "fill", "currentColor" },
+                    { "d", "M0 0h13l20 20-20 20H0l20-20z" }
+                });
+
+            icon.InnerHtml.AppendHtml(path);
+
+            return icon;
         }
     }
 }

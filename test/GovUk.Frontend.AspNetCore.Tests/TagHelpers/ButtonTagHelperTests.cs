@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.AsString();
             Assert.Equal(
-                "<a class=\"govuk-button\" data-module=\"govuk-button\" href=\"http://foo.com\" role=\"button\" draggable=\"false\">" +
+                "<a class=\"govuk-button\" data-module=\"govuk-button\" draggable=\"false\" href=\"http://foo.com\" role=\"button\">" +
                 "Button text" +
                 "</a>",
                 html);
