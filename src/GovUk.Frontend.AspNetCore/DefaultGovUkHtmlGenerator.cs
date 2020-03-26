@@ -207,6 +207,7 @@ namespace GovUk.Frontend.AspNetCore
             bool isStartButton,
             bool disabled,
             bool preventDoubleClick,
+            string formAction,
             IDictionary<string, string> attributes,
             IHtmlContent content)
         {
@@ -245,6 +246,11 @@ namespace GovUk.Frontend.AspNetCore
             if (type != null)
             {
                 tagBuilder.Attributes.Add("type", type);
+            }
+
+            if (formAction != null)
+            {
+                tagBuilder.Attributes.Add("formaction", formAction);
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);

@@ -92,9 +92,43 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 html);
         }
 
+        [Fact]
+        public async Task ProcessAsync_CorrectlyInfersButtonElementType()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-button",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-button",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("Button text");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new ButtonTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                Type = "button"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal("button", output.TagName);
+        }
+
         [Theory]
-        [MemberData(nameof(ProcessAsync_CorrectlyInfersElementTypeData))]
-        public async Task ProcessAsync_CorrectlyInfersElementType(
+        [MemberData(nameof(ProcessAsync_CorrectlyInfersAnchorElementTypeData))]
+        public async Task ProcessAsync_CorrectlyInfersAnchorElementType(
             string href,
             string action,
             string controller,
@@ -567,7 +601,131 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal("Cannot specify the 'prevent-double-click' attribute for 'a' elements.", ex.Message);
         }
 
-        public static IEnumerable<object[]> ProcessAsync_CorrectlyInfersElementTypeData { get; } =
+        [Theory]
+        [MemberData(nameof(ProcessAsync_AspLinkAttributesSpecifiedWithButtonElementTypeGeneratesFormActionAttributeData))]
+        public async Task ProcessAsync_AspLinkAttributesSpecifiedWithButtonElementTypeGeneratesFormActionAttribute(
+            string action,
+            string controller,
+            string area,
+            string fragment,
+            string host,
+            string page,
+            string pageHandler,
+            string protocol,
+            string route,
+            IDictionary<string, string> routeValues)
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-button",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-button",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("Button text");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var urlHelperFactory = new Mock<IUrlHelperFactory>();
+            urlHelperFactory
+                .Setup(mock => mock.GetUrlHelper(It.IsAny<ActionContext>()))
+                .Returns((ActionContext actionContext) =>
+                {
+                    var urlHelper = new Mock<IUrlHelper>();
+
+                    urlHelper.SetupGet(mock => mock.ActionContext).Returns(actionContext);
+
+                    urlHelper
+                        .Setup(mock => mock.Action(
+                            /*actionContext: */It.IsAny<UrlActionContext>()))
+                        .Returns("http://place.com");
+
+                    urlHelper
+                        .Setup(mock => mock.Link(
+                            /*routeName: */It.IsAny<string>(),
+                            /*values: */It.IsAny<object>()))
+                        .Returns("http://place.com");
+
+                    urlHelper
+                        .Setup(mock => mock.RouteUrl(
+                            /*routeContext: */It.IsAny<UrlRouteContext>()))
+                        .Returns("http://place.com");
+
+                    return urlHelper.Object;
+                });
+
+            var viewContext = new ViewContext()
+            {
+                RouteData = new Microsoft.AspNetCore.Routing.RouteData()
+            };
+
+            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(), urlHelperFactory.Object)
+            {
+                Element = ButtonTagHelperElementType.Button,
+                Action = action,
+                Area = area,
+                Controller = controller,
+                Fragment = fragment,
+                Host = host,
+                Page = page,
+                PageHandler = pageHandler,
+                Protocol = protocol,
+                Route = route,
+                RouteValues = routeValues,
+                ViewContext = viewContext
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal("button", output.TagName);
+            Assert.Equal("http://place.com", output.Attributes["formaction"].Value);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_FormActionSpecifiedAddsAttributeToOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-button",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-button",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("Button text");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new ButtonTagHelper(
+                new DefaultGovUkHtmlGenerator(),
+                Mock.Of<IUrlHelperFactory>())
+            {
+                Element = ButtonTagHelperElementType.Button,
+                FormAction = "foo"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal("button", output.TagName);
+            Assert.Equal("foo", output.Attributes["formaction"].Value);
+        }
+
+        public static IEnumerable<object[]> ProcessAsync_CorrectlyInfersAnchorElementTypeData { get; } =
             new[]
             {
                 new object[] { "href", null, null, null, null, null, null, null, null, null, null },
@@ -582,6 +740,22 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new object[] { null, null, null, null, null, null, null, null, "protocol", null, null },
                 new object[] { null, null, null, null, null, null, null, null, null, "route", null },
                 new object[] { null, null, null, null, null, null, null, null, null, null, new Dictionary<string, string>() { { "controller", "controller" } } }
+            };
+
+        public static IEnumerable<object[]> ProcessAsync_AspLinkAttributesSpecifiedWithButtonElementTypeGeneratesFormActionAttributeData { get; } =
+            new[]
+            {
+                new object[] { "action", null, null, null, null, null, null, null, null, null },
+                new object[] { null, "controller", null, null, null, null, null, null, null, null },
+                new object[] { null, null, "area", null, null, null, null, null, null, null },
+                new object[] { null, null, null, "fragment", null, null, null, null, null, null },
+                new object[] { null, null, null, null, "host", null, null, null, null, null },
+                // FIXME
+                //new object[] { null, null, null, null, null, "page", null, null, null, null },
+                new object[] { null, null, null, null, null, null, "pageHandler", null, null, null },
+                new object[] { null, null, null, null, null, null, null, "protocol", null, null },
+                new object[] { null, null, null, null, null, null, null, null, "route", null },
+                new object[] { null, null, null, null, null, null, null, null, null, new Dictionary<string, string>() { { "controller", "controller" } } }
             };
     }
 }
