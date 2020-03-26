@@ -25,6 +25,7 @@ namespace GovUk.Frontend.AspNetCore
             bool isStartButton,
             bool disabled,
             bool preventDoubleClick,
+            string formAction,
             IDictionary<string, string> attributes,
             IHtmlContent content);
 

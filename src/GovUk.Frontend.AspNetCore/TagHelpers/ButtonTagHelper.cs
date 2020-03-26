@@ -16,6 +16,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AttributesPrefix = "button-";
         private const string DisabledAttributeName = "disabled";
         private const string ElementAttributeName = "element";
+        private const string FormActionAttributeName = "formaction";
         private const string IsStartButtonAttributeName = "is-start-button";
         private const string NameAttributeName = "name";
         private const string PreventDoubleClickAttributeName = "prevent-double-click";
@@ -35,6 +36,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(ElementAttributeName)]
         public ButtonTagHelperElementType? Element { get; set; }
+
+        [HtmlAttributeName(FormActionAttributeName)]
+        public string FormAction { get; set; }
 
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = false;
@@ -69,7 +73,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             string element = GetTagNameFromElementType(
                 Element ??
-                (hasAnchorAttributes ? ButtonTagHelperElementType.Anchor : ButtonTagHelperElementType.Button));
+                (Href != null || (Type == null && HasLinkAttributes) ?
+                    ButtonTagHelperElementType.Anchor :
+                    ButtonTagHelperElementType.Button));
             output.TagName = element;
 
             if (element == "a" && Name != null)
@@ -92,6 +98,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"Cannot specify the '{ValueAttributeName}' attribute for '{element}' elements.");
             }
 
+            if (element == "a" && FormAction != null)
+            {
+                throw new InvalidOperationException($"Cannot specify the '{FormActionAttributeName}' attribute for '{element}' elements.");
+            }
+
+            if (element == "button" && Href != null)
+            {
+                throw new InvalidOperationException($"Cannot specify the '{HrefAttributeName}' attribute for '{element}' elements.");
+            }
+
+            if (HasLinkAttributes && FormAction != null)
+            {
+                throw new InvalidOperationException(
+                    $"Cannot determine the 'formaction' attribute for <button>. The following attributes are mutually exclusive:\n" +
+                    $"{FormActionAttributeName}\n" +
+                    $"{RouteAttributeName}\n" +
+                    $"{ControllerAttributeName}, {ActionAttributeName}\n" +
+                    $"{PageAttributeName}, {PageHandlerAttributeName}");
+            }
+
             var childContent = await output.GetChildContentAsync();
 
             TagBuilder tagBuilder;
@@ -104,6 +130,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
             else
             {
+                var resolvedFormAction = FormAction ??
+                    (HasLinkAttributes ? ResolveHref() : null);
+
                 tagBuilder = Generator.GenerateButton(
                     Name,
                     Type,
@@ -111,6 +140,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     IsStartButton,
                     Disabled,
                     PreventDoubleClick,
+                    resolvedFormAction,
                     Attributes,
                     childContent);
             }

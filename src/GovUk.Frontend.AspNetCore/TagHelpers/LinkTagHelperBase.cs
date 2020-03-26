@@ -12,18 +12,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     public abstract class LinkTagHelperBase : TagHelper
     {
-        private const string ActionAttributeName = "asp-action";
-        private const string ControllerAttributeName = "asp-controller";
-        private const string AreaAttributeName = "asp-area";
-        private const string PageAttributeName = "asp-page";
-        private const string PageHandlerAttributeName = "asp-page-handler";
-        private const string FragmentAttributeName = "asp-fragment";
-        private const string HostAttributeName = "asp-host";
-        private const string ProtocolAttributeName = "asp-protocol";
-        private const string RouteAttributeName = "asp-route";
-        private const string RouteValuesDictionaryName = "asp-all-route-data";
-        private const string RouteValuesPrefix = "asp-route-";
-        private const string HrefAttributeName = "href";
+        protected const string ActionAttributeName = "asp-action";
+        protected const string ControllerAttributeName = "asp-controller";
+        protected const string AreaAttributeName = "asp-area";
+        protected const string PageAttributeName = "asp-page";
+        protected const string PageHandlerAttributeName = "asp-page-handler";
+        protected const string FragmentAttributeName = "asp-fragment";
+        protected const string HostAttributeName = "asp-host";
+        protected const string ProtocolAttributeName = "asp-protocol";
+        protected const string RouteAttributeName = "asp-route";
+        protected const string RouteValuesDictionaryName = "asp-all-route-data";
+        protected const string RouteValuesPrefix = "asp-route-";
+        protected const string HrefAttributeName = "href";
 
         private IDictionary<string, string> _routeValues;
         private readonly IUrlHelperFactory _urlHelperFactory;
