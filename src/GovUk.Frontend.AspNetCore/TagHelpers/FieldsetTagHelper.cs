@@ -84,6 +84,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
+
+            output.SuppressOutput();
         }
     }
 
