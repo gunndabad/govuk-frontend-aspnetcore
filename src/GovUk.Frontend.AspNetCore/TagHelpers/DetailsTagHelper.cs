@@ -22,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(AttributesPrefix)]
+        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
         public IDictionary<string, string> Attributes { get; set; }
 
         [HtmlAttributeName(IdAttributeName)]
