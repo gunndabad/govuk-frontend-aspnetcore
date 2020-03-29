@@ -103,13 +103,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Route != null ||
             RouteValues.Count > 0;
 
-        protected TagBuilder CreateAnchorTagBuilder()
-        {
-            var href = ResolveHref();
-
-            return Generator.GenerateAnchor(href);
-        }
-
         protected string ResolveHref()
         {
             var hrefLink = Href != null;
