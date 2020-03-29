@@ -14,6 +14,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         protected const string AspForAttributeName = "asp-for";
         protected const string DescribedByAttributeName = "described-by";
         protected const string FormGroupAttributesPrefix = "form-group-";
+        protected const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
         protected const string NameAttributeName = "name";
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -24,6 +25,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(DictionaryAttributePrefix = FormGroupAttributesPrefix)]
         public IDictionary<string, string> FormGroupAttributes { get; set; } = new Dictionary<string, string>();
+
+        [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
+        public bool? IgnoreModelStateErrors { get; set; }
 
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
@@ -139,7 +143,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var content = builder.ErrorMessage?.content;
             var attributes = builder.ErrorMessage?.attributes;
 
-            if (content == null && AspFor != null)
+            if (content == null && AspFor != null && IgnoreModelStateErrors != true)
             {
                 var validationMessage = Generator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
 

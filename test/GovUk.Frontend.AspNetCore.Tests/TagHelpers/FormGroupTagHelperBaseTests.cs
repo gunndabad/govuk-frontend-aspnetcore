@@ -795,6 +795,73 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Fact]
+        public async Task ProcessAsync_ModelStateErrorWithIgnoreModelStateErrorsSpecifiedDoesNotOutputErrorMessage()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-test-formgroup",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-test-formgroup",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    formGroupContext.TrySetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: null);
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetFullHtmlFieldName(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns("Foo");
+
+            htmlGenerator
+                .Setup(mock => mock.GetDisplayName(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns("Generated label");
+
+            htmlGenerator
+                .Setup(mock => mock.GetValidationMessage(
+                    /*viewContext: */It.IsAny<ViewContext>(),
+                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                    /*expression: */It.IsAny<string>()))
+                .Returns("An error");
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+
+            var tagHelper = new TestFormGroupTagHelper(htmlGenerator.Object)
+            {
+                AspFor = new ModelExpression("Foo", modelExplorer),
+                IgnoreModelStateErrors = true,
+                ViewContext = new ViewContext()
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var html = output.AsString();
+            Assert.DoesNotContain("<span class=\"govuk-error-message\"", html);
+        }
+
+        [Fact]
         public async Task ProcessAsync_SpecifiedErrorOutputsCorrectErrorMessage()
         {
             // Arrange
