@@ -10,7 +10,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-fieldset", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class FieldsetTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "fieldset-";
         private const string DescribedByAttributeName = "described-by";
         private const string IsPageHeadingAttributeName = "is-page-heading";
         private const string RoleAttributeName = "role";
@@ -21,9 +20,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             _htmlGenerator = htmlGenerator;
         }
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
@@ -36,8 +32,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var fieldsetContext = new FieldsetContext();
 
             IHtmlContent childContent;
@@ -50,10 +44,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 DescribedBy,
                 IsPageHeading,
                 Role,
-                Attributes,
                 fieldsetContext.Legend.Value.content,
                 fieldsetContext.Legend.Value.attributes,
-                childContent);
+                childContent,
+                output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -67,20 +61,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-fieldset-legend", ParentTag = "govuk-fieldset")]
     public class FieldsetLegendTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "fieldset-legend-";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var fieldsetContext = (FieldsetContext)context.Items[FieldsetContext.ContextName];
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!fieldsetContext.TrySetLegend(Attributes, childContent.Snapshot()))
+            if (!fieldsetContext.TrySetLegend(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }

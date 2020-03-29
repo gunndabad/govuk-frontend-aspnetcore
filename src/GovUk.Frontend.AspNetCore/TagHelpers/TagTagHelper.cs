@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -9,8 +8,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-tag", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class TagTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "tag-";
-
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public TagTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -18,16 +15,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var childContent = await output.GetChildContentAsync();
 
-            var tagBuilder = _htmlGenerator.GenerateTag(Attributes, childContent);
+            var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

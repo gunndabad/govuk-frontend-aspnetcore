@@ -62,6 +62,7 @@ namespace GovUk.Frontend.AspNetCore
             foreach (var item in items)
             {
                 var section = new TagBuilder("div");
+                section.MergeAttributes(item.Attributes);
                 section.AddCssClass("govuk-accordion__section");
 
                 if (item.Expanded)
@@ -76,6 +77,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 var headingId = $"{id}-heading-{index}";
                 var heading = new TagBuilder($"h{item.HeadingLevel ?? DefaultAccordionItemHeadingLevel}");
+                heading.MergeAttributes(item.HeadingAttributes);
                 heading.AddCssClass("govuk-accordion__section-heading");
                 var headingContent = new TagBuilder("span");
                 headingContent.AddCssClass("govuk-accordion__section-button");
@@ -84,10 +86,11 @@ namespace GovUk.Frontend.AspNetCore
                 heading.InnerHtml.AppendHtml(headingContent);
                 header.InnerHtml.AppendHtml(heading);
 
-                if (item.Summary != null)
+                if (item.SummaryContent != null)
                 {
                     var summaryId = $"{id}-summary-{index}";
                     var summary = new TagBuilder("div");
+                    summary.MergeAttributes(item.SummaryAttributes);
                     summary.AddCssClass("govuk-accordion__section-summary");
                     summary.AddCssClass("govuk-body");
                     summary.Attributes.Add("id", summaryId);
@@ -127,8 +130,8 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateBackLink(
             string href,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (href == null)
             {
@@ -168,6 +171,7 @@ namespace GovUk.Frontend.AspNetCore
             foreach (var item in items)
             {
                 var li = new TagBuilder("li");
+                li.MergeAttributes(item.Attributes);
                 li.AddCssClass("govuk-breadcrumbs__list-item");
 
                 if (item.IsCurrentPage)
@@ -208,8 +212,8 @@ namespace GovUk.Frontend.AspNetCore
             bool disabled,
             bool preventDoubleClick,
             string formAction,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (content == null)
             {
@@ -270,8 +274,8 @@ namespace GovUk.Frontend.AspNetCore
             string href,
             bool isStartButton,
             bool disabled,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (href == null)
             {
@@ -353,7 +357,7 @@ namespace GovUk.Frontend.AspNetCore
 
                 var hintId = $"{elementId}-info";
                 var hintContent = new HtmlString(content);
-                var generatedHint = GenerateHint(hintId, attributes: null, hintContent);
+                var generatedHint = GenerateHint(hintId, hintContent, attributes: null);
 
                 generatedHint.AddCssClass("govuk-character-count__message");
                 generatedHint.Attributes.Add("aria-live", "polite");
@@ -422,10 +426,11 @@ namespace GovUk.Frontend.AspNetCore
                 //}
 
                 var tagBuilder = new TagBuilder("div");
+                tagBuilder.MergeAttributes(item.Attributes);
                 tagBuilder.AddCssClass("govuk-checkboxes__item");
 
                 var input = new TagBuilder("input");
-                input.MergeAttributes(item.Attributes);
+                input.MergeAttributes(item.InputAttributes);
                 input.TagRenderMode = TagRenderMode.SelfClosing;
                 input.AddCssClass("govuk-checkboxes__input");
                 input.Attributes.Add("id", item.Id);
@@ -461,13 +466,13 @@ namespace GovUk.Frontend.AspNetCore
 
                 tagBuilder.InnerHtml.AppendHtml(input);
 
-                var label = GenerateLabel(item.Id, isPageHeading: false, attributes: null, item.Content);
+                var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null);
                 label.AddCssClass("govuk-checkboxes__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
                 if (item.HintContent != null)
                 {
-                    var hint = GenerateHint(item.HintId, item.HintAttributes, item.HintContent);
+                    var hint = GenerateHint(item.HintId, item.HintContent, item.HintAttributes);
                     hint.AddCssClass("govuk-checkboxes__hint");
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
@@ -475,6 +480,7 @@ namespace GovUk.Frontend.AspNetCore
                 if (item.ConditionalContent != null)
                 {
                     var conditional = new TagBuilder("div");
+                    conditional.MergeAttributes(item.ConditionalAttributes);
                     conditional.AddCssClass("govuk-checkboxes__conditional");
 
                     if (!item.Checked)
@@ -495,18 +501,21 @@ namespace GovUk.Frontend.AspNetCore
 
         public TagBuilder GenerateDetails(
             bool open,
-            IHtmlContent summary,
-            IHtmlContent text,
+            string id,
+            IHtmlContent summaryContent,
+            IDictionary<string, string> summaryAttributes,
+            IHtmlContent textContent,
+            IDictionary<string, string> textAttributes,
             IDictionary<string, string> attributes)
         {
-            if (summary == null)
+            if (summaryContent == null)
             {
-                throw new ArgumentNullException(nameof(summary));
+                throw new ArgumentNullException(nameof(summaryContent));
             }
 
-            if (text == null)
+            if (textContent == null)
             {
-                throw new ArgumentNullException(nameof(text));
+                throw new ArgumentNullException(nameof(textContent));
             }
 
             var tagBuilder = new TagBuilder("details");
@@ -519,19 +528,26 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.Attributes.Add("open", "true");
             }
 
+            if (id != null)
+            {
+                tagBuilder.Attributes.Add("id", id);
+            }
+
             var summaryTagBuilder = new TagBuilder("summary");
+            summaryTagBuilder.MergeAttributes(summaryAttributes);
             summaryTagBuilder.AddCssClass("govuk-details__summary");
 
             var summaryTextTagBuilder = new TagBuilder("span");
             summaryTextTagBuilder.AddCssClass("govuk-details__summary-text");
-            summaryTextTagBuilder.InnerHtml.AppendHtml(summary);
+            summaryTextTagBuilder.InnerHtml.AppendHtml(summaryContent);
             summaryTagBuilder.InnerHtml.AppendHtml(summaryTextTagBuilder);
 
             tagBuilder.InnerHtml.AppendHtml(summaryTagBuilder);
 
             var textTagBuilder = new TagBuilder("div");
+            textTagBuilder.MergeAttributes(textAttributes);
             textTagBuilder.AddCssClass("govuk-details__text");
-            textTagBuilder.InnerHtml.AppendHtml(text);
+            textTagBuilder.InnerHtml.AppendHtml(textContent);
             tagBuilder.InnerHtml.AppendHtml(textTagBuilder);
 
             return tagBuilder;
@@ -540,8 +556,8 @@ namespace GovUk.Frontend.AspNetCore
         public virtual TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,
             string id,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (content == null)
             {
@@ -574,14 +590,16 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GenerateErrorSummary(
-            IHtmlContent title,
-            IHtmlContent description,
+            IHtmlContent titleContent,
+            IDictionary<string, string> titleAttributes,
+            IHtmlContent descriptionContent,
+            IDictionary<string, string> descriptionAttributes,
             IDictionary<string, string> attributes,
             IEnumerable<ErrorSummaryItem> items)
         {
-            if (title == null)
+            if (titleContent == null)
             {
-                throw new ArgumentNullException(nameof(title));
+                throw new ArgumentNullException(nameof(titleContent));
             }
 
             if (items == null)
@@ -598,18 +616,20 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.Attributes.Add("data-module", "govuk-error-summary");
 
             var heading = new TagBuilder("h2");
+            heading.MergeAttributes(titleAttributes);
             heading.AddCssClass("govuk-error-summary__title");
             heading.Attributes.Add("id", "error-summary-title");
-            heading.InnerHtml.AppendHtml(title);
+            heading.InnerHtml.AppendHtml(titleContent);
             tagBuilder.InnerHtml.AppendHtml(heading);
 
             var body = new TagBuilder("div");
             body.AddCssClass("govuk-error-summary__body");
 
-            if (description != null)
+            if (descriptionContent != null)
             {
                 var p = new TagBuilder("p");
-                p.InnerHtml.AppendHtml(description);
+                p.MergeAttributes(descriptionAttributes);
+                p.InnerHtml.AppendHtml(descriptionContent);
                 body.InnerHtml.AppendHtml(p);
             }
 
@@ -620,6 +640,7 @@ namespace GovUk.Frontend.AspNetCore
             foreach (var item in items)
             {
                 var li = new TagBuilder("li");
+                li.MergeAttributes(item.Attributes);
                 li.InnerHtml.AppendHtml(item.Content);
                 ul.InnerHtml.AppendHtml(li);
             }
@@ -635,10 +656,10 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool isPageHeading,
             string role,
-            IDictionary<string, string> attributes,
             IHtmlContent legendContent,
             IDictionary<string, string> legendAttributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             var tagBuilder = new TagBuilder("fieldset");
             tagBuilder.MergeAttributes(attributes);
@@ -678,8 +699,8 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateFormGroup(
             bool haveError,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (content == null)
             {
@@ -700,7 +721,7 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateHint(string id, IDictionary<string, string> attributes, IHtmlContent content)
+        public virtual TagBuilder GenerateHint(string id, IHtmlContent content, IDictionary<string, string> attributes)
         {
             if (content == null)
             {
@@ -723,8 +744,8 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateInsetText(
             string id,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (content == null)
             {
@@ -817,8 +838,8 @@ namespace GovUk.Frontend.AspNetCore
         public virtual TagBuilder GenerateLabel(
             string @for,
             bool isPageHeading,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (@for == null)
             {
@@ -854,8 +875,8 @@ namespace GovUk.Frontend.AspNetCore
         public virtual TagBuilder GeneratePanel(
             int? titleHeadingLevel,
             IHtmlContent titleContent,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (titleContent == null)
             {
@@ -884,10 +905,10 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GeneratePhaseBanner(
-            IDictionary<string, string> tabAttributes,
             IHtmlContent tagContent,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IDictionary<string, string> tabAttributes,
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (tagContent == null)
             {
@@ -906,7 +927,7 @@ namespace GovUk.Frontend.AspNetCore
             var contentTagBuilder = new TagBuilder("p");
             contentTagBuilder.AddCssClass("govuk-phase-banner__content");
 
-            var tagTagBuilder = GenerateTag(tabAttributes, tagContent);
+            var tagTagBuilder = GenerateTag(tagContent, tabAttributes);
             tagTagBuilder.AddCssClass("govuk-phase-banner__content__tag");
             contentTagBuilder.InnerHtml.AppendHtml(tagTagBuilder);
 
@@ -920,7 +941,11 @@ namespace GovUk.Frontend.AspNetCore
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items)
+        public virtual TagBuilder GenerateRadios(
+            string name,
+            bool isConditional,
+            IEnumerable<RadiosItemBase> items,
+            IDictionary<string, string> attributes)
         {
             if (items == null)
             {
@@ -928,6 +953,7 @@ namespace GovUk.Frontend.AspNetCore
             }
 
             var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-radios");
 
             if (isConditional)
@@ -987,10 +1013,12 @@ namespace GovUk.Frontend.AspNetCore
                 //}
 
                 var tagBuilder = new TagBuilder("div");
+                tagBuilder.MergeAttributes(item.Attributes);
                 tagBuilder.AddCssClass("govuk-radios__item");
 
                 var input = new TagBuilder("input");
                 input.TagRenderMode = TagRenderMode.SelfClosing;
+                input.MergeAttributes(item.InputAttributes);
                 input.AddCssClass("govuk-radios__input");
                 input.Attributes.Add("id", item.Id);
                 input.Attributes.Add("name", name);
@@ -1019,13 +1047,13 @@ namespace GovUk.Frontend.AspNetCore
 
                 tagBuilder.InnerHtml.AppendHtml(input);
 
-                var label = GenerateLabel(item.Id, isPageHeading: false, attributes: null, item.Content);
+                var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null);
                 label.AddCssClass("govuk-radios__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
                 if (item.HintContent != null)
                 {
-                    var hint = GenerateHint(item.HintId, item.HintAttributes, item.HintContent);
+                    var hint = GenerateHint(item.HintId, item.HintContent, item.HintAttributes);
                     hint.AddCssClass("govuk-radios__hint");
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
@@ -1033,6 +1061,7 @@ namespace GovUk.Frontend.AspNetCore
                 if (item.ConditionalContent != null)
                 {
                     var conditional = new TagBuilder("div");
+                    conditional.MergeAttributes(item.ConditionalAttributes);
                     conditional.AddCssClass("govuk-radios__conditional");
 
                     if (!item.Checked)
@@ -1053,6 +1082,7 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent GenerateRadioItemDivider(RadiosItemDivider divider)
             {
                 var tagBuilder = new TagBuilder("div");
+                tagBuilder.MergeAttributes(divider.Attributes);
                 tagBuilder.AddCssClass("govuk-radios__divider");
                 tagBuilder.InnerHtml.AppendHtml(divider.Content);
                 return tagBuilder;
@@ -1061,8 +1091,8 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateSkipLink(
             string href,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (href == null)
             {
@@ -1244,8 +1274,8 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GenerateTag(
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (content == null)
             {
@@ -1268,8 +1298,8 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             string autocomplete,
             bool disabled,
-            IDictionary<string, string> attributes,
-            IHtmlContent content)
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
             if (id == null)
             {
@@ -1320,9 +1350,9 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GenerateWarningText(
-            IDictionary<string, string> attributes,
+            string iconFallbackText,
             IHtmlContent content,
-            string iconFallbackText)
+            IDictionary<string, string> attributes)
         {
             if (content == null)
             {

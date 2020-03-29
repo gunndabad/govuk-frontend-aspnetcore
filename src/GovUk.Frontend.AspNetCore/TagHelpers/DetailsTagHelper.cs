@@ -11,7 +11,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-details-summary", "govuk-details-text")]
     public class DetailsTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "details-";
         private const string IdAttributeName = "id";
         private const string OpenAttributeName = "open";
 
@@ -22,9 +21,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
@@ -33,8 +29,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var detailsContext = new DetailsContext();
 
             using (context.SetScopedContextItem(DetailsContext.ContextName, detailsContext))
@@ -46,20 +40,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = _htmlGenerator.GenerateDetails(
                 Open,
-                detailsContext.Summary,
-                detailsContext.Text,
-                Attributes);
+                Id,
+                detailsContext.Summary?.content,
+                detailsContext.Summary?.attributes,
+                detailsContext.Text?.content,
+                detailsContext.Text?.attributes,
+                output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
 
             output.Attributes.Clear();
-
-            if (!string.IsNullOrEmpty(Id))
-            {
-                output.Attributes.Add("id", Id);
-            }
-
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
@@ -73,7 +64,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = await output.GetChildContentAsync();
 
             var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
-            detailsContext.SetSummary(childContent);
+            detailsContext.SetSummary(output.Attributes.ToAttributesDictionary(), childContent);
 
             output.SuppressOutput();
         }
@@ -87,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = await output.GetChildContentAsync();
 
             var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
-            detailsContext.SetText(childContent);
+            detailsContext.SetText(output.Attributes.ToAttributesDictionary(), childContent);
 
             output.SuppressOutput();
         }
@@ -104,14 +95,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public const string ContextName = nameof(DetailsContext);
 
-        public IHtmlContent Summary { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
 
-        public IHtmlContent Text { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Text { get; private set; }
 
         // Internal for testing
         internal DetailsRenderStage RenderStage { get; private set; }
 
-        public void SetSummary(IHtmlContent content)
+        public void SetSummary(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -123,11 +114,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException("Cannot render <govuk-details-summary> here.");
             }
 
-            Summary = content;
+            Summary = (attributes, content);
             RenderStage = DetailsRenderStage.Summary;
         }
 
-        public void SetText(IHtmlContent content)
+        public void SetText(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -139,7 +130,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException("Cannot render <govuk-details-text> here.");
             }
 
-            Text = content;
+            Text = (attributes, content);
             RenderStage = DetailsRenderStage.Text;
         }
 

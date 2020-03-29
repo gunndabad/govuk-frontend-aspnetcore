@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,7 +12,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class LabelTagHelper : TagHelper
     {
         private const string AspForAttributeName = "asp-for";
-        private const string AttributesPrefix = "label-";
         private const string IsPageHeadingAttributeName = "is-page-heading";
         private const string ForAttributeName = "for";
 
@@ -27,9 +25,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(AspForAttributeName)]
         public ModelExpression AspFor { get; set; }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(ForAttributeName)]
         public string For { get; set; }
 
@@ -42,8 +37,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             if (For == null && AspFor == null)
             {
                 throw new InvalidOperationException($"Cannot determine 'for' attribute for <label>.");
@@ -57,7 +50,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = (IHtmlContent)childContent ??
                 new HtmlString(_htmlGenerator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
-            var tagBuilder = _htmlGenerator.GenerateLabel(resolvedFor, IsPageHeading, Attributes, resolvedContent);
+            var tagBuilder = _htmlGenerator.GenerateLabel(
+                resolvedFor,
+                IsPageHeading,
+                resolvedContent,
+                output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
