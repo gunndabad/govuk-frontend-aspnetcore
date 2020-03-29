@@ -14,7 +14,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateAnchor(string href);
 
-        TagBuilder GenerateBackLink(string href, IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GenerateBackLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateBreadcrumbs(IDictionary<string, string> attributes, IEnumerable<BreadcrumbsItem> items);
 
@@ -26,15 +26,15 @@ namespace GovUk.Frontend.AspNetCore
             bool disabled,
             bool preventDoubleClick,
             string formAction,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateButtonLink(
             string href,
             bool isStartButton,
             bool disabled,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateCharacterCount(
             string elementId,
@@ -52,19 +52,24 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateDetails(
             bool open,
-            IHtmlContent summary,
+            string id,
+            IHtmlContent summaryContent,
+            IDictionary<string, string> summaryAttributes,
             IHtmlContent text,
+            IDictionary<string, string> textAttributes,
             IDictionary<string, string> attributes);
 
         TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,
             string id,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateErrorSummary(
-            IHtmlContent title,
-            IHtmlContent description,
+            IHtmlContent titleContent,
+            IDictionary<string, string> titleAttributes,
+            IHtmlContent descriptionContent,
+            IDictionary<string, string> descriptionAttributes,
             IDictionary<string, string> attributes,
             IEnumerable<ErrorSummaryItem> items);
 
@@ -72,16 +77,16 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool isPageHeading,
             string role,
-            IDictionary<string, string> attributes,
             IHtmlContent legendContent,
             IDictionary<string, string> legendAttributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
-        TagBuilder GenerateFormGroup(bool haveError, IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, IDictionary<string, string> attributes);
 
-        TagBuilder GenerateHint(string id, IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GenerateHint(string id, IHtmlContent content, IDictionary<string, string> attributes);
 
-        TagBuilder GenerateInsetText(string id, IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GenerateInsetText(string id, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateInput(
             bool haveError,
@@ -99,24 +104,28 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateLabel(
             string @for,
             bool isPageHeading,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
         TagBuilder GeneratePanel(
             int? titleHeadingLevel,
             IHtmlContent titleContent,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
         TagBuilder GeneratePhaseBanner(
-            IDictionary<string, string> tabAttributes,
             IHtmlContent tagContent,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IDictionary<string, string> tabAttributes,
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
-        TagBuilder GenerateRadios(string name, bool isConditional, IEnumerable<RadiosItemBase> items);
+        TagBuilder GenerateRadios(
+            string name,
+            bool isConditional,
+            IEnumerable<RadiosItemBase> items,
+            IDictionary<string, string> attributes);
 
-        TagBuilder GenerateSkipLink(string href, IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GenerateSkipLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateSummaryList(IDictionary<string, string> attributes, IEnumerable<SummaryListRow> rows);
 
@@ -126,7 +135,7 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IEnumerable<TabsItem> items);
 
-        TagBuilder GenerateTag(IDictionary<string, string> attributes, IHtmlContent content);
+        TagBuilder GenerateTag(IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateTextArea(
             bool haveError,
@@ -136,13 +145,13 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             string autocomplete,
             bool disabled,
-            IDictionary<string, string> attributes,
-            IHtmlContent content);
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateWarningText(
-            IDictionary<string, string> attributes,
+            string iconFallbackText,
             IHtmlContent content,
-            string iconFallbackText);
+            IDictionary<string, string> attributes);
 
         string GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
 

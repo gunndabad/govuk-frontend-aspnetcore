@@ -13,7 +13,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         protected const string AspForAttributeName = "asp-for";
         protected const string DescribedByAttributeName = "described-by";
-        protected const string FormGroupAttributesPrefix = "form-group-";
         protected const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
         protected const string NameAttributeName = "name";
 
@@ -22,9 +21,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
-
-        [HtmlAttributeName(DictionaryAttributePrefix = FormGroupAttributesPrefix)]
-        public IDictionary<string, string> FormGroupAttributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
         public bool? IgnoreModelStateErrors { get; set; }
@@ -35,6 +31,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
+
+        protected IDictionary<string, string> FormGroupAttributes { get; private set; }
 
         protected IGovUkHtmlGenerator Generator { get; }
 
@@ -49,14 +47,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             if (Name == null && AspFor == null)
             {
                 throw new InvalidOperationException(
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
+            FormGroupAttributes = output.Attributes.ToAttributesDictionary();
             var builder = CreateFormGroupBuilder();
 
             using (context.SetScopedContextItem(FormGroupBuilder.ContextName, builder))
@@ -126,7 +123,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             contentBuilder.AppendHtml(element);
 
-            return Generator.GenerateFormGroup(haveError, FormGroupAttributes, contentBuilder);
+            return Generator.GenerateFormGroup(haveError, contentBuilder, FormGroupAttributes);
         }
 
         protected virtual TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
@@ -157,7 +154,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var errorId = ResolvedId + "-error";
                 AppendToDescribedBy(errorId);
-                return Generator.GenerateErrorMessage(visuallyHiddenText, errorId, attributes, content);
+                return Generator.GenerateErrorMessage(visuallyHiddenText, errorId, content, attributes);
             }
             else
             {
@@ -171,7 +168,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var hintId = ResolvedId + "-hint";
                 AppendToDescribedBy(hintId);
-                return Generator.GenerateHint(hintId, builder.Hint.Value.attributes, builder.Hint.Value.content);
+                return Generator.GenerateHint(hintId, builder.Hint.Value.content, builder.Hint.Value.attributes);
             }
             else
             {
@@ -188,33 +185,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = content ??
                 new HtmlString(Generator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
-            return Generator.GenerateLabel(ResolvedId, isPageHeading, attributes, resolvedContent);
+            return Generator.GenerateLabel(ResolvedId, isPageHeading, resolvedContent, attributes);
         }
     }
 
     public abstract class FormGroupLabelTagHelperBase : TagHelper
     {
-        private const string AttributesPrefix = "label-";
         private const string IsPageHeadingAttributeName = "is-page-heading";
 
         private protected FormGroupLabelTagHelperBase()
         {
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetLabel(IsPageHeading, Attributes, childContent.Snapshot()))
+            if (!formGroupContext.TrySetLabel(IsPageHeading, output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -225,23 +216,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public abstract class FormGroupHintTagHelperBase : TagHelper
     {
-        private const string AttributesPrefix = "hint-";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         private protected FormGroupHintTagHelperBase()
         {
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetHint(Attributes, childContent.Snapshot()))
+            if (!formGroupContext.TrySetHint(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -252,27 +236,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public abstract class FormGroupErrorMessageTagHelperBase : TagHelper
     {
-        private const string AttributesPrefix = "error-message-";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
         private protected FormGroupErrorMessageTagHelperBase()
         {
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
         public string VisuallyHiddenText { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, Attributes, childContent.Snapshot()))
+            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }

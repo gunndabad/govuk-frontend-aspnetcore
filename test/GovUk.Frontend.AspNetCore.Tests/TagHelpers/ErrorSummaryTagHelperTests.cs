@@ -32,8 +32,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
 
-                    errorSummaryContext.TrySetTitle(new HtmlString("Title"));
-                    errorSummaryContext.TrySetDescription(new HtmlString("Description"));
+                    errorSummaryContext.TrySetTitle(attributes: null, new HtmlString("Title"));
+                    errorSummaryContext.TrySetDescription(attributes: null, new HtmlString("Description"));
 
                     errorSummaryContext.AddItem(new ErrorSummaryItem()
                     {
@@ -129,7 +129,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Some title", errorSummaryContext.Title.AsString());
+            Assert.Equal("Some title", errorSummaryContext.Title?.content.AsString());
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var errorSummaryContext = new ErrorSummaryContext();
-            errorSummaryContext.TrySetTitle(new HtmlString("Existing title"));
+            errorSummaryContext.TrySetTitle(attributes: null, new HtmlString("Existing title"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-error-summary-title",
@@ -199,7 +199,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Some description", errorSummaryContext.Description.AsString());
+            Assert.Equal("Some description", errorSummaryContext.Description?.content.AsString());
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var errorSummaryContext = new ErrorSummaryContext();
-            errorSummaryContext.TrySetDescription(new HtmlString("Existing description"));
+            errorSummaryContext.TrySetDescription(attributes: null, new HtmlString("Existing description"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-error-summary-description",

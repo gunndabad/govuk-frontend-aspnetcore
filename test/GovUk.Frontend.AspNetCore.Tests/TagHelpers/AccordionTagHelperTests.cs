@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Expanded = false,
                         HeadingContent = new HtmlString("First heading"),
                         HeadingLevel = 1,
-                        Summary = new HtmlString("First summary")
+                        SummaryContent = new HtmlString("First summary")
                     });
 
                     accordionContext.AddItem(new AccordionItem()
@@ -108,7 +108,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Expanded = false,
                         HeadingContent = new HtmlString("First heading"),
                         HeadingLevel = 1,
-                        Summary = new HtmlString("First summary")
+                        SummaryContent = new HtmlString("First summary")
                     });
 
                     accordionContext.AddItem(new AccordionItem()
@@ -154,8 +154,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = (AccordionItemContext)context.Items[AccordionItemContext.ContextName];
-                    itemContext.TrySetHeading(1, new HtmlString("Heading"));
-                    itemContext.TrySetSummary(new HtmlString("Summary"));
+                    itemContext.TrySetHeading(1, attributes: null, new HtmlString("Heading"));
+                    itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Content");
@@ -173,7 +173,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var firstItem = accordionContext.Items.First();
             Assert.Equal(1, firstItem.HeadingLevel.Value);
             Assert.Equal("Heading", firstItem.HeadingContent.AsString());
-            Assert.Equal("Summary", firstItem.Summary.AsString());
+            Assert.Equal("Summary", firstItem.SummaryContent.AsString());
             Assert.Equal("Content", firstItem.Content.AsString());
         }
 
@@ -198,7 +198,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = (AccordionItemContext)context.Items[AccordionItemContext.ContextName];
-                    itemContext.TrySetSummary(new HtmlString("Summary"));
+                    itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Content");
@@ -302,7 +302,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.TrySetHeading(level: null, content: new HtmlString("Existing heading"));
+            itemContext.TrySetHeading(level: null, attributes: null, content: new HtmlString("Existing heading"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-heading",
@@ -368,7 +368,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(itemContext.Summary);
-            Assert.Equal("Summary content", itemContext.Summary.AsString());
+            Assert.Equal("Summary content", itemContext.Summary?.content.AsString());
         }
 
         [Fact]
@@ -377,7 +377,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.TrySetSummary(new HtmlString("Existing summary"));
+            itemContext.TrySetSummary(attributes: null, new HtmlString("Existing summary"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-summary",

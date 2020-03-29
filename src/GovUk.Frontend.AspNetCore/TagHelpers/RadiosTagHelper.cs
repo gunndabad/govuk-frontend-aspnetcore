@@ -12,19 +12,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-radios-divider", "govuk-radios-fieldset", "govuk-radios-item", "govuk-radios-hint", "govuk-radios-error-message")]
     public class RadiosTagHelper : FormGroupTagHelperBase
     {
-        private const string AttributesPrefix = "radios-";
         private const string IdPrefixAttributeName = "id-prefix";
+        private const string RadiosAttributesPrefix = "radios-";
 
         public RadiosTagHelper(IGovUkHtmlGenerator htmlGenerator)
             : base(htmlGenerator)
         {
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = RadiosAttributesPrefix)]
+        public IDictionary<string, string> RadiosAttributes { get; set; } = new Dictionary<string, string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -61,7 +61,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var haveError = errorMessage != null;
 
-            var tagBuilder = Generator.GenerateRadios(ResolvedName, radiosContext.IsConditional, radiosContext.Items);
+            var tagBuilder = Generator.GenerateRadios(
+                ResolvedName,
+                radiosContext.IsConditional,
+                radiosContext.Items,
+                RadiosAttributes);
             contentBuilder.AppendHtml(tagBuilder);
 
             IHtmlContent content = contentBuilder;
@@ -71,13 +75,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     DescribedBy,
                     radiosContext.Fieldset.IsPageHeading,
                     role: null,
-                    attributes: Attributes,
                     legendContent: radiosContext.Fieldset.LegendContent,
                     legendAttributes: radiosContext.Fieldset.LegendAttributes,
-                    content: content);
+                    content: content,
+                    attributes: radiosContext.Fieldset.Attributes);
             }
 
-            return Generator.GenerateFormGroup(haveError, FormGroupAttributes, content);
+            return Generator.GenerateFormGroup(haveError, content, FormGroupAttributes);
         }
 
         protected override string GetIdPrefix() => IdPrefix ?? Name;
@@ -94,6 +98,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             radiosContext.AddItem(new RadiosItemDivider()
             {
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = content.Snapshot()
             });
 
@@ -105,19 +110,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-radios-fieldset-legend")]
     public class RadiosFieldsetTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "fieldset-";
         private const string IsPageHeadingAttributeName = "is-page-heading";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
 
             var fieldsetContext = new RadiosFieldsetContext();
@@ -129,7 +128,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             radiosContext.SetFieldset(new RadiosFieldset()
             {
-                Attributes = Attributes,
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 IsPageHeading = IsPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
                 LegendAttributes = fieldsetContext.Legend?.attributes
@@ -142,20 +141,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-radios-fieldset-legend", ParentTag = "govuk-radios-fieldset")]
     public class RadiosFieldsetLegendTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "legend-";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var fieldsetContext = (RadiosFieldsetContext)context.Items[RadiosFieldsetContext.ContextName];
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!fieldsetContext.TrySetLegend(Attributes, childContent.Snapshot()))
+            if (!fieldsetContext.TrySetLegend(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
             }
@@ -170,6 +162,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string CheckedAttributeName = "checked";
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
+        private const string InputAttributesPrefix = "input-";
         private const string ValueAttributeName = "value";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -188,13 +181,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
+        [HtmlAttributeName(DictionaryAttributePrefix = InputAttributesPrefix)]
+        public IDictionary<string, string> InputAttributes { get; set; } = new Dictionary<string, string>();
+
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             if (Value == null)
             {
                 throw new InvalidOperationException($"The '{ValueAttributeName}' attribute must be specified.");
@@ -227,8 +221,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             radiosContext.AddItem(new RadiosItem()
             {
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 Checked = resolvedChecked,
-                ConditionalContent = itemContext.ConditionalContent,
+                ConditionalContent = itemContext.Conditional?.content,
+                ConditionalAttributes = itemContext.Conditional?.attributes,
                 ConditionalId = conditionalId,
                 Content = childContent.Snapshot(),
                 Disabled = Disabled,
@@ -236,10 +232,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 HintContent = itemContext.Hint?.content,
                 HintId = hintId,
                 Id = resolvedId,
+                InputAttributes = InputAttributes,
                 Value = Value
             });
 
-            if (itemContext.ConditionalContent != null)
+            if (itemContext.Conditional != null)
             {
                 radiosContext.SetIsConditional();
             }
@@ -253,13 +250,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
 
             var content = await output.GetChildContentAsync();
 
-            itemContext.SetConditionalContent(content.Snapshot());
+            itemContext.SetConditional(output.Attributes.ToAttributesDictionary(), content.Snapshot());
 
             output.SuppressOutput();
         }
@@ -268,20 +263,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-radios-item-hint", ParentTag = "govuk-radios-item")]
     public class RadiosItemHintTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "hint-";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
 
             var content = await output.GetChildContentAsync();
 
-            itemContext.SetHint(Attributes, content.Snapshot());
+            itemContext.SetHint(output.Attributes.ToAttributesDictionary(), content.Snapshot());
 
             output.SuppressOutput();
         }
@@ -380,22 +368,22 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public const string ContextName = nameof(RadiosItemContext);
 
-        public IHtmlContent ConditionalContent { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Conditional { get; private set; }
         public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
 
-        public void SetConditionalContent(IHtmlContent content)
+        public void SetConditional(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
                 throw new ArgumentNullException(nameof(content));
             }
 
-            if (ConditionalContent != null)
+            if (Conditional != null)
             {
                 throw new InvalidOperationException("Conditional content has already been set.");
             }
 
-            ConditionalContent = content;
+            Conditional = (attributes, content);
         }
 
         public void SetHint(IDictionary<string, string> attributes, IHtmlContent content)

@@ -10,8 +10,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-phase-banner", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class PhaseBannerTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "phase-banner-";
-
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public PhaseBannerTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -19,13 +17,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var pbContext = new PhaseBannerContext();
 
             TagHelperContent childContent;
@@ -40,10 +33,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GeneratePhaseBanner(
-                pbContext.Tag.Value.attributes,
                 pbContext.Tag.Value.content,
-                Attributes,
-                childContent);
+                pbContext.Tag.Value.attributes,
+                childContent,
+                output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -57,20 +50,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-phase-banner-tag", ParentTag = "govuk-phase-banner")]
     public class PhaseBannerTagTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "tag-";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var pbContext = (PhaseBannerContext)context.Items[PhaseBannerContext.ContextName];
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!pbContext.TrySetTag(Attributes, childContent.Snapshot()))
+            if (!pbContext.TrySetTag(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }

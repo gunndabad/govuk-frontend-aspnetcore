@@ -9,7 +9,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-warning-text", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class WarningTextTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "warning-text-";
         private const string IconFallbackTextAttributeName = "icon-fallback-text";
         
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -19,16 +18,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(IconFallbackTextAttributeName)]
         public string IconFallbackText { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             if (IconFallbackText == null)
             {
                 throw new InvalidOperationException(
@@ -37,7 +31,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            var tagBuilder = _htmlGenerator.GenerateWarningText(Attributes, childContent, IconFallbackText);
+            var tagBuilder = _htmlGenerator.GenerateWarningText(
+                IconFallbackText,
+                childContent,
+                output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

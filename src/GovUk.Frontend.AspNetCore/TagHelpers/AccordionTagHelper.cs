@@ -11,7 +11,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-accordion-item")]
     public class AccordionTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "accordion-";
         private const string IdAttributeName = "id";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -21,16 +20,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             if (Id == null)
             {
                 throw new InvalidOperationException($"The '{IdAttributeName}' attribute must be specified.");
@@ -43,7 +37,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateAccordion(Id, Attributes, accordionContext.Items);
+            var tagBuilder = _htmlGenerator.GenerateAccordion(
+                Id,
+                output.Attributes.ToAttributesDictionary(),
+                accordionContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -81,11 +78,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             accordionContext.AddItem(new AccordionItem()
             {
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = childContent.Snapshot(),
                 Expanded = Expanded,
                 HeadingContent = itemContext.Heading.Value.content,
+                HeadingAttributes = itemContext.Heading.Value.attributes,
                 HeadingLevel = itemContext.Heading.Value.level,
-                Summary = itemContext.Summary
+                SummaryContent = itemContext.Summary?.content,
+                SummaryAttributes = itemContext.Summary?.attributes
             });
 
             output.SuppressOutput();
@@ -115,7 +115,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 childContent = await output.GetChildContentAsync();
             }
 
-            if (!itemContext.TrySetHeading(Level, childContent.Snapshot()))
+            if (!itemContext.TrySetHeading(Level, output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -137,7 +137,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 childContent = await output.GetChildContentAsync();
             }
 
-            if (!itemContext.TrySetSummary(childContent.Snapshot()))
+            if (!itemContext.TrySetSummary(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -174,10 +174,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public const string ContextName = nameof(AccordionItemContext);
 
-        public (int? level, IHtmlContent content)? Heading { get; private set; }
-        public IHtmlContent Summary { get; private set; }
+        public (int? level, IDictionary<string, string> attributes, IHtmlContent content)? Heading { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
 
-        public bool TrySetHeading(int? level, IHtmlContent content)
+        public bool TrySetHeading(int? level, IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -189,11 +189,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Heading = (level, content);
+            Heading = (level, attributes, content);
             return true;
         }
 
-        public bool TrySetSummary(IHtmlContent content)
+        public bool TrySetSummary(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -205,7 +205,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Summary = content;
+            Summary = (attributes, content);
             return true;
         }
     }

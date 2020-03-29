@@ -28,10 +28,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(summary);
+                    detailsContext.SetSummary(attributes: null, summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(text);
+                    detailsContext.SetText(attributes: null, text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -72,10 +72,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(summary);
+                    detailsContext.SetSummary(attributes: null, summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(text);
+                    detailsContext.SetText(attributes: null, text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -111,10 +111,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(summary);
+                    detailsContext.SetSummary(attributes: null, summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(text);
+                    detailsContext.SetText(attributes: null, text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -166,7 +166,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The summary", detailsContext.Summary.AsString());
+            Assert.Equal("The summary", detailsContext.Summary?.content.AsString());
         }
     }
 
@@ -177,7 +177,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var detailsContext = new DetailsContext();
-            detailsContext.SetSummary(new HtmlString("The summary"));
+            detailsContext.SetSummary(attributes: null, new HtmlString("The summary"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-details-text",
@@ -204,7 +204,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The text", detailsContext.Text.AsString());
+            Assert.Equal("The text", detailsContext.Text?.content.AsString());
         }
     }
 
@@ -215,12 +215,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new DetailsContext();
-            ctx.SetSummary(new HtmlString("Summary"));
-            ctx.SetText(new HtmlString("Text"));
+            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
+            ctx.SetText(attributes: null, new HtmlString("Text"));
 
             // Act & Assert
             Assert.Equal(DetailsRenderStage.Text, ctx.RenderStage);
-            var ex = Assert.Throws<InvalidOperationException>(() => ctx.SetSummary(new HtmlString("Summary")));
+            var ex = Assert.Throws<InvalidOperationException>(() => ctx.SetSummary(attributes: null, new HtmlString("Summary")));
             Assert.Equal("Cannot render <govuk-details-summary> here.", ex.Message);
         }
 
@@ -229,11 +229,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new DetailsContext();
-            ctx.SetSummary(new HtmlString("Summary"));
+            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
 
             // Act & Assert
             Assert.Equal(DetailsRenderStage.Summary, ctx.RenderStage);
-            var ex = Assert.Throws<InvalidOperationException>(() => ctx.SetSummary(new HtmlString("Summary")));
+            var ex = Assert.Throws<InvalidOperationException>(() => ctx.SetSummary(attributes: null, new HtmlString("Summary")));
             Assert.Equal("Cannot render <govuk-details-summary> here.", ex.Message);
         }
 
@@ -254,7 +254,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new DetailsContext();
-            ctx.SetSummary(new HtmlString("Summary"));
+            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
 
             // Act & Assert
             Assert.Equal(DetailsRenderStage.Summary, ctx.RenderStage);
@@ -267,8 +267,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var ctx = new DetailsContext();
-            ctx.SetSummary(new HtmlString("Summary"));
-            ctx.SetText(new HtmlString("Text"));
+            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
+            ctx.SetText(attributes: null, new HtmlString("Text"));
 
             // Act & Assert
             Assert.Equal(DetailsRenderStage.Text, ctx.RenderStage);

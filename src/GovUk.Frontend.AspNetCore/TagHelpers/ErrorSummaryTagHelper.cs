@@ -13,8 +13,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-error-summary-title", "govuk-error-summary-description", "govuk-error-summary-item")]
     public class ErrorSummaryTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "error-summary-";
-
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public ErrorSummaryTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -22,13 +20,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var errorSummaryContext = new ErrorSummaryContext();
 
             using (context.SetScopedContextItem(ErrorSummaryContext.ContextName, errorSummaryContext))
@@ -42,9 +35,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateErrorSummary(
-                errorSummaryContext.Title,
-                errorSummaryContext.Description,
-                Attributes,
+                errorSummaryContext.Title?.content,
+                errorSummaryContext.Title?.attributes,
+                errorSummaryContext.Description?.content,
+                errorSummaryContext.Description?.attributes,
+                output.Attributes.ToAttributesDictionary(),
                 errorSummaryContext.Items);
 
             output.TagName = tagBuilder.TagName;
@@ -65,7 +60,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!errorSummaryContext.TrySetTitle(childContent.Snapshot()))
+            if (!errorSummaryContext.TrySetTitle(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -83,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!errorSummaryContext.TrySetDescription(childContent.Snapshot()))
+            if (!errorSummaryContext.TrySetDescription(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -96,7 +91,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class ErrorSummaryItemTagHelper : TagHelper
     {
         private const string AspForAttributeName = "asp-for";
-        private const string AttributesPrefix = "error-summary-item-";
         private const string ForAttributeName = "for";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -108,9 +102,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(AspForAttributeName)]
         public ModelExpression AspFor { get; set; }
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(ForAttributeName)]
         public string For { get; set; }
@@ -168,7 +159,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             errorSummaryContext.AddItem(new ErrorSummaryItem()
             {
                 Content = itemContent,
-                Attributes = Attributes
+                Attributes = output.Attributes.ToAttributesDictionary()
             });
 
             output.SuppressOutput();
@@ -188,9 +179,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public IReadOnlyCollection<ErrorSummaryItem> Items => _items;
 
-        public IHtmlContent Description { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Description { get; private set; }
 
-        public IHtmlContent Title { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Title { get; private set; }
 
         public void AddItem(ErrorSummaryItem item)
         {
@@ -202,7 +193,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _items.Add(item);
         }
 
-        public bool TrySetDescription(IHtmlContent content)
+        public bool TrySetDescription(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -214,11 +205,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Description = content;
+            Description = (attributes, content);
             return true;
         }
 
-        public bool TrySetTitle(IHtmlContent content)
+        public bool TrySetTitle(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -230,7 +221,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Title = content;
+            Title = (attributes, content);
             return true;
         }
     }

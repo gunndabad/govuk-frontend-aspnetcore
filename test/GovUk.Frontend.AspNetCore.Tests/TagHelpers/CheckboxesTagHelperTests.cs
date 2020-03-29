@@ -638,7 +638,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
                     itemContext.SetHint(attributes: null, content: new HtmlString("Hint"));
-                    itemContext.SetConditionalContent(new HtmlString("Conditional"));
+                    itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.AppendHtml(new HtmlString("Label"));
@@ -774,7 +774,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
-                    itemContext.SetConditionalContent(new HtmlString("Conditional"));
+                    itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.AppendHtml(new HtmlString("Label"));
@@ -866,7 +866,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Conditional", itemContext.ConditionalContent.AsString());
+            Assert.Equal("Conditional", itemContext.Conditional?.content.AsString());
         }
     }
 

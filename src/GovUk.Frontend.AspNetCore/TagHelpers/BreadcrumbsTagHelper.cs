@@ -13,8 +13,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-breadcrumbs-item")]
     public class BreadcrumbsTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "breadcrumbs-";
-
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public BreadcrumbsTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -22,13 +20,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var bcContext = new BreadcrumbsContext();
 
             using (context.SetScopedContextItem(BreadcrumbsContext.ContextName, bcContext))
@@ -36,7 +29,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(Attributes, bcContext.Items);
+            var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(
+                output.Attributes.ToAttributesDictionary(),
+                bcContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -62,8 +57,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var bcContext = (BreadcrumbsContext)context.Items[BreadcrumbsContext.ContextName];
 
             if (bcContext.HasCurrentPageItem)
@@ -89,6 +82,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             bcContext.AddItem(new BreadcrumbsItem()
             {
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 Href = href,
                 Content = childContent.Snapshot(),
                 IsCurrentPage = IsCurrentPage

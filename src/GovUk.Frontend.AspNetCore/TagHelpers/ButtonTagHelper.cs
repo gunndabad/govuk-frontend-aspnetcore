@@ -57,8 +57,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             var hasAnchorAttributes = Href != null ||
                 Action != null ||
                 Controller != null ||
@@ -126,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var href = ResolveHref();
 
-                tagBuilder = Generator.GenerateButtonLink(href, IsStartButton, Disabled, Attributes, childContent);
+                tagBuilder = Generator.GenerateButtonLink(href, IsStartButton, Disabled, childContent, Attributes);
             }
             else
             {
@@ -141,8 +139,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     Disabled,
                     PreventDoubleClick,
                     resolvedFormAction,
-                    Attributes,
-                    childContent);
+                    childContent,
+                    Attributes);
             }
 
             output.TagName = tagBuilder.TagName;

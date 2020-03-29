@@ -22,8 +22,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            output.ThrowIfOutputHasAttributes();
-
             IHtmlContent content = new HtmlString("Back");
 
             if (output.TagMode == TagMode.StartTagAndEndTag)
@@ -33,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var href = ResolveHref();
 
-            var tagBuilder = Generator.GenerateBackLink(href, Attributes, content);
+            var tagBuilder = Generator.GenerateBackLink(href, content, Attributes);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

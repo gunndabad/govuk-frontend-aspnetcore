@@ -60,8 +60,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 DescribedBy,
                 Autocomplete,
                 Disabled,
-                Attributes,
-                resolvedContent);
+                resolvedContent,
+                Attributes);
         }
 
         protected override string GetIdPrefix() => Id;
