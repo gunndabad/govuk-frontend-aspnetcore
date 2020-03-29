@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-accordion")]
-    [RestrictChildren("govuk-accordion-items")]
+    [RestrictChildren("govuk-accordion-item")]
     public class AccordionTagHelper : TagHelper
     {
         private const string AttributesPrefix = "accordion-";
@@ -54,19 +54,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
     }
 
-    [HtmlTargetElement("govuk-accordion-items", ParentTag = "govuk-accordion")]
-    [RestrictChildren("govuk-accordion-item")]
-    public class AccordionItemsTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            await output.GetChildContentAsync();
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-accordion-item", ParentTag = "govuk-accordion-items")]
+    [HtmlTargetElement("govuk-accordion-item", ParentTag = "govuk-accordion")]
     public class AccordionItemTagHelper : TagHelper
     {
         private const string ExpandedAttributeName = "expanded";
