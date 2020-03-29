@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-summary-list-row", ParentTag = "govuk-summary-list")]
-    [RestrictChildren("govuk-summary-list-row-key", "govuk-summary-list-row-value", "govuk-summary-list-row-actions")]
+    [RestrictChildren("govuk-summary-list-row-key", "govuk-summary-list-row-value", "govuk-summary-list-row-action")]
     public class SummaryListRowTagHelper : TagHelper
     {
         private const string AttributesPrefix = "row-";
@@ -120,20 +120,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
     }
 
-    [HtmlTargetElement("govuk-summary-list-row-actions", ParentTag = "govuk-summary-list-row")]
-    public class SummaryListRowActionsTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            output.ThrowIfOutputHasAttributes();
-
-            await output.GetChildContentAsync();
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-summary-list-row-action", ParentTag = "govuk-summary-list-row-actions")]
+    [HtmlTargetElement("govuk-summary-list-row-action", ParentTag = "govuk-summary-list-row")]
     public class SummaryListRowActionTagHelper : LinkTagHelperBase
     {
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
