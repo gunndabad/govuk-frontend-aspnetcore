@@ -119,14 +119,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var haveError = errorMessage != null;
 
             var elementCtx = new FormGroupElementContext(haveError);
-            var element = GenerateElement(builder, elementCtx);
+            var element = GenerateElement(context, builder, elementCtx);
 
             contentBuilder.AppendHtml(element);
 
             return Generator.GenerateFormGroup(haveError, contentBuilder, FormGroupAttributes);
         }
 
-        protected virtual TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected virtual TagBuilder GenerateElement(
+            TagHelperContext context,
+            FormGroupBuilder builder,
+            FormGroupElementContext elementContext)
         {
             // For deriving classes to implement when required
             throw new NotImplementedException();
