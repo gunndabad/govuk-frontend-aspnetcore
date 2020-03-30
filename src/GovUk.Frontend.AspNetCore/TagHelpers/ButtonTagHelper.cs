@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -13,7 +12,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-button")]
     public class ButtonTagHelper : LinkTagHelperBase
     {
-        private const string AttributesPrefix = "button-";
         private const string DisabledAttributeName = "disabled";
         private const string ElementAttributeName = "element";
         private const string FormActionAttributeName = "formaction";
@@ -27,9 +25,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             : base(htmlGenerator, urlHelperFactory)
         {
         }
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         [HtmlAttributeName(DisabledAttributeName)]
         public bool Disabled { get; set; } = false;
@@ -57,18 +52,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var hasAnchorAttributes = Href != null ||
-                Action != null ||
-                Controller != null ||
-                Area != null ||
-                Page != null ||
-                PageHandler != null ||
-                Route != null ||
-                Protocol != null ||
-                Host != null ||
-                Fragment != null ||
-                RouteValues.Count > 0;
-
             string element = GetTagNameFromElementType(
                 Element ??
                 (Href != null || (Type == null && HasLinkAttributes) ?
@@ -124,7 +107,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var href = ResolveHref();
 
-                tagBuilder = Generator.GenerateButtonLink(href, IsStartButton, Disabled, childContent, Attributes);
+                tagBuilder = Generator.GenerateButtonLink(
+                    href,
+                    IsStartButton,
+                    Disabled,
+                    childContent,
+                    output.Attributes.ToAttributesDictionary());
             }
             else
             {
@@ -140,7 +128,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     PreventDoubleClick,
                     resolvedFormAction,
                     childContent,
-                    Attributes);
+                    output.Attributes.ToAttributesDictionary());
             }
 
             output.TagName = tagBuilder.TagName;
