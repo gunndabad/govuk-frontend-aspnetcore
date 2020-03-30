@@ -39,7 +39,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected override FormGroupBuilder CreateFormGroupBuilder() => new TextAreaBuilder();
 
-        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override TagBuilder GenerateElement(
+            TagHelperContext context,
+            FormGroupBuilder builder,
+            FormGroupElementContext elementContext)
         {
             var textAreaBuilder = (TextAreaBuilder)builder;
 
@@ -53,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 new HtmlString(Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
             return Generator.GenerateTextArea(
-                context.HaveError,
+                elementContext.HaveError,
                 ResolvedId,
                 ResolvedName,
                 Rows,

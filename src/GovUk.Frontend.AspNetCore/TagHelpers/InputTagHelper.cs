@@ -46,13 +46,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
 
-        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override TagBuilder GenerateElement(
+            TagHelperContext context, 
+            FormGroupBuilder builder,
+            FormGroupElementContext elementContext)
         {
             var resolvedValue = Value ??
                 (AspFor != null ? Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : null);
 
             return Generator.GenerateInput(
-                context.HaveError,
+                elementContext.HaveError,
                 ResolvedId,
                 ResolvedName,
                 Type,
