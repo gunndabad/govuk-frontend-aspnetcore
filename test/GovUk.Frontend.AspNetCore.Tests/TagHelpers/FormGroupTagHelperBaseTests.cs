@@ -1544,11 +1544,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         public string Id { get; set; }
 
-        protected override TagBuilder GenerateElement(FormGroupBuilder builder, FormGroupElementContext context)
+        protected override TagBuilder GenerateElement(
+            TagHelperContext context,
+            FormGroupBuilder builder,
+            FormGroupElementContext elementContext)
         {
             var tagBuilder = new TagBuilder("dummy");
             tagBuilder.Attributes.Add("id", ResolvedId);
-            tagBuilder.Attributes.Add("have-error", context.HaveError.ToString());
+            tagBuilder.Attributes.Add("have-error", elementContext.HaveError.ToString());
 
             if (!string.IsNullOrEmpty(DescribedBy))
             {

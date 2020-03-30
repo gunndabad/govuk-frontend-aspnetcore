@@ -125,6 +125,15 @@ namespace GovUk.Frontend.AspNetCore
             IEnumerable<RadiosItemBase> items,
             IDictionary<string, string> attributes);
 
+        TagBuilder GenerateSelect(
+            bool haveError,
+            string id,
+            string name,
+            string describedBy,
+            bool disabled,
+            IEnumerable<SelectListItem> items,
+            IDictionary<string, string> attributes);
+
         TagBuilder GenerateSkipLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateSummaryList(IDictionary<string, string> attributes, IEnumerable<SummaryListRow> rows);

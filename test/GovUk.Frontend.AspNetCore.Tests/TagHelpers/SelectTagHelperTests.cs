@@ -77,22 +77,27 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var node = HtmlNode.CreateNode(html);
             var input = node.ChildNodes.FindFirst("select");
             Assert.Equal(
-                "<input aria-describedby=\"describedby\" autocomplete=\"none\" class=\"govuk-input\" id=\"my-id\" inputmode=\"numeric\" name=\"my-id\" pattern=\"[0-9]*\" type=\"number\" value=\"42\">",
+                "<select aria-describedby=\"describedby\" class=\"govuk-select\" id=\"my-id\" name=\"my-id\">" +
+                "<option>First</option>" +
+                "<option value=\"second\">Second</option>" +
+                "<option disabled=\"disabled\" value=\"third\">Third</option>" +
+                "<option selected=\"selected\" value=\"fourth\">Fourth</option>" +
+                "</select>",
                 input.OuterHtml);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task ProcessAsync_HasErrorClassWhenErrorSpecified()
         {
             // Arrange
             var context = new TagHelperContext(
-                tagName: "govuk-input",
+                tagName: "govuk-select",
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>(),
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-input",
+                "govuk-select",
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
@@ -100,26 +105,20 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
-                        content: new HtmlString("The label"));
-                    formGroupContext.TrySetErrorMessage(
-                        visuallyHiddenText: null,
-                        attributes: null,
-                        content: new HtmlString("Error"));
+                        content: new HtmlString("The label")); formGroupContext.TrySetErrorMessage(
+                         visuallyHiddenText: null,
+                         attributes: null,
+                         content: new HtmlString("Error"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new SelectTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
-                Name = "my-id",
-                Autocomplete = "none",
-                InputMode = "numeric",
-                Pattern = "[0-9]*",
-                Type = "number",
-                Value = "42"
+                Name = "my-id"
             };
 
             // Act
@@ -128,53 +127,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.AsString();
             var node = HtmlNode.CreateNode(html);
-            Assert.Contains("govuk-input--error", node.ChildNodes.FindFirst("input").GetCssClasses());
+            Assert.Contains("govuk-select--error", node.ChildNodes.FindFirst("select").GetCssClasses());
         }
-
-        [Fact]
-        public async Task ProcessAsync_NoTypeSpecifiedUsesDefaultType()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
-                    formGroupContext.TrySetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator())
-            {
-                Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-id",
-                Autocomplete = "none",
-                InputMode = "numeric",
-                Pattern = "[0-9]*",
-                Value = "42"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            var html = output.AsString();
-            var node = HtmlNode.CreateNode(html);
-            var input = node.ChildNodes.FindFirst("input");
-            Assert.Equal("text", input.Attributes["type"].Value);
-        }*/
     }
 }
