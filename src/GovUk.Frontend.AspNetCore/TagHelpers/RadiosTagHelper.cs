@@ -35,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var radiosContext = new RadiosContext(ResolvedId, ResolvedName, ViewContext, AspFor);
-            using (context.SetScopedContextItem(RadiosContext.ContextName, radiosContext))
+            using (context.SetScopedContextItem(typeof(RadiosContext), radiosContext))
             {
                 await base.ProcessAsync(context, output);
             }
@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
         {
-            var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
             var contentBuilder = new HtmlContentBuilder();
 
@@ -92,7 +92,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -117,11 +117,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
             var fieldsetContext = new RadiosFieldsetContext();
 
-            using (context.SetScopedContextItem(RadiosFieldsetContext.ContextName, fieldsetContext))
+            using (context.SetScopedContextItem(typeof(RadiosFieldsetContext), fieldsetContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -143,7 +143,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var fieldsetContext = (RadiosFieldsetContext)context.Items[RadiosFieldsetContext.ContextName];
+            var fieldsetContext = (RadiosFieldsetContext)context.Items[typeof(RadiosFieldsetContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -196,7 +196,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             // REVIEW Consider throwing if Checked is null && there is no AspFor
 
-            var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
             var index = radiosContext.Items.Count;
             var resolvedId = Id ?? (index == 0 ? radiosContext.IdPrefix : $"{radiosContext.IdPrefix}-{index}");
@@ -214,7 +214,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var itemContext = new RadiosItemContext();
 
             TagHelperContent childContent;
-            using (context.SetScopedContextItem(RadiosItemContext.ContextName, itemContext))
+            using (context.SetScopedContextItem(typeof(RadiosItemContext), itemContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -250,7 +250,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
+            var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -265,7 +265,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
+            var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -287,8 +287,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosContext
     {
-        public const string ContextName = nameof(RadiosContext);
-
         private readonly List<RadiosItemBase> _items;
 
         public RadiosContext(
@@ -343,8 +341,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosFieldsetContext
     {
-        public const string ContextName = nameof(CheckboxesFieldsetContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
         public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
@@ -366,8 +362,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosItemContext
     {
-        public const string ContextName = nameof(RadiosItemContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Conditional { get; private set; }
         public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
 

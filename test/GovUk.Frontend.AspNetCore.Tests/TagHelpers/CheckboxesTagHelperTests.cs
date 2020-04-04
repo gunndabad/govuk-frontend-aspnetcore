@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
@@ -81,7 +81,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
@@ -128,7 +128,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
@@ -175,7 +175,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetHint(attributes: null, content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -217,7 +217,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -262,7 +262,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
@@ -318,7 +318,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
@@ -376,7 +376,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
@@ -463,7 +463,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+                    var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
                     checkboxesContext.SetFieldset(new CheckboxesFieldset()
                     {
@@ -513,7 +513,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -522,7 +522,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var fieldsetContext = (CheckboxesFieldsetContext)context.Items[CheckboxesFieldsetContext.ContextName];
+                    var fieldsetContext = (CheckboxesFieldsetContext)context.Items[typeof(CheckboxesFieldsetContext)];
                     fieldsetContext.TrySetLegend(attributes: null, content: new HtmlString("Legend"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -558,7 +558,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesFieldsetContext.ContextName, fieldsetContext }
+                    { typeof(CheckboxesFieldsetContext), fieldsetContext }
                 },
                 uniqueId: "test");
 
@@ -595,7 +595,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -627,7 +627,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -636,7 +636,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
+                    var itemContext = (CheckboxesItemContext)context.Items[typeof(CheckboxesItemContext)];
                     itemContext.SetHint(attributes: null, content: new HtmlString("Hint"));
                     itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
 
@@ -680,7 +680,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -724,7 +724,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -764,7 +764,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -773,7 +773,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
+                    var itemContext = (CheckboxesItemContext)context.Items[typeof(CheckboxesItemContext)];
                     itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -805,7 +805,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesContext.ContextName, checkboxesContext }
+                    { typeof(CheckboxesContext), checkboxesContext }
                 },
                 uniqueId: "test");
 
@@ -846,7 +846,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesItemContext.ContextName, itemContext }
+                    { typeof(CheckboxesItemContext), itemContext }
                 },
                 uniqueId: "test");
 
@@ -883,7 +883,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { CheckboxesItemContext.ContextName, itemContext }
+                    { typeof(CheckboxesItemContext), itemContext }
                 },
                 uniqueId: "test");
 

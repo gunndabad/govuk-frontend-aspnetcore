@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var summaryListContext = new SummaryListContext();
 
-            using (context.SetScopedContextItem(SummaryListContext.ContextName, summaryListContext))
+            using (context.SetScopedContextItem(typeof(SummaryListContext), summaryListContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -52,11 +52,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var summaryListContext = (SummaryListContext)context.Items[SummaryListContext.ContextName];
+            var summaryListContext = (SummaryListContext)context.Items[typeof(SummaryListContext)];
 
             var rowContext = new SummaryListRowContext();
 
-            using (context.SetScopedContextItem(SummaryListRowContext.ContextName, rowContext))
+            using (context.SetScopedContextItem(typeof(SummaryListRowContext), rowContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -78,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var summaryListRowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
+            var summaryListRowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -96,7 +96,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var summaryListRowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
+            var summaryListRowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -124,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var summaryListRowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
+            var summaryListRowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
 
             var href = ResolveHref();
 
@@ -143,8 +143,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class SummaryListContext
     {
-        public const string ContextName = nameof(SummaryListContext);
-
         private readonly List<SummaryListRow> _rows;
 
         public SummaryListContext()
@@ -167,8 +165,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class SummaryListRowContext
     {
-        public const string ContextName = nameof(SummaryListRowContext);
-
         private readonly List<SummaryListRowAction> _actions;
 
         public SummaryListRowContext()

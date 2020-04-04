@@ -92,7 +92,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var formGroupContext = (TextAreaBuilder)context.Items[FormGroupBuilder.ContextName];
+            var formGroupContext = (TextAreaBuilder)context.Items[typeof(FormGroupBuilder)];
             if (!formGroupContext.TrySetElementContent(childContent))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");

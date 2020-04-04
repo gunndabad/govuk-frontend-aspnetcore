@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var panelContext = (PanelContext)context.Items[PanelContext.ContextName];
+                    var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
                     panelContext.TrySetHeading(3, new HtmlString("Title"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var panelContext = (PanelContext)context.Items[PanelContext.ContextName];
+                    var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetHtmlContent("Body");
@@ -87,7 +87,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { PanelContext.ContextName, panelContext }
+                    { typeof(PanelContext), panelContext }
                 },
                 uniqueId: "test");
 
@@ -129,7 +129,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { PanelContext.ContextName, panelContext }
+                    { typeof(PanelContext), panelContext }
                 },
                 uniqueId: "test");
 
@@ -165,7 +165,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { PanelContext.ContextName, panelContext }
+                    { typeof(PanelContext), panelContext }
                 },
                 uniqueId: "test");
 

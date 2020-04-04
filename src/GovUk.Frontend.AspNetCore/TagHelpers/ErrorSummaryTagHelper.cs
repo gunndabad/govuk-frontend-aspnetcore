@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var errorSummaryContext = new ErrorSummaryContext();
 
-            using (context.SetScopedContextItem(ErrorSummaryContext.ContextName, errorSummaryContext))
+            using (context.SetScopedContextItem(typeof(ErrorSummaryContext), errorSummaryContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -56,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
+            var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -74,7 +74,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
+            var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -118,7 +118,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"Content is required when the '{AspForAttributeName}' attribute is not specified.");
             }
 
-            var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
+            var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -168,8 +168,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class ErrorSummaryContext
     {
-        public const string ContextName = nameof(ErrorSummaryContext);
-
         private readonly List<ErrorSummaryItem> _items;
 
         public ErrorSummaryContext()

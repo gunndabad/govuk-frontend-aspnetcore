@@ -27,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var tabsContext = (TabsContext)context.Items[TabsContext.ContextName];
+                    var tabsContext = (TabsContext)context.Items[typeof(TabsContext)];
 
                     tabsContext.AddItem(new TabsItem()
                     {
@@ -86,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var tabsContext = (TabsContext)context.Items[TabsContext.ContextName];
+                    var tabsContext = (TabsContext)context.Items[typeof(TabsContext)];
 
                     tabsContext.AddItem(new TabsItem()
                     {
@@ -149,7 +149,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 PanelContent = new HtmlString("Second panel content")
             });
 
-            context.Items.Add(TabsContext.ContextName, tabsContext);
+            context.Items.Add(typeof(TabsContext), tabsContext);
 
             var output = new TagHelperOutput(
                 "govuk-tabs-item",
@@ -183,7 +183,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 uniqueId: "test");
 
             var tabsContext = new TabsContext(idPrefix: null);
-            context.Items.Add(TabsContext.ContextName, tabsContext);
+            context.Items.Add(typeof(TabsContext), tabsContext);
 
             var output = new TagHelperOutput(
                 "govuk-tabs-item",
@@ -215,7 +215,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 uniqueId: "test");
 
             var tabsContext = new TabsContext(idPrefix: null);
-            context.Items.Add(TabsContext.ContextName, tabsContext);
+            context.Items.Add(typeof(TabsContext), tabsContext);
 
             var output = new TagHelperOutput(
                 "govuk-tabs-item",

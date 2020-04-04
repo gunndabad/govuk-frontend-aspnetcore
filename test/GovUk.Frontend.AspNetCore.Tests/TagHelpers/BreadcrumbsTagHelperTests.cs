@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var bcContext = (BreadcrumbsContext)context.Items["BreadcrumbsContext"];
+                    var bcContext = (BreadcrumbsContext)context.Items[typeof(BreadcrumbsContext)];
 
                     bcContext.AddItem(new BreadcrumbsItem()
                     {
@@ -85,7 +85,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var bcContext = (BreadcrumbsContext)context.Items["BreadcrumbsContext"];
+                    var bcContext = (BreadcrumbsContext)context.Items[typeof(BreadcrumbsContext)];
 
                     bcContext.AddItem(new BreadcrumbsItem()
                     {
@@ -140,7 +140,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { BreadcrumbsContext.ContextName, bcContext }
+                    { typeof(BreadcrumbsContext), bcContext }
                 },
                 uniqueId: "test");
 
@@ -179,7 +179,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { BreadcrumbsContext.ContextName, bcContext }
+                    { typeof(BreadcrumbsContext), bcContext }
                 },
                 uniqueId: "test");
 
@@ -221,7 +221,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { BreadcrumbsContext.ContextName, bcContext }
+                    { typeof(BreadcrumbsContext), bcContext }
                 },
                 uniqueId: "test");
 
@@ -268,7 +268,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { BreadcrumbsContext.ContextName, bcContext }
+                    { typeof(BreadcrumbsContext), bcContext }
                 },
                 uniqueId: "test");
 
@@ -310,7 +310,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { BreadcrumbsContext.ContextName, bcContext }
+                    { typeof(BreadcrumbsContext), bcContext }
                 },
                 uniqueId: "test");
 
@@ -344,7 +344,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { BreadcrumbsContext.ContextName, bcContext }
+                    { typeof(BreadcrumbsContext), bcContext }
                 },
                 uniqueId: "test");
 

@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -120,7 +120,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -239,7 +239,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -327,7 +327,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -441,7 +441,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -553,7 +553,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: true,
                         attributes: null,
@@ -614,7 +614,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: true,
                         attributes: null,
@@ -675,7 +675,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -741,7 +741,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -809,7 +809,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -876,7 +876,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: "Bang",
                         attributes: null,
@@ -944,7 +944,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -984,7 +984,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -1023,7 +1023,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -1063,7 +1063,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -1106,7 +1106,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -1146,7 +1146,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -1190,7 +1190,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { FormGroupBuilder.ContextName, formGroupContext }
+                    { typeof(FormGroupBuilder), formGroupContext }
                 },
                 uniqueId: "test");
 
@@ -1232,7 +1232,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { FormGroupBuilder.ContextName, formGroupContext }
+                    { typeof(FormGroupBuilder), formGroupContext }
                 },
                 uniqueId: "test");
 
@@ -1270,7 +1270,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { FormGroupBuilder.ContextName, formGroupContext }
+                    { typeof(FormGroupBuilder), formGroupContext }
                 },
                 uniqueId: "test");
 

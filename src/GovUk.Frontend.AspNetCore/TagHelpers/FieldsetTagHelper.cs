@@ -35,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var fieldsetContext = new FieldsetContext();
 
             IHtmlContent childContent;
-            using (context.SetScopedContextItem(FieldsetContext.ContextName, fieldsetContext))
+            using (context.SetScopedContextItem(typeof(FieldsetContext), fieldsetContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var fieldsetContext = (FieldsetContext)context.Items[FieldsetContext.ContextName];
+            var fieldsetContext = (FieldsetContext)context.Items[typeof(FieldsetContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -78,8 +78,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public class FieldsetContext
     {
-        public const string ContextName = nameof(FieldsetContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
         public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)

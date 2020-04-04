@@ -31,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var detailsContext = new DetailsContext();
 
-            using (context.SetScopedContextItem(DetailsContext.ContextName, detailsContext))
+            using (context.SetScopedContextItem(typeof(DetailsContext), detailsContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = await output.GetChildContentAsync();
 
-            var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
+            var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
             detailsContext.SetSummary(output.Attributes.ToAttributesDictionary(), childContent);
 
             output.SuppressOutput();
@@ -77,7 +77,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = await output.GetChildContentAsync();
 
-            var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
+            var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
             detailsContext.SetText(output.Attributes.ToAttributesDictionary(), childContent);
 
             output.SuppressOutput();
@@ -93,8 +93,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class DetailsContext
     {
-        public const string ContextName = nameof(DetailsContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
 
         public (IDictionary<string, string> attributes, IHtmlContent content)? Text { get; private set; }

@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var pbContext = (PhaseBannerContext)context.Items[PhaseBannerContext.ContextName];
+                    var pbContext = (PhaseBannerContext)context.Items[typeof(PhaseBannerContext)];
                     pbContext.TrySetTag(attributes: null, content: new HtmlString("Alpha"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { PhaseBannerContext.ContextName, pbContext }
+                    { typeof(PhaseBannerContext), pbContext }
                 },
                 uniqueId: "test");
 
@@ -126,7 +126,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { PhaseBannerContext.ContextName, pbContext }
+                    { typeof(PhaseBannerContext), pbContext }
                 },
                 uniqueId: "test");
 
