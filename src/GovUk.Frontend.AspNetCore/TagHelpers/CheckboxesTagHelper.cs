@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var checkboxesContext = new CheckboxesContext(ResolvedId, ResolvedName);
-            using (context.SetScopedContextItem(CheckboxesContext.ContextName, checkboxesContext))
+            using (context.SetScopedContextItem(typeof(CheckboxesContext), checkboxesContext))
             {
                 await base.ProcessAsync(context, output);
             }
@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
         {
-            var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+            var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
             var contentBuilder = new HtmlContentBuilder();
 
@@ -104,11 +104,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+            var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
             var fieldsetContext = new CheckboxesFieldsetContext();
 
-            using (context.SetScopedContextItem(CheckboxesFieldsetContext.ContextName, fieldsetContext))
+            using (context.SetScopedContextItem(typeof(CheckboxesFieldsetContext), fieldsetContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -131,7 +131,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var fieldsetContext = (CheckboxesFieldsetContext)context.Items[CheckboxesFieldsetContext.ContextName];
+            var fieldsetContext = (CheckboxesFieldsetContext)context.Items[typeof(CheckboxesFieldsetContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -175,7 +175,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{ValueAttributeName}' attribute must be specified.");
             }
 
-            var checkboxesContext = (CheckboxesContext)context.Items[CheckboxesContext.ContextName];
+            var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
 
             var index = checkboxesContext.Items.Count;
             var resolvedId = Id ?? (index == 0 ? checkboxesContext.IdPrefix : $"{checkboxesContext.IdPrefix}-{index}");
@@ -185,7 +185,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var itemContext = new CheckboxesItemContext();
 
             TagHelperContent childContent;
-            using (context.SetScopedContextItem(CheckboxesItemContext.ContextName, itemContext))
+            using (context.SetScopedContextItem(typeof(CheckboxesItemContext), itemContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -222,7 +222,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
+            var itemContext = (CheckboxesItemContext)context.Items[typeof(CheckboxesItemContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -237,7 +237,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var itemContext = (CheckboxesItemContext)context.Items[CheckboxesItemContext.ContextName];
+            var itemContext = (CheckboxesItemContext)context.Items[typeof(CheckboxesItemContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -259,8 +259,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class CheckboxesContext
     {
-        public const string ContextName = nameof(CheckboxesContext);
-
         private readonly List<CheckboxesItem> _items;
 
         public CheckboxesContext(string idPrefix, string resolvedName)
@@ -306,8 +304,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class CheckboxesFieldsetContext
     {
-        public const string ContextName = nameof(CheckboxesFieldsetContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
         public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
@@ -329,8 +325,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class CheckboxesItemContext
     {
-        public const string ContextName = nameof(CheckboxesItemContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Conditional { get; private set; }
         public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
 

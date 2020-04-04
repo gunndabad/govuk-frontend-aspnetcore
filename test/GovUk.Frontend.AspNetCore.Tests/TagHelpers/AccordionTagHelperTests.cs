@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var accordionContext = (AccordionContext)context.Items[AccordionContext.ContextName];
+                    var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
                     accordionContext.AddItem(new AccordionItem()
                     {
@@ -100,7 +100,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var accordionContext = (AccordionContext)context.Items[AccordionContext.ContextName];
+                    var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
                     accordionContext.AddItem(new AccordionItem()
                     {
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext }
+                    { typeof(AccordionContext), accordionContext }
                 },
                 uniqueId: "test");
 
@@ -153,7 +153,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var itemContext = (AccordionItemContext)context.Items[AccordionItemContext.ContextName];
+                    var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
                     itemContext.TrySetHeading(1, attributes: null, new HtmlString("Heading"));
                     itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
 
@@ -188,7 +188,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext }
+                    { typeof(AccordionContext), accordionContext }
                 },
                 uniqueId: "test");
 
@@ -197,7 +197,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var itemContext = (AccordionItemContext)context.Items[AccordionItemContext.ContextName];
+                    var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
                     itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -227,8 +227,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext },
-                    { AccordionItemContext.ContextName, itemContext }
+                    { typeof(AccordionContext), accordionContext },
+                    { typeof(AccordionItemContext), itemContext }
                 },
                 uniqueId: "test");
 
@@ -271,8 +271,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext },
-                    { AccordionItemContext.ContextName, itemContext }
+                    { typeof(AccordionContext), accordionContext },
+                    { typeof(AccordionItemContext), itemContext }
                 },
                 uniqueId: "test");
 
@@ -309,8 +309,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext },
-                    { AccordionItemContext.ContextName, itemContext }
+                    { typeof(AccordionContext), accordionContext },
+                    { typeof(AccordionItemContext), itemContext }
                 },
                 uniqueId: "test");
 
@@ -346,8 +346,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext },
-                    { AccordionItemContext.ContextName, itemContext }
+                    { typeof(AccordionContext), accordionContext },
+                    { typeof(AccordionItemContext), itemContext }
                 },
                 uniqueId: "test");
 
@@ -384,8 +384,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { AccordionContext.ContextName, accordionContext },
-                    { AccordionItemContext.ContextName, itemContext }
+                    { typeof(AccordionContext), accordionContext },
+                    { typeof(AccordionItemContext), itemContext }
                 },
                 uniqueId: "test");
 

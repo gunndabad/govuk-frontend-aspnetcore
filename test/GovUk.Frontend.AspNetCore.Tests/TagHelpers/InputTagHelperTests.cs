@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -74,7 +74,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
@@ -124,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,

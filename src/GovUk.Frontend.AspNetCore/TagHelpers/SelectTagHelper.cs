@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var selectContext = new SelectContext();
-            using (context.SetScopedContextItem(SelectContext.ContextName, selectContext))
+            using (context.SetScopedContextItem(typeof(SelectContext), selectContext))
             {
                 await base.ProcessAsync(context, output);
             }
@@ -50,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             FormGroupBuilder builder,
             FormGroupElementContext elementContext)
         {
-            var selectContext = (SelectContext)context.Items[SelectContext.ContextName];
+            var selectContext = (SelectContext)context.Items[typeof(SelectContext)];
 
             return Generator.GenerateSelect(
                 elementContext.HaveError,
@@ -96,7 +96,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var selectContext = (SelectContext)context.Items[SelectContext.ContextName];
+            var selectContext = (SelectContext)context.Items[typeof(SelectContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -115,8 +115,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class SelectContext
     {
-        public const string ContextName = nameof(SelectContext);
-
         private List<SelectListItem> _items;
 
         public SelectContext()

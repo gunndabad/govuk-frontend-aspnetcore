@@ -32,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.AddItem(new RadiosItem()
                     {
@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.AddItem(new RadiosItem()
                     {
@@ -143,7 +143,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.AddItem(new RadiosItem()
                     {
@@ -195,7 +195,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetHint(attributes: null, content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -237,7 +237,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
@@ -282,7 +282,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.AddItem(new RadiosItem()
                     {
@@ -338,7 +338,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.AddItem(new RadiosItem()
                     {
@@ -396,7 +396,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.AddItem(new RadiosItem()
                     {
@@ -483,7 +483,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var radiosContext = (RadiosContext)context.Items[RadiosContext.ContextName];
+                    var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
 
                     radiosContext.SetFieldset(new RadiosFieldset()
                     {
@@ -536,7 +536,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -577,7 +577,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -586,7 +586,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var fieldsetContext = (RadiosFieldsetContext)context.Items[RadiosFieldsetContext.ContextName];
+                    var fieldsetContext = (RadiosFieldsetContext)context.Items[typeof(RadiosFieldsetContext)];
                     fieldsetContext.TrySetLegend(attributes: null, content: new HtmlString("Legend"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -620,7 +620,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosFieldsetContext.ContextName, fieldsetContext }
+                    { typeof(RadiosFieldsetContext), fieldsetContext }
                 },
                 uniqueId: "test");
 
@@ -661,7 +661,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -697,7 +697,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -706,7 +706,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
+                    var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
                     itemContext.SetHint(attributes: null, content: new HtmlString("Hint"));
                     itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
 
@@ -754,7 +754,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -799,7 +799,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -843,7 +843,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -852,7 +852,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var itemContext = (RadiosItemContext)context.Items[RadiosItemContext.ContextName];
+                    var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
                     itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -888,7 +888,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -933,7 +933,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -986,7 +986,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosContext.ContextName, radiosContext }
+                    { typeof(RadiosContext), radiosContext }
                 },
                 uniqueId: "test");
 
@@ -1035,7 +1035,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosItemContext.ContextName, itemContext }
+                    { typeof(RadiosItemContext), itemContext }
                 },
                 uniqueId: "test");
 
@@ -1072,7 +1072,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { RadiosItemContext.ContextName, itemContext }
+                    { typeof(RadiosItemContext), itemContext }
                 },
                 uniqueId: "test");
 

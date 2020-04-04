@@ -32,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var accordionContext = new AccordionContext();
 
-            using (context.SetScopedContextItem(AccordionContext.ContextName, accordionContext))
+            using (context.SetScopedContextItem(typeof(AccordionContext), accordionContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -61,12 +61,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var accordionContext = (AccordionContext)context.Items[AccordionContext.ContextName];
+            var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
             var itemContext = new AccordionItemContext();
 
             TagHelperContent childContent;
-            using (context.SetScopedContextItem(AccordionItemContext.ContextName, itemContext))
+            using (context.SetScopedContextItem(typeof(AccordionItemContext), itemContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -107,10 +107,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{LevelAttributeName}' attribute must be between 1 and 6.");
             }
 
-            var itemContext = (AccordionItemContext)context.Items[AccordionItemContext.ContextName];
+            var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
 
             TagHelperContent childContent;
-            using (context.SetScopedContextItem(AccordionItemContext.ContextName, itemContext))
+            using (context.SetScopedContextItem(typeof(AccordionItemContext), itemContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -129,10 +129,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var itemContext = (AccordionItemContext)context.Items[AccordionItemContext.ContextName];
+            var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
 
             TagHelperContent childContent;
-            using (context.SetScopedContextItem(AccordionItemContext.ContextName, itemContext))
+            using (context.SetScopedContextItem(typeof(AccordionItemContext), itemContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -148,8 +148,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class AccordionContext
     {
-        public const string ContextName = nameof(AccordionContext);
-
         private readonly List<AccordionItem> _items;
 
         public AccordionContext()
@@ -172,8 +170,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class AccordionItemContext
     {
-        public const string ContextName = nameof(AccordionItemContext);
-
         public (int? level, IDictionary<string, string> attributes, IHtmlContent content)? Heading { get; private set; }
         public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
 

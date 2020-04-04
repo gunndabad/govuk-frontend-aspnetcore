@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var panelContext = new PanelContext();
 
             IHtmlContent childContent;
-            using (context.SetScopedContextItem(PanelContext.ContextName, panelContext))
+            using (context.SetScopedContextItem(typeof(PanelContext), panelContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -61,7 +61,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
             }
 
-            var panelContext = (PanelContext)context.Items[PanelContext.ContextName];
+            var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
 
             var content = await output.GetChildContentAsync();
 
@@ -76,8 +76,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class PanelContext
     {
-        public const string ContextName = nameof(PanelContext);
-
         public (int? headingLevel, IHtmlContent content)? Title { get; private set; }
 
         public bool TrySetHeading(int? headingLevel, IHtmlContent content)

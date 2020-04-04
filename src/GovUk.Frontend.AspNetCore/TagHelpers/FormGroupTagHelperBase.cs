@@ -56,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             FormGroupAttributes = output.Attributes.ToAttributesDictionary();
             var builder = CreateFormGroupBuilder();
 
-            using (context.SetScopedContextItem(FormGroupBuilder.ContextName, builder))
+            using (context.SetScopedContextItem(typeof(FormGroupBuilder), builder))
             {
                 await output.GetChildContentAsync();
             }
@@ -207,7 +207,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+            var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
             if (!formGroupContext.TrySetLabel(IsPageHeading, output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
@@ -227,7 +227,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+            var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
             if (!formGroupContext.TrySetHint(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
@@ -252,7 +252,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
-            var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+            var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
             if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
@@ -273,8 +273,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public class FormGroupBuilder
     {
-        public const string ContextName = nameof(FormGroupBuilder);
-
         internal FormGroupBuilder()
         {
         }

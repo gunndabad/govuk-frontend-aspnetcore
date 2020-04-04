@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
+                    var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
                     detailsContext.SetSummary(attributes: null, summary);
@@ -69,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
+                    var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
                     detailsContext.SetSummary(attributes: null, summary);
@@ -108,7 +108,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var detailsContext = (DetailsContext)context.Items[DetailsContext.ContextName];
+                    var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
                     detailsContext.SetSummary(attributes: null, summary);
@@ -146,7 +146,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { DetailsContext.ContextName, detailsContext }
+                    { typeof(DetailsContext), detailsContext }
                 },
                 uniqueId: "test");
 
@@ -184,7 +184,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { DetailsContext.ContextName, detailsContext }
+                    { typeof(DetailsContext), detailsContext }
                 },
                 uniqueId: "test");
 

@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var tabsContext = new TabsContext(IdPrefix);
 
-            using (context.SetScopedContextItem(TabsContext.ContextName, tabsContext))
+            using (context.SetScopedContextItem(typeof(TabsContext), tabsContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -69,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{LabelAttributeName}' attribute must be specified.");
             }
 
-            var tabsContext = (TabsContext)context.Items[TabsContext.ContextName];
+            var tabsContext = (TabsContext)context.Items[typeof(TabsContext)];
 
             if (Id == null && tabsContext.IdPrefix == null)
             {
@@ -96,8 +96,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class TabsContext
     {
-        public const string ContextName = nameof(TabsContext);
-
         private readonly List<TabsItem> _items;
 
         public TabsContext(string idPrefix)

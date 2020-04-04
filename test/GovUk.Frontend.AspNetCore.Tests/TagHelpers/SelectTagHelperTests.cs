@@ -25,13 +25,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
 
-                    var selectContext = (SelectContext)context.Items[SelectContext.ContextName];
+                    var selectContext = (SelectContext)context.Items[typeof(SelectContext)];
 
                     selectContext.AddItem(new SelectListItem()
                     {
@@ -101,7 +101,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[FormGroupBuilder.ContextName];
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
                     formGroupContext.TrySetLabel(
                         isPageHeading: false,
                         attributes: null,

@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var summaryListContent = (SummaryListContext)context.Items[SummaryListContext.ContextName];
+                    var summaryListContent = (SummaryListContext)context.Items[typeof(SummaryListContext)];
 
                     summaryListContent.AddRow(new SummaryListRow()
                     {
@@ -107,7 +107,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { SummaryListContext.ContextName, summaryListContext }
+                    { typeof(SummaryListContext), summaryListContext }
                 },
                 uniqueId: "test");
 
@@ -116,7 +116,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var rowContext = (SummaryListRowContext)context.Items[SummaryListRowContext.ContextName];
+                    var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
                     rowContext.TrySetKey(new HtmlString("Key"));
                     rowContext.TrySetValue(new HtmlString("Value"));
                     rowContext.AddAction(new SummaryListRowAction()
@@ -171,8 +171,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { SummaryListContext.ContextName, summaryListContext },
-                    { SummaryListRowContext.ContextName, rowContext }
+                    { typeof(SummaryListContext), summaryListContext },
+                    { typeof(SummaryListRowContext), rowContext }
                 },
                 uniqueId: "test");
 
@@ -208,8 +208,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { SummaryListContext.ContextName, summaryListContext },
-                    { SummaryListRowContext.ContextName, rowContext }
+                    { typeof(SummaryListContext), summaryListContext },
+                    { typeof(SummaryListRowContext), rowContext }
                 },
                 uniqueId: "test");
 
@@ -245,8 +245,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { SummaryListContext.ContextName, summaryListContext },
-                    { SummaryListRowContext.ContextName, rowContext }
+                    { typeof(SummaryListContext), summaryListContext },
+                    { typeof(SummaryListRowContext), rowContext }
                 },
                 uniqueId: "test");
 
@@ -282,8 +282,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { SummaryListContext.ContextName, summaryListContext },
-                    { SummaryListRowContext.ContextName, rowContext }
+                    { typeof(SummaryListContext), summaryListContext },
+                    { typeof(SummaryListRowContext), rowContext }
                 },
                 uniqueId: "test");
 
@@ -319,8 +319,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { SummaryListContext.ContextName, summaryListContext },
-                    { SummaryListRowContext.ContextName, rowContext }
+                    { typeof(SummaryListContext), summaryListContext },
+                    { typeof(SummaryListRowContext), rowContext }
                 },
                 uniqueId: "test");
 

@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var errorSummaryContext = (ErrorSummaryContext)context.Items[ErrorSummaryContext.ContextName];
+                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
                     errorSummaryContext.TrySetTitle(attributes: null, new HtmlString("Title"));
                     errorSummaryContext.TrySetDescription(attributes: null, new HtmlString("Description"));
@@ -109,7 +109,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -179,7 +179,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -214,7 +214,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -249,7 +249,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -286,7 +286,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -319,7 +319,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 
@@ -359,7 +359,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { ErrorSummaryContext.ContextName, errorSummaryContext }
+                    { typeof(ErrorSummaryContext), errorSummaryContext }
                 },
                 uniqueId: "test");
 

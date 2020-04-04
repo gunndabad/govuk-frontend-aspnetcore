@@ -22,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var pbContext = new PhaseBannerContext();
 
             TagHelperContent childContent;
-            using (context.SetScopedContextItem(PhaseBannerContext.ContextName, pbContext))
+            using (context.SetScopedContextItem(typeof(PhaseBannerContext), pbContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
@@ -52,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var pbContext = (PhaseBannerContext)context.Items[PhaseBannerContext.ContextName];
+            var pbContext = (PhaseBannerContext)context.Items[typeof(PhaseBannerContext)];
 
             var childContent = await output.GetChildContentAsync();
 
@@ -67,8 +67,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class PhaseBannerContext
     {
-        public const string ContextName = nameof(PhaseBannerContext);
-
         public (IDictionary<string, string> attributes, IHtmlContent content)? Tag { get; private set; }
 
         public bool TrySetTag(IDictionary<string, string> attributes, IHtmlContent content)

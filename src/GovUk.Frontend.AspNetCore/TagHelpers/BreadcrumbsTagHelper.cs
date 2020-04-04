@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var bcContext = new BreadcrumbsContext();
 
-            using (context.SetScopedContextItem(BreadcrumbsContext.ContextName, bcContext))
+            using (context.SetScopedContextItem(typeof(BreadcrumbsContext), bcContext))
             {
                 await output.GetChildContentAsync();
             }
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var bcContext = (BreadcrumbsContext)context.Items[BreadcrumbsContext.ContextName];
+            var bcContext = (BreadcrumbsContext)context.Items[typeof(BreadcrumbsContext)];
 
             if (bcContext.HasCurrentPageItem)
             {
@@ -94,8 +94,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class BreadcrumbsContext
     {
-        public const string ContextName = nameof(BreadcrumbsContext);
-
         private readonly List<BreadcrumbsItem> _items;
 
         public BreadcrumbsContext()
