@@ -293,12 +293,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             string idPrefix,
             string resolvedName,
             ViewContext viewContext,
-            ModelExpression @for)
+            ModelExpression aspFor)
         {
             IdPrefix = idPrefix ?? throw new ArgumentNullException(nameof(idPrefix));
             ResolvedName = resolvedName ?? throw new ArgumentNullException(nameof(resolvedName));
             ViewContext = viewContext;
-            AspFor = @for;
+            AspFor = aspFor;
             _items = new List<RadiosItemBase>();
         }
 
@@ -311,6 +311,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public ModelExpression AspFor { get; }
 
         public bool HaveModelExpression => AspFor != null;
+
         public void AddItem(RadiosItemBase item)
         {
             if (item == null)

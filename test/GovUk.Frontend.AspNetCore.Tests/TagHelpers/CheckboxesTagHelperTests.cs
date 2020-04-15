@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -506,7 +509,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_SetsFieldsetOnContext()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "r");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "r",
+                aspFor: null,
+                viewContext: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-checkboxes-fieldset",
@@ -588,7 +595,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ValueNotSpecifiedThrowsNotSupportedException()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "r");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "r",
+                aspFor: null,
+                viewContext: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-checkboxes-item",
@@ -609,7 +620,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper();
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -620,7 +631,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_AddsItemToContext()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "mycheckboxes");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                aspFor: null,
+                viewContext: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-checkboxes-item",
@@ -645,7 +660,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper()
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Id = "id",
@@ -673,7 +688,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ComputesCorrectIdForFirstItemWhenNotSpecified()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "mycheckboxes");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                aspFor: null,
+                viewContext: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-checkboxes-item",
@@ -694,7 +713,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper()
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -713,7 +732,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ComputesCorrectIdForSubsequentItemsWhenNotSpecified()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "mycheckboxes");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                aspFor: null,
+                viewContext: null);
+
             checkboxesContext.AddItem(new CheckboxesItem()
             {
                 Content = new HtmlString("First")
@@ -738,7 +762,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper()
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -757,7 +781,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ConditionalContentSpecifiedSetsIsConditional()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "mycheckboxes");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                aspFor: null,
+                viewContext: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-checkboxes-item",
@@ -781,7 +809,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper()
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -798,7 +826,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ConditionalContentNotSpecifiedDoesNotSetIsConditional()
         {
             // Arrange
-            var checkboxesContext = new CheckboxesContext(idPrefix: "prefix", resolvedName: "mycheckboxes");
+            var checkboxesContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                aspFor: null,
+                viewContext: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-checkboxes-item",
@@ -819,7 +851,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper()
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 Checked = true,
                 Value = "V"
@@ -830,6 +862,112 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.False(checkboxesContext.IsConditional);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_CheckedNullButModelValueEqualsValueSetsCheckedAttribute()
+        {
+            // Arrange
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+            var viewContext = new ViewContext();
+
+            var radiosContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                viewContext: viewContext,
+                aspFor: new ModelExpression("Foo", modelExplorer));
+
+            var context = new TagHelperContext(
+                tagName: "govuk-checkboxes-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(CheckboxesContext), radiosContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-checkboxes-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.AppendHtml(new HtmlString("Label"));
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetModelValue(viewContext, modelExplorer, "Foo"))
+                .Returns("bar");
+
+            var tagHelper = new CheckboxesItemTagHelper(htmlGenerator.Object)
+            {
+                Value = "bar"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.True(radiosContext.Items.Single().Checked);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_CheckedNullAndModelValueDoesEqualsValueDoesNotSetCheckedAttribute()
+        {
+            // Arrange
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+            var viewContext = new ViewContext();
+
+            var radiosContext = new CheckboxesContext(
+                idPrefix: "prefix",
+                resolvedName: "mycheckboxes",
+                viewContext: viewContext,
+                aspFor: new ModelExpression("Foo", modelExplorer));
+
+            var context = new TagHelperContext(
+                tagName: "govuk-checkboxes-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(CheckboxesContext), radiosContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-checkboxes-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.AppendHtml(new HtmlString("Label"));
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
+            {
+                CallBase = true
+            };
+
+            htmlGenerator
+                .Setup(mock => mock.GetModelValue(viewContext, modelExplorer, "Foo"))
+                .Returns("bar");
+
+            var tagHelper = new CheckboxesItemTagHelper(htmlGenerator.Object)
+            {
+                Value = "baz"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.False(radiosContext.Items.Single().Checked);
         }
     }
 
