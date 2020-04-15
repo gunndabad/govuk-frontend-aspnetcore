@@ -1256,6 +1256,7 @@ namespace GovUk.Frontend.AspNetCore
             TagBuilder GenerateLink(SummaryListRowAction action)
             {
                 var anchor = new TagBuilder("a");
+                anchor.MergeAttributes(action.Attributes);
                 anchor.AddCssClass("govuk-link");
                 anchor.Attributes.Add("href", action.Href);
                 anchor.InnerHtml.AppendHtml(action.Content);

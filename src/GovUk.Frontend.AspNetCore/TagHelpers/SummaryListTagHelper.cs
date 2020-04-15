@@ -132,6 +132,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             summaryListRowContext.AddAction(new SummaryListRowAction()
             {
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = content.Snapshot(),
                 Href = href,
                 VisuallyHiddenText = VisuallyHiddenText
