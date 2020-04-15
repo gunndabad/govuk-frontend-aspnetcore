@@ -16,5 +16,6 @@ namespace GovUk.Frontend.AspNetCore
         public string Href { get; set; }
         public string VisuallyHiddenText { get; set; }
         public IHtmlContent Content { get; set; }
+        public IDictionary<string, string> Attributes { get; set; }
     }
 }
