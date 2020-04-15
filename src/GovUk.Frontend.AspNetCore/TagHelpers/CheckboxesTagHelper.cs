@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -33,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            var checkboxesContext = new CheckboxesContext(ResolvedId, ResolvedName);
+            var checkboxesContext = new CheckboxesContext(ResolvedId, ResolvedName, AspFor, ViewContext);
             using (context.SetScopedContextItem(typeof(CheckboxesContext), checkboxesContext))
             {
                 await base.ProcessAsync(context, output);
@@ -153,8 +154,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string InputAttributesPrefix = "input-";
         private const string ValueAttributeName = "value";
 
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
+
+        public CheckboxesItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+        }
+
         [HtmlAttributeName(CheckedAttributeName)]
-        public bool Checked { get; set; }
+        public bool? Checked { get; set; }
 
         [HtmlAttributeName(DisabledAttributeName)]
         public bool Disabled { get; set; }
@@ -182,6 +190,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var conditionalId = "conditional-" + resolvedId;
             var hintId = resolvedId + "-item-hint";
 
+            // REVIEW should we throw if AspFor is null and Checked is not specified?
+            var resolvedChecked = Checked ??
+                (checkboxesContext.HaveModelExpression ?
+                    _htmlGenerator.GetModelValue(
+                        checkboxesContext.ViewContext,
+                        checkboxesContext.AspFor.ModelExplorer,
+                        checkboxesContext.AspFor.Name) == Value :
+                 false);
+
             var itemContext = new CheckboxesItemContext();
 
             TagHelperContent childContent;
@@ -193,7 +210,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             checkboxesContext.AddItem(new CheckboxesItem()
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
-                Checked = Checked,
+                Checked = resolvedChecked,
                 ConditionalContent = itemContext.Conditional?.content,
                 ConditionalAttributes = itemContext.Conditional?.attributes,
                 ConditionalId = conditionalId,
@@ -261,18 +278,28 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private readonly List<CheckboxesItem> _items;
 
-        public CheckboxesContext(string idPrefix, string resolvedName)
+        public CheckboxesContext(
+            string idPrefix,
+            string resolvedName,
+            ModelExpression aspFor,
+            ViewContext viewContext)
         {
+            AspFor = aspFor;
+            ViewContext = viewContext;
             IdPrefix = idPrefix ?? throw new ArgumentNullException(nameof(idPrefix));
             ResolvedName = resolvedName ?? throw new ArgumentNullException(nameof(resolvedName));
             _items = new List<CheckboxesItem>();
         }
 
+        public ModelExpression AspFor { get; }
+        public ViewContext ViewContext { get; }
         public CheckboxesFieldset Fieldset { get; private set; }
         public string IdPrefix { get; }
         public bool IsConditional { get; private set; }
         public IReadOnlyCollection<CheckboxesItem> Items => _items;
         public string ResolvedName { get; }
+
+        public bool HaveModelExpression => AspFor != null;
 
         public void AddItem(CheckboxesItem item)
         {
