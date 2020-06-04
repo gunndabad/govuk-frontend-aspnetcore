@@ -13,8 +13,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private const string AttributesPrefix = "textarea-";
         private const string AutocompleteAttributeName = "autocomplete";
-        private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
+        private const string IsDisabledAttributeName = "disabled";
         private const string RowsAttributeName = "rows";
 
         public TextAreaTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -28,11 +28,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
 
-        [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; }
-
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
+
+        [HtmlAttributeName(IsDisabledAttributeName)]
+        public bool IsDisabled { get; set; }
 
         [HtmlAttributeName(RowsAttributeName)]
         public int? Rows { get; set; }
@@ -62,7 +62,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Rows,
                 DescribedBy,
                 Autocomplete,
-                Disabled,
+                IsDisabled,
                 resolvedContent,
                 Attributes);
         }

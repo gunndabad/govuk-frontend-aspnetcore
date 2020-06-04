@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore
 {
     public class AccordionItem
     {
-        public bool Expanded { get; set; }
+        public bool IsExpanded { get; set; }
         public int? HeadingLevel { get; set; }
         public IHtmlContent HeadingContent { get; set; }
         public IDictionary<string, string> HeadingAttributes { get; set; }

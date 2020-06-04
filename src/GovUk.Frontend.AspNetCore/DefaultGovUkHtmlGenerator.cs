@@ -65,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore
                 section.MergeAttributes(item.Attributes);
                 section.AddCssClass("govuk-accordion__section");
 
-                if (item.Expanded)
+                if (item.IsExpanded)
                 {
                     section.AddCssClass("govuk-accordion__section--expanded");
                 }
@@ -438,12 +438,12 @@ namespace GovUk.Frontend.AspNetCore
                 input.Attributes.Add("type", "checkbox");
                 input.Attributes.Add("value", item.Value);
 
-                if (item.Checked)
+                if (item.IsChecked)
                 {
                     input.Attributes.Add("checked", "checked");
                 }
 
-                if (item.Disabled)
+                if (item.IsDisabled)
                 {
                     input.Attributes.Add("disabled", "disabled");
                 }
@@ -483,7 +483,7 @@ namespace GovUk.Frontend.AspNetCore
                     conditional.MergeAttributes(item.ConditionalAttributes);
                     conditional.AddCssClass("govuk-checkboxes__conditional");
 
-                    if (!item.Checked)
+                    if (!item.IsChecked)
                     {
                         conditional.AddCssClass("govuk-checkboxes__conditional--hidden");
                     }
@@ -1025,12 +1025,12 @@ namespace GovUk.Frontend.AspNetCore
                 input.Attributes.Add("type", "radio");
                 input.Attributes.Add("value", item.Value);
 
-                if (item.Checked)
+                if (item.IsChecked)
                 {
                     input.Attributes.Add("checked", "checked");
                 }
 
-                if (item.Disabled)
+                if (item.IsDisabled)
                 {
                     input.Attributes.Add("disabled", "disabled");
                 }
@@ -1064,7 +1064,7 @@ namespace GovUk.Frontend.AspNetCore
                     conditional.MergeAttributes(item.ConditionalAttributes);
                     conditional.AddCssClass("govuk-radios__conditional");
 
-                    if (!item.Checked)
+                    if (!item.IsChecked)
                     {
                         conditional.AddCssClass("govuk-radios__conditional--hidden");
                     }
@@ -1140,12 +1140,12 @@ namespace GovUk.Frontend.AspNetCore
                     option.Attributes.Add("value", item.Value);
                 }
                 
-                if (item.Selected)
+                if (item.IsSelected)
                 {
                     option.Attributes.Add("selected", "selected");
                 }
 
-                if (item.Disabled)
+                if (item.IsDisabled)
                 {
                     option.Attributes.Add("disabled", "disabled");
                 }

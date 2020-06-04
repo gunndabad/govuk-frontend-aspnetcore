@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class SelectTagHelper : FormGroupTagHelperBase
     {
         private const string AttributesPrefix = "select-";
-        private const string DisabledAttributeName = "disabled";
+        private const string IsDisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
 
         public SelectTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -19,8 +19,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
-        [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; }
+        [HtmlAttributeName(IsDisabledAttributeName)]
+        public bool IsDisabled { get; set; }
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 ResolvedId,
                 ResolvedName,
                 DescribedBy,
-                Disabled,
+                IsDisabled,
                 selectContext.Items,
                 FormGroupAttributes);
         }
@@ -81,15 +81,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-select-item", ParentTag = "govuk-select")]
     public class SelectItemTagHelper : TagHelper
     {
-        private const string DisabledAttributeName = "disabled";
-        private const string SelectedAttributeName = "selected";
+        private const string IsDisabledAttributeName = "disabled";
+        private const string IsSelectedAttributeName = "selected";
         private const string ValueAttributeName = "value";
 
-        [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; }
+        [HtmlAttributeName(IsDisabledAttributeName)]
+        public bool IsDisabled { get; set; }
 
-        [HtmlAttributeName(SelectedAttributeName)]
-        public bool Selected { get; set; }
+        [HtmlAttributeName(IsSelectedAttributeName)]
+        public bool IsSelected { get; set; }
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
@@ -104,8 +104,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = content.Snapshot(),
-                Disabled = Disabled,
-                Selected = Selected,
+                IsDisabled = IsDisabled,
+                IsSelected = IsSelected,
                 Value = Value
             });
 

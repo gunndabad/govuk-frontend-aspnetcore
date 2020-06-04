@@ -12,9 +12,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-button")]
     public class ButtonTagHelper : LinkTagHelperBase
     {
-        private const string DisabledAttributeName = "disabled";
         private const string ElementAttributeName = "element";
         private const string FormActionAttributeName = "formaction";
+        private const string IsDisabledAttributeName = "disabled";
         private const string IsStartButtonAttributeName = "is-start-button";
         private const string NameAttributeName = "name";
         private const string PreventDoubleClickAttributeName = "prevent-double-click";
@@ -26,14 +26,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
-        [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; } = false;
-
         [HtmlAttributeName(ElementAttributeName)]
         public ButtonTagHelperElementType? Element { get; set; }
 
         [HtmlAttributeName(FormActionAttributeName)]
         public string FormAction { get; set; }
+
+        [HtmlAttributeName(IsDisabledAttributeName)]
+        public bool IsDisabled { get; set; } = false;
 
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = false;
@@ -110,7 +110,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 tagBuilder = Generator.GenerateButtonLink(
                     href,
                     IsStartButton,
-                    Disabled,
+                    IsDisabled,
                     childContent,
                     output.Attributes.ToAttributesDictionary());
             }
@@ -124,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     Type,
                     Value,
                     IsStartButton,
-                    Disabled,
+                    IsDisabled,
                     PreventDoubleClick,
                     resolvedFormAction,
                     childContent,

@@ -36,9 +36,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.AddItem(new RadiosItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -95,9 +95,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.AddItem(new RadiosItem()
                     {
-                        Checked = true,
+                        IsChecked = true,
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -147,9 +147,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.AddItem(new RadiosItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         Content = new HtmlString("First"),
-                        Disabled = true,
+                        IsDisabled = true,
                         Id = "first",
                         Value = "first"
                     });
@@ -286,9 +286,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.AddItem(new RadiosItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         HintContent = new HtmlString("Item hint"),
                         HintId = "first-hint",
                         Id = "first",
@@ -342,11 +342,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.AddItem(new RadiosItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         ConditionalContent = new HtmlString("Conditional"),
                         ConditionalId = "conditional-first",
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -400,11 +400,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.AddItem(new RadiosItem()
                     {
-                        Checked = true,
+                        IsChecked = true,
                         ConditionalContent = new HtmlString("Conditional"),
                         ConditionalId = "conditional-first",
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -717,7 +717,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Id = "id",
                 Value = "V"
             };
@@ -729,10 +729,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Contains(
                 radiosContext.Items,
                 item => item is RadiosItem i &&
-                    i.Checked &&
-                    !i.Disabled &&
+                    i.IsChecked &&
+                    !i.IsDisabled &&
                     i.Content.AsString() == "Label" &&
-                    !i.Disabled &&
+                    !i.IsDisabled &&
                     i.Id == "id" &&
                     i.Value == "V" &&
                     i.ConditionalContent.AsString() == "Conditional" &&
@@ -770,7 +770,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -815,7 +815,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -862,7 +862,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -904,7 +904,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new RadiosItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -965,7 +965,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.True(radiosContext.Items.OfType<RadiosItem>().Single().Checked);
+            Assert.True(radiosContext.Items.OfType<RadiosItem>().Single().IsChecked);
         }
 
         [Fact]
@@ -1018,7 +1018,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.False(radiosContext.Items.OfType<RadiosItem>().Single().Checked);
+            Assert.False(radiosContext.Items.OfType<RadiosItem>().Single().IsChecked);
         }
     }
 

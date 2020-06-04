@@ -35,9 +35,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -88,9 +88,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
-                        Checked = true,
+                        IsChecked = true,
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -135,9 +135,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         Content = new HtmlString("First"),
-                        Disabled = true,
+                        IsDisabled = true,
                         Id = "first",
                         Value = "first"
                     });
@@ -269,9 +269,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         HintContent = new HtmlString("Item hint"),
                         HintId = "first-hint",
                         Id = "first",
@@ -325,11 +325,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
-                        Checked = false,
+                        IsChecked = false,
                         ConditionalContent = new HtmlString("Conditional"),
                         ConditionalId = "conditional-first",
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -383,11 +383,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.AddItem(new CheckboxesItem()
                     {
-                        Checked = true,
+                        IsChecked = true,
                         ConditionalContent = new HtmlString("Conditional"),
                         ConditionalId = "conditional-first",
                         Content = new HtmlString("First"),
-                        Disabled = false,
+                        IsDisabled = false,
                         Id = "first",
                         Value = "first"
                     });
@@ -662,7 +662,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Id = "id",
                 Value = "V"
             };
@@ -674,10 +674,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Contains(
                 checkboxesContext.Items,
                 item => item is CheckboxesItem i &&
-                    i.Checked &&
-                    !i.Disabled &&
+                    i.IsChecked &&
+                    !i.IsDisabled &&
                     i.Content.AsString() == "Label" &&
-                    !i.Disabled &&
+                    !i.IsDisabled &&
                     i.Id == "id" &&
                     i.Value == "V" &&
                     i.ConditionalContent.AsString() == "Conditional" &&
@@ -715,7 +715,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -764,7 +764,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -811,7 +811,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -853,7 +853,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Checked = true,
+                IsChecked = true,
                 Value = "V"
             };
 
@@ -914,7 +914,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.True(radiosContext.Items.Single().Checked);
+            Assert.True(radiosContext.Items.Single().IsChecked);
         }
 
         [Fact]
@@ -967,7 +967,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.False(radiosContext.Items.Single().Checked);
+            Assert.False(radiosContext.Items.Single().IsChecked);
         }
     }
 

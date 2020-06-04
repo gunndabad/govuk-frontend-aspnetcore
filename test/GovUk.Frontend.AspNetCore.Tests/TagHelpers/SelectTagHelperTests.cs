@@ -47,14 +47,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     selectContext.AddItem(new SelectListItem()
                     {
                         Content = new HtmlString("Third"),
-                        Disabled = true,
+                        IsDisabled = true,
                         Value = "third"
                     });
 
                     selectContext.AddItem(new SelectListItem()
                     {
                         Content = new HtmlString("Fourth"),
-                        Selected = true,
+                        IsSelected = true,
                         Value = "fourth"
                     });
 
