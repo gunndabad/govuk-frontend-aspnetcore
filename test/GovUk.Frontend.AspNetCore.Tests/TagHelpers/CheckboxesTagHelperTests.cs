@@ -470,7 +470,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.SetFieldset(new CheckboxesFieldset()
                     {
-                        DescribedBy = "fieldsetdescribedby",
                         IsPageHeading = false,
                         LegendContent = new HtmlString("Legend")
                     });
@@ -538,7 +537,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new CheckboxesFieldsetTagHelper()
             {
-                DescribedBy = "fieldsetdescribedby",
                 IsPageHeading = true
             };
 
@@ -548,7 +546,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             Assert.True(checkboxesContext.Fieldset.IsPageHeading);
             Assert.Equal("Legend", checkboxesContext.Fieldset.LegendContent.AsString());
-            Assert.Equal("fieldsetdescribedby", checkboxesContext.Fieldset.DescribedBy);
         }
     }
 
