@@ -61,12 +61,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var haveError = errorMessage != null;
 
-            var resolvedDescribedBy = checkboxesContext.Fieldset?.DescribedBy ?? DescribedBy;
-
             var tagBuilder = Generator.GenerateCheckboxes(
                 ResolvedName,
                 checkboxesContext.IsConditional,
-                resolvedDescribedBy,
+                DescribedBy,
                 CheckboxesAttributes,
                 checkboxesContext.Items);
             contentBuilder.AppendHtml(tagBuilder);
@@ -94,11 +92,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-checkboxes-fieldset-legend")]
     public class CheckboxesFieldsetTagHelper : TagHelper
     {
-        private const string DescribedByAttributeName = "described-by";
         private const string IsPageHeadingAttributeName = "is-page-heading";
-
-        [HtmlAttributeName(DescribedByAttributeName)]
-        public string DescribedBy { get; set; }
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
         public bool IsPageHeading { get; set; }
@@ -117,7 +111,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             checkboxesContext.SetFieldset(new CheckboxesFieldset()
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
-                DescribedBy = DescribedBy,
                 IsPageHeading = IsPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
                 LegendAttributes = fieldsetContext.Legend?.attributes
@@ -392,6 +385,5 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public IDictionary<string, string> Attributes { get; set; }
         public IHtmlContent LegendContent { get; set; }
         public IDictionary<string, string> LegendAttributes { get; set; }
-        public string DescribedBy { get; set; }
     }
 }
