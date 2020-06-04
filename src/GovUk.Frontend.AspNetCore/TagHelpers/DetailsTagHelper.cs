@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class DetailsTagHelper : TagHelper
     {
         private const string IdAttributeName = "id";
-        private const string OpenAttributeName = "open";
+        private const string IsOpenAttributeName = "open";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
@@ -24,8 +24,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
-        [HtmlAttributeName(OpenAttributeName)]
-        public bool Open { get; set; }
+        [HtmlAttributeName(IsOpenAttributeName)]
+        public bool IsOpen { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -39,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             detailsContext.ThrowIfStagesIncomplete();
 
             var tagBuilder = _htmlGenerator.GenerateDetails(
-                Open,
+                IsOpen,
                 Id,
                 detailsContext.Summary?.content,
                 detailsContext.Summary?.attributes,

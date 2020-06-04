@@ -14,8 +14,8 @@ namespace GovUk.Frontend.AspNetCore
     {
         public string Id { get; set; }
         public string Value { get; set; }
-        public bool Checked { get; set; }
-        public bool Disabled { get; set; }
+        public bool IsChecked { get; set; }
+        public bool IsDisabled { get; set; }
         public IHtmlContent Content { get; set; }
         public string ConditionalId { get; set; }
         public IHtmlContent ConditionalContent { get; set; }

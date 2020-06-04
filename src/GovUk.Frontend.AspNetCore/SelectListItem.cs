@@ -7,8 +7,8 @@ namespace GovUk.Frontend.AspNetCore
     {
         public string Value { get; set; }
         public IHtmlContent Content { get; set; }
-        public bool Selected { get; set; }
-        public bool Disabled { get; set; }
+        public bool IsSelected { get; set; }
+        public bool IsDisabled { get; set; }
         public IDictionary<string, string> Attributes { get; set; }
     }
 }

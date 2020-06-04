@@ -275,7 +275,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Mock.Of<IUrlHelperFactory>())
             {
                 Element = ButtonTagHelperElementType.Button,
-                Disabled = true
+                IsDisabled = true
             };
 
             // Act
@@ -313,7 +313,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Mock.Of<IUrlHelperFactory>())
             {
                 Element = ButtonTagHelperElementType.Anchor,
-                Disabled = true,
+                IsDisabled = true,
                 Href = "https://place.com"
             };
 

@@ -31,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     accordionContext.AddItem(new AccordionItem()
                     {
                         Content = new HtmlString("First content"),
-                        Expanded = false,
+                        IsExpanded = false,
                         HeadingContent = new HtmlString("First heading"),
                         HeadingLevel = 1,
                         SummaryContent = new HtmlString("First summary")
@@ -40,7 +40,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     accordionContext.AddItem(new AccordionItem()
                     {
                         Content = new HtmlString("First content"),
-                        Expanded = true,
+                        IsExpanded = true,
                         HeadingContent = new HtmlString("Second heading"),
                         HeadingLevel = 2
                     });
@@ -105,7 +105,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     accordionContext.AddItem(new AccordionItem()
                     {
                         Content = new HtmlString("First content"),
-                        Expanded = false,
+                        IsExpanded = false,
                         HeadingContent = new HtmlString("First heading"),
                         HeadingLevel = 1,
                         SummaryContent = new HtmlString("First summary")
@@ -114,7 +114,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     accordionContext.AddItem(new AccordionItem()
                     {
                         Content = new HtmlString("First content"),
-                        Expanded = true,
+                        IsExpanded = true,
                         HeadingContent = new HtmlString("Second heading"),
                         HeadingLevel = 2
                     });

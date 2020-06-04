@@ -159,10 +159,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-radios-item", ParentTag = "govuk-radios")]
     public class RadiosItemTagHelper : TagHelper
     {
-        private const string CheckedAttributeName = "checked";
-        private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
         private const string InputAttributesPrefix = "input-";
+        private const string IsCheckedAttributeName = "checked";
+        private const string IsDisabledAttributeName = "disabled";
         private const string ValueAttributeName = "value";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -172,17 +172,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(CheckedAttributeName)]
-        public bool? Checked { get; set; }
-
-        [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; }
-
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
         [HtmlAttributeName(DictionaryAttributePrefix = InputAttributesPrefix)]
         public IDictionary<string, string> InputAttributes { get; set; } = new Dictionary<string, string>();
+
+        [HtmlAttributeName(IsCheckedAttributeName)]
+        public bool? IsChecked { get; set; }
+
+        [HtmlAttributeName(IsDisabledAttributeName)]
+        public bool IsDisabled { get; set; }
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
@@ -203,7 +203,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var conditionalId = "conditional-" + resolvedId;
             var hintId = resolvedId + "-item-hint";
 
-            var resolvedChecked = Checked ??
+            var resolvedChecked = IsChecked ??
                 (radiosContext.HaveModelExpression ?
                     _htmlGenerator.GetModelValue(
                         radiosContext.ViewContext,
@@ -222,12 +222,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             radiosContext.AddItem(new RadiosItem()
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
-                Checked = resolvedChecked,
+                IsChecked = resolvedChecked,
                 ConditionalContent = itemContext.Conditional?.content,
                 ConditionalAttributes = itemContext.Conditional?.attributes,
                 ConditionalId = conditionalId,
                 Content = childContent.Snapshot(),
-                Disabled = Disabled,
+                IsDisabled = IsDisabled,
                 HintAttributes = itemContext.Hint?.attributes,
                 HintContent = itemContext.Hint?.content,
                 HintId = hintId,
