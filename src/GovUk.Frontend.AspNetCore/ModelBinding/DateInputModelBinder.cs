@@ -73,7 +73,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
 
             if (TryParseYear() && TryParseMonth() && TryParseDay())
             {
-                var date = new Date(day, month, year);
+                var date = new Date(year, month, day);
                 bindingContext.Result = ModelBindingResult.Success(date);
             }
             else

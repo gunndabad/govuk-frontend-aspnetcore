@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         private readonly DateTime _dt;
 
-        public Date(int day, int month, int year)
+        public Date(int year, int month, int day)
             : this(new DateTime(year, month, day))
         {
         }
