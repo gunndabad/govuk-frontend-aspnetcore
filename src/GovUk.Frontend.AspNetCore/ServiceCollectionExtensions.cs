@@ -1,5 +1,7 @@
 ﻿using System;
+using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -35,6 +37,11 @@ namespace GovUk.Frontend.AspNetCore
             {
                 services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
             }
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider());
+            });
 
             return services;
         }
