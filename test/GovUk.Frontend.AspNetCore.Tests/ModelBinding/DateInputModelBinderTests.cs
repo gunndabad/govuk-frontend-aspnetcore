@@ -150,24 +150,24 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             Assert.Equal(ModelBindingResult.Failed(), bindingContext.Result);
 
             var topLevelError = Assert.Single(bindingContext.ModelState["TheModelName"].Errors);
-            Assert.Equal("Invalid date specified.", topLevelError.ErrorMessage);
+            Assert.Equal("Invalid date specified.", topLevelError.Exception.Message);
 
             if (expectedDayModelError != null)
             {
                 var dayError = Assert.Single(bindingContext.ModelState["TheModelName.Day"].Errors);
-                Assert.Equal(expectedDayModelError, dayError.ErrorMessage);
+                Assert.Equal(expectedDayModelError, dayError.Exception.Message);
             }
 
             if (expectedMonthModelError != null)
             {
                 var monthError = Assert.Single(bindingContext.ModelState["TheModelName.Month"].Errors);
-                Assert.Equal(expectedMonthModelError, monthError.ErrorMessage);
+                Assert.Equal(expectedMonthModelError, monthError.Exception.Message);
             }
 
             if (expectedYearModelError != null)
             {
                 var yearError = Assert.Single(bindingContext.ModelState["TheModelName.Year"].Errors);
-                Assert.Equal(expectedYearModelError, yearError.ErrorMessage);
+                Assert.Equal(expectedYearModelError, yearError.Exception.Message);
             }
 
             Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"].AttemptedValue);

@@ -84,7 +84,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
 
                 bindingContext.ModelState.TryAddModelError(
                     bindingContext.ModelName,
-                    "Invalid date specified.");
+                    new DateParseException("Invalid date specified."),
+                    bindingContext.ModelMetadata);
 
                 bindingContext.Result = ModelBindingResult.Failed();
             }
@@ -102,7 +103,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                     {
                         bindingContext.ModelState.TryAddModelError(
                             dayModelName,
-                            "Day is not valid.");
+                            new DateParseException("Day is not valid."),
+                            bindingContext.ModelMetadata);
 
                         bindingContext.ModelState.TryGetValue(bindingContext.ModelName, out var x);
 
@@ -117,7 +119,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                 {
                     bindingContext.ModelState.TryAddModelError(
                         dayModelName,
-                        "Day is missing.");
+                        new DateParseException("Day is missing."),
+                        bindingContext.ModelMetadata);
 
                     return false;
                 }
@@ -134,7 +137,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                     {
                         bindingContext.ModelState.TryAddModelError(
                             monthModelName,
-                            "Month is not valid.");
+                            new DateParseException("Month is not valid."),
+                            bindingContext.ModelMetadata);
 
                         return false;
                     }
@@ -147,7 +151,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                 {
                     bindingContext.ModelState.TryAddModelError(
                         monthModelName,
-                        "Month is missing.");
+                        new DateParseException("Month is missing."),
+                        bindingContext.ModelMetadata);
 
                     return false;
                 }
@@ -164,7 +169,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                     {
                         bindingContext.ModelState.TryAddModelError(
                             yearModelName,
-                            "Year is not valid.");
+                            new DateParseException("Year is not valid."),
+                            bindingContext.ModelMetadata);
 
                         return false;
                     }
@@ -177,7 +183,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                 {
                     bindingContext.ModelState.TryAddModelError(
                         yearModelName,
-                        "Year is missing.");
+                        new DateParseException("Year is missing."),
+                        bindingContext.ModelMetadata);
 
                     return false;
                 }
