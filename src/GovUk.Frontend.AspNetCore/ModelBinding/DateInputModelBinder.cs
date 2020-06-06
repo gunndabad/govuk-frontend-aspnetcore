@@ -104,6 +104,8 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                             dayModelName,
                             "Day is not valid.");
 
+                        bindingContext.ModelState.TryGetValue(bindingContext.ModelName, out var x);
+
                         return false;
                     }
                     else
