@@ -17,7 +17,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string PatternAttributeName = "pattern";
         private const string TypeAttributeName = "type";
         private const string ValueAttributeName = "value";
-        
+
+        private string _value;
+        private bool _valueSpecified = false;
+
         public InputTagHelper(IGovUkHtmlGenerator htmlGenerator)
             : base(htmlGenerator)
         {
@@ -45,17 +48,25 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string Type { get; set; }
 
         [HtmlAttributeName(ValueAttributeName)]
-        public string Value { get; set; }
+        public string Value
+        {
+            get => _value;
+            set
+            { 
+                _value = value;
+                _valueSpecified = true;
+            }
+        }
 
         protected override TagBuilder GenerateElement(
-            TagHelperContext context, 
+            TagHelperContext context,
             FormGroupBuilder builder,
             FormGroupElementContext elementContext)
         {
-            if (Value == null && AspFor == null)
+            if (AspFor == null && !_valueSpecified)
             {
                 throw new InvalidOperationException(
-                    $"At least one of the '{NameAttributeName}' and '{ValueAttributeName}' attributes must be specified.");
+                    $"At least one of the '{AspFor}' and '{Value}' attributes must be specified.");
             }
 
             var resolvedValue = Value ??
