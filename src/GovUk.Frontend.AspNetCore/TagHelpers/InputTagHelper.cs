@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -51,6 +52,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             FormGroupBuilder builder,
             FormGroupElementContext elementContext)
         {
+            if (Value == null && AspFor == null)
+            {
+                throw new InvalidOperationException(
+                    $"At least one of the '{NameAttributeName}' and '{ValueAttributeName}' attributes must be specified.");
+            }
+
             var resolvedValue = Value ??
                 (AspFor != null ? Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : null);
 
