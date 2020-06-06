@@ -499,6 +499,86 @@ namespace GovUk.Frontend.AspNetCore
             }
         }
 
+        public virtual TagBuilder GenerateDateInput(
+            string id,
+            bool disabled,
+            DateInputItem day,
+            DateInputItem month,
+            DateInputItem year,
+            IDictionary<string, string> attributes)
+        {
+            if (day == null)
+            {
+                throw new ArgumentNullException(nameof(day));
+            }
+
+            if (month == null)
+            {
+                throw new ArgumentNullException(nameof(month));
+            }
+
+            if (year == null)
+            {
+                throw new ArgumentNullException(nameof(year));
+            }
+
+            var tagBuilder = new TagBuilder("div");
+            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.AddCssClass("govuk-date-input");
+            
+            if (id != null)
+            {
+                tagBuilder.Attributes.Add("id", id);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(CreateDateComponent(day, "govuk-input--width-2"));
+            tagBuilder.InnerHtml.AppendHtml(CreateDateComponent(month, "govuk-input--width-2"));
+            tagBuilder.InnerHtml.AppendHtml(CreateDateComponent(year, "govuk-input--width-4"));
+
+            return tagBuilder;
+
+            IHtmlContent CreateDateComponent(DateInputItem item, string @class)
+            {
+                var div = new TagBuilder("div");
+                div.AddCssClass("govuk-date-input__item");
+
+                var itemInput = GenerateInput(
+                    item.HaveError,
+                    item.Id,
+                    item.Name,
+                    type: "text",
+                    item.Value,
+                    describedBy: null,
+                    item.Autocomplete,
+                    item.Pattern ?? "[0-9]*",
+                    inputMode: "numeric",
+                    disabled,
+                    item.Attributes);
+                itemInput.AddCssClass("govuk-date-input__input");
+                itemInput.AddCssClass(@class);
+
+                var itemLabel = GenerateLabel(
+                    @for: item.Id,
+                    isPageHeading: false,
+                    content: item.Label,
+                    attributes: null);
+                itemLabel.AddCssClass("govuk-date-input__label");
+
+                var contentBuilder = new HtmlContentBuilder()
+                    .AppendHtml(itemLabel)
+                    .AppendHtml(itemInput);
+
+                var itemFormGroup = GenerateFormGroup(
+                    item.HaveError,
+                    content: contentBuilder,
+                    attributes: null);
+
+                div.InnerHtml.AppendHtml(itemFormGroup);
+
+                return div;
+            }
+        }
+
         public TagBuilder GenerateDetails(
             bool open,
             string id,

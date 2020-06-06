@@ -50,6 +50,14 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IEnumerable<CheckboxesItem> items);
 
+        TagBuilder GenerateDateInput(
+            string id,
+            bool disabled,
+            DateInputItem day,
+            DateInputItem month,
+            DateInputItem year,
+            IDictionary<string, string> attributes);
+
         TagBuilder GenerateDetails(
             bool open,
             string id,
