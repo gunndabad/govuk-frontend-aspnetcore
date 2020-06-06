@@ -4,7 +4,12 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -117,17 +122,28 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var container = node.ChildNodes.FindFirst("div");
 
             var day = container.SelectNodes("//input").First();
-            Assert.Equal("", day.Attributes["value"].Value);
-
             var month = container.SelectNodes("//input").Skip(1).First();
-            Assert.Equal("", month.Attributes["value"].Value);
-
             var year = container.SelectNodes("//input").Skip(2).First();
+
+            Assert.Equal("", day.Attributes["value"].Value);
+            Assert.Equal("", month.Attributes["value"].Value);
             Assert.Equal("", year.Attributes["value"].Value);
         }
 
-        [Fact]
-        public async Task ProcessAsync_HasErrorClassWhenErrorSpecified()
+        [Theory]
+        [InlineData(null, true, true, true)]
+        [InlineData(DateInputErrorItems.All, true, true, true)]
+        [InlineData(DateInputErrorItems.Day, true, false, false)]
+        [InlineData(DateInputErrorItems.Month, false, true, false)]
+        [InlineData(DateInputErrorItems.Year, false, false, true)]
+        [InlineData(DateInputErrorItems.Day | DateInputErrorItems.Month, true, true, false)]
+        [InlineData(DateInputErrorItems.Day | DateInputErrorItems.Year, true, false, true)]
+        [InlineData(DateInputErrorItems.Month | DateInputErrorItems.Year, false, true, true)]
+        public async Task ProcessAsync_HaveErrorClassesWhenErrorSpecified(
+            DateInputErrorItems? specifiedErrorItems,
+            bool expectDayError,
+            bool expectMonthError,
+            bool expectYearError)
         {
             // Arrange
             var context = new TagHelperContext(
@@ -151,6 +167,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                          attributes: null,
                          content: new HtmlString("Error"));
 
+                    if (specifiedErrorItems != null)
+                    {
+                        var dateInputContext = (DateInputContext)context.Items[typeof(DateInputContext)];
+                        dateInputContext.SetErrorItems(specifiedErrorItems.Value);
+                    }
+
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
@@ -172,13 +194,254 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var container = node.ChildNodes.FindFirst("div");
 
             var day = container.SelectNodes("//input").First();
-            Assert.Contains("govuk-input--error", day.GetClasses());
-
             var month = container.SelectNodes("//input").Skip(1).First();
-            Assert.Contains("govuk-input--error", month.GetClasses());
-
             var year = container.SelectNodes("//input").Skip(2).First();
-            Assert.Contains("govuk-input--error", year.GetClasses());
+
+            AssertHaveErrorClass(day, expectDayError);
+            AssertHaveErrorClass(month, expectMonthError);
+            AssertHaveErrorClass(year, expectYearError);
+
+            static void AssertHaveErrorClass(HtmlNode node, bool expectError)
+            {
+                if (expectError)
+                {
+                    Assert.Contains("govuk-input--error", node.GetClasses());
+                }
+                else
+                {
+                    Assert.DoesNotContain("govuk-input--error", node.GetClasses());
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData("Day is not valid.", null, null, true, false, false)]
+        [InlineData(null, "Month is not valid.", null, false, true, false)]
+        [InlineData(null, null, "Year is not valid.", false, false, true)]
+        public async Task ProcessAsync_ErrorItemsNotSpecifiedAndErrorsFromModelBinder_InfersErrorItems(
+            string dayModelError,
+            string monthModelError,
+            string yearModelError,
+            bool expectDayError,
+            bool expectMonthError,
+            bool expectYearError)
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-date-input",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-date-input",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        content: new HtmlString("The label"));
+                    formGroupContext.TrySetErrorMessage(
+                          visuallyHiddenText: null,
+                          attributes: null,
+                          content: new HtmlString("Error"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
+            {
+                CallBase = true
+            };
+
+            var modelExplorer = new EmptyModelMetadataProvider()
+                .GetModelExplorerForType(typeof(Date), new Date(2020, 4, 1));
+
+            var viewContext = new ViewContext();
+
+            if (dayModelError != null)
+            {
+                var dayModelExplorer = modelExplorer.GetExplorerForProperty("Day");
+
+                viewContext.ModelState.AddModelError(
+                    ".Day",
+                    new DateParseException(dayModelError),
+                    dayModelExplorer.Metadata);
+            }
+
+            if (monthModelError != null)
+            {
+                var monthModelExplorer = modelExplorer.GetExplorerForProperty("Month");
+
+                viewContext.ModelState.AddModelError(
+                    ".Month",
+                    new DateParseException(monthModelError),
+                    monthModelExplorer.Metadata);
+            }
+
+            if (yearModelError != null)
+            {
+                var yearModelExplorer = modelExplorer.GetExplorerForProperty("Year");
+
+                viewContext.ModelState.AddModelError(
+                    ".Year",
+                    new DateParseException(yearModelError),
+                    yearModelExplorer.Metadata);
+            }
+
+            var tagHelper = new DateInputTagHelper(htmlGenerator.Object)
+            {
+                AspFor = new ModelExpression("", modelExplorer),
+                ViewContext = viewContext
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var html = output.AsString();
+            var node = HtmlNode.CreateNode(html);
+            var container = node.ChildNodes.FindFirst("div");
+
+            var day = container.SelectNodes("//input").First();
+            var month = container.SelectNodes("//input").Skip(1).First();
+            var year = container.SelectNodes("//input").Skip(2).First();
+
+            AssertHaveErrorClass(day, expectDayError);
+            AssertHaveErrorClass(month, expectMonthError);
+            AssertHaveErrorClass(year, expectYearError);
+
+            static void AssertHaveErrorClass(HtmlNode node, bool expectError)
+            {
+                if (expectError)
+                {
+                    Assert.Contains("govuk-input--error", node.GetClasses());
+                }
+                else
+                {
+                    Assert.DoesNotContain("govuk-input--error", node.GetClasses());
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData(DateInputErrorItems.Month, "Day is not valid.", null, null, false, true, false)]
+        [InlineData(DateInputErrorItems.Year, null, "Month is not valid.", null, false, false, true)]
+        [InlineData(DateInputErrorItems.Day, null, null, "Year is not valid.", true, false, false)]
+        public async Task ProcessAsync_ErrorItemsSpecifiedAndErrorsFromModelBinder_UsesSpecifiedErrorItems(
+            DateInputErrorItems errorItems,
+            string dayModelError,
+            string monthModelError,
+            string yearModelError,
+            bool expectDayError,
+            bool expectMonthError,
+            bool expectYearError)
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-date-input",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-date-input",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
+                    formGroupContext.TrySetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        content: new HtmlString("The label"));
+                    formGroupContext.TrySetErrorMessage(
+                          visuallyHiddenText: null,
+                          attributes: null,
+                          content: new HtmlString("Error"));
+
+                    var dateInputContext = (DateInputContext)context.Items[typeof(DateInputContext)];
+                    dateInputContext.SetErrorItems(errorItems);
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
+            {
+                CallBase = true
+            };
+
+            var modelExplorer = new EmptyModelMetadataProvider()
+                .GetModelExplorerForType(typeof(Date), new Date(2020, 4, 1));
+
+            var viewContext = new ViewContext();
+
+            if (dayModelError != null)
+            {
+                var dayModelExplorer = modelExplorer.GetExplorerForProperty("Day");
+
+                viewContext.ModelState.AddModelError(
+                    ".Day",
+                    new DateParseException(dayModelError),
+                    dayModelExplorer.Metadata);
+            }
+
+            if (monthModelError != null)
+            {
+                var monthModelExplorer = modelExplorer.GetExplorerForProperty("Month");
+
+                viewContext.ModelState.AddModelError(
+                    ".Month",
+                    new DateParseException(monthModelError),
+                    monthModelExplorer.Metadata);
+            }
+
+            if (yearModelError != null)
+            {
+                var yearModelExplorer = modelExplorer.GetExplorerForProperty("Year");
+
+                viewContext.ModelState.AddModelError(
+                    ".Year",
+                    new DateParseException(yearModelError),
+                    yearModelExplorer.Metadata);
+            }
+
+            var tagHelper = new DateInputTagHelper(htmlGenerator.Object)
+            {
+                AspFor = new ModelExpression("", modelExplorer),
+                ViewContext = viewContext
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var html = output.AsString();
+            var node = HtmlNode.CreateNode(html);
+            var container = node.ChildNodes.FindFirst("div");
+
+            var day = container.SelectNodes("//input").First();
+            var month = container.SelectNodes("//input").Skip(1).First();
+            var year = container.SelectNodes("//input").Skip(2).First();
+
+            AssertHaveErrorClass(day, expectDayError);
+            AssertHaveErrorClass(month, expectMonthError);
+            AssertHaveErrorClass(year, expectYearError);
+
+            static void AssertHaveErrorClass(HtmlNode node, bool expectError)
+            {
+                if (expectError)
+                {
+                    Assert.Contains("govuk-input--error", node.GetClasses());
+                }
+                else
+                {
+                    Assert.DoesNotContain("govuk-input--error", node.GetClasses());
+                }
+            }
         }
     }
 }

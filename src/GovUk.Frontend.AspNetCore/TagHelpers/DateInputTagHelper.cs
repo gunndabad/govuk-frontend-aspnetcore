@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -90,6 +92,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var dateInputContext = (DateInputContext)context.Items[typeof(DateInputContext)];
             Debug.Assert(dateInputContext != null);
 
+            var deducedErrorItems = GetErrorItems();
+
             var day = CreateDateInputItem(
                 specifiedValue: Value?.Day.ToString() ?? string.Empty,
                 useSpecifiedValue: _valueSpecified,
@@ -150,17 +154,74 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 var resolvedItemLabel = new HtmlString(defaultLabel);
 
+                var resolvedItemHaveError = elementContext.HaveError &&
+                    ((dateInputContext.ErrorItems ?? deducedErrorItems) & errorSource) != 0;
+
                 return new DateInputItem()
                 {
                     //Attributes,
                     //Autocomplete
-                    HaveError = elementContext.HaveError && (dateInputContext.ErrorItems & errorSource) != 0,
+                    HaveError = resolvedItemHaveError,
                     Id = resolvedItemId,
                     Name = resolvedItemName,
                     Label = resolvedItemLabel,
                     //Pattern
                     Value = resolvedItemValue
                 };
+            }
+
+            DateInputErrorItems GetErrorItems()
+            {
+                if (AspFor == null)
+                {
+                    return DateInputErrorItems.All;
+                }
+
+                Debug.Assert(ViewContext != null);
+
+                // If we have one or more errors in ModelState for the child properties from our DateModelBinder
+                // (i.e. .Day, .Month, .Year) then we assume that the top-level error is because the date is invalid.
+                // As such, we only show highlight the fields with the errors.
+
+                var dayComponentModelName = $"{AspFor.Name}.Day";
+                var monthComponentModelName = $"{AspFor.Name}.Month";
+                var yearComponentModelName = $"{AspFor.Name}.Year";
+
+                DateInputErrorItems errorItems = 0;
+
+                if (HasErrorFromModelBinder(dayComponentModelName))
+                {
+                    errorItems |= DateInputErrorItems.Day;
+                }
+
+                if (HasErrorFromModelBinder(monthComponentModelName))
+                {
+                    errorItems |= DateInputErrorItems.Month;
+                }
+
+                if (HasErrorFromModelBinder(yearComponentModelName))
+                {
+                    errorItems |= DateInputErrorItems.Year;
+                }
+
+                return errorItems != 0 ? errorItems : DateInputErrorItems.All;
+
+                bool ErrorIsFromDateModelBinder(ModelError error) => error.Exception is DateParseException;
+
+                bool HasErrorFromModelBinder(string modelName)
+                {
+                    var fullName = Generator.GetFullHtmlFieldName(ViewContext, modelName);
+
+                    if (ViewContext.ModelState.TryGetValue(fullName, out var entry)
+                        && entry.Errors.Any(ErrorIsFromDateModelBinder))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
 
@@ -256,7 +317,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class DateInputContext
     {
-        public DateInputErrorItems ErrorItems { get; private set; }
+        public DateInputErrorItems? ErrorItems { get; private set; }
         public DateInputFieldset Fieldset { get; private set; }
 
         public void SetErrorItems(DateInputErrorItems errorItems) => ErrorItems = errorItems;
