@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ModelBinding;
@@ -149,25 +150,30 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             // Assert
             Assert.Equal(ModelBindingResult.Failed(), bindingContext.Result);
 
-            var topLevelError = Assert.Single(bindingContext.ModelState["TheModelName"].Errors);
-            Assert.Equal("Invalid date specified.", topLevelError.Exception.Message);
+            var topLevelError = Assert.IsType<DateParseException>(
+                bindingContext.ModelState["TheModelName"].Errors.Single()?.Exception);
+
+            Assert.Equal("Invalid date specified.", topLevelError.Message);
 
             if (expectedDayModelError != null)
             {
                 var dayError = Assert.Single(bindingContext.ModelState["TheModelName.Day"].Errors);
-                Assert.Equal(expectedDayModelError, dayError.Exception.Message);
+                Assert.Equal(expectedDayModelError, dayError.ErrorMessage);
+                Assert.True((topLevelError.ErrorComponents & DateParseErrorComponents.Day) != 0);
             }
 
             if (expectedMonthModelError != null)
             {
                 var monthError = Assert.Single(bindingContext.ModelState["TheModelName.Month"].Errors);
-                Assert.Equal(expectedMonthModelError, monthError.Exception.Message);
+                Assert.Equal(expectedMonthModelError, monthError.ErrorMessage);
+                Assert.True((topLevelError.ErrorComponents & DateParseErrorComponents.Month) != 0);
             }
 
             if (expectedYearModelError != null)
             {
                 var yearError = Assert.Single(bindingContext.ModelState["TheModelName.Year"].Errors);
-                Assert.Equal(expectedYearModelError, yearError.Exception.Message);
+                Assert.Equal(expectedYearModelError, yearError.ErrorMessage);
+                Assert.True((topLevelError.ErrorComponents & DateParseErrorComponents.Year) != 0);
             }
 
             Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"].AttemptedValue);
