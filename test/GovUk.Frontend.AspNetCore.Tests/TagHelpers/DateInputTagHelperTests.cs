@@ -262,34 +262,34 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var viewContext = new ViewContext();
 
+            var errorComponents = (DateParseErrorComponents)0;
+
             if (dayModelError != null)
             {
                 var dayModelExplorer = modelExplorer.GetExplorerForProperty("Day");
-
-                viewContext.ModelState.AddModelError(
-                    ".Day",
-                    new DateParseException(dayModelError),
-                    dayModelExplorer.Metadata);
+                viewContext.ModelState.AddModelError(".Day", dayModelError);
+                errorComponents |= DateParseErrorComponents.Day;
             }
 
             if (monthModelError != null)
             {
                 var monthModelExplorer = modelExplorer.GetExplorerForProperty("Month");
-
-                viewContext.ModelState.AddModelError(
-                    ".Month",
-                    new DateParseException(monthModelError),
-                    monthModelExplorer.Metadata);
+                viewContext.ModelState.AddModelError(".Month", monthModelError);
+                errorComponents |= DateParseErrorComponents.Month;
             }
 
             if (yearModelError != null)
             {
                 var yearModelExplorer = modelExplorer.GetExplorerForProperty("Year");
+                viewContext.ModelState.AddModelError(".Year", yearModelError);
+                errorComponents |= DateParseErrorComponents.Year;
+            }
 
+            if (errorComponents != 0)
+            {
                 viewContext.ModelState.AddModelError(
-                    ".Year",
-                    new DateParseException(yearModelError),
-                    yearModelExplorer.Metadata);
+                    "",
+                    new DateParseException("Invalid date.", errorComponents), modelExplorer.Metadata);
             }
 
             var tagHelper = new DateInputTagHelper(htmlGenerator.Object)
@@ -382,31 +382,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             if (dayModelError != null)
             {
                 var dayModelExplorer = modelExplorer.GetExplorerForProperty("Day");
-
-                viewContext.ModelState.AddModelError(
-                    ".Day",
-                    new DateParseException(dayModelError),
-                    dayModelExplorer.Metadata);
+                viewContext.ModelState.AddModelError(".Day", dayModelError);
             }
 
             if (monthModelError != null)
             {
                 var monthModelExplorer = modelExplorer.GetExplorerForProperty("Month");
-
-                viewContext.ModelState.AddModelError(
-                    ".Month",
-                    new DateParseException(monthModelError),
-                    monthModelExplorer.Metadata);
+                viewContext.ModelState.AddModelError(".Month", monthModelError);
             }
 
             if (yearModelError != null)
             {
                 var yearModelExplorer = modelExplorer.GetExplorerForProperty("Year");
-
-                viewContext.ModelState.AddModelError(
-                    ".Year",
-                    new DateParseException(yearModelError),
-                    yearModelExplorer.Metadata);
+                viewContext.ModelState.AddModelError(".Year", yearModelError);
             }
 
             var tagHelper = new DateInputTagHelper(htmlGenerator.Object)

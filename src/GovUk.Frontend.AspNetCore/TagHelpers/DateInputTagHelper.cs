@@ -177,51 +177,35 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     return DateInputErrorItems.All;
                 }
 
+                Debug.Assert(AspFor != null);
                 Debug.Assert(ViewContext != null);
 
-                // If we have one or more errors in ModelState for the child properties from our DateModelBinder
-                // (i.e. .Day, .Month, .Year) then we assume that the top-level error is because the date is invalid.
-                // As such, we only show highlight the fields with the errors.
+                // If there is a DateParseException in ModelState for the bound property,
+                // use its ErrorComponents to deduce DateInputErrorItems
 
-                var dayComponentModelName = $"{AspFor.Name}.Day";
-                var monthComponentModelName = $"{AspFor.Name}.Month";
-                var yearComponentModelName = $"{AspFor.Name}.Year";
-
-                DateInputErrorItems errorItems = 0;
-
-                if (HasErrorFromModelBinder(dayComponentModelName))
+                var fullName = Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+                if (!ViewContext.ModelState.TryGetValue(fullName, out var modelState))
                 {
-                    errorItems |= DateInputErrorItems.Day;
+                    return DateInputErrorItems.All;
                 }
 
-                if (HasErrorFromModelBinder(monthComponentModelName))
+                var dateParseException = modelState.Errors
+                    .Select(e => e.Exception)
+                    .Where(e => e != null)
+                    .OfType<DateParseException>()
+                    .FirstOrDefault();
+
+                if (dateParseException == null)
                 {
-                    errorItems |= DateInputErrorItems.Month;
+                    return DateInputErrorItems.All;
                 }
 
-                if (HasErrorFromModelBinder(yearComponentModelName))
-                {
-                    errorItems |= DateInputErrorItems.Year;
-                }
+                var dateParseErrorComponents = dateParseException.ErrorComponents;
 
-                return errorItems != 0 ? errorItems : DateInputErrorItems.All;
-
-                bool ErrorIsFromDateModelBinder(ModelError error) => error.Exception is DateParseException;
-
-                bool HasErrorFromModelBinder(string modelName)
-                {
-                    var fullName = Generator.GetFullHtmlFieldName(ViewContext, modelName);
-
-                    if (ViewContext.ModelState.TryGetValue(fullName, out var entry)
-                        && entry.Errors.Any(ErrorIsFromDateModelBinder))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+                return 0 |
+                    ((dateParseErrorComponents & DateParseErrorComponents.Day) != 0 ? DateInputErrorItems.Day : 0) |
+                    ((dateParseErrorComponents & DateParseErrorComponents.Month) != 0 ? DateInputErrorItems.Month : 0) |
+                    ((dateParseErrorComponents & DateParseErrorComponents.Year) != 0 ? DateInputErrorItems.Year : 0);
             }
         }
 
