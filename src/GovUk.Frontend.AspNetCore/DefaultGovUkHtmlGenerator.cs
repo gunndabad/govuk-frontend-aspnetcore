@@ -1293,39 +1293,42 @@ namespace GovUk.Frontend.AspNetCore
                 dd.InnerHtml.AppendHtml(row.Value);
                 rowTagBuilder.InnerHtml.AppendHtml(dd);
 
-                if (row.Actions.Any())
+                if (anyRowHasActions)
                 {
-                    var actionsDd = new TagBuilder("dd");
-                    actionsDd.AddCssClass("govuk-summary-list__actions");
-
-                    if (row.Actions.Count() == 1)
+                    if (row.Actions.Any())
                     {
-                        actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Single()));
+                        var actionsDd = new TagBuilder("dd");
+                        actionsDd.AddCssClass("govuk-summary-list__actions");
+
+                        if (row.Actions.Count() == 1)
+                        {
+                            actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Single()));
+                        }
+                        else
+                        {
+                            var ul = new TagBuilder("ul");
+                            ul.AddCssClass("govuk-summary-list__actions-list");
+
+                            foreach (var action in row.Actions)
+                            {
+                                var li = new TagBuilder("li");
+                                li.AddCssClass("govuk-summary-list__actions-list-item");
+                                li.InnerHtml.AppendHtml(GenerateLink(action));
+
+                                ul.InnerHtml.AppendHtml(li);
+                            }
+
+                            actionsDd.InnerHtml.AppendHtml(ul);
+                        }
+
+                        rowTagBuilder.InnerHtml.AppendHtml(actionsDd);
                     }
                     else
                     {
-                        var ul = new TagBuilder("ul");
-                        ul.AddCssClass("govuk-summary-list__actions-list");
-
-                        foreach (var action in row.Actions)
-                        {
-                            var li = new TagBuilder("li");
-                            li.AddCssClass("govuk-summary-list__actions-list-item");
-                            li.InnerHtml.AppendHtml(GenerateLink(action));
-
-                            ul.InnerHtml.AppendHtml(li);
-                        }
-
-                        actionsDd.InnerHtml.AppendHtml(ul);
+                        var span = new TagBuilder("span");
+                        span.AddCssClass("govuk-summary-list__actions");
+                        rowTagBuilder.InnerHtml.AppendHtml(span);
                     }
-
-                    rowTagBuilder.InnerHtml.AppendHtml(actionsDd);
-                }
-                else
-                {
-                    var span = new TagBuilder("span");
-                    span.AddCssClass("govuk-summary-list__actions");
-                    rowTagBuilder.InnerHtml.AppendHtml(span);
                 }
 
                 tagBuilder.InnerHtml.AppendHtml(rowTagBuilder);

@@ -92,6 +92,61 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "</dl>",
                 output.AsString());
         }
+
+        [Fact]
+        public async Task ProcessAsync_NoRowHasActions_GeneratesExpectedOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-summary-list",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-summary-list",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var summaryListContent = (SummaryListContext)context.Items[typeof(SummaryListContext)];
+
+                    summaryListContent.AddRow(new SummaryListRow()
+                    {
+                        Key = new HtmlString("Row 1 key"),
+                        Value = new HtmlString("Row 1 value"),
+                        Actions = Enumerable.Empty<SummaryListRowAction>()
+                    });
+
+                    summaryListContent.AddRow(new SummaryListRow()
+                    {
+                        Key = new HtmlString("Row 2 key"),
+                        Value = new HtmlString("Row 2 value"),
+                        Actions = Enumerable.Empty<SummaryListRowAction>()
+                    });
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new SummaryListTagHelper(new DefaultGovUkHtmlGenerator());
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Equal(
+                "<dl class=\"govuk-summary-list\">" +
+                "<div class=\"govuk-summary-list__row\">" +
+                "<dt class=\"govuk-summary-list__key\">Row 1 key</dt>" +
+                "<dt class=\"govuk-summary-list__value\">Row 1 value</dt>" +
+                "</div>" +
+                "<div class=\"govuk-summary-list__row\">" +
+                "<dt class=\"govuk-summary-list__key\">Row 2 key</dt>" +
+                "<dt class=\"govuk-summary-list__value\">Row 2 value</dt>" +
+                "</div>" +
+                "</dl>",
+                output.AsString());
+        }
     }
 
     public class SummaryListRowTagHelperTests
