@@ -45,11 +45,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-summary-list-row-key", "govuk-summary-list-row-value", "govuk-summary-list-row-action")]
     public class SummaryListRowTagHelper : TagHelper
     {
-        private const string AttributesPrefix = "row-";
-
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var summaryListContext = (SummaryListContext)context.Items[typeof(SummaryListContext)];
@@ -64,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             summaryListContext.AddRow(new SummaryListRow()
             {
                 Actions = rowContext.Actions,
-                Attributes = Attributes,
+                Attributes = output.Attributes.ToAttributesDictionary(),
                 Key = rowContext.Key,
                 Value = rowContext.Value
             });
