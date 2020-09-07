@@ -156,6 +156,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 href = urlHelper.Action(Action, Controller, RouteValues, Protocol, Host, Fragment);
             }
 
+            if (href == null)
+            {
+                throw new InvalidOperationException("Cannot determine the 'href' attribute for <a>.");
+            }
+
             return href;
         }
     }
