@@ -35,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var html = output.AsString();
-            Assert.Equal("<span class=\"govuk-hint\">Hint text</span>", html);
+            Assert.Equal("<div class=\"govuk-hint\">Hint text</div>", html);
         }
 
         [Fact]

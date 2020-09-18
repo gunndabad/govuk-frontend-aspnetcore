@@ -558,6 +558,7 @@ namespace GovUk.Frontend.AspNetCore
                     item.Autocomplete,
                     item.Pattern ?? "[0-9]*",
                     inputMode: "numeric",
+                    spellcheck: null,
                     disabled,
                     item.Attributes);
                 itemInput.AddCssClass("govuk-date-input__input");
@@ -814,7 +815,7 @@ namespace GovUk.Frontend.AspNetCore
                 throw new ArgumentNullException(nameof(content));
             }
 
-            var tagBuilder = new TagBuilder("span");
+            var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-hint");
 
@@ -862,6 +863,7 @@ namespace GovUk.Frontend.AspNetCore
             string autocomplete,
             string pattern,
             string inputMode,
+            bool? spellcheck,
             bool disabled,
             IDictionary<string, string> attributes)
         {
@@ -911,6 +913,11 @@ namespace GovUk.Frontend.AspNetCore
             if (inputMode != null)
             {
                 tagBuilder.Attributes.Add("inputmode", inputMode);
+            }
+
+            if (spellcheck.HasValue)
+            {
+                tagBuilder.Attributes.Add("spellcheck", spellcheck.Value ? "true" : "false");
             }
 
             if (disabled)
@@ -1456,6 +1463,7 @@ namespace GovUk.Frontend.AspNetCore
             int? rows,
             string describedBy,
             string autocomplete,
+            bool? spellcheck,
             bool disabled,
             IHtmlContent content,
             IDictionary<string, string> attributes)
@@ -1496,6 +1504,11 @@ namespace GovUk.Frontend.AspNetCore
             if (autocomplete != null)
             {
                 tagBuilder.Attributes.Add("autocomplete", autocomplete);
+            }
+
+            if (spellcheck.HasValue)
+            {
+                tagBuilder.Attributes.Add("spellcheck", spellcheck.Value ? "true" : "false");
             }
 
             if (disabled)

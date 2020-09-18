@@ -966,7 +966,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var html = output.AsString();
-            Assert.Contains("<span class=\"govuk-hint\" id=\"element-id-hint\">The hint</span>", html);
+            Assert.Contains("<div class=\"govuk-hint\" id=\"element-id-hint\">The hint</div>", html);
         }
 
         [Fact]

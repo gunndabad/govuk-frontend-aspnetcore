@@ -198,7 +198,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.AsString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
-                "<span class=\"govuk-hint\" id=\"my-id-hint\">The hint</span>" +
+                "<div class=\"govuk-hint\" id=\"my-id-hint\">The hint</div>" +
                 "<div class=\"govuk-checkboxes\">" +
                 "</div>" +
                 "</div>",
@@ -299,7 +299,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-checkboxes__item\">" +
                 "<input aria-describedby=\"first-hint\" class=\"govuk-checkboxes__input\" id=\"first\" name=\"testcheckboxes\" type=\"checkbox\" value=\"first\" />" +
                 "<label class=\"govuk-checkboxes__label govuk-label\" for=\"first\">First</label>" +
-                "<span class=\"govuk-checkboxes__hint govuk-hint\" id=\"first-hint\">Item hint</span>" +
+                "<div class=\"govuk-checkboxes__hint govuk-hint\" id=\"first-hint\">Item hint</div>" +
                 "</div>" +
                 "</div>" +
                 "</div>",

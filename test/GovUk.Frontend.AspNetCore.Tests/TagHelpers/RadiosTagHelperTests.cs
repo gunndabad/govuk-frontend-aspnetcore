@@ -215,7 +215,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.AsString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
-                "<span class=\"govuk-hint\" id=\"my-id-hint\">The hint</span>" +
+                "<div class=\"govuk-hint\" id=\"my-id-hint\">The hint</div>" +
                 "<div class=\"govuk-radios\">" +
                 "</div>" +
                 "</div>",
@@ -316,7 +316,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-radios__item\">" +
                 "<input aria-describedby=\"first-hint\" class=\"govuk-radios__input\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
-                "<span class=\"govuk-radios__hint govuk-hint\" id=\"first-hint\">Item hint</span>" +
+                "<div class=\"govuk-radios__hint govuk-hint\" id=\"first-hint\">Item hint</div>" +
                 "</div>" +
                 "</div>" +
                 "</div>",

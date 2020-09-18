@@ -15,6 +15,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IsDisabledAttributeName = "disabled";
         private const string InputModeAttributeName = "inputmode";
         private const string PatternAttributeName = "pattern";
+        private const string SpellcheckAttributeName = "spellcheck";
         private const string TypeAttributeName = "type";
         private const string ValueAttributeName = "value";
 
@@ -43,6 +44,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(PatternAttributeName)]
         public string Pattern { get; set; }
+
+        [HtmlAttributeName(SpellcheckAttributeName)]
+        public bool? Spellcheck { get; set; }
 
         [HtmlAttributeName(TypeAttributeName)]
         public string Type { get; set; }
@@ -82,6 +86,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Autocomplete,
                 Pattern,
                 InputMode,
+                Spellcheck,
                 IsDisabled,
                 Attributes);
         }
