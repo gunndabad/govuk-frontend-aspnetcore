@@ -178,7 +178,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var textarea = node.ChildNodes.FindFirst("textarea");
             Assert.Contains("govuk-js-character-count", textarea.GetCssClasses());
 
-            var hint = node.SelectSingleNode("//span[contains(@class, 'govuk-hint')]");
+            var hint = node.SelectSingleNode("//div[contains(@class, 'govuk-hint')]");
             Assert.Equal("my-id-info", hint.Id);
             Assert.Contains("govuk-character-count__message", hint.GetCssClasses());
             Assert.Equal("polite", hint.Attributes["aria-live"].Value);
@@ -235,7 +235,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var textarea = node.ChildNodes.FindFirst("textarea");
             Assert.Contains("govuk-js-character-count", textarea.GetCssClasses());
 
-            var hint = node.SelectSingleNode("//span[contains(@class, 'govuk-hint')]");
+            var hint = node.SelectSingleNode("//div[contains(@class, 'govuk-hint')]");
             Assert.Equal("my-id-info", hint.Id);
             Assert.Contains("govuk-character-count__message", hint.GetCssClasses());
             Assert.Equal("polite", hint.Attributes["aria-live"].Value);

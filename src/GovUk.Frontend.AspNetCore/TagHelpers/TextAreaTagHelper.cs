@@ -16,6 +16,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IdAttributeName = "id";
         private const string IsDisabledAttributeName = "disabled";
         private const string RowsAttributeName = "rows";
+        private const string SpellcheckAttributeName = "spellcheck";
 
         public TextAreaTagHelper(IGovUkHtmlGenerator htmlGenerator)
             : base(htmlGenerator)
@@ -36,6 +37,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(RowsAttributeName)]
         public int? Rows { get; set; }
+
+        [HtmlAttributeName(SpellcheckAttributeName)]
+        public bool? Spellcheck { get; set; }
 
         protected override FormGroupBuilder CreateFormGroupBuilder() => new TextAreaBuilder();
 
@@ -62,6 +66,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Rows,
                 DescribedBy,
                 Autocomplete,
+                Spellcheck,
                 IsDisabled,
                 resolvedContent,
                 Attributes);

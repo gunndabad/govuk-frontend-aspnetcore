@@ -109,6 +109,7 @@ namespace GovUk.Frontend.AspNetCore
             string autocomplete,
             string pattern,
             string inputMode,
+            bool? spellcheck,
             bool disabled,
             IDictionary<string, string> attributes);
 
@@ -164,6 +165,7 @@ namespace GovUk.Frontend.AspNetCore
             int? rows,
             string describedBy,
             string autocomplete,
+            bool? spellcheck,
             bool disabled,
             IHtmlContent content,
             IDictionary<string, string> attributes);
