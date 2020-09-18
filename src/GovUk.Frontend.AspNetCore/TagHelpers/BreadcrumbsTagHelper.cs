@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -13,12 +12,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-breadcrumbs-item")]
     public class BreadcrumbsTagHelper : TagHelper
     {
+        private const string CollapseOnMobileAttributeName = "collapse-on-mobile";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public BreadcrumbsTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
+
+        [HtmlAttributeName(CollapseOnMobileAttributeName)]
+        public bool CollapseOnMobile { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -30,6 +34,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(
+                CollapseOnMobile,
                 output.Attributes.ToAttributesDictionary(),
                 bcContext.Items);
 
