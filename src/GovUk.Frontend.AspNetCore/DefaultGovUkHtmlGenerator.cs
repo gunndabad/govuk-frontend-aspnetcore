@@ -153,6 +153,7 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GenerateBreadcrumbs(
+            bool collapseOnMobile,
             IDictionary<string, string> attributes,
             IEnumerable<BreadcrumbsItem> items)
         {
@@ -164,6 +165,11 @@ namespace GovUk.Frontend.AspNetCore
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-breadcrumbs");
+
+            if (collapseOnMobile)
+            {
+                tagBuilder.AddCssClass("govuk-breadcrumbs--collapse-on-mobile");
+            }
 
             var ol = new TagBuilder("ol");
             ol.AddCssClass("govuk-breadcrumbs__list");

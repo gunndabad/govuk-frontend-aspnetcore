@@ -8,7 +8,7 @@
     <RepositoryUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>aspnetcore, taghelpers, gds, gov.uk</PackageTags>
-    <VersionPrefix>0.1.5</VersionPrefix>
+    <VersionPrefix>0.2.0</VersionPrefix>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
