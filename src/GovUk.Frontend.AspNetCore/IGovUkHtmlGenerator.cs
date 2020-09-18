@@ -111,7 +111,11 @@ namespace GovUk.Frontend.AspNetCore
             string inputMode,
             bool? spellcheck,
             bool disabled,
-            IDictionary<string, string> attributes);
+            IDictionary<string, string> attributes,
+            IHtmlContent prefixContent,
+            IDictionary<string, string> prefixAttributes,
+            IHtmlContent suffixContent,
+            IDictionary<string, string> suffixAttributes);
 
         TagBuilder GenerateLabel(
             string @for,

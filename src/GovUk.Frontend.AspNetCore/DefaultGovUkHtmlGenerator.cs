@@ -560,7 +560,11 @@ namespace GovUk.Frontend.AspNetCore
                     inputMode: "numeric",
                     spellcheck: null,
                     disabled,
-                    item.Attributes);
+                    item.Attributes,
+                    prefixContent: null,
+                    prefixAttributes: null,
+                    suffixContent: null,
+                    suffixAttributes: null);
                 itemInput.AddCssClass("govuk-date-input__input");
                 itemInput.AddCssClass(@class);
 
@@ -865,7 +869,11 @@ namespace GovUk.Frontend.AspNetCore
             string inputMode,
             bool? spellcheck,
             bool disabled,
-            IDictionary<string, string> attributes)
+            IDictionary<string, string> attributes,
+            IHtmlContent prefixContent,
+            IDictionary<string, string> prefixAttributes,
+            IHtmlContent suffixContent,
+            IDictionary<string, string> suffixAttributes)
         {
             if (id == null)
             {
@@ -925,7 +933,41 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.Attributes.Add("disabled", "disabled");
             }
 
-            return tagBuilder;
+            if (prefixContent != null || suffixContent != null)
+            {
+                var wrapper = new TagBuilder("div");
+                wrapper.AddCssClass("govuk-input__wrapper");
+
+                if (prefixContent != null)
+                {
+                    var prefix = new TagBuilder("div");
+                    prefix.MergeAttributes(prefixAttributes);
+                    prefix.AddCssClass("govuk-input__prefix");
+                    prefix.Attributes.Add("aria-hidden", "true");
+                    prefix.InnerHtml.AppendHtml(prefixContent);
+
+                    wrapper.InnerHtml.AppendHtml(prefix);
+                }
+
+                wrapper.InnerHtml.AppendHtml(tagBuilder);
+
+                if (suffixContent != null)
+                {
+                    var suffix = new TagBuilder("div");
+                    suffix.MergeAttributes(suffixAttributes);
+                    suffix.AddCssClass("govuk-input__suffix");
+                    suffix.Attributes.Add("aria-hidden", "true");
+                    suffix.InnerHtml.AppendHtml(suffixContent);
+
+                    wrapper.InnerHtml.AppendHtml(suffix);
+                }
+
+                return wrapper;
+            }
+            else
+            {
+                return tagBuilder;
+            }
         }
 
         public virtual TagBuilder GenerateLabel(
