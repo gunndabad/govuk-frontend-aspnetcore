@@ -66,7 +66,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (AspFor == null && !_valueSpecified)
             {
                 throw new InvalidOperationException(
-                    $"At least one of the '{AspFor}' and '{Value}' attributes must be specified.");
+                    $"At least one of the '{AspForAttributeName}' and '{ValueAttributeName}' attributes must be specified.");
             }
 
             var resolvedValue = Value ??
