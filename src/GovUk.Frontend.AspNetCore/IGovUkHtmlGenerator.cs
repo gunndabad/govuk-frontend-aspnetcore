@@ -93,6 +93,13 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
+        TagBuilder GenerateFileUpload(
+            bool haveError,
+            string id,
+            string name,
+            string describedBy,
+            IDictionary<string, string> attributes);
+
         TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateHint(string id, IHtmlContent content, IDictionary<string, string> attributes);
