@@ -15,6 +15,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         public const int DefaultAccordionItemHeadingLevel = 2;
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
+        public const string DefaultErrorSummaryTitle = "There is a problem";
         public const string DefaultInputType = "text";
         public const int DefaultPanelHeadingLevel = 1;
         public const string DefaultTabsTitle = "Contents";
@@ -688,11 +689,6 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes,
             IEnumerable<ErrorSummaryItem> items)
         {
-            if (titleContent == null)
-            {
-                throw new ArgumentNullException(nameof(titleContent));
-            }
-
             if (items == null)
             {
                 throw new ArgumentNullException(nameof(items));
@@ -710,7 +706,7 @@ namespace GovUk.Frontend.AspNetCore
             heading.MergeAttributes(titleAttributes);
             heading.AddCssClass("govuk-error-summary__title");
             heading.Attributes.Add("id", "error-summary-title");
-            heading.InnerHtml.AppendHtml(titleContent);
+            heading.InnerHtml.AppendHtml(titleContent ?? new HtmlString(DefaultErrorSummaryTitle));
             tagBuilder.InnerHtml.AppendHtml(heading);
 
             var body = new TagBuilder("div");
