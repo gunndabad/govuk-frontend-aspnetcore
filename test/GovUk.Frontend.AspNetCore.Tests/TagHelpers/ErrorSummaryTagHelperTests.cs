@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -70,7 +71,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Fact]
-        public async Task ProcessAsync_NoTitleThrowsInvalidOperationException()
+        public async Task ProcessAsync_NoTitleSpecified_UsesDefaultTitle()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -84,15 +85,27 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                    errorSummaryContext.AddItem(new ErrorSummaryItem()
+                    {
+                        Content = new HtmlString("First message")
+                    });
+
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
             var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
 
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Missing <govuk-error-summary-title> element.", ex.Message);
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var html = output.AsString();
+            var node = HtmlNode.CreateNode(html);
+            var h2 = node.ChildNodes.FindFirst("h2");
+            Assert.Equal("There is a problem", h2.InnerHtml);
         }
     }
 
