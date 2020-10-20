@@ -107,6 +107,35 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var h2 = node.ChildNodes.FindFirst("h2");
             Assert.Equal("There is a problem", h2.InnerHtml);
         }
+
+        [Fact]
+        public async Task ProcessAsync_NoTitleDescriptionOrItems_RendersNothing()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-summary",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-summary",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var html = output.AsString();
+            Assert.Empty(html);
+        }
     }
 
     public class ErrorSummaryTitleTagHelperTests

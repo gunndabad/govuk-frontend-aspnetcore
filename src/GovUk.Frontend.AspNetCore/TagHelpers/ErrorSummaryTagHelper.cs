@@ -29,6 +29,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
+            if (errorSummaryContext.Title == null &&
+                errorSummaryContext.Description == null &&
+                errorSummaryContext.Items.Count == 0)
+            {
+                output.SuppressOutput();
+                return;
+            }
+
             var tagBuilder = _htmlGenerator.GenerateErrorSummary(
                 errorSummaryContext.Title?.content,
                 errorSummaryContext.Title?.attributes,
