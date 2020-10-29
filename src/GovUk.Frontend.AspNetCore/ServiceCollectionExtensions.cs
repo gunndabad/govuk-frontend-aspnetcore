@@ -1,6 +1,7 @@
 ﻿using System;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,7 @@ namespace GovUk.Frontend.AspNetCore
             services.AddSingleton(options);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
+            services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
 
             if (options.AddImportsToHtml)
             {
