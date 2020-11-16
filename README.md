@@ -1,6 +1,7 @@
 # ASP.NET Core tag helpers for GOV.UK Design System
 
 ![ci](https://github.com/gunndabad/govuk-frontend-aspnetcore/workflows/ci/badge.svg)
+![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/GovUk.Frontend.AspNetCore)
 
 Targets [GDS Frontend v3.9.1](https://github.com/alphagov/govuk-frontend/releases/tag/v3.9.1)
 
