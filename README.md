@@ -53,3 +53,33 @@ In your `_ViewImports.cshtml` file:
 ## GDS assets
 
 This package serves the GDS Frontend assets (stylesheets, javascript, fonts) inside the host application so these do not need to be imported separately.
+
+## Components
+
+- [x] Accordion
+- [x] Back link
+- [x] Breadcrumbs
+- [x] Button
+- [x] Character count
+- [x] Checkboxes
+- [x] Date input
+- [x] Details
+- [x] Error message
+- [x] Error summary
+- [x] Fieldset
+- [x] File upload
+- [ ] [Footer](https://github.com/gunndabad/govuk-frontend-aspnetcore/issues/18)
+- [ ] [Header](https://github.com/gunndabad/govuk-frontend-aspnetcore/issues/17)
+- [x] Inset text
+- [x] Panel
+- [x] Phase banner
+- [x] Radios
+- [x] Select
+- [x] Skip link
+- [x] Summary list
+- [ ] [Table](https://github.com/gunndabad/govuk-frontend-aspnetcore/issues/29)
+- [x] Tabs
+- [x] Tag
+- [x] Text input
+- [x] Textarea
+- [x] Warning text
