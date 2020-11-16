@@ -8,6 +8,7 @@
     <RepositoryUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>aspnetcore, taghelpers, gds, gov.uk</PackageTags>
+    <Description>A port of the GOV.UK Design system's components for ASP.NET Core.</Description>
     <VersionPrefix>0.4.4</VersionPrefix>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
