@@ -13,14 +13,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelperComponents
         {
             if (string.Equals(context.TagName, "head", StringComparison.OrdinalIgnoreCase))
             {
-                output.PostContent.AppendHtml(HtmlSnippets.StyleImports);
+                output.PostContent.AppendHtml(HtmlSnippets.StyleImports + "\n");
             }
             else if (string.Equals(context.TagName, "body", StringComparison.OrdinalIgnoreCase))
             {
                 output.AddClass("govuk-template__body", HtmlEncoder.Default);
 
-                output.PreContent.AppendHtml(HtmlSnippets.BodyInitScript);
-                output.PostContent.AppendHtml(HtmlSnippets.ScriptImports);
+                output.PreContent.AppendHtml("\n" + HtmlSnippets.BodyInitScript);
+                output.PostContent.AppendHtml(HtmlSnippets.ScriptImports + "\n");
             }
         }
     }
