@@ -82,7 +82,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.AsString();
             Assert.Equal(
-                "<button class=\"govuk-button\" data-module=\"govuk-button\">" +
+                "<button class=\"govuk-button\" data-module=\"govuk-button\" type=\"submit\">" +
                 "Button text" +
                 "</button>",
                 html);
