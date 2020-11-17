@@ -7,12 +7,9 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    public enum ButtonTagHelperElementType { Anchor, Button }
-
     [HtmlTargetElement("govuk-button")]
     public class ButtonTagHelper : LinkTagHelperBase
     {
-        private const string ElementAttributeName = "element";
         private const string FormActionAttributeName = "formaction";
         private const string IsDisabledAttributeName = "disabled";
         private const string IsStartButtonAttributeName = "is-start-button";
@@ -25,9 +22,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             : base(htmlGenerator, urlHelperFactory)
         {
         }
-
-        [HtmlAttributeName(ElementAttributeName)]
-        public ButtonTagHelperElementType? Element { get; set; }
 
         [HtmlAttributeName(FormActionAttributeName)]
         public string FormAction { get; set; }
@@ -45,18 +39,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public bool? PreventDoubleClick { get; set; } = false;
 
         [HtmlAttributeName(TypeAttributeName)]
-        public string Type { get; set; }  // TODO Make this an enum?
+        public string Type { get; set; }
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            string element = GetTagNameFromElementType(
-                Element ??
-                (Href != null || (Type == null && HasLinkAttributes) ?
-                    ButtonTagHelperElementType.Anchor :
-                    ButtonTagHelperElementType.Button));
+            var element = (Type == null && HasLinkAttributes)
+                ? "a"
+                : "button";
             output.TagName = element;
 
             if (element == "a" && Name != null)
@@ -67,11 +59,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (element == "a" && PreventDoubleClick == true)
             {
                 throw new InvalidOperationException($"Cannot specify the '{PreventDoubleClickAttributeName}' attribute for 'a' elements.");
-            }
-
-            if (element == "a" && Type != null)
-            {
-                throw new InvalidOperationException($"Cannot specify the '{TypeAttributeName}' attribute for 'a' elements.");
             }
 
             if (element == "a" && Value != null)
@@ -138,13 +125,5 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
         }
-
-        private string GetTagNameFromElementType(ButtonTagHelperElementType elementType) =>
-            elementType switch
-            {
-                ButtonTagHelperElementType.Anchor => "a",
-                ButtonTagHelperElementType.Button => "button",
-                _ => throw new ArgumentException("Invalid elementType", nameof(elementType))
-            };
     }
 }
