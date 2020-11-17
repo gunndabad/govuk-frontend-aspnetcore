@@ -15,6 +15,9 @@ namespace GovUk.Frontend.AspNetCore
     {
         public const int DefaultAccordionHeadingLevel = 2;
         public const bool DefaultBreadcrumbCollapseOnMobile = false;
+        public const bool DefaultButtonDisabled = false;
+        public const bool DefaultButtonIsStartButton = false;
+        public const bool DefaultButtonPreventDoubleClick = false;
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultErrorSummaryTitle = "There is a problem";
         public const string DefaultInputType = "text";
@@ -214,9 +217,9 @@ namespace GovUk.Frontend.AspNetCore
             string name,
             string type,
             string value,
-            bool isStartButton,
-            bool disabled,
-            bool preventDoubleClick,
+            bool? isStartButton,
+            bool? disabled,
+            bool? preventDoubleClick,
             string formAction,
             IHtmlContent content,
             IDictionary<string, string> attributes)
@@ -231,7 +234,7 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.AddCssClass("govuk-button");
             tagBuilder.Attributes.Add("data-module", "govuk-button");
 
-            if (disabled)
+            if (disabled ?? DefaultButtonDisabled)
             {
                 tagBuilder.AddCssClass("govuk-button--disabled");
                 tagBuilder.Attributes.Add("disabled", "disabled");
@@ -243,7 +246,7 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.Attributes.Add("name", name);
             }
 
-            if (preventDoubleClick)
+            if (preventDoubleClick ?? DefaultButtonPreventDoubleClick)
             {
                 tagBuilder.Attributes.Add("data-prevent-double-click", "true");
             }
@@ -265,7 +268,7 @@ namespace GovUk.Frontend.AspNetCore
 
             tagBuilder.InnerHtml.AppendHtml(content);
 
-            if (isStartButton)
+            if (isStartButton ?? DefaultButtonIsStartButton)
             {
                 tagBuilder.AddCssClass("govuk-button--start");
 
@@ -278,8 +281,8 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateButtonLink(
             string href,
-            bool isStartButton,
-            bool disabled,
+            bool? isStartButton,
+            bool? disabled,
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
@@ -301,14 +304,14 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.Attributes.Add("draggable", "false");
             tagBuilder.Attributes.Add("href", href);
 
-            if (disabled)
+            if (disabled ?? DefaultButtonDisabled)
             {
                 tagBuilder.AddCssClass("govuk-button--disabled");
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);
 
-            if (isStartButton)
+            if (isStartButton ?? DefaultButtonIsStartButton)
             {
                 tagBuilder.AddCssClass("govuk-button--start");
 

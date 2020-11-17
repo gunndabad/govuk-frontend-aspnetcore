@@ -33,16 +33,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string FormAction { get; set; }
 
         [HtmlAttributeName(IsDisabledAttributeName)]
-        public bool IsDisabled { get; set; } = false;
+        public bool? IsDisabled { get; set; } = false;
 
         [HtmlAttributeName(IsStartButtonAttributeName)]
-        public bool IsStartButton { get; set; } = false;
+        public bool? IsStartButton { get; set; } = false;
 
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
 
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
-        public bool PreventDoubleClick { get; set; } = false;
+        public bool? PreventDoubleClick { get; set; } = false;
 
         [HtmlAttributeName(TypeAttributeName)]
         public string Type { get; set; }  // TODO Make this an enum?
