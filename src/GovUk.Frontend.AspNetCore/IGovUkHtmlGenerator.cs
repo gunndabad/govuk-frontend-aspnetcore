@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateBackLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateBreadcrumbs(
-            bool collapseOnMobile,
+            bool? collapseOnMobile,
             IDictionary<string, string> attributes,
             IEnumerable<BreadcrumbsItem> items);
 
