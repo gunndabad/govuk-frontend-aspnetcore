@@ -187,6 +187,7 @@ namespace GovUk.Frontend.AspNetCore
                 if (item.Href != null)
                 {
                     var itemLink = new TagBuilder("a");
+                    itemLink.MergeAttributes(item.LinkAttributes);
                     itemLink.AddCssClass("govuk-breadcrumbs__link");
                     itemLink.Attributes.Add("href", item.Href);
                     itemLink.InnerHtml.AppendHtml(item.Content);

@@ -49,10 +49,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-breadcrumbs-item", TagStructure = TagStructure.NormalOrSelfClosing, ParentTag = "govuk-breadcrumbs")]
     public class BreadcrumbsItemTagHelper : LinkTagHelperBase
     {
+        private const string LinkAttributesPrefix = "link-";
+
         public BreadcrumbsItemTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
             : base(htmlGenerator, urlHelperFactory)
         {
         }
+
+        [HtmlAttributeName(DictionaryAttributePrefix = LinkAttributesPrefix)]
+        public IDictionary<string, string> LinkAttributes { get; set; } = new Dictionary<string, string>();
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -66,6 +71,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 Href = href,
+                LinkAttributes = LinkAttributes,
                 Content = childContent.Snapshot()
             });
 
