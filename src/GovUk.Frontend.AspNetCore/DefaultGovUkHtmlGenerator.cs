@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore
 {
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
-        public const int DefaultAccordionItemHeadingLevel = 2;
+        public const int DefaultAccordionHeadingLevel = 2;
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultErrorSummaryTitle = "There is a problem";
         public const string DefaultInputType = "text";
@@ -40,6 +40,7 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateAccordion(
             string id,
+            int? headingLevel,
             IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items)
         {
@@ -52,6 +53,8 @@ namespace GovUk.Frontend.AspNetCore
             {
                 throw new ArgumentNullException(nameof(items));
             }
+
+            var resolvedHeadingLevel = headingLevel ?? DefaultAccordionHeadingLevel;
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
@@ -74,10 +77,8 @@ namespace GovUk.Frontend.AspNetCore
                 var header = new TagBuilder("div");
                 header.AddCssClass("govuk-accordion__section-header");
 
-                // REVIEW Validate heading level?
-
                 var headingId = $"{id}-heading-{index}";
-                var heading = new TagBuilder($"h{item.HeadingLevel ?? DefaultAccordionItemHeadingLevel}");
+                var heading = new TagBuilder($"h{resolvedHeadingLevel}");
                 heading.MergeAttributes(item.HeadingAttributes);
                 heading.AddCssClass("govuk-accordion__section-heading");
                 var headingContent = new TagBuilder("span");

@@ -33,7 +33,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First content"),
                         IsExpanded = false,
                         HeadingContent = new HtmlString("First heading"),
-                        HeadingLevel = 1,
                         SummaryContent = new HtmlString("First summary")
                     });
 
@@ -41,8 +40,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     {
                         Content = new HtmlString("First content"),
                         IsExpanded = true,
-                        HeadingContent = new HtmlString("Second heading"),
-                        HeadingLevel = 2
+                        HeadingContent = new HtmlString("Second heading")
                     });
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -51,7 +49,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new AccordionTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                Id = "testaccordion"
+                Id = "testaccordion",
+                HeadingLevel = 1,
             };
 
             // Act
@@ -73,9 +72,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "</div>" +
                 "</div>" +
                 "<div class=\"govuk-accordion__section--expanded govuk-accordion__section\">" +
-                "<div class=\"govuk-accordion__section-header\"><h2 class=\"govuk-accordion__section-heading\">" +
+                "<div class=\"govuk-accordion__section-header\">" +
+                "<h1 class=\"govuk-accordion__section-heading\">" +
                 "<span class=\"govuk-accordion__section-button\" id=\"testaccordion-heading-1\">Second heading</span>" +
-                "</h2>" +
+                "</h1>" +
                 "</div>" +
                 "<div aria-labelledby=\"testaccordion-heading-1\" class=\"govuk-accordion__section-content\" id=\"testaccordion-content-1\">" +
                 "First content" +
@@ -107,7 +107,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First content"),
                         IsExpanded = false,
                         HeadingContent = new HtmlString("First heading"),
-                        HeadingLevel = 1,
                         SummaryContent = new HtmlString("First summary")
                     });
 
@@ -115,8 +114,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     {
                         Content = new HtmlString("First content"),
                         IsExpanded = true,
-                        HeadingContent = new HtmlString("Second heading"),
-                        HeadingLevel = 2
+                        HeadingContent = new HtmlString("Second heading")
                     });
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -128,6 +126,56 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
             Assert.Equal("The 'id' attribute must be specified.", ex.Message);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(7)]
+        public async Task ProcessAsync_InvalidLevelThrowsInvalidOperationException(int level)
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-accordion",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-accordion",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
+
+                    accordionContext.AddItem(new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        IsExpanded = false,
+                        HeadingContent = new HtmlString("First heading"),
+                        SummaryContent = new HtmlString("First summary")
+                    });
+
+                    accordionContext.AddItem(new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        IsExpanded = true,
+                        HeadingContent = new HtmlString("Second heading")
+                    });
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new AccordionTagHelper(new DefaultGovUkHtmlGenerator())
+            {
+                Id = "testaccordion",
+                HeadingLevel = level
+            };
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("The 'heading-level' attribute must be between 1 and 6.", ex.Message);
         }
     }
 
@@ -154,7 +202,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
-                    itemContext.TrySetHeading(1, attributes: null, new HtmlString("Heading"));
+                    itemContext.TrySetHeading(attributes: null, new HtmlString("Heading"));
                     itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -171,7 +219,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, accordionContext.Items.Count);
 
             var firstItem = accordionContext.Items.First();
-            Assert.Equal(1, firstItem.HeadingLevel.Value);
             Assert.Equal("Heading", firstItem.HeadingContent.AsString());
             Assert.Equal("Summary", firstItem.SummaryContent.AsString());
             Assert.Equal("Content", firstItem.Content.AsString());
@@ -242,58 +289,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new AccordionItemHeadingTagHelper()
-            {
-                Level = 3
-            };
+            var tagHelper = new AccordionItemHeadingTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
             Assert.NotNull(itemContext.Heading);
-            Assert.Equal(3, itemContext.Heading.Value.level);
             Assert.Equal("Summary content", itemContext.Heading.Value.content.AsString());
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        [InlineData(7)]
-        public async Task ProcessAsync_InvalidLevelThrowsInvalidOperationException(int level)
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-            var itemContext = new AccordionItemContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item-heading",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext },
-                    { typeof(AccordionItemContext), itemContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item-heading",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Summary content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemHeadingTagHelper()
-            {
-                Level = level
-            };
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("The 'level' attribute must be between 1 and 6.", ex.Message);
         }
 
         [Fact]
@@ -302,7 +305,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.TrySetHeading(level: null, attributes: null, content: new HtmlString("Existing heading"));
+            itemContext.TrySetHeading(attributes: null, content: new HtmlString("Existing heading"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-heading",
