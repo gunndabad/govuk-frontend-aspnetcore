@@ -1,0 +1,29 @@
+﻿@page "/button"
+
+<p>
+    <govuk-button type="submit">Save and continue</govuk-button>
+</p>
+
+<p>
+    <govuk-button class="govuk-button--secondary">Cancel</govuk-button>
+</p>
+
+<p>
+    <govuk-button is-start-button="true" href="/start">Start</govuk-button>
+</p>
+
+<p>
+    <govuk-button disabled="true">Save and continue</govuk-button>
+</p>
+
+<p>
+    <govuk-button href="/">Confirm</govuk-button>
+</p>
+
+<p>
+    <govuk-button asp-controller="Home" asp-action="Confirm">Confirm</govuk-button>
+</p>
+
+<p>
+    <govuk-button type="submit" asp-controller="Home" asp-action="Confirm">Confirm</govuk-button>
+</p>
