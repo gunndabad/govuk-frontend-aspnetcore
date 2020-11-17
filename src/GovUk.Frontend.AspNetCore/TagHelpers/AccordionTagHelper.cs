@@ -65,10 +65,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-accordion-item", ParentTag = "govuk-accordion")]
     public class AccordionItemTagHelper : TagHelper
     {
-        private const string IsExpandedAttributeName = "expanded";
+        private const string ExpandedAttributeName = "expanded";
 
-        [HtmlAttributeName(IsExpandedAttributeName)]
-        public bool IsExpanded { get; set; }
+        [HtmlAttributeName(ExpandedAttributeName)]
+        public bool Expanded { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = childContent.Snapshot(),
-                IsExpanded = IsExpanded,
+                IsExpanded = Expanded,
                 HeadingContent = itemContext.Heading.Value.content,
                 HeadingAttributes = itemContext.Heading.Value.attributes,
                 SummaryContent = itemContext.Summary?.content,
