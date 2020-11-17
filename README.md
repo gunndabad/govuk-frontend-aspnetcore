@@ -59,7 +59,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 
 - [x] [Accordion](docs/accordion.md)
 - [x] [Back link](docs/back-link.md)
-- [x] Breadcrumbs
+- [x] [Breadcrumbs](docs/breadcrumbs.md)
 - [x] Button
 - [x] Character count
 - [x] Checkboxes
