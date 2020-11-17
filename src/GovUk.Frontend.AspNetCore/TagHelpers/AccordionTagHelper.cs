@@ -11,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-accordion-item")]
     public class AccordionTagHelper : TagHelper
     {
+        private const string HeadingLevelAttributeName = "heading-level";
         private const string IdAttributeName = "id";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -19,6 +20,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
+
+        [HtmlAttributeName(HeadingLevelAttributeName)]
+        public int? HeadingLevel { get; set; }
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -30,6 +34,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{IdAttributeName}' attribute must be specified.");
             }
 
+            if (HeadingLevel != null && (HeadingLevel < 1 || HeadingLevel > 6))
+            {
+                throw new InvalidOperationException(
+                    $"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
+            }
+
             var accordionContext = new AccordionContext();
 
             using (context.SetScopedContextItem(typeof(AccordionContext), accordionContext))
@@ -39,6 +49,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = _htmlGenerator.GenerateAccordion(
                 Id,
+                HeadingLevel,
                 output.Attributes.ToAttributesDictionary(),
                 accordionContext.Items);
 
@@ -83,7 +94,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 IsExpanded = IsExpanded,
                 HeadingContent = itemContext.Heading.Value.content,
                 HeadingAttributes = itemContext.Heading.Value.attributes,
-                HeadingLevel = itemContext.Heading.Value.level,
                 SummaryContent = itemContext.Summary?.content,
                 SummaryAttributes = itemContext.Summary?.attributes
             });
@@ -95,18 +105,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-accordion-item-heading", ParentTag = "govuk-accordion-item")]
     public class AccordionItemHeadingTagHelper : TagHelper
     {
-        private const string LevelAttributeName = "level";
-
-        [HtmlAttributeName(LevelAttributeName)]
-        public int? Level { get; set; }
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (Level != null && (Level < 1 || Level > 6))
-            {
-                throw new InvalidOperationException($"The '{LevelAttributeName}' attribute must be between 1 and 6.");
-            }
-
             var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
 
             TagHelperContent childContent;
@@ -115,7 +115,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 childContent = await output.GetChildContentAsync();
             }
 
-            if (!itemContext.TrySetHeading(Level, output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
+            if (!itemContext.TrySetHeading(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -170,10 +170,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class AccordionItemContext
     {
-        public (int? level, IDictionary<string, string> attributes, IHtmlContent content)? Heading { get; private set; }
+        public (IDictionary<string, string> attributes, IHtmlContent content)? Heading { get; private set; }
         public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
 
-        public bool TrySetHeading(int? level, IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetHeading(IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -185,7 +185,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Heading = (level, attributes, content);
+            Heading = (attributes, content);
             return true;
         }
 

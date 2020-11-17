@@ -9,6 +9,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         TagBuilder GenerateAccordion(
             string id,
+            int? headingLevel,
             IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items);
 
