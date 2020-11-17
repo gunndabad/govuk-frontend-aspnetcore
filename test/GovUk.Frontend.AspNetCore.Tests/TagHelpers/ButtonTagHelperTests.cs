@@ -37,7 +37,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Anchor,
                 Href = "http://foo.com"
             };
 
@@ -75,10 +74,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new ButtonTagHelper(
                 new DefaultGovUkHtmlGenerator(),
-                Mock.Of<IUrlHelperFactory>())
-            {
-                Element = ButtonTagHelperElementType.Button
-            };
+                Mock.Of<IUrlHelperFactory>());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -238,7 +234,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
                 IsStartButton = true
             };
 
@@ -274,7 +269,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
                 IsDisabled = true
             };
 
@@ -312,7 +306,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Anchor,
                 IsDisabled = true,
                 Href = "https://place.com"
             };
@@ -349,7 +342,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
                 Value = "some value"
             };
 
@@ -384,7 +376,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
                 Type = "submit"
             };
 
@@ -419,7 +410,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
                 Name = "Some name"
             };
 
@@ -454,7 +444,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
                 PreventDoubleClick = true
             };
 
@@ -489,7 +478,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Anchor,
                 Href = "https://place.com",
                 Name = "A name"
             };
@@ -497,40 +485,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
             Assert.Equal("Cannot specify the 'name' attribute for 'a' elements.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_TypeSpecifiedForAnchorElementThrowsInvalidOperationException()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-button",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-button",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Button text");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
-                Mock.Of<IUrlHelperFactory>())
-            {
-                Element = ButtonTagHelperElementType.Anchor,
-                Href = "https://place.com",
-                Type = "submit"
-            };
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Cannot specify the 'type' attribute for 'a' elements.", ex.Message);
         }
 
         [Fact]
@@ -557,7 +511,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Anchor,
                 Value = "Some value",
                 Href = "https://place.com"
             };
@@ -591,7 +544,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Anchor,
                 PreventDoubleClick = true,
                 Href = "https://place.com"
             };
@@ -667,7 +619,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(), urlHelperFactory.Object)
             {
-                Element = ButtonTagHelperElementType.Button,
                 Action = action,
                 Area = area,
                 Controller = controller,
@@ -678,6 +629,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Protocol = protocol,
                 Route = route,
                 RouteValues = routeValues,
+                Type = "button",
                 ViewContext = viewContext
             };
 
@@ -689,8 +641,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal("http://place.com", output.Attributes["formaction"].Value);
         }
 
-        [Fact]
-        public async Task ProcessAsync_FormActionSpecifiedAddsAttributeToOutput()
+        [Theory]
+        [InlineData("button")]
+        [InlineData("submit")]
+        public async Task ProcessAsync_FormActionSpecifiedAddsAttributeToOutput(string type)
         {
             // Arrange
             var context = new TagHelperContext(
@@ -713,8 +667,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                Element = ButtonTagHelperElementType.Button,
-                FormAction = "foo"
+                FormAction = "foo",
+                Type = type
             };
 
             // Act
