@@ -642,6 +642,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Theory]
+        [InlineData(null)]
         [InlineData("button")]
         [InlineData("submit")]
         public async Task ProcessAsync_FormActionSpecifiedAddsAttributeToOutput(string type)
