@@ -14,6 +14,7 @@ namespace GovUk.Frontend.AspNetCore
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
         public const int DefaultAccordionHeadingLevel = 2;
+        public const bool DefaultBreadcrumbCollapseOnMobile = false;
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultErrorSummaryTitle = "There is a problem";
         public const string DefaultInputType = "text";
@@ -155,7 +156,7 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GenerateBreadcrumbs(
-            bool collapseOnMobile,
+            bool? collapseOnMobile,
             IDictionary<string, string> attributes,
             IEnumerable<BreadcrumbsItem> items)
         {
@@ -168,7 +169,7 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-breadcrumbs");
 
-            if (collapseOnMobile)
+            if (collapseOnMobile ?? DefaultBreadcrumbCollapseOnMobile)
             {
                 tagBuilder.AddCssClass("govuk-breadcrumbs--collapse-on-mobile");
             }
