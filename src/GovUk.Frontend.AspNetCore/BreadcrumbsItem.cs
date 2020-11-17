@@ -8,6 +8,5 @@ namespace GovUk.Frontend.AspNetCore
         public string Href { get; set; }
         public IDictionary<string, string> Attributes { get; set; }
         public IHtmlContent Content { get; set; }
-        public bool IsCurrentPage { get; set; }
     }
 }

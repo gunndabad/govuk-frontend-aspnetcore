@@ -182,11 +182,6 @@ namespace GovUk.Frontend.AspNetCore
                 li.MergeAttributes(item.Attributes);
                 li.AddCssClass("govuk-breadcrumbs__list-item");
 
-                if (item.IsCurrentPage)
-                {
-                    li.Attributes.Add("aria-current", "page");
-                }
-
                 IHtmlContent itemContent;
 
                 if (item.Href != null)
@@ -199,6 +194,7 @@ namespace GovUk.Frontend.AspNetCore
                 }
                 else
                 {
+                    li.Attributes.Add("aria-current", "page");
                     itemContent = item.Content;
                 }
 
