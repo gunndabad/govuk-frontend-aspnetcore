@@ -18,6 +18,7 @@ namespace GovUk.Frontend.AspNetCore
         public const bool DefaultButtonDisabled = false;
         public const bool DefaultButtonIsStartButton = false;
         public const bool DefaultButtonPreventDoubleClick = false;
+        public const string DefaultButtonType = "submit";
         public const string DefaultErrorMessageVisuallyHiddenText = "Error";
         public const string DefaultErrorSummaryTitle = "There is a problem";
         public const string DefaultInputType = "text";
@@ -233,6 +234,7 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-button");
             tagBuilder.Attributes.Add("data-module", "govuk-button");
+            tagBuilder.Attributes.Add("type", type ?? DefaultButtonType);
 
             if (disabled ?? DefaultButtonDisabled)
             {
@@ -254,11 +256,6 @@ namespace GovUk.Frontend.AspNetCore
             if (value != null)
             {
                 tagBuilder.Attributes.Add("value", value);
-            }
-
-            if (type != null)
-            {
-                tagBuilder.Attributes.Add("type", type);
             }
 
             if (formAction != null)
