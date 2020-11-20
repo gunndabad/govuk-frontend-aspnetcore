@@ -11,7 +11,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class FieldsetTagHelper : TagHelper
     {
         private const string DescribedByAttributeName = "described-by";
-        private const string IsPageHeadingAttributeName = "is-page-heading";
         private const string RoleAttributeName = "role";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -23,9 +22,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         [HtmlAttributeName(DescribedByAttributeName)]
         public string DescribedBy { get; set; }
-
-        [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
 
         [HtmlAttributeName(RoleAttributeName)]
         public string Role { get; set; }
@@ -42,10 +38,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = _htmlGenerator.GenerateFieldset(
                 DescribedBy,
-                IsPageHeading,
                 Role,
-                fieldsetContext.Legend.Value.content,
-                fieldsetContext.Legend.Value.attributes,
+                fieldsetContext.Legend?.isPageHeading,
+                fieldsetContext.Legend?.content,
+                fieldsetContext.Legend?.attributes,
                 childContent,
                 output.Attributes.ToAttributesDictionary());
 
@@ -61,13 +57,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-fieldset-legend", ParentTag = "govuk-fieldset")]
     public class FieldsetLegendTagHelper : TagHelper
     {
+        private const string IsPageHeadingAttributeName = "is-page-heading";
+
+        [HtmlAttributeName(IsPageHeadingAttributeName)]
+        public bool IsPageHeading { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var fieldsetContext = (FieldsetContext)context.Items[typeof(FieldsetContext)];
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!fieldsetContext.TrySetLegend(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
+            if (!fieldsetContext.TrySetLegend(
+                IsPageHeading,
+                output.Attributes.ToAttributesDictionary(),
+                childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -78,9 +82,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     public class FieldsetContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+        public (bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
-        public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetLegend(
+            bool isPageHeading,
+            IDictionary<string, string> attributes,
+            IHtmlContent content)
         {
             if (content == null)
             {
@@ -92,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Legend = (attributes, content);
+            Legend = (isPageHeading, attributes, content);
             return true;
         }
     }

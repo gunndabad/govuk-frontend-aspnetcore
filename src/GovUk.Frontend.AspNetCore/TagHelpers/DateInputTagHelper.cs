@@ -59,8 +59,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var fieldset = Generator.GenerateFieldset(
                     DescribedBy,
-                    dateInputContext.Fieldset.IsPageHeading,
                     role: "group",
+                    dateInputContext.Fieldset.LegendIsPageHeading,
                     dateInputContext.Fieldset.LegendContent,
                     dateInputContext.Fieldset.LegendAttributes,
                     content: dateInput,
@@ -226,11 +226,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-date-input-fieldset-legend")]
     public class DateInputFieldsetTagHelper : TagHelper
     {
-        private const string IsPageHeadingAttributeName = "is-page-heading";
-
-        [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var dateInputContext = (DateInputContext)context.Items[typeof(DateInputContext)];
@@ -245,7 +240,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             dateInputContext.SetFieldset(new DateInputFieldset()
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
-                IsPageHeading = IsPageHeading,
+                LegendIsPageHeading = fieldsetContext.Legend?.isPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
                 LegendAttributes = fieldsetContext.Legend?.attributes
             });
@@ -257,6 +252,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-date-input-fieldset-legend", ParentTag = "govuk-date-input-fieldset")]
     public class DateInputFieldsetLegendTagHelper : TagHelper
     {
+        private const string IsPageHeadingAttributeName = "is-page-heading";
+
+        [HtmlAttributeName(IsPageHeadingAttributeName)]
+        public bool IsPageHeading { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var fieldsetContext = (DateInputFieldsetContext)context.Items[typeof(DateInputFieldsetContext)];
@@ -264,7 +264,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            fieldsetContext.SetLegend(output.Attributes.ToAttributesDictionary(), childContent.Snapshot());
+            fieldsetContext.SetLegend(
+                IsPageHeading,
+                output.Attributes.ToAttributesDictionary(),
+                childContent.Snapshot());
 
             output.SuppressOutput();
         }
@@ -324,9 +327,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class DateInputFieldsetContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+        public (bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
-        public void SetLegend(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetLegend(bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -338,14 +341,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 ThrowHelper.OnlyOneElementAllowed("govuk-date-input-fieldset-legend");
             }
 
-            Legend = (attributes, content);
+            Legend = (isPageHeading, attributes, content);
         }
     }
 
     internal class DateInputFieldset
     {
-        public bool IsPageHeading { get; set; }
         public IDictionary<string, string> Attributes { get; set; }
+        public bool? LegendIsPageHeading { get; set; }
         public IHtmlContent LegendContent { get; set; }
         public IDictionary<string, string> LegendAttributes { get; set; }
     }

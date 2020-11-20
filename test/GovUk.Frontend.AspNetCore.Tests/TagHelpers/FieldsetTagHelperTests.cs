@@ -26,6 +26,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var fieldsetContext = (FieldsetContext)context.Items[typeof(FieldsetContext)];
                     fieldsetContext.TrySetLegend(
+                        isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("Legend text"));
 
@@ -72,6 +73,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var fieldsetContext = (FieldsetContext)context.Items[typeof(FieldsetContext)];
                     fieldsetContext.TrySetLegend(
+                        isPageHeading: true,
                         attributes: null,
                         content: new HtmlString("Legend text"));
 
@@ -83,7 +85,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new FieldsetTagHelper(new DefaultGovUkHtmlGenerator())
             {
                 DescribedBy = "describedby",
-                IsPageHeading = true,
                 Role = "therole"
             };
 
