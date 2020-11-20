@@ -9,6 +9,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-panel")]
     public class PanelTagHelper : TagHelper
     {
+        private const string HeadingLevelAttributeName = "heading-level";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public PanelTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -16,8 +18,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        [HtmlAttributeName(HeadingLevelAttributeName)]
+        public int? HeadingLevel { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            if (HeadingLevel != null && (HeadingLevel < 1 || HeadingLevel > 6))
+            {
+                throw new InvalidOperationException($"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
+            }
+
             var panelContext = new PanelContext();
 
             IHtmlContent childContent;
@@ -32,8 +42,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GeneratePanel(
-                panelContext.Title.Value.headingLevel,
-                panelContext.Title.Value.content,
+                HeadingLevel,
+                panelContext.Title,
                 childContent,
                 output.Attributes.ToAttributesDictionary());
 
@@ -49,23 +59,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-panel-title", ParentTag = "govuk-panel")]
     public class PanelTitleTagHelper : TagHelper
     {
-        private const string HeadingLevelAttributeName = "heading-level";
-
-        [HtmlAttributeName(HeadingLevelAttributeName)]
-        public int? HeadingLevel { get; set; }
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (HeadingLevel != null && (HeadingLevel < 1 || HeadingLevel > 6))
-            {
-                throw new InvalidOperationException($"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
-            }
-
             var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
 
             var content = await output.GetChildContentAsync();
 
-            if (!panelContext.TrySetHeading(HeadingLevel, content.Snapshot()))
+            if (!panelContext.TrySetTitle(content.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -76,9 +76,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class PanelContext
     {
-        public (int? headingLevel, IHtmlContent content)? Title { get; private set; }
+        public IHtmlContent Title { get; private set; }
 
-        public bool TrySetHeading(int? headingLevel, IHtmlContent content)
+        public bool TrySetTitle(IHtmlContent content)
         {
             if (content == null)
             {
@@ -90,7 +90,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Title = (headingLevel, content);
+            Title = content;
             return true;
         }
     }
