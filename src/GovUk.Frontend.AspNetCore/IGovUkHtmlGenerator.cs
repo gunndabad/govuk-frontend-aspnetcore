@@ -87,8 +87,8 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateFieldset(
             string describedBy,
-            bool isPageHeading,
             string role,
+            bool? legendIsPageHeading,
             IHtmlContent legendContent,
             IDictionary<string, string> legendAttributes,
             IHtmlContent content,

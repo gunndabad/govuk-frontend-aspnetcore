@@ -470,7 +470,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     checkboxesContext.SetFieldset(new CheckboxesFieldset()
                     {
-                        IsPageHeading = false,
+                        LegendIsPageHeading = false,
                         LegendContent = new HtmlString("Legend")
                     });
 
@@ -529,22 +529,22 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var fieldsetContext = (CheckboxesFieldsetContext)context.Items[typeof(CheckboxesFieldsetContext)];
-                    fieldsetContext.TrySetLegend(attributes: null, content: new HtmlString("Legend"));
+                    fieldsetContext.TrySetLegend(
+                        isPageHeading: true,
+                        attributes: null,
+                        content: new HtmlString("Legend"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesFieldsetTagHelper()
-            {
-                IsPageHeading = true
-            };
+            var tagHelper = new CheckboxesFieldsetTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.True(checkboxesContext.Fieldset.IsPageHeading);
+            Assert.True(checkboxesContext.Fieldset.LegendIsPageHeading);
             Assert.Equal("Legend", checkboxesContext.Fieldset.LegendContent.AsString());
         }
     }

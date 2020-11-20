@@ -73,8 +73,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 content = Generator.GenerateFieldset(
                     DescribedBy,
-                    radiosContext.Fieldset.IsPageHeading,
                     role: null,
+                    radiosContext.Fieldset.LegendIsPageHeading,
                     legendContent: radiosContext.Fieldset.LegendContent,
                     legendAttributes: radiosContext.Fieldset.LegendAttributes,
                     content: content,
@@ -110,11 +110,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-radios-fieldset-legend")]
     public class RadiosFieldsetTagHelper : TagHelper
     {
-        private const string IsPageHeadingAttributeName = "is-page-heading";
-
-        [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
@@ -129,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             radiosContext.SetFieldset(new RadiosFieldset()
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
-                IsPageHeading = IsPageHeading,
+                LegendIsPageHeading = fieldsetContext.Legend?.isPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
                 LegendAttributes = fieldsetContext.Legend?.attributes
             });
@@ -141,13 +136,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-radios-fieldset-legend", ParentTag = "govuk-radios-fieldset")]
     public class RadiosFieldsetLegendTagHelper : TagHelper
     {
+        private const string IsPageHeadingAttributeName = "is-page-heading";
+
+        [HtmlAttributeName(IsPageHeadingAttributeName)]
+        public bool IsPageHeading { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var fieldsetContext = (RadiosFieldsetContext)context.Items[typeof(RadiosFieldsetContext)];
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!fieldsetContext.TrySetLegend(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
+            if (!fieldsetContext.TrySetLegend(
+                IsPageHeading,
+                output.Attributes.ToAttributesDictionary(),
+                childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
             }
@@ -342,9 +345,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosFieldsetContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+        public (bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
-        public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetLegend(bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -356,7 +359,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Legend = (attributes, content);
+            Legend = (isPageHeading, attributes, content);
             return true;
         }
     }
@@ -399,8 +402,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosFieldset
     {
-        public bool IsPageHeading { get; set; }
         public IDictionary<string, string> Attributes { get; set; }
+        public bool? LegendIsPageHeading { get; set; }
         public IHtmlContent LegendContent { get; set; }
         public IDictionary<string, string> LegendAttributes { get; set; }
     }

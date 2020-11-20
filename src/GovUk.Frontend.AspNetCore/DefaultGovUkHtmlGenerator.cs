@@ -740,13 +740,20 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateFieldset(
             string describedBy,
-            bool isPageHeading,
             string role,
+            bool? legendIsPageHeading,
             IHtmlContent legendContent,
             IDictionary<string, string> legendAttributes,
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
+            if (legendContent != null && !legendIsPageHeading.HasValue)
+            {
+                throw new ArgumentNullException(
+                    nameof(legendIsPageHeading),
+                    $"{nameof(legendIsPageHeading)} must be specified when {nameof(legendContent)} is specified.");
+            }
+
             var tagBuilder = new TagBuilder("fieldset");
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-fieldset");
@@ -761,23 +768,27 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.Attributes.Add("aria-describedby", describedBy);
             }
 
-            var legend = new TagBuilder("legend");
-            legend.MergeAttributes(legendAttributes);
-            legend.AddCssClass("govuk-fieldset__legend");
-
-            if (isPageHeading)
+            if (legendContent != null)
             {
-                var h1 = new TagBuilder("h1");
-                h1.AddCssClass("govuk-fieldset__heading");
-                h1.InnerHtml.AppendHtml(legendContent);
-                legend.InnerHtml.AppendHtml(h1);
-            }
-            else
-            {
-                legend.InnerHtml.AppendHtml(legendContent);
-            }
+                var legend = new TagBuilder("legend");
+                legend.MergeAttributes(legendAttributes);
+                legend.AddCssClass("govuk-fieldset__legend");
 
-            tagBuilder.InnerHtml.AppendHtml(legend);
+                if (legendIsPageHeading == true)
+                {
+                    var h1 = new TagBuilder("h1");
+                    h1.AddCssClass("govuk-fieldset__heading");
+                    h1.InnerHtml.AppendHtml(legendContent);
+                    legend.InnerHtml.AppendHtml(h1);
+                }
+                else
+                {
+                    legend.InnerHtml.AppendHtml(legendContent);
+                }
+
+                tagBuilder.InnerHtml.AppendHtml(legend);
+            }
+            
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;

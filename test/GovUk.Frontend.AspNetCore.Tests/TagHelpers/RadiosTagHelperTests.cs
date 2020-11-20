@@ -487,7 +487,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
                     radiosContext.SetFieldset(new RadiosFieldset()
                     {
-                        IsPageHeading = false,
+                        LegendIsPageHeading = false,
                         LegendContent = new HtmlString("Legend")
                     });
 
@@ -587,22 +587,22 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var fieldsetContext = (RadiosFieldsetContext)context.Items[typeof(RadiosFieldsetContext)];
-                    fieldsetContext.TrySetLegend(attributes: null, content: new HtmlString("Legend"));
+                    fieldsetContext.TrySetLegend(
+                        isPageHeading: true,
+                        attributes: null,
+                        content: new HtmlString("Legend"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new RadiosFieldsetTagHelper()
-            {
-                IsPageHeading = true
-            };
+            var tagHelper = new RadiosFieldsetTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.True(radiosContext.Fieldset.IsPageHeading);
+            Assert.True(radiosContext.Fieldset.LegendIsPageHeading);
             Assert.Equal("Legend", radiosContext.Fieldset.LegendContent.AsString());
         }
     }

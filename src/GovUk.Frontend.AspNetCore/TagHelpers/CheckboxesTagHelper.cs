@@ -74,8 +74,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 content = Generator.GenerateFieldset(
                     DescribedBy,
-                    checkboxesContext.Fieldset.IsPageHeading,
                     role: null,
+                    legendIsPageHeading: checkboxesContext.Fieldset.LegendIsPageHeading,
                     legendContent: checkboxesContext.Fieldset.LegendContent,
                     legendAttributes: checkboxesContext.Fieldset.LegendAttributes,
                     content: content,
@@ -92,11 +92,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-checkboxes-fieldset-legend")]
     public class CheckboxesFieldsetTagHelper : TagHelper
     {
-        private const string IsPageHeadingAttributeName = "is-page-heading";
-
-        [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
-
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var checkboxesContext = (CheckboxesContext)context.Items[typeof(CheckboxesContext)];
@@ -111,7 +106,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             checkboxesContext.SetFieldset(new CheckboxesFieldset()
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
-                IsPageHeading = IsPageHeading,
+                LegendIsPageHeading = fieldsetContext.Legend?.isPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
                 LegendAttributes = fieldsetContext.Legend?.attributes
             });
@@ -123,13 +118,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-checkboxes-fieldset-legend", ParentTag = "govuk-checkboxes-fieldset")]
     public class CheckboxesFieldsetLegendTagHelper : TagHelper
     {
+        private const string IsPageHeadingAttributeName = "is-page-heading";
+
+        [HtmlAttributeName(IsPageHeadingAttributeName)]
+        public bool IsPageHeading { get; set; }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var fieldsetContext = (CheckboxesFieldsetContext)context.Items[typeof(CheckboxesFieldsetContext)];
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!fieldsetContext.TrySetLegend(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
+            if (!fieldsetContext.TrySetLegend(
+                IsPageHeading,
+                output.Attributes.ToAttributesDictionary(),
+                childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
             }
@@ -324,9 +327,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class CheckboxesFieldsetContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+        public (bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
 
-        public bool TrySetLegend(IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetLegend(bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -338,7 +341,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return false;
             }
 
-            Legend = (attributes, content);
+            Legend = (isPageHeading, attributes, content);
             return true;
         }
     }
@@ -381,8 +384,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class CheckboxesFieldset
     {
-        public bool IsPageHeading { get; set; }
         public IDictionary<string, string> Attributes { get; set; }
+        public bool? LegendIsPageHeading { get; set; }
         public IHtmlContent LegendContent { get; set; }
         public IDictionary<string, string> LegendAttributes { get; set; }
     }
