@@ -29,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string Id { get; set; }
 
         [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
-        public string VisuallyHiddenText { get; set; }
+        public string VisuallyHiddenText { get; set; } = ComponentDefaults.ErrorMessage.VisuallyHiddenText;
 
         [HtmlAttributeNotBound]
         [ViewContext]
@@ -37,7 +37,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
+            var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
+                await output.GetChildContentAsync()
+                : null;
 
             if (childContent == null && AspFor == null)
             {
@@ -47,7 +49,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = (IHtmlContent)childContent;
             if (resolvedContent == null && AspFor != null)
             {
-                var validationMessage = _htmlGenerator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
+                var validationMessage = _htmlGenerator.GetValidationMessage(
+                    ViewContext,
+                    AspFor.ModelExplorer,
+                    AspFor.Name);
 
                 if (validationMessage != null)
                 {

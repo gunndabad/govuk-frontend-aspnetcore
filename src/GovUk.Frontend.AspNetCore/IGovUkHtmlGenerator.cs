@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         TagBuilder GenerateAccordion(
             string id,
-            int? headingLevel,
+            int headingLevel,
             IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items);
 
@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateBackLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateBreadcrumbs(
-            bool? collapseOnMobile,
+            bool collapseOnMobile,
             IDictionary<string, string> attributes,
             IEnumerable<BreadcrumbsItem> items);
 
@@ -26,17 +26,17 @@ namespace GovUk.Frontend.AspNetCore
             string name,
             string type,
             string value,
-            bool? isStartButton,
-            bool? disabled,
-            bool? preventDoubleClick,
+            bool isStartButton,
+            bool disabled,
+            bool preventDoubleClick,
             string formAction,
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
         TagBuilder GenerateButtonLink(
             string href,
-            bool? isStartButton,
-            bool? disabled,
+            bool isStartButton,
+            bool disabled,
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
@@ -132,7 +132,7 @@ namespace GovUk.Frontend.AspNetCore
             IDictionary<string, string> attributes);
 
         TagBuilder GeneratePanel(
-            int? titleHeadingLevel,
+            int titleHeadingLevel,
             IHtmlContent titleContent,
             IHtmlContent content,
             IDictionary<string, string> attributes);
@@ -174,7 +174,7 @@ namespace GovUk.Frontend.AspNetCore
             bool haveError,
             string id,
             string name,
-            int? rows,
+            int rows,
             string describedBy,
             string autocomplete,
             bool? spellcheck,

@@ -19,13 +19,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(HeadingLevelAttributeName)]
-        public int? HeadingLevel { get; set; }
+        public int HeadingLevel { get; set; } = ComponentDefaults.Panel.HeadingLevel;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (HeadingLevel != null && (HeadingLevel < 1 || HeadingLevel > 6))
+            if (HeadingLevel < 1 || HeadingLevel > 6)
             {
-                throw new InvalidOperationException($"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
+                throw new InvalidOperationException(
+                    $"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
             }
 
             var panelContext = new PanelContext();

@@ -122,7 +122,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new DetailsTagHelper(new DefaultGovUkHtmlGenerator())
             {
-                IsOpen = true
+                Open = true
             };
 
             // Act

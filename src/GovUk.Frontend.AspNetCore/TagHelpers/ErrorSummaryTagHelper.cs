@@ -38,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateErrorSummary(
-                errorSummaryContext.Title?.content,
+                errorSummaryContext.Title?.content ?? new HtmlString(ComponentDefaults.ErrorSummary.Title),
                 errorSummaryContext.Title?.attributes,
                 errorSummaryContext.Description?.content,
                 errorSummaryContext.Description?.attributes,

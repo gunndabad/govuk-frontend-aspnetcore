@@ -9,6 +9,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-back-link", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class BackLinkTagHelper : LinkTagHelperBase
     {
+        private static readonly HtmlString _defaultContent = new HtmlString(ComponentDefaults.BackLink.Content);
+
         public BackLinkTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
             : base(htmlGenerator, urlHelperFactory)
         {
@@ -16,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            IHtmlContent content = new HtmlString("Back");
+            IHtmlContent content = _defaultContent;
 
             if (output.TagMode == TagMode.StartTagAndEndTag)
             {

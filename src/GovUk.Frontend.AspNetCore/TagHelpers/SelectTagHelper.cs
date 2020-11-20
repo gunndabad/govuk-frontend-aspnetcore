@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class SelectTagHelper : FormGroupTagHelperBase
     {
         private const string AttributesPrefix = "select-";
-        private const string IsDisabledAttributeName = "disabled";
+        private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
 
         public SelectTagHelper(IGovUkHtmlGenerator htmlGenerator)
@@ -19,8 +19,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
-        [HtmlAttributeName(IsDisabledAttributeName)]
-        public bool IsDisabled { get; set; }
+        [HtmlAttributeName(DisabledAttributeName)]
+        public bool Disabled { get; set; } = ComponentDefaults.Select.Disabled;
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 ResolvedId,
                 ResolvedName,
                 DescribedBy,
-                IsDisabled,
+                Disabled,
                 selectContext.Items,
                 FormGroupAttributes);
         }

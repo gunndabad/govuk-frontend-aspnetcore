@@ -10,43 +10,54 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement("govuk-button")]
     public class ButtonTagHelper : LinkTagHelperBase
     {
+        private const string DisabledAttributeName = "disabled";
         private const string FormActionAttributeName = "formaction";
-        private const string IsDisabledAttributeName = "disabled";
         private const string IsStartButtonAttributeName = "is-start-button";
         private const string NameAttributeName = "name";
         private const string PreventDoubleClickAttributeName = "prevent-double-click";
         private const string TypeAttributeName = "type";
         private const string ValueAttributeName = "value";
 
+        private string _type = ComponentDefaults.Button.Type;
+        private bool _typeSpecified = false;
+
         public ButtonTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
             : base(htmlGenerator, urlHelperFactory)
         {
         }
 
+        [HtmlAttributeName(DisabledAttributeName)]
+        public bool Disabled { get; set; } = ComponentDefaults.Button.Disabled;
+
         [HtmlAttributeName(FormActionAttributeName)]
         public string FormAction { get; set; }
 
-        [HtmlAttributeName(IsDisabledAttributeName)]
-        public bool? IsDisabled { get; set; } = false;
-
         [HtmlAttributeName(IsStartButtonAttributeName)]
-        public bool? IsStartButton { get; set; } = false;
+        public bool IsStartButton { get; set; } = ComponentDefaults.Button.IsStartButton;
 
         [HtmlAttributeName(NameAttributeName)]
         public string Name { get; set; }
 
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
-        public bool? PreventDoubleClick { get; set; } = false;
+        public bool PreventDoubleClick { get; set; } = ComponentDefaults.Button.PreventDoubleClick;
 
         [HtmlAttributeName(TypeAttributeName)]
-        public string Type { get; set; }
+        public string Type
+        {
+            get => _type;
+            set
+            {
+                _type = value;
+                _typeSpecified = true;
+            }
+        }
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var element = (Type == null && HasLinkAttributes)
+            var element = (!_typeSpecified && HasLinkAttributes)
                 ? "a"
                 : "button";
             output.TagName = element;
@@ -97,7 +108,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 tagBuilder = Generator.GenerateButtonLink(
                     href,
                     IsStartButton,
-                    IsDisabled,
+                    Disabled,
                     childContent,
                     output.Attributes.ToAttributesDictionary());
             }
@@ -111,7 +122,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     Type,
                     Value,
                     IsStartButton,
-                    IsDisabled,
+                    Disabled,
                     PreventDoubleClick,
                     resolvedFormAction,
                     childContent,

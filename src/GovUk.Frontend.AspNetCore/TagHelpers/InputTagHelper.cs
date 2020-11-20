@@ -13,8 +13,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private const string AttributesPrefix = "input-";
         private const string AutocompleteAttributeName = "autocomplete";
+        private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
-        private const string IsDisabledAttributeName = "disabled";
         private const string InputModeAttributeName = "inputmode";
         private const string PatternAttributeName = "pattern";
         private const string SpellcheckAttributeName = "spellcheck";
@@ -35,14 +35,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(AutocompleteAttributeName)]
         public string Autocomplete { get; set; }
 
+        [HtmlAttributeName(DisabledAttributeName)]
+        public bool Disabled { get; set; } = ComponentDefaults.Input.Disabled;
+
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
 
         [HtmlAttributeName(InputModeAttributeName)]
         public string InputMode { get; set; }
-
-        [HtmlAttributeName(IsDisabledAttributeName)]
-        public bool IsDisabled { get; set; }
 
         [HtmlAttributeName(PatternAttributeName)]
         public string Pattern { get; set; }
@@ -51,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public bool? Spellcheck { get; set; }
 
         [HtmlAttributeName(TypeAttributeName)]
-        public string Type { get; set; }
+        public string Type { get; set; } = ComponentDefaults.Input.Type;
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value
@@ -100,7 +100,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Pattern,
                 InputMode,
                 Spellcheck,
-                IsDisabled,
+                Disabled,
                 Attributes,
                 inputContext.Prefix?.content,
                 inputContext.Prefix?.attributes,

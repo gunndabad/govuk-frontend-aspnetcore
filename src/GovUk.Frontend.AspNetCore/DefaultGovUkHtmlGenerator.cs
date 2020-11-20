@@ -13,19 +13,6 @@ namespace GovUk.Frontend.AspNetCore
 {
     public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
     {
-        public const int DefaultAccordionHeadingLevel = 2;
-        public const bool DefaultBreadcrumbCollapseOnMobile = false;
-        public const bool DefaultButtonDisabled = false;
-        public const bool DefaultButtonIsStartButton = false;
-        public const bool DefaultButtonPreventDoubleClick = false;
-        public const string DefaultButtonType = "submit";
-        public const string DefaultErrorMessageVisuallyHiddenText = "Error";
-        public const string DefaultErrorSummaryTitle = "There is a problem";
-        public const string DefaultInputType = "text";
-        public const int DefaultPanelHeadingLevel = 1;
-        public const string DefaultTabsTitle = "Contents";
-        public const int DefaultTextAreaRows = 5;
-
         private static readonly GetFullHtmlFieldNameDelegate s_getFullHtmlFieldNameDelegate;
 
         static DefaultGovUkHtmlGenerator()
@@ -45,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateAccordion(
             string id,
-            int? headingLevel,
+            int headingLevel,
             IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items)
         {
@@ -58,8 +45,6 @@ namespace GovUk.Frontend.AspNetCore
             {
                 throw new ArgumentNullException(nameof(items));
             }
-
-            var resolvedHeadingLevel = headingLevel ?? DefaultAccordionHeadingLevel;
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
@@ -74,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore
                 section.MergeAttributes(item.Attributes);
                 section.AddCssClass("govuk-accordion__section");
 
-                if (item.IsExpanded)
+                if (item.Expanded)
                 {
                     section.AddCssClass("govuk-accordion__section--expanded");
                 }
@@ -83,7 +68,7 @@ namespace GovUk.Frontend.AspNetCore
                 header.AddCssClass("govuk-accordion__section-header");
 
                 var headingId = $"{id}-heading-{index}";
-                var heading = new TagBuilder($"h{resolvedHeadingLevel}");
+                var heading = new TagBuilder($"h{headingLevel}");
                 heading.MergeAttributes(item.HeadingAttributes);
                 heading.AddCssClass("govuk-accordion__section-heading");
                 var headingContent = new TagBuilder("span");
@@ -160,7 +145,7 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GenerateBreadcrumbs(
-            bool? collapseOnMobile,
+            bool collapseOnMobile,
             IDictionary<string, string> attributes,
             IEnumerable<BreadcrumbsItem> items)
         {
@@ -173,7 +158,7 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-breadcrumbs");
 
-            if (collapseOnMobile ?? DefaultBreadcrumbCollapseOnMobile)
+            if (collapseOnMobile)
             {
                 tagBuilder.AddCssClass("govuk-breadcrumbs--collapse-on-mobile");
             }
@@ -218,9 +203,9 @@ namespace GovUk.Frontend.AspNetCore
             string name,
             string type,
             string value,
-            bool? isStartButton,
-            bool? disabled,
-            bool? preventDoubleClick,
+            bool isStartButton,
+            bool disabled,
+            bool preventDoubleClick,
             string formAction,
             IHtmlContent content,
             IDictionary<string, string> attributes)
@@ -234,9 +219,9 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-button");
             tagBuilder.Attributes.Add("data-module", "govuk-button");
-            tagBuilder.Attributes.Add("type", type ?? DefaultButtonType);
+            tagBuilder.Attributes.Add("type", type);
 
-            if (disabled ?? DefaultButtonDisabled)
+            if (disabled)
             {
                 tagBuilder.AddCssClass("govuk-button--disabled");
                 tagBuilder.Attributes.Add("disabled", "disabled");
@@ -248,7 +233,7 @@ namespace GovUk.Frontend.AspNetCore
                 tagBuilder.Attributes.Add("name", name);
             }
 
-            if (preventDoubleClick ?? DefaultButtonPreventDoubleClick)
+            if (preventDoubleClick)
             {
                 tagBuilder.Attributes.Add("data-prevent-double-click", "true");
             }
@@ -265,7 +250,7 @@ namespace GovUk.Frontend.AspNetCore
 
             tagBuilder.InnerHtml.AppendHtml(content);
 
-            if (isStartButton ?? DefaultButtonIsStartButton)
+            if (isStartButton)
             {
                 tagBuilder.AddCssClass("govuk-button--start");
 
@@ -278,8 +263,8 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual TagBuilder GenerateButtonLink(
             string href,
-            bool? isStartButton,
-            bool? disabled,
+            bool isStartButton,
+            bool disabled,
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
@@ -301,14 +286,14 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.Attributes.Add("draggable", "false");
             tagBuilder.Attributes.Add("href", href);
 
-            if (disabled ?? DefaultButtonDisabled)
+            if (disabled)
             {
                 tagBuilder.AddCssClass("govuk-button--disabled");
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);
 
-            if (isStartButton ?? DefaultButtonIsStartButton)
+            if (isStartButton)
             {
                 tagBuilder.AddCssClass("govuk-button--start");
 
@@ -650,6 +635,11 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
+            if (visuallyHiddenText == null)
+            {
+                throw new ArgumentNullException(nameof(visuallyHiddenText));
+            }
+
             if (content == null)
             {
                 throw new ArgumentNullException(nameof(content));
@@ -662,11 +652,6 @@ namespace GovUk.Frontend.AspNetCore
             if (!string.IsNullOrEmpty(id))
             {
                 tagBuilder.Attributes.Add("id", id);
-            }
-
-            if (string.IsNullOrEmpty(visuallyHiddenText))
-            {
-                visuallyHiddenText = DefaultErrorMessageVisuallyHiddenText;
             }
 
             var vht = new TagBuilder("span");
@@ -705,7 +690,7 @@ namespace GovUk.Frontend.AspNetCore
             heading.MergeAttributes(titleAttributes);
             heading.AddCssClass("govuk-error-summary__title");
             heading.Attributes.Add("id", "error-summary-title");
-            heading.InnerHtml.AppendHtml(titleContent ?? new HtmlString(DefaultErrorSummaryTitle));
+            heading.InnerHtml.AppendHtml(titleContent);
             tagBuilder.InnerHtml.AppendHtml(heading);
 
             var body = new TagBuilder("div");
@@ -929,6 +914,11 @@ namespace GovUk.Frontend.AspNetCore
                 throw new ArgumentNullException(nameof(name));
             }
 
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             var tagBuilder = new TagBuilder("input");
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-input");
@@ -940,7 +930,7 @@ namespace GovUk.Frontend.AspNetCore
 
             tagBuilder.Attributes.Add("id", id);
             tagBuilder.Attributes.Add("name", name);
-            tagBuilder.Attributes.Add("type", type ?? DefaultInputType);
+            tagBuilder.Attributes.Add("type", type);
 
             if (value != null)
             {
@@ -1052,7 +1042,7 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public virtual TagBuilder GeneratePanel(
-            int? titleHeadingLevel,
+            int titleHeadingLevel,
             IHtmlContent titleContent,
             IHtmlContent content,
             IDictionary<string, string> attributes)
@@ -1067,7 +1057,7 @@ namespace GovUk.Frontend.AspNetCore
             tagBuilder.AddCssClass("govuk-panel");
             tagBuilder.AddCssClass("govuk-panel--confirmation");
 
-            var heading = new TagBuilder($"h{titleHeadingLevel ?? DefaultPanelHeadingLevel}");
+            var heading = new TagBuilder($"h{titleHeadingLevel}");
             heading.AddCssClass("govuk-panel__title");
             heading.InnerHtml.AppendHtml(titleContent);
             tagBuilder.InnerHtml.AppendHtml(heading);
@@ -1466,6 +1456,11 @@ namespace GovUk.Frontend.AspNetCore
                 throw new ArgumentNullException(nameof(items));
             }
 
+            if (title == null)
+            {
+                throw new ArgumentNullException(nameof(title));
+            }
+
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-tabs");
@@ -1478,7 +1473,7 @@ namespace GovUk.Frontend.AspNetCore
 
             var h2 = new TagBuilder("h2");
             h2.AddCssClass("govuk-tabs__title");
-            h2.InnerHtml.Append(title ?? DefaultTabsTitle);
+            h2.InnerHtml.Append(title);
             tagBuilder.InnerHtml.AppendHtml(h2);
 
             var ul = new TagBuilder("ul");
@@ -1546,7 +1541,7 @@ namespace GovUk.Frontend.AspNetCore
             bool haveError,
             string id,
             string name,
-            int? rows,
+            int rows,
             string describedBy,
             string autocomplete,
             bool? spellcheck,
@@ -1580,7 +1575,7 @@ namespace GovUk.Frontend.AspNetCore
 
             tagBuilder.Attributes.Add("id", id);
             tagBuilder.Attributes.Add("name", name);
-            tagBuilder.Attributes.Add("rows", (rows ?? DefaultTextAreaRows).ToString());
+            tagBuilder.Attributes.Add("rows", rows.ToString());
 
             if (describedBy != null)
             {

@@ -269,7 +269,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                IsDisabled = true
+                Disabled = true
             };
 
             // Act
@@ -306,7 +306,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 new DefaultGovUkHtmlGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
-                IsDisabled = true,
+                Disabled = true,
                 Href = "https://place.com"
             };
 
