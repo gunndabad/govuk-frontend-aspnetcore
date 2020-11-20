@@ -36,7 +36,7 @@ jobs:
     - name: Package
       run: |
         VERSION_SUFFIX=${{ steps.get_package_version_suffix.outputs.SUFFIX }}
-        dotnet pack --configuration Release --include-symbols \
+        dotnet pack --configuration Release \
           ${VERSION_SUFFIX:+ --version-suffix $VERSION_SUFFIX}
 
     - name: Publish package artifact
