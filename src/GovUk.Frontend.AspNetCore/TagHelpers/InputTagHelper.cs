@@ -51,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public bool? Spellcheck { get; set; }
 
         [HtmlAttributeName(TypeAttributeName)]
-        public string Type { get; set; }
+        public string Type { get; set; } = ComponentDefaults.Input.Type;
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value

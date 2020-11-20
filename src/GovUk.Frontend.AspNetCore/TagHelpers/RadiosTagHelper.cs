@@ -139,7 +139,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IsPageHeadingAttributeName = "is-page-heading";
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
+        public bool IsPageHeading { get; set; } = ComponentDefaults.Fieldset.Legend.IsPageHeading;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

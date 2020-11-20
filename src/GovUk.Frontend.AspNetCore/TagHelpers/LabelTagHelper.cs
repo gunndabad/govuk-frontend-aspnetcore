@@ -29,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string For { get; set; }
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
+        public bool IsPageHeading { get; set; } = ComponentDefaults.Label.IsPageHeading;
 
         [HtmlAttributeNotBound]
         [ViewContext]

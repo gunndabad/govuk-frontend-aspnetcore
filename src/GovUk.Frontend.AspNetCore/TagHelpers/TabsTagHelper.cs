@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string IdPrefix { get; set; }
 
         [HtmlAttributeName(TitleAttributeName)]
-        public string Title { get; set; }
+        public string Title { get; set; } = ComponentDefaults.Tabs.Title;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

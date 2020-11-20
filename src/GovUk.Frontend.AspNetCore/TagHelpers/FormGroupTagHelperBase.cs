@@ -139,7 +139,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private protected IHtmlContent GenerateErrorMessage(FormGroupBuilder builder)
         {
-            var visuallyHiddenText = builder.ErrorMessage?.visuallyHiddenText;
+            var visuallyHiddenText = builder.ErrorMessage?.visuallyHiddenText ??
+                ComponentDefaults.ErrorMessage.VisuallyHiddenText;
+
             var content = builder.ErrorMessage?.content;
             var attributes = builder.ErrorMessage?.attributes;
 
@@ -201,7 +203,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
+        public bool IsPageHeading { get; set; } = ComponentDefaults.Fieldset.Legend.IsPageHeading;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

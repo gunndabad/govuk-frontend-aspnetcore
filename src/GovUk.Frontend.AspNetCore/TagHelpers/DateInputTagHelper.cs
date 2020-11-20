@@ -17,8 +17,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         internal const string ValueAttributeName = "value";
         private const string AttributesPrefix = "date-input-";
+        private const string DisabledAttributeName = "disabled";
         private const string IdPrefixAttributeName = "id-prefix";
-        private const string IsDisabledAttributeName = "disabled";
 
         private Date? _value;
         private bool _valueSpecified = false;
@@ -31,11 +31,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
         public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
+        [HtmlAttributeName(DisabledAttributeName)]
+        public bool Disabled { get; set; } = ComponentDefaults.DateInput.Disabled;
+
         [HtmlAttributeName(IdPrefixAttributeName)]
         public string IdPrefix { get; set; }
-
-        [HtmlAttributeName(IsDisabledAttributeName)]
-        public bool IsDisabled { get; set; }
 
         [HtmlAttributeName(ValueAttributeName)]
         public Date? Value
@@ -117,7 +117,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             return Generator.GenerateDateInput(
                 IdPrefix,
-                IsDisabled,
+                Disabled,
                 day,
                 month,
                 year,
@@ -255,7 +255,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IsPageHeadingAttributeName = "is-page-heading";
 
         [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; }
+        public bool IsPageHeading { get; set; } = ComponentDefaults.Fieldset.Legend.IsPageHeading;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

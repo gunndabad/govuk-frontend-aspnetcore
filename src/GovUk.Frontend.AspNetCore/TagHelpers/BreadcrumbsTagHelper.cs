@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(CollapseOnMobileAttributeName)]
-        public bool? CollapseOnMobile { get; set; }
+        public bool CollapseOnMobile { get; set; } = ComponentDefaults.Breadcrumbs.CollapseOnMobile;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

@@ -22,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         [HtmlAttributeName(HeadingLevelAttributeName)]
-        public int? HeadingLevel { get; set; }
+        public int HeadingLevel { get; set; } = ComponentDefaults.Accordion.HeadingLevel;
 
         [HtmlAttributeName(IdAttributeName)]
         public string Id { get; set; }
@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"The '{IdAttributeName}' attribute must be specified.");
             }
 
-            if (HeadingLevel != null && (HeadingLevel < 1 || HeadingLevel > 6))
+            if (HeadingLevel < 1 || HeadingLevel > 6)
             {
                 throw new InvalidOperationException(
                     $"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
@@ -68,7 +68,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string ExpandedAttributeName = "expanded";
 
         [HtmlAttributeName(ExpandedAttributeName)]
-        public bool Expanded { get; set; }
+        public bool Expanded { get; set; } = ComponentDefaults.Accordion.Item.Expanded;
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = childContent.Snapshot(),
-                IsExpanded = Expanded,
+                Expanded = Expanded,
                 HeadingContent = itemContext.Heading.Value.content,
                 HeadingAttributes = itemContext.Heading.Value.attributes,
                 SummaryContent = itemContext.Summary?.content,
