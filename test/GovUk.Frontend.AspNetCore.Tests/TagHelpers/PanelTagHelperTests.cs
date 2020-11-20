@@ -26,14 +26,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
-                    panelContext.TrySetHeading(3, new HtmlString("Title"));
+                    panelContext.TrySetTitle(new HtmlString("Title"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetHtmlContent("Body");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new PanelTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new PanelTagHelper(new DefaultGovUkHtmlGenerator())
+            {
+                HeadingLevel = 3
+            };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -42,6 +45,42 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(
                 "<div class=\"govuk-panel--confirmation govuk-panel\"><h3 class=\"govuk-panel__title\">Title</h3><div class=\"govuk-panel__body\">Body</div></div>",
                 output.AsString());
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(7)]
+        public async Task ProcessAsync_InvalidheadingLevelThrowsInvalidOperationException(int level)
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-panel",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-panel",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
+                    panelContext.TrySetTitle(new HtmlString("Title"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetHtmlContent("Body");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new PanelTagHelper(new DefaultGovUkHtmlGenerator())
+            {
+                HeadingLevel = level
+            };
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            Assert.Equal("The 'heading-level' attribute must be between 1 and 6.", ex.Message);
         }
 
         [Fact]
@@ -101,56 +140,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new PanelTitleTagHelper()
-            {
-                HeadingLevel = 3
-            };
+            var tagHelper = new PanelTitleTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
             Assert.NotNull(panelContext.Title);
-            Assert.Equal(3, panelContext.Title.Value.headingLevel);
-            Assert.Equal("Title", panelContext.Title.Value.content.AsString());
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        [InlineData(7)]
-        public async Task ProcessAsync_InvalidheadingLevelThrowsInvalidOperationException(int level)
-        {
-            // Arrange
-            var panelContext = new PanelContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-panel-title",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(PanelContext), panelContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-panel-title",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetHtmlContent("Title");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new PanelTitleTagHelper()
-            {
-                HeadingLevel = level
-            };
-            
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("The 'heading-level' attribute must be between 1 and 6.", ex.Message);
+            Assert.Equal("Title", panelContext.Title.AsString());
         }
 
         [Fact]
@@ -158,7 +155,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var panelContext = new PanelContext();
-            panelContext.TrySetHeading(headingLevel: null, content: new HtmlString("Existing title"));
+            panelContext.TrySetTitle(content: new HtmlString("Existing title"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-panel-title",
