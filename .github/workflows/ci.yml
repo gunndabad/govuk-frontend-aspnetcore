@@ -22,6 +22,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      with:
+        fetch-depth: 0
 
     - name: Build
       run: dotnet build --configuration Release
@@ -29,15 +31,8 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release
 
-    - name: Get package version suffix
-      id: get_package_version_suffix
-      run: echo ::set-output name=SUFFIX::$([[ $GITHUB_REF =~ "refs/tags/" ]] && echo "" || echo "pre-${GITHUB_RUN_NUMBER}")
-
     - name: Package
-      run: |
-        VERSION_SUFFIX=${{ steps.get_package_version_suffix.outputs.SUFFIX }}
-        dotnet pack --configuration Release \
-          ${VERSION_SUFFIX:+ --version-suffix $VERSION_SUFFIX}
+      run: dotnet pack --configuration Release
 
     - name: Publish package artifact
       uses: actions/upload-artifact@v2-preview
