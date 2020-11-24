@@ -33,6 +33,8 @@ jobs:
 
     - name: Package
       run: dotnet pack --configuration Release
+      env:
+        MINVERBUILDMETADATA: ${GITHUB_RUN_NUMBER}
 
     - name: Publish package artifact
       uses: actions/upload-artifact@v2-preview
