@@ -374,8 +374,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-radios__item\">" +
                 "<input class=\"govuk-radios__input\" data-aria-controls=\"conditional-first\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
-                "<div class=\"govuk-radios__conditional--hidden govuk-radios__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
+                "<div class=\"govuk-radios__conditional--hidden govuk-radios__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
                 "</div>",
                 html);
@@ -432,8 +432,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-radios__item\">" +
                 "<input checked=\"checked\" class=\"govuk-radios__input\" data-aria-controls=\"conditional-first\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
-                "<div class=\"govuk-radios__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
+                "<div class=\"govuk-radios__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
                 "</div>",
                 html);

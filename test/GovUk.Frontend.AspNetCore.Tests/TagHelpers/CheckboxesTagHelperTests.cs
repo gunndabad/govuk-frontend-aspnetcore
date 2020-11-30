@@ -357,8 +357,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-checkboxes__item\">" +
                 "<input class=\"govuk-checkboxes__input\" data-aria-controls=\"conditional-first\" id=\"first\" name=\"testcheckboxes\" type=\"checkbox\" value=\"first\" />" +
                 "<label class=\"govuk-checkboxes__label govuk-label\" for=\"first\">First</label>" +
-                "<div class=\"govuk-checkboxes__conditional--hidden govuk-checkboxes__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
+                "<div class=\"govuk-checkboxes__conditional--hidden govuk-checkboxes__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
                 "</div>",
                 html);
@@ -415,8 +415,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-checkboxes__item\">" +
                 "<input checked=\"checked\" class=\"govuk-checkboxes__input\" data-aria-controls=\"conditional-first\" id=\"first\" name=\"testcheckboxes\" type=\"checkbox\" value=\"first\" />" +
                 "<label class=\"govuk-checkboxes__label govuk-label\" for=\"first\">First</label>" +
-                "<div class=\"govuk-checkboxes__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
+                "<div class=\"govuk-checkboxes__conditional\" id=\"conditional-first\">Conditional</div>" +
                 "</div>" +
                 "</div>",
                 html);
