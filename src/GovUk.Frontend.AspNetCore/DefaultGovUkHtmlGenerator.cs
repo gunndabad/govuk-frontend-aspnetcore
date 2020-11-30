@@ -381,14 +381,12 @@ namespace GovUk.Frontend.AspNetCore
 
             foreach (var item in items)
             {
-                var itemContent = GenerateCheckboxItem(item);
-
-                tagBuilder.InnerHtml.AppendHtml(itemContent);
+                AddCheckboxItem(item, tagBuilder.InnerHtml);
             }
 
             return tagBuilder;
 
-            IHtmlContent GenerateCheckboxItem(CheckboxesItem item)
+            void AddCheckboxItem(CheckboxesItem item, IHtmlContentBuilder container)
             {
                 // REVIEW Validate properties?
 
@@ -468,6 +466,8 @@ namespace GovUk.Frontend.AspNetCore
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
 
+                container.AppendHtml(tagBuilder);
+
                 if (item.ConditionalContent != null)
                 {
                     var conditional = new TagBuilder("div");
@@ -483,10 +483,8 @@ namespace GovUk.Frontend.AspNetCore
 
                     conditional.InnerHtml.AppendHtml(item.ConditionalContent);
 
-                    tagBuilder.InnerHtml.AppendHtml(conditional);
+                    container.AppendHtml(conditional);
                 }
-
-                return tagBuilder;
             }
         }
 
@@ -1133,27 +1131,24 @@ namespace GovUk.Frontend.AspNetCore
 
             foreach (var item in items)
             {
-                IHtmlContent itemContent;
-
                 if (item is RadiosItemDivider divider)
                 {
-                    itemContent = GenerateRadioItemDivider(divider);
+                    var dividerContent = GenerateRadioItemDivider(divider);
+                    tagBuilder.InnerHtml.AppendHtml(dividerContent);
                 }
                 else if (item is RadiosItem i)
                 {
-                    itemContent = GenerateRadioItem(i);
+                    AddCheckboxItem(i, tagBuilder.InnerHtml);
                 }
                 else
                 {
                     throw new NotSupportedException($"Unknown item type: '{item.GetType().FullName}'.");
                 }
-
-                tagBuilder.InnerHtml.AppendHtml(itemContent);
             }
 
             return tagBuilder;
 
-            IHtmlContent GenerateRadioItem(RadiosItem item)
+            void AddCheckboxItem(RadiosItem item, IHtmlContentBuilder container)
             {
                 // REVIEW Validate properties?
 
@@ -1227,6 +1222,8 @@ namespace GovUk.Frontend.AspNetCore
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
 
+                container.AppendHtml(tagBuilder);
+
                 if (item.ConditionalContent != null)
                 {
                     var conditional = new TagBuilder("div");
@@ -1242,10 +1239,8 @@ namespace GovUk.Frontend.AspNetCore
 
                     conditional.InnerHtml.AppendHtml(item.ConditionalContent);
 
-                    tagBuilder.InnerHtml.AppendHtml(conditional);
+                    container.AppendHtml(conditional);
                 }
-
-                return tagBuilder;
             }
 
             IHtmlContent GenerateRadioItemDivider(RadiosItemDivider divider)
