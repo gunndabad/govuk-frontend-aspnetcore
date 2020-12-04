@@ -35,7 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Content\**\*" />
+    <EmbeddedResource Include="$(RepoRoot)\lib\govuk-frontend\dist\**\*">
+      <Link>Content/%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <LogicalName>Content/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
