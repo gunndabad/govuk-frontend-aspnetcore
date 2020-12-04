@@ -7,13 +7,23 @@ on:
     - release
     tags:
     - v*
+    paths-ignore:
+    - docs/**
+    - LICENSE
+    - '**.md'
   pull_request:
     branches:
     - master
+    - release
+    paths-ignore:
+    - docs/**
+    - LICENSE
+    - '**.md'
 
 jobs:
   build:
 
+    name: "Build & package"
     runs-on: ubuntu-latest
 
     env:
@@ -25,25 +35,41 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Restore
+      run: dotnet restore
+
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release
+      run: dotnet test --configuration Release --no-build
 
     - name: Package
-      run: dotnet pack --configuration Release
+      run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
       env:
         MINVERBUILDMETADATA: ${GITHUB_RUN_NUMBER}
 
     - name: Publish package artifact
       uses: actions/upload-artifact@v2-preview
       with:
-        name: package
+        name: GovUk.Frontend.AspNetCore.nupkg
         path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
+
+
+  release:
+
+    name: "Release"
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
     
+    steps:
+    - name: Download package artifact
+      uses: actions/download-artifact@v2-preview
+      with:
+        name: GovUk.Frontend.AspNetCore.nupkg
+
     - name: Publish package to NuGet
-      if: startsWith(github.ref, 'refs/tags/v')
-      run: dotnet nuget push src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg --api-key ${NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push GovUk.Frontend.AspNetCore.nupkg/*.nupkg --api-key ${NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
       env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }} 
