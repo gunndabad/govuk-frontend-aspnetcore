@@ -31,9 +31,10 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 0
+        submodules: recursive
 
     - name: Restore
       run: dotnet restore
