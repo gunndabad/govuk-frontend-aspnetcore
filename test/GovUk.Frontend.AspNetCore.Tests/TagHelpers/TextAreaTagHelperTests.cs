@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -85,7 +85,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -129,7 +129,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -173,7 +173,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",

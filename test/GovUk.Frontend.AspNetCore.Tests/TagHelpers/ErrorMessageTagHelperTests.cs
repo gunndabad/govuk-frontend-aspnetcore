@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "some-id"
             };
@@ -111,7 +111,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 VisuallyHiddenText = "Overriden"
             };
@@ -149,12 +149,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
-            {
-                CallBase = true
-            };
+            var modelHelperMock = new Mock<IModelHelper>();
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetValidationMessage(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
@@ -163,7 +160,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(htmlGenerator.Object)
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
@@ -202,12 +199,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
-            {
-                CallBase = true
-            };
+            var modelHelperMock = new Mock<IModelHelper>();
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetValidationMessage(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
@@ -216,7 +210,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(htmlGenerator.Object)
+            var tagHelper = new ErrorMessageTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()

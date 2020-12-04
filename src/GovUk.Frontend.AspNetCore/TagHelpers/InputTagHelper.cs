@@ -24,8 +24,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private string _value;
         private bool _valueSpecified = false;
 
-        public InputTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public InputTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 
@@ -87,7 +87,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var inputContext = (InputContext)context.Items[typeof(InputContext)];
 
             var resolvedValue = Value ??
-                (AspFor != null ? Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : null);
+                (AspFor != null ? ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : null);
 
             return Generator.GenerateInput(
                 elementContext.HaveError,

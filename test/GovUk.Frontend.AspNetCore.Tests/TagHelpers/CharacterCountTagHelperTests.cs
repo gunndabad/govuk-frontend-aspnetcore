@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 Name = "my-name"
@@ -74,7 +74,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 Name = "my-name",
@@ -115,7 +115,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 Name = "my-name",
@@ -154,7 +154,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 Name = "my-name",
@@ -211,7 +211,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CharacterCountTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 Name = "my-name",

@@ -305,7 +305,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -343,7 +343,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -375,7 +375,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 For = "field"
             };
@@ -415,18 +415,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
-            {
-                CallBase = true
-            };
+            var modelHelperMock = new Mock<IModelHelper>();
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetFullHtmlFieldName(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetValidationMessage(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
@@ -435,7 +432,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorSummaryItemTagHelper(htmlGenerator.Object)
+            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()

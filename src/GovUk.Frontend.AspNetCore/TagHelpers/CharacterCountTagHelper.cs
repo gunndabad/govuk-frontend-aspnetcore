@@ -13,8 +13,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string MaxWordsLengthAttributeName = "max-words";
         private const string ThresholdAttributeName = "threshold";
 
-        public CharacterCountTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public CharacterCountTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 

@@ -36,13 +36,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         protected IGovUkHtmlGenerator Generator { get; }
 
+        protected IModelHelper ModelHelper { get; }
+
         protected string ResolvedId => GetIdPrefix() ?? TagBuilder.CreateSanitizedId(ResolvedName, Constants.IdAttributeDotReplacement);
 
-        protected string ResolvedName => Name ?? Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+        protected string ResolvedName => Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
 
-        protected FormGroupTagHelperBase(IGovUkHtmlGenerator htmlGenerator)
+        protected FormGroupTagHelperBase(
+            IGovUkHtmlGenerator htmlGenerator,
+            IModelHelper modelHelper)
         {
             Generator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            ModelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -147,7 +152,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (content == null && AspFor != null && IgnoreModelStateErrors != true)
             {
-                var validationMessage = Generator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
+                var validationMessage = ModelHelper.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
 
                 if (validationMessage != null)
                 {
@@ -188,7 +193,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var attributes = builder.Label?.attributes;
 
             var resolvedContent = content ??
-                new HtmlString(Generator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
+                new HtmlString(ModelHelper.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
             return Generator.GenerateLabel(ResolvedId, isPageHeading, resolvedContent, attributes);
         }

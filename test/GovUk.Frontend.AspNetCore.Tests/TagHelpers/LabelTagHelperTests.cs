@@ -32,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 For = "some-input-id"
             };
@@ -65,18 +65,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
-            {
-                CallBase = true
-            };
+            var modelHelperMock = new Mock<IModelHelper>();
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetFullHtmlFieldName(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetDisplayName(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
@@ -85,7 +82,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
@@ -119,18 +116,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
-            {
-                CallBase = true
-            };
+            var modelHelperMock = new Mock<IModelHelper>();
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetFullHtmlFieldName(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*expression: */It.IsAny<string>()))
                 .Returns("Foo");
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetDisplayName(
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
@@ -139,7 +133,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new LabelTagHelper(htmlGenerator.Object)
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
@@ -173,7 +167,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new LabelTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 For = "some-input-id",
                 IsPageHeading = true

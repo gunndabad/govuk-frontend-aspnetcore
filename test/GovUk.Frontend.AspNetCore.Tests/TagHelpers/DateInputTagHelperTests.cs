@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -105,7 +105,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id-prefix",
                 DescribedBy = "describedby",
@@ -177,7 +177,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -292,7 +292,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     new DateParseException("Invalid date.", errorComponents), modelExplorer.Metadata);
             }
 
-            var tagHelper = new DateInputTagHelper(htmlGenerator.Object)
+            var tagHelper = new DateInputTagHelper(htmlGenerator.Object, new DefaultModelHelper())
             {
                 AspFor = new ModelExpression("", modelExplorer),
                 ViewContext = viewContext
@@ -397,7 +397,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 viewContext.ModelState.AddModelError(".Year", yearModelError);
             }
 
-            var tagHelper = new DateInputTagHelper(htmlGenerator.Object)
+            var tagHelper = new DateInputTagHelper(htmlGenerator.Object, new DefaultModelHelper())
             {
                 AspFor = new ModelExpression("", modelExplorer),
                 ViewContext = viewContext

@@ -23,8 +23,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private Date? _value;
         private bool _valueSpecified = false;
 
-        public DateInputTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public DateInputTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 
@@ -142,7 +142,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                     var itemModelExplorer = AspFor.ModelExplorer.GetExplorerForProperty(modelNameSuffix);
 
-                    resolvedItemValue = Generator.GetModelValue(
+                    resolvedItemValue = ModelHelper.GetModelValue(
                         ViewContext,
                         itemModelExplorer,
                         expression: $"{AspFor.Name}.{modelNameSuffix}");
@@ -183,7 +183,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 // If there is a DateParseException in ModelState for the bound property,
                 // use its ErrorComponents to deduce DateInputErrorItems
 
-                var fullName = Generator.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+                var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
                 if (!ViewContext.ModelState.TryGetValue(fullName, out var modelState))
                 {
                     return DateInputErrorItems.All;

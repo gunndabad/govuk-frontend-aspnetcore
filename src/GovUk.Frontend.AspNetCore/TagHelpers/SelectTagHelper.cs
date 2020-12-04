@@ -14,8 +14,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
 
-        public SelectTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public SelectTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 

@@ -16,10 +16,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string ForAttributeName = "for";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private readonly IModelHelper _modelHelper;
 
-        public LabelTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        public LabelTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
         }
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -42,13 +44,16 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 throw new InvalidOperationException($"Cannot determine 'for' attribute for <label>.");
             }
 
-            var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
+            var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
+                await output.GetChildContentAsync() :
+                null;
 
             var resolvedFor = For ??
-                TagBuilder.CreateSanitizedId(_htmlGenerator.GetFullHtmlFieldName(ViewContext, AspFor.Name), Constants.IdAttributeDotReplacement);
+                TagBuilder.CreateSanitizedId(
+                    _modelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name), Constants.IdAttributeDotReplacement);
 
             var resolvedContent = (IHtmlContent)childContent ??
-                new HtmlString(_htmlGenerator.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
+                new HtmlString(_modelHelper.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
             var tagBuilder = _htmlGenerator.GenerateLabel(
                 resolvedFor,

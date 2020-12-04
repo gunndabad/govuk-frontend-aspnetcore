@@ -18,8 +18,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string RowsAttributeName = "rows";
         private const string SpellcheckAttributeName = "spellcheck";
 
-        public TextAreaTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public TextAreaTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var resolvedContent = textAreaBuilder.Content ??
-                new HtmlString(Generator.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name));
+                new HtmlString(ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
             return Generator.GenerateTextArea(
                 elementContext.HaveError,
