@@ -35,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new FileUploadTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new FileUploadTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -83,7 +83,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new FileUploadTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new FileUploadTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",

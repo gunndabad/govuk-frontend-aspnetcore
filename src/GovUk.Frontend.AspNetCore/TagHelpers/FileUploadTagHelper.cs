@@ -11,8 +11,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AttributesPrefix = "input-";
         private const string IdAttributeName = "id";
 
-        public FileUploadTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public FileUploadTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 

@@ -33,6 +33,7 @@ namespace GovUk.Frontend.AspNetCore
             services.AddSingleton(options);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
+            services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
             services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
 
             if (options.AddImportsToHtml)

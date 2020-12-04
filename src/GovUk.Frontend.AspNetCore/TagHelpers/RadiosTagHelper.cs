@@ -15,8 +15,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IdPrefixAttributeName = "id-prefix";
         private const string RadiosAttributesPrefix = "radios-";
 
-        public RadiosTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public RadiosTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 
@@ -169,10 +169,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string ValueAttributeName = "value";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private readonly IModelHelper _modelHelper;
 
-        public RadiosItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        public RadiosItemTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
         }
 
         [HtmlAttributeName(IdAttributeName)]
@@ -208,7 +210,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var resolvedChecked = IsChecked ??
                 (radiosContext.HaveModelExpression ?
-                    _htmlGenerator.GetModelValue(
+                    _modelHelper.GetModelValue(
                         radiosContext.ViewContext,
                         radiosContext.AspFor.ModelExplorer,
                         radiosContext.AspFor.Name) == Value :

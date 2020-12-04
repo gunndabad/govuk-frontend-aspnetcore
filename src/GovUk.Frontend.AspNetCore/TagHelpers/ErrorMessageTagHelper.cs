@@ -16,10 +16,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
         
         private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private readonly IModelHelper _modelHelper;
 
-        public ErrorMessageTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        public ErrorMessageTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
         }
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -49,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = (IHtmlContent)childContent;
             if (resolvedContent == null && AspFor != null)
             {
-                var validationMessage = _htmlGenerator.GetValidationMessage(
+                var validationMessage = _modelHelper.GetValidationMessage(
                     ViewContext,
                     AspFor.ModelExplorer,
                     AspFor.Name);

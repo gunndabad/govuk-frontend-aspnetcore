@@ -97,10 +97,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string ForAttributeName = "for";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private readonly IModelHelper _modelHelper;
 
-        public ErrorSummaryItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        public ErrorSummaryItemTagHelper(
+            IGovUkHtmlGenerator htmlGenerator,
+            IModelHelper modelHelper)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
         }
 
         [HtmlAttributeName(AspForAttributeName)]
@@ -133,7 +137,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
             else
             {
-                var validationMessage = _htmlGenerator.GetValidationMessage(ViewContext, AspFor.ModelExplorer, AspFor.Name);
+                var validationMessage = _modelHelper.GetValidationMessage(
+                    ViewContext,
+                    AspFor.ModelExplorer,
+                    AspFor.Name);
 
                 if (validationMessage == null)
                 {
@@ -149,7 +156,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 var resolvedHref = For != null ?
                     "#" + For :
                     "#" + TagBuilder.CreateSanitizedId(
-                        _htmlGenerator.GetFullHtmlFieldName(ViewContext, AspFor.Name),
+                        _modelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name),
                         Constants.IdAttributeDotReplacement);
 
                 var link = new TagBuilder("a");

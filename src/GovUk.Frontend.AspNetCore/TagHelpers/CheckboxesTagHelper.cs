@@ -15,8 +15,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string CheckboxesAttributesPrefix = "checkboxes-";
         private const string IdPrefixAttributeName = "id-prefix";
 
-        public CheckboxesTagHelper(IGovUkHtmlGenerator htmlGenerator)
-            : base(htmlGenerator)
+        public CheckboxesTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper)
         {
         }
 
@@ -150,11 +150,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IsDisabledAttributeName = "disabled";
         private const string ValueAttributeName = "value";
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private readonly IModelHelper _htmlGenerator;
 
-        public CheckboxesItemTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        public CheckboxesItemTagHelper(IModelHelper modelHelper)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _htmlGenerator = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
         }
 
         [HtmlAttributeName(IdAttributeName)]

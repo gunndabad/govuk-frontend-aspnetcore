@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -99,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -146,7 +146,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -185,7 +185,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -230,7 +230,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -282,7 +282,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -340,7 +340,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -398,7 +398,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "my-id",
                 Name = "testcheckboxes"
@@ -441,7 +441,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(Mock.Of<IGovUkHtmlGenerator>())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 IdPrefix = "prefix"
             };
@@ -478,7 +478,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
             {
                 DescribedBy = "describedby",
                 IdPrefix = "my-id",
@@ -617,7 +617,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultModelHelper());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -657,7 +657,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultModelHelper())
             {
                 IsChecked = true,
                 Id = "id",
@@ -710,7 +710,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultModelHelper())
             {
                 IsChecked = true,
                 Value = "V"
@@ -759,7 +759,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultModelHelper())
             {
                 IsChecked = true,
                 Value = "V"
@@ -806,7 +806,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultModelHelper())
             {
                 IsChecked = true,
                 Value = "V"
@@ -848,7 +848,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new CheckboxesItemTagHelper(new DefaultModelHelper())
             {
                 IsChecked = true,
                 Value = "V"
@@ -893,16 +893,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlGenerator = new Mock<DefaultGovUkHtmlGenerator>()
-            {
-                CallBase = true
-            };
+            var modelHelperMock = new Mock<IModelHelper>();
 
-            htmlGenerator
+            modelHelperMock
                 .Setup(mock => mock.GetModelValue(viewContext, modelExplorer, "Foo"))
                 .Returns("bar");
 
-            var tagHelper = new CheckboxesItemTagHelper(htmlGenerator.Object)
+            var tagHelper = new CheckboxesItemTagHelper(modelHelperMock.Object)
             {
                 Value = "bar"
             };
@@ -951,11 +948,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 CallBase = true
             };
 
-            htmlGenerator
+            var modelHelperMock = new Mock<IModelHelper>();
+
+            modelHelperMock
                 .Setup(mock => mock.GetModelValue(viewContext, modelExplorer, "Foo"))
                 .Returns("bar");
 
-            var tagHelper = new CheckboxesItemTagHelper(htmlGenerator.Object)
+            var tagHelper = new CheckboxesItemTagHelper(modelHelperMock.Object)
             {
                 Value = "baz"
             };

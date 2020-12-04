@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -186,13 +185,5 @@ namespace GovUk.Frontend.AspNetCore
             string iconFallbackText,
             IHtmlContent content,
             IDictionary<string, string> attributes);
-
-        string GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
-
-        string GetFullHtmlFieldName(ViewContext viewContext, string expression);
-
-        string GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
-
-        string GetValidationMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
     }
 }
