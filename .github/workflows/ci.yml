@@ -42,7 +42,7 @@ jobs:
     - name: Publish package artifact
       uses: actions/upload-artifact@v2-preview
       with:
-        name: package
+        name: GovUk.Frontend.AspNetCore.nupkg
         path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
     
     - name: Publish package to NuGet
