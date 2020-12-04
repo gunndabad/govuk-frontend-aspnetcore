@@ -35,7 +35,7 @@ jobs:
       run: dotnet test --configuration Release --no-build
 
     - name: Package
-      run: dotnet pack --configuration Release --no-build
+      run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
       env:
         MINVERBUILDMETADATA: ${GITHUB_RUN_NUMBER}
 
