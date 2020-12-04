@@ -25,14 +25,17 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Restore
+      run: dotnet restore
+
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release
+      run: dotnet test --configuration Release --no-build
 
     - name: Package
-      run: dotnet pack --configuration Release
+      run: dotnet pack --configuration Release --no-build
       env:
         MINVERBUILDMETADATA: ${GITHUB_RUN_NUMBER}
 
