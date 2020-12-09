@@ -24,7 +24,7 @@ jobs:
   build:
 
     name: "Build & package"
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     env:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -48,7 +48,7 @@ jobs:
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
       env:
-        MINVERBUILDMETADATA: ${GITHUB_RUN_NUMBER}
+        MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
 
     - name: Publish package artifact
       uses: actions/upload-artifact@v2-preview
@@ -60,7 +60,7 @@ jobs:
   release:
 
     name: "Release"
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
     
@@ -71,6 +71,6 @@ jobs:
         name: GovUk.Frontend.AspNetCore.nupkg
 
     - name: Publish package to NuGet
-      run: dotnet nuget push GovUk.Frontend.AspNetCore.nupkg/*.nupkg --api-key ${NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push GovUk.Frontend.AspNetCore.nupkg/*.nupkg --api-key ${env:NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
       env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }} 
