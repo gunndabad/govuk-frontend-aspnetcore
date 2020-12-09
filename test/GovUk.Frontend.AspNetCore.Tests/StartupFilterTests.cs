@@ -1,17 +1,17 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.TagHelperComponents;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using GovUk.Frontend.AspNetCore.TagHelperComponents;
 using Microsoft.Extensions.DependencyInjection;
-#if NETCOREAPP3_1
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Builder;
+#if NETCOREAPP3_1
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 #endif
 using Xunit;
 
@@ -57,7 +57,6 @@ namespace GovUk.Frontend.AspNetCore.Tests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-#if NETCOREAPP3_1
         [Fact]
         public async Task AddsStyleAndScriptImportsToRazorViews()
         {
@@ -96,7 +95,6 @@ namespace GovUk.Frontend.AspNetCore.Tests
                 $"window.GOVUKFrontend.initAll()",
                 bodyScriptTags.Select(t => t.InnerText));
         }
-#endif
     }
 
     public class StartupFilterTestFixture : IDisposable
@@ -110,10 +108,12 @@ namespace GovUk.Frontend.AspNetCore.Tests
                 .ConfigureServices(services =>
                 {
                     services.AddGovUkFrontend();
+
+                    services.AddMvc();
                 })
                 .Configure(app =>
                 {
-                    // .Configure() has to be called, even if it's not used
+                    app.UseMvc();
                 }));
 
             _host = server;
