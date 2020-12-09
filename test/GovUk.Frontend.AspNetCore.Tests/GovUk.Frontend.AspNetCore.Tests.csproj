@@ -29,4 +29,12 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FixtureFiles Include="$(RepoRoot)\lib\govuk-frontend\package\govuk\components\*\fixtures.json" />
+    <Content Include="@(FixtureFiles)">
+      <Link>ConformanceTests\Fixtures\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
