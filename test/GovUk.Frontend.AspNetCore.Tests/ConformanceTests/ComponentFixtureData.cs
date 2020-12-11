@@ -42,6 +42,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
                 throw new InvalidOperationException($"Couldn't find fixtures in '{fixturesFile}'.");
             }
 
+            var testCaseDataType = typeof(ComponentTestCaseData<>).MakeGenericType(_optionsType);
+
             foreach (var fixture in fixtures)
             {
                 var name = fixture["name"].ToString();
@@ -54,11 +56,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
                 var options = fixture["options"].ToObject(_optionsType);
                 var html = fixture["html"].ToString();
 
+                var testCaseData = Activator.CreateInstance(testCaseDataType, name, options, html);
+
                 yield return new object[]
                 {
-                    name,
-                    options,
-                    html
+                    testCaseData
                 };
             }
         }
