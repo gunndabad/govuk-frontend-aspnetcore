@@ -18,10 +18,10 @@ namespace Samples.DateInput
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var options = new GovUkFrontendAspNetCoreOptions();
-            options.DateInputModelConverters.Add(new LocalDateDateInputModelConverter());
-
-            services.AddGovUkFrontend(options);
+            services.AddGovUkFrontend(options =>
+            {
+                options.DateInputModelConverters.Add(new LocalDateDateInputModelConverter());
+            });
 
             services.AddRazorPages()
                 .AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled = false);

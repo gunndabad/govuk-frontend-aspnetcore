@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -14,41 +15,48 @@ namespace GovUk.Frontend.AspNetCore
     {
         public static IServiceCollection AddGovUkFrontend(this IServiceCollection services)
         {
-            return AddGovUkFrontend(services, new GovUkFrontendAspNetCoreOptions());
+            return AddGovUkFrontend(services, _ => { });
         }
 
         public static IServiceCollection AddGovUkFrontend(
             this IServiceCollection services,
-            GovUkFrontendAspNetCoreOptions options)
+            Action<GovUkFrontendAspNetCoreOptions> configureOptions)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (options == null)
+            if (configureOptions == null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(configureOptions));
             }
-
-            services.AddSingleton(options);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
             services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
+            services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureMvcOptions>();
             services.AddScoped<DateInputParseErrorsProvider>();
+            services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
 
-            if (options.AddImportsToHtml)
-            {
-                services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
-            }
-
-            services.Configure<MvcOptions>(mvcOptions =>
-            {
-                mvcOptions.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider(options));
-            });
+            services.Configure(configureOptions);
 
             return services;
+        }
+
+        private class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
+        {
+            private readonly GovUkFrontendAspNetCoreOptions _gfaOptions;
+
+            public ConfigureMvcOptions(IOptions<GovUkFrontendAspNetCoreOptions> gfaOptionsAccessor)
+            {
+                _gfaOptions = gfaOptionsAccessor.Value;
+            }
+
+            public void Configure(MvcOptions options)
+            {
+                options.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider(_gfaOptions));
+            }
         }
     }
 }
