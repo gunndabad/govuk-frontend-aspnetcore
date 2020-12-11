@@ -15,6 +15,7 @@ on:
     branches:
     - main
     - release
+    - v1.0
     paths-ignore:
     - docs/**
     - LICENSE
