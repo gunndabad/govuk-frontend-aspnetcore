@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<details class=\"govuk-details\" data-module=\"govuk-details\">" +
                 "<summary class=\"govuk-details__summary\">" +
@@ -166,7 +166,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The summary", detailsContext.Summary?.content.AsString());
+            Assert.Equal("The summary", detailsContext.Summary?.content.RenderToString());
         }
     }
 
@@ -204,7 +204,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The text", detailsContext.Text?.content.AsString());
+            Assert.Equal("The text", detailsContext.Text?.content.RenderToString());
         }
     }
 

@@ -56,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<div class=\"govuk-checkboxes\">" +
@@ -110,7 +110,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var input = node.ChildNodes.FindFirst("input");
             Assert.Equal("checked", input.Attributes["checked"].Value);
@@ -157,7 +157,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var input = node.ChildNodes.FindFirst("input");
             Assert.Equal("disabled", input.Attributes["disabled"].Value);
@@ -195,7 +195,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<div class=\"govuk-hint\" id=\"my-id-hint\">The hint</div>" +
@@ -240,7 +240,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group--error govuk-form-group\">" +
                 "<span class=\"govuk-error-message\" id=\"my-id-error\"><span class=\"govuk-visually-hidden\">Error</span>A error</span>" +
@@ -292,7 +292,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<div class=\"govuk-checkboxes\">" +
@@ -350,7 +350,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<div class=\"govuk-checkboxes--conditional govuk-checkboxes\" data-module=\"govuk-checkboxes\">" +
@@ -408,7 +408,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<div class=\"govuk-checkboxes--conditional govuk-checkboxes\" data-module=\"govuk-checkboxes\">" +
@@ -489,7 +489,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<fieldset aria-describedby=\"describedby\" class=\"govuk-fieldset\">" +
@@ -545,7 +545,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.True(checkboxesContext.Fieldset.LegendIsPageHeading);
-            Assert.Equal("Legend", checkboxesContext.Fieldset.LegendContent.AsString());
+            Assert.Equal("Legend", checkboxesContext.Fieldset.LegendContent.RenderToString());
         }
     }
 
@@ -582,7 +582,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Legend", fieldsetContext.Legend?.content?.AsString());
+            Assert.Equal("Legend", fieldsetContext.Legend?.content?.RenderToString());
         }
     }
 
@@ -673,12 +673,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item => item is CheckboxesItem i &&
                     i.IsChecked &&
                     !i.IsDisabled &&
-                    i.Content.AsString() == "Label" &&
+                    i.Content.RenderToString() == "Label" &&
                     !i.IsDisabled &&
                     i.Id == "id" &&
                     i.Value == "V" &&
-                    i.ConditionalContent.AsString() == "Conditional" &&
-                    i.HintContent.AsString() == "Hint");
+                    i.ConditionalContent.RenderToString() == "Conditional" &&
+                    i.HintContent.RenderToString() == "Hint");
         }
 
         [Fact]
@@ -1000,7 +1000,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Conditional", itemContext.Conditional?.content.AsString());
+            Assert.Equal("Conditional", itemContext.Conditional?.content.RenderToString());
         }
     }
 
@@ -1037,7 +1037,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Hint", itemContext.Hint?.content.AsString());
+            Assert.Equal("Hint", itemContext.Hint?.content.RenderToString());
         }
     }
 }
