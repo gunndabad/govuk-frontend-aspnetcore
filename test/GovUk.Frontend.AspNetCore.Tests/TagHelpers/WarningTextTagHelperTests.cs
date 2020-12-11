@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -29,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new WarningTextTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new WarningTextTagHelper(new ComponentGenerator())
             {
                 IconFallbackText = "Danger"
             };
@@ -70,7 +71,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new WarningTextTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new WarningTextTagHelper(new ComponentGenerator());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
