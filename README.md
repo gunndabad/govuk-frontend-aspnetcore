@@ -12,7 +12,7 @@ Targets [GDS Frontend v3.9.1](https://github.com/alphagov/govuk-frontend/release
 Install the [GovUk.Frontend.AspNetCore NuGet package](https://www.nuget.org/packages/GovUk.Frontend.AspNetCore/):
 
     Install-Package GovUk.Frontend.AspNetCore
-    
+
 Or via the .NET Core command line interface:
 
     dotnet add package GovUk.Frontend.AspNetCore
@@ -34,12 +34,12 @@ public class Startup
 ```
 
 This will register a [Tag Helper Component](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/th-components?view=aspnetcore-5.0) that automatically adds stylesheet and script imports to your Razor views.
-If you do *not* want this then use the overload of `AddGovUkFrontend` that takes a `GovUkFrontendAspNetCoreOptions` parameter and set `AddImportsToHtml` to `false`:
+If you do *not* want this then use the overload of `AddGovUkFrontend` that takes an `Action<GovUkFrontendAspNetCoreOptions>` parameter and set `AddImportsToHtml` to `false`:
 
 ```cs
-services.AddGovUkFrontend(new GovUkFrontendAspNetCoreOptions()
+services.AddGovUkFrontend(options =>
 {
-    AddImportsToHtml = false
+    options.AddImportsToHtml = false;
 });
 ```
 
