@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
@@ -37,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -85,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -129,7 +130,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -173,7 +174,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",

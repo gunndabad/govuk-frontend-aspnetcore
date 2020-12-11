@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -50,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new BreadcrumbsTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new BreadcrumbsTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -97,7 +98,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new BreadcrumbsItemTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>());
 
             // Act
@@ -135,7 +136,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new BreadcrumbsItemTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Href = "place.com"
