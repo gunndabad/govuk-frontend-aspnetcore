@@ -39,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-phase-banner\">" +
                 "<p class=\"govuk-phase-banner__content\">" +
@@ -111,7 +111,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Legend message", pbContext.Tag?.content.AsString());
+            Assert.Equal("Legend message", pbContext.Tag?.content.RenderToString());
         }
 
         [Fact]

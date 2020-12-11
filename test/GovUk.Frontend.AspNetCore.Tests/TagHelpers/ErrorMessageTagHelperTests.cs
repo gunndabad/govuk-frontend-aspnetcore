@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<span class=\"govuk-error-message\">" +
                 "<span class=\"govuk-visually-hidden\">Error</span>" +
@@ -120,7 +120,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<span class=\"govuk-error-message\">" +
                 "<span class=\"govuk-visually-hidden\">Overriden</span>" +
@@ -170,7 +170,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<span class=\"govuk-error-message\">" +
                 "<span class=\"govuk-visually-hidden\">Error</span>" +

@@ -44,7 +44,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             Assert.Equal(
                 "<div class=\"govuk-panel--confirmation govuk-panel\"><h3 class=\"govuk-panel__title\">Title</h3><div class=\"govuk-panel__body\">Body</div></div>",
-                output.AsString());
+                output.RenderToString());
         }
 
         [Theory]
@@ -147,7 +147,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(panelContext.Title);
-            Assert.Equal("Title", panelContext.Title.AsString());
+            Assert.Equal("Title", panelContext.Title.RenderToString());
         }
 
         [Fact]
