@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -28,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new HintTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new HintTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -58,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new HintTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new HintTagHelper(new ComponentGenerator())
             {
                 Id = "some-id"
             };

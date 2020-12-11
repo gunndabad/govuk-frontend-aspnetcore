@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -34,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"
@@ -73,7 +74,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>());
 
             // Act
@@ -109,7 +110,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Type = "button"
@@ -187,7 +188,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 RouteData = new Microsoft.AspNetCore.Routing.RouteData()
             };
 
-            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(), urlHelperFactory.Object)
+            var tagHelper = new ButtonTagHelper(new ComponentGenerator(), urlHelperFactory.Object)
             {
                 Action = action,
                 Area = area,
@@ -231,7 +232,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 IsStartButton = true
@@ -266,7 +267,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Disabled = true
@@ -303,7 +304,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Disabled = true,
@@ -339,7 +340,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Value = "some value"
@@ -373,7 +374,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Type = "submit"
@@ -407,7 +408,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Name = "Some name"
@@ -441,7 +442,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 PreventDoubleClick = true
@@ -475,7 +476,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Href = "https://place.com",
@@ -508,7 +509,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Value = "Some value",
@@ -541,7 +542,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 PreventDoubleClick = true,
@@ -617,7 +618,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 RouteData = new Microsoft.AspNetCore.Routing.RouteData()
             };
 
-            var tagHelper = new ButtonTagHelper(new DefaultGovUkHtmlGenerator(), urlHelperFactory.Object)
+            var tagHelper = new ButtonTagHelper(new ComponentGenerator(), urlHelperFactory.Object)
             {
                 Action = action,
                 Area = area,
@@ -665,7 +666,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new ButtonTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 FormAction = "foo",

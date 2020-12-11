@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,7 @@ namespace GovUk.Frontend.AspNetCore
 
             services.AddSingleton(options);
 
-            services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
+            services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
             services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
 

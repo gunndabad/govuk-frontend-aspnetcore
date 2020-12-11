@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
@@ -50,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -96,7 +97,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -127,7 +128,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -305,7 +306,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -343,7 +344,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -375,7 +376,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 For = "field"
             };
@@ -432,7 +433,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
