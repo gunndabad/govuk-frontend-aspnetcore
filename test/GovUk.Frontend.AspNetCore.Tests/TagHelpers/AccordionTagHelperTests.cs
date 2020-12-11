@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -47,7 +48,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new AccordionTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new AccordionTagHelper(new ComponentGenerator())
             {
                 Id = "testaccordion",
                 HeadingLevel = 1,
@@ -121,7 +122,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new AccordionTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new AccordionTagHelper(new ComponentGenerator());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -167,7 +168,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new AccordionTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new AccordionTagHelper(new ComponentGenerator())
             {
                 Id = "testaccordion",
                 HeadingLevel = level

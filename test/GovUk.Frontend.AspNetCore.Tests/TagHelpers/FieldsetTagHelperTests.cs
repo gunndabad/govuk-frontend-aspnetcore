@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -35,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new FieldsetTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new FieldsetTagHelper(new ComponentGenerator())
             {
                 DescribedBy = "describedby",
                 Role = "therole"
@@ -82,7 +83,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new FieldsetTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new FieldsetTagHelper(new ComponentGenerator())
             {
                 DescribedBy = "describedby",
                 Role = "therole"
