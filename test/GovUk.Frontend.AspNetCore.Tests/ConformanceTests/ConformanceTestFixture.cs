@@ -56,6 +56,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
 
             services.AddGovUkFrontend();
 
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.RunningConformanceTests = true);
+
             services
                 .AddMvc(options =>
                 {
