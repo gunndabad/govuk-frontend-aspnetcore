@@ -1,16 +1,29 @@
-﻿using System;
+using System;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.TagHelperComponents
 {
     public class GdsImportsTagHelperComponent : TagHelperComponent
     {
+        private readonly GovUkFrontendAspNetCoreOptions _options;
+
+        public GdsImportsTagHelperComponent(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+        {
+            _options = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
+        }
+
         public override int Order => 1;
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if (!_options.AddImportsToHtml)
+            {
+                return;
+            }
+
             if (string.Equals(context.TagName, "head", StringComparison.OrdinalIgnoreCase))
             {
                 output.PostContent.AppendHtml(HtmlSnippets.StyleImports + "\n");

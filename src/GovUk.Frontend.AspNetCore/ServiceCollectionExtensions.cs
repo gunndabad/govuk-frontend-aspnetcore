@@ -14,38 +14,34 @@ namespace GovUk.Frontend.AspNetCore
     {
         public static IServiceCollection AddGovUkFrontend(this IServiceCollection services)
         {
-            return AddGovUkFrontend(services, new GovUkFrontendAspNetCoreOptions());
+            return AddGovUkFrontend(services, _ => { });
         }
 
         public static IServiceCollection AddGovUkFrontend(
             this IServiceCollection services,
-            GovUkFrontendAspNetCoreOptions options)
+            Action<GovUkFrontendAspNetCoreOptions> configureOptions)
         {
             if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (options == null)
+            if (configureOptions == null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(configureOptions));
             }
-
-            services.AddSingleton(options);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
             services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
-
-            if (options.AddImportsToHtml)
-            {
-                services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
-            }
+            services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
 
             services.Configure<MvcOptions>(options =>
             {
                 options.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider());
             });
+
+            services.Configure(configureOptions);
 
             return services;
         }
