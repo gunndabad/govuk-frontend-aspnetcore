@@ -5,14 +5,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using HtmlAgilityPack;
-#if NETCOREAPP3_1
-using Microsoft.Extensions.Hosting;
-#endif
+using GovUk.Frontend.AspNetCore.Tests.Infrastructure;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
@@ -97,58 +93,36 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
         }
     }
 
-    public class StartupFilterTestFixture : IDisposable
+    public class StartupFilterTestFixture : TestServerFixtureBase
     {
-        private readonly IDisposable _host;
-
         public StartupFilterTestFixture()
+            : base(ConfigureServices, Configure)
+        {
+        }
+
+        private static void Configure(IApplicationBuilder app)
         {
 #if NETCOREAPP2_1
-            var server = new TestServer(new WebHostBuilder()
-                .ConfigureServices(services =>
-                {
-                    services.AddGovUkFrontend();
-
-                    services.AddMvc();
-                })
-                .Configure(app =>
-                {
-                    app.UseMvc();
-                }));
-
-            _host = server;
-            HttpClient = server.CreateClient();
+            app.UseMvc();
 #else
-            var host = new HostBuilder()
-                .ConfigureWebHost(webBuilder =>
-                {
-                    webBuilder
-                        .UseTestServer()
-                        .ConfigureServices(services =>
-                        {
-                            services.AddGovUkFrontend();
+            app.UseRouting();
 
-                            services.AddRazorPages();
-                        })
-                        .Configure(app =>
-                        {
-                            app.UseRouting();
-
-                            app.UseEndpoints(endpoints =>
-                            {
-                                endpoints.MapRazorPages();
-                            });
-                        });
-                })
-                .Start();
-
-            _host = host;
-            HttpClient = host.GetTestClient();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+            });
 #endif
         }
 
-        public HttpClient HttpClient { get; }
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddGovUkFrontend();
 
-        public void Dispose() => _host.Dispose();
+#if NETCOREAPP2_1
+            services.AddMvc();
+#else
+            services.AddRazorPages();
+#endif
+        }
     }
 }
