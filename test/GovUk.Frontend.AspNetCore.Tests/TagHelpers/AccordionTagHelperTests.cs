@@ -82,7 +82,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "</div>" +
                 "</div>" +
                 "</div>",
-                output.AsString());
+                output.RenderToString());
         }
 
         [Fact]
@@ -219,9 +219,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, accordionContext.Items.Count);
 
             var firstItem = accordionContext.Items.First();
-            Assert.Equal("Heading", firstItem.HeadingContent.AsString());
-            Assert.Equal("Summary", firstItem.SummaryContent.AsString());
-            Assert.Equal("Content", firstItem.Content.AsString());
+            Assert.Equal("Heading", firstItem.HeadingContent.RenderToString());
+            Assert.Equal("Summary", firstItem.SummaryContent.RenderToString());
+            Assert.Equal("Content", firstItem.Content.RenderToString());
         }
 
         [Fact]
@@ -296,7 +296,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(itemContext.Heading);
-            Assert.Equal("Summary content", itemContext.Heading.Value.content.AsString());
+            Assert.Equal("Summary content", itemContext.Heading.Value.content.RenderToString());
         }
 
         [Fact]
@@ -371,7 +371,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(itemContext.Summary);
-            Assert.Equal("Summary content", itemContext.Summary?.content.AsString());
+            Assert.Equal("Summary content", itemContext.Summary?.content.RenderToString());
         }
 
         [Fact]

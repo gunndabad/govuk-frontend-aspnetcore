@@ -67,7 +67,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "</ul>" +
                 "</div>" +
                 "</div>",
-                output.AsString());
+                output.RenderToString());
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var h2 = node.ChildNodes.FindFirst("h2");
             Assert.Equal("There is a problem", h2.InnerHtml);
@@ -133,7 +133,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Empty(html);
         }
     }
@@ -171,7 +171,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Some title", errorSummaryContext.Title?.content.AsString());
+            Assert.Equal("Some title", errorSummaryContext.Title?.content.RenderToString());
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Some description", errorSummaryContext.Description?.content.AsString());
+            Assert.Equal("Some description", errorSummaryContext.Description?.content.RenderToString());
         }
 
         [Fact]
@@ -314,7 +314,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("An error message", firstItem.Content.AsString());
+            Assert.Equal("An error message", firstItem.Content.RenderToString());
         }
 
         [Fact]
@@ -387,7 +387,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"#field\">An error message</a>", firstItem.Content.AsString());
+            Assert.Equal("<a href=\"#field\">An error message</a>", firstItem.Content.RenderToString());
         }
 
         [Fact]
@@ -445,7 +445,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"#Foo\">Generated error</a>", firstItem.Content.AsString());
+            Assert.Equal("<a href=\"#Foo\">Generated error</a>", firstItem.Content.RenderToString());
         }
     }
 }

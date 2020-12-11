@@ -38,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-warning-text\">" +
                 "<span aria-hidden=\"true\" class=\"govuk-warning-text__icon\">!</span>" +
