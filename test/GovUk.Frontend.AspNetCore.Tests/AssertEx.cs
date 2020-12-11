@@ -1,14 +1,26 @@
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
+using AngleSharp;
 using AngleSharp.Diffing;
 using AngleSharp.Diffing.Core;
+using AngleSharp.Dom;
 using Xunit.Sdk;
 
 namespace GovUk.Frontend.AspNetCore.Tests
 {
     public static class AssertEx
     {
+        public static async Task<IDocument> GetHtmlDocument(this HttpResponseMessage response)
+        {
+            var html = await response.Content.ReadAsStringAsync();
+
+            var browsingContext = BrowsingContext.New();
+            return await browsingContext.OpenAsync(req => req.Content(html));
+        }
+
         public static void HtmlEqual(string expected, string actual)
         {
             var diffs = DiffBuilder.Compare(expected).WithTest(actual).Build().ToArray();
