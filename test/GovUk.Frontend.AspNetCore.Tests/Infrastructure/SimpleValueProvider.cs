@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
+namespace GovUk.Frontend.AspNetCore.Tests.Infrastructure
 {
     public sealed class SimpleValueProvider : Dictionary<string, object>, IValueProvider
     {
