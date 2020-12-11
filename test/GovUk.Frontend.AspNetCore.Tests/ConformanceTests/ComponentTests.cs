@@ -4,6 +4,7 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
 {
+    [Trait("Category", "ConformanceTests")]
     public class ComponentTests : IClassFixture<ConformanceTestFixture>
     {
         private readonly ConformanceTestFixture _fixture;

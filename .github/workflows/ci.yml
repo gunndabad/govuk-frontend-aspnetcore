@@ -44,7 +44,11 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release --no-build
+      run: dotnet test --configuration Release --no-build --filter Category!=ConformanceTests
+
+    - name: Conformance tests
+      run: dotnet test --configuration Release --no-build --filter Category=ConformanceTests
+      continue-on-error: true
 
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
