@@ -31,6 +31,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.Infrastructure
 
             _host = server;
             HttpClient = server.CreateClient();
+            Services = server.Host.Services;
 #else
             var host = new HostBuilder()
                 .ConfigureWebHost(webBuilder =>
@@ -50,10 +51,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.Infrastructure
 
             _host = host;
             HttpClient = host.GetTestClient();
+            Services = host.Services;
 #endif
         }
 
         public HttpClient HttpClient { get; private set; }
+
+        public IServiceProvider Services { get; private set; }
 
         public virtual void Dispose()
         {
