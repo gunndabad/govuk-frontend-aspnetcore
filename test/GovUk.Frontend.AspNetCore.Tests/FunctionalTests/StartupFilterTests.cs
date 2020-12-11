@@ -15,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 #endif
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests
+namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
 {
     public class StartupFilterTests : IClassFixture<StartupFilterTestFixture>
     {
