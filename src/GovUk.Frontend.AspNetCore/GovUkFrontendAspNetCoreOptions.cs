@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -18,5 +18,7 @@ namespace GovUk.Frontend.AspNetCore
         public bool AddImportsToHtml { get; set; }
 
         public List<DateInputModelConverter> DateInputModelConverters { get; }
+		
+        internal bool RunningConformanceTests { get; set; }
     }
 }
