@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -32,7 +33,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             output.Content.SetContent("My custom link content");
 
             var tagHelper = new SkipLinkTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-namespace GovUk.Frontend.AspNetCore
+
+namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class DefaultGovUkHtmlGenerator : IGovUkHtmlGenerator
+    public partial class ComponentGenerator : IGovUkHtmlGenerator
     {
         public virtual TagBuilder GenerateAccordion(
             string id,
