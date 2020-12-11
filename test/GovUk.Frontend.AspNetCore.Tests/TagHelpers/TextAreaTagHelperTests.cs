@@ -50,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var textarea = node.ChildNodes.FindFirst("textarea");
             Assert.Equal(
@@ -142,7 +142,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             Assert.Contains("govuk-textarea--error", node.ChildNodes.FindFirst("textarea").GetCssClasses());
         }
@@ -185,7 +185,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var textarea = node.ChildNodes.FindFirst("textarea");
             Assert.Equal("5", textarea.Attributes["rows"].Value);

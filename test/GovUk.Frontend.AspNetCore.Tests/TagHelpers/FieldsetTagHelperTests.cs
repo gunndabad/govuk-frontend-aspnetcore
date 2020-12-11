@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<fieldset aria-describedby=\"describedby\" class=\"govuk-fieldset\" role=\"therole\">" +
                 "<legend class=\"govuk-fieldset__legend\">" +
@@ -92,7 +92,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<fieldset aria-describedby=\"describedby\" class=\"govuk-fieldset\" role=\"therole\">" +
                 "<legend class=\"govuk-fieldset__legend\">" +

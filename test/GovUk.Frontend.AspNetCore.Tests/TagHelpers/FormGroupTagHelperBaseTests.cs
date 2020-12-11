@@ -97,7 +97,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             Assert.Equal("my-element-id", node.ChildNodes.FindFirst("dummy").Attributes["id"].Value);
         }
@@ -154,7 +154,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             Assert.Equal("Foo", node.ChildNodes.FindFirst("dummy").Attributes["id"].Value);
         }
@@ -353,7 +353,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<label class=\"govuk-label\" for=\"element-id\">The label</label>", html);
         }
 
@@ -404,7 +404,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<label class=\"govuk-label\" for=\"element-id\">Generated label</label>", html);
         }
 
@@ -460,7 +460,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<label class=\"govuk-label\" for=\"Foo\">The label</label>", html);
         }
 
@@ -510,7 +510,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<label class=\"govuk-label\" for=\"Foo\">Generated label</label>", html);
         }
 
@@ -566,7 +566,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains(
                 "<h1 class=\"govuk-label-wrapper\"><label class=\"govuk-label\" for=\"Foo\">Generated label</label></h1>",
                 html);
@@ -624,7 +624,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains(
                 "<h1 class=\"govuk-label-wrapper\"><label class=\"govuk-label\" for=\"Foo\">The label</label></h1>",
                 html);
@@ -689,7 +689,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.DoesNotContain("<span class=\"govuk-error-message\"", html);
         }
 
@@ -752,7 +752,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains(
                 "<span class=\"govuk-error-message\" id=\"Foo-error\"><span class=\"govuk-visually-hidden\">Error</span>An error</span>",
                 html);
@@ -818,7 +818,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.DoesNotContain("<span class=\"govuk-error-message\"", html);
         }
 
@@ -881,7 +881,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains(
                 "<span class=\"govuk-error-message\" id=\"Foo-error\"><span class=\"govuk-visually-hidden\">Bang</span>Boom!</span>",
                 html);
@@ -923,7 +923,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<div class=\"govuk-hint\" id=\"element-id-hint\">The hint</div>", html);
         }
 
@@ -962,7 +962,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<dummy have-error=\"False\" id=\"element-id\"></dummy>", html);
         }
 
@@ -1002,7 +1002,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<dummy described-by=\"other-thing\" have-error=\"False\" id=\"element-id\"></dummy>", html);
         }
 
@@ -1045,7 +1045,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<dummy described-by=\"element-id-error\" have-error=\"True\" id=\"element-id\"></dummy>", html);
         }
 
@@ -1085,7 +1085,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<dummy described-by=\"element-id-hint\" have-error=\"False\" id=\"element-id\"></dummy>", html);
         }
 
@@ -1130,7 +1130,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Contains("<dummy described-by=\"other-thing element-id-hint element-id-error\" have-error=\"True\" id=\"element-id\"></dummy>", html);
         }
     }
@@ -1172,7 +1172,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.True(formGroupContext.Label.Value.isPageHeading);
-            Assert.Equal("The label content", formGroupContext.Label.Value.content.AsString());
+            Assert.Equal("The label content", formGroupContext.Label.Value.content.RenderToString());
             Assert.Null(output.TagName);
         }
     }
@@ -1210,7 +1210,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The hint content", formGroupContext.Hint?.content.AsString());
+            Assert.Equal("The hint content", formGroupContext.Hint?.content.RenderToString());
             Assert.Null(output.TagName);
         }
     }
@@ -1253,7 +1253,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             Assert.NotNull(formGroupContext.ErrorMessage);
             Assert.Equal("vht", formGroupContext.ErrorMessage.Value.visuallyHiddenText);
-            Assert.Equal("The error content", formGroupContext.ErrorMessage.Value.content.AsString());
+            Assert.Equal("The error content", formGroupContext.ErrorMessage.Value.content.RenderToString());
             Assert.Null(output.TagName);
         }
     }
@@ -1350,7 +1350,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.True(result);
             Assert.Equal(FormGroupRenderStage.Hint, ctx.RenderStage);
             Assert.NotNull(ctx.Hint);
-            Assert.Equal("Hint", ctx.Hint?.content.AsString());
+            Assert.Equal("Hint", ctx.Hint?.content.RenderToString());
         }
 
         [Fact]
@@ -1368,7 +1368,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.True(result);
             Assert.Equal(FormGroupRenderStage.Hint, ctx.RenderStage);
             Assert.NotNull(ctx.Hint);
-            Assert.Equal("Hint", ctx.Hint?.content.AsString());
+            Assert.Equal("Hint", ctx.Hint?.content.RenderToString());
         }
 
         [Fact]
