@@ -44,7 +44,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<a class=\"govuk-button\" data-module=\"govuk-button\" draggable=\"false\" href=\"http://foo.com\" role=\"button\">" +
                 "Button text" +
@@ -80,7 +80,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<button class=\"govuk-button\" data-module=\"govuk-button\" type=\"submit\">" +
                 "Button text" +

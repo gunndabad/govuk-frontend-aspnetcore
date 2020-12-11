@@ -90,7 +90,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<span class=\"govuk-summary-list__actions\"></span>" +
                 "</div>" +
                 "</dl>",
-                output.AsString());
+                output.RenderToString());
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<dt class=\"govuk-summary-list__value\">Row 2 value</dt>" +
                 "</div>" +
                 "</dl>",
-                output.AsString());
+                output.RenderToString());
         }
     }
 
@@ -200,13 +200,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, summaryListContext.Rows.Count);
 
             var firstRow = summaryListContext.Rows.First();
-            Assert.Equal("Key", firstRow.Key.AsString());
-            Assert.Equal("Value", firstRow.Value.AsString());
+            Assert.Equal("Key", firstRow.Key.RenderToString());
+            Assert.Equal("Value", firstRow.Value.RenderToString());
             Assert.Equal(2, firstRow.Actions.Count());
-            Assert.Equal("First action", firstRow.Actions.First().Content.AsString());
+            Assert.Equal("First action", firstRow.Actions.First().Content.RenderToString());
             Assert.Equal("first", firstRow.Actions.First().Href);
             Assert.Equal("vht1", firstRow.Actions.First().VisuallyHiddenText);
-            Assert.Equal("Second action", firstRow.Actions.Skip(1).First().Content.AsString());
+            Assert.Equal("Second action", firstRow.Actions.Skip(1).First().Content.RenderToString());
             Assert.Equal("second", firstRow.Actions.Skip(1).First().Href);
             Assert.Equal("vht2", firstRow.Actions.Skip(1).First().VisuallyHiddenText);
         }
@@ -247,7 +247,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Key content", rowContext.Key.AsString());
+            Assert.Equal("Key content", rowContext.Key.RenderToString());
         }
 
         [Fact]
@@ -321,7 +321,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Value content", rowContext.Value.AsString());
+            Assert.Equal("Value content", rowContext.Value.RenderToString());
         }
 
         [Fact]
@@ -406,7 +406,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var firstAction = rowContext.Actions.First();
             Assert.Equal("vht", firstAction.VisuallyHiddenText);
             Assert.Equal("href", firstAction.Href);
-            Assert.Equal("Action content", firstAction.Content.AsString());
+            Assert.Equal("Action content", firstAction.Content.RenderToString());
         }
     }
 }

@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">My custom link content</a>", html);
         }
 
@@ -77,7 +77,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">Back</a>", html);
         }
     }

@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal("<label class=\"govuk-label\" for=\"some-input-id\">Label content</label>", html);
         }
 
@@ -92,7 +92,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal("<label class=\"govuk-label\" for=\"Foo\">Generated label</label>", html);
         }
 
@@ -143,7 +143,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal("<label class=\"govuk-label\" for=\"Foo\">Specific content</label>", html);
         }
 
@@ -177,7 +177,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<h1 class=\"govuk-label-wrapper\">" +
                 "<label class=\"govuk-label\" for=\"some-input-id\">Label content</label>" +
