@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 
-namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
+namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
     public class StringFileProvider : IFileProvider
     {

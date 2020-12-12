@@ -3,5 +3,7 @@
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     <RepoRoot>$([MSBuild]::EnsureTrailingSlash('$(MSBuildThisFileDirectory)'))</RepoRoot>
+
+    <DefineConstants Condition="'$(EnableTestSwitches)' == 'true' or '$(Configuration)' == 'Debug'">$(DefineConstants);TEST_SWITCHES</DefineConstants>
   </PropertyGroup>
 </Project>
