@@ -4,7 +4,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 
-namespace GovUk.Frontend.AspNetCore.Tests.Infrastructure
+namespace GovUk.Frontend.AspNetCore.TestCommon
 {
     public class SpecifiedControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
     {

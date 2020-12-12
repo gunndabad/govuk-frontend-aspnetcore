@@ -1,4 +1,4 @@
-namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests.OptionsJson
+namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
 {
     public interface ITextOrHtmlContent
     {

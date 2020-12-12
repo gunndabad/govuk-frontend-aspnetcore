@@ -2,7 +2,7 @@ using System.IO;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 
-namespace GovUk.Frontend.AspNetCore.Tests
+namespace GovUk.Frontend.AspNetCore.TestCommon
 {
     public static class HtmlContentExtensions
     {

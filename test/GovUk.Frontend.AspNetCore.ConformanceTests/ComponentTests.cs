@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
+namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
-    [Trait("Category", "ConformanceTests")]
     public class ComponentTests : IClassFixture<ConformanceTestFixture>
     {
         private readonly ConformanceTestFixture _fixture;
