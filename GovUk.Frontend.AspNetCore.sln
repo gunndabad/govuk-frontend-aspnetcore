@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{18D22039-E361-4D56-819B-78BF6DAC75C2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore", "src\GovUk.Frontend.AspNetCore\GovUk.Frontend.AspNetCore.csproj", "{E44813ED-0397-4BBC-9817-18735FF47916}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7724F774-9C65-4425-B92D-1E035258D224}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.Tests", "test\GovUk.Frontend.AspNetCore.Tests\GovUk.Frontend.AspNetCore.Tests.csproj", "{AB17A248-6FB0-4B01-99C7-05117341A764}"
 EndProject
@@ -57,10 +53,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{E44813ED-0397-4BBC-9817-18735FF47916} = {18D22039-E361-4D56-819B-78BF6DAC75C2}
-		{AB17A248-6FB0-4B01-99C7-05117341A764} = {7724F774-9C65-4425-B92D-1E035258D224}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56670F00-D357-4E76-A289-2114015DDFE5}
