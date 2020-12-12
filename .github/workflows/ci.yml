@@ -44,10 +44,10 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release --no-build --filter Category!=ConformanceTests
+      run: dotnet test test/GovUk.FrontEnd.AspNetCore.Tests --configuration Release --no-build
 
     - name: Conformance tests
-      run: dotnet test --configuration Release --no-build --filter Category=ConformanceTests
+      run: dotnet test test/GovUk.FrontEnd.AspNetCore.ConformanceTests --configuration Release /p:EnableTestSwitches=true
       continue-on-error: true
 
     - name: Package

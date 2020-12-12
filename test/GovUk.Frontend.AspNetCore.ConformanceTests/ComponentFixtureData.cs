@@ -5,7 +5,7 @@ using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Xunit.Sdk;
 
-namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
+namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
     public class ComponentFixtureData : DataAttribute
     {
@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ConformanceTests
 
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
-            var fixturesFile = Path.Combine("ConformanceTests", "Fixtures", _fixtureFolder, "fixtures.json");
+            var fixturesFile = Path.Combine("Fixtures", _fixtureFolder, "fixtures.json");
 
             if (!File.Exists(fixturesFile))
             {

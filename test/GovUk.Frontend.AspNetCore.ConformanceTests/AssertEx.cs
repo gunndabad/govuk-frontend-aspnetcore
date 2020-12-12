@@ -9,7 +9,7 @@ using AngleSharp.Diffing.Core;
 using AngleSharp.Dom;
 using Xunit.Sdk;
 
-namespace GovUk.Frontend.AspNetCore.Tests
+namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
     public static class AssertEx
     {
