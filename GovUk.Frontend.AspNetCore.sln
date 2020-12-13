@@ -18,7 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.ConformanceTests", "test\GovUk.Frontend.AspNetCore.ConformanceTests\GovUk.Frontend.AspNetCore.ConformanceTests.csproj", "{DDF45412-C16E-497F-88A5-B6A926836B08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovUk.FrontEnd.AspNetCore.TestCommon", "test\GovUk.FrontEnd.AspNetCore.TestCommon\GovUk.FrontEnd.AspNetCore.TestCommon.csproj", "{D1B82295-B3B6-4065-AAD0-6FE115F203B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.FrontEnd.AspNetCore.TestCommon", "test\GovUk.FrontEnd.AspNetCore.TestCommon\GovUk.FrontEnd.AspNetCore.TestCommon.csproj", "{D1B82295-B3B6-4065-AAD0-6FE115F203B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovUk.Frontend.AspNetCore.DocSamples", "src\GovUk.Frontend.AspNetCore.DocSamples\GovUk.Frontend.AspNetCore.DocSamples.csproj", "{1AB2352D-1151-4F82-83F4-5C327A436B70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +80,18 @@ Global
 		{D1B82295-B3B6-4065-AAD0-6FE115F203B1}.Release|x64.Build.0 = Release|Any CPU
 		{D1B82295-B3B6-4065-AAD0-6FE115F203B1}.Release|x86.ActiveCfg = Release|Any CPU
 		{D1B82295-B3B6-4065-AAD0-6FE115F203B1}.Release|x86.Build.0 = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x64.Build.0 = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x86.Build.0 = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x64.ActiveCfg = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x64.Build.0 = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x86.ActiveCfg = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
