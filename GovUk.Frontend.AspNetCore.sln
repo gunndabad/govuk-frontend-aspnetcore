@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.FrontEnd.AspNetCore.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.ConformanceTests", "test\GovUk.Frontend.AspNetCore.ConformanceTests\GovUk.Frontend.AspNetCore.ConformanceTests.csproj", "{36C36B87-7385-48B1-A82D-ADEDB54D574B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovUk.Frontend.AspNetCore.DocSamples", "src\GovUk.Frontend.AspNetCore.DocSamples\GovUk.Frontend.AspNetCore.DocSamples.csproj", "{1AB2352D-1151-4F82-83F4-5C327A436B70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,18 @@ Global
 		{36C36B87-7385-48B1-A82D-ADEDB54D574B}.Release|x64.Build.0 = Release|Any CPU
 		{36C36B87-7385-48B1-A82D-ADEDB54D574B}.Release|x86.ActiveCfg = Release|Any CPU
 		{36C36B87-7385-48B1-A82D-ADEDB54D574B}.Release|x86.Build.0 = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x64.Build.0 = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Debug|x86.Build.0 = Debug|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x64.ActiveCfg = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x64.Build.0 = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x86.ActiveCfg = Release|Any CPU
+		{1AB2352D-1151-4F82-83F4-5C327A436B70}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
