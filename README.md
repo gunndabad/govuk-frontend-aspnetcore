@@ -54,3 +54,7 @@ In your `_ViewImports.cshtml` file:
 ## GDS assets
 
 This package serves the GDS Frontend assets (stylesheets, javascript, fonts) inside the host application so these do not need to be imported separately.
+
+## Components
+
+- [x] [Accordion](docs/accordion.md)
