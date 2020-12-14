@@ -1,17 +1,7 @@
-﻿namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore
 {
     public static class ComponentDefaults
     {
-        public static class Accordion
-        {
-            public const int HeadingLevel = 2;
-
-            public static class Item
-            {
-                public const bool Expanded = false;
-            }
-        }
-
         public static class BackLink
         {
             public const string Content = "Back";
