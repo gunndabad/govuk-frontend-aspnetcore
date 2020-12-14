@@ -2,11 +2,6 @@ namespace GovUk.Frontend.AspNetCore
 {
     public static class ComponentDefaults
     {
-        public static class BackLink
-        {
-            public const string Content = "Back";
-        }
-
         public static class Breadcrumbs
         {
             public const bool CollapseOnMobile = false;
