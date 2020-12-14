@@ -36,6 +36,8 @@ namespace GovUk.Frontend.AspNetCore.DocSamples
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+
+                endpoints.MapControllers();
             });
         }
     }
