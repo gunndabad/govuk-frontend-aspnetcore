@@ -30,7 +30,10 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 Headless = true
             });
 
-            await WriteScreenshots(System.Array.Empty<(string, string)>());
+            await WriteScreenshots(new[]
+            {
+                ("Accordion/AccordionWithSummarySections", "accordion-with-summary-sections.png")
+            });
 
             await browser.CloseAsync();
             await host.StopAsync();

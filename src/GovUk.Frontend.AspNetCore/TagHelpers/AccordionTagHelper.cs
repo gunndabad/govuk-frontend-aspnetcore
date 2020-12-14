@@ -1,54 +1,118 @@
-﻿using System;
-using System.Collections.Generic;
+#nullable enable
+using System;
+#if !NETSTANDARD2_0
+using System.Diagnostics.CodeAnalysis;
+#endif
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-accordion")]
-    [RestrictChildren("govuk-accordion-item")]
+    [HtmlTargetElement(TagName)]
+    [OutputElementHint(ComponentGenerator.AccordionElement)]
+    [RestrictChildren(AccordionItemTagHelper.TagName)]
     public class AccordionTagHelper : TagHelper
     {
+        internal const string TagName = "govuk-accordion";
+
         private const string HeadingLevelAttributeName = "heading-level";
         private const string IdAttributeName = "id";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private readonly GovUkFrontendAspNetCoreOptions _options;
 
-        public AccordionTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        private string? _id;
+        private int _headingLevel = ComponentGenerator.AccordionDefaultHeadingLevel;
+
+        /// <summary>
+        /// Creates a new <see cref="AccordionTagHelper"/>.
+        /// </summary>
+        /// <param name="optionsAccessor">The accessor for <see cref="GovUkFrontendAspNetCoreOptions"/>.</param>
+        public AccordionTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+            : this(null, optionsAccessor)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        internal AccordionTagHelper(
+            IGovUkHtmlGenerator? htmlGenerator = null,
+            IOptions<GovUkFrontendAspNetCoreOptions>? optionsAccessor = null)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+            _options = (optionsAccessor ?? Options.Create(new GovUkFrontendAspNetCoreOptions())).Value;
+        }
+
+        /// <summary>
+        /// The heading level for the accordion.
+        /// </summary>
+        /// <remarks>
+        /// Must be between 1 and 6 (inclusive). The default is 2.
+        /// </remarks>
         [HtmlAttributeName(HeadingLevelAttributeName)]
-        public int HeadingLevel { get; set; } = ComponentDefaults.Accordion.HeadingLevel;
+        public int HeadingLevel
+        {
+            get => _headingLevel;
+            set
+            {
+                if (value < ComponentGenerator.AccordionMinHeadingLevel ||
+                    value > ComponentGenerator.AccordionMaxHeadingLevel)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        $"{nameof(HeadingLevel)} must be between {ComponentGenerator.AccordionMinHeadingLevel} and {ComponentGenerator.AccordionMaxHeadingLevel}.");
+                }
 
+                _headingLevel = value;
+            }
+        }
+
+        /// <summary>
+        /// The id attribute for the accordion.
+        /// </summary>
+        /// <remarks>
+        /// Must be unique across the domain of your service.
+        /// Cannot be <see langword="null"/>.
+        /// </remarks>
         [HtmlAttributeName(IdAttributeName)]
-        public string Id { get; set; }
+#if !NETSTANDARD2_0
+        [DisallowNull]
+#endif
+        public string? Id
+        {
+            get => _id;
+            set
+            {
+                _id = value ?? throw new ArgumentNullException(nameof(value));
+            }
+        }
 
+        /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (Id == null)
+            if (Id == null
+#if TEST_SWITCHES
+                && !Config.RunningConformanceTests
+#endif
+                )
             {
-                throw new InvalidOperationException($"The '{IdAttributeName}' attribute must be specified.");
-            }
-
-            if (HeadingLevel < 1 || HeadingLevel > 6)
-            {
-                throw new InvalidOperationException(
-                    $"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
+                throw ExceptionHelper.TheAttributeMustBeSpecified(IdAttributeName);
             }
 
             var accordionContext = new AccordionContext();
 
-            using (context.SetScopedContextItem(typeof(AccordionContext), accordionContext))
+            using (context.SetScopedContextItem(accordionContext))
             {
                 await output.GetChildContentAsync();
             }
 
             var tagBuilder = _htmlGenerator.GenerateAccordion(
-                Id,
+                Id
+#if TEST_SWITCHES
+                ?? string.Empty
+#endif
+                ,
                 HeadingLevel,
                 output.Attributes.ToAttributesDictionary(),
                 accordionContext.Items);
@@ -59,150 +123,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.Attributes.Clear();
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
-    }
-
-    [HtmlTargetElement("govuk-accordion-item", ParentTag = "govuk-accordion")]
-    public class AccordionItemTagHelper : TagHelper
-    {
-        private const string ExpandedAttributeName = "expanded";
-
-        [HtmlAttributeName(ExpandedAttributeName)]
-        public bool Expanded { get; set; } = ComponentDefaults.Accordion.Item.Expanded;
-
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
-
-            var itemContext = new AccordionItemContext();
-
-            TagHelperContent childContent;
-            using (context.SetScopedContextItem(typeof(AccordionItemContext), itemContext))
-            {
-                childContent = await output.GetChildContentAsync();
-            }
-
-            if (itemContext.Heading == null)
-            {
-                throw new InvalidOperationException("Missing <govuk-accordion-item-heading> element.");
-            }
-
-            accordionContext.AddItem(new AccordionItem()
-            {
-                Attributes = output.Attributes.ToAttributesDictionary(),
-                Content = childContent.Snapshot(),
-                Expanded = Expanded,
-                HeadingContent = itemContext.Heading.Value.content,
-                HeadingAttributes = itemContext.Heading.Value.attributes,
-                SummaryContent = itemContext.Summary?.content,
-                SummaryAttributes = itemContext.Summary?.attributes
-            });
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-accordion-item-heading", ParentTag = "govuk-accordion-item")]
-    public class AccordionItemHeadingTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
-
-            TagHelperContent childContent;
-            using (context.SetScopedContextItem(typeof(AccordionItemContext), itemContext))
-            {
-                childContent = await output.GetChildContentAsync();
-            }
-
-            if (!itemContext.TrySetHeading(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
-            {
-                throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
-            }
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-accordion-item-summary", ParentTag = "govuk-accordion-item")]
-    public class AccordionItemSummaryTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
-
-            TagHelperContent childContent;
-            using (context.SetScopedContextItem(typeof(AccordionItemContext), itemContext))
-            {
-                childContent = await output.GetChildContentAsync();
-            }
-
-            if (!itemContext.TrySetSummary(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
-            {
-                throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
-            }
-
-            output.SuppressOutput();
-        }
-    }
-
-    internal class AccordionContext
-    {
-        private readonly List<AccordionItem> _items;
-
-        public AccordionContext()
-        {
-            _items = new List<AccordionItem>();
-        }
-
-        public IReadOnlyCollection<AccordionItem> Items => _items;
-
-        internal void AddItem(AccordionItem item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            _items.Add(item);
-        }
-    }
-
-    internal class AccordionItemContext
-    {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Heading { get; private set; }
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
-
-        public bool TrySetHeading(IDictionary<string, string> attributes, IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Heading != null)
-            {
-                return false;
-            }
-
-            Heading = (attributes, content);
-            return true;
-        }
-
-        public bool TrySetSummary(IDictionary<string, string> attributes, IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Summary != null)
-            {
-                return false;
-            }
-
-            Summary = (attributes, content);
-            return true;
         }
     }
 }
