@@ -1,4 +1,5 @@
 #if NETCOREAPP3_1
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,17 +19,31 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             "accordion",
             typeof(OptionsJson.Accordion),
             exclude: "with falsey values")]
-        public async Task Accordion(ComponentTestCaseData<OptionsJson.Accordion> data)
+        public Task Accordion(ComponentTestCaseData<OptionsJson.Accordion> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateAccordion(options));
+
+        [Theory]
+        [ComponentFixtureData("back-link", typeof(OptionsJson.BackLink))]
+        public Task BackLink(ComponentTestCaseData<OptionsJson.BackLink> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateBackLink(options));
+
+        protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
+
+        private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
+            ComponentTestCaseData<TOptions> testCaseData,
+            Func<RazorGenerator, TOptions, string> generateRazor)
         {
             var razorGenerator = new RazorGenerator();
-            var template = razorGenerator.GenerateAccordion(data.Options);
+            var template = generateRazor(razorGenerator, testCaseData.Options);
 
             var html = await RenderRazorTemplate(template);
 
-            AssertEx.HtmlEqual(data.ExpectedHtml, html);
+            AssertEx.HtmlEqual(testCaseData.ExpectedHtml, html);
         }
-
-        protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
     }
 }
 #endif
