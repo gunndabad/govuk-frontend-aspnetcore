@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
@@ -8,9 +9,14 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
     public class StringFileProvider : IFileProvider
     {
-        private readonly string _path;
+        private readonly Dictionary<string, (string Value, DateTimeOffset Created)> _values;
 
-        public StringFileProvider(string path, string initialValue = null)
+        public StringFileProvider()
+        {
+            _values = new Dictionary<string, (string Value, DateTimeOffset Created)>();
+        }
+
+        public void Add(string path, string value)
         {
             if (path == null)
             {
@@ -22,19 +28,21 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 throw new ArgumentException($"{nameof(path)} must start with '/'.", nameof(path));
             }
 
-            _path = path;
-            Value = initialValue;
-        }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
-        public string Value { get; set; }
+            _values.Add(path, (value, DateTimeOffset.Now));
+        }
 
         public IDirectoryContents GetDirectoryContents(string subpath) => new NotFoundDirectoryContents();
 
         public IFileInfo GetFileInfo(string subpath)
         {
-            if (_path == subpath)
+            if (_values.TryGetValue(subpath, out var entry))
             {
-                return new StringFileInfo(subpath, subpath, Value);
+                return new StringFileInfo(subpath, subpath, entry.Value, entry.Created);
             }
             else
             {
@@ -47,12 +55,14 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         private class StringFileInfo : IFileInfo
         {
             private readonly string _value;
+            private readonly DateTimeOffset _created;
 
-            public StringFileInfo(string name, string physicalPath, string value)
+            public StringFileInfo(string name, string physicalPath, string value, DateTimeOffset created)
             {
                 Name = name;
                 PhysicalPath = physicalPath;
                 _value = value;
+                _created = created;
             }
 
             public bool Exists => true;
@@ -63,7 +73,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
             public string Name { get; }
 
-            public DateTimeOffset LastModified => DateTimeOffset.Now;
+            public DateTimeOffset LastModified => _created;
 
             public bool IsDirectory => false;
 

@@ -16,8 +16,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     {
         private const string ViewImports = @"@addTagHelper *, GovUk.Frontend.AspNetCore";
 
-        private const string ViewName = "ConformanceTest";
-
         private readonly IHost _host;
 
         public ConformanceTestFixture()
@@ -33,7 +31,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .UseTestServer()
                         .ConfigureServices(services =>
                         {
-                            var stringFileProvider = new StringFileProvider($"/Views/Shared/{ViewName}.cshtml");
+                            var stringFileProvider = new StringFileProvider();
+                            stringFileProvider.Add("/_ViewImports.cshtml", ViewImports);
 
                             services.AddSingleton(stringFileProvider);
 
@@ -48,8 +47,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 })
                                 .AddRazorRuntimeCompilation(options =>
                                 {
-                                    options.FileProviders.Add(new StringFileProvider("/Views/Shared/_ViewImports.cshtml", ViewImports));
-
                                     options.FileProviders.Add(stringFileProvider);
                                 });
                         })
@@ -89,9 +86,11 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 throw new ArgumentNullException(template);
             }
 
-            StringFileProvider.Value = template;
+            var id = Guid.NewGuid().ToString();
 
-            var rendered = await HttpClient.GetAsync("");
+            StringFileProvider.Add($"/Views/ComponentTest/{id}.cshtml", template);
+
+            var rendered = await HttpClient.GetAsync($"?viewName={id}");
             rendered.EnsureSuccessStatusCode();
 
             return await rendered.Content.ReadAsStringAsync();
@@ -100,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         private class ComponentTestController : Controller
         {
             [HttpGet("")]
-            public IActionResult RenderView() => View(ViewName);
+            public IActionResult RenderView([FromQuery] string viewName) => View(viewName);
         }
     }
 }
