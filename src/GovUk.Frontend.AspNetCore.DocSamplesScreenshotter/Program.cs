@@ -15,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
         static async Task Main()
         {
             const string baseUrl = "http://localhost:9919";
-            const string docsRoot = "../../../../../docs/";
+            const string docsRoot = "../../../../../docs/images/";
 
             var hostBuilder = CreateHostBuilder();
             using var host = hostBuilder.Build();
