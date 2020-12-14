@@ -32,7 +32,9 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
 
             await WriteScreenshots(new[]
             {
-                ("Accordion/AccordionWithSummarySections", "accordion-with-summary-sections.png")
+                ("Accordion/AccordionWithSummarySections", "accordion-with-summary-sections.png"),
+                ("BackLink/BackLinkWithDefaultContent", "back-link-with-default-content.png"),
+                ("BackLink/BackLinkWithCustomContent", "back-link-with-custom-content.png"),
             });
 
             await browser.CloseAsync();

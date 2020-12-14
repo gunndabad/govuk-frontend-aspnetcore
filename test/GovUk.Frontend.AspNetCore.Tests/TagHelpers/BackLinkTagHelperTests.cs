@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -13,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class BackLinkTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_WithContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -33,9 +32,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var tagHelper = new BackLinkTagHelper(
-                new ComponentGenerator(),
-                Mock.Of<IUrlHelperFactory>())
+            var tagHelper = new BackLinkTagHelper(Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"
             };
@@ -44,12 +41,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">My custom link content</a>", html);
+            var expectedHtml = @"
+<a class=""govuk-back-link"" href=""http://foo.com"">My custom link content</a>";
+
+            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_WithNoContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithNoContent_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -68,9 +67,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new BackLinkTagHelper(
-                new ComponentGenerator(),
-                Mock.Of<IUrlHelperFactory>())
+            var tagHelper = new BackLinkTagHelper(Mock.Of<IUrlHelperFactory>())
             {
                 Href = "http://foo.com"
             };
@@ -79,8 +76,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">Back</a>", html);
+            var expectedHtml = @"
+<a class=""govuk-back-link"" href=""http://foo.com"">Back</a>";
+
+            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
         }
     }
 }
