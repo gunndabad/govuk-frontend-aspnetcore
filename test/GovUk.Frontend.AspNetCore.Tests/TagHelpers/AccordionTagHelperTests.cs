@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
@@ -49,7 +48,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new AccordionTagHelper(new ComponentGenerator())
+            var tagHelper = new AccordionTagHelper()
             {
                 Id = "testaccordion",
                 HeadingLevel = 1,
@@ -59,36 +58,36 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal(
-                "<div class=\"govuk-accordion\" data-module=\"govuk-accordion\" id=\"testaccordion\">" +
-                "<div class=\"govuk-accordion__section\">" +
-                "<div class=\"govuk-accordion__section-header\">" +
-                "<h1 class=\"govuk-accordion__section-heading\">" +
-                "<span class=\"govuk-accordion__section-button\" id=\"testaccordion-heading-0\">First heading</span>" +
-                "</h1>" +
-                "<div class=\"govuk-body govuk-accordion__section-summary\" id=\"testaccordion-summary-0\">" +
-                "</div>" +
-                "</div>" +
-                "<div aria-labelledby=\"testaccordion-heading-0\" class=\"govuk-accordion__section-content\" id=\"testaccordion-content-0\">" +
-                "First content" +
-                "</div>" +
-                "</div>" +
-                "<div class=\"govuk-accordion__section--expanded govuk-accordion__section\">" +
-                "<div class=\"govuk-accordion__section-header\">" +
-                "<h1 class=\"govuk-accordion__section-heading\">" +
-                "<span class=\"govuk-accordion__section-button\" id=\"testaccordion-heading-1\">Second heading</span>" +
-                "</h1>" +
-                "</div>" +
-                "<div aria-labelledby=\"testaccordion-heading-1\" class=\"govuk-accordion__section-content\" id=\"testaccordion-content-1\">" +
-                "First content" +
-                "</div>" +
-                "</div>" +
-                "</div>",
-                output.RenderToString());
+            var expectedHtml = @"
+<div class=""govuk-accordion"" data-module=""govuk-accordion"" id=""testaccordion"">
+    <div class=""govuk-accordion__section"">
+        <div class=""govuk-accordion__section-header"">
+            <h1 class=""govuk-accordion__section-heading"">
+                <span class=""govuk-accordion__section-button"" id=""testaccordion-heading-1"">First heading</span>
+            </h1>
+            <div class=""govuk-body govuk-accordion__section-summary"" id=""testaccordion-summary-1"">First summary</div>
+        </div>
+        <div aria-labelledby=""testaccordion-heading-1"" class=""govuk-accordion__section-content"" id=""testaccordion-content-1"">
+            First content
+        </div>
+    </div>
+    <div class=""govuk-accordion__section--expanded govuk-accordion__section"">
+        <div class=""govuk-accordion__section-header"">
+            <h1 class=""govuk-accordion__section-heading"">
+                <span class=""govuk-accordion__section-button"" id=""testaccordion-heading-2"">Second heading</span>
+            </h1>
+        </div>
+        <div aria-labelledby=""testaccordion-heading-2"" class=""govuk-accordion__section-content"" id=""testaccordion-content-2"">
+            First content
+        </div>
+    </div>
+</div>";
+
+            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_NoIdThrowsInvalidOperationException()
+        public async Task ProcessAsync_NoId_ThrowsInvalidOperationException()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -125,8 +124,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var tagHelper = new AccordionTagHelper(new ComponentGenerator());
 
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
+            // Act
+            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+            // Assert
+            Assert.IsType<InvalidOperationException>(ex);
             Assert.Equal("The 'id' attribute must be specified.", ex.Message);
         }
 
@@ -134,7 +136,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(7)]
-        public async Task ProcessAsync_InvalidLevelThrowsInvalidOperationException(int level)
+        public void SetHeadingLevel_InvalidLevel_ThrowsArgumentException(int level)
         {
             // Arrange
             var context = new TagHelperContext(
@@ -169,246 +171,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new AccordionTagHelper(new ComponentGenerator())
+            // Act
+            var ex = Record.Exception(() => new AccordionTagHelper(new ComponentGenerator())
             {
                 Id = "testaccordion",
                 HeadingLevel = level
-            };
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("The 'heading-level' attribute must be between 1 and 6.", ex.Message);
-        }
-    }
-
-    public class AccordionItemTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_AddsItemToContext()
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
-                    itemContext.TrySetHeading(attributes: null, new HtmlString("Heading"));
-                    itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemTagHelper();
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+            });
 
             // Assert
-            Assert.Equal(1, accordionContext.Items.Count);
-
-            var firstItem = accordionContext.Items.First();
-            Assert.Equal("Heading", firstItem.HeadingContent.RenderToString());
-            Assert.Equal("Summary", firstItem.SummaryContent.RenderToString());
-            Assert.Equal("Content", firstItem.Content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoHeadingThrowsInvalidOperationException()
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = (AccordionItemContext)context.Items[typeof(AccordionItemContext)];
-                    itemContext.TrySetSummary(attributes: null, new HtmlString("Summary"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemTagHelper();
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Missing <govuk-accordion-item-heading> element.", ex.Message);
-        }
-    }
-
-    public class AccordionItemHeadingTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_AddsHeadingToContext()
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-            var itemContext = new AccordionItemContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item-heading",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext },
-                    { typeof(AccordionItemContext), itemContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item-heading",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Summary content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemHeadingTagHelper();
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.NotNull(itemContext.Heading);
-            Assert.Equal("Summary content", itemContext.Heading.Value.content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_ItemAlreadyHasHeaderThrowsInvalidOperationException()
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-            var itemContext = new AccordionItemContext();
-            itemContext.TrySetHeading(attributes: null, content: new HtmlString("Existing heading"));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item-heading",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext },
-                    { typeof(AccordionItemContext), itemContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item-heading",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Summary content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemHeadingTagHelper();
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Cannot render <govuk-accordion-item-heading> here.", ex.Message);
-        }
-    }
-
-    public class AccordionItemSummaryTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_AddsSummaryToContext()
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-            var itemContext = new AccordionItemContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext },
-                    { typeof(AccordionItemContext), itemContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Summary content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemSummaryTagHelper();
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.NotNull(itemContext.Summary);
-            Assert.Equal("Summary content", itemContext.Summary?.content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_ItemAlreadyHasSummaryThrowsInvalidOperationException()
-        {
-            // Arrange
-            var accordionContext = new AccordionContext();
-            var itemContext = new AccordionItemContext();
-            itemContext.TrySetSummary(attributes: null, new HtmlString("Existing summary"));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-accordion-item-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(AccordionContext), accordionContext },
-                    { typeof(AccordionItemContext), itemContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-accordion-item-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Summary content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new AccordionItemSummaryTagHelper();
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Cannot render <govuk-accordion-item-summary> here.", ex.Message);
+            var argumentEx = Assert.IsType<ArgumentOutOfRangeException>(ex);
+            Assert.Equal("value", argumentEx.ParamName);
+            Assert.StartsWith("HeadingLevel must be between 1 and 6.", argumentEx.Message);
         }
     }
 }
