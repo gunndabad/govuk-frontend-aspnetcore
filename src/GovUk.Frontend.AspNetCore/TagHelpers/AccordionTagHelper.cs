@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
@@ -22,26 +21,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IdAttributeName = "id";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
-        private readonly GovUkFrontendAspNetCoreOptions _options;
-
         private string? _id;
         private int _headingLevel = ComponentGenerator.AccordionDefaultHeadingLevel;
 
         /// <summary>
         /// Creates a new <see cref="AccordionTagHelper"/>.
         /// </summary>
-        /// <param name="optionsAccessor">The accessor for <see cref="GovUkFrontendAspNetCoreOptions"/>.</param>
-        public AccordionTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
-            : this(null, optionsAccessor)
+        public AccordionTagHelper()
+            : this(null)
         {
         }
 
-        internal AccordionTagHelper(
-            IGovUkHtmlGenerator? htmlGenerator = null,
-            IOptions<GovUkFrontendAspNetCoreOptions>? optionsAccessor = null)
+        internal AccordionTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
         {
             _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-            _options = (optionsAccessor ?? Options.Create(new GovUkFrontendAspNetCoreOptions())).Value;
         }
 
         /// <summary>
