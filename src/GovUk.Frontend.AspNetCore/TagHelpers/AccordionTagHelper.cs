@@ -1,15 +1,18 @@
 #nullable enable
 using System;
-#if !NETSTANDARD2_0
-using System.Diagnostics.CodeAnalysis;
-#endif
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+#if !NETSTANDARD2_0
+using System.Diagnostics.CodeAnalysis;
+#endif
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
+    /// <summary>
+    /// Generates a GDS accordion component.
+    /// </summary>
     [HtmlTargetElement(TagName)]
     [OutputElementHint(ComponentGenerator.AccordionElement)]
     [RestrictChildren(AccordionItemTagHelper.TagName)]
