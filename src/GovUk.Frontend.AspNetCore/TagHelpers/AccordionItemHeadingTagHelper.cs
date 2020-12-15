@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
+    /// <summary>
+    /// Represents a heading in a GDS accordion component item.
+    /// </summary>
     [HtmlTargetElement(TagName, ParentTag = AccordionItemTagHelper.TagName)]
     public class AccordionItemHeadingTagHelper : TagHelper
     {

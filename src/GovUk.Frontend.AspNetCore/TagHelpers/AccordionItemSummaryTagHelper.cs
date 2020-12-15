@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
+    /// <summary>
+    /// Represents a summary in a GDS accordion component item.
+    /// </summary>
     [HtmlTargetElement(TagName, ParentTag = AccordionItemTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.AccordionItemSummaryElement)]
     public class AccordionItemSummaryTagHelper : TagHelper
