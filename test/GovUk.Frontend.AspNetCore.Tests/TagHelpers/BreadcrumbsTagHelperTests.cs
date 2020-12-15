@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -29,21 +26,21 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var bcContext = (BreadcrumbsContext)context.Items[typeof(BreadcrumbsContext)];
+                    var breadcrumbsContext = context.GetContextItem<BreadcrumbsContext>();
 
-                    bcContext.AddItem(new BreadcrumbsItem()
+                    breadcrumbsContext.AddItem(new BreadcrumbsItem()
                     {
                         Href = "first",
                         Content = new HtmlString("First")
                     });
 
-                    bcContext.AddItem(new BreadcrumbsItem()
+                    breadcrumbsContext.AddItem(new BreadcrumbsItem()
                     {
                         Href = "second",
                         Content = new HtmlString("Second")
                     });
 
-                    bcContext.AddItem(new BreadcrumbsItem()
+                    breadcrumbsContext.AddItem(new BreadcrumbsItem()
                     {
                         Content = new HtmlString("Last")
                     });
@@ -52,104 +49,21 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new BreadcrumbsTagHelper(new ComponentGenerator());
+            var tagHelper = new BreadcrumbsTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<div class=\"govuk-breadcrumbs\">" +
-                "<ol class=\"govuk-breadcrumbs__list\">" +
-                "<li class=\"govuk-breadcrumbs__list-item\"><a class=\"govuk-breadcrumbs__link\" href=\"first\">First</a></li>" +
-                "<li class=\"govuk-breadcrumbs__list-item\"><a class=\"govuk-breadcrumbs__link\" href=\"second\">Second</a></li>" +
-                "<li aria-current=\"page\" class=\"govuk-breadcrumbs__list-item\">Last</li>" +
-                "</ol>" +
-                "</div>",
-                html);
-        }
-    }
+            var expectedHtml = @"<div class=""govuk-breadcrumbs"">
+<ol class=""govuk-breadcrumbs__list"">
+<li class=""govuk-breadcrumbs__list-item""><a class=""govuk-breadcrumbs__link"" href=""first"">First</a></li>
+<li class=""govuk-breadcrumbs__list-item""><a class=""govuk-breadcrumbs__link"" href=""second"">Second</a></li>
+<li aria-current=""page"" class=""govuk-breadcrumbs__list-item"">Last</li>
+</ol>
+</div>";
 
-    public class BreadcrumbsItemTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_NoLinkAddsItemToContext()
-        {
-            // Arrange
-            var bcContext = new BreadcrumbsContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-breadcrumbs-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(BreadcrumbsContext), bcContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-breadcrumbs-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetHtmlContent("The item");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new BreadcrumbsItemTagHelper(
-                new ComponentGenerator(),
-                Mock.Of<IUrlHelperFactory>());
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            var lastItem = bcContext.Items.Last();
-            Assert.Null(lastItem.Href);
-            Assert.Equal("The item", lastItem.Content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithLinkAddsItemToContext()
-        {
-            // Arrange
-            var bcContext = new BreadcrumbsContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-breadcrumbs-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(BreadcrumbsContext), bcContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-breadcrumbs-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetHtmlContent("The item");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new BreadcrumbsItemTagHelper(
-                new ComponentGenerator(),
-                Mock.Of<IUrlHelperFactory>())
-            {
-                Href = "place.com"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            var lastItem = bcContext.Items.Last();
-            Assert.Equal("place.com", lastItem.Href);
-            Assert.Equal("The item", lastItem.Content.RenderToString());
+            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
         }
     }
 }

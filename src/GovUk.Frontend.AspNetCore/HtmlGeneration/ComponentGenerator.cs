@@ -21,61 +21,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateBreadcrumbs(
-            bool collapseOnMobile,
-            IDictionary<string, string> attributes,
-            IEnumerable<BreadcrumbsItem> items)
-        {
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-breadcrumbs");
-
-            if (collapseOnMobile)
-            {
-                tagBuilder.AddCssClass("govuk-breadcrumbs--collapse-on-mobile");
-            }
-
-            var ol = new TagBuilder("ol");
-            ol.AddCssClass("govuk-breadcrumbs__list");
-
-            foreach (var item in items)
-            {
-                var li = new TagBuilder("li");
-                li.MergeAttributes(item.Attributes);
-                li.AddCssClass("govuk-breadcrumbs__list-item");
-
-                IHtmlContent itemContent;
-
-                if (item.Href != null)
-                {
-                    var itemLink = new TagBuilder("a");
-                    itemLink.MergeAttributes(item.LinkAttributes);
-                    itemLink.AddCssClass("govuk-breadcrumbs__link");
-                    itemLink.Attributes.Add("href", item.Href);
-                    itemLink.InnerHtml.AppendHtml(item.Content);
-                    itemContent = itemLink;
-                }
-                else
-                {
-                    li.Attributes.Add("aria-current", "page");
-                    itemContent = item.Content;
-                }
-
-                li.InnerHtml.AppendHtml(itemContent);
-
-                ol.InnerHtml.AppendHtml(li);
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(ol);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateButton(
             string name,
             string type,

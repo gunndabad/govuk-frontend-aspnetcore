@@ -31,6 +31,13 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) => generator.GenerateBackLink(options));
 
+        [Theory]
+        [ComponentFixtureData("breadcrumbs", typeof(OptionsJson.Breadcrumbs))]
+        public Task Breadcrumbs(ComponentTestCaseData<OptionsJson.Breadcrumbs> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateBreadcrumbs(options));
+
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
