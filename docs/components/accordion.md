@@ -96,7 +96,7 @@
 </govuk-accordion>
 ```
 
-![Accordion](images/accordion-with-summary-sections.png)
+![Accordion](../images/accordion-with-summary-sections.png)
 
 ## API
 
