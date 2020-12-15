@@ -31,6 +31,23 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) => generator.GenerateBackLink(options));
 
+        [Theory]
+        [ComponentFixtureData(
+            "button",
+            typeof(OptionsJson.Button),
+            exclude: new[]
+            {
+                "input",
+                "input disabled",
+                "input attributes",
+                "input classes",
+                "input type"
+            })]
+        public Task Button(ComponentTestCaseData<OptionsJson.Button> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateButton(options));
+
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
