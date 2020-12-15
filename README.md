@@ -57,4 +57,4 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 
 ## Components
 
-- [x] [Accordion](docs/accordion.md)
+- [x] [Accordion](docs/components/accordion.md)
