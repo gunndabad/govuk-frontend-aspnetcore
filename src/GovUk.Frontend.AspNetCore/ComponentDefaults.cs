@@ -7,14 +7,6 @@ namespace GovUk.Frontend.AspNetCore
             public const bool CollapseOnMobile = false;
         }
 
-        public static class Button
-        {
-            public const bool Disabled = false;
-            public const bool IsStartButton = false;
-            public const bool PreventDoubleClick = false;
-            public const string Type = "submit";
-        }
-
         public static class DateInput
         {
             public const bool Disabled = false;

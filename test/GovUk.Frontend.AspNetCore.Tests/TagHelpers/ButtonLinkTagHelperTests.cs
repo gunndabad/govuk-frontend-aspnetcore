@@ -7,21 +7,24 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 {
-    public class ButtonTagHelperTests
+    public class ButtonLinkTagHelperTests
     {
         [Fact]
         public async Task ProcessAsync_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
-                tagName: "govuk-button",
+                tagName: "govuk-button-link",
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>(),
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-button",
-                attributes: new TagHelperAttributeList(),
+                "govuk-button-link",
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -29,16 +32,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper();
+            var tagHelper = new ButtonLinkTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
             var expectedHtml = @"
-<button class=""govuk-button"" data-module=""govuk-button"">
+<a class=""govuk-button"" data-module=""govuk-button"" draggable=""false"" href=""http://foo.com"" role=""button"">
     Button text
-</button>";
+</a>";
 
             AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
@@ -48,14 +51,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new TagHelperContext(
-                tagName: "govuk-button",
+                tagName: "govuk-button-link",
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>(),
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-button",
-                attributes: new TagHelperAttributeList(),
+                "govuk-button-link",
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -63,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper()
+            var tagHelper = new ButtonLinkTagHelper()
             {
                 IsStartButton = true
             };
@@ -86,14 +92,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new TagHelperContext(
-                tagName: "govuk-button",
+                tagName: "govuk-button-link",
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>(),
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-button",
-                attributes: new TagHelperAttributeList(),
+                "govuk-button-link",
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -101,7 +110,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper()
+            var tagHelper = new ButtonLinkTagHelper()
             {
                 Disabled = true
             };
@@ -113,42 +122,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var element = await output.RenderToElement();
 
             Assert.Contains("govuk-button--disabled", element.ClassList);
-            Assert.Equal("disabled", element.Attributes["disabled"].Value);
-            Assert.Equal("true", element.Attributes["aria-disabled"].Value);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_PreventDoubleClickSpecified_AddsAttributesToOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-button",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-button",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Button text");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ButtonTagHelper()
-            {
-                PreventDoubleClick = true
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            var element = await output.RenderToElement();
-
-            Assert.Equal("true", element.Attributes["data-prevent-double-click"].Value);
         }
     }
 }
