@@ -7,29 +7,28 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     /// <summary>
-    /// Generates a GDS button component that renders a &lt;button&gt; element.
+    /// Generates a GDS button component that renders an &lt;a&gt; element.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [OutputElementHint(ComponentGenerator.ButtonElement)]
-    public class ButtonTagHelper : TagHelper
+    [OutputElementHint(ComponentGenerator.ButtonLinkElement)]
+    public class ButtonLinkTagHelper : TagHelper
     {
-        internal const string TagName = "govuk-button";
+        internal const string TagName = "govuk-button-link";
 
         private const string DisabledAttributeName = "disabled";
         private const string IsStartButtonAttributeName = "is-start-button";
-        private const string PreventDoubleClickAttributeName = "prevent-double-click";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         /// <summary>
-        /// Creates a new <see cref="ButtonTagHelper"/>.
+        /// Creates a <see cref="ButtonLinkTagHelper"/>.
         /// </summary>
-        public ButtonTagHelper()
+        public ButtonLinkTagHelper()
             : this(htmlGenerator: null)
         {
         }
 
-        internal ButtonTagHelper(IGovUkHtmlGenerator? htmlGenerator)
+        internal ButtonLinkTagHelper(IGovUkHtmlGenerator? htmlGenerator)
         {
             _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
         }
@@ -52,25 +51,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;
 
-        /// <summary>
-        /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
-        /// </summary>
-        /// <remarks>
-        /// Defaults to <see langword="false"/>.
-        /// </remarks>
-        [HtmlAttributeName(PreventDoubleClickAttributeName)]
-        public bool PreventDoubleClick { get; set; } = ComponentGenerator.ButtonDefaultPreventDoubleClick;
-
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var childContent = await output.GetChildContentAsync();
 
-            var tagBuilder = _htmlGenerator.GenerateButton(
+            var tagBuilder = _htmlGenerator.GenerateButtonLink(
                 IsStartButton,
                 Disabled,
-                PreventDoubleClick,
-                childContent,
+                childContent.Snapshot(),
                 output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;

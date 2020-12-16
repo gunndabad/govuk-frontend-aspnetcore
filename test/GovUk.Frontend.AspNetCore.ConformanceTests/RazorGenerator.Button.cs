@@ -8,7 +8,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     {
         public string GenerateButton(Button options)
         {
-            var button = new TagBuilder("govuk-button");
+            var tagName = options.Element == "a" || options.Href != null ? "govuk-button-link" : "govuk-button";
+
+            var button = new TagBuilder(tagName);
 
             button.AddCssClass(options.Classes);
             button.MergeAttributes(options.Attributes);
