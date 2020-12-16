@@ -15,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateAnchor(string href);
 
-        TagBuilder GenerateBackLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateBackLink(IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateBreadcrumbs(
             bool collapseOnMobile,

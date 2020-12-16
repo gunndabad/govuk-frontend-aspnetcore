@@ -12,15 +12,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         internal const string BackLinkElement = "a";
 
         public virtual TagBuilder GenerateBackLink(
-            string href,
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
-            if (href == null)
-            {
-                throw new ArgumentNullException(nameof(href));
-            }
-
             if (content == null)
             {
                 throw new ArgumentNullException(nameof(content));
@@ -29,7 +23,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             var tagBuilder = new TagBuilder(BackLinkElement);
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.AddCssClass("govuk-back-link");
-            tagBuilder.Attributes.Add("href", href);
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
