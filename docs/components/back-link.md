@@ -28,8 +28,9 @@
 
 ### `<govuk-back-link>`
 
-Content is the HTML to use within the back link component. Defaults to "Back".
+Content is the inner HTML to use within the generated `<a>`. Defaults to "Back".
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| (link attributes) | | See [documentation on links](../links.md) for more information |
+| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| * | | Any additional attributes will be copied onto the generated `<a>`. |
