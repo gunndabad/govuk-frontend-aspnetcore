@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -23,7 +21,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var output = new TagHelperOutput(
                 "govuk-back-link",
-                attributes: new TagHelperAttributeList(),
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -32,10 +33,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var tagHelper = new BackLinkTagHelper(Mock.Of<IUrlHelperFactory>())
-            {
-                Href = "http://foo.com"
-            };
+            var tagHelper = new BackLinkTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -59,7 +57,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var output = new TagHelperOutput(
                 "govuk-back-link",
-                attributes: new TagHelperAttributeList(),
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -67,10 +68,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new BackLinkTagHelper(Mock.Of<IUrlHelperFactory>())
-            {
-                Href = "http://foo.com"
-            };
+            var tagHelper = new BackLinkTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
