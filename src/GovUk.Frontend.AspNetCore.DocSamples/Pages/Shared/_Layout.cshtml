@@ -3,10 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+        #container>* {
+            margin: 0 !important;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="@(ViewBag.InlineElement != true ? "govuk-width-container" : "govuk-!-display-inline") govuk-!-margin-top-5 govuk-!-padding-5" id="container">
+    <div class="@(ViewBag.InlineElement != true ? "govuk-width-container" : "govuk-!-display-inline-block") govuk-!-margin-top-5 govuk-!-padding-3" id="container">
         @RenderBody()
     </div>
 
