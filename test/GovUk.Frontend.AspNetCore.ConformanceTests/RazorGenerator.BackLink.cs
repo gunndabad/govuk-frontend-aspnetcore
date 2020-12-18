@@ -10,8 +10,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         {
             var backLink = new TagBuilder("govuk-back-link");
 
+            backLink.AddAttributes(options.Attributes);
             backLink.AddCssClass(options.Classes);
-            backLink.MergeAttributes(options.Attributes);
 
             if (options.Href != null)
             {
