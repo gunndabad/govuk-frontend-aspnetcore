@@ -38,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether the button should be disabled.
         /// </summary>
         /// <remarks>
-        /// Defaults to <see langword="false"/>.
+        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(DisabledAttributeName)]
         public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether this button is the main call to action on your service's start page.
         /// </summary>
         /// <remarks>
-        /// Defaults to <see langword="false"/>.
+        /// The defaults is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;
@@ -56,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
         /// </summary>
         /// <remarks>
-        /// Defaults to <see langword="false"/>.
+        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
         public bool PreventDoubleClick { get; set; } = ComponentGenerator.ButtonDefaultPreventDoubleClick;
