@@ -29,17 +29,17 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 }
 
                 var accordionItemHeading = new TagBuilder("govuk-accordion-item-heading");
-                accordionItemHeading.InnerHtml.AppendHtml(item.Heading.GetHtmlContent());
+                accordionItemHeading.InnerHtml.AppendHtml(TextOrHtmlHelper.GetHtmlContent(item.Heading.Text, item.Heading.Html));
                 accordionItem.InnerHtml.AppendHtml(accordionItemHeading);
 
                 if (item.Summary != null)
                 {
                     var accordionItemSummary = new TagBuilder("govuk-accordion-item-summary");
-                    accordionItemSummary.InnerHtml.AppendHtml(item.Summary.GetHtmlContent());
+                    accordionItemSummary.InnerHtml.AppendHtml(TextOrHtmlHelper.GetHtmlContent(item.Summary.Text, item.Summary.Html));
                     accordionItem.InnerHtml.AppendHtml(accordionItemSummary);
                 }
 
-                accordionItem.InnerHtml.AppendHtml(item.Content.GetHtmlContent());
+                accordionItem.InnerHtml.AppendHtml(TextOrHtmlHelper.GetHtmlContent(item.Content.Text, item.Content.Html));
 
                 accordion.InnerHtml.AppendHtml(accordionItem);
             }

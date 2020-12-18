@@ -19,19 +19,19 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public bool? Expanded { get; set; }
     }
 
-    public class AccordionItemHeading : ITextOrHtmlContent
+    public class AccordionItemHeading
     {
         public string Text { get; set; }
         public string Html { get; set; }
     }
 
-    public class AccordionItemSummary : ITextOrHtmlContent
+    public class AccordionItemSummary
     {
         public string Text { get; set; }
         public string Html { get; set; }
     }
 
-    public class AccordionItemContent : ITextOrHtmlContent
+    public class AccordionItemContent
     {
         public string Text { get; set; }
         public string Html { get; set; }

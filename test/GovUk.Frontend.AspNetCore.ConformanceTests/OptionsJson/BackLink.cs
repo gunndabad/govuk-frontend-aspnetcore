@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
 {
-    public class BackLink : ITextOrHtmlContent
+    public class BackLink
     {
         public string Html { get; set; }
         public string Text { get; set; }
