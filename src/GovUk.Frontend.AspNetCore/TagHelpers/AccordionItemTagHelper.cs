@@ -21,7 +21,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether the section should be expanded upon initial load or not.
         /// </summary>
         /// <remarks>
-        /// The default is <see langword="false"/>.</remarks>
+        /// The default is <c>false</c>.
+        /// </remarks>
         [HtmlAttributeName(ExpandedAttributeName)]
         public bool Expanded { get; set; } = ComponentGenerator.AccordionItemDefaultExpanded;
 
