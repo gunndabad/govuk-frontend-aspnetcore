@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
 {
-    public class Button : ITextOrHtmlContent
+    public class Button
     {
         public string Element { get; set; }
         public string Html { get; set; }
