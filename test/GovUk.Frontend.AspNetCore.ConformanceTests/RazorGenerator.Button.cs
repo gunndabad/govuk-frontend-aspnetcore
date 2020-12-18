@@ -12,8 +12,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
             var button = new TagBuilder(tagName);
 
+            button.AddAttributes(options.Attributes);
             button.AddCssClass(options.Classes);
-            button.MergeAttributes(options.Attributes);
 
             if (options.Element == "a" && options.Href == null)
             {
@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
             if (options.Disabled.HasValue)
             {
-                button.Attributes.Add("disabled", options.Disabled.Value ? "true" : "false");
+                button.AddAttribute("disabled", options.Disabled.Value);
             }
 
             if (options.Href != null)
@@ -47,12 +47,12 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
             if (options.PreventDoubleClick.HasValue)
             {
-                button.Attributes.Add("prevent-double-click", options.PreventDoubleClick.Value ? "true" : "false");
+                button.AddAttribute("prevent-double-click", options.PreventDoubleClick.Value);
             }
 
             if (options.IsStartButton.HasValue)
             {
-                button.Attributes.Add("is-start-button", options.IsStartButton.Value ? "true" : "false");
+                button.AddAttribute("is-start-button", options.IsStartButton.Value);
             }
 
             var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
