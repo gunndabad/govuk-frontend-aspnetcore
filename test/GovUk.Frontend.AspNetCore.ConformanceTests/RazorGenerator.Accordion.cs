@@ -16,8 +16,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 accordion.Attributes.Add("heading-level", options.HeadingLevel.Value.ToString());
             }
 
+            accordion.AddAttributes(options.Attributes);
             accordion.AddCssClass(options.Classes);
-            accordion.MergeAttributes(options.Attributes);
 
             foreach (var item in options.Items)
             {
@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
                 if (item.Expanded.HasValue)
                 {
-                    accordionItem.Attributes.Add("expanded", item.Expanded.Value ? "true" : "false");
+                    accordionItem.AddAttribute("expanded", item.Expanded.Value);
                 }
 
                 var accordionItemHeading = new TagBuilder("govuk-accordion-item-heading");
