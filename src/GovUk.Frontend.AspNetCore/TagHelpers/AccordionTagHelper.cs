@@ -69,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// </summary>
         /// <remarks>
         /// Must be unique across the domain of your service.
-        /// Cannot be <see langword="null"/>.
+        /// Cannot be <c>null</c>.
         /// </remarks>
         [HtmlAttributeName(IdAttributeName)]
 #if !NETSTANDARD2_0
