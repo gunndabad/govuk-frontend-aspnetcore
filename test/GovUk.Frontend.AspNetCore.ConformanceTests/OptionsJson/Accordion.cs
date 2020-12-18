@@ -7,7 +7,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public string Id { get; set; }
         public int? HeadingLevel { get; set; }
         public string Classes { get; set; }
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, object> Attributes { get; set; }
         public IList<AccordionItem> Items { get; set; }
     }
 

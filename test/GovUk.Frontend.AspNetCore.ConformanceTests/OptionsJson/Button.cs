@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public bool? Disabled { get; set; }
         public string Href { get; set; }
         public string Classes { get; set; }
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, object> Attributes { get; set; }
         public bool? PreventDoubleClick { get; set; }
         public bool? IsStartButton { get; set; }
     }
