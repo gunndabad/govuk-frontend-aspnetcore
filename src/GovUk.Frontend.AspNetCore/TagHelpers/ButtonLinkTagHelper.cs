@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether the button should be disabled.
         /// </summary>
         /// <remarks>
-        /// Defaults to <see langword="false"/>.
+        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(DisabledAttributeName)]
         public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether this button is the main call to action on your service's start page.
         /// </summary>
         /// <remarks>
-        /// Defaults to <see langword="false"/>.
+        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;
