@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 backLink.Attributes.Add("href", options.Href);
             }
 
-            var content = options.GetHtmlContent();
+            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
             if (content == null)
             {
                 backLink.TagRenderMode = TagRenderMode.SelfClosing;

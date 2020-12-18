@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 button.Attributes.Add("is-start-button", options.IsStartButton.Value ? "true" : "false");
             }
 
-            var content = options.GetHtmlContent();
+            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
             button.InnerHtml.AppendHtml(content);
 
             return button.RenderToString();
