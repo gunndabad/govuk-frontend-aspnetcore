@@ -39,6 +39,8 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("Button/SecondaryButton", "button-secondary.png"),
                 ("Button/StartButton", "button-start.png"),
                 ("Button/DisabledButton", "button-disabled.png"),
+                ("Details/Details", "details.png"),
+                ("Details/DetailsExpanded", "details-expanded.png"),
             });
 
             await browser.CloseAsync();
