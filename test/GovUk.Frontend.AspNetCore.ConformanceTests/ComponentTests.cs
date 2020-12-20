@@ -1,6 +1,7 @@
 #if NETCOREAPP3_1
 using System;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
