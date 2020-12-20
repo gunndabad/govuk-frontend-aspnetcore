@@ -12,11 +12,6 @@ namespace GovUk.Frontend.AspNetCore
             public const bool Disabled = false;
         }
 
-        public static class Details
-        {
-            public const bool Open = false;
-        }
-
         public static class ErrorMessage
         {
             public const string VisuallyHiddenText = "Error";

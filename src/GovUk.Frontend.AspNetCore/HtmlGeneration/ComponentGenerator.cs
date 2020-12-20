@@ -345,60 +345,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
         }
 
-        public TagBuilder GenerateDetails(
-            bool open,
-            string id,
-            IHtmlContent summaryContent,
-            IDictionary<string, string> summaryAttributes,
-            IHtmlContent textContent,
-            IDictionary<string, string> textAttributes,
-            IDictionary<string, string> attributes)
-        {
-            if (summaryContent == null)
-            {
-                throw new ArgumentNullException(nameof(summaryContent));
-            }
-
-            if (textContent == null)
-            {
-                throw new ArgumentNullException(nameof(textContent));
-            }
-
-            var tagBuilder = new TagBuilder("details");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-details");
-            tagBuilder.Attributes.Add("data-module", "govuk-details");
-
-            if (open)
-            {
-                tagBuilder.Attributes.Add("open", "true");
-            }
-
-            if (id != null)
-            {
-                tagBuilder.Attributes.Add("id", id);
-            }
-
-            var summaryTagBuilder = new TagBuilder("summary");
-            summaryTagBuilder.MergeAttributes(summaryAttributes);
-            summaryTagBuilder.AddCssClass("govuk-details__summary");
-
-            var summaryTextTagBuilder = new TagBuilder("span");
-            summaryTextTagBuilder.AddCssClass("govuk-details__summary-text");
-            summaryTextTagBuilder.InnerHtml.AppendHtml(summaryContent);
-            summaryTagBuilder.InnerHtml.AppendHtml(summaryTextTagBuilder);
-
-            tagBuilder.InnerHtml.AppendHtml(summaryTagBuilder);
-
-            var textTagBuilder = new TagBuilder("div");
-            textTagBuilder.MergeAttributes(textAttributes);
-            textTagBuilder.AddCssClass("govuk-details__text");
-            textTagBuilder.InnerHtml.AppendHtml(textContent);
-            tagBuilder.InnerHtml.AppendHtml(textTagBuilder);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,
             string id,
