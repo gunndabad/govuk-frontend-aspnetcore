@@ -92,7 +92,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var element = await output.RenderToElement();
+            var element = output.RenderToElement();
 
             Assert.Equal("", element.Attributes["open"].Value);
         }

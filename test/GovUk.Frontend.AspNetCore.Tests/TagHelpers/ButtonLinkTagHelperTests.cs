@@ -78,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var element = await output.RenderToElement();
+            var element = output.RenderToElement();
 
             Assert.Contains("govuk-button--start", element.ClassList);
 
@@ -119,7 +119,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var element = await output.RenderToElement();
+            var element = output.RenderToElement();
 
             Assert.Contains("govuk-button--disabled", element.ClassList);
         }
