@@ -59,7 +59,6 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateDetails(
             bool open,
-            string id,
             IHtmlContent summaryContent,
             IDictionary<string, string> summaryAttributes,
             IHtmlContent text,
