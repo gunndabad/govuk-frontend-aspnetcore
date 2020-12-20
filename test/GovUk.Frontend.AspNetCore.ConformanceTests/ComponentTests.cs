@@ -48,6 +48,13 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) => generator.GenerateButton(options));
 
+        [Theory]
+        [ComponentFixtureData("details", typeof(OptionsJson.Details))]
+        public Task Details(ComponentTestCaseData<OptionsJson.Details> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateDetails(options));
+
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(

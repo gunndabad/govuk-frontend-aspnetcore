@@ -45,58 +45,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<details class=\"govuk-details\" data-module=\"govuk-details\">" +
-                "<summary class=\"govuk-details__summary\">" +
-                "<span class=\"govuk-details__summary-text\">The summary</span>" +
-                "</summary>" +
-                "<div class=\"govuk-details__text\">The text</div>" +
-                "</details>",
-                html);
+            var expectedHtml = @"
+<details class=""govuk-details"" data-module=""govuk-details"">
+    <summary class=""govuk-details__summary"">
+        <span class=""govuk-details__summary-text"">The summary</span>
+    </summary>
+    <div class=""govuk-details__text"">The text</div>
+</details>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_WithIdSpecifiedAddsIdAttributeToOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-details",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-details",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
-
-                    var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(attributes: null, summary);
-
-                    var text = new HtmlString("The text");
-                    detailsContext.SetText(attributes: null, text);
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new DetailsTagHelper(new ComponentGenerator())
-            {
-                Id = "my-id"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal("my-id", output.Attributes["id"].Value);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithOpenSpecifiedAddsOpenAttributeToOutput()
+        public async Task ProcessAsync_WithOpenSpecified_AddsOpenAttributeToOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -131,150 +92,80 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("true", output.Attributes["open"].Value);
-        }
-    }
+            var element = await output.RenderToElement();
 
-    public class DetailsSummaryTagHelperTests
-    {
+            Assert.Equal("", element.Attributes["open"].Value);
+        }
+
         [Fact]
-        public async Task ProcessAsync_SetsContentOnContext()
+        public async Task ProcessAsync_MissingSummary_ThrowsInvalidOperationException()
         {
             // Arrange
-            var detailsContext = new DetailsContext();
-
             var context = new TagHelperContext(
-                tagName: "govuk-details-summary",
+                tagName: "govuk-details",
                 allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(DetailsContext), detailsContext }
-                },
+                items: new Dictionary<object, object>(),
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-details-summary",
+                "govuk-details",
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
+
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The summary");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DetailsSummaryTagHelper();
+            var tagHelper = new DetailsTagHelper(new ComponentGenerator())
+            {
+                Open = true
+            };
 
             // Act
-            await tagHelper.ProcessAsync(context, output);
+            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
             // Assert
-            Assert.Equal("The summary", detailsContext.Summary?.content.RenderToString());
+            Assert.IsType<InvalidOperationException>(ex);
+            Assert.Equal("A <govuk-details-summary> element must be provided.", ex.Message);
         }
-    }
 
-    public class DetailsTextTagHelperTests
-    {
         [Fact]
-        public async Task ProcessAsync_SetsContentOnContext()
+        public async Task ProcessAsync_MissingText_ThrowsInvalidOperationException()
         {
             // Arrange
-            var detailsContext = new DetailsContext();
-            detailsContext.SetSummary(attributes: null, new HtmlString("The summary"));
-
             var context = new TagHelperContext(
-                tagName: "govuk-details-text",
+                tagName: "govuk-details",
                 allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(DetailsContext), detailsContext }
-                },
+                items: new Dictionary<object, object>(),
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-details-text",
+                "govuk-details",
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
+                    var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
+
+                    var summary = new HtmlString("The summary");
+                    detailsContext.SetSummary(attributes: null, summary);
+
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The text");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DetailsTextTagHelper();
+            var tagHelper = new DetailsTagHelper(new ComponentGenerator())
+            {
+                Open = true
+            };
 
             // Act
-            await tagHelper.ProcessAsync(context, output);
+            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
             // Assert
-            Assert.Equal("The text", detailsContext.Text?.content.RenderToString());
-        }
-    }
-
-    public class DetailsContextTests
-    {
-        [Fact]
-        public void SetSummary_StageAtTextThrowsInvalidOperationException()
-        {
-            // Arrange
-            var ctx = new DetailsContext();
-            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
-            ctx.SetText(attributes: null, new HtmlString("Text"));
-
-            // Act & Assert
-            Assert.Equal(DetailsRenderStage.Text, ctx.RenderStage);
-            var ex = Assert.Throws<InvalidOperationException>(() => ctx.SetSummary(attributes: null, new HtmlString("Summary")));
-            Assert.Equal("Cannot render <govuk-details-summary> here.", ex.Message);
-        }
-
-        [Fact]
-        public void SetSummary_StageAtSummaryThrowsInvalidOperationException()
-        {
-            // Arrange
-            var ctx = new DetailsContext();
-            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
-
-            // Act & Assert
-            Assert.Equal(DetailsRenderStage.Summary, ctx.RenderStage);
-            var ex = Assert.Throws<InvalidOperationException>(() => ctx.SetSummary(attributes: null, new HtmlString("Summary")));
-            Assert.Equal("Cannot render <govuk-details-summary> here.", ex.Message);
-        }
-
-        [Fact]
-        public void ThrowIfStagesIncomplete_StageAtNoneThrowsInvalidOperationException()
-        {
-            // Arrange
-            var ctx = new DetailsContext();
-
-            // Act & Assert
-            Assert.Equal(DetailsRenderStage.None, ctx.RenderStage);
-            var ex = Assert.Throws<InvalidOperationException>(() => ctx.ThrowIfStagesIncomplete());
-            Assert.Equal("Missing one or more child elements.", ex.Message);
-        }
-
-        [Fact]
-        public void ThrowIfStagesIncomplete_StageAtSummaryThrowsInvalidOperationException()
-        {
-            // Arrange
-            var ctx = new DetailsContext();
-            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
-
-            // Act & Assert
-            Assert.Equal(DetailsRenderStage.Summary, ctx.RenderStage);
-            var ex = Assert.Throws<InvalidOperationException>(() => ctx.ThrowIfStagesIncomplete());
-            Assert.Equal("Missing one or more child elements.", ex.Message);
-        }
-
-        [Fact]
-        public void ThrowIfStagesIncomplete_StageAtTextDoesNotThrow()
-        {
-            // Arrange
-            var ctx = new DetailsContext();
-            ctx.SetSummary(attributes: null, new HtmlString("Summary"));
-            ctx.SetText(attributes: null, new HtmlString("Text"));
-
-            // Act & Assert
-            Assert.Equal(DetailsRenderStage.Text, ctx.RenderStage);
-            ctx.ThrowIfStagesIncomplete();
+            Assert.IsType<InvalidOperationException>(ex);
+            Assert.Equal("A <govuk-details-text> element must be provided.", ex.Message);
         }
     }
 }
