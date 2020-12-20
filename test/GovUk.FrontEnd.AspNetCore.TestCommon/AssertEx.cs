@@ -29,6 +29,13 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
             {
                 var sb = new StringBuilder();
                 sb.AppendLine("AssertEx.HtmlEqual() Failure");
+                sb.AppendLine();
+
+                sb.AppendLine("Expected:");
+                sb.AppendLine(HtmlHelper.ParseHtmlElement(expected).OuterHtml);
+                sb.AppendLine();
+                sb.AppendLine("Actual:");
+                sb.AppendLine(HtmlHelper.ParseHtmlElement(actual).OuterHtml);
 
                 foreach (var diff in diffs)
                 {
