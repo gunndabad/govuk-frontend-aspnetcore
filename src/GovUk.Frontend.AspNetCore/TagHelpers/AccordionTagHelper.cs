@@ -1,12 +1,10 @@
 #nullable enable
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-#if !NETSTANDARD2_0
-using System.Diagnostics.CodeAnalysis;
-#endif
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
@@ -72,9 +70,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Cannot be <c>null</c>.
         /// </remarks>
         [HtmlAttributeName(IdAttributeName)]
-#if !NETSTANDARD2_0
         [DisallowNull]
-#endif
         public string? Id
         {
             get => _id;
