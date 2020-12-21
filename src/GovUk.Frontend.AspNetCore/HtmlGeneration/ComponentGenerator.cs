@@ -345,42 +345,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
         }
 
-        public virtual TagBuilder GenerateErrorMessage(
-            string visuallyHiddenText,
-            string id,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (visuallyHiddenText == null)
-            {
-                throw new ArgumentNullException(nameof(visuallyHiddenText));
-            }
-
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("span");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-error-message");
-
-            if (!string.IsNullOrEmpty(id))
-            {
-                tagBuilder.Attributes.Add("id", id);
-            }
-
-            var vht = new TagBuilder("span");
-            vht.AddCssClass("govuk-visually-hidden");
-            vht.InnerHtml.Append(visuallyHiddenText);
-
-            tagBuilder.InnerHtml.AppendHtml(vht);
-
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateErrorSummary(
             IHtmlContent titleContent,
             IDictionary<string, string> titleAttributes,
