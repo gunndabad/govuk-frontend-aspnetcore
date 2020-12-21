@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-select")]
     [RestrictChildren("govuk-select-fieldset", "govuk-select-item", "govuk-select-hint", "govuk-select-label", "govuk-select-error-message")]
-    public class SelectTagHelper : FormGroupTagHelperBase
+    public class SelectTagHelper : LegacyFormGroupTagHelperBase
     {
         private const string AttributesPrefix = "select-";
         private const string DisabledAttributeName = "disabled";

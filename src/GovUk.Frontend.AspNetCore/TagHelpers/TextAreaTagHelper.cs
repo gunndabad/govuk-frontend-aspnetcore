@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-textarea")]
     [RestrictChildren("govuk-textarea-label", "govuk-textarea-hint", "govuk-textarea-error-message", "govuk-textarea-element")]
-    public class TextAreaTagHelper : FormGroupTagHelperBase
+    public class TextAreaTagHelper : LegacyFormGroupTagHelperBase
     {
         private const string AttributesPrefix = "textarea-";
         private const string AutocompleteAttributeName = "autocomplete";

@@ -10,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-radios", TagStructure = TagStructure.NormalOrSelfClosing)]
     [RestrictChildren("govuk-radios-divider", "govuk-radios-fieldset", "govuk-radios-item", "govuk-radios-hint", "govuk-radios-error-message")]
-    public class RadiosTagHelper : FormGroupTagHelperBase
+    public class RadiosTagHelper : LegacyFormGroupTagHelperBase
     {
         private const string IdPrefixAttributeName = "id-prefix";
         private const string RadiosAttributesPrefix = "radios-";
