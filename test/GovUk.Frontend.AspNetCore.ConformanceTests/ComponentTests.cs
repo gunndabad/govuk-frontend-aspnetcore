@@ -56,6 +56,13 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) => generator.GenerateDetails(options));
 
+        [Theory]
+        [ComponentFixtureData("error-message", typeof(OptionsJson.ErrorMessage))]
+        public Task ErrorMessage(ComponentTestCaseData<OptionsJson.ErrorMessage> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateErrorMessage(options));
+
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
