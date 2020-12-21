@@ -41,6 +41,9 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("Button/DisabledButton", "button-disabled.png"),
                 ("Details/Details", "details.png"),
                 ("Details/DetailsExpanded", "details-expanded.png"),
+                ("ErrorMessage/ErrorMessageWithSpecifiedContent", "error-message-with-specified-content.png"),
+                ("ErrorMessage/ErrorMessageWithOverridenVisuallyHiddenText", "error-message-with-overriden-visually-hidden-text.png"),
+                ("ErrorMessage/ErrorMessageWithModelStateError", "error-message-with-modelstate-error.png"),
             });
 
             await browser.CloseAsync();
