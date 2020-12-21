@@ -10,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-checkboxes", TagStructure = TagStructure.NormalOrSelfClosing)]
     [RestrictChildren("govuk-checkboxes-fieldset", "govuk-checkboxes-item", "govuk-checkboxes-hint", "govuk-checkboxes-error-message")]
-    public class CheckboxesTagHelper : FormGroupTagHelperBase
+    public class CheckboxesTagHelper : LegacyFormGroupTagHelperBase
     {
         private const string CheckboxesAttributesPrefix = "checkboxes-";
         private const string IdPrefixAttributeName = "id-prefix";
