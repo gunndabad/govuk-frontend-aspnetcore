@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
@@ -34,27 +35,23 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlHelper = new Mock<IHtmlHelper>();
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
-
-            var tagHelper = new ErrorMessageTagHelper(new ComponentGenerator(), new DefaultModelHelper());
+            var tagHelper = new ErrorMessageTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<span class=\"govuk-error-message\">" +
-                "<span class=\"govuk-visually-hidden\">Error</span>" +
-                "An error!" +
-                "</span>",
-                html);
+            var expectedHtml = @"
+<span class=""govuk-error-message"">
+    <span class=""govuk-visually-hidden"">Error:</span>
+    An error!
+</span>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_WithIdSpecifiedGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithVisuallyHiddenTextSpecified_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -73,47 +70,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var htmlHelper = new Mock<IHtmlHelper>();
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
-
-            var tagHelper = new ErrorMessageTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                Id = "some-id"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal("some-id", output.Attributes["id"].Value);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithVisuallyHiddenTextSpecifiedGeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-message",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-message",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("An error!");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var htmlHelper = new Mock<IHtmlHelper>();
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
-
-            var tagHelper = new ErrorMessageTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+            var tagHelper = new ErrorMessageTagHelper()
             {
                 VisuallyHiddenText = "Overriden"
             };
@@ -122,17 +79,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<span class=\"govuk-error-message\">" +
-                "<span class=\"govuk-visually-hidden\">Overriden</span>" +
-                "An error!" +
-                "</span>",
-                html);
+            var expectedHtml = @"
+<span class=""govuk-error-message"">
+    <span class=""govuk-visually-hidden"">Overriden:</span>
+    An error!
+</span>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_AspForSpecifiedGeneratesExpectedContent()
+        public async Task ProcessAsync_AspForSpecified_GeneratesExpectedContent()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -162,7 +119,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorMessageTagHelper(new ComponentGenerator(), modelHelperMock.Object)
+            var tagHelper = new ErrorMessageTagHelper(htmlGenerator: null, modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
@@ -172,17 +129,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<span class=\"govuk-error-message\">" +
-                "<span class=\"govuk-visually-hidden\">Error</span>" +
-                "An error!" +
-                "</span>",
-                html);
+            var expectedHtml = @"
+<span class=""govuk-error-message"">
+    <span class=""govuk-visually-hidden"">Error:</span>
+    An error!
+</span>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_AspForSpecifiedButNoErrorGeneratesNoOutput()
+        public async Task ProcessAsync_AspForSpecifiedButNoError_GeneratesNoOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -223,6 +180,38 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.Null(output.TagName);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_NoAspForOrContent_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-message",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-message",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+            output.TagMode = TagMode.SelfClosing;
+
+            var htmlHelper = new Mock<IHtmlHelper>();
+
+            var tagHelper = new ErrorMessageTagHelper();
+
+            // Act
+            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+            // Assert
+            Assert.IsType<InvalidOperationException>(ex);
+            Assert.Equal("Cannot determine content. Element must contain content if the 'asp-for' attribute is not specified.", ex.Message);
         }
 
         public class Model
