@@ -245,7 +245,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group--error govuk-form-group\">" +
-                "<span class=\"govuk-error-message\" id=\"my-id-error\"><span class=\"govuk-visually-hidden\">Error</span>A error</span>" +
+                "<span class=\"govuk-error-message\" id=\"my-id-error\"><span class=\"govuk-visually-hidden\">Error:</span>A error</span>" +
                 "<div class=\"govuk-checkboxes\">" +
                 "</div>" +
                 "</div>",

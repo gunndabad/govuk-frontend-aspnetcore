@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -145,7 +146,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected IHtmlContent GenerateErrorMessage(FormGroupBuilder builder)
         {
             var visuallyHiddenText = builder.ErrorMessage?.visuallyHiddenText ??
-                ComponentDefaults.ErrorMessage.VisuallyHiddenText;
+                ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;
 
             var content = builder.ErrorMessage?.content;
             var attributes = builder.ErrorMessage?.attributes;
@@ -164,7 +165,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var errorId = ResolvedId + "-error";
                 AppendToDescribedBy(errorId);
-                return Generator.GenerateErrorMessage(visuallyHiddenText, errorId, content, attributes);
+
+                attributes ??= new Dictionary<string, string>();
+                attributes["id"] = errorId;
+
+                return Generator.GenerateErrorMessage(visuallyHiddenText, content, attributes);
             }
             else
             {
