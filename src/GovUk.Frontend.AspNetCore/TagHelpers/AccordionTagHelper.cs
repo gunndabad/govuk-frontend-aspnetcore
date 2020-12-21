@@ -67,7 +67,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// </summary>
         /// <remarks>
         /// Must be unique across the domain of your service.
-        /// Cannot be <c>null</c>.
+        /// Cannot be <c>null</c> or empty.
         /// </remarks>
         [HtmlAttributeName(IdAttributeName)]
         [DisallowNull]
@@ -76,7 +76,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             get => _id;
             set
             {
-                _id = value ?? throw new ArgumentNullException(nameof(value));
+                _id = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
             }
         }
 

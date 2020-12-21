@@ -21,15 +21,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IDictionary<string, string> textAttributes,
             IDictionary<string, string> attributes)
         {
-            if (summaryContent == null)
-            {
-                throw new ArgumentNullException(nameof(summaryContent));
-            }
-
-            if (textContent == null)
-            {
-                throw new ArgumentNullException(nameof(textContent));
-            }
+            Guard.ArgumentNotNull(nameof(summaryContent), summaryContent);
+            Guard.ArgumentNotNull(nameof(textContent), textContent);
 
             var tagBuilder = new TagBuilder(DetailsElement);
             tagBuilder.MergeAttributes(attributes);

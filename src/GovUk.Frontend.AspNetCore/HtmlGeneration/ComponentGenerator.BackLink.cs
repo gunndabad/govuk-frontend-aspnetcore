@@ -15,10 +15,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(BackLinkElement);
             tagBuilder.MergeAttributes(attributes);
