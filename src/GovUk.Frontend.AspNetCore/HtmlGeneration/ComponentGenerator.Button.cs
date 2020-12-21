@@ -21,10 +21,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(ButtonElement);
             tagBuilder.MergeAttributes(attributes);
@@ -62,10 +59,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IHtmlContent content,
             IDictionary<string, string> attributes)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(ButtonLinkElement);
             tagBuilder.MergeAttributes(attributes);
