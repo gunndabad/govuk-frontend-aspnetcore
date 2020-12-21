@@ -21,10 +21,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+#if !TEST_SWITCHES
+            Guard.ArgumentNotNullOrEmpty(nameof(id), id);
+#endif
 
             if (headingLevel < AccordionMinHeadingLevel || headingLevel > AccordionMaxHeadingLevel)
             {
@@ -33,10 +32,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     nameof(headingLevel));
             }
 
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
+            Guard.ArgumentNotNullOrEmpty(nameof(items), items);
 
             var tagBuilder = new TagBuilder(AccordionElement);
             tagBuilder.MergeAttributes(attributes);
@@ -47,19 +43,17 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             var index = 0;
             foreach (var item in items)
             {
-                if (item.Content == null)
-                {
-                    throw new ArgumentException(
-                        $"Item {index} is not valid; {nameof(AccordionItem.Content)} cannot be null.",
-                        nameof(items));
-                }
+                Guard.ArgumentValidNotNull(
+                    nameof(items),
+                    $"Item {index} is not valid; {nameof(AccordionItem.Content)} cannot be null.",
+                    item.Content,
+                    item.Content != null);
 
-                if (item.HeadingContent == null)
-                {
-                    throw new ArgumentException(
-                        $"Item {index} is not valid; {nameof(AccordionItem.HeadingContent)} cannot be null.",
-                        nameof(items));
-                }
+                Guard.ArgumentValidNotNull(
+                    nameof(items),
+                    $"Item {index} is not valid; {nameof(AccordionItem.HeadingContent)} cannot be null.",
+                    item.HeadingContent,
+                    item.HeadingContent != null);
 
                 var idSuffix = index + 1;
 
