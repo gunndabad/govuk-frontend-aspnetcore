@@ -67,7 +67,6 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,
-            string id,
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
