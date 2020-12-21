@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-date-input")]
     [RestrictChildren("govuk-date-input-fieldset", "govuk-date-input-label", "govuk-date-input-hint", "govuk-date-input-error-message")]
-    public class DateInputTagHelper : FormGroupTagHelperBase
+    public class DateInputTagHelper : LegacyFormGroupTagHelperBase
     {
         internal const string ValueAttributeName = "value";
         private const string AttributesPrefix = "date-input-";

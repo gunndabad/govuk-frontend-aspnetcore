@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-input")]
     [RestrictChildren("govuk-input-label", "govuk-input-hint", "govuk-input-error-message", "govuk-input-prefix", "govuk-input-suffix")]
-    public class InputTagHelper : FormGroupTagHelperBase
+    public class InputTagHelper : LegacyFormGroupTagHelperBase
     {
         private const string AttributesPrefix = "input-";
         private const string AutocompleteAttributeName = "autocomplete";
