@@ -6,4 +6,11 @@
 
     <DefineConstants Condition="'$(EnableTestSwitches)' == 'true' or '$(Configuration)' == 'Debug'">$(DefineConstants);TEST_SWITCHES</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nullable" Version="1.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
