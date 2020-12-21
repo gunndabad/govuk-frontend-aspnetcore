@@ -18,6 +18,20 @@ namespace GovUk.Frontend.AspNetCore
             return argValue;
         }
 
+        public static T ArgumentNotNull<T>(
+            string argName,
+            string message,
+            [NotNull] T? testValue)
+            where T : struct
+        {
+            if (testValue == null)
+            {
+                throw new ArgumentException(message, argName);
+            }
+
+            return testValue.Value;
+        }
+
         public static string ArgumentNotNullOrEmpty(string argName, [NotNull] string? argValue)
         {
             if (argValue == null)
