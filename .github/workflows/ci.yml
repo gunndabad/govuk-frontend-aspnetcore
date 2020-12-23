@@ -52,7 +52,7 @@ jobs:
       run: dotnet test test/GovUk.FrontEnd.AspNetCore.Tests --configuration Release --no-build
 
     - name: Conformance tests
-      run: dotnet test test/GovUk.FrontEnd.AspNetCore.ConformanceTests --configuration Release /p:EnableTestSwitches=true
+      run: dotnet test test/GovUk.FrontEnd.AspNetCore.ConformanceTests --configuration Release
 
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build

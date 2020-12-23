@@ -20,10 +20,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
         public ConformanceTestFixture()
         {
-#if TEST_SWITCHES
-            Config.RunningConformanceTests = true;
-#endif
-
             var host = new HostBuilder()
                 .ConfigureWebHost(webBuilder =>
                 {
