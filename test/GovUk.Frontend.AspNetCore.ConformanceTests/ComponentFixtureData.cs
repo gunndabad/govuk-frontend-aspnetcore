@@ -11,15 +11,18 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     {
         private readonly string _fixtureFolder;
         private readonly Type _optionsType;
+        private readonly string _only;
         private readonly HashSet<string> _exclude;
 
         public ComponentFixtureData(
             string fixtureFolder,
             Type optionsType,
+            string only = null,
             params string[] exclude)
         {
             _fixtureFolder = fixtureFolder ?? throw new ArgumentNullException(nameof(fixtureFolder));
             _optionsType = optionsType ?? throw new ArgumentNullException(nameof(optionsType));
+            _only = only;
             _exclude = new HashSet<string>(exclude ?? Array.Empty<string>());
         }
 
@@ -48,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             {
                 var name = fixture["name"].ToString();
 
-                if (_exclude.Contains(name))
+                if (_exclude.Contains(name) || (_only != null && name != _only))
                 {
                     continue;
                 }
