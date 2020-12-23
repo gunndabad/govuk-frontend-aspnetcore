@@ -83,11 +83,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (Id == null
-#if TEST_SWITCHES
-                && !Config.RunningConformanceTests
-#endif
-                )
+            if (Id == null)
             {
                 throw ExceptionHelper.TheAttributeMustBeSpecified(IdAttributeName);
             }
@@ -100,11 +96,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateAccordion(
-                Id
-#if TEST_SWITCHES
-                ?? string.Empty
-#endif
-                ,
+                Id,
                 HeadingLevel,
                 output.Attributes.ToAttributesDictionary(),
                 accordionContext.Items);
