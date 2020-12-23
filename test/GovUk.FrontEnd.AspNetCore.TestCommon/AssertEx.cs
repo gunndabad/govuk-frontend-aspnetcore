@@ -29,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
             excludeDiff ??= _ => false;
 
             var diffs = DiffBuilder.Compare(expected).WithTest(actual).Build()
-                .Where(diff => !excludeDiff(diff))
+                .Where(diff => !excludeDiff(diff) && !ExcludeDiff(diff))
                 .ToArray();
 
             if (diffs.Any())
@@ -50,6 +50,25 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
                 }
 
                 throw new XunitException(sb.ToString());
+            }
+
+            static bool ExcludeDiff(IDiff diff)
+            {
+                // Handle aria-describedby being out of order
+                // e.g. 'bar foo' instead of 'foo bar'
+                if (diff is AttrDiff attrDiff && attrDiff.Test.Attribute.Name == "aria-describedby")
+                {
+                    var controlValueParts = attrDiff.Control.Attribute.Value
+                        .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    var testValueParts = attrDiff.Test.Attribute.Value
+                        .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    return controlValueParts.OrderBy(v => v, StringComparer.OrdinalIgnoreCase)
+                        .SequenceEqual(testValueParts.OrderBy(v => v, StringComparer.OrdinalIgnoreCase));
+                }
+
+                return false;
             }
         }
 
