@@ -22,7 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.FrontEnd.AspNetCore.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.DocSamples", "src\GovUk.Frontend.AspNetCore.DocSamples\GovUk.Frontend.AspNetCore.DocSamples.csproj", "{1AB2352D-1151-4F82-83F4-5C327A436B70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GovUk.Frontend.AspNetCore.DocSamplesScreenshotter", "src\GovUk.Frontend.AspNetCore.DocSamplesScreenshotter\GovUk.Frontend.AspNetCore.DocSamplesScreenshotter.csproj", "{64A0B1FF-882D-4270-AD3B-A3B6ABD74957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.DocSamplesScreenshotter", "src\GovUk.Frontend.AspNetCore.DocSamplesScreenshotter\GovUk.Frontend.AspNetCore.DocSamplesScreenshotter.csproj", "{64A0B1FF-882D-4270-AD3B-A3B6ABD74957}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F85128C9-8470-4F7A-B16F-5AEC17BC0924}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AED24400-DECA-43E7-872C-4ADCFB02A3B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +113,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB17A248-6FB0-4B01-99C7-05117341A764} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
+		{DDF45412-C16E-497F-88A5-B6A926836B08} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
+		{D1B82295-B3B6-4065-AAD0-6FE115F203B1} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
+		{1AB2352D-1151-4F82-83F4-5C327A436B70} = {AED24400-DECA-43E7-872C-4ADCFB02A3B2}
+		{64A0B1FF-882D-4270-AD3B-A3B6ABD74957} = {AED24400-DECA-43E7-872C-4ADCFB02A3B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56670F00-D357-4E76-A289-2114015DDFE5}
