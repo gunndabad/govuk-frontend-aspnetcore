@@ -19,12 +19,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder(ErrorMessageElement);
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-error-message");
+            tagBuilder.MergeCssClass("govuk-error-message");
 
             if (!string.IsNullOrEmpty(visuallyHiddenText))
             {
                 var vht = new TagBuilder("span");
-                vht.AddCssClass("govuk-visually-hidden");
+                vht.MergeCssClass("govuk-visually-hidden");
                 vht.InnerHtml.Append(visuallyHiddenText + ":");
 
                 tagBuilder.InnerHtml.AppendHtml(vht);

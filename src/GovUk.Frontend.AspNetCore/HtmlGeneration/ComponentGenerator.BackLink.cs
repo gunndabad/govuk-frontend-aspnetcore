@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder(BackLinkElement);
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-back-link");
+            tagBuilder.MergeCssClass("govuk-back-link");
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
