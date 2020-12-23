@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder(AccordionElement);
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-accordion");
+            tagBuilder.MergeCssClass("govuk-accordion");
             tagBuilder.Attributes.Add("data-module", "govuk-accordion");
             tagBuilder.Attributes.Add("id", id);
 
@@ -59,22 +59,22 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 var section = new TagBuilder(AccordionItemElement);
                 section.MergeAttributes(item.Attributes);
-                section.AddCssClass("govuk-accordion__section");
+                section.MergeCssClass("govuk-accordion__section");
 
                 if (item.Expanded)
                 {
-                    section.AddCssClass("govuk-accordion__section--expanded");
+                    section.MergeCssClass("govuk-accordion__section--expanded");
                 }
 
                 var header = new TagBuilder("div");
-                header.AddCssClass("govuk-accordion__section-header");
+                header.MergeCssClass("govuk-accordion__section-header");
 
                 var headingId = $"{id}-heading-{idSuffix}";
                 var heading = new TagBuilder($"h{headingLevel}");
                 heading.MergeAttributes(item.HeadingAttributes);
-                heading.AddCssClass("govuk-accordion__section-heading");
+                heading.MergeCssClass("govuk-accordion__section-heading");
                 var headingContent = new TagBuilder("span");
-                headingContent.AddCssClass("govuk-accordion__section-button");
+                headingContent.MergeCssClass("govuk-accordion__section-button");
                 headingContent.Attributes.Add("id", headingId);
                 headingContent.InnerHtml.AppendHtml(item.HeadingContent);
                 heading.InnerHtml.AppendHtml(headingContent);
@@ -85,8 +85,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     var summaryId = $"{id}-summary-{idSuffix}";
                     var summary = new TagBuilder(AccordionItemSummaryElement);
                     summary.MergeAttributes(item.SummaryAttributes);
-                    summary.AddCssClass("govuk-accordion__section-summary");
-                    summary.AddCssClass("govuk-body");
+                    summary.MergeCssClass("govuk-accordion__section-summary");
+                    summary.MergeCssClass("govuk-body");
                     summary.Attributes.Add("id", summaryId);
                     summary.InnerHtml.AppendHtml(item.SummaryContent);
                     header.InnerHtml.AppendHtml(summary);
@@ -96,7 +96,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 var contentId = $"{id}-content-{idSuffix}";
                 var contentDiv = new TagBuilder("div");
-                contentDiv.AddCssClass("govuk-accordion__section-content");
+                contentDiv.MergeCssClass("govuk-accordion__section-content");
                 contentDiv.Attributes.Add("id", contentId);
                 contentDiv.Attributes.Add("aria-labelledby", headingId);
                 contentDiv.InnerHtml.AppendHtml(item.Content);

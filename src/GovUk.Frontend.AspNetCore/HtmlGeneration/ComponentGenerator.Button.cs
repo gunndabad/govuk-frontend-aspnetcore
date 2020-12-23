@@ -25,12 +25,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder(ButtonElement);
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-button");
+            tagBuilder.MergeCssClass("govuk-button");
             tagBuilder.Attributes.Add("data-module", "govuk-button");
 
             if (disabled)
             {
-                tagBuilder.AddCssClass("govuk-button--disabled");
+                tagBuilder.MergeCssClass("govuk-button--disabled");
                 tagBuilder.Attributes.Add("disabled", "disabled");
                 tagBuilder.Attributes.Add("aria-disabled", "true");
             }
@@ -44,7 +44,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             if (isStartButton)
             {
-                tagBuilder.AddCssClass("govuk-button--start");
+                tagBuilder.MergeCssClass("govuk-button--start");
 
                 var icon = GenerateStartButton();
                 tagBuilder.InnerHtml.AppendHtml(icon);
@@ -63,21 +63,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder(ButtonLinkElement);
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-button");
+            tagBuilder.MergeCssClass("govuk-button");
             tagBuilder.Attributes.Add("data-module", "govuk-button");
             tagBuilder.Attributes.Add("role", "button");
             tagBuilder.Attributes.Add("draggable", "false");
 
             if (disabled)
             {
-                tagBuilder.AddCssClass("govuk-button--disabled");
+                tagBuilder.MergeCssClass("govuk-button--disabled");
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);
 
             if (isStartButton)
             {
-                tagBuilder.AddCssClass("govuk-button--start");
+                tagBuilder.MergeCssClass("govuk-button--start");
 
                 var icon = GenerateStartButton();
                 tagBuilder.InnerHtml.AppendHtml(icon);
@@ -89,7 +89,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         private static TagBuilder GenerateStartButton()
         {
             var icon = new TagBuilder("svg");
-            icon.AddCssClass("govuk-button__start-icon");
+            icon.MergeCssClass("govuk-button__start-icon");
             icon.MergeAttributes(new Dictionary<string, string>()
             {
                 { "xmlns", "http://www.w3.org/2000/svg" },

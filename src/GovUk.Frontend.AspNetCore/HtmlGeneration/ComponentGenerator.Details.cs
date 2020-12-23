@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder(DetailsElement);
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-details");
+            tagBuilder.MergeCssClass("govuk-details");
             tagBuilder.Attributes.Add("data-module", "govuk-details");
 
             if (open)
@@ -36,10 +36,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var summaryTagBuilder = new TagBuilder(DetailsSummaryElement);
             summaryTagBuilder.MergeAttributes(summaryAttributes);
-            summaryTagBuilder.AddCssClass("govuk-details__summary");
+            summaryTagBuilder.MergeCssClass("govuk-details__summary");
 
             var summaryTextTagBuilder = new TagBuilder("span");
-            summaryTextTagBuilder.AddCssClass("govuk-details__summary-text");
+            summaryTextTagBuilder.MergeCssClass("govuk-details__summary-text");
             summaryTextTagBuilder.InnerHtml.AppendHtml(summaryContent);
             summaryTagBuilder.InnerHtml.AppendHtml(summaryTextTagBuilder);
 
@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var textTagBuilder = new TagBuilder(DetailsTextElement);
             textTagBuilder.MergeAttributes(textAttributes);
-            textTagBuilder.AddCssClass("govuk-details__text");
+            textTagBuilder.MergeCssClass("govuk-details__text");
             textTagBuilder.InnerHtml.AppendHtml(textContent);
             tagBuilder.InnerHtml.AppendHtml(textTagBuilder);
 
