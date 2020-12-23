@@ -21,9 +21,16 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
             return await browsingContext.OpenAsync(req => req.Content(html));
         }
 
-        public static void HtmlEqual(string expected, string actual)
+        public static void HtmlEqual(
+            string expected,
+            string actual,
+            Predicate<IDiff> excludeDiff = null)
         {
-            var diffs = DiffBuilder.Compare(expected).WithTest(actual).Build().ToArray();
+            excludeDiff ??= _ => false;
+
+            var diffs = DiffBuilder.Compare(expected).WithTest(actual).Build()
+                .Where(diff => !excludeDiff(diff))
+                .ToArray();
 
             if (diffs.Any())
             {

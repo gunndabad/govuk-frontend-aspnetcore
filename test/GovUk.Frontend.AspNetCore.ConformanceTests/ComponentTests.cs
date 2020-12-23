@@ -1,6 +1,7 @@
 #if NETCOREAPP3_1
 using System;
 using System.Threading.Tasks;
+using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
@@ -67,14 +68,15 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
             ComponentTestCaseData<TOptions> testCaseData,
-            Func<RazorGenerator, TOptions, string> generateRazor)
+            Func<RazorGenerator, TOptions, string> generateRazor,
+            Predicate<IDiff> excludeDiff = null)
         {
             var razorGenerator = new RazorGenerator();
             var template = generateRazor(razorGenerator, testCaseData.Options);
 
             var html = await RenderRazorTemplate(template);
 
-            AssertEx.HtmlEqual(testCaseData.ExpectedHtml, html);
+            AssertEx.HtmlEqual(testCaseData.ExpectedHtml, html, excludeDiff);
         }
     }
 }
