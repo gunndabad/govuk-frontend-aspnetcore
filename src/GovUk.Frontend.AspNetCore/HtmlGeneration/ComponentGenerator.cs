@@ -33,21 +33,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-breadcrumbs");
+            tagBuilder.MergeCssClass("govuk-breadcrumbs");
 
             if (collapseOnMobile)
             {
-                tagBuilder.AddCssClass("govuk-breadcrumbs--collapse-on-mobile");
+                tagBuilder.MergeCssClass("govuk-breadcrumbs--collapse-on-mobile");
             }
 
             var ol = new TagBuilder("ol");
-            ol.AddCssClass("govuk-breadcrumbs__list");
+            ol.MergeCssClass("govuk-breadcrumbs__list");
 
             foreach (var item in items)
             {
                 var li = new TagBuilder("li");
                 li.MergeAttributes(item.Attributes);
-                li.AddCssClass("govuk-breadcrumbs__list-item");
+                li.MergeCssClass("govuk-breadcrumbs__list-item");
 
                 IHtmlContent itemContent;
 
@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 {
                     var itemLink = new TagBuilder("a");
                     itemLink.MergeAttributes(item.LinkAttributes);
-                    itemLink.AddCssClass("govuk-breadcrumbs__link");
+                    itemLink.MergeCssClass("govuk-breadcrumbs__link");
                     itemLink.Attributes.Add("href", item.Href);
                     itemLink.InnerHtml.AppendHtml(item.Content);
                     itemContent = itemLink;
@@ -89,7 +89,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
 
             var tagBuilder = new TagBuilder("div");
-            tagBuilder.AddCssClass("govuk-character-count");
+            tagBuilder.MergeCssClass("govuk-character-count");
             tagBuilder.Attributes.Add("data-module", "govuk-character-count");
 
             if (maxLength.HasValue)
@@ -122,7 +122,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var hintContent = new HtmlString(content);
                 var generatedHint = GenerateHint(hintId, hintContent, attributes: null);
 
-                generatedHint.AddCssClass("govuk-character-count__message");
+                generatedHint.MergeCssClass("govuk-character-count__message");
                 generatedHint.Attributes.Add("aria-live", "polite");
 
                 return generatedHint;
@@ -143,11 +143,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-checkboxes");
+            tagBuilder.MergeCssClass("govuk-checkboxes");
 
             if (isConditional)
             {
-                tagBuilder.AddCssClass("govuk-checkboxes--conditional");
+                tagBuilder.MergeCssClass("govuk-checkboxes--conditional");
                 tagBuilder.Attributes.Add("data-module", "govuk-checkboxes");
             }
 
@@ -188,12 +188,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 var tagBuilder = new TagBuilder("div");
                 tagBuilder.MergeAttributes(item.Attributes);
-                tagBuilder.AddCssClass("govuk-checkboxes__item");
+                tagBuilder.MergeCssClass("govuk-checkboxes__item");
 
                 var input = new TagBuilder("input");
                 input.MergeAttributes(item.InputAttributes);
                 input.TagRenderMode = TagRenderMode.SelfClosing;
-                input.AddCssClass("govuk-checkboxes__input");
+                input.MergeCssClass("govuk-checkboxes__input");
                 input.Attributes.Add("id", item.Id);
                 input.Attributes.Add("name", name);
                 input.Attributes.Add("type", "checkbox");
@@ -228,13 +228,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 tagBuilder.InnerHtml.AppendHtml(input);
 
                 var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null);
-                label.AddCssClass("govuk-checkboxes__label");
+                label.MergeCssClass("govuk-checkboxes__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
                 if (item.HintContent != null)
                 {
                     var hint = GenerateHint(item.HintId, item.HintContent, item.HintAttributes);
-                    hint.AddCssClass("govuk-checkboxes__hint");
+                    hint.MergeCssClass("govuk-checkboxes__hint");
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
 
@@ -244,11 +244,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 {
                     var conditional = new TagBuilder("div");
                     conditional.MergeAttributes(item.ConditionalAttributes);
-                    conditional.AddCssClass("govuk-checkboxes__conditional");
+                    conditional.MergeCssClass("govuk-checkboxes__conditional");
 
                     if (!item.IsChecked)
                     {
-                        conditional.AddCssClass("govuk-checkboxes__conditional--hidden");
+                        conditional.MergeCssClass("govuk-checkboxes__conditional--hidden");
                     }
 
                     conditional.Attributes.Add("id", item.ConditionalId);
@@ -285,7 +285,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-date-input");
+            tagBuilder.MergeCssClass("govuk-date-input");
             
             if (id != null)
             {
@@ -301,7 +301,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IHtmlContent CreateDateComponent(DateInputItem item, string @class)
             {
                 var div = new TagBuilder("div");
-                div.AddCssClass("govuk-date-input__item");
+                div.MergeCssClass("govuk-date-input__item");
 
                 var itemInput = GenerateInput(
                     item.HaveError,
@@ -320,15 +320,15 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     prefixAttributes: null,
                     suffixContent: null,
                     suffixAttributes: null);
-                itemInput.AddCssClass("govuk-date-input__input");
-                itemInput.AddCssClass(@class);
+                itemInput.MergeCssClass("govuk-date-input__input");
+                itemInput.MergeCssClass(@class);
 
                 var itemLabel = GenerateLabel(
                     @for: item.Id,
                     isPageHeading: false,
                     content: item.Label,
                     attributes: null);
-                itemLabel.AddCssClass("govuk-date-input__label");
+                itemLabel.MergeCssClass("govuk-date-input__label");
 
                 var contentBuilder = new HtmlContentBuilder()
                     .AppendHtml(itemLabel)
@@ -360,7 +360,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-error-summary");
+            tagBuilder.MergeCssClass("govuk-error-summary");
             tagBuilder.Attributes.Add("aria-labelledby", "error-summary-title");
             tagBuilder.Attributes.Add("role", "alert");
             tagBuilder.Attributes.Add("tabindex", "-1");
@@ -368,13 +368,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var heading = new TagBuilder("h2");
             heading.MergeAttributes(titleAttributes);
-            heading.AddCssClass("govuk-error-summary__title");
+            heading.MergeCssClass("govuk-error-summary__title");
             heading.Attributes.Add("id", "error-summary-title");
             heading.InnerHtml.AppendHtml(titleContent);
             tagBuilder.InnerHtml.AppendHtml(heading);
 
             var body = new TagBuilder("div");
-            body.AddCssClass("govuk-error-summary__body");
+            body.MergeCssClass("govuk-error-summary__body");
 
             if (descriptionContent != null)
             {
@@ -385,8 +385,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
 
             var ul = new TagBuilder("ul");
-            ul.AddCssClass("govuk-list");
-            ul.AddCssClass("govuk-error-summary__list");
+            ul.MergeCssClass("govuk-list");
+            ul.MergeCssClass("govuk-error-summary__list");
 
             foreach (var item in items)
             {
@@ -421,7 +421,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("fieldset");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-fieldset");
+            tagBuilder.MergeCssClass("govuk-fieldset");
 
             if (role != null)
             {
@@ -437,12 +437,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             {
                 var legend = new TagBuilder("legend");
                 legend.MergeAttributes(legendAttributes);
-                legend.AddCssClass("govuk-fieldset__legend");
+                legend.MergeCssClass("govuk-fieldset__legend");
 
                 if (legendIsPageHeading == true)
                 {
                     var h1 = new TagBuilder("h1");
-                    h1.AddCssClass("govuk-fieldset__heading");
+                    h1.MergeCssClass("govuk-fieldset__heading");
                     h1.InnerHtml.AppendHtml(legendContent);
                     legend.InnerHtml.AppendHtml(h1);
                 }
@@ -478,11 +478,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("input");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-file-upload");
+            tagBuilder.MergeCssClass("govuk-file-upload");
 
             if (haveError)
             {
-                tagBuilder.AddCssClass("govuk-file-upload--error");
+                tagBuilder.MergeCssClass("govuk-file-upload--error");
             }
 
             tagBuilder.Attributes.Add("id", id);
@@ -509,11 +509,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-form-group");
+            tagBuilder.MergeCssClass("govuk-form-group");
 
             if (haveError)
             {
-                tagBuilder.AddCssClass("govuk-form-group--error");
+                tagBuilder.MergeCssClass("govuk-form-group--error");
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);
@@ -530,7 +530,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-hint");
+            tagBuilder.MergeCssClass("govuk-hint");
 
             if (!string.IsNullOrEmpty(id))
             {
@@ -554,7 +554,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-inset-text");
+            tagBuilder.MergeCssClass("govuk-inset-text");
 
             if (id != null)
             {
@@ -601,11 +601,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("input");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-input");
+            tagBuilder.MergeCssClass("govuk-input");
 
             if (haveError)
             {
-                tagBuilder.AddCssClass("govuk-input--error");
+                tagBuilder.MergeCssClass("govuk-input--error");
             }
 
             tagBuilder.Attributes.Add("id", id);
@@ -650,13 +650,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             if (prefixContent != null || suffixContent != null)
             {
                 var wrapper = new TagBuilder("div");
-                wrapper.AddCssClass("govuk-input__wrapper");
+                wrapper.MergeCssClass("govuk-input__wrapper");
 
                 if (prefixContent != null)
                 {
                     var prefix = new TagBuilder("div");
                     prefix.MergeAttributes(prefixAttributes);
-                    prefix.AddCssClass("govuk-input__prefix");
+                    prefix.MergeCssClass("govuk-input__prefix");
                     prefix.Attributes.Add("aria-hidden", "true");
                     prefix.InnerHtml.AppendHtml(prefixContent);
 
@@ -669,7 +669,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 {
                     var suffix = new TagBuilder("div");
                     suffix.MergeAttributes(suffixAttributes);
-                    suffix.AddCssClass("govuk-input__suffix");
+                    suffix.MergeCssClass("govuk-input__suffix");
                     suffix.Attributes.Add("aria-hidden", "true");
                     suffix.InnerHtml.AppendHtml(suffixContent);
 
@@ -702,14 +702,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("label");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-label");
+            tagBuilder.MergeCssClass("govuk-label");
             tagBuilder.Attributes.Add("for", @for);
             tagBuilder.InnerHtml.AppendHtml(content);
 
             if (isPageHeading)
             {
                 var heading = new TagBuilder("h1");
-                heading.AddCssClass("govuk-label-wrapper");
+                heading.MergeCssClass("govuk-label-wrapper");
 
                 heading.InnerHtml.AppendHtml(tagBuilder);
 
@@ -734,18 +734,18 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-panel");
-            tagBuilder.AddCssClass("govuk-panel--confirmation");
+            tagBuilder.MergeCssClass("govuk-panel");
+            tagBuilder.MergeCssClass("govuk-panel--confirmation");
 
             var heading = new TagBuilder($"h{titleHeadingLevel}");
-            heading.AddCssClass("govuk-panel__title");
+            heading.MergeCssClass("govuk-panel__title");
             heading.InnerHtml.AppendHtml(titleContent);
             tagBuilder.InnerHtml.AppendHtml(heading);
 
             if (content != null)
             {
                 var body = new TagBuilder("div");
-                body.AddCssClass("govuk-panel__body");
+                body.MergeCssClass("govuk-panel__body");
                 body.InnerHtml.AppendHtml(content);
                 tagBuilder.InnerHtml.AppendHtml(body);
             }
@@ -771,17 +771,17 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-phase-banner");
+            tagBuilder.MergeCssClass("govuk-phase-banner");
 
             var contentTagBuilder = new TagBuilder("p");
-            contentTagBuilder.AddCssClass("govuk-phase-banner__content");
+            contentTagBuilder.MergeCssClass("govuk-phase-banner__content");
 
             var tagTagBuilder = GenerateTag(tagContent, tabAttributes);
-            tagTagBuilder.AddCssClass("govuk-phase-banner__content__tag");
+            tagTagBuilder.MergeCssClass("govuk-phase-banner__content__tag");
             contentTagBuilder.InnerHtml.AppendHtml(tagTagBuilder);
 
             var textTagBuilder = new TagBuilder("span");
-            textTagBuilder.AddCssClass("govuk-phase-banner__text");
+            textTagBuilder.MergeCssClass("govuk-phase-banner__text");
             textTagBuilder.InnerHtml.AppendHtml(content);
             contentTagBuilder.InnerHtml.AppendHtml(textTagBuilder);
 
@@ -803,11 +803,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-radios");
+            tagBuilder.MergeCssClass("govuk-radios");
 
             if (isConditional)
             {
-                tagBuilder.AddCssClass("govuk-radios--conditional");
+                tagBuilder.MergeCssClass("govuk-radios--conditional");
                 tagBuilder.Attributes.Add("data-module", "govuk-radios");
             }
 
@@ -860,12 +860,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 var tagBuilder = new TagBuilder("div");
                 tagBuilder.MergeAttributes(item.Attributes);
-                tagBuilder.AddCssClass("govuk-radios__item");
+                tagBuilder.MergeCssClass("govuk-radios__item");
 
                 var input = new TagBuilder("input");
                 input.TagRenderMode = TagRenderMode.SelfClosing;
                 input.MergeAttributes(item.InputAttributes);
-                input.AddCssClass("govuk-radios__input");
+                input.MergeCssClass("govuk-radios__input");
                 input.Attributes.Add("id", item.Id);
                 input.Attributes.Add("name", name);
                 input.Attributes.Add("type", "radio");
@@ -894,13 +894,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 tagBuilder.InnerHtml.AppendHtml(input);
 
                 var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null);
-                label.AddCssClass("govuk-radios__label");
+                label.MergeCssClass("govuk-radios__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
                 if (item.HintContent != null)
                 {
                     var hint = GenerateHint(item.HintId, item.HintContent, item.HintAttributes);
-                    hint.AddCssClass("govuk-radios__hint");
+                    hint.MergeCssClass("govuk-radios__hint");
                     tagBuilder.InnerHtml.AppendHtml(hint);
                 }
 
@@ -910,11 +910,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 {
                     var conditional = new TagBuilder("div");
                     conditional.MergeAttributes(item.ConditionalAttributes);
-                    conditional.AddCssClass("govuk-radios__conditional");
+                    conditional.MergeCssClass("govuk-radios__conditional");
 
                     if (!item.IsChecked)
                     {
-                        conditional.AddCssClass("govuk-radios__conditional--hidden");
+                        conditional.MergeCssClass("govuk-radios__conditional--hidden");
                     }
 
                     conditional.Attributes.Add("id", item.ConditionalId);
@@ -929,7 +929,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             {
                 var tagBuilder = new TagBuilder("div");
                 tagBuilder.MergeAttributes(divider.Attributes);
-                tagBuilder.AddCssClass("govuk-radios__divider");
+                tagBuilder.MergeCssClass("govuk-radios__divider");
                 tagBuilder.InnerHtml.AppendHtml(divider.Content);
                 return tagBuilder;
             }
@@ -961,11 +961,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("select");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-select");
+            tagBuilder.MergeCssClass("govuk-select");
 
             if (haveError)
             {
-                tagBuilder.AddCssClass("govuk-select--error");
+                tagBuilder.MergeCssClass("govuk-select--error");
             }
 
             tagBuilder.Attributes.Add("id", id);
@@ -1021,7 +1021,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("a");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-skip-link");
+            tagBuilder.MergeCssClass("govuk-skip-link");
             tagBuilder.Attributes.Add("href", href);
             tagBuilder.InnerHtml.AppendHtml(content);
 
@@ -1041,21 +1041,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("dl");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-summary-list");
+            tagBuilder.MergeCssClass("govuk-summary-list");
 
             foreach (var row in rows)
             {
                 var rowTagBuilder = new TagBuilder("div");
                 rowTagBuilder.MergeAttributes(row.Attributes);
-                rowTagBuilder.AddCssClass("govuk-summary-list__row");
+                rowTagBuilder.MergeCssClass("govuk-summary-list__row");
 
                 var dt = new TagBuilder("dt");
-                dt.AddCssClass("govuk-summary-list__key");
+                dt.MergeCssClass("govuk-summary-list__key");
                 dt.InnerHtml.AppendHtml(row.Key);
                 rowTagBuilder.InnerHtml.AppendHtml(dt);
 
                 var dd = new TagBuilder("dt");
-                dd.AddCssClass("govuk-summary-list__value");
+                dd.MergeCssClass("govuk-summary-list__value");
                 dd.InnerHtml.AppendHtml(row.Value);
                 rowTagBuilder.InnerHtml.AppendHtml(dd);
 
@@ -1064,7 +1064,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     if (row.Actions.Any())
                     {
                         var actionsDd = new TagBuilder("dd");
-                        actionsDd.AddCssClass("govuk-summary-list__actions");
+                        actionsDd.MergeCssClass("govuk-summary-list__actions");
 
                         if (row.Actions.Count() == 1)
                         {
@@ -1073,12 +1073,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                         else
                         {
                             var ul = new TagBuilder("ul");
-                            ul.AddCssClass("govuk-summary-list__actions-list");
+                            ul.MergeCssClass("govuk-summary-list__actions-list");
 
                             foreach (var action in row.Actions)
                             {
                                 var li = new TagBuilder("li");
-                                li.AddCssClass("govuk-summary-list__actions-list-item");
+                                li.MergeCssClass("govuk-summary-list__actions-list-item");
                                 li.InnerHtml.AppendHtml(GenerateLink(action));
 
                                 ul.InnerHtml.AppendHtml(li);
@@ -1092,7 +1092,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     else
                     {
                         var span = new TagBuilder("span");
-                        span.AddCssClass("govuk-summary-list__actions");
+                        span.MergeCssClass("govuk-summary-list__actions");
                         rowTagBuilder.InnerHtml.AppendHtml(span);
                     }
                 }
@@ -1106,14 +1106,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             {
                 var anchor = new TagBuilder("a");
                 anchor.MergeAttributes(action.Attributes);
-                anchor.AddCssClass("govuk-link");
+                anchor.MergeCssClass("govuk-link");
                 anchor.Attributes.Add("href", action.Href);
                 anchor.InnerHtml.AppendHtml(action.Content);
 
                 if (action.VisuallyHiddenText != null)
                 {
                     var vht = new TagBuilder("span");
-                    vht.AddCssClass("govuk-visually-hidden");
+                    vht.MergeCssClass("govuk-visually-hidden");
                     vht.InnerHtml.Append(action.VisuallyHiddenText);
                     anchor.InnerHtml.AppendHtml(vht);
                 }
@@ -1140,7 +1140,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-tabs");
+            tagBuilder.MergeCssClass("govuk-tabs");
             tagBuilder.Attributes.Add("data-module", "govuk-tabs");
 
             if (id != null)
@@ -1149,25 +1149,25 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
 
             var h2 = new TagBuilder("h2");
-            h2.AddCssClass("govuk-tabs__title");
+            h2.MergeCssClass("govuk-tabs__title");
             h2.InnerHtml.Append(title);
             tagBuilder.InnerHtml.AppendHtml(h2);
 
             var ul = new TagBuilder("ul");
-            ul.AddCssClass("govuk-tabs__list");
+            ul.MergeCssClass("govuk-tabs__list");
 
             foreach (var item in items)
             {
                 var li = new TagBuilder("li");
-                li.AddCssClass("govuk-tabs__list-item");
+                li.MergeCssClass("govuk-tabs__list-item");
 
                 if (item == items.First())
                 {
-                    li.AddCssClass("govuk-tabs__list-item--selected");
+                    li.MergeCssClass("govuk-tabs__list-item--selected");
                 }
 
                 var a = new TagBuilder("a");
-                a.AddCssClass("govuk-tabs__tab");
+                a.MergeCssClass("govuk-tabs__tab");
                 a.Attributes.Add("href", $"#{item.Id}");
                 a.InnerHtml.Append(item.Label);
                 li.InnerHtml.AppendHtml(a);
@@ -1181,12 +1181,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             {
                 var section = new TagBuilder("section");
                 section.MergeAttributes(item.PanelAttributes);
-                section.AddCssClass("govuk-tabs__panel");
+                section.MergeCssClass("govuk-tabs__panel");
                 section.Attributes.Add("id", item.Id);
 
                 if (item != items.First())
                 {
-                    section.AddCssClass("govuk-tabs__panel--hidden");
+                    section.MergeCssClass("govuk-tabs__panel--hidden");
                 }
 
                 section.InnerHtml.AppendHtml(item.PanelContent);
@@ -1208,7 +1208,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("strong");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-tag");
+            tagBuilder.MergeCssClass("govuk-tag");
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
@@ -1243,11 +1243,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("textarea");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-textarea");
+            tagBuilder.MergeCssClass("govuk-textarea");
 
             if (haveError)
             {
-                tagBuilder.AddCssClass("govuk-textarea--error");
+                tagBuilder.MergeCssClass("govuk-textarea--error");
             }
 
             tagBuilder.Attributes.Add("id", id);
@@ -1296,20 +1296,20 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-warning-text");
+            tagBuilder.MergeCssClass("govuk-warning-text");
 
             var icon = new TagBuilder("span");
-            icon.AddCssClass("govuk-warning-text__icon");
+            icon.MergeCssClass("govuk-warning-text__icon");
             icon.Attributes.Add("aria-hidden", "true");
             icon.InnerHtml.Append("!");
 
             tagBuilder.InnerHtml.AppendHtml(icon);
 
             var text = new TagBuilder("strong");
-            text.AddCssClass("govuk-warning-text__text");
+            text.MergeCssClass("govuk-warning-text__text");
 
             var iconFallback = new TagBuilder("span");
-            iconFallback.AddCssClass("govuk-warning-text__assistive");
+            iconFallback.MergeCssClass("govuk-warning-text__assistive");
             iconFallback.InnerHtml.Append(iconFallbackText);
 
             text.InnerHtml.AppendHtml(iconFallback);
