@@ -24,7 +24,10 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         public Task Accordion(ComponentTestCaseData<OptionsJson.Accordion> data) =>
             CheckTagHelperOutputMatchesExpectedHtml(
                 data,
-                (generator, options) => generator.GenerateAccordion(options));
+                (generator, options) => generator.GenerateAccordion(options),
+                excludeDiff: diff => diff is AttrDiff attrDiff &&
+                    ((attrDiff.Test.Attribute.Name == "id" && attrDiff.Test.Attribute.Value.StartsWith("GFA_test")) ||
+                    (attrDiff.Test.Attribute.Name == "aria-labelledby" && attrDiff.Test.Attribute.Value.StartsWith("GFA_test"))));
 
         [Theory]
         [ComponentFixtureData("back-link", typeof(OptionsJson.BackLink))]
