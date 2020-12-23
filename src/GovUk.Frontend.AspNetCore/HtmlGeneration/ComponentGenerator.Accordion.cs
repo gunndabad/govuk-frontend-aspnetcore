@@ -21,9 +21,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IDictionary<string, string> attributes,
             IEnumerable<AccordionItem> items)
         {
-#if !TEST_SWITCHES
             Guard.ArgumentNotNullOrEmpty(nameof(id), id);
-#endif
 
             if (headingLevel < AccordionMinHeadingLevel || headingLevel > AccordionMaxHeadingLevel)
             {

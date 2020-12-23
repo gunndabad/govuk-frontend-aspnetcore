@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         public string GenerateAccordion(Accordion options)
         {
             var accordion = new TagBuilder("govuk-accordion");
-            accordion.Attributes.Add("id", options.Id);
+            accordion.Attributes.Add("id", options.Id ?? "GFA_test");
 
             if (options.HeadingLevel.HasValue)
             {
