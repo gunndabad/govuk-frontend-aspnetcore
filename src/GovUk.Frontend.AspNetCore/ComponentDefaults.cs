@@ -31,11 +31,6 @@ namespace GovUk.Frontend.AspNetCore
             public const string Type = "text";
         }
 
-        public static class Label
-        {
-            public const bool IsPageHeading = false;
-        }
-
         public static class Panel
         {
             public const int HeadingLevel = 1;
