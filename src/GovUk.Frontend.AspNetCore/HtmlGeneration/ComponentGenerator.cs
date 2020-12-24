@@ -521,27 +521,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateHint(string id, IHtmlContent content, IDictionary<string, string> attributes)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-hint");
-
-            if (!string.IsNullOrEmpty(id))
-            {
-                tagBuilder.Attributes.Add("id", id);
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateInsetText(
             string id,
             IHtmlContent content,
