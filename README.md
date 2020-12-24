@@ -62,3 +62,4 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Button](docs/components/button.md)
 - [Details](docs/components/details.md)
 - [Error message](docs/components/error-message.md)
+- [Inset text](docs/components/inset-text.md)
