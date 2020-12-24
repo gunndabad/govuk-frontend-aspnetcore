@@ -39,8 +39,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal("<div class=\"govuk-inset-text\" id=\"my-id\">Inset text</div>", html);
+            var expectedHtml = @"<div class=""govuk-inset-text"" id=""my-id"">Inset text</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
     }
 }
