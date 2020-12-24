@@ -1196,47 +1196,5 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             return tagBuilder;
         }
-
-        public virtual TagBuilder GenerateWarningText(
-            string iconFallbackText,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (iconFallbackText == null)
-            {
-                throw new ArgumentNullException(nameof(iconFallbackText));
-            }
-
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-warning-text");
-
-            var icon = new TagBuilder("span");
-            icon.MergeCssClass("govuk-warning-text__icon");
-            icon.Attributes.Add("aria-hidden", "true");
-            icon.InnerHtml.Append("!");
-
-            tagBuilder.InnerHtml.AppendHtml(icon);
-
-            var text = new TagBuilder("strong");
-            text.MergeCssClass("govuk-warning-text__text");
-
-            var iconFallback = new TagBuilder("span");
-            iconFallback.MergeCssClass("govuk-warning-text__assistive");
-            iconFallback.InnerHtml.Append(iconFallbackText);
-
-            text.InnerHtml.AppendHtml(iconFallback);
-
-            text.InnerHtml.AppendHtml(content);
-
-            tagBuilder.InnerHtml.AppendHtml(text);
-
-            return tagBuilder;
-        }
     }
 }
