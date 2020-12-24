@@ -135,6 +135,15 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 excludeDiff: diff => diff is UnexpectedAttrDiff unexpectedAttrDiff &&
                     unexpectedAttrDiff.Test.Attribute.Name == "for");
 
+        [Theory]
+        [ComponentFixtureData("warning-text", typeof(OptionsJson.WarningText))]
+        public Task WarningText(ComponentTestCaseData<OptionsJson.WarningText> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateWarningText(options),
+                excludeDiff: diff => diff is UnexpectedNodeDiff unexpectedNodeDiff &&
+                    unexpectedNodeDiff.Test.Node.NodeValue == "GFA_test");
+
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
