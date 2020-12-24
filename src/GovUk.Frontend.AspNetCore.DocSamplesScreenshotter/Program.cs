@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -85,7 +86,14 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 Directory.CreateDirectory(screenShotDirectory);
 
                 await using var page = await browser.NewPageAsync();
-                await page.GoToAsync(fullyQualifiedPagePath);
+                var response = await page.GoToAsync(fullyQualifiedPagePath);
+
+                if (!response.Ok)
+                {
+                    throw new ArgumentException(
+                        $"Unsuccessful response ({(int)response.Status}) for '{pagePath}'.",
+                        nameof(pagePath));
+                }
 
                 var container = await page.WaitForSelectorAsync("#container");
                 await container.ScreenshotAsync(fullyQualifiedScreenshotPath);
