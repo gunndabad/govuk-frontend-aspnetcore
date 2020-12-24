@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var role = options.Role;
 
                     var legendIsPageHeading = options.Legend?.IsPageHeading ??
-                        ComponentDefaults.Fieldset.Legend.IsPageHeading;
+                        ComponentGenerator.FieldsetLegendDefaultIsPageHeading;
 
                     var legendContent = options.Legend != null ?
                         TextOrHtmlHelper.GetHtmlContent(options.Legend.Text, options.Legend.Html) :
@@ -26,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var legendAttributes = new Dictionary<string, string>()
                         .MergeAttribute("class", options.Legend?.Classes);
 
-                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
+                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
 
                     var attributes = options.Attributes.ToAttributesDictionary()
                         .MergeAttribute("class", options.Classes);
