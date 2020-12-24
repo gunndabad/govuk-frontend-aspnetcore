@@ -663,43 +663,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
         }
 
-        public virtual TagBuilder GenerateLabel(
-            string @for,
-            bool isPageHeading,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (@for == null)
-            {
-                throw new ArgumentNullException(nameof(@for));
-            }
-
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("label");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-label");
-            tagBuilder.Attributes.Add("for", @for);
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            if (isPageHeading)
-            {
-                var heading = new TagBuilder("h1");
-                heading.MergeCssClass("govuk-label-wrapper");
-
-                heading.InnerHtml.AppendHtml(tagBuilder);
-
-                return heading;
-            }
-            else
-            {
-                return tagBuilder;
-            }
-        }
-
         public virtual TagBuilder GeneratePanel(
             int titleHeadingLevel,
             IHtmlContent titleContent,

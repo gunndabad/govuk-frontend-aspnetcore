@@ -96,6 +96,38 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     return generator.GenerateHint(options.Id, content, attributes).RenderToString();
                 });
 
+        [Theory]
+        [ComponentFixtureData("label", typeof(OptionsJson.Label), exclude: "empty")]
+        public Task Label(ComponentTestCaseData<OptionsJson.Label> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (_, options) =>
+                {
+                    // No tag helper for this element - go direct to ComponentGenerator
+
+                    var attributes = (options.Attributes ?? new Dictionary<string, object>())
+                        .ToDictionary(a => a.Key, a => a.Value.ToString());
+
+                    if (options.Classes != null)
+                    {
+                        attributes.Add("class", options.Classes);
+                    }
+
+                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ??
+                        new HtmlString(string.Empty);
+
+                    var generator = new ComponentGenerator();
+
+                    return generator.GenerateLabel(
+                            options.For ?? "GFA_test",
+                            options.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading,
+                            content,
+                            attributes)
+                        .RenderToString();
+                },
+                excludeDiff: diff => diff is UnexpectedAttrDiff unexpectedAttrDiff &&
+                    unexpectedAttrDiff.Test.Attribute.Name == "for");
+
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
         private async Task CheckTagHelperOutputMatchesExpectedHtml<TOptions>(
