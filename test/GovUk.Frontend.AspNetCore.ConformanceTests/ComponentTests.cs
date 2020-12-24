@@ -97,6 +97,13 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 });
 
         [Theory]
+        [ComponentFixtureData("inset-text", typeof(OptionsJson.InsetText))]
+        public Task InsetText(ComponentTestCaseData<OptionsJson.InsetText> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateInsetText(options));
+
+        [Theory]
         [ComponentFixtureData("label", typeof(OptionsJson.Label), exclude: "empty")]
         public Task Label(ComponentTestCaseData<OptionsJson.Label> data) =>
             CheckTagHelperOutputMatchesExpectedHtml(
