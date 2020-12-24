@@ -1,32 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-warning-text", TagStructure = TagStructure.NormalOrSelfClosing)]
+    /// <summary>
+    /// Generates a GDS warning text component.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [OutputElementHint(ComponentGenerator.WarningTextElement)]
     public class WarningTextTagHelper : TagHelper
     {
-        private const string IconFallbackTextAttributeName = "icon-fallback-text";
-        
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
+        internal const string TagName = "govuk-warning-text";
 
-        public WarningTextTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        private const string IconFallbackTextAttributeName = "icon-fallback-text";
+
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private string? _iconFallbackText;
+
+        /// <summary>
+        /// Creates a new <see cref="WarningTextTagHelper"/>.
+        /// </summary>
+        public WarningTextTagHelper()
+            : this(htmlGenerator: null)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(IconFallbackTextAttributeName)]
-        public string IconFallbackText { get; set; }
+        internal WarningTextTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        }
 
+        /// <summary>
+        /// The fallback text for the icon.
+        /// </summary>
+        [HtmlAttributeName(IconFallbackTextAttributeName)]
+        [DisallowNull]
+        public string? IconFallbackText
+        {
+            get => _iconFallbackText;
+            set
+            {
+                _iconFallbackText = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
+            }
+        }
+
+        /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (IconFallbackText == null)
             {
-                throw new InvalidOperationException(
-                    $"You must specify a value for the '{IconFallbackTextAttributeName}' attribute.");
+                throw ExceptionHelper.TheAttributeMustBeSpecified(IconFallbackTextAttributeName);
             }
 
             var childContent = await output.GetChildContentAsync();
