@@ -1,8 +1,12 @@
 #if NETCOREAPP3_1
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Diffing.Core;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -66,6 +70,31 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             CheckTagHelperOutputMatchesExpectedHtml(
                 data,
                 (generator, options) => generator.GenerateErrorMessage(options));
+
+        [Theory]
+        [ComponentFixtureData("hint", typeof(OptionsJson.Hint))]
+        public Task Hint(ComponentTestCaseData<OptionsJson.Hint> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (_, options) =>
+                {
+                    // No tag helper for this element - go direct to ComponentGenerator
+
+                    var attributes = (options.Attributes ?? new Dictionary<string, object>())
+                        .ToDictionary(a => a.Key, a => a.Value.ToString());
+
+                    if (options.Classes != null)
+                    {
+                        attributes.Add("class", options.Classes);
+                    }
+
+                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ??
+                        new HtmlString(string.Empty);
+
+                    var generator = new ComponentGenerator();
+
+                    return generator.GenerateHint(options.Id, content, attributes).RenderToString();
+                });
 
         protected Task<string> RenderRazorTemplate(string template) => _fixture.RenderRazorTemplate(template);
 
