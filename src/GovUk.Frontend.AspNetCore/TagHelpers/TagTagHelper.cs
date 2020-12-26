@@ -1,20 +1,36 @@
-﻿using System;
+#nullable enable
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-tag", TagStructure = TagStructure.NormalOrSelfClosing)]
+    /// <summary>
+    /// Generates a GDS tag component.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [OutputElementHint(ComponentGenerator.TagElement)]
     public class TagTagHelper : TagHelper
     {
+        internal const string TagName = "govuk-tag";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        public TagTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        /// <summary>
+        /// Creates a new <see cref="TagTagHelper"/>.
+        /// </summary>
+        public TagTagHelper()
+            : this(htmlGenerator: null)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        internal TagTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        }
+
+        /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var childContent = await output.GetChildContentAsync();

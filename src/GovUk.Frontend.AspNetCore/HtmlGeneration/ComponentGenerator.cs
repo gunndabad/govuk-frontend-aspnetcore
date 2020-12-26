@@ -1115,23 +1115,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateTag(
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("strong");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-tag");
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateTextArea(
             bool haveError,
             string id,
