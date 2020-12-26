@@ -136,6 +136,13 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     unexpectedAttrDiff.Test.Attribute.Name == "for");
 
         [Theory]
+        [ComponentFixtureData("tag", typeof(OptionsJson.Tag))]
+        public Task Tag(ComponentTestCaseData<OptionsJson.Tag> data) =>
+            CheckTagHelperOutputMatchesExpectedHtml(
+                data,
+                (generator, options) => generator.GenerateTag(options));
+
+        [Theory]
         [ComponentFixtureData("warning-text", typeof(OptionsJson.WarningText))]
         public Task WarningText(ComponentTestCaseData<OptionsJson.WarningText> data) =>
             CheckTagHelperOutputMatchesExpectedHtml(
