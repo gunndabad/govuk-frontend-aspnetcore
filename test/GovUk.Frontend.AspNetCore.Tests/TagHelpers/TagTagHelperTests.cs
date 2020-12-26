@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class TagTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_WithContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -36,8 +36,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal("<strong class=\"govuk-tag\">A tag</strong>", html);
+            var expectedHtml = @"<strong class=""govuk-tag"">A tag</strong>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
     }
 }

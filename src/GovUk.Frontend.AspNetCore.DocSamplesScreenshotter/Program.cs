@@ -46,6 +46,8 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("ErrorMessage/ErrorMessageWithOverridenVisuallyHiddenText", "error-message-with-overriden-visually-hidden-text.png"),
                 ("ErrorMessage/ErrorMessageWithModelStateError", "error-message-with-modelstate-error.png"),
                 ("InsetText/InsetText", "inset-text.png"),
+                ("Tag/DefaultTag", "tag-default.png"),
+                ("Tag/TagWithClass", "tag-with-class.png"),
                 ("WarningText/WarningText", "warning-text.png")
             });
 
