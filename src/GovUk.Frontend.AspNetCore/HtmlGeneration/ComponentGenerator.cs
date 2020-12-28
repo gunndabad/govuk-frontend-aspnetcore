@@ -671,43 +671,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GeneratePhaseBanner(
-            IHtmlContent tagContent,
-            IDictionary<string, string> tabAttributes,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (tagContent == null)
-            {
-                throw new ArgumentNullException(nameof(tagContent));
-            }
-
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-phase-banner");
-
-            var contentTagBuilder = new TagBuilder("p");
-            contentTagBuilder.MergeCssClass("govuk-phase-banner__content");
-
-            var tagTagBuilder = GenerateTag(tagContent, tabAttributes);
-            tagTagBuilder.MergeCssClass("govuk-phase-banner__content__tag");
-            contentTagBuilder.InnerHtml.AppendHtml(tagTagBuilder);
-
-            var textTagBuilder = new TagBuilder("span");
-            textTagBuilder.MergeCssClass("govuk-phase-banner__text");
-            textTagBuilder.InnerHtml.AppendHtml(content);
-            contentTagBuilder.InnerHtml.AppendHtml(textTagBuilder);
-
-            tagBuilder.InnerHtml.AppendHtml(contentTagBuilder);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateRadios(
             string name,
             bool isConditional,
