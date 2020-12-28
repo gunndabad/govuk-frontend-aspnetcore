@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
@@ -10,76 +9,76 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 {
-    public class PhaseBannerTagHelperTests
+    public class PhaseBannerTagTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
+        public async Task ProcessAsync_AddsToContext()
         {
             // Arrange
+            var phaseBannerContext = new PhaseBannerContext();
+
             var context = new TagHelperContext(
-                tagName: "govuk-phase-banner",
+                tagName: "govuk-phase-banner-tag",
                 allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(PhaseBannerContext), phaseBannerContext }
+                },
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-phase-banner",
+                "govuk-phase-banner-tag",
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var pbContext = context.GetContextItem<PhaseBannerContext>();
-                    pbContext.SetTag(attributes: null, content: new HtmlString("Alpha"));
-
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Phase message");
+                    tagHelperContent.SetContent("Legend message");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new PhaseBannerTagHelper();
+            var tagHelper = new PhaseBannerTagTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var expectedHtml = @"
-<div class=""govuk-phase-banner"">
-    <p class=""govuk-phase-banner__content"">
-        <strong class=""govuk-phase-banner__content__tag govuk-tag"">Alpha</strong>
-        <span class=""govuk-phase-banner__text"">Phase message</span>
-    </p>
-</div>";
-
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            Assert.Equal("Legend message", phaseBannerContext.Tag?.Content.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_MissingIconFallbackText_ThrowsInvalidOperationException()
+        public async Task ProcessAsync_TagAlreadySpecified_ThrowsInvalidOperationException()
         {
             // Arrange
+            var phaseBannerContext = new PhaseBannerContext();
+            phaseBannerContext.SetTag(attributes: null, content: new HtmlString("Existing tag"));
+
             var context = new TagHelperContext(
-                tagName: "govuk-phase-banner",
+                tagName: "govuk-phase-banner-tag",
                 allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(PhaseBannerContext), phaseBannerContext }
+                },
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-phase-banner",
+                "govuk-phase-banner-tag",
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Phase message");
+                    tagHelperContent.SetContent("Legend message");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new PhaseBannerTagHelper(new ComponentGenerator());
+            var tagHelper = new PhaseBannerTagTagHelper();
 
             // Act
             var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("A <govuk-phase-banner-tag> element must be provided.", ex.Message);
+            Assert.Equal("Only one <govuk-phase-banner-tag> element is permitted within each <govuk-phase-banner>.", ex.Message);
         }
     }
 }
