@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
 {
-    public class Accordion
+    public record Accordion
     {
         public string Id { get; set; }
         public int? HeadingLevel { get; set; }
@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public IList<AccordionItem> Items { get; set; }
     }
 
-    public class AccordionItem
+    public record AccordionItem
     {
         public AccordionItemHeading Heading { get; set; }
         public AccordionItemSummary Summary { get; set; }
@@ -19,19 +19,19 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public bool? Expanded { get; set; }
     }
 
-    public class AccordionItemHeading
+    public record AccordionItemHeading
     {
         public string Text { get; set; }
         public string Html { get; set; }
     }
 
-    public class AccordionItemSummary
+    public record AccordionItemSummary
     {
         public string Text { get; set; }
         public string Html { get; set; }
     }
 
-    public class AccordionItemContent
+    public record AccordionItemContent
     {
         public string Text { get; set; }
         public string Html { get; set; }
