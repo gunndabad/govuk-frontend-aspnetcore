@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
 {
-    public class Details
+    public record Details
     {
         public string Id { get; set; }
         public bool? Open { get; set; }
