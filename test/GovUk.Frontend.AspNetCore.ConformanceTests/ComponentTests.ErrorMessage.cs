@@ -1,5 +1,6 @@
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -11,23 +12,24 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         public void ErrorMessage(ComponentTestCaseData<OptionsJson.ErrorMessage> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
-                (generator, options) =>
-                {
-                    var visuallyHiddenText = options.VisuallyHiddenText switch
-                    {
-                        bool flag when flag == false => string.Empty,
-                        string str => str,
-                        _ => ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText
-                    };
+                (generator, options) => BuildErrorMessage(generator, options).RenderToString());
 
-                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+        private static IHtmlContent BuildErrorMessage(ComponentGenerator generator, OptionsJson.ErrorMessage options)
+        {
+            var visuallyHiddenText = options.VisuallyHiddenText switch
+            {
+                bool flag when flag == false => string.Empty,
+                string str => str,
+                _ => ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText
+            };
 
-                    var attributes = options.Attributes.ToAttributesDictionary()
-                        .MergeAttribute("class", options.Classes)
-                        .MergeAttribute("id", options.Id);
+            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
 
-                    return generator.GenerateErrorMessage(visuallyHiddenText, content, attributes)
-                        .RenderToString();
-                });
+            var attributes = options.Attributes.ToAttributesDictionary()
+                .MergeAttribute("class", options.Classes)
+                .MergeAttribute("id", options.Id);
+
+            return generator.GenerateErrorMessage(visuallyHiddenText, content, attributes);
+        }
     }
 }

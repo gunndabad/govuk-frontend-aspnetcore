@@ -1,6 +1,7 @@
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -14,19 +15,25 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+                    var labelOptions = options with { For = options.For ?? "GFA_test" };
 
-                    var attributes = options.Attributes.ToAttributesDictionary()
-                        .MergeAttribute("class", options.Classes);
-
-                    return generator.GenerateLabel(
-                            options.For ?? "GFA_test",
-                            options.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading,
-                            content,
-                            attributes)
-                        .RenderToString();
+                    return BuildLabel(generator, labelOptions).RenderToString();
                 },
                 excludeDiff: diff => diff is UnexpectedAttrDiff unexpectedAttrDiff &&
                     unexpectedAttrDiff.Test.Attribute.Name == "for");
+
+        private static IHtmlContent BuildLabel(ComponentGenerator generator, OptionsJson.Label options)
+        {
+            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+
+            var attributes = options.Attributes.ToAttributesDictionary()
+                .MergeAttribute("class", options.Classes);
+
+            return generator.GenerateLabel(
+                options.For,
+                options.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading,
+                content,
+                attributes);
+        }
     }
 }
