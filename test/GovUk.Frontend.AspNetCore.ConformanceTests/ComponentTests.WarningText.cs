@@ -1,4 +1,3 @@
-using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
@@ -13,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var iconFallbackText = options.IconFallbackText ?? "GFA_test";
+                    var iconFallbackText = options.IconFallbackText;
                     var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
 
                     var attributes = options.Attributes.ToAttributesDictionary()
@@ -21,8 +20,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
                     return generator.GenerateWarningText(iconFallbackText, content, attributes)
                         .RenderToString();
-                },
-                excludeDiff: diff => diff is UnexpectedNodeDiff unexpectedNodeDiff &&
-                    unexpectedNodeDiff.Test.Node.NodeValue == "GFA_test");
+                });
     }
 }

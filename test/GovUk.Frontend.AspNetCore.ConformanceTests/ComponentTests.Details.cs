@@ -15,10 +15,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 {
                     var open = options.Open ?? ComponentGenerator.DetailsDefaultOpen;
 
-                    var summaryContent = TextOrHtmlHelper.GetHtmlContent(options.SummaryText, options.SummaryHtml) ??
-                        _emptyContent;
+                    var summaryContent = TextOrHtmlHelper.GetHtmlContent(options.SummaryText, options.SummaryHtml);
 
-                    var textContent = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+                    var textContent = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
                     var attributes = options.Attributes.ToAttributesDictionary()
                         .MergeAttribute("class", options.Classes)
