@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Linq;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -8,8 +9,19 @@ namespace GovUk.Frontend.AspNetCore
         public static InvalidOperationException AChildElementMustBeProvided(string childElementTagName) =>
             new InvalidOperationException($"A <{childElementTagName}> element must be provided.");
 
-        public static InvalidOperationException AtLeastOneOfAttributesMustBeProvided(string attr1, string attr2) =>
-            new InvalidOperationException($"At least one of the '{attr1}' and '{attr2}' attributes must be provided.");
+        public static InvalidOperationException AtLeastOneOfAttributesMustBeProvided(params string[] attributeNames)
+        {
+            if (attributeNames.Length < 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(attributeNames));
+            }
+
+            var quotedNames = attributeNames.Select(a => $"'{a}'").ToArray();
+
+            var attrsList = string.Join(", ", quotedNames.SkipLast(2).Append(string.Join(" and ", quotedNames.TakeLast(2))));
+
+            return new InvalidOperationException($"At least one of the {attrsList} attributes must be provided.");
+        }
 
         public static InvalidOperationException ChildElementMustBeSpecifiedBefore(
             string childElementTagName, string beforeSiblingTagName) =>
