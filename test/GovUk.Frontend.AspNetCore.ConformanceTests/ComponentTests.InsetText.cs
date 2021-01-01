@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 (generator, options) =>
                 {
                     var id = options.Id;
-                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
                     var attributes = options.Attributes.ToAttributesDictionary()
                         .MergeAttribute("class", options.Classes);

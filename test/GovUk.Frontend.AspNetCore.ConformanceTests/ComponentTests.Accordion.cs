@@ -1,5 +1,4 @@
 using System.Linq;
-using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
@@ -18,7 +17,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var id = options.Id ?? "GFA_test";
                     var headingLevel = options.HeadingLevel.GetValueOrDefault(ComponentGenerator.AccordionDefaultHeadingLevel);
 
                     var attributes = options.Attributes.ToAttributesDictionary()
@@ -34,11 +32,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         })
                         .OrEmpty();
 
-                    return generator.GenerateAccordion(id, headingLevel, attributes, items)
+                    return generator.GenerateAccordion(options.Id, headingLevel, attributes, items)
                         .RenderToString();
-                },
-                excludeDiff: diff => diff is AttrDiff attrDiff &&
-                    ((attrDiff.Test.Attribute.Name == "id" && attrDiff.Test.Attribute.Value.StartsWith("GFA_test")) ||
-                    (attrDiff.Test.Attribute.Name == "aria-labelledby" && attrDiff.Test.Attribute.Value.StartsWith("GFA_test"))));
+                });
     }
 }
