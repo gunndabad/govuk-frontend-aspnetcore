@@ -17,14 +17,6 @@ namespace GovUk.Frontend.AspNetCore
             public const string Title = "There is a problem";
         }
 
-        public static class Fieldset
-        {
-            public static class Legend
-            {
-                public const bool IsPageHeading = false;
-            }
-        }
-
         public static class Input
         {
             public const bool Disabled = false;

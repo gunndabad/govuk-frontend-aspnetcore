@@ -403,62 +403,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateFieldset(
-            string describedBy,
-            string role,
-            bool? legendIsPageHeading,
-            IHtmlContent legendContent,
-            IDictionary<string, string> legendAttributes,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (legendContent != null && !legendIsPageHeading.HasValue)
-            {
-                throw new ArgumentNullException(
-                    nameof(legendIsPageHeading),
-                    $"{nameof(legendIsPageHeading)} must be specified when {nameof(legendContent)} is specified.");
-            }
-
-            var tagBuilder = new TagBuilder("fieldset");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-fieldset");
-
-            if (role != null)
-            {
-                tagBuilder.Attributes.Add("role", role);
-            }
-
-            if (describedBy != null)
-            {
-                tagBuilder.Attributes.Add("aria-describedby", describedBy);
-            }
-
-            if (legendContent != null)
-            {
-                var legend = new TagBuilder("legend");
-                legend.MergeAttributes(legendAttributes);
-                legend.MergeCssClass("govuk-fieldset__legend");
-
-                if (legendIsPageHeading == true)
-                {
-                    var h1 = new TagBuilder("h1");
-                    h1.MergeCssClass("govuk-fieldset__heading");
-                    h1.InnerHtml.AppendHtml(legendContent);
-                    legend.InnerHtml.AppendHtml(h1);
-                }
-                else
-                {
-                    legend.InnerHtml.AppendHtml(legendContent);
-                }
-
-                tagBuilder.InnerHtml.AppendHtml(legend);
-            }
-            
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateFileUpload(
             bool haveError,
             string id,

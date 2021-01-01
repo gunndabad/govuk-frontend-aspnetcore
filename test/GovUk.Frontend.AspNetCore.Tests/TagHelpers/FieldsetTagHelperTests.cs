@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
@@ -26,8 +27,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var fieldsetContext = (FieldsetContext)context.Items[typeof(FieldsetContext)];
-                    fieldsetContext.TrySetLegend(
+                    var fieldsetContext = context.GetContextItem<FieldsetContext>();
+
+                    fieldsetContext.SetLegend(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("Legend text"));
@@ -37,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new FieldsetTagHelper(new ComponentGenerator())
+            var tagHelper = new FieldsetTagHelper()
             {
                 DescribedBy = "describedby",
                 Role = "therole"
@@ -47,19 +49,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<fieldset aria-describedby=\"describedby\" class=\"govuk-fieldset\" role=\"therole\">" +
-                "<legend class=\"govuk-fieldset__legend\">" +
-                "Legend text" +
-                "</legend>" +
-                "Main content" +
-                "</fieldset>",
-                html);
+            var expectedHtml = @"
+<fieldset aria-describedby=""describedby"" class=""govuk-fieldset"" role=""therole"">
+    <legend class=""govuk-fieldset__legend"">
+        Legend text
+    </legend>
+    Main content
+</fieldset>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_IsPageHeadingGeneratesExpectedOutput()
+        public async Task ProcessAsync_LegendHasIsPageHeading_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -73,18 +75,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var fieldsetContext = (FieldsetContext)context.Items[typeof(FieldsetContext)];
-                    fieldsetContext.TrySetLegend(
+                    var fieldsetContext = context.GetContextItem<FieldsetContext>();
+
+                    fieldsetContext.SetLegend(
                         isPageHeading: true,
                         attributes: null,
                         content: new HtmlString("Legend text"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Main text");
+                    tagHelperContent.SetContent("Main content");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new FieldsetTagHelper(new ComponentGenerator())
+            var tagHelper = new FieldsetTagHelper()
             {
                 DescribedBy = "describedby",
                 Role = "therole"
@@ -94,15 +97,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal(
-                "<fieldset aria-describedby=\"describedby\" class=\"govuk-fieldset\" role=\"therole\">" +
-                "<legend class=\"govuk-fieldset__legend\">" +
-                "<h1 class=\"govuk-fieldset__heading\">Legend text</h1>" +
-                "</legend>" +
-                "Main text" +
-                "</fieldset>",
-                html);
+            var expectedHtml = @"
+<fieldset aria-describedby=""describedby"" class=""govuk-fieldset"" role=""therole"">
+    <legend class=""govuk-fieldset__legend"">
+        <h1 class=""govuk-fieldset__heading"">Legend text</h1>
+    </legend>
+    Main content
+</fieldset>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
     }
 }
