@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
         private static IHtmlContent BuildLabel(ComponentGenerator generator, OptionsJson.Label options)
         {
-            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
             var attributes = options.Attributes.ToAttributesDictionary()
                 .MergeAttribute("class", options.Classes);
