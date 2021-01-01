@@ -25,12 +25,6 @@ namespace GovUk.Frontend.AspNetCore
             }
         }
 
-        public static class Input
-        {
-            public const bool Disabled = false;
-            public const string Type = "text";
-        }
-
         public static class Select
         {
             public const bool Disabled = false;

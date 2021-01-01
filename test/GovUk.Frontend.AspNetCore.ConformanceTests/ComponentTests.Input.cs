@@ -1,3 +1,4 @@
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -11,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var type = options.Type ?? ComponentDefaults.Input.Type;
+                    var type = options.Type ?? ComponentGenerator.InputDefaultType;
 
                     var prefixContent = options.Prefix != null ?
                         TextOrHtmlHelper.GetHtmlContent(options.Prefix.Text, options.Prefix.Html) :
@@ -63,7 +64,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 options.Pattern,
                                 options.Inputmode,
                                 options.Spellcheck,
-                                ComponentDefaults.Input.Disabled,
+                                ComponentGenerator.InputDefaultDisabled,
                                 attributes,
                                 prefixContent,
                                 prefixAttributes,
