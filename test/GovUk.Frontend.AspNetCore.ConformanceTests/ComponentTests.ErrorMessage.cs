@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 _ => ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText
             };
 
-            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
+            var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
             var attributes = options.Attributes.ToAttributesDictionary()
                 .MergeAttribute("class", options.Classes)
