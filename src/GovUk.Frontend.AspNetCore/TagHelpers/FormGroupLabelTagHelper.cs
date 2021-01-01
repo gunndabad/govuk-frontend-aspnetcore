@@ -9,6 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the label in a GDS form group component.
     /// </summary>
     [HtmlTargetElement(FileUploadTagHelper.LabelTagName, ParentTag = FileUploadTagHelper.TagName)]
+    [HtmlTargetElement(SelectTagHelper.LabelTagName, ParentTag = SelectTagHelper.TagName)]	
     [HtmlTargetElement(TextInputTagHelper.LabelTagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.LabelElement)]
     public class FormGroupLabelTagHelper : TagHelper

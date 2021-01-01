@@ -1,4 +1,5 @@
 using System.Linq;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Xunit;
 
@@ -10,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         [ComponentFixtureData(
             "select",
             typeof(OptionsJson.Select),
+            only: "default",
             exclude: new[]
             {
                 "with falsey values"
@@ -19,15 +21,15 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var disabled = ComponentDefaults.Select.Disabled;
+                    var disabled = ComponentGenerator.SelectDefaultDisabled;
 
                     var items = options.Items.OrEmpty()
-                        .Select(i => new SelectListItem()
+                        .Select(i => new SelectItem()
                         {
                             Attributes = i.Attributes.ToAttributesDictionary(),
                             Content = new HtmlString(i.Text),
-                            IsDisabled = i.Disabled ?? false,
-                            IsSelected = i.Selected ?? false,
+                            Disabled = i.Disabled ?? ComponentGenerator.SelectItemDefaultDisabled,
+                            Selected = i.Selected ?? ComponentGenerator.SelectItemDefaultSelected,
                             Value = i.Value ?? string.Empty
                         });
 
@@ -51,6 +53,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         hintOptions,
                         errorMessageOptions,
                         options.FormGroup,
+                        fieldset: null,
                         (haveError, describedBy) =>
                         {
                             AppendToDescribedBy(ref describedBy, options.DescribedBy);
