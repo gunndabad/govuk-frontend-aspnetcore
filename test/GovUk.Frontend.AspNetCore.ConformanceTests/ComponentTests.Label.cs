@@ -1,4 +1,3 @@
-using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
@@ -15,12 +14,10 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var labelOptions = options with { For = options.For ?? "GFA_test" };
+                    var labelOptions = options with { For = options.For };
 
                     return BuildLabel(generator, labelOptions).RenderToString();
-                },
-                excludeDiff: diff => diff is UnexpectedAttrDiff unexpectedAttrDiff &&
-                    unexpectedAttrDiff.Test.Attribute.Name == "for");
+                });
 
         private static IHtmlContent BuildLabel(ComponentGenerator generator, OptionsJson.Label options)
         {
