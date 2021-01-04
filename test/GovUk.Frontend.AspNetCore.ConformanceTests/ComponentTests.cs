@@ -53,6 +53,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             Hint hint,
             ErrorMessage errorMessage,
             FormGroup formGroup,
+            Fieldset fieldset,
             GenerateFormGroupElement generateElement)
         {
             var haveError = errorMessage != null;
@@ -89,9 +90,29 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             var element = generateElement(haveError, describedBy);
             contentBuilder.AppendHtml(element);
 
+            IHtmlContent content = contentBuilder;
+
+            if (fieldset != null)
+            {
+                AppendToDescribedBy(ref describedBy, fieldset.DescribedBy);
+
+                content = _componentGenerator.GenerateFieldset(
+                    describedBy,
+                    role: null,
+                    fieldset.Legend?.IsPageHeading ?? ComponentDefaults.Fieldset.Legend.IsPageHeading,
+                    legendContent: TextOrHtmlHelper.GetHtmlContent(
+                        fieldset.Legend?.Text,
+                        fieldset.Legend?.Html),
+                    legendAttributes: new Dictionary<string, string>()
+                        .MergeAttribute("class", fieldset.Legend?.Classes),
+                    content: contentBuilder,
+                    attributes: fieldset.Attributes.ToAttributesDictionary()
+                        .MergeAttribute("class", fieldset.Classes));
+            }
+
             return _componentGenerator.GenerateFormGroup(
                     haveError,
-                    contentBuilder,
+                    content,
                     attributes)
                 .RenderToString();
         }
