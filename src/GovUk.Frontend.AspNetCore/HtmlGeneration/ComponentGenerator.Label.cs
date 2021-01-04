@@ -10,24 +10,27 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         internal const string LabelElement = "label";
         internal const bool LabelDefaultIsPageHeading = false;
 
-        public TagBuilder GenerateLabel(
+        public TagBuilder? GenerateLabel(
             string? @for,
             bool isPageHeading,
-            IHtmlContent content,
+            IHtmlContent? content,
             IDictionary<string, string>? attributes)
         {
-            Guard.ArgumentNotNull(nameof(content), content);
+            TagBuilder? tagBuilder = null;
 
-            var tagBuilder = new TagBuilder(LabelElement);
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-label");
-
-            if (@for != null)
+            if (content != null)
             {
-                tagBuilder.Attributes.Add("for", @for);
-            }
+                tagBuilder = new TagBuilder(LabelElement);
+                tagBuilder.MergeAttributes(attributes);
+                tagBuilder.MergeCssClass("govuk-label");
 
-            tagBuilder.InnerHtml.AppendHtml(content);
+                if (@for != null)
+                {
+                    tagBuilder.Attributes.Add("for", @for);
+                }
+
+                tagBuilder.InnerHtml.AppendHtml(content);
+            }
 
             if (isPageHeading)
             {
