@@ -24,7 +24,8 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
         public static void HtmlEqual(
             string expected,
             string actual,
-            Predicate<IDiff> excludeDiff = null)
+            Predicate<IDiff> excludeDiff = null,
+            bool outputFullMarkupOnFailure = false)
         {
             excludeDiff ??= _ => false;
 
@@ -38,11 +39,14 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
                 sb.AppendLine("AssertEx.HtmlEqual() Failure");
                 sb.AppendLine();
 
-                sb.AppendLine("Expected:");
-                sb.AppendLine(HtmlHelper.ParseHtmlElement(expected).OuterHtml);
-                sb.AppendLine();
-                sb.AppendLine("Actual:");
-                sb.AppendLine(HtmlHelper.ParseHtmlElement(actual).OuterHtml);
+                if (outputFullMarkupOnFailure)
+                {
+                    sb.AppendLine("Expected:");
+                    sb.AppendLine(HtmlHelper.ParseHtmlElement(expected).OuterHtml);
+                    sb.AppendLine();
+                    sb.AppendLine("Actual:");
+                    sb.AppendLine(HtmlHelper.ParseHtmlElement(actual).OuterHtml);
+                }
 
                 foreach (var diff in diffs)
                 {
