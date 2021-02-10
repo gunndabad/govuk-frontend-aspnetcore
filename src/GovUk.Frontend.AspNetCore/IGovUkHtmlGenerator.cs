@@ -124,6 +124,16 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
+        TagBuilder GenerateNotificationBanner(
+            NotificationBannerType type,
+            string role,
+            bool disableAutoFocus,
+            string titleId,
+            int? titleHeadingLevel,
+            IHtmlContent titleContent,
+            IHtmlContent content,
+            IDictionary<string, string> attributes);
+
         TagBuilder GeneratePanel(
             int titleHeadingLevel,
             IHtmlContent titleContent,
