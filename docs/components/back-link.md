@@ -28,9 +28,8 @@
 
 ### `<govuk-back-link>`
 
-Content is the inner HTML to use within the generated `<a>`. Defaults to "Back".
+The content is the HTML to use within the generated link. The default is `Back`.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
 | (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
-| * | | Any additional attributes will be copied onto the generated `<a>`. |

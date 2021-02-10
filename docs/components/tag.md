@@ -23,8 +23,4 @@
 
 ### `<govuk-tag>`
 
-Content is the inner HTML to use within the generated `<strong>`.
-
-| Attribute | Type | Description |
-| --- | --- | --- |
-| * | | Any additional attributes will be copied onto the generated `<a>`. |
+The content is the HTML to use within the generated component.
