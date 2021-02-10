@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether the details element should be expanded.
         /// </summary>
         /// <remarks>
-        /// Defaults to <c>false</c>.
+        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(OpenAttributeName)]
         public bool Open { get; set; } = ComponentGenerator.DetailsDefaultOpen;

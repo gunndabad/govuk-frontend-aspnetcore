@@ -40,17 +40,16 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `open` | `bool` | Whether the details element should be expanded. Defaults to `false`. |
-| * | | Any additional attributes will be copied onto the generated `<details>`. |
+| `open` | `bool` | Whether the details element should be expanded. The default is `false`. |
 
 ### `<govuk-details-summary>`
 
 *Required*\
-Content is the HTML for the summary.\
+The content is the HTML to use within the generated summary element.\
 Must be inside a `<govuk-details>` element.
 
 ### `<govuk-details-text>`
 
 *Required*\
-Content is the HTML for the disclosed part of the details element.\
+The content is the HTML to use within the disclosed part of the details element.\
 Must be inside a `<govuk-details>` element.
