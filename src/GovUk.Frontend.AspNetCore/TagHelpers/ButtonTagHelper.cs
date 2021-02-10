@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether this button is the main call to action on your service's start page.
         /// </summary>
         /// <remarks>
-        /// The defaults is <c>false</c>.
+        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(IsStartButtonAttributeName)]
         public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;

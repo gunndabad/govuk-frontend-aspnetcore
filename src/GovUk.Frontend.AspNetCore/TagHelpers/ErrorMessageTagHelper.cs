@@ -54,10 +54,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public ModelExpression? AspFor { get; set; }
 
         /// <summary>
-        /// A visually hidden prefix used before the error message.
+        /// The visually hidden prefix used before the error message.
         /// </summary>
         /// <remarks>
-        /// Defaults to <c>&quot;Error&quot;</c>.
+        /// The default is <c>&quot;Error&quot;</c>.
         /// </remarks>
         [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
         public string? VisuallyHiddenText { get; set; } = ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;

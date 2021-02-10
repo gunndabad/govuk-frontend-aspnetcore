@@ -18,5 +18,6 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `icon-fallback-text` | `string` | *Required* The fallback text for the icon. |
-| * | | Any additional attributes will be copied onto the generated `<div>`. |
+| `icon-fallback-text` | `string` | *Required* The fallback text for the icon. Cannot be `null` or empty. |
+
+The content is the HTML to use within the generated component.

@@ -37,6 +37,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// <summary>
         /// The fallback text for the icon.
         /// </summary>
+        /// <remarks>
+        /// Cannot be <c>null</c> or empty.
+        /// </remarks>
         [HtmlAttributeName(IconFallbackTextAttributeName)]
         [DisallowNull]
         public string? IconFallbackText

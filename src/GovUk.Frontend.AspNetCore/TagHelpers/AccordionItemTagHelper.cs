@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string ExpandedAttributeName = "expanded";
 
         /// <summary>
-        /// Whether the section should be expanded upon initial load or not.
+        /// Whether the section should be expanded upon initial load.
         /// </summary>
         /// <remarks>
         /// The default is <c>false</c>.
