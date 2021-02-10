@@ -104,24 +104,24 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `id` | `string` | *Required* Must be **unique** across the domain of your service (as the expanded state of individual instances of the component persists across page loads using [`sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)). Used as an `id` in the HTML for the accordion as a whole, and also as a prefix for the `id`s of the section contents and the buttons that open them, so that those `id`s can be the target of `aria-labelledby` and `aria-control` attributes. |
-| `heading-level` | `int` | Heading level, from 1 to 6. Default is `2`. |
+| `id` | `string` | *Required* The `id` attribute for the accordion. Must be unique across the domain of your service. Cannot be `null` or empty. |
+| `heading-level` | `int` | The heading level. Must be between `1` and `6` (inclusive). The default is `2`. |
 
 ### `<govuk-accordion-item>`
 
-Content is the HTML of each section, which is hidden when the section is closed.\
+The content is the HTML of the section, which is hidden when the section is closed.\
 Must be inside a `<govuk-accordion>` element.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `expanded` | `bool` | Whether the section should be expanded upon initial load or not. Default is `false`. |
+| `expanded` | `bool` | Whether the section should be expanded upon initial load. The default is `false`. |
 
 ### `<govuk-accordion-item-heading>`
 
-Content is the HTML of the header for each section which is used both as the title for each section, and as the button to open or close each section.\
+The content is the HTML of the header for each section which is used both as the title for each section, and as the button to open or close each section.\
 Must be inside a `<govuk-accordion-item>` element.
 
 ### `<govuk-accordion-item-summary>`
 
-Content is the HTML for summary line.\
+The content is the HTML for the summary line.\
 Must be inside a `<govuk-accordion-item>` element.

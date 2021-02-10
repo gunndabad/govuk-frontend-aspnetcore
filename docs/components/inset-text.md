@@ -18,5 +18,6 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `id` | `string` | The `id` attribute for the generated inset text container. |
-| * | | Any additional attributes will be copied onto the generated `<div>`. |
+| `id` | `string` | The `id` attribute for the inset text. |
+
+The content is the HTML to use within the generated component.
