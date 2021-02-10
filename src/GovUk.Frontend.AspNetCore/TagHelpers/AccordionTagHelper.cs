@@ -39,10 +39,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         /// <summary>
-        /// The heading level for the accordion.
+        /// The heading level.
         /// </summary>
         /// <remarks>
-        /// Must be between 1 and 6 (inclusive). The default is 2.
+        /// Must be between <c>1</c> and <c>6</c> (inclusive). The default is <c>2</c>.
         /// </remarks>
         [HtmlAttributeName(HeadingLevelAttributeName)]
         public int HeadingLevel
@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         /// <summary>
-        /// The id attribute for the accordion.
+        /// The <c>id</c> attribute for the accordion.
         /// </summary>
         /// <remarks>
         /// Must be unique across the domain of your service.
