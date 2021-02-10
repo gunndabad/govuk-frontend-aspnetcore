@@ -42,7 +42,7 @@
 </govuk-notification-banner>
 ```
 
-![Notification banner](../images/notification-banner.png)
+![Notification banner](../images/notification-banner-with-overriden-title.png)
 
 ## API
 
