@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace GovUk.Frontend.AspNetCore
@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore
 
         public static bool operator >=(Date left, Date right) => left._dt >= right._dt;
 
-        public static explicit operator Date(DateTime dt) => new Date(dt);
+        public static implicit operator Date(DateTime dt) => new Date(dt);
 
         public static int Compare(Date t1, Date t2) => DateTime.Compare(t1._dt, t2._dt);
 
