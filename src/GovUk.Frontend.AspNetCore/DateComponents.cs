@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 
 namespace GovUk.Frontend.AspNetCore
 {
     [Flags]
-    public enum DateParseErrorComponents
+    public enum DateComponents
     {
         None = 0,
         Day = 1,

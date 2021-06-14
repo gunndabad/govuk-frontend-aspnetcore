@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
 using Microsoft.AspNetCore.Hosting;
@@ -35,15 +35,16 @@ namespace GovUk.Frontend.AspNetCore
             services.TryAddSingleton<IGovUkHtmlGenerator, DefaultGovUkHtmlGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
             services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
+            services.AddScoped<DateInputParseErrorsProvider>();
 
             if (options.AddImportsToHtml)
             {
                 services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
             }
 
-            services.Configure<MvcOptions>(options =>
+            services.Configure<MvcOptions>(mvcOptions =>
             {
-                options.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider());
+                mvcOptions.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider(options));
             });
 
             return services;

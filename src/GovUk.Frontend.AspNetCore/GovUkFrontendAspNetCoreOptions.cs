@@ -1,7 +1,21 @@
-﻿namespace GovUk.Frontend.AspNetCore
+using System.Collections.Generic;
+
+namespace GovUk.Frontend.AspNetCore
 {
     public class GovUkFrontendAspNetCoreOptions
     {
-        public bool AddImportsToHtml { get; set; } = true;
+        public GovUkFrontendAspNetCoreOptions()
+        {
+            AddImportsToHtml = true;
+
+            DateInputModelConverters = new List<DateInputModelConverter>()
+            {
+                new DateDateInputModelConverter()
+            };
+        }
+
+        public bool AddImportsToHtml { get; set; }
+
+        public List<DateInputModelConverter> DateInputModelConverters { get; }
     }
 }
