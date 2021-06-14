@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper(), new DateInputParseErrorsProvider(), new GovUkFrontendAspNetCoreOptions())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -105,7 +105,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper(), new DateInputParseErrorsProvider(), new GovUkFrontendAspNetCoreOptions())
             {
                 IdPrefix = "my-id-prefix",
                 DescribedBy = "describedby",
@@ -177,7 +177,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new DateInputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper(), new DateInputParseErrorsProvider(), new GovUkFrontendAspNetCoreOptions())
             {
                 IdPrefix = "my-id",
                 DescribedBy = "describedby",
@@ -215,13 +215,22 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Theory]
-        [InlineData("Day is not valid.", null, null, true, false, false)]
-        [InlineData(null, "Month is not valid.", null, false, true, false)]
-        [InlineData(null, null, "Year is not valid.", false, false, true)]
+        [InlineData(DateInputParseErrors.MissingDay, true, false, false)]
+        [InlineData(DateInputParseErrors.MissingMonth, false, true, false)]
+        [InlineData(DateInputParseErrors.MissingYear, false, false, true)]
+        [InlineData(DateInputParseErrors.MissingDay | DateInputParseErrors.MissingMonth, true, true, false)]
+        [InlineData(DateInputParseErrors.MissingDay | DateInputParseErrors.MissingYear, true, false, true)]
+        [InlineData(DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingYear, false, true, true)]
+        [InlineData(DateInputParseErrors.MissingDay | DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidYear, true, true, true)]
+        [InlineData(DateInputParseErrors.InvalidDay, true, false, false)]
+        [InlineData(DateInputParseErrors.InvalidMonth, false, true, false)]
+        [InlineData(DateInputParseErrors.InvalidYear, false, false, true)]
+        [InlineData(DateInputParseErrors.InvalidDay | DateInputParseErrors.InvalidMonth, true, true, false)]
+        [InlineData(DateInputParseErrors.InvalidDay | DateInputParseErrors.InvalidYear, true, false, true)]
+        [InlineData(DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidYear, false, true, true)]
+        [InlineData(DateInputParseErrors.InvalidDay | DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidYear, true, true, true)]
         public async Task ProcessAsync_ErrorItemsNotSpecifiedAndErrorsFromModelBinder_InfersErrorItems(
-            string dayModelError,
-            string monthModelError,
-            string yearModelError,
+            DateInputParseErrors parseErrors,
             bool expectDayError,
             bool expectMonthError,
             bool expectYearError)
@@ -262,37 +271,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var viewContext = new ViewContext();
 
-            var errorComponents = (DateParseErrorComponents)0;
+            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+            dateInputParseErrorsProvider.SetErrorsForModel("", parseErrors);
 
-            if (dayModelError != null)
-            {
-                var dayModelExplorer = modelExplorer.GetExplorerForProperty("Day");
-                viewContext.ModelState.AddModelError(".Day", dayModelError);
-                errorComponents |= DateParseErrorComponents.Day;
-            }
-
-            if (monthModelError != null)
-            {
-                var monthModelExplorer = modelExplorer.GetExplorerForProperty("Month");
-                viewContext.ModelState.AddModelError(".Month", monthModelError);
-                errorComponents |= DateParseErrorComponents.Month;
-            }
-
-            if (yearModelError != null)
-            {
-                var yearModelExplorer = modelExplorer.GetExplorerForProperty("Year");
-                viewContext.ModelState.AddModelError(".Year", yearModelError);
-                errorComponents |= DateParseErrorComponents.Year;
-            }
-
-            if (errorComponents != 0)
-            {
-                viewContext.ModelState.AddModelError(
-                    "",
-                    new DateParseException("Invalid date.", errorComponents), modelExplorer.Metadata);
-            }
-
-            var tagHelper = new DateInputTagHelper(htmlGenerator.Object, new DefaultModelHelper())
+            var tagHelper = new DateInputTagHelper(htmlGenerator.Object, new DefaultModelHelper(), dateInputParseErrorsProvider, new GovUkFrontendAspNetCoreOptions())
             {
                 AspFor = new ModelExpression("", modelExplorer),
                 ViewContext = viewContext
@@ -397,7 +379,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 viewContext.ModelState.AddModelError(".Year", yearModelError);
             }
 
-            var tagHelper = new DateInputTagHelper(htmlGenerator.Object, new DefaultModelHelper())
+            var tagHelper = new DateInputTagHelper(htmlGenerator.Object, new DefaultModelHelper(), new DateInputParseErrorsProvider(), new GovUkFrontendAspNetCoreOptions())
             {
                 AspFor = new ModelExpression("", modelExplorer),
                 ViewContext = viewContext

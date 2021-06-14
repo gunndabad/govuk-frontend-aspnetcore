@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -20,12 +18,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string DisabledAttributeName = "disabled";
         private const string IdPrefixAttributeName = "id-prefix";
 
+        private readonly GovUkFrontendAspNetCoreOptions _options;
+        private readonly DateInputParseErrorsProvider _dateInputParseErrorsProvider;
+
         private Date? _value;
         private bool _valueSpecified = false;
 
-        public DateInputTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+        public DateInputTagHelper(
+            IGovUkHtmlGenerator htmlGenerator,
+            IModelHelper modelHelper,
+            DateInputParseErrorsProvider dateInputParseErrorsProvider,
+            GovUkFrontendAspNetCoreOptions options)
             : base(htmlGenerator, modelHelper)
         {
+            _dateInputParseErrorsProvider = dateInputParseErrorsProvider ?? throw new ArgumentNullException(nameof(dateInputParseErrorsProvider));
+            _options = options;
         }
 
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
@@ -92,24 +99,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var dateInputContext = (DateInputContext)context.Items[typeof(DateInputContext)];
             Debug.Assert(dateInputContext != null);
 
+            (int Day, int Month, int Year)? components = ResolveComponents();
+
             var deducedErrorItems = GetErrorItems();
 
             var day = CreateDateInputItem(
-                specifiedValue: Value?.Day.ToString() ?? string.Empty,
+                value: components?.Day,
                 useSpecifiedValue: _valueSpecified,
                 defaultLabel: "Day",
                 modelNameSuffix: DateInputModelBinder.DayComponentName,
                 DateInputErrorItems.Day);
 
             var month = CreateDateInputItem(
-                specifiedValue: Value?.Month.ToString() ?? string.Empty,
+                value: components?.Month,
                 useSpecifiedValue: _valueSpecified,
                 defaultLabel: "Month",
                 modelNameSuffix: DateInputModelBinder.MonthComponentName,
                 DateInputErrorItems.Month);
 
             var year = CreateDateInputItem(
-                specifiedValue: Value?.Year.ToString() ?? string.Empty,
+                value: components?.Year,
                 useSpecifiedValue: _valueSpecified,
                 defaultLabel: "Year",
                 modelNameSuffix: DateInputModelBinder.YearComponentName,
@@ -124,28 +133,29 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Attributes);
 
             DateInputItem CreateDateInputItem(
-                string specifiedValue,
+                int? value,
                 bool useSpecifiedValue,
                 string defaultLabel,
                 string modelNameSuffix,
                 DateInputErrorItems errorSource)
             {
-                // Value resolution rules:
-                //   if Value property is specified, use that (even if it's null);
-                //   otherwise use value from ModelState (which may be invalid if user has POSTed invalid date, say)
-
-                string resolvedItemValue = specifiedValue;
+                string resolvedItemValue = value?.ToString() ?? string.Empty;
 
                 if (!useSpecifiedValue)
                 {
                     Debug.Assert(AspFor != null);
 
-                    var itemModelExplorer = AspFor.ModelExplorer.GetExplorerForProperty(modelNameSuffix);
+                    // Note we cannot use ModelHelper.GetModelValue here since it will fall back to trying to get
+                    // the model from the expression, which may fail since this path is 'virtual'
+                    // i.e. `{AspFor}.Day` may not be a valid expression
 
-                    resolvedItemValue = ModelHelper.GetModelValue(
-                        ViewContext,
-                        itemModelExplorer,
-                        expression: $"{AspFor.Name}.{modelNameSuffix}");
+                    var itemModelExplorer = AspFor.ModelExplorer.GetExplorerForProperty(modelNameSuffix);
+                    var itemFullName = ModelHelper.GetFullHtmlFieldName(ViewContext, expression: $"{AspFor.Name}.{modelNameSuffix}");
+
+                    if (ViewContext.ViewData.ModelState.TryGetValue(itemFullName, out var entry) && entry.AttemptedValue != null)
+                    {
+                        resolvedItemValue = entry.AttemptedValue;
+                    }
                 }
 
                 var resolvedItemName = $"{ResolvedName}.{modelNameSuffix}";
@@ -180,32 +190,56 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Debug.Assert(AspFor != null);
                 Debug.Assert(ViewContext != null);
 
-                // If there is a DateParseException in ModelState for the bound property,
-                // use its ErrorComponents to deduce DateInputErrorItems
+                // If DateInputModelBinder was used for binding then we should have the specific parse errors available
 
                 var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
-                if (!ViewContext.ModelState.TryGetValue(fullName, out var modelState))
+
+                if (_dateInputParseErrorsProvider.TryGetErrorsForModel(fullName, out var parseErrors))
+                {
+                    var dateParseErrorComponents = parseErrors.GetComponentsWithErrors();
+
+                    return 0 |
+                        ((dateParseErrorComponents & DateComponents.Day) != 0 ? DateInputErrorItems.Day : 0) |
+                        ((dateParseErrorComponents & DateComponents.Month) != 0 ? DateInputErrorItems.Month : 0) |
+                        ((dateParseErrorComponents & DateComponents.Year) != 0 ? DateInputErrorItems.Year : 0);
+                }
+                else
                 {
                     return DateInputErrorItems.All;
                 }
+            }
 
-                var dateParseException = modelState.Errors
-                    .Select(e => e.Exception)
-                    .Where(e => e != null)
-                    .OfType<DateParseException>()
-                    .FirstOrDefault();
-
-                if (dateParseException == null)
+            (int Day, int Month, int Year)? ResolveComponents()
+            {
+                if (_valueSpecified)
                 {
-                    return DateInputErrorItems.All;
+                    if (Value == null)
+                    {
+                        return null;
+                    }
+
+                    var (year, month, day) = Value.Value;
+                    return (day, month, year);
                 }
 
-                var dateParseErrorComponents = dateParseException.ErrorComponents;
+                if (AspFor != null && AspFor.Model is not null)
+                {
+                    var modelType = AspFor.ModelExplorer.ModelType;
 
-                return 0 |
-                    ((dateParseErrorComponents & DateParseErrorComponents.Day) != 0 ? DateInputErrorItems.Day : 0) |
-                    ((dateParseErrorComponents & DateParseErrorComponents.Month) != 0 ? DateInputErrorItems.Month : 0) |
-                    ((dateParseErrorComponents & DateParseErrorComponents.Year) != 0 ? DateInputErrorItems.Year : 0);
+                    // TODO Consider stashing the actual converter instance used by the model binder and using that
+                    foreach (var converter in _options.DateInputModelConverters)
+                    {
+                        if (converter.CanConvertModelType(modelType))
+                        {
+                            var components = converter.GetElementsFromModel(modelType, AspFor.Model);
+                            return components;
+                        }
+                    }
+
+                    throw new Exception($"No {nameof(DateInputModelConverter)} registered that can convert {modelType.FullName}.");
+                }
+
+                return null;
             }
         }
 
