@@ -1,51 +1,80 @@
-﻿using System;
+#nullable enable
+using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Html;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-panel")]
+    /// <summary>
+    /// Generates a GDS panel component.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [OutputElementHint(ComponentGenerator.PanelElement)]
+    [RestrictChildren(PanelTitleTagHelper.TagName, PanelBodyTagHelper.TagName)]
     public class PanelTagHelper : TagHelper
     {
+        internal const string TagName = "govuk-panel";
+
         private const string HeadingLevelAttributeName = "heading-level";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
+        private int _headingLevel = ComponentGenerator.PanelDefaultHeadingLevel;
 
-        public PanelTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        /// <summary>
+        /// Creates a new <see cref="PanelTagHelper"/>.
+        /// </summary>
+        public PanelTagHelper()
+            : this(null)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
-        [HtmlAttributeName(HeadingLevelAttributeName)]
-        public int HeadingLevel { get; set; } = ComponentDefaults.Panel.HeadingLevel;
+        internal PanelTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        }
 
+        /// <summary>
+        /// The heading level.
+        /// </summary>
+        /// <remarks>
+        /// Must be between <c>1</c> and <c>6</c> (inclusive). The default is <c>1</c>.
+        /// </remarks>
+        [HtmlAttributeName(HeadingLevelAttributeName)]
+        public int HeadingLevel
+        {
+            get => _headingLevel;
+            set
+            {
+                if (value < ComponentGenerator.PanelMinHeadingLevel ||
+                    value > ComponentGenerator.PanelMaxHeadingLevel)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        $"{nameof(HeadingLevel)} must be between {ComponentGenerator.PanelMinHeadingLevel} and {ComponentGenerator.PanelMaxHeadingLevel}.");
+                }
+
+                _headingLevel = value;
+            }
+        }
+
+        /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            if (HeadingLevel < 1 || HeadingLevel > 6)
-            {
-                throw new InvalidOperationException(
-                    $"The '{HeadingLevelAttributeName}' attribute must be between 1 and 6.");
-            }
-
             var panelContext = new PanelContext();
 
-            IHtmlContent childContent;
-            using (context.SetScopedContextItem(typeof(PanelContext), panelContext))
+            using (context.SetScopedContextItem(panelContext))
             {
-                childContent = await output.GetChildContentAsync();
+                await output.GetChildContentAsync();
             }
 
-            if (panelContext.Title == null)
-            {
-                throw new InvalidOperationException("Missing <govuk-panel-title> element.");
-            }
+            panelContext.ThrowIfNotComplete();
 
             var tagBuilder = _htmlGenerator.GeneratePanel(
                 HeadingLevel,
                 panelContext.Title,
-                childContent,
+                panelContext.Body,
                 output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
@@ -54,45 +83,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.Attributes.Clear();
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
-    }
-
-    [HtmlTargetElement("govuk-panel-title", ParentTag = "govuk-panel")]
-    public class PanelTitleTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
-
-            var content = await output.GetChildContentAsync();
-
-            if (!panelContext.TrySetTitle(content.Snapshot()))
-            {
-                throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
-            }
-
-            output.SuppressOutput();
-        }
-    }
-
-    internal class PanelContext
-    {
-        public IHtmlContent Title { get; private set; }
-
-        public bool TrySetTitle(IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Title != null)
-            {
-                return false;
-            }
-
-            Title = content;
-            return true;
         }
     }
 }
