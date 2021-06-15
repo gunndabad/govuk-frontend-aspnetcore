@@ -1,3 +1,4 @@
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Xunit;
@@ -13,7 +14,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                    data,
                    (generator, options) =>
                    {
-                       var href = options.Href ?? "#content";
+                       var href = options.Href ?? ComponentGenerator.SkipLinkDefaultHref;
 
                        var attributes = options.Attributes.ToAttributesDictionary()
                            .MergeAttribute("class", options.Classes);

@@ -853,30 +853,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateSkipLink(
-            string href,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (href == null)
-            {
-                throw new ArgumentNullException(nameof(href));
-            }
-
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("a");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-skip-link");
-            tagBuilder.Attributes.Add("href", href);
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateSummaryList(
             IDictionary<string, string> attributes,
             IEnumerable<SummaryListRow> rows)
