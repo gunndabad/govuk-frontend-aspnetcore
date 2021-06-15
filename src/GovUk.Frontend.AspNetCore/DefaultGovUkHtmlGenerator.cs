@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Html;
@@ -1349,7 +1349,7 @@ namespace GovUk.Frontend.AspNetCore
                 dt.InnerHtml.AppendHtml(row.Key);
                 rowTagBuilder.InnerHtml.AppendHtml(dt);
 
-                var dd = new TagBuilder("dt");
+                var dd = new TagBuilder("dd");
                 dd.AddCssClass("govuk-summary-list__value");
                 dd.InnerHtml.AppendHtml(row.Value);
                 rowTagBuilder.InnerHtml.AppendHtml(dd);

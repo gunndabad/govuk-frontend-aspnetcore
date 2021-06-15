@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,7 +72,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<dl class=\"govuk-summary-list\">" +
                 "<div class=\"govuk-summary-list__row\">" +
                 "<dt class=\"govuk-summary-list__key\">Row 1 key</dt>" +
-                "<dt class=\"govuk-summary-list__value\">Row 1 value</dt>" +
+                "<dd class=\"govuk-summary-list__value\">Row 1 value</dd>" +
                 "<dd class=\"govuk-summary-list__actions\">" +
                 "<ul class=\"govuk-summary-list__actions-list\">" +
                 "<li class=\"govuk-summary-list__actions-list-item\">" +
@@ -86,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "</div>" +
                 "<div class=\"govuk-summary-list__row\">" +
                 "<dt class=\"govuk-summary-list__key\">Row 2 key</dt>" +
-                "<dt class=\"govuk-summary-list__value\">Row 2 value</dt>" +
+                "<dd class=\"govuk-summary-list__value\">Row 2 value</dd>" +
                 "<span class=\"govuk-summary-list__actions\"></span>" +
                 "</div>" +
                 "</dl>",
@@ -138,11 +138,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<dl class=\"govuk-summary-list\">" +
                 "<div class=\"govuk-summary-list__row\">" +
                 "<dt class=\"govuk-summary-list__key\">Row 1 key</dt>" +
-                "<dt class=\"govuk-summary-list__value\">Row 1 value</dt>" +
+                "<dd class=\"govuk-summary-list__value\">Row 1 value</dd>" +
                 "</div>" +
                 "<div class=\"govuk-summary-list__row\">" +
                 "<dt class=\"govuk-summary-list__key\">Row 2 key</dt>" +
-                "<dt class=\"govuk-summary-list__value\">Row 2 value</dt>" +
+                "<dd class=\"govuk-summary-list__value\">Row 2 value</dd>" +
                 "</div>" +
                 "</dl>",
                 output.AsString());
