@@ -639,38 +639,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
         }
 
-        public virtual TagBuilder GeneratePanel(
-            int titleHeadingLevel,
-            IHtmlContent titleContent,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (titleContent == null)
-            {
-                throw new ArgumentNullException(nameof(titleContent));
-            }
-
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-panel");
-            tagBuilder.MergeCssClass("govuk-panel--confirmation");
-
-            var heading = new TagBuilder($"h{titleHeadingLevel}");
-            heading.MergeCssClass("govuk-panel__title");
-            heading.InnerHtml.AppendHtml(titleContent);
-            tagBuilder.InnerHtml.AppendHtml(heading);
-
-            if (content != null)
-            {
-                var body = new TagBuilder("div");
-                body.MergeCssClass("govuk-panel__body");
-                body.InnerHtml.AppendHtml(content);
-                tagBuilder.InnerHtml.AppendHtml(body);
-            }
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateRadios(
             string name,
             bool isConditional,
