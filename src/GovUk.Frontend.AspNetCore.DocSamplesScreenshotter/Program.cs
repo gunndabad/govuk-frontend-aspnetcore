@@ -49,6 +49,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("NotificationBanner/NotificationBanner", "notification-banner.png"),
                 ("NotificationBanner/NotificationBannerSuccess", "notification-banner-success.png"),
                 ("NotificationBanner/NotificationBannerWithOverridenTitle", "notification-banner-with-overriden-title.png"),
+                ("Panel/Panel", "panel.png"),
                 ("PhaseBanner/PhaseBanner", "phase-banner.png"),
                 ("Tag/DefaultTag", "tag-default.png"),
                 ("Tag/TagWithClass", "tag-with-class.png"),
