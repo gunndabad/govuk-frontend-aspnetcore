@@ -1,3 +1,4 @@
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
@@ -14,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var headingLevel = options.HeadingLevel.GetValueOrDefault(1);
+                    var headingLevel = options.HeadingLevel.GetValueOrDefault(ComponentGenerator.PanelDefaultHeadingLevel);
                     var titleContent = TextOrHtmlHelper.GetHtmlContent(options.TitleText, options.TitleHtml);
                     var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 

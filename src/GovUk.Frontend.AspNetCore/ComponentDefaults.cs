@@ -31,11 +31,6 @@ namespace GovUk.Frontend.AspNetCore
             public const string Type = "text";
         }
 
-        public static class Panel
-        {
-            public const int HeadingLevel = 1;
-        }
-
         public static class Select
         {
             public const bool Disabled = false;
