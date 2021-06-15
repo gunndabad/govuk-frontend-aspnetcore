@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -13,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class SkipLinkTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_WithContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithHrefSpecified_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -28,24 +25,54 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("My custom link content");
+                    tagHelperContent.SetContent("Link content");
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
-            output.Content.SetContent("My custom link content");
 
-            var tagHelper = new SkipLinkTagHelper(
-                new ComponentGenerator(),
-                Mock.Of<IUrlHelperFactory>())
+            var tagHelper = new SkipLinkTagHelper()
             {
-                Href = "http://foo.com"
+                Href = "#main"
             };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            Assert.Equal("<a class=\"govuk-skip-link\" href=\"http://foo.com\">My custom link content</a>", html);
+            var expectedHtml = @"
+<a class=""govuk-skip-link"" href=""#main"">Link content</a>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithNoHrefSpecified_UsesDefaultHref()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-skip-link",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-skip-link",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("Link content");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new SkipLinkTagHelper();
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var element = output.RenderToElement();
+
+            Assert.Equal("#content", element.GetAttribute("href"));
         }
     }
 }
