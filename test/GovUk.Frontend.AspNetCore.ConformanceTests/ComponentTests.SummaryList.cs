@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
@@ -23,17 +23,30 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var rows = options.Rows
                         .Select(r => new SummaryListRow()
                         {
-                            Actions = (r.Actions?.Items
-                                .Select(a => new SummaryListRowAction()
-                                {
-                                    Attributes = a.Attributes.ToAttributesDictionary().MergeAttribute("class", a.Classes),
-                                    Content = TextOrHtmlHelper.GetHtmlContent(a.Text, a.Html),
-                                    Href = a.Href,
-                                    VisuallyHiddenText = a.VisuallyHiddenText
-                                })).OrEmpty(),
-                            Attributes = new Dictionary<string, string>().MergeAttribute("class", r.Classes),
-                            Key = TextOrHtmlHelper.GetHtmlContent(r.Key.Text, r.Key.Html),
-                            Value = TextOrHtmlHelper.GetHtmlContent(r.Value.Text, r.Value.Html)
+                            Actions = new SummaryListRowActions()
+                            {
+                                Items = (r.Actions?.Items
+                                    .Select(a => new SummaryListRowAction()
+                                    {
+                                        Attributes = a.Attributes.ToAttributesDictionary()
+                                            .MergeAttribute("class", a.Classes)
+                                            .MergeAttribute("href", a.Href),
+                                        Content = TextOrHtmlHelper.GetHtmlContent(a.Text, a.Html),
+                                        VisuallyHiddenText = a.VisuallyHiddenText
+                                    })).OrEmpty().ToList(),
+                                Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Actions?.Classes)
+                            },
+                            Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Classes),
+                            Key = new SummaryListRowKey()
+                            {
+                                Content = TextOrHtmlHelper.GetHtmlContent(r.Key.Text, r.Key.Html),
+                                Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Key.Classes)
+                            },
+                            Value = new SummaryListRowValue()
+                            {
+                                Content = TextOrHtmlHelper.GetHtmlContent(r.Value.Text, r.Value.Html),
+                                Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Value.Classes)
+                            }
                         })
                         .OrEmpty();
 
