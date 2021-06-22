@@ -5,6 +5,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
     public static class DictionaryExtensions
     {
+        public static IDictionary<string, string> CreateEmptyAttributesDictionary() =>
+            new Dictionary<string, string>();
+
         public static IDictionary<string, string> MergeAttribute(
             this IDictionary<string, string> attributes,
             string key,
