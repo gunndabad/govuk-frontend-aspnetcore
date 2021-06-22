@@ -29,6 +29,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement(ButtonLinkTagHelper.TagName, Attributes = "asp-route")]
     [HtmlTargetElement(ButtonLinkTagHelper.TagName, Attributes = "asp-all-route-data")]
     [HtmlTargetElement(ButtonLinkTagHelper.TagName, Attributes = "asp-route-*")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-action")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-controller")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-area")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-page")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-page-handler")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-fragment")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-host")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-protocol")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-route")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-all-route-data")]
+    [HtmlTargetElement(SummaryListRowActionTagHelper.TagName, Attributes = "asp-route-*")]
     public class AnchorTagHelper : Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelper
     {
         /// <inheritdoc/>
