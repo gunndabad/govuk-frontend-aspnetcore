@@ -58,12 +58,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             var ul = new TagBuilder("ul");
             ul.MergeCssClass("govuk-tabs__list");
 
+            var index = 0;
             foreach (var item in items)
             {
                 var li = new TagBuilder("li");
                 li.MergeCssClass("govuk-tabs__list-item");
 
-                if (item == items.First())
+                if (index == 0)
                 {
                     li.MergeCssClass("govuk-tabs__list-item--selected");
                 }
@@ -75,18 +76,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 li.InnerHtml.AppendHtml(a);
 
                 ul.InnerHtml.AppendHtml(li);
+
+                index++;
             }
 
             tagBuilder.InnerHtml.AppendHtml(ul);
 
+            index = 0;
             foreach (var item in items)
             {
-                var section = new TagBuilder("section");
+                var section = new TagBuilder("div");
                 section.MergeAttributes(item.PanelAttributes);
                 section.MergeCssClass("govuk-tabs__panel");
                 section.Attributes.Add("id", item.Id);
 
-                if (item != items.First())
+                if (index != 0)
                 {
                     section.MergeCssClass("govuk-tabs__panel--hidden");
                 }
@@ -94,6 +98,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 section.InnerHtml.AppendHtml(item.PanelContent);
 
                 tagBuilder.InnerHtml.AppendHtml(section);
+
+                index++;
             }
 
             return tagBuilder;
