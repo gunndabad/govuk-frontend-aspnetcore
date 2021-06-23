@@ -30,10 +30,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(attributes: null, summary);
+                    detailsContext.SetSummary(Attributes.Empty(), summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(attributes: null, text);
+                    detailsContext.SetText(Attributes.Empty(), text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -74,10 +74,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(attributes: null, summary);
+                    detailsContext.SetSummary(Attributes.Empty(), summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(attributes: null, text);
+                    detailsContext.SetText(Attributes.Empty(), text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -149,7 +149,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(attributes: null, summary);
+                    detailsContext.SetSummary(Attributes.Empty(), summary);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);

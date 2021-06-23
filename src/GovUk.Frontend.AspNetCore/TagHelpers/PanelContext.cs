@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -11,10 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void SetBody(IHtmlContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             if (Body != null)
             {
@@ -26,10 +22,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void SetTitle(IHtmlContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             if (Title != null)
             {

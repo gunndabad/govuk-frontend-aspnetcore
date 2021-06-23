@@ -14,14 +14,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _items = new List<AccordionItem>();
         }
 
-        public IReadOnlyCollection<AccordionItem> Items => _items;
+        public IReadOnlyList<AccordionItem> Items => _items;
 
         public void AddItem(AccordionItem item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            Guard.ArgumentNotNull(nameof(item), item);
 
             _items.Add(item);
         }

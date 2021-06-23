@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var pbContext = context.GetContextItem<PhaseBannerContext>();
-                    pbContext.SetTag(attributes: null, content: new HtmlString("Alpha"));
+                    pbContext.SetTag(Attributes.Empty(), content: new HtmlString("Alpha"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Phase message");

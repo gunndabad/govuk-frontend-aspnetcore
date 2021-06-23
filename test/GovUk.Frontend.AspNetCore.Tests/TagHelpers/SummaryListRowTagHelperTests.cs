@@ -33,8 +33,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
-                    rowContext.SetKey(new HtmlString("Key"), attributes: null);
-                    rowContext.SetValue(new HtmlString("Value"), attributes: null);
+                    rowContext.SetKey(Attributes.Empty(), new HtmlString("Key"));
+                    rowContext.SetValue(Attributes.Empty(), new HtmlString("Value"));
                     rowContext.AddAction(new SummaryListRowAction()
                     {
                         Attributes = new Dictionary<string, string>()
@@ -145,7 +145,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
-                    rowContext.SetKey(new HtmlString("Key"), attributes: null);
+                    rowContext.SetKey(Attributes.Empty(), new HtmlString("Key"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);

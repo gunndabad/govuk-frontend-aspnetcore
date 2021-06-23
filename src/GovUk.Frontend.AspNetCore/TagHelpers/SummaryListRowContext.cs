@@ -18,9 +18,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public IDictionary<string, string>? ActionsAttributes { get; private set; }
 
-        public (IHtmlContent Content, IDictionary<string, string> Attributes)? Key { get; private set; }
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Key { get; private set; }
 
-        public (IHtmlContent Content, IDictionary<string, string> Attributes)? Value { get; private set; }
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Value { get; private set; }
 
         public void AddAction(SummaryListRowAction action)
         {
@@ -50,8 +50,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             ActionsAttributes = attributes;
         }
 
-        public void SetKey(IHtmlContent content, IDictionary<string, string> attributes)
+        public void SetKey(IDictionary<string, string> attributes, IHtmlContent content)
         {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);
 
             if (Key != null)
@@ -82,11 +83,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     SummaryListRowActionTagHelper.TagName);
             }
 
-            Key = (content, attributes);
+            Key = (attributes, content);
         }
 
-        public void SetValue(IHtmlContent content, IDictionary<string, string> attributes)
+        public void SetValue(IDictionary<string, string> attributes, IHtmlContent content)
         {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);
 
             if (Value != null)
@@ -110,7 +112,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     SummaryListRowActionTagHelper.TagName);
             }
 
-            Value = (content, attributes);
+            Value = (attributes, content);
         }
 
         public void ThrowIfIncomplete()

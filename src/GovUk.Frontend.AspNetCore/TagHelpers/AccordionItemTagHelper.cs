@@ -39,18 +39,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 childContent = await output.GetChildContentAsync();
             }
 
-            if (itemContext.Heading == null)
-            {
-                throw new InvalidOperationException($"Missing <{AccordionItemHeadingTagHelper.TagName}> element.");
-            }
+            itemContext.ThrowIfIncomplete();
 
             accordionContext.AddItem(new AccordionItem()
             {
                 Expanded = Expanded,
-                HeadingContent = itemContext.Heading.Value.content,
-                HeadingAttributes = itemContext.Heading.Value.attributes,
-                SummaryContent = itemContext.Summary?.content,
-                SummaryAttributes = itemContext.Summary?.attributes,
+                HeadingContent = itemContext.Heading!.Value.Content,
+                HeadingAttributes = itemContext.Heading.Value.Attributes,
+                SummaryContent = itemContext.Summary?.Content,
+                SummaryAttributes = itemContext.Summary?.Attributes,
                 Content = childContent.Snapshot(),
                 Attributes = output.Attributes.ToAttributesDictionary()
             });
