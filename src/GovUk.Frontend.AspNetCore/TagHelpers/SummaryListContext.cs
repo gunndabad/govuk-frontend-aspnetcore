@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _rows = new List<SummaryListRow>();
         }
 
-        public IReadOnlyCollection<SummaryListRow> Rows => _rows;
+        public IReadOnlyList<SummaryListRow> Rows => _rows;
 
         public void AddRow(SummaryListRow row)
         {

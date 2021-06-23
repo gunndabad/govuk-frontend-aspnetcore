@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 
@@ -7,16 +6,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class DetailsContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Summary { get; private set; }
 
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Text { get; private set; }
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Text { get; private set; }
 
         public void SetSummary(IDictionary<string, string> attributes, IHtmlContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
 
             if (Summary != null)
             {
@@ -33,10 +30,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void SetText(IDictionary<string, string> attributes, IHtmlContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
 
             if (Text != null)
             {

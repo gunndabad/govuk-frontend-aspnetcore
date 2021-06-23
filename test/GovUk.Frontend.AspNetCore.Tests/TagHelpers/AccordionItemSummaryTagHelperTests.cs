@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(itemContext.Summary);
-            Assert.Equal("Summary content", itemContext.Summary?.content.RenderToString());
+            Assert.Equal("Summary content", itemContext.Summary?.Content.RenderToString());
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.SetSummary(attributes: null, new HtmlString("Existing summary"));
+            itemContext.SetSummary(Attributes.Empty(), new HtmlString("Existing summary"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-summary",

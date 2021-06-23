@@ -56,10 +56,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = _htmlGenerator.GenerateDetails(
                 Open,
-                detailsContext.Summary?.content,
-                detailsContext.Summary?.attributes,
-                detailsContext.Text?.content,
-                detailsContext.Text?.attributes,
+                detailsContext.Summary?.Content,
+                detailsContext.Summary?.Attributes,
+                detailsContext.Text?.Content,
+                detailsContext.Text?.Attributes,
                 output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;

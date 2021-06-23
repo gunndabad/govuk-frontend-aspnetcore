@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(itemContext.Heading);
-            Assert.Equal("Summary content", itemContext.Heading.Value.content.RenderToString());
+            Assert.Equal("Summary content", itemContext.Heading?.Content.RenderToString());
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.SetHeading(attributes: null, content: new HtmlString("Existing heading"));
+            itemContext.SetHeading(Attributes.Empty(), content: new HtmlString("Existing heading"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-heading",

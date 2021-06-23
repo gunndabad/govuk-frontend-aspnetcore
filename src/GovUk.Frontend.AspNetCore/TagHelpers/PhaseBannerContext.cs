@@ -10,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void SetTag(IDictionary<string, string>? attributes, IHtmlContent content)
         {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);
 
             if (Tag != null)

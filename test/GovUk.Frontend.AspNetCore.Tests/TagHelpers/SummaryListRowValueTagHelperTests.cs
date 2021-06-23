@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var summaryListContext = new SummaryListContext();
 
             var rowContext = new SummaryListRowContext();
-            rowContext.SetValue(new HtmlString("Value"), attributes: null);
+            rowContext.SetValue(Attributes.Empty(), new HtmlString("Value"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-summary-list-row-value",

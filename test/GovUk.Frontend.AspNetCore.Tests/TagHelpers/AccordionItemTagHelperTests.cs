@@ -33,8 +33,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = context.GetContextItem<AccordionItemContext>();
-                    itemContext.SetHeading(attributes: null, new HtmlString("Heading"));
-                    itemContext.SetSummary(attributes: null, new HtmlString("Summary"));
+                    itemContext.SetHeading(Attributes.Empty(), new HtmlString("Heading"));
+                    itemContext.SetSummary(Attributes.Empty(), new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Content");
@@ -76,7 +76,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = context.GetContextItem<AccordionItemContext>();
-                    itemContext.SetSummary(attributes: null, new HtmlString("Summary"));
+                    itemContext.SetSummary(Attributes.Empty(), new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Content");
@@ -90,7 +90,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("Missing <govuk-accordion-item-heading> element.", ex.Message);
+            Assert.Equal("A <govuk-accordion-item-heading> element must be provided.", ex.Message);
         }
     }
 }
