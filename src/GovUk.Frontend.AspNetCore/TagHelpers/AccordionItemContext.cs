@@ -7,15 +7,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class AccordionItemContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Heading { get; private set; }
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Summary { get; private set; }
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Heading { get; private set; }
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Summary { get; private set; }
 
         public void SetHeading(IDictionary<string, string> attributes, IHtmlContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
 
             if (Heading != null)
             {
@@ -34,10 +32,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void SetSummary(IDictionary<string, string> attributes, IHtmlContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
 
             if (Summary != null)
             {
@@ -46,6 +42,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             Summary = (attributes, content);
+        }
+
+        public void ThrowIfIncomplete()
+        {
+            if (Heading == null)
+            {
+                throw ExceptionHelper.AChildElementMustBeProvided(AccordionItemHeadingTagHelper.TagName);
+            }
         }
     }
 }

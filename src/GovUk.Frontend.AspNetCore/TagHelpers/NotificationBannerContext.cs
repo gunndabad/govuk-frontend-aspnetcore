@@ -9,6 +9,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void SetTitle(string id, int headingLevel, IHtmlContent? content)
         {
+            Guard.ArgumentNotNullOrEmpty(nameof(id), id);
+
             if (Title != null)
             {
                 throw ExceptionHelper.OnlyOneElementIsPermittedIn(

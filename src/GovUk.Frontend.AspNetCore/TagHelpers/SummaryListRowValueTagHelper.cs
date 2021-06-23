@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            summaryListRowContext.SetValue(content.Snapshot(), output.Attributes.ToAttributesDictionary());
+            summaryListRowContext.SetValue(output.Attributes.ToAttributesDictionary(), content.Snapshot());
 
             output.SuppressOutput();
         }

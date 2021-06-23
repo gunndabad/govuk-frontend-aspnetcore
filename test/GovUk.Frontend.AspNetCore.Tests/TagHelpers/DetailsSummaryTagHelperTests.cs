@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("The summary", detailsContext.Summary?.content.RenderToString());
+            Assert.Equal("The summary", detailsContext.Summary?.Content.RenderToString());
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var detailsContext = new DetailsContext();
-            detailsContext.SetSummary(attributes: null, new HtmlString("The summary"));
+            detailsContext.SetSummary(Attributes.Empty(), new HtmlString("The summary"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-details-summary",
@@ -86,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var detailsContext = new DetailsContext();
-            detailsContext.SetText(attributes: null, new HtmlString("The text"));
+            detailsContext.SetText(Attributes.Empty(), new HtmlString("The text"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-details-summary",

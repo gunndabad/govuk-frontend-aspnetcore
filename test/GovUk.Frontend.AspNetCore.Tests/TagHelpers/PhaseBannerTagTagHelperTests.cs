@@ -50,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var phaseBannerContext = new PhaseBannerContext();
-            phaseBannerContext.SetTag(attributes: null, content: new HtmlString("Existing tag"));
+            phaseBannerContext.SetTag(Attributes.Empty(), content: new HtmlString("Existing tag"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-phase-banner-tag",
