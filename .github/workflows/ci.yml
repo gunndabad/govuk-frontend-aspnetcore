@@ -63,14 +63,14 @@ jobs:
     runs-on: windows-latest
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
-    
+
     steps:
     - name: Download package artifact
-      uses: actions/download-artifact@v2-preview
+      uses: actions/download-artifact@v2
       with:
         name: GovUk.Frontend.AspNetCore.nupkg
 
     - name: Publish package to NuGet
-      run: dotnet nuget push GovUk.Frontend.AspNetCore.nupkg/*.nupkg --api-key ${env:NUGET_TOKEN} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push "*.nupkg" --api-key ${env:NUGET_TOKEN} --source https://api.nuget.org/v3/index.json --skip-duplicate
       env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }} 
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
