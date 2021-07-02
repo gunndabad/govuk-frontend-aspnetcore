@@ -10,7 +10,8 @@ namespace GovUk.Frontend.AspNetCore
 
             DateInputModelConverters = new List<DateInputModelConverter>()
             {
-                new DateDateInputModelConverter()
+                new DateDateInputModelConverter(),
+                new DateTimeDateInputModelConverter()
             };
         }
 
