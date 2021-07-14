@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -36,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            var selectContext = new SelectContext();
+            var selectContext = new SelectContext(ViewContext, AspFor);
             using (context.SetScopedContextItem(typeof(SelectContext), selectContext))
             {
                 await base.ProcessAsync(context, output);
@@ -85,18 +86,35 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string IsSelectedAttributeName = "selected";
         private const string ValueAttributeName = "value";
 
+        private readonly IModelHelper _modelHelper;
+
+        public SelectItemTagHelper(IModelHelper modelHelper)
+        {
+            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
+        }
+
         [HtmlAttributeName(IsDisabledAttributeName)]
         public bool IsDisabled { get; set; }
 
         [HtmlAttributeName(IsSelectedAttributeName)]
-        public bool IsSelected { get; set; }
+        public bool? IsSelected { get; set; }
 
         [HtmlAttributeName(ValueAttributeName)]
         public string Value { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            // REVIEW Consider throwing if IsSelected is null && there is no AspFor
+
             var selectContext = (SelectContext)context.Items[typeof(SelectContext)];
+
+            var resolvedSelected = IsSelected ??
+                (selectContext.HaveModelExpression ?
+                    _modelHelper.GetModelValue(
+                        selectContext.ViewContext,
+                        selectContext.AspFor.ModelExplorer,
+                        selectContext.AspFor.Name) == Value :
+                 false);
 
             var content = await output.GetChildContentAsync();
 
@@ -105,7 +123,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 Content = content.Snapshot(),
                 IsDisabled = IsDisabled,
-                IsSelected = IsSelected,
+                IsSelected = resolvedSelected,
                 Value = Value
             });
 
@@ -117,12 +135,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private List<SelectListItem> _items;
 
-        public SelectContext()
+        public SelectContext(ViewContext viewContext, ModelExpression aspFor)
         {
+            ViewContext = viewContext;
+            AspFor = aspFor;
             _items = new List<SelectListItem>();
         }
 
         public IReadOnlyCollection<SelectListItem> Items => _items;
+        public ViewContext ViewContext { get; }
+        public ModelExpression AspFor { get; }
+
+        public bool HaveModelExpression => AspFor != null;
 
         public void AddItem(SelectListItem item)
         {
