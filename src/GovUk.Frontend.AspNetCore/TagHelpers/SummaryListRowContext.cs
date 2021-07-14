@@ -1,0 +1,131 @@
+#nullable enable
+using System.Collections.Generic;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using Microsoft.AspNetCore.Html;
+
+namespace GovUk.Frontend.AspNetCore.TagHelpers
+{
+    internal class SummaryListRowContext
+    {
+        private readonly List<SummaryListRowAction> _actions;
+
+        public SummaryListRowContext()
+        {
+            _actions = new List<SummaryListRowAction>();
+        }
+
+        public IReadOnlyList<SummaryListRowAction> Actions => _actions;
+
+        public IDictionary<string, string>? ActionsAttributes { get; private set; }
+
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Key { get; private set; }
+
+        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Value { get; private set; }
+
+        public void AddAction(SummaryListRowAction action)
+        {
+            Guard.ArgumentNotNull(nameof(action), action);
+
+            _actions.Add(action);
+        }
+
+        public void SetActionsAttributes(IDictionary<string, string> attributes)
+        {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+
+            if (ActionsAttributes != null)
+            {
+                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                    SummaryListRowActionsTagHelper.TagName,
+                    SummaryListRowTagHelper.TagName);
+            }
+
+            if (_actions.Count > 0)
+            {
+                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                    SummaryListRowActionsTagHelper.TagName,
+                    SummaryListRowActionTagHelper.TagName);
+            }
+
+            ActionsAttributes = attributes;
+        }
+
+        public void SetKey(IDictionary<string, string> attributes, IHtmlContent content)
+        {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
+
+            if (Key != null)
+            {
+                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                    SummaryListRowKeyTagHelper.TagName,
+                    SummaryListRowTagHelper.TagName);
+            }
+
+            if (Value != null)
+            {
+                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                    SummaryListRowKeyTagHelper.TagName,
+                    SummaryListRowValueTagHelper.TagName);
+            }
+
+            if (ActionsAttributes != null)
+            {
+                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                    SummaryListRowKeyTagHelper.TagName,
+                    SummaryListRowActionsTagHelper.TagName);
+            }
+
+            if (_actions.Count > 0)
+            {
+                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                    SummaryListRowKeyTagHelper.TagName,
+                    SummaryListRowActionTagHelper.TagName);
+            }
+
+            Key = (attributes, content);
+        }
+
+        public void SetValue(IDictionary<string, string> attributes, IHtmlContent content)
+        {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
+
+            if (Value != null)
+            {
+                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                    SummaryListRowValueTagHelper.TagName,
+                    SummaryListRowTagHelper.TagName);
+            }
+
+            if (ActionsAttributes != null)
+            {
+                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                    SummaryListRowValueTagHelper.TagName,
+                    SummaryListRowActionsTagHelper.TagName);
+            }
+
+            if (_actions.Count > 0)
+            {
+                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                    SummaryListRowValueTagHelper.TagName,
+                    SummaryListRowActionTagHelper.TagName);
+            }
+
+            Value = (attributes, content);
+        }
+
+        public void ThrowIfIncomplete()
+        {
+            if (Key == null)
+            {
+                throw ExceptionHelper.AChildElementMustBeProvided(SummaryListRowKeyTagHelper.TagName);
+            }
+
+            if (Value == null)
+            {
+                throw ExceptionHelper.AChildElementMustBeProvided(SummaryListRowValueTagHelper.TagName);
+            }
+        }
+    }
+}

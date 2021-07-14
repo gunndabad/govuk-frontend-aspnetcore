@@ -7,35 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp.Diffing" Version="0.14.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.18" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\GovUk.Frontend.AspNetCore\GovUk.Frontend.AspNetCore.csproj" />
+    <ProjectReference Include="..\GovUk.FrontEnd.AspNetCore.TestCommon\GovUk.FrontEnd.AspNetCore.TestCommon.csproj" />
   </ItemGroup>
 	
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.23" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.1.10" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.10" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <FixtureFiles Include="$(RepoRoot)\lib\govuk-frontend\package\govuk\components\*\fixtures.json" />
-    <Content Include="@(FixtureFiles)">
-      <Link>ConformanceTests\Fixtures\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

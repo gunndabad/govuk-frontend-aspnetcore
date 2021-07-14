@@ -6,7 +6,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-file-upload")]
     [RestrictChildren("govuk-file-upload-label", "govuk-file-upload-hint", "govuk-file-upload-error-message")]
-    public class FileUploadTagHelper : FormGroupTagHelperBase
+    public class FileUploadTagHelper : LegacyFormGroupTagHelperBase
     {
         private const string AttributesPrefix = "input-";
         private const string IdAttributeName = "id";

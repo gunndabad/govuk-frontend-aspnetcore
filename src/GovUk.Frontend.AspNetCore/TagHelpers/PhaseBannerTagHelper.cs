@@ -1,40 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
+#nullable enable
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-phase-banner", TagStructure = TagStructure.NormalOrSelfClosing)]
+    /// <summary>
+    /// Generates a GDS phase banner component.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [OutputElementHint(ComponentGenerator.PhaseBannerElement)]
     public class PhaseBannerTagHelper : TagHelper
     {
+        internal const string TagName = "govuk-phase-banner";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        public PhaseBannerTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        /// <summary>
+        /// Creates a <see cref="PhaseBannerTagHelper"/>.
+        /// </summary>
+        public PhaseBannerTagHelper()
+            : this(htmlGenerator: null)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
 
+        internal PhaseBannerTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        }
+
+        /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var pbContext = new PhaseBannerContext();
+            var phaseBannerContext = new PhaseBannerContext();
 
-            TagHelperContent childContent;
-            using (context.SetScopedContextItem(typeof(PhaseBannerContext), pbContext))
+            IHtmlContent childContent;
+
+            using (context.SetScopedContextItem(phaseBannerContext))
             {
                 childContent = await output.GetChildContentAsync();
             }
 
-            if (!pbContext.Tag.HasValue)
-            {
-                throw new InvalidOperationException($"You must specify a <govuk-phase-banner-tag> child element.");
-            }
+            phaseBannerContext.ThrowIfIncomplete();
 
             var tagBuilder = _htmlGenerator.GeneratePhaseBanner(
-                pbContext.Tag.Value.content,
-                pbContext.Tag.Value.attributes,
+                phaseBannerContext.Tag?.Content,
+                phaseBannerContext.Tag?.Attributes,
                 childContent,
                 output.Attributes.ToAttributesDictionary());
 
@@ -44,45 +57,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             output.Attributes.Clear();
             output.MergeAttributes(tagBuilder);
             output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
-    }
-
-    [HtmlTargetElement("govuk-phase-banner-tag", ParentTag = "govuk-phase-banner")]
-    public class PhaseBannerTagTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var pbContext = (PhaseBannerContext)context.Items[typeof(PhaseBannerContext)];
-
-            var childContent = await output.GetChildContentAsync();
-
-            if (!pbContext.TrySetTag(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
-            {
-                throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
-            }
-
-            output.SuppressOutput();
-        }
-    }
-
-    internal class PhaseBannerContext
-    {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Tag { get; private set; }
-
-        public bool TrySetTag(IDictionary<string, string> attributes, IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Tag != null)
-            {
-                return false;
-            }
-
-            Tag = (attributes, content);
-            return true;
         }
     }
 }

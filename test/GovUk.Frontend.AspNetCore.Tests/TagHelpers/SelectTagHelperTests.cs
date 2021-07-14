@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -62,7 +64,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new SelectTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new SelectTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -73,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var input = node.ChildNodes.FindFirst("select");
             Assert.Equal(
@@ -114,7 +116,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new SelectTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new SelectTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -125,7 +127,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             Assert.Contains("govuk-select--error", node.ChildNodes.FindFirst("select").GetCssClasses());
         }

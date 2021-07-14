@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -50,13 +52,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new BreadcrumbsTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new BreadcrumbsTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-breadcrumbs\">" +
                 "<ol class=\"govuk-breadcrumbs__list\">" +
@@ -97,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new BreadcrumbsItemTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>());
 
             // Act
@@ -106,7 +108,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var lastItem = bcContext.Items.Last();
             Assert.Null(lastItem.Href);
-            Assert.Equal("The item", lastItem.Content.AsString());
+            Assert.Equal("The item", lastItem.Content.RenderToString());
         }
 
         [Fact]
@@ -135,7 +137,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
 
             var tagHelper = new BreadcrumbsItemTagHelper(
-                new DefaultGovUkHtmlGenerator(),
+                new ComponentGenerator(),
                 Mock.Of<IUrlHelperFactory>())
             {
                 Href = "place.com"
@@ -147,7 +149,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var lastItem = bcContext.Items.Last();
             Assert.Equal("place.com", lastItem.Href);
-            Assert.Equal("The item", lastItem.Content.AsString());
+            Assert.Equal("The item", lastItem.Content.RenderToString());
         }
     }
 }

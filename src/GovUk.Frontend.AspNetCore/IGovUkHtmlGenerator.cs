@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -14,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateAnchor(string href);
 
-        TagBuilder GenerateBackLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateBackLink(IHtmlContent content, IDictionary<string, string> attributes);
 
         TagBuilder GenerateBreadcrumbs(
             bool collapseOnMobile,
@@ -22,18 +23,13 @@ namespace GovUk.Frontend.AspNetCore
             IEnumerable<BreadcrumbsItem> items);
 
         TagBuilder GenerateButton(
-            string name,
-            string type,
-            string value,
             bool isStartButton,
             bool disabled,
             bool preventDoubleClick,
-            string formAction,
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
         TagBuilder GenerateButtonLink(
-            string href,
             bool isStartButton,
             bool disabled,
             IHtmlContent content,
@@ -63,7 +59,6 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateDetails(
             bool open,
-            string id,
             IHtmlContent summaryContent,
             IDictionary<string, string> summaryAttributes,
             IHtmlContent text,
@@ -72,7 +67,6 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,
-            string id,
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
@@ -130,10 +124,20 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent content,
             IDictionary<string, string> attributes);
 
-        TagBuilder GeneratePanel(
-            int titleHeadingLevel,
+        TagBuilder GenerateNotificationBanner(
+            NotificationBannerType type,
+            string role,
+            bool disableAutoFocus,
+            string titleId,
+            int? titleHeadingLevel,
             IHtmlContent titleContent,
             IHtmlContent content,
+            IDictionary<string, string> attributes);
+
+        TagBuilder GeneratePanel(
+            int headingLevel,
+            IHtmlContent titleContent,
+            IHtmlContent bodyContent,
             IDictionary<string, string> attributes);
 
         TagBuilder GeneratePhaseBanner(

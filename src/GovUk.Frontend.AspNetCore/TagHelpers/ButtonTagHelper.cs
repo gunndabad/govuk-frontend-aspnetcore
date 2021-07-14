@@ -1,133 +1,77 @@
-﻿using System;
+#nullable enable
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-button")]
-    public class ButtonTagHelper : LinkTagHelperBase
+    /// <summary>
+    /// Generates a GDS button component that renders a &lt;button&gt; element.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [OutputElementHint(ComponentGenerator.ButtonElement)]
+    public class ButtonTagHelper : TagHelper
     {
+        internal const string TagName = "govuk-button";
+
         private const string DisabledAttributeName = "disabled";
-        private const string FormActionAttributeName = "formaction";
         private const string IsStartButtonAttributeName = "is-start-button";
-        private const string NameAttributeName = "name";
         private const string PreventDoubleClickAttributeName = "prevent-double-click";
-        private const string TypeAttributeName = "type";
-        private const string ValueAttributeName = "value";
 
-        private string _type = ComponentDefaults.Button.Type;
-        private bool _typeSpecified = false;
+        private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        public ButtonTagHelper(IGovUkHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
-            : base(htmlGenerator, urlHelperFactory)
+        /// <summary>
+        /// Creates a new <see cref="ButtonTagHelper"/>.
+        /// </summary>
+        public ButtonTagHelper()
+            : this(htmlGenerator: null)
         {
         }
 
+        internal ButtonTagHelper(IGovUkHtmlGenerator? htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        }
+
+        /// <summary>
+        /// Whether the button should be disabled.
+        /// </summary>
+        /// <remarks>
+        /// The default is <c>false</c>.
+        /// </remarks>
         [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; } = ComponentDefaults.Button.Disabled;
+        public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
 
-        [HtmlAttributeName(FormActionAttributeName)]
-        public string FormAction { get; set; }
-
+        /// <summary>
+        /// Whether this button is the main call to action on your service's start page.
+        /// </summary>
+        /// <remarks>
+        /// The default is <c>false</c>.
+        /// </remarks>
         [HtmlAttributeName(IsStartButtonAttributeName)]
-        public bool IsStartButton { get; set; } = ComponentDefaults.Button.IsStartButton;
+        public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;
 
-        [HtmlAttributeName(NameAttributeName)]
-        public string Name { get; set; }
-
+        /// <summary>
+        /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
+        /// </summary>
+        /// <remarks>
+        /// The default is <c>false</c>.
+        /// </remarks>
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
-        public bool PreventDoubleClick { get; set; } = ComponentDefaults.Button.PreventDoubleClick;
+        public bool PreventDoubleClick { get; set; } = ComponentGenerator.ButtonDefaultPreventDoubleClick;
 
-        [HtmlAttributeName(TypeAttributeName)]
-        public string Type
-        {
-            get => _type;
-            set
-            {
-                _type = value;
-                _typeSpecified = true;
-            }
-        }
-
-        [HtmlAttributeName(ValueAttributeName)]
-        public string Value { get; set; }
-
+        /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var element = (!_typeSpecified && HasLinkAttributes)
-                ? "a"
-                : "button";
-            output.TagName = element;
-
-            if (element == "a" && Name != null)
-            {
-                throw new InvalidOperationException($"Cannot specify the '{NameAttributeName}' attribute for 'a' elements.");
-            }
-
-            if (element == "a" && PreventDoubleClick == true)
-            {
-                throw new InvalidOperationException($"Cannot specify the '{PreventDoubleClickAttributeName}' attribute for 'a' elements.");
-            }
-
-            if (element == "a" && Value != null)
-            {
-                throw new InvalidOperationException($"Cannot specify the '{ValueAttributeName}' attribute for '{element}' elements.");
-            }
-
-            if (element == "a" && FormAction != null)
-            {
-                throw new InvalidOperationException($"Cannot specify the '{FormActionAttributeName}' attribute for '{element}' elements.");
-            }
-
-            if (element == "button" && Href != null)
-            {
-                throw new InvalidOperationException($"Cannot specify the '{HrefAttributeName}' attribute for '{element}' elements.");
-            }
-
-            if (HasLinkAttributes && FormAction != null)
-            {
-                throw new InvalidOperationException(
-                    $"Cannot determine the 'formaction' attribute for <button>. The following attributes are mutually exclusive:\n" +
-                    $"{FormActionAttributeName}\n" +
-                    $"{RouteAttributeName}\n" +
-                    $"{ControllerAttributeName}, {ActionAttributeName}\n" +
-                    $"{PageAttributeName}, {PageHandlerAttributeName}");
-            }
-
             var childContent = await output.GetChildContentAsync();
 
-            TagBuilder tagBuilder;
-
-            if (element == "a")
-            {
-                var href = ResolveHref();
-
-                tagBuilder = Generator.GenerateButtonLink(
-                    href,
-                    IsStartButton,
-                    Disabled,
-                    childContent,
-                    output.Attributes.ToAttributesDictionary());
-            }
-            else
-            {
-                var resolvedFormAction = FormAction ??
-                    (HasLinkAttributes ? ResolveHref() : null);
-
-                tagBuilder = Generator.GenerateButton(
-                    Name,
-                    Type,
-                    Value,
-                    IsStartButton,
-                    Disabled,
-                    PreventDoubleClick,
-                    resolvedFormAction,
-                    childContent,
-                    output.Attributes.ToAttributesDictionary());
-            }
+            var tagBuilder = _htmlGenerator.GenerateButton(
+                IsStartButton,
+                Disabled,
+                PreventDoubleClick,
+                childContent,
+                output.Attributes.ToAttributesDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

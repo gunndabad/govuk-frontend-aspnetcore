@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -29,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new WarningTextTagHelper(new DefaultGovUkHtmlGenerator())
+            var tagHelper = new WarningTextTagHelper(new ComponentGenerator())
             {
                 IconFallbackText = "Danger"
             };
@@ -38,20 +40,20 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
-            Assert.Equal(
-                "<div class=\"govuk-warning-text\">" +
-                "<span aria-hidden=\"true\" class=\"govuk-warning-text__icon\">!</span>" +
-                "<strong class=\"govuk-warning-text__text\">" +
-                "<span class=\"govuk-warning-text__assistive\">Danger</span>" +
-                "Warning message" +
-                "</strong>" +
-                "</div>",
-                html);
+            var expectedHtml = @"
+<div class=""govuk-warning-text"">
+    <span aria-hidden=""true"" class=""govuk-warning-text__icon"">!</span>
+        <strong class=""govuk-warning-text__text"">
+        <span class=""govuk-warning-text__assistive"">Danger</span>
+        Warning message
+    </strong>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_MissingIconFallbackTextThrowsInvalidOperationException()
+        public async Task ProcessAsync_MissingIconFallbackText_ThrowsInvalidOperationException()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -70,11 +72,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new WarningTextTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new WarningTextTagHelper(new ComponentGenerator());
+
+            // Act
+            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
             // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("You must specify a value for the 'icon-fallback-text' attribute.", ex.Message);
+            Assert.IsType<InvalidOperationException>(ex);
+            Assert.Equal("The 'icon-fallback-text' attribute must be specified.", ex.Message);
         }
     }
 }

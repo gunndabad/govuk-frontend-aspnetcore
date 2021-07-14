@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -9,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class TagTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_WithContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -28,14 +30,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TagTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new TagTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
-            Assert.Equal("<strong class=\"govuk-tag\">A tag</strong>", html);
+            var expectedHtml = @"<strong class=""govuk-tag"">A tag</strong>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Mvc.Routing;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -11,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class BackLinkTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_WithContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -22,7 +21,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var output = new TagHelperOutput(
                 "govuk-back-link",
-                attributes: new TagHelperAttributeList(),
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -31,23 +33,20 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.Content.SetContent("My custom link content");
 
-            var tagHelper = new BackLinkTagHelper(
-                new DefaultGovUkHtmlGenerator(),
-                Mock.Of<IUrlHelperFactory>())
-            {
-                Href = "http://foo.com"
-            };
+            var tagHelper = new BackLinkTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
-            Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">My custom link content</a>", html);
+            var expectedHtml = @"
+<a class=""govuk-back-link"" href=""http://foo.com"">My custom link content</a>";
+
+            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_WithNoContentGeneratesExpectedOutput()
+        public async Task ProcessAsync_WithNoContent_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -58,7 +57,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var output = new TagHelperOutput(
                 "govuk-back-link",
-                attributes: new TagHelperAttributeList(),
+                attributes: new TagHelperAttributeList()
+                {
+                    { "href", "http://foo.com" }
+                },
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
@@ -66,19 +68,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new BackLinkTagHelper(
-                new DefaultGovUkHtmlGenerator(),
-                Mock.Of<IUrlHelperFactory>())
-            {
-                Href = "http://foo.com"
-            };
+            var tagHelper = new BackLinkTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
-            Assert.Equal("<a class=\"govuk-back-link\" href=\"http://foo.com\">Back</a>", html);
+            var expectedHtml = @"
+<a class=""govuk-back-link"" href=""http://foo.com"">Back</a>";
+
+            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
         }
     }
 }

@@ -3,7 +3,7 @@
 ![ci](https://github.com/gunndabad/govuk-frontend-aspnetcore/workflows/ci/badge.svg)
 ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/GovUk.Frontend.AspNetCore)
 
-Targets [GDS Frontend v3.9.1](https://github.com/alphagov/govuk-frontend/releases/tag/v3.9.1)
+Targets [GDS Frontend v3.11.0](https://github.com/alphagov/govuk-frontend/releases/tag/v3.12.0)
 
 ## Installation
 
@@ -12,7 +12,7 @@ Targets [GDS Frontend v3.9.1](https://github.com/alphagov/govuk-frontend/release
 Install the [GovUk.Frontend.AspNetCore NuGet package](https://www.nuget.org/packages/GovUk.Frontend.AspNetCore/):
 
     Install-Package GovUk.Frontend.AspNetCore
-    
+
 Or via the .NET Core command line interface:
 
     dotnet add package GovUk.Frontend.AspNetCore
@@ -34,12 +34,12 @@ public class Startup
 ```
 
 This will register a [Tag Helper Component](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/th-components?view=aspnetcore-5.0) that automatically adds stylesheet and script imports to your Razor views.
-If you do *not* want this then use the overload of `AddGovUkFrontend` that takes a `GovUkFrontendAspNetCoreOptions` parameter and set `AddImportsToHtml` to `false`:
+If you do *not* want this then use the overload of `AddGovUkFrontend` that takes an `Action<GovUkFrontendAspNetCoreOptions>` parameter and set `AddImportsToHtml` to `false`:
 
 ```cs
-services.AddGovUkFrontend(new GovUkFrontendAspNetCoreOptions()
+services.AddGovUkFrontend(options =>
 {
-    AddImportsToHtml = false
+    options.AddImportsToHtml = false;
 });
 ```
 
@@ -54,3 +54,17 @@ In your `_ViewImports.cshtml` file:
 ## GDS assets
 
 This package serves the GDS Frontend assets (stylesheets, javascript, fonts) inside the host application so these do not need to be imported separately.
+
+## Components
+
+- [Accordion](docs/components/accordion.md)
+- [Back link](docs/components/back-link.md)
+- [Button](docs/components/button.md)
+- [Details](docs/components/details.md)
+- [Error message](docs/components/error-message.md)
+- [Inset text](docs/components/inset-text.md)
+- [Notification banner](docs/components/notification-banner.md)
+- [Panel](docs/components/panel.md)
+- [Summary list](docs/components/summary-list.md)
+- [Tag](docs/components/tag.md)
+- [Warning text](docs/components/warning-text.md)

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -35,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new InputTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -51,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var input = node.ChildNodes.FindFirst("input");
             Assert.Equal(
@@ -88,7 +90,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new InputTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -104,7 +106,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             Assert.Contains("govuk-input--error", node.ChildNodes.FindFirst("input").GetCssClasses());
         }
@@ -134,7 +136,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new InputTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -149,7 +151,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var input = node.ChildNodes.FindFirst("input");
             Assert.Equal("text", input.Attributes["type"].Value);
@@ -183,7 +185,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new InputTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -199,7 +201,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var wrapper = node.ChildNodes.FindFirst("div");
             Assert.Equal(
@@ -238,7 +240,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new InputTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -254,7 +256,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var wrapper = node.ChildNodes.FindFirst("div");
             Assert.Equal(
@@ -294,7 +296,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new InputTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -310,7 +312,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var wrapper = node.ChildNodes.FindFirst("div");
             Assert.Equal(

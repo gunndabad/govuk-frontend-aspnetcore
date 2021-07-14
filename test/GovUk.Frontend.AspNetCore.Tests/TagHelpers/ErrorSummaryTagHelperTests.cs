@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -50,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -67,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "</ul>" +
                 "</div>" +
                 "</div>",
-                output.AsString());
+                output.RenderToString());
         }
 
         [Fact]
@@ -96,13 +98,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             var node = HtmlNode.CreateNode(html);
             var h2 = node.ChildNodes.FindFirst("h2");
             Assert.Equal("There is a problem", h2.InnerHtml);
@@ -127,13 +129,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new DefaultGovUkHtmlGenerator());
+            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.AsString();
+            var html = output.RenderToString();
             Assert.Empty(html);
         }
     }
@@ -171,7 +173,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Some title", errorSummaryContext.Title?.content.AsString());
+            Assert.Equal("Some title", errorSummaryContext.Title?.content.RenderToString());
         }
 
         [Fact]
@@ -241,7 +243,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Some description", errorSummaryContext.Description?.content.AsString());
+            Assert.Equal("Some description", errorSummaryContext.Description?.content.RenderToString());
         }
 
         [Fact]
@@ -305,7 +307,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper());
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -314,7 +316,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("An error message", firstItem.Content.AsString());
+            Assert.Equal("An error message", firstItem.Content.RenderToString());
         }
 
         [Fact]
@@ -343,7 +345,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
             output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper());
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper());
 
             // Act & Assert
             var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
@@ -375,7 +377,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), new DefaultModelHelper())
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper())
             {
                 For = "field"
             };
@@ -387,7 +389,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"#field\">An error message</a>", firstItem.Content.AsString());
+            Assert.Equal("<a href=\"#field\">An error message</a>", firstItem.Content.RenderToString());
         }
 
         [Fact]
@@ -432,7 +434,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
 
-            var tagHelper = new ErrorSummaryItemTagHelper(new DefaultGovUkHtmlGenerator(), modelHelperMock.Object)
+            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), modelHelperMock.Object)
             {
                 AspFor = new ModelExpression("Foo", modelExplorer),
                 ViewContext = new ViewContext()
@@ -445,7 +447,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, errorSummaryContext.Items.Count);
 
             var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"#Foo\">Generated error</a>", firstItem.Content.AsString());
+            Assert.Equal("<a href=\"#Foo\">Generated error</a>", firstItem.Content.RenderToString());
         }
     }
 }

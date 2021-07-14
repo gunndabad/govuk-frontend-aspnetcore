@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -52,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             FormGroupElementContext elementContext)
         {
             var textArea = base.GenerateElement(context, builder, elementContext);
-            textArea.AddCssClass("govuk-js-character-count");
+            textArea.MergeCssClass("govuk-js-character-count");
             return textArea;
         }
 
