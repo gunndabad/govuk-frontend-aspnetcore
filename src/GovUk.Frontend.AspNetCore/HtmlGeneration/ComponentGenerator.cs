@@ -23,57 +23,107 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateBreadcrumbs(
-            bool collapseOnMobile,
-            IDictionary<string, string> attributes,
-            IEnumerable<BreadcrumbsItem> items)
+        public virtual TagBuilder GenerateButton(
+            string name,
+            string type,
+            string value,
+            bool isStartButton,
+            bool disabled,
+            bool preventDoubleClick,
+            string formAction,
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
         {
-            if (items == null)
+            if (content == null)
             {
-                throw new ArgumentNullException(nameof(items));
+                throw new ArgumentNullException(nameof(content));
             }
 
-            var tagBuilder = new TagBuilder("div");
+            var tagBuilder = new TagBuilder("button");
             tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-breadcrumbs");
+            tagBuilder.AddCssClass("govuk-button");
+            tagBuilder.Attributes.Add("data-module", "govuk-button");
+            tagBuilder.Attributes.Add("type", type);
 
-            if (collapseOnMobile)
+            if (disabled)
             {
-                tagBuilder.MergeCssClass("govuk-breadcrumbs--collapse-on-mobile");
+                tagBuilder.AddCssClass("govuk-button--disabled");
+                tagBuilder.Attributes.Add("disabled", "disabled");
+                tagBuilder.Attributes.Add("aria-disabled", "true");
             }
 
-            var ol = new TagBuilder("ol");
-            ol.MergeCssClass("govuk-breadcrumbs__list");
-
-            foreach (var item in items)
+            if (name != null)
             {
-                var li = new TagBuilder("li");
-                li.MergeAttributes(item.Attributes);
-                li.MergeCssClass("govuk-breadcrumbs__list-item");
-
-                IHtmlContent itemContent;
-
-                if (item.Href != null)
-                {
-                    var itemLink = new TagBuilder("a");
-                    itemLink.MergeAttributes(item.LinkAttributes);
-                    itemLink.MergeCssClass("govuk-breadcrumbs__link");
-                    itemLink.Attributes.Add("href", item.Href);
-                    itemLink.InnerHtml.AppendHtml(item.Content);
-                    itemContent = itemLink;
-                }
-                else
-                {
-                    li.Attributes.Add("aria-current", "page");
-                    itemContent = item.Content;
-                }
-
-                li.InnerHtml.AppendHtml(itemContent);
-
-                ol.InnerHtml.AppendHtml(li);
+                tagBuilder.Attributes.Add("name", name);
             }
 
-            tagBuilder.InnerHtml.AppendHtml(ol);
+            if (preventDoubleClick)
+            {
+                tagBuilder.Attributes.Add("data-prevent-double-click", "true");
+            }
+
+            if (value != null)
+            {
+                tagBuilder.Attributes.Add("value", value);
+            }
+
+            if (formAction != null)
+            {
+                tagBuilder.Attributes.Add("formaction", formAction);
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            if (isStartButton)
+            {
+                tagBuilder.AddCssClass("govuk-button--start");
+
+                var icon = GenerateStartButton();
+                tagBuilder.InnerHtml.AppendHtml(icon);
+            }
+
+            return tagBuilder;
+        }
+
+        public virtual TagBuilder GenerateButtonLink(
+            string href,
+            bool isStartButton,
+            bool disabled,
+            IHtmlContent content,
+            IDictionary<string, string> attributes)
+        {
+            if (href == null)
+            {
+                throw new ArgumentNullException(nameof(href));
+            }
+
+            if (content == null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+
+            var tagBuilder = new TagBuilder("a");
+            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.AddCssClass("govuk-button");
+            tagBuilder.Attributes.Add("data-module", "govuk-button");
+            tagBuilder.Attributes.Add("role", "button");
+            tagBuilder.Attributes.Add("draggable", "false");
+            tagBuilder.Attributes.Add("href", href);
+
+            if (disabled)
+            {
+                tagBuilder.AddCssClass("govuk-button--disabled");
+            }
+
+            tagBuilder.InnerHtml.AppendHtml(content);
+
+            if (isStartButton)
+            {
+                tagBuilder.AddCssClass("govuk-button--start");
+
+                var icon = GenerateStartButton();
+                tagBuilder.InnerHtml.AppendHtml(icon);
+            }
 
             return tagBuilder;
         }
