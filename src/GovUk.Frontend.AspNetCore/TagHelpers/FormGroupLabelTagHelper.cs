@@ -8,6 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// <summary>
     /// Represents the label in a GDS form group component.
     /// </summary>
+    [HtmlTargetElement(InputTagHelper.LabelTagName, ParentTag = InputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.LabelElement)]
     public class FormGroupLabelTagHelper : TagHelper
     {
@@ -21,13 +22,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         /// <summary>
-        /// Whether the legend also acts as the heading for the page.
+        /// Whether the label also acts as the heading for the page.
         /// </summary>
         /// <remarks>
         /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; } = ComponentDefaults.Fieldset.Legend.IsPageHeading;
+        public bool IsPageHeading { get; set; } = ComponentGenerator.LabelDefaultIsPageHeading;
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
