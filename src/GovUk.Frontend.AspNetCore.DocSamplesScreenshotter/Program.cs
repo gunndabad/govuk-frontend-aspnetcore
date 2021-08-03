@@ -55,6 +55,9 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("PhaseBanner/PhaseBanner", "phase-banner.png"),
                 ("Tag/DefaultTag", "tag-default.png"),
                 ("Tag/TagWithClass", "tag-with-class.png"),
+                ("TextInput/TextInput", "text-input.png"),
+                ("TextInput/TextInputWithError", "text-input-with-error.png"),
+                ("TextInput/TextInputWithPrefixAndSuffix", "text-input-with-prefix-and-suffix.png"),
                 ("WarningText/WarningText", "warning-text.png")
             });
 
