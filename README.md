@@ -67,4 +67,5 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Panel](docs/components/panel.md)
 - [Summary list](docs/components/summary-list.md)
 - [Tag](docs/components/tag.md)
+- [Text input](docs/components/text-input.md)
 - [Warning text](docs/components/warning-text.md)
