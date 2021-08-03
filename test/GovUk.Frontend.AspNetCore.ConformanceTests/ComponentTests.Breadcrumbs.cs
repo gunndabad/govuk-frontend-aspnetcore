@@ -1,4 +1,5 @@
 using System.Linq;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var collapseOnMobile = options.CollapseOnMobile ?? ComponentDefaults.Breadcrumbs.CollapseOnMobile;
+                    var collapseOnMobile = options.CollapseOnMobile ?? ComponentGenerator.BreadcrumbsDefaultCollapseOnMobile;
 
                     var attributes = options.Attributes.ToAttributesDictionary()
                         .MergeAttribute("class", options.Classes);
@@ -21,9 +22,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var items = options.Items
                         .Select(i => new BreadcrumbsItem()
                         {
-                            Attributes = i.Attributes.ToAttributesDictionary(),
                             Content = TextOrHtmlHelper.GetHtmlContent(i.Text, i.Html),
-                            Href = i.Href
+                            Href = i.Href,
+                            LinkAttributes = i.Attributes.ToAttributesDictionary()
                         });
 
                     return generator.GenerateBreadcrumbs(collapseOnMobile, attributes, items)

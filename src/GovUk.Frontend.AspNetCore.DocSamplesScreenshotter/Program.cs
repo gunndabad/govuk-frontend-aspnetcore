@@ -36,6 +36,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("Accordion/AccordionWithSummarySections", "accordion-with-summary-sections.png"),
                 ("BackLink/BackLinkWithDefaultContent", "back-link-with-default-content.png"),
                 ("BackLink/BackLinkWithCustomContent", "back-link-with-custom-content.png"),
+                ("Breadcrumbs/Breadcrumbs", "breadcrumbs.png"),
                 ("Button/DefaultButton", "button-default.png"),
                 ("Button/SecondaryButton", "button-secondary.png"),
                 ("Button/StartButton", "button-start.png"),
