@@ -9,6 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the hint in a GDS form group component.
     /// </summary>
     [HtmlTargetElement(FileUploadTagHelper.HintTagName, ParentTag = FileUploadTagHelper.TagName)]
+    [HtmlTargetElement(SelectTagHelper.HintTagName, ParentTag = SelectTagHelper.TagName)]
     [HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.HintElement)]
     public class FormGroupHintTagHelper : TagHelper

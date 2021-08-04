@@ -140,7 +140,7 @@ namespace GovUk.Frontend.AspNetCore
             string name,
             string describedBy,
             bool disabled,
-            IEnumerable<SelectListItem> items,
+            IEnumerable<SelectItem> items,
             IDictionary<string, string> attributes);
 
         TagBuilder GenerateSkipLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
