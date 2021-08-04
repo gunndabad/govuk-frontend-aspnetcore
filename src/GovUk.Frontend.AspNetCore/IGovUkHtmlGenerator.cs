@@ -100,24 +100,6 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateInsetText(string id, IHtmlContent content, IDictionary<string, string> attributes);
 
-        TagBuilder GenerateInput(
-            bool haveError,
-            string id,
-            string name,
-            string type,
-            string value,
-            string describedBy,
-            string autocomplete,
-            string pattern,
-            string inputMode,
-            bool? spellcheck,
-            bool disabled,
-            IDictionary<string, string> attributes,
-            IHtmlContent prefixContent,
-            IDictionary<string, string> prefixAttributes,
-            IHtmlContent suffixContent,
-            IDictionary<string, string> suffixAttributes);
-
         TagBuilder GenerateLabel(
             string @for,
             bool isPageHeading,
@@ -184,6 +166,24 @@ namespace GovUk.Frontend.AspNetCore
             bool disabled,
             IHtmlContent content,
             IDictionary<string, string> attributes);
+
+        TagBuilder GenerateTextInput(
+            bool haveError,
+            string id,
+            string name,
+            string type,
+            string value,
+            string describedBy,
+            string autocomplete,
+            string pattern,
+            string inputMode,
+            bool? spellcheck,
+            bool disabled,
+            IDictionary<string, string> attributes,
+            IHtmlContent prefixContent,
+            IDictionary<string, string> prefixAttributes,
+            IHtmlContent suffixContent,
+            IDictionary<string, string> suffixAttributes);
 
         TagBuilder GenerateWarningText(
             string iconFallbackText,
