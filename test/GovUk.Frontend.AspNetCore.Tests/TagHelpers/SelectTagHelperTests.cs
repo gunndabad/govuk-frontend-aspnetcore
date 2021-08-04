@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -27,36 +26,39 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var selectContext = context.GetContextItem<SelectContext>();
+
+                    selectContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
 
-                    var selectContext = (SelectContext)context.Items[typeof(SelectContext)];
+                    selectContext.SetHint(
+                        attributes: null,
+                        content: new HtmlString("The hint"));
 
-                    selectContext.AddItem(new SelectListItem()
+                    selectContext.AddItem(new SelectItem()
                     {
                         Content = new HtmlString("First")
                     });
 
-                    selectContext.AddItem(new SelectListItem()
+                    selectContext.AddItem(new SelectItem()
                     {
                         Content = new HtmlString("Second"),
                         Value = "second"
                     });
 
-                    selectContext.AddItem(new SelectListItem()
+                    selectContext.AddItem(new SelectItem()
                     {
                         Content = new HtmlString("Third"),
-                        IsDisabled = true,
+                        Disabled = true,
                         Value = "third"
                     });
 
-                    selectContext.AddItem(new SelectListItem()
+                    selectContext.AddItem(new SelectItem()
                     {
                         Content = new HtmlString("Fourth"),
-                        IsSelected = true,
+                        Selected = true,
                         Value = "fourth"
                     });
 
@@ -64,32 +66,34 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new SelectTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+            var tagHelper = new SelectTagHelper()
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
-                Name = "my-id"
+                Name = "my-name"
             };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            var input = node.ChildNodes.FindFirst("select");
-            Assert.Equal(
-                "<select aria-describedby=\"describedby\" class=\"govuk-select\" id=\"my-id\" name=\"my-id\">" +
-                "<option>First</option>" +
-                "<option value=\"second\">Second</option>" +
-                "<option disabled=\"disabled\" value=\"third\">Third</option>" +
-                "<option selected=\"selected\" value=\"fourth\">Fourth</option>" +
-                "</select>",
-                input.OuterHtml);
+            var expectedHtml = @"
+<div class=""govuk-form-group"">
+    <label for=""my-id"" class=""govuk-label"">The label</label>
+    <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
+    <select aria-describedby=""describedby my-id-hint"" class=""govuk-select"" id=""my-id"" name=""my-name"">
+        <option>First</option>
+        <option value=""second"">Second</option>
+        <option disabled=""disabled"" value=""third"">Third</option>
+        <option selected=""selected"" value=""fourth"">Fourth</option>
+    </select>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_HasErrorClassWhenErrorSpecified()
+        public async Task ProcessAsync_WithError_RendersExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -103,33 +107,56 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var selectContext = context.GetContextItem<SelectContext>();
+
+                    selectContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
-                        content: new HtmlString("The label")); formGroupContext.TrySetErrorMessage(
-                         visuallyHiddenText: null,
-                         attributes: null,
-                         content: new HtmlString("Error"));
+                        content: new HtmlString("The label"));
+
+                    selectContext.SetHint(
+                        attributes: null,
+                        content: new HtmlString("The hint"));
+
+                    selectContext.SetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: new HtmlString("The error"));
+
+                    selectContext.AddItem(new SelectItem()
+                    {
+                        Content = new HtmlString("First")
+                    });
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new SelectTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+            var tagHelper = new SelectTagHelper()
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
-                Name = "my-id"
+                Name = "my-name"
             };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            Assert.Contains("govuk-select--error", node.ChildNodes.FindFirst("select").GetCssClasses());
+            var expectedHtml = @"
+<div class=""govuk-form-group govuk-form-group--error"">
+    <label for=""my-id"" class=""govuk-label"">The label</label>
+    <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
+    <span id=""my-id-error"" class=""govuk-error-message"">
+        <span class=""govuk-visually-hidden"">Error:</span>
+        The error
+    </span>
+    <select aria-describedby=""describedby my-id-hint my-id-error"" class=""govuk-select govuk-select--error"" id=""my-id"" name=""my-name"">
+        <option>First</option>
+    </select>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
     }
 }
