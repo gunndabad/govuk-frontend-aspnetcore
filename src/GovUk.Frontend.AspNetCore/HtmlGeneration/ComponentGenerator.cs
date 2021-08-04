@@ -455,44 +455,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        public virtual TagBuilder GenerateFileUpload(
-            bool haveError,
-            string id,
-            string name,
-            string describedBy,
-            IDictionary<string, string> attributes)
-        {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            var tagBuilder = new TagBuilder("input");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-file-upload");
-
-            if (haveError)
-            {
-                tagBuilder.MergeCssClass("govuk-file-upload--error");
-            }
-
-            tagBuilder.Attributes.Add("id", id);
-            tagBuilder.Attributes.Add("name", name);
-            tagBuilder.Attributes.Add("type", "file");
-
-            if (describedBy != null)
-            {
-                tagBuilder.Attributes.Add("aria-describedby", describedBy);
-            }
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateFormGroup(
             bool haveError,
             IHtmlContent content,
