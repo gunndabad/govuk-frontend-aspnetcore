@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -27,11 +26,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var fileUploadContext = context.GetContextItem<FileUploadContext>();
+
+                    fileUploadContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
+
+                    fileUploadContext.SetHint(
+                        attributes: null,
+                        content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -48,16 +52,18 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            var input = node.ChildNodes.FindFirst("input");
-            Assert.Equal(
-                "<input aria-describedby=\"describedby\" class=\"govuk-file-upload\" id=\"my-id\" name=\"my-id\" type=\"file\">",
-                input.OuterHtml);
+            var expectedHtml = @"
+<div class=""govuk-form-group"">
+    <label for=""my-id"" class=""govuk-label"">The label</label>
+    <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
+    <input aria-describedby=""describedby my-id-hint"" class=""govuk-file-upload"" id=""my-id"" name=""my-id"" type=""file"">
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_HasErrorClassWhenErrorSpecified()
+        public async Task ProcessAsync_WithError_RendersExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -71,15 +77,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var fileUploadContext = context.GetContextItem<FileUploadContext>();
+
+                    fileUploadContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
-                    formGroupContext.TrySetErrorMessage(
+
+                    fileUploadContext.SetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
-                        content: new HtmlString("Error"));
+                        content: new HtmlString("The error"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -96,9 +104,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            Assert.Contains("govuk-file-upload--error", node.ChildNodes.FindFirst("input").GetCssClasses());
+            var expectedHtml = @"
+<div class=""govuk-form-group govuk-form-group--error"">
+    <label for=""my-id"" class=""govuk-label"">The label</label>
+    <span id=""my-id-error"" class=""govuk-error-message"">
+        <span class=""govuk-visually-hidden"">Error:</span>
+        The error
+    </span>
+    <input aria-describedby=""describedby my-id-error"" class=""govuk-file-upload govuk-file-upload--error"" id=""my-id"" name=""my-id"" type=""file"">
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
     }
 }

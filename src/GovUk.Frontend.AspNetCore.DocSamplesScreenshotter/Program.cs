@@ -47,6 +47,8 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("ErrorMessage/ErrorMessageWithOverridenVisuallyHiddenText", "error-message-with-overriden-visually-hidden-text.png"),
                 ("ErrorMessage/ErrorMessageWithModelStateError", "error-message-with-modelstate-error.png"),
                 ("Fieldset/Fieldset", "fieldset.png"),
+                ("FileUpload/FileUpload", "file-upload.png"),
+                ("FileUpload/FileUploadWithErrors", "file-upload-with-errors.png"),
                 ("InsetText/InsetText", "inset-text.png"),
                 ("NotificationBanner/NotificationBanner", "notification-banner.png"),
                 ("NotificationBanner/NotificationBannerSuccess", "notification-banner-success.png"),
