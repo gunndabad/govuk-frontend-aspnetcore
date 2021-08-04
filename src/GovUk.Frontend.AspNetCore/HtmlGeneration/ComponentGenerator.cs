@@ -355,7 +355,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var div = new TagBuilder("div");
                 div.MergeCssClass("govuk-date-input__item");
 
-                var itemInput = GenerateInput(
+                var itemInput = GenerateTextInput(
                     item.HaveError,
                     item.Id,
                     item.Name,

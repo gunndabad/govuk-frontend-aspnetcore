@@ -8,7 +8,7 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 {
-    public class InputTagHelperTests
+    public class TextInputTagHelperTests
     {
         [Fact]
         public async Task ProcessAsync_GeneratesExpectedOutput()
@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var inputContext = context.GetContextItem<InputContext>();
+                    var inputContext = context.GetContextItem<TextInputContext>();
 
                     inputContext.SetLabel(
                         isPageHeading: false,
@@ -40,7 +40,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper()
+            var tagHelper = new TextInputTagHelper()
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -89,7 +89,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var inputContext = context.GetContextItem<InputContext>();
+                    var inputContext = context.GetContextItem<TextInputContext>();
 
                     inputContext.SetLabel(
                         isPageHeading: false,
@@ -109,7 +109,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper()
+            var tagHelper = new TextInputTagHelper()
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
@@ -155,7 +155,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var inputContext = context.GetContextItem<InputContext>();
+                    var inputContext = context.GetContextItem<TextInputContext>();
 
                     inputContext.SetLabel(
                         isPageHeading: false,
@@ -166,7 +166,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper()
+            var tagHelper = new TextInputTagHelper()
             {
                 Id = "my-id",
                 Name = "my-name"
@@ -196,7 +196,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var inputContext = context.GetContextItem<InputContext>();
+                    var inputContext = context.GetContextItem<TextInputContext>();
 
                     inputContext.SetLabel(
                         isPageHeading: false,
@@ -209,7 +209,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper()
+            var tagHelper = new TextInputTagHelper()
             {
                 Id = "my-id",
                 Name = "my-name"
@@ -250,7 +250,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var inputContext = context.GetContextItem<InputContext>();
+                    var inputContext = context.GetContextItem<TextInputContext>();
 
                     inputContext.SetLabel(
                         isPageHeading: false,
@@ -263,7 +263,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper()
+            var tagHelper = new TextInputTagHelper()
             {
                 Id = "my-id",
                 Name = "my-name"
@@ -304,7 +304,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var inputContext = context.GetContextItem<InputContext>();
+                    var inputContext = context.GetContextItem<TextInputContext>();
 
                     inputContext.SetLabel(
                         isPageHeading: false,
@@ -319,7 +319,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputTagHelper()
+            var tagHelper = new TextInputTagHelper()
             {
                 Id = "my-id",
                 Name = "my-name"

@@ -5,13 +5,13 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 {
-    public class InputContextTests
+    public class TextInputContextTests
     {
         [Fact]
         public void SetErrorMessage_AlreadyGotPrefix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
 
@@ -27,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetErrorMessage_AlreadyGotSuffix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
 
@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetHint_AlreadyGotPrefix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
 
@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetHint_AlreadyGotSuffix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
 
@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetLabel_AlreadyGotPrefix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
 
@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetLabel_AlreadyGotSuffix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
 
@@ -107,7 +107,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetPrefix_AlreadySet_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetPrefix(attributes: null, content: new HtmlString("Existing prefix"));
 
@@ -123,7 +123,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetPrefix_AlreadyGotSuffix_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
 
@@ -139,7 +139,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetSuffix_AlreadySet_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new InputContext();
+            var context = new TextInputContext();
 
             context.SetSuffix(attributes: null, content: new HtmlString("Existing prefix"));
 

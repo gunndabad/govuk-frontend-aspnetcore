@@ -12,9 +12,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS input component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, InputPrefixTagHelper.TagName, InputSuffixTagHelper.TagName)]
+    [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, TextInputPrefixTagHelper.TagName, TextInputSuffixTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
-    public class InputTagHelper : FormGroupTagHelperBase
+    public class TextInputTagHelper : FormGroupTagHelperBase
     {
         internal const string ErrorMessageTagName = "govuk-input-error-message";
         internal const string HintTagName = "govuk-input-hint";
@@ -38,14 +38,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private bool _valueSpecified;
 
         /// <summary>
-        /// Creates an <see cref="InputTagHelper"/>.
+        /// Creates an <see cref="TextInputTagHelper"/>.
         /// </summary>
-        public InputTagHelper()
+        public TextInputTagHelper()
             : this(htmlGenerator: null, modelHelper: null)
         {
         }
 
-        internal InputTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
+        internal TextInputTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
             : base(
                   htmlGenerator ?? new ComponentGenerator(),
                   modelHelper ?? new DefaultModelHelper())
@@ -148,14 +148,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        private protected override FormGroupContext CreateFormGroupContext() => new InputContext();
+        private protected override FormGroupContext CreateFormGroupContext() => new TextInputContext();
 
         private protected override IHtmlContent GenerateFormGroupContent(
             TagHelperContext context,
             FormGroupContext formGroupContext,
             out bool haveError)
         {
-            var inputContext = context.GetContextItem<InputContext>();
+            var inputContext = context.GetContextItem<TextInputContext>();
 
             var contentBuilder = new HtmlContentBuilder();
 
@@ -192,7 +192,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     AspFor != null ? ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) :
                     null;
 
-                return Generator.GenerateInput(
+                return Generator.GenerateTextInput(
                     haveError,
                     resolvedId,
                     resolvedName,
