@@ -6,8 +6,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     public partial class ComponentTests
     {
         [Theory]
-        [ComponentFixtureData("input", typeof(OptionsJson.Input))]
-        public void Input(ComponentTestCaseData<OptionsJson.Input> data) =>
+        [ComponentFixtureData("input", typeof(OptionsJson.TextInput))]
+        public void TextInput(ComponentTestCaseData<OptionsJson.TextInput> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
                 (generator, options) =>
@@ -53,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         {
                             AppendToDescribedBy(ref describedBy, options.DescribedBy);
 
-                            return generator.GenerateInput(
+                            return generator.GenerateTextInput(
                                 haveError,
                                 options.Id,
                                 options.Name,

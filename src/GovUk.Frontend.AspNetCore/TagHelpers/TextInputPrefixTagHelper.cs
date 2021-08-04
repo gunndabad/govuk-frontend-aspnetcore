@@ -8,23 +8,23 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// <summary>
     /// Represents the prefix element in a GDS input component.
     /// </summary>
-    [HtmlTargetElement(TagName, ParentTag = InputTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.InputPrefixElement)]
-    public class InputPrefixTagHelper : FormGroupErrorMessageTagHelperBase
+    public class TextInputPrefixTagHelper : FormGroupErrorMessageTagHelperBase
     {
         internal const string TagName = "govuk-input-prefix";
 
         /// <summary>
-        /// Creates an <see cref="InputPrefixTagHelper"/>.
+        /// Creates an <see cref="TextInputPrefixTagHelper"/>.
         /// </summary>
-        public InputPrefixTagHelper()
+        public TextInputPrefixTagHelper()
         {
         }
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var inputContext = (InputContext)context.Items[typeof(InputContext)];
+            var inputContext = (TextInputContext)context.Items[typeof(TextInputContext)];
 
             var content = await output.GetChildContentAsync();
 

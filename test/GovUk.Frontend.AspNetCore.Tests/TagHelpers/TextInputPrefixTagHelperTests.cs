@@ -8,41 +8,41 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 {
-    public class InputSuffixTagHelperTests
+    public class TextInputPrefixTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_SetsSuffixOnContext()
+        public async Task ProcessAsync_SetsPrefixOnContext()
         {
             // Arrange
-            var inputContext = new InputContext();
+            var inputContext = new TextInputContext();
 
             var context = new TagHelperContext(
-                tagName: "govuk-input-suffix",
+                tagName: "govuk-input-prefix",
                 allAttributes: new TagHelperAttributeList(),
                 items: new Dictionary<object, object>()
                 {
-                    { typeof(InputContext), inputContext }
+                    { typeof(TextInputContext), inputContext }
                 },
                 uniqueId: "test");
 
             var output = new TagHelperOutput(
-                "govuk-input-suffix",
+                "govuk-input-prefix",
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Suffix"));
+                    tagHelperContent.AppendHtml(new HtmlString("Prefix"));
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new InputSuffixTagHelper();
+            var tagHelper = new TextInputPrefixTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.True(inputContext.Suffix.HasValue);
-            Assert.Equal("Suffix", inputContext.Suffix.Value.Content.RenderToString());
+            Assert.True(inputContext.Prefix.HasValue);
+            Assert.Equal("Prefix", inputContext.Prefix.Value.Content.RenderToString());
         }
     }
 }

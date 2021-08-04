@@ -4,19 +4,19 @@ using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    internal class InputContext : FormGroupContext
+    internal class TextInputContext : FormGroupContext
     {
         public (IDictionary<string, string>? Attributes, IHtmlContent Content)? Prefix { get; private set; }
 
         public (IDictionary<string, string>? Attributes, IHtmlContent Content)? Suffix { get; private set; }
 
-        protected override string ErrorMessageTagName => InputTagHelper.ErrorMessageTagName;
+        protected override string ErrorMessageTagName => TextInputTagHelper.ErrorMessageTagName;
 
-        protected override string HintTagName => InputTagHelper.HintTagName;
+        protected override string HintTagName => TextInputTagHelper.HintTagName;
 
-        protected override string LabelTagName => InputTagHelper.LabelTagName;
+        protected override string LabelTagName => TextInputTagHelper.LabelTagName;
 
-        protected override string RootTagName => InputTagHelper.TagName;
+        protected override string RootTagName => TextInputTagHelper.TagName;
 
         public override void SetErrorMessage(
             string? visuallyHiddenText,
@@ -27,14 +27,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     ErrorMessageTagName,
-                    InputPrefixTagHelper.TagName);
+                    TextInputPrefixTagHelper.TagName);
             }
 
             if (Suffix != null)
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     ErrorMessageTagName,
-                    InputSuffixTagHelper.TagName);
+                    TextInputSuffixTagHelper.TagName);
             }
 
             base.SetErrorMessage(visuallyHiddenText, attributes, content);
@@ -46,14 +46,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     HintTagName,
-                    InputPrefixTagHelper.TagName);
+                    TextInputPrefixTagHelper.TagName);
             }
 
             if (Suffix != null)
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     HintTagName,
-                    InputSuffixTagHelper.TagName);
+                    TextInputSuffixTagHelper.TagName);
             }
 
             base.SetHint(attributes, content);
@@ -65,14 +65,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     LabelTagName,
-                    InputPrefixTagHelper.TagName);
+                    TextInputPrefixTagHelper.TagName);
             }
 
             if (Suffix != null)
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     LabelTagName,
-                    InputSuffixTagHelper.TagName);
+                    TextInputSuffixTagHelper.TagName);
             }
 
             base.SetLabel(isPageHeading, attributes, content);
@@ -85,15 +85,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (Prefix != null)
             {
                 throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                    InputPrefixTagHelper.TagName,
-                    InputTagHelper.TagName);
+                    TextInputPrefixTagHelper.TagName,
+                    TextInputTagHelper.TagName);
             }
 
             if (Suffix != null)
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                    InputPrefixTagHelper.TagName,
-                    InputSuffixTagHelper.TagName);
+                    TextInputPrefixTagHelper.TagName,
+                    TextInputSuffixTagHelper.TagName);
             }
 
             Prefix = (attributes, content);
@@ -106,8 +106,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (Suffix != null)
             {
                 throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                    InputSuffixTagHelper.TagName,
-                    InputTagHelper.TagName);
+                    TextInputSuffixTagHelper.TagName,
+                    TextInputTagHelper.TagName);
             }
 
             Suffix = (attributes, content);

@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string NameAttributeName = "name";
 
         /// <summary>
-        /// Creates an <see cref="InputTagHelper"/>.
+        /// Creates an <see cref="TextInputTagHelper"/>.
         /// </summary>
         public FileUploadTagHelper()
             : this(htmlGenerator: null, modelHelper: null)

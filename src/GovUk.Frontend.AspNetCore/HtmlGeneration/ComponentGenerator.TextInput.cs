@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         internal const string InputPrefixElement = "div";
         internal const string InputSuffixElement = "div";
 
-        public TagBuilder GenerateInput(
+        public TagBuilder GenerateTextInput(
             bool haveError,
             string id,
             string name,
