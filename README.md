@@ -34,7 +34,7 @@ public class Startup
 ```
 
 This will register a [Tag Helper Component](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/th-components?view=aspnetcore-5.0) that automatically adds stylesheet and script imports to your Razor views.
-If you do *not* want this then use the overload of `AddGovUkFrontend` that takes an `Action<GovUkFrontendAspNetCoreOptions>` parameter and set `AddImportsToHtml` to `false`:
+If you do *not* want this then use the overload of `AddGovUkFrontend` that takes an `Action<GovUkFrontendAspNetCoreOptions>` argument and set `AddImportsToHtml` to `false`:
 
 ```cs
 services.AddGovUkFrontend(options =>
@@ -68,6 +68,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Inset text](docs/components/inset-text.md)
 - [Notification banner](docs/components/notification-banner.md)
 - [Panel](docs/components/panel.md)
+- [Select](docs/components/select.md)
 - [Summary list](docs/components/summary-list.md)
 - [Tag](docs/components/tag.md)
 - [Text input](docs/components/text-input.md)
