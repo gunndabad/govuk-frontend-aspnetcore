@@ -12,11 +12,6 @@ namespace GovUk.Frontend.AspNetCore
             public const string Title = "There is a problem";
         }
 
-        public static class Select
-        {
-            public const bool Disabled = false;
-        }
-
         public static class Tabs
         {
             public const string Title = "Contents";

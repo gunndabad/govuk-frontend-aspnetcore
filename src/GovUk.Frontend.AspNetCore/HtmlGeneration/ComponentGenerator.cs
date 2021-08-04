@@ -465,7 +465,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 throw new ArgumentNullException(nameof(content));
             }
 
-            var tagBuilder = new TagBuilder("div");
+            var tagBuilder = new TagBuilder(FormGroupElement);
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-form-group");
 
@@ -622,75 +622,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 tagBuilder.InnerHtml.AppendHtml(divider.Content);
                 return tagBuilder;
             }
-        }
-
-        public virtual TagBuilder GenerateSelect(
-            bool haveError,
-            string id,
-            string name,
-            string describedBy,
-            bool disabled,
-            IEnumerable<SelectListItem> items,
-            IDictionary<string, string> attributes)
-        {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            if (name == null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            var tagBuilder = new TagBuilder("select");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-select");
-
-            if (haveError)
-            {
-                tagBuilder.MergeCssClass("govuk-select--error");
-            }
-
-            tagBuilder.Attributes.Add("id", id);
-            tagBuilder.Attributes.Add("name", name);
-
-            if (describedBy != null)
-            {
-                tagBuilder.Attributes.Add("aria-describedby", describedBy);
-            }
-
-            foreach (var item in items)
-            {
-                var option = new TagBuilder("option");
-                option.MergeAttributes(item.Attributes);
-
-                if (item.Value != null)
-                {
-                    option.Attributes.Add("value", item.Value);
-                }
-                
-                if (item.IsSelected)
-                {
-                    option.Attributes.Add("selected", "selected");
-                }
-
-                if (item.IsDisabled)
-                {
-                    option.Attributes.Add("disabled", "disabled");
-                }
-
-                option.InnerHtml.AppendHtml(item.Content);
-
-                tagBuilder.InnerHtml.AppendHtml(option);
-            }
-
-            return tagBuilder;
         }
 
         public virtual TagBuilder GenerateTabs(
