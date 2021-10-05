@@ -1,4 +1,5 @@
 using System.Linq;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Xunit;
 
@@ -19,26 +20,36 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var idPrefix = options.IdPrefix ?? options.Name;
 
                     var items = options.Items
-                        .Select((item, index) => new CheckboxesItem()
-                        {
-                            ConditionalContent = item.Conditional?.Html != null ?
-                                new HtmlString(item.Conditional.Html) :
-                                null,
-                            Content = TextOrHtmlHelper.GetHtmlContent(item.Text, item.Html),
-                            HintAttributes = item.Hint?.Attributes.ToAttributesDictionary()
-                                .MergeAttribute("class", item.Hint?.Classes),
-                            HintContent = item.Hint != null ?
-                                TextOrHtmlHelper.GetHtmlContent(item.Hint.Text, item.Hint.Html) :
-                                null,
-                            Id = item.Id,
-                            InputAttributes = item.Attributes.ToAttributesDictionary(),
-                            IsChecked = item.Checked ?? false,  // FIXME
-                            IsDisabled = item.Disabled ?? false,  // FIXME
-                            Name = item.Name,
-                            Value = item.Value
-                        });
-
-                    var isConditional = items.Any(i => i.ConditionalContent != null);
+                        .Select((item, index) =>
+                            item.Divider != null ?
+                                (CheckboxesItemBase)new CheckboxesItemDivider() { Content = new HtmlString(item.Divider) } :
+                                (CheckboxesItemBase)new CheckboxesItem()
+                                {
+                                    Behavior = item.Behaviour == "exclusive" ? CheckboxesItemBehavior.Exclusive : CheckboxesItemBehavior.Default,
+                                    Conditional = item.Conditional?.Html != null ?
+                                    new CheckboxesItemConditional()
+                                    {
+                                        Content = new HtmlString(item.Conditional.Html)
+                                    } :
+                                    null,
+                                        LabelContent = TextOrHtmlHelper.GetHtmlContent(item.Text, item.Html),
+                                        Hint = item.Hint != null ?
+                                    new CheckboxesItemHint()
+                                    {
+                                        Attributes = item.Hint.Attributes?.ToAttributesDictionary(),
+                                        Content = TextOrHtmlHelper.GetHtmlContent(item.Hint.Text, item.Hint.Html)
+                                    } :
+                                    null,
+                                        Id = item.Id,
+                                        InputAttributes = item.Attributes.ToAttributesDictionary(),
+                                        LabelAttributes = item.Label?.Attributes.ToAttributesDictionary()
+                                            .MergeAttribute("class", item.Label?.Classes),
+                                        Checked = item.Checked ?? ComponentGenerator.CheckboxesItemDefaultChecked,
+                                        Disabled = item.Disabled ?? ComponentGenerator.CheckboxesItemDefaultDisabled,
+                                        Name = item.Name,
+                                        Value = item.Value ?? string.Empty
+                                }
+                        );
 
                     var attributes = options.Attributes.ToAttributesDictionary()
                        .MergeAttribute("class", options.Classes);
@@ -62,11 +73,12 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             AppendToDescribedBy(ref describedBy, options.DescribedBy);
 
                             return generator.GenerateCheckboxes(
+                                idPrefix,
                                 options.Name,
-                                isConditional,
                                 describedBy,
-                                attributes,
-                                items);
+                                hasFieldset: options.Fieldset != null,
+                                items: items,
+                                attributes: attributes);
                         });
                 });
     }

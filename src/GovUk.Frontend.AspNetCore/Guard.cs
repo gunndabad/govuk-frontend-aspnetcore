@@ -60,6 +60,17 @@ namespace GovUk.Frontend.AspNetCore
             return argValue;
         }
 
+        public static void ArgumentValid(
+            string argName,
+            string message,
+            bool test)
+        {
+            if (!test)
+            {
+                throw new ArgumentException(message, argName);
+            }
+        }
+
         public static T ArgumentValidNotNull<T>(
             string argName,
             string message,

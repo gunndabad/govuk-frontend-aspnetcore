@@ -95,7 +95,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             TagBuilder GenerateFileUpload(bool haveError)
             {
-                var resolvedId = ResolveId();
+                var resolvedId = ResolveIdPrefix();
                 var resolvedName = ResolveName();
 
                 return Generator.GenerateFileUpload(
@@ -107,7 +107,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        private protected override string ResolveId()
+        private protected override string ResolveIdPrefix()
         {
             if (Id != null)
             {

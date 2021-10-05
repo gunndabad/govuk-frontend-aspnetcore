@@ -28,8 +28,10 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public string Value { get; set; }
         public Label Label { get; set; }
         public Hint Hint { get; set; }
+        public string Divider { get; set; }
         public bool? Checked { get; set; }
         public CheckboxesItemConditional Conditional { get; set; }
+        public string Behaviour { get; set; }
         public bool? Disabled { get; set; }
         public IDictionary<string, object> Attributes { get; set; }
     }
