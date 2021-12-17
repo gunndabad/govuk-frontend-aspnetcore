@@ -67,9 +67,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_DeducesSelectedFromModelExpression(string modelValue, bool expectedSelected)
         {
             // Arrange
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
-            var modelExpression = "Foo";
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
@@ -117,10 +118,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_SelectedAttributeExplicitlySet_IgnoresModelExpression()
         {
             // Arrange
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
-            var viewContext = new ViewContext();
-            var modelExpression = "Foo";
             var modelValue = "bar";
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
@@ -165,9 +167,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
         }
 
-        public class Model
+        private class Model
         {
-            public string Foo { get; set; }
+            public string SimpleProperty { get; set; }
         }
     }
 }
