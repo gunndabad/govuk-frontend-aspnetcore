@@ -117,11 +117,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*expression: */It.IsAny<string>()))
                 .Returns("An error!");
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
             var tagHelper = new ErrorMessageTagHelper(htmlGenerator: null, modelHelperMock.Object)
             {
-                AspFor = new ModelExpression("Foo", modelExplorer),
+                AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
                 ViewContext = new ViewContext()
             };
 
@@ -167,11 +168,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*expression: */It.IsAny<string>()))
                 .Returns((string)null);
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
             var tagHelper = new ErrorMessageTagHelper(new ComponentGenerator(), modelHelperMock.Object)
             {
-                AspFor = new ModelExpression("Foo", modelExplorer),
+                AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
                 ViewContext = new ViewContext()
             };
 
@@ -214,9 +216,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal("Cannot determine content. Element must contain content if the 'asp-for' attribute is not specified.", ex.Message);
         }
 
-        public class Model
+        private class Model
         {
-            public string Foo { get; set; }
+            public string SimpleProperty { get; set; }
         }
     }
 }
