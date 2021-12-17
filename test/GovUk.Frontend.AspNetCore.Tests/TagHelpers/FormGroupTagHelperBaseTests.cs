@@ -58,9 +58,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var context = new TestFormGroupContext();
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
-            var modelExpression = "Foo";
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns("ModelState error");
@@ -86,9 +87,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new TestFormGroupContext();
             context.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Context error"));
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
-            var modelExpression = "Foo";
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns("ModelState error");
@@ -114,9 +116,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var context = new TestFormGroupContext();
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
-            var modelExpression = "Foo";
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns("ModelState error");
@@ -142,7 +145,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var context = new TestFormGroupContext();
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
             var modelExpression = "Foo";
 
@@ -359,9 +363,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var context = new TestFormGroupContext();
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
-            var modelExpression = "Foo";
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata label");
@@ -388,9 +393,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new TestFormGroupContext();
             context.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Context label"));
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model());
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
             var viewContext = new ViewContext();
-            var modelExpression = "Foo";
+            var modelExpression = nameof(Model.SimpleProperty);
 
             var modelHelper = new Mock<IModelHelper>();
             modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata label");
@@ -410,7 +416,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Contains("Context label", label.RenderToString());
         }
 
-        private class Model { }
+        private class Model
+        {
+            public string SimpleProperty { get; set; }
+        }
 
         private class TestFormGroupTagHelper : FormGroupTagHelperBase
         {
