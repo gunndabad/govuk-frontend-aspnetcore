@@ -181,137 +181,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
         }
 
-        public virtual TagBuilder GenerateCheckboxes(
-            string name,
-            bool isConditional,
-            string describedBy,
-            IDictionary<string, string> attributes,
-            IEnumerable<CheckboxesItem> items)
-        {
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-checkboxes");
-
-            if (isConditional)
-            {
-                tagBuilder.MergeCssClass("govuk-checkboxes--conditional");
-                tagBuilder.Attributes.Add("data-module", "govuk-checkboxes");
-            }
-
-            foreach (var item in items)
-            {
-                AddCheckboxItem(item, tagBuilder.InnerHtml);
-            }
-
-            return tagBuilder;
-
-            void AddCheckboxItem(CheckboxesItem item, IHtmlContentBuilder container)
-            {
-                // REVIEW Validate properties?
-
-                //if (item.Id == null)
-                //{
-                //    throw new ArgumentNullException(nameof(id));
-                //}
-
-                //if (value == null)
-                //{
-                //    throw new ArgumentNullException(nameof(value));
-                //}
-
-                //if (conditionalId == null && conditionalContent != null)
-                //{
-                //    throw new ArgumentNullException(
-                //        nameof(conditionalId),
-                //        $"{nameof(conditionalId)} must be provided when {nameof(conditionalContent)} is specified.");
-                //}
-
-                //if (hintId == null && hintContent != null)
-                //{
-                //    throw new ArgumentNullException(
-                //        nameof(hintId),
-                //        $"{nameof(hintId)} must be provided when {nameof(hintContent)} is specified.");
-                //}
-
-                var tagBuilder = new TagBuilder("div");
-                tagBuilder.MergeAttributes(item.Attributes);
-                tagBuilder.MergeCssClass("govuk-checkboxes__item");
-
-                var input = new TagBuilder("input");
-                input.MergeAttributes(item.InputAttributes);
-                input.TagRenderMode = TagRenderMode.SelfClosing;
-                input.MergeCssClass("govuk-checkboxes__input");
-                input.Attributes.Add("id", item.Id);
-                input.Attributes.Add("name", name);
-                input.Attributes.Add("type", "checkbox");
-                input.Attributes.Add("value", item.Value);
-
-                if (item.IsChecked)
-                {
-                    input.Attributes.Add("checked", "checked");
-                }
-
-                if (item.IsDisabled)
-                {
-                    input.Attributes.Add("disabled", "disabled");
-                }
-
-                if (item.ConditionalContent != null)
-                {
-                    input.Attributes.Add("data-aria-controls", item.ConditionalId);
-                }
-
-                var itemDescribedBy = describedBy;
-                if (item.HintContent != null)
-                {
-                    itemDescribedBy = ((describedBy ?? "") + $" {item.HintId}").Trim();
-                }
-
-                if (itemDescribedBy != null)
-                {
-                    input.Attributes.Add("aria-describedby", itemDescribedBy);
-                }
-
-                tagBuilder.InnerHtml.AppendHtml(input);
-
-                var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null);
-                label.MergeCssClass("govuk-checkboxes__label");
-                tagBuilder.InnerHtml.AppendHtml(label);
-
-                if (item.HintContent != null)
-                {
-                    var hint = GenerateHint(item.HintId, item.HintContent, item.HintAttributes);
-                    hint.MergeCssClass("govuk-checkboxes__hint");
-                    tagBuilder.InnerHtml.AppendHtml(hint);
-                }
-
-                container.AppendHtml(tagBuilder);
-
-                if (item.ConditionalContent != null)
-                {
-                    var conditional = new TagBuilder("div");
-                    conditional.MergeAttributes(item.ConditionalAttributes);
-                    conditional.MergeCssClass("govuk-checkboxes__conditional");
-
-                    if (!item.IsChecked)
-                    {
-                        conditional.MergeCssClass("govuk-checkboxes__conditional--hidden");
-                    }
-
-                    conditional.Attributes.Add("id", item.ConditionalId);
-
-                    conditional.InnerHtml.AppendHtml(item.ConditionalContent);
-
-                    container.AppendHtml(conditional);
-                }
-            }
-        }
-
         public virtual TagBuilder GenerateDateInput(
             string id,
             bool disabled,
@@ -762,6 +631,23 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.InnerHtml.AppendHtml(content);
 
             return tagBuilder;
+        }
+
+        private static void AppendToDescribedBy(ref string describedBy, string value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            if (describedBy == null)
+            {
+                describedBy = value;
+            }
+            else
+            {
+                describedBy += $" {value}";
+            }
         }
     }
 }

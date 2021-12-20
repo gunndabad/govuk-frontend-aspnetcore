@@ -183,7 +183,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             TagBuilder GenerateInput(bool haveError)
             {
-                var resolvedId = ResolveId();
+                var resolvedId = ResolveIdPrefix();
                 var resolvedName = ResolveName();
                 var resolvedType = Type ?? ComponentGenerator.InputDefaultType;
 
@@ -212,7 +212,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        private protected override string ResolveId()
+        private protected override string ResolveIdPrefix()
         {
             if (Id != null)
             {
