@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Xunit;
@@ -11,11 +12,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetLegend_SetsLegendOnContext()
         {
             // Arrange
-            var context = new FormGroupFieldsetContext(
-                fieldsetTagName: "test-fieldset",
-                legendTagName: "test-fieldset-legend",
-                attributes: null,
-                describedBy: null);
+            var context = new TestContext(attributes: null);
 
             // Act
             context.SetLegend(isPageHeading: true, null, new HtmlString("Legend"));
@@ -29,11 +26,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetLegend_AlreadySet_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new FormGroupFieldsetContext(
-                fieldsetTagName: "test-fieldset",
-                legendTagName: "test-fieldset-legend",
-                attributes: null,
-                describedBy: null);
+            var context = new TestContext(attributes: null);
 
             context.SetLegend(false, null, new HtmlString("Existing legend"));
 
@@ -43,6 +36,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
             Assert.Equal("Only one <test-fieldset-legend> element is permitted within each <test-fieldset>.", ex.Message);
+        }
+
+        private class TestContext : FormGroupFieldsetContext
+        {
+            public TestContext(IDictionary<string, string> attributes) :
+                base(fieldsetTagName: "test-fieldset", legendTagName : "test-fieldset-legend", attributes)
+            {
+            }
         }
     }
 }

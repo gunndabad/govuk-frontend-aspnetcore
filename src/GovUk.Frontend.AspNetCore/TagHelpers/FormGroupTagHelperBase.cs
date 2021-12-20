@@ -132,8 +132,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (content != null)
             {
-                var resolvedId = ResolveId();
-                var errorId = resolvedId + "-error";
+                var resolvedIdPrefix = ResolveIdPrefix();
+                var errorId = resolvedIdPrefix + "-error";
                 DescribedBy = AppendToDescribedBy(DescribedBy, errorId);
 
                 attributes ??= new Dictionary<string, string>();
@@ -151,8 +151,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             if (builder.Hint != null)
             {
-                var resolvedId = ResolveId();
-                var hintId = resolvedId + "-hint";
+                var resolvedIdPrefix = ResolveIdPrefix();
+                var hintId = resolvedIdPrefix + "-hint";
                 DescribedBy = AppendToDescribedBy(DescribedBy, hintId);
                 return Generator.GenerateHint(hintId, builder.Hint.Value.Content, builder.Hint.Value.Attributes);
             }
@@ -171,7 +171,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");
             }
 
-            var resolvedId = ResolveId();
+            var resolvedIdPrefix = ResolveIdPrefix();
 
             var isPageHeading = formGroupContext.Label?.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading;
             var content = formGroupContext.Label?.Content;
@@ -180,7 +180,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = content ??
                 new HtmlString(ModelHelper.GetDisplayName(ViewContext, AspFor!.ModelExplorer, AspFor.Name));
 
-            return Generator.GenerateLabel(resolvedId, isPageHeading, resolvedContent, attributes);
+            return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
         }
 
         private protected abstract FormGroupContext CreateFormGroupContext();
@@ -190,6 +190,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             FormGroupContext formGroupContext,
             out bool haveError);
 
-        private protected abstract string ResolveId();
+        private protected abstract string ResolveIdPrefix();
     }
 }

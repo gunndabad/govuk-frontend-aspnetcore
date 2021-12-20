@@ -461,7 +461,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 return contentBuilder;
             }
 
-            private protected override string ResolveId() => Id;
+            private protected override string ResolveIdPrefix() => Id;
         }
 
         private class TestFormGroupContext : FormGroupContext
