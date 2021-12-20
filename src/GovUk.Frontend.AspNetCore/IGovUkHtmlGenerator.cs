@@ -43,11 +43,12 @@ namespace GovUk.Frontend.AspNetCore
             IHtmlContent formGroup);
 
         TagBuilder GenerateCheckboxes(
+            string idPrefix,
             string name,
-            bool isConditional,
             string describedBy,
-            IDictionary<string, string> attributes,
-            IEnumerable<CheckboxesItem> items);
+            bool hasFieldset,
+            IEnumerable<CheckboxesItemBase> items,
+            IDictionary<string, string> attributes);
 
         TagBuilder GenerateDateInput(
             string id,

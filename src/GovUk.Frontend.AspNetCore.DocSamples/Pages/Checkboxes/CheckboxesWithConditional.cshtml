@@ -1,0 +1,40 @@
+﻿@page
+
+<govuk-checkboxes name="contact">
+    <govuk-checkboxes-fieldset>
+        <govuk-checkboxes-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            How would you like to be contacted?
+        </govuk-checkboxes-fieldset-legend>
+
+        <govuk-checkboxes-hint>
+            Select all options that are relevant to you.
+        </govuk-checkboxes-hint>
+
+        <govuk-checkboxes-item value="email">
+            Email
+            <govuk-checkboxes-item-conditional>
+                <govuk-input name="contact-by-email" type="email" autocomplete="email" spellcheck="false" input-class="govuk-!-width-one-third">
+                    <govuk-input-label>Email address</govuk-input-label>
+                </govuk-input>
+            </govuk-checkboxes-item-conditional>
+        </govuk-checkboxes-item>
+
+        <govuk-checkboxes-item value="phone">
+            Phone
+            <govuk-checkboxes-item-conditional>
+                <govuk-input name="contact-by-phone" type="tel" autocomplete="tel" input-class="govuk-!-width-one-third">
+                    <govuk-input-label>Phone number</govuk-input-label>
+                </govuk-input>
+            </govuk-checkboxes-item-conditional>
+        </govuk-checkboxes-item>
+
+        <govuk-checkboxes-item value="text message">
+            Text message
+            <govuk-checkboxes-item-conditional>
+                <govuk-input name="contact-by-text" type="tel" autocomplete="tel" input-class="govuk-!-width-one-third">
+                    <govuk-input-label>Mobile phone number</govuk-input-label>
+                </govuk-input>
+            </govuk-checkboxes-item-conditional>
+        </govuk-checkboxes-item>
+    </govuk-checkboxes-fieldset>
+</govuk-checkboxes>
