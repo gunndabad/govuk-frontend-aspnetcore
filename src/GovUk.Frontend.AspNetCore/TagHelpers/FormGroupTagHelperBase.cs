@@ -74,9 +74,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             using (context.SetScopedContextItem(formGroupContext))
             using (context.SetScopedContextItem(formGroupContext.GetType(), formGroupContext))
             {
-                await output.GetChildContentAsync();
+                var childContent = await output.GetChildContentAsync();
 
-                content = GenerateFormGroupContent(context, formGroupContext, out haveError);
+                content = GenerateFormGroupContent(context, formGroupContext, output, childContent, out haveError);
             }
 
             var tagBuilder = Generator.GenerateFormGroup(
@@ -188,6 +188,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected abstract IHtmlContent GenerateFormGroupContent(
             TagHelperContext context,
             FormGroupContext formGroupContext,
+            TagHelperOutput tagHelperOutput,
+            IHtmlContent childContent,
             out bool haveError);
 
         private protected abstract string ResolveIdPrefix();
