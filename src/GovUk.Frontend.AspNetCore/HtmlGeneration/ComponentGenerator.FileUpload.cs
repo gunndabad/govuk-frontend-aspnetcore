@@ -1,6 +1,6 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             string id,
             string name,
             string describedBy,
-            IDictionary<string, string> attributes)
+            AttributeDictionary attributes)
         {
             Guard.ArgumentNotNull(nameof(id), id);
             Guard.ArgumentNotNull(nameof(name), name);

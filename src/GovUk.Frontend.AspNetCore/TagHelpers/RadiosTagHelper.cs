@@ -66,7 +66,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 ResolvedName,
                 radiosContext.IsConditional,
                 radiosContext.Items,
-                RadiosAttributes);
+                RadiosAttributes.ToAttributeDictionary());
             contentBuilder.AppendHtml(tagBuilder);
 
             IHtmlContent content = contentBuilder;
@@ -82,7 +82,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     attributes: radiosContext.Fieldset.Attributes);
             }
 
-            return Generator.GenerateFormGroup(haveError, content, FormGroupAttributes);
+            return Generator.GenerateFormGroup(haveError, content, FormGroupAttributes.ToAttributeDictionary());
         }
 
         protected override string GetIdPrefix() => IdPrefix ?? Name;
@@ -238,7 +238,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 HintContent = itemContext.Hint?.content,
                 HintId = hintId,
                 Id = resolvedId,
-                InputAttributes = InputAttributes,
+                InputAttributes = InputAttributes.ToAttributeDictionary(),
                 Value = Value
             });
 
@@ -348,9 +348,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosFieldsetContext
     {
-        public (bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)? Legend { get; private set; }
+        public (bool isPageHeading, AttributeDictionary attributes, IHtmlContent content)? Legend { get; private set; }
 
-        public bool TrySetLegend(bool isPageHeading, IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetLegend(bool isPageHeading, AttributeDictionary attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -369,10 +369,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosItemContext
     {
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Conditional { get; private set; }
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Hint { get; private set; }
+        public (AttributeDictionary attributes, IHtmlContent content)? Conditional { get; private set; }
+        public (AttributeDictionary attributes, IHtmlContent content)? Hint { get; private set; }
 
-        public void SetConditional(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetConditional(AttributeDictionary attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -387,7 +387,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Conditional = (attributes, content);
         }
 
-        public void SetHint(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetHint(AttributeDictionary attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -405,9 +405,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class RadiosFieldset
     {
-        public IDictionary<string, string> Attributes { get; set; }
+        public AttributeDictionary Attributes { get; set; }
         public bool? LegendIsPageHeading { get; set; }
         public IHtmlContent LegendContent { get; set; }
-        public IDictionary<string, string> LegendAttributes { get; set; }
+        public AttributeDictionary LegendAttributes { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -50,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var phaseBannerContext = new PhaseBannerContext();
-            phaseBannerContext.SetTag(Attributes.Empty(), content: new HtmlString("Existing tag"));
+            phaseBannerContext.SetTag(new AttributeDictionary(), content: new HtmlString("Existing tag"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-phase-banner-tag",

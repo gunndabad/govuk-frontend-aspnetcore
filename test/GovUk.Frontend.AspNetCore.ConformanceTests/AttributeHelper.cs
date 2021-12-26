@@ -1,15 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
-    public static class DictionaryExtensions
+    public static class AttributeHelper
     {
-        public static IDictionary<string, string> CreateEmptyAttributesDictionary() =>
-            new Dictionary<string, string>();
-
-        public static IDictionary<string, string> MergeAttribute(
-            this IDictionary<string, string> attributes,
+        public static AttributeDictionary MergeAttribute(
+            this AttributeDictionary attributes,
             string key,
             object value)
         {
@@ -23,10 +20,20 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             return attributes;
         }
 
-        public static IDictionary<string, string> ToAttributesDictionary(
+        public static AttributeDictionary ToAttributesDictionary(
             this IDictionary<string, object> attributes)
         {
-            return (attributes?.ToDictionary(a => a.Key, a => AttributeValueToString(a.Value))).OrEmpty();
+            var attributeDictionary = new AttributeDictionary();
+
+            if (attributes != null)
+            {
+                foreach (var kvp in attributes)
+                {
+                    attributeDictionary.Add(kvp.Key, AttributeValueToString(kvp.Value));
+                }
+            }
+
+            return attributeDictionary;
         }
 
         private static string AttributeValueToString(object value) => value switch

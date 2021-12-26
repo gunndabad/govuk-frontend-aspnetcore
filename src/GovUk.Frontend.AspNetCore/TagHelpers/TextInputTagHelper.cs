@@ -204,7 +204,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     InputMode,
                     Spellcheck,
                     Disabled,
-                    InputAttributes,
+                    InputAttributes.ToAttributeDictionary(),
                     inputContext.Prefix?.Content,
                     inputContext.Prefix?.Attributes,
                     inputContext.Suffix?.Content,

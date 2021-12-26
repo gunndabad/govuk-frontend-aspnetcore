@@ -1,12 +1,13 @@
 #nullable enable
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
     public class CheckboxesItemBase
     {
-        public IDictionary<string, string>? Attributes { get; set; }
+        public AttributeDictionary? Attributes { get; set; }
     }
 
     public class CheckboxesItem : CheckboxesItemBase
@@ -18,22 +19,22 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public CheckboxesItemBehavior Behavior { get; set; }
         public bool Disabled { get; set; }
         public IHtmlContent? LabelContent { get; set; }
-        public IDictionary<string, string>? LabelAttributes { get; set; }
+        public AttributeDictionary? LabelAttributes { get; set; }
         public CheckboxesItemHint? Hint { get; set; }
         public CheckboxesItemConditional? Conditional { get; set; }
-        public IDictionary<string, string>? InputAttributes { get; set; }
+        public AttributeDictionary? InputAttributes { get; set; }
     }
 
     public class CheckboxesItemConditional
     {
         public IHtmlContent? Content { get; set; }
-        public IDictionary<string, string>? Attributes { get; set; }
+        public AttributeDictionary? Attributes { get; set; }
     }
 
     public class CheckboxesItemHint
     {
         public IHtmlContent? Content { get; set; }
-        public IDictionary<string, string>? Attributes { get; set; }
+        public AttributeDictionary? Attributes { get; set; }
     }
 
     public class CheckboxesItemDivider : CheckboxesItemBase

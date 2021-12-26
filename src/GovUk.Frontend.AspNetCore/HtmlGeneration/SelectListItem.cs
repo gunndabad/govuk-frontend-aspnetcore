@@ -1,7 +1,7 @@
 #nullable enable
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -12,6 +12,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public IHtmlContent? Content { get; set; }
         public bool Selected { get; set; }
         public bool Disabled { get; set; }
-        public IDictionary<string, string>? Attributes { get; set; }
+        public AttributeDictionary? Attributes { get; set; }
     }
 }

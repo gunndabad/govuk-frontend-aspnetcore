@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -55,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.SetHeading(Attributes.Empty(), content: new HtmlString("Existing heading"));
+            itemContext.SetHeading(new AttributeDictionary(), content: new HtmlString("Existing heading"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-heading",
@@ -93,7 +94,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Arrange
             var accordionContext = new AccordionContext();
             var itemContext = new AccordionItemContext();
-            itemContext.SetSummary(attributes: new Dictionary<string, string>(), content: new HtmlString("Summary"));
+            itemContext.SetSummary(attributes: new AttributeDictionary(), content: new HtmlString("Summary"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-accordion-item-heading",

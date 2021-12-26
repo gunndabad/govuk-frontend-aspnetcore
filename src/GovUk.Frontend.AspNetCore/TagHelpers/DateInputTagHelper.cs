@@ -6,6 +6,7 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -131,7 +132,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 day,
                 month,
                 year,
-                Attributes);
+                Attributes.ToAttributeDictionary());
 
             DateInputItem CreateDateInputItem(
                 int? value,
@@ -277,7 +278,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 LegendIsPageHeading = fieldsetContext.Legend?.isPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
-                LegendAttributes = fieldsetContext.Legend?.attributes
+                LegendAttributes = fieldsetContext.Legend?.attributes.ToAttributeDictionary()
             });
 
             output.SuppressOutput();
@@ -382,9 +383,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
     internal class DateInputFieldset
     {
-        public IDictionary<string, string> Attributes { get; set; }
+        public AttributeDictionary Attributes { get; set; }
         public bool? LegendIsPageHeading { get; set; }
         public IHtmlContent LegendContent { get; set; }
-        public IDictionary<string, string> LegendAttributes { get; set; }
+        public AttributeDictionary LegendAttributes { get; set; }
     }
 }

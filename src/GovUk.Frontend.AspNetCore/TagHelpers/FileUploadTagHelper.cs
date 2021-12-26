@@ -103,7 +103,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     resolvedId,
                     resolvedName,
                     DescribedBy,
-                    InputAttributes);
+                    InputAttributes.ToAttributeDictionary());
             }
         }
 

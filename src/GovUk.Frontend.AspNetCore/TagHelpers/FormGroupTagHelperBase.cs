@@ -136,7 +136,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 var errorId = resolvedIdPrefix + "-error";
                 DescribedBy = AppendToDescribedBy(DescribedBy, errorId);
 
-                attributes ??= new Dictionary<string, string>();
+                attributes ??= new AttributeDictionary();
                 attributes["id"] = errorId;
 
                 return Generator.GenerateErrorMessage(visuallyHiddenText, content, attributes);

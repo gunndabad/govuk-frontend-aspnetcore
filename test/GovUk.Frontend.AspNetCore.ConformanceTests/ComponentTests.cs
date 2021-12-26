@@ -5,6 +5,7 @@ using GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
 {
@@ -60,7 +61,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
             string describedBy = null;
 
-            var attributes = new Dictionary<string, string>()
+            var attributes = new AttributeDictionary()
                 .MergeAttribute("class", formGroup?.Classes);
 
             var contentBuilder = new HtmlContentBuilder();
@@ -103,7 +104,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     legendContent: TextOrHtmlHelper.GetHtmlContent(
                         fieldset.Legend?.Text,
                         fieldset.Legend?.Html),
-                    legendAttributes: new Dictionary<string, string>()
+                    legendAttributes: new AttributeDictionary()
                         .MergeAttribute("class", fieldset.Legend?.Classes),
                     content: contentBuilder,
                     attributes: fieldset.Attributes.ToAttributesDictionary()

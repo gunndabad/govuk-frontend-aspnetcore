@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -18,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public TagBuilder GenerateAccordion(
             string id,
             int headingLevel,
-            IDictionary<string, string> attributes,
+            AttributeDictionary? attributes,
             IEnumerable<AccordionItem> items)
         {
             Guard.ArgumentNotNullOrEmpty(nameof(id), id);

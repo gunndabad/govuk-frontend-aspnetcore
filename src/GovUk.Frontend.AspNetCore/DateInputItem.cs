@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -12,6 +12,6 @@ namespace GovUk.Frontend.AspNetCore
         public string Pattern { get; set; }
         public IHtmlContent Label { get; set; }
         public bool HaveError { get; set; }
-        public IDictionary<string, string> Attributes { get; set; }
+        public AttributeDictionary Attributes { get; set; }
     }
 }

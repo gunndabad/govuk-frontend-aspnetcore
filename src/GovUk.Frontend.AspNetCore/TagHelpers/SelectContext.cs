@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
@@ -40,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override void SetErrorMessage(
             string? visuallyHiddenText,
-            IDictionary<string, string>? attributes,
+            AttributeDictionary? attributes,
             IHtmlContent? content)
         {
             if (_items.Count != 0)
@@ -51,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             base.SetErrorMessage(visuallyHiddenText, attributes, content);
         }
 
-        public override void SetHint(IDictionary<string, string>? attributes, IHtmlContent? content)
+        public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
         {
             if (_items.Count != 0)
             {
@@ -61,7 +60,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             base.SetHint(attributes, content);
         }
 
-        public override void SetLabel(bool isPageHeading, IDictionary<string, string>? attributes, IHtmlContent? content)
+        public override void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
         {
             if (_items.Count != 0)
             {

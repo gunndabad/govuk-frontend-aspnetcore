@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Attributes = output.Attributes.ToAttributesDictionary(),
                 Href = href,
-                LinkAttributes = LinkAttributes,
+                LinkAttributes = LinkAttributes.ToAttributeDictionary(),
                 Content = childContent.Snapshot()
             });
 
