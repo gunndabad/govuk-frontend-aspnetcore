@@ -42,6 +42,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 tagBuilder.Attributes.Add("aria-describedby", describedBy);
             }
 
+            if (disabled)
+            {
+                tagBuilder.Attributes.Add("disabled", "disabled");
+            }
+
             var index = 0;
             foreach (var item in items)
             {
