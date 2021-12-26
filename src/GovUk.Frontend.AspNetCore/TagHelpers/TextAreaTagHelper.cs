@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
@@ -69,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Spellcheck,
                 Disabled,
                 resolvedContent,
-                Attributes);
+                Attributes.ToAttributeDictionary());
         }
 
         protected override string GetIdPrefix() => Id;

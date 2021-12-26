@@ -1,8 +1,10 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -19,111 +21,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             var tagBuilder = new TagBuilder("a");
             tagBuilder.Attributes.Add("href", href);
-
-            return tagBuilder;
-        }
-
-        public virtual TagBuilder GenerateButton(
-            string name,
-            string type,
-            string value,
-            bool isStartButton,
-            bool disabled,
-            bool preventDoubleClick,
-            string formAction,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("button");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-button");
-            tagBuilder.Attributes.Add("data-module", "govuk-button");
-            tagBuilder.Attributes.Add("type", type);
-
-            if (disabled)
-            {
-                tagBuilder.AddCssClass("govuk-button--disabled");
-                tagBuilder.Attributes.Add("disabled", "disabled");
-                tagBuilder.Attributes.Add("aria-disabled", "true");
-            }
-
-            if (name != null)
-            {
-                tagBuilder.Attributes.Add("name", name);
-            }
-
-            if (preventDoubleClick)
-            {
-                tagBuilder.Attributes.Add("data-prevent-double-click", "true");
-            }
-
-            if (value != null)
-            {
-                tagBuilder.Attributes.Add("value", value);
-            }
-
-            if (formAction != null)
-            {
-                tagBuilder.Attributes.Add("formaction", formAction);
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            if (isStartButton)
-            {
-                tagBuilder.AddCssClass("govuk-button--start");
-
-                var icon = GenerateStartButton();
-                tagBuilder.InnerHtml.AppendHtml(icon);
-            }
-
-            return tagBuilder;
-        }
-
-        public virtual TagBuilder GenerateButtonLink(
-            string href,
-            bool isStartButton,
-            bool disabled,
-            IHtmlContent content,
-            IDictionary<string, string> attributes)
-        {
-            if (href == null)
-            {
-                throw new ArgumentNullException(nameof(href));
-            }
-
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            var tagBuilder = new TagBuilder("a");
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.AddCssClass("govuk-button");
-            tagBuilder.Attributes.Add("data-module", "govuk-button");
-            tagBuilder.Attributes.Add("role", "button");
-            tagBuilder.Attributes.Add("draggable", "false");
-            tagBuilder.Attributes.Add("href", href);
-
-            if (disabled)
-            {
-                tagBuilder.AddCssClass("govuk-button--disabled");
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            if (isStartButton)
-            {
-                tagBuilder.AddCssClass("govuk-button--start");
-
-                var icon = GenerateStartButton();
-                tagBuilder.InnerHtml.AppendHtml(icon);
-            }
 
             return tagBuilder;
         }
@@ -187,7 +84,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             DateInputItem day,
             DateInputItem month,
             DateInputItem year,
-            IDictionary<string, string> attributes)
+            AttributeDictionary attributes)
         {
             if (day == null)
             {
@@ -268,10 +165,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
         public virtual TagBuilder GenerateErrorSummary(
             IHtmlContent titleContent,
-            IDictionary<string, string> titleAttributes,
+            AttributeDictionary titleAttributes,
             IHtmlContent descriptionContent,
-            IDictionary<string, string> descriptionAttributes,
-            IDictionary<string, string> attributes,
+            AttributeDictionary descriptionAttributes,
+            AttributeDictionary attributes,
             IEnumerable<ErrorSummaryItem> items)
         {
             if (items == null)
@@ -327,7 +224,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public virtual TagBuilder GenerateFormGroup(
             bool haveError,
             IHtmlContent content,
-            IDictionary<string, string> attributes)
+            AttributeDictionary attributes)
         {
             if (content == null)
             {
@@ -352,7 +249,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             string name,
             bool isConditional,
             IEnumerable<RadiosItemBase> items,
-            IDictionary<string, string> attributes)
+            AttributeDictionary attributes)
         {
             if (items == null)
             {
@@ -496,7 +393,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public virtual TagBuilder GenerateTabs(
             string id,
             string title,
-            IDictionary<string, string> attributes,
+            AttributeDictionary attributes,
             IEnumerable<TabsItem> items)
         {
             if (items == null)
@@ -578,7 +475,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             bool? spellcheck,
             bool disabled,
             IHtmlContent content,
-            IDictionary<string, string> attributes)
+            AttributeDictionary attributes)
         {
             if (id == null)
             {

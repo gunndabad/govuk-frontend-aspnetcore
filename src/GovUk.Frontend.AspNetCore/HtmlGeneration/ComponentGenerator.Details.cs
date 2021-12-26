@@ -1,8 +1,7 @@
 #nullable enable
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -16,10 +15,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public TagBuilder GenerateDetails(
             bool open,
             IHtmlContent summaryContent,
-            IDictionary<string, string> summaryAttributes,
+            AttributeDictionary? summaryAttributes,
             IHtmlContent textContent,
-            IDictionary<string, string> textAttributes,
-            IDictionary<string, string> attributes)
+            AttributeDictionary? textAttributes,
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(summaryContent), summaryContent);
             Guard.ArgumentNotNull(nameof(textContent), textContent);

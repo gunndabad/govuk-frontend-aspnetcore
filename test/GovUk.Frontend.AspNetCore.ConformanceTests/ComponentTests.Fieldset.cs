@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         TextOrHtmlHelper.GetHtmlContent(options.Legend.Text, options.Legend.Html) :
                         null;
 
-                    var legendAttributes = new Dictionary<string, string>()
+                    var legendAttributes = new AttributeDictionary()
                         .MergeAttribute("class", options.Legend?.Classes);
 
                     var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;

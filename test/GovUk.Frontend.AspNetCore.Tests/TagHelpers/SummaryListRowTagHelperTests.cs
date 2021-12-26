@@ -5,6 +5,7 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -33,11 +34,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
-                    rowContext.SetKey(Attributes.Empty(), new HtmlString("Key"));
-                    rowContext.SetValue(Attributes.Empty(), new HtmlString("Value"));
+                    rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
+                    rowContext.SetValue(new AttributeDictionary(), new HtmlString("Value"));
                     rowContext.AddAction(new SummaryListRowAction()
                     {
-                        Attributes = new Dictionary<string, string>()
+                        Attributes = new AttributeDictionary()
                         {
                             { "href", "first" }
                         },
@@ -46,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     });
                     rowContext.AddAction(new SummaryListRowAction()
                     {
-                        Attributes = new Dictionary<string, string>()
+                        Attributes = new AttributeDictionary()
                         {
                             { "href", "second" }
                         },
@@ -145,7 +146,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
-                    rowContext.SetKey(Attributes.Empty(), new HtmlString("Key"));
+                    rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);

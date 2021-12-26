@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -10,16 +11,16 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateAccordion(
             string id,
             int headingLevel,
-            IDictionary<string, string> attributes,
+            AttributeDictionary attributes,
             IEnumerable<AccordionItem> items);
 
         TagBuilder GenerateAnchor(string href);
 
-        TagBuilder GenerateBackLink(IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateBackLink(IHtmlContent content, AttributeDictionary attributes);
 
         TagBuilder GenerateBreadcrumbs(
             bool collapseOnMobile,
-            IDictionary<string, string> attributes,
+            AttributeDictionary attributes,
             IEnumerable<BreadcrumbsItem> items);
 
         TagBuilder GenerateButton(
@@ -27,13 +28,13 @@ namespace GovUk.Frontend.AspNetCore
             bool disabled,
             bool preventDoubleClick,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateButtonLink(
             bool isStartButton,
             bool disabled,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateCharacterCount(
             string elementId,
@@ -48,7 +49,7 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool hasFieldset,
             IEnumerable<CheckboxesItemBase> items,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateDateInput(
             string id,
@@ -56,27 +57,27 @@ namespace GovUk.Frontend.AspNetCore
             DateInputItem day,
             DateInputItem month,
             DateInputItem year,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateDetails(
             bool open,
             IHtmlContent summaryContent,
-            IDictionary<string, string> summaryAttributes,
+            AttributeDictionary summaryAttributes,
             IHtmlContent text,
-            IDictionary<string, string> textAttributes,
-            IDictionary<string, string> attributes);
+            AttributeDictionary textAttributes,
+            AttributeDictionary attributes);
 
         TagBuilder GenerateErrorMessage(
             string visuallyHiddenText,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateErrorSummary(
             IHtmlContent titleContent,
-            IDictionary<string, string> titleAttributes,
+            AttributeDictionary titleAttributes,
             IHtmlContent descriptionContent,
-            IDictionary<string, string> descriptionAttributes,
-            IDictionary<string, string> attributes,
+            AttributeDictionary descriptionAttributes,
+            AttributeDictionary attributes,
             IEnumerable<ErrorSummaryItem> items);
 
         TagBuilder GenerateFieldset(
@@ -84,28 +85,28 @@ namespace GovUk.Frontend.AspNetCore
             string role,
             bool? legendIsPageHeading,
             IHtmlContent legendContent,
-            IDictionary<string, string> legendAttributes,
+            AttributeDictionary legendAttributes,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateFileUpload(
             bool haveError,
             string id,
             string name,
             string describedBy,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
-        TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, AttributeDictionary attributes);
 
-        TagBuilder GenerateHint(string id, IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateHint(string id, IHtmlContent content, AttributeDictionary attributes);
 
-        TagBuilder GenerateInsetText(string id, IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateInsetText(string id, IHtmlContent content, AttributeDictionary attributes);
 
         TagBuilder GenerateLabel(
             string @for,
             bool isPageHeading,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateNotificationBanner(
             NotificationBannerType type,
@@ -115,25 +116,25 @@ namespace GovUk.Frontend.AspNetCore
             int? titleHeadingLevel,
             IHtmlContent titleContent,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GeneratePanel(
             int headingLevel,
             IHtmlContent titleContent,
             IHtmlContent bodyContent,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GeneratePhaseBanner(
             IHtmlContent tagContent,
-            IDictionary<string, string> tabAttributes,
+            AttributeDictionary tabAttributes,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateRadios(
             string name,
             bool isConditional,
             IEnumerable<RadiosItemBase> items,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateSelect(
             bool haveError,
@@ -142,19 +143,19 @@ namespace GovUk.Frontend.AspNetCore
             string describedBy,
             bool disabled,
             IEnumerable<SelectItem> items,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
-        TagBuilder GenerateSkipLink(string href, IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateSkipLink(string href, IHtmlContent content, AttributeDictionary attributes);
 
-        TagBuilder GenerateSummaryList(IDictionary<string, string> attributes, IEnumerable<SummaryListRow> rows);
+        TagBuilder GenerateSummaryList(AttributeDictionary attributes, IEnumerable<SummaryListRow> rows);
 
         TagBuilder GenerateTabs(
             string id,
             string title,
-            IDictionary<string, string> attributes,
+            AttributeDictionary attributes,
             IEnumerable<TabsItem> items);
 
-        TagBuilder GenerateTag(IHtmlContent content, IDictionary<string, string> attributes);
+        TagBuilder GenerateTag(IHtmlContent content, AttributeDictionary attributes);
 
         TagBuilder GenerateTextArea(
             bool haveError,
@@ -166,7 +167,7 @@ namespace GovUk.Frontend.AspNetCore
             bool? spellcheck,
             bool disabled,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
 
         TagBuilder GenerateTextInput(
             bool haveError,
@@ -180,15 +181,15 @@ namespace GovUk.Frontend.AspNetCore
             string inputMode,
             bool? spellcheck,
             bool disabled,
-            IDictionary<string, string> attributes,
+            AttributeDictionary attributes,
             IHtmlContent prefixContent,
-            IDictionary<string, string> prefixAttributes,
+            AttributeDictionary prefixAttributes,
             IHtmlContent suffixContent,
-            IDictionary<string, string> suffixAttributes);
+            AttributeDictionary suffixAttributes);
 
         TagBuilder GenerateWarningText(
             string iconFallbackText,
             IHtmlContent content,
-            IDictionary<string, string> attributes);
+            AttributeDictionary attributes);
     }
 }

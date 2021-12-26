@@ -1,6 +1,6 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -8,10 +8,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
     {
         public bool Expanded { get; set; }
         public IHtmlContent? HeadingContent { get; set; }
-        public IDictionary<string, string>? HeadingAttributes { get; set; }
+        public AttributeDictionary? HeadingAttributes { get; set; }
         public IHtmlContent? SummaryContent { get; set; }
-        public IDictionary<string, string>? SummaryAttributes { get; set; }
+        public AttributeDictionary? SummaryAttributes { get; set; }
         public IHtmlContent? Content { get; set; }
-        public IDictionary<string, string>? Attributes { get; set; }
+        public AttributeDictionary? Attributes { get; set; }
     }
 }

@@ -129,7 +129,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             contentBuilder.AppendHtml(element);
 
-            return Generator.GenerateFormGroup(haveError, contentBuilder, FormGroupAttributes);
+            return Generator.GenerateFormGroup(haveError, contentBuilder, FormGroupAttributes.ToAttributeDictionary());
         }
 
         protected virtual TagBuilder GenerateElement(
@@ -169,7 +169,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 attributes ??= new Dictionary<string, string>();
                 attributes["id"] = errorId;
 
-                return Generator.GenerateErrorMessage(visuallyHiddenText, content, attributes);
+                return Generator.GenerateErrorMessage(visuallyHiddenText, content, attributes.ToAttributeDictionary());
             }
             else
             {
@@ -183,7 +183,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 var hintId = ResolvedId + "-hint";
                 AppendToDescribedBy(hintId);
-                return Generator.GenerateHint(hintId, builder.Hint.Value.content, builder.Hint.Value.attributes);
+                return Generator.GenerateHint(hintId, builder.Hint.Value.content, builder.Hint.Value.attributes.ToAttributeDictionary());
             }
             else
             {
@@ -200,7 +200,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var resolvedContent = content ??
                 new HtmlString(ModelHelper.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name));
 
-            return Generator.GenerateLabel(ResolvedId, isPageHeading, resolvedContent, attributes);
+            return Generator.GenerateLabel(ResolvedId, isPageHeading, resolvedContent, attributes.ToAttributeDictionary());
         }
     }
 

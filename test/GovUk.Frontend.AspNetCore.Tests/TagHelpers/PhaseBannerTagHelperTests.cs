@@ -5,6 +5,7 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -28,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var pbContext = context.GetContextItem<PhaseBannerContext>();
-                    pbContext.SetTag(Attributes.Empty(), content: new HtmlString("Alpha"));
+                    pbContext.SetTag(new AttributeDictionary(), content: new HtmlString("Alpha"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Phase message");

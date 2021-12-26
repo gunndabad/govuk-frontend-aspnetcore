@@ -1,16 +1,16 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class FieldsetContext
     {
-        public (bool IsPageHeading, IDictionary<string, string>? Attributes, IHtmlContent Content)? Legend { get; private set; }
+        public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
 
         public void SetLegend(
             bool isPageHeading,
-            IDictionary<string, string>? attributes,
+            AttributeDictionary? attributes,
             IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);

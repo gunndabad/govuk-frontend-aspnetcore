@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -55,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var summaryListContext = new SummaryListContext();
 
             var rowContext = new SummaryListRowContext();
-            rowContext.SetValue(Attributes.Empty(), new HtmlString("Value"));
+            rowContext.SetValue(new AttributeDictionary(), new HtmlString("Value"));
 
             var context = new TagHelperContext(
                 tagName: "govuk-summary-list-row-value",
@@ -94,7 +95,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var summaryListContext = new SummaryListContext();
 
             var rowContext = new SummaryListRowContext();
-            rowContext.SetActionsAttributes(new Dictionary<string, string>());
+            rowContext.SetActionsAttributes(new AttributeDictionary());
 
             var context = new TagHelperContext(
                 tagName: "govuk-summary-list-row-value",

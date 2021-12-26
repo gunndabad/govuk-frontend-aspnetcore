@@ -1,7 +1,7 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -11,9 +11,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
         public TagBuilder GeneratePhaseBanner(
             IHtmlContent tagContent,
-            IDictionary<string, string>? tagAttributes,
+            AttributeDictionary? tagAttributes,
             IHtmlContent content,
-            IDictionary<string, string>? attributes)
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(tagContent), tagContent);
             Guard.ArgumentNotNull(nameof(content), content);

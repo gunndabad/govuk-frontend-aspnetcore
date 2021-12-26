@@ -1,14 +1,14 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class TextInputContext : FormGroupContext
     {
-        public (IDictionary<string, string>? Attributes, IHtmlContent Content)? Prefix { get; private set; }
+        public (AttributeDictionary? Attributes, IHtmlContent Content)? Prefix { get; private set; }
 
-        public (IDictionary<string, string>? Attributes, IHtmlContent Content)? Suffix { get; private set; }
+        public (AttributeDictionary? Attributes, IHtmlContent Content)? Suffix { get; private set; }
 
         protected override string ErrorMessageTagName => TextInputTagHelper.ErrorMessageTagName;
 
@@ -20,7 +20,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override void SetErrorMessage(
             string? visuallyHiddenText,
-            IDictionary<string, string>? attributes,
+            AttributeDictionary? attributes,
             IHtmlContent? content)
         {
             if (Prefix != null)
@@ -40,7 +40,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             base.SetErrorMessage(visuallyHiddenText, attributes, content);
         }
 
-        public override void SetHint(IDictionary<string, string>? attributes, IHtmlContent? content)
+        public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
         {
             if (Prefix != null)
             {
@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             base.SetHint(attributes, content);
         }
 
-        public override void SetLabel(bool isPageHeading, IDictionary<string, string>? attributes, IHtmlContent? content)
+        public override void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
         {
             if (Prefix != null)
             {
@@ -78,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             base.SetLabel(isPageHeading, attributes, content);
         }
 
-        public void SetPrefix(IDictionary<string, string>? attributes, IHtmlContent content)
+        public void SetPrefix(AttributeDictionary? attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 
@@ -99,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Prefix = (attributes, content);
         }
 
-        public void SetSuffix(IDictionary<string, string>? attributes, IHtmlContent content)
+        public void SetSuffix(AttributeDictionary? attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 

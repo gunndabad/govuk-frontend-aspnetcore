@@ -1,7 +1,7 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
     {
         internal const string HintElement = "div";
 
-        public TagBuilder GenerateHint(string? id, IHtmlContent content, IDictionary<string, string>? attributes)
+        public TagBuilder GenerateHint(string? id, IHtmlContent content, AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 

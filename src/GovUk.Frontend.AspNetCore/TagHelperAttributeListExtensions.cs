@@ -1,14 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+#nullable enable
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore
 {
     internal static class TagHelperAttributeListExtensions
     {
-        public static IDictionary<string, string> ToAttributesDictionary(this TagHelperAttributeList list) =>
-            list.ToDictionary(
-                a => a.Name,
-                a => a.ValueStyle == HtmlAttributeValueStyle.Minimized ? string.Empty : a.Value.ToString());
+        public static AttributeDictionary ToAttributesDictionary(this TagHelperAttributeList? list)
+        {
+            var attributeDictionary = new AttributeDictionary();
+
+            if (list != null)
+            {
+                foreach (var attribute in list)
+                {
+                    attributeDictionary.Add(
+                        attribute.Name,
+                        attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ? string.Empty : attribute.Value.ToString());
+                }
+            }
+
+            return attributeDictionary;
+        }
     }
 }
