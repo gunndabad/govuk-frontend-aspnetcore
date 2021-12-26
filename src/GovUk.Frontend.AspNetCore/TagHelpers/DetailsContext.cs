@@ -1,16 +1,16 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class DetailsContext
     {
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Summary { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Summary { get; private set; }
 
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Text { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Text { get; private set; }
 
-        public void SetSummary(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetSummary(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);
@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Summary = (attributes, content);
         }
 
-        public void SetText(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetText(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);

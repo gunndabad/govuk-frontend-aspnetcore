@@ -1,11 +1,11 @@
 #nullable enable
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class CheckboxesFieldsetContext : FormGroupFieldsetContext
     {
-        public CheckboxesFieldsetContext(IDictionary<string, string>? attributes) :
+        public CheckboxesFieldsetContext(AttributeDictionary? attributes) :
             base(CheckboxesFieldsetTagHelper.TagName, CheckboxesFieldsetLegendTagHelper.TagName, attributes)
         {
         }

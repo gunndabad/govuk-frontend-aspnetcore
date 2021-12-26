@@ -1,6 +1,6 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
@@ -12,18 +12,18 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         protected FormGroupFieldsetContext(
             string fieldsetTagName,
             string legendTagName,
-            IDictionary<string, string>? attributes)
+            AttributeDictionary? attributes)
         {
             _fieldsetTagName = Guard.ArgumentNotNull(nameof(fieldsetTagName), fieldsetTagName);
             _legendTagName = Guard.ArgumentNotNull(nameof(legendTagName), legendTagName);
             Attributes = attributes;
         }
 
-        public IDictionary<string, string>? Attributes { get; private set; }
+        public AttributeDictionary? Attributes { get; private set; }
 
-        public (bool IsPageHeading, IDictionary<string, string>? Attributes, IHtmlContent Content)? Legend { get; private set; }
+        public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
 
-        public virtual void SetLegend(bool isPageHeading, IDictionary<string, string>? attributes, IHtmlContent content)
+        public virtual void SetLegend(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 

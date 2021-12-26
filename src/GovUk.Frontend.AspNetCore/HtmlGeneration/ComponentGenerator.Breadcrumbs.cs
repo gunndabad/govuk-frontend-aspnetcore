@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -14,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
         public TagBuilder GenerateBreadcrumbs(
             bool collapseOnMobile,
-            IDictionary<string, string> attributes,
+            AttributeDictionary? attributes,
             IEnumerable<BreadcrumbsItem> items)
         {
             Guard.ArgumentNotNull(nameof(items), items);

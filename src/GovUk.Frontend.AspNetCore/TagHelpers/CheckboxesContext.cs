@@ -83,7 +83,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override void SetErrorMessage(
             string? visuallyHiddenText,
-            IDictionary<string, string>? attributes,
+            AttributeDictionary? attributes,
             IHtmlContent? content)
         {
             if (Fieldset != null)
@@ -99,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             base.SetErrorMessage(visuallyHiddenText, attributes, content);
         }
 
-        public override void SetHint(IDictionary<string, string>? attributes, IHtmlContent? content)
+        public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
         {
             if (Fieldset != null)
             {
@@ -116,7 +116,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public override void SetLabel(
             bool isPageHeading,
-            IDictionary<string, string>? attributes,
+            AttributeDictionary? attributes,
             IHtmlContent? content)
         {
             throw new NotSupportedException();

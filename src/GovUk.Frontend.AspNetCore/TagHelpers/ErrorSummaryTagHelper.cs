@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
@@ -187,9 +187,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public IReadOnlyCollection<ErrorSummaryItem> Items => _items;
 
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Description { get; private set; }
+        public (AttributeDictionary attributes, IHtmlContent content)? Description { get; private set; }
 
-        public (IDictionary<string, string> attributes, IHtmlContent content)? Title { get; private set; }
+        public (AttributeDictionary attributes, IHtmlContent content)? Title { get; private set; }
 
         public void AddItem(ErrorSummaryItem item)
         {
@@ -201,7 +201,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _items.Add(item);
         }
 
-        public bool TrySetDescription(IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetDescription(AttributeDictionary attributes, IHtmlContent content)
         {
             if (content == null)
             {
@@ -217,7 +217,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return true;
         }
 
-        public bool TrySetTitle(IDictionary<string, string> attributes, IHtmlContent content)
+        public bool TrySetTitle(AttributeDictionary attributes, IHtmlContent content)
         {
             if (content == null)
             {

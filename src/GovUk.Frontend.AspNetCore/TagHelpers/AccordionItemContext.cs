@@ -1,16 +1,16 @@
 #nullable enable
 using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class AccordionItemContext
     {
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Heading { get; private set; }
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Summary { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Heading { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Summary { get; private set; }
 
-        public void SetHeading(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetHeading(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);
@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Heading = (attributes, content);
         }
 
-        public void SetSummary(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetSummary(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);

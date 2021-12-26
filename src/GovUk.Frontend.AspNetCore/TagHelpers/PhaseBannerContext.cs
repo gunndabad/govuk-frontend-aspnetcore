@@ -1,14 +1,14 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class PhaseBannerContext
     {
-        public (IDictionary<string, string>? Attributes, IHtmlContent Content)? Tag { get; private set; }
+        public (AttributeDictionary? Attributes, IHtmlContent Content)? Tag { get; private set; }
 
-        public void SetTag(IDictionary<string, string>? attributes, IHtmlContent content)
+        public void SetTag(AttributeDictionary? attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -40,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class TestContext : FormGroupFieldsetContext
         {
-            public TestContext(IDictionary<string, string> attributes) :
+            public TestContext(AttributeDictionary attributes) :
                 base(fieldsetTagName: "test-fieldset", legendTagName : "test-fieldset-legend", attributes)
             {
             }

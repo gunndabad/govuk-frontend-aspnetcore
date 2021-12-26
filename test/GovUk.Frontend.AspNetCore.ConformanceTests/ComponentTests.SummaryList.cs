@@ -1,6 +1,7 @@
 using System.Linq;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -34,18 +35,18 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                         Content = TextOrHtmlHelper.GetHtmlContent(a.Text, a.Html),
                                         VisuallyHiddenText = a.VisuallyHiddenText
                                     })).OrEmpty().ToList(),
-                                Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Actions?.Classes)
+                                Attributes = new AttributeDictionary().MergeAttribute("class", r.Actions?.Classes)
                             },
-                            Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Classes),
+                            Attributes = new AttributeDictionary().MergeAttribute("class", r.Classes),
                             Key = new SummaryListRowKey()
                             {
                                 Content = TextOrHtmlHelper.GetHtmlContent(r.Key.Text, r.Key.Html),
-                                Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Key.Classes)
+                                Attributes = new AttributeDictionary().MergeAttribute("class", r.Key.Classes)
                             },
                             Value = new SummaryListRowValue()
                             {
                                 Content = TextOrHtmlHelper.GetHtmlContent(r.Value.Text, r.Value.Html),
-                                Attributes = DictionaryExtensions.CreateEmptyAttributesDictionary().MergeAttribute("class", r.Value.Classes)
+                                Attributes = new AttributeDictionary().MergeAttribute("class", r.Value.Classes)
                             }
                         })
                         .OrEmpty();

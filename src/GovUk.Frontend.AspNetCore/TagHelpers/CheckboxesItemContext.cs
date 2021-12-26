@@ -1,15 +1,15 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class CheckboxesItemContext
     {
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Conditional { get; private set; }
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Hint { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Conditional { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Hint { get; private set; }
 
-        public void SetConditional(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetConditional(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 
@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Conditional = (attributes, content);
         }
 
-        public void SetHint(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetHint(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 

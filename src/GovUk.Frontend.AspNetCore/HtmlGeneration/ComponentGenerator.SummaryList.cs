@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -15,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         internal const string SummaryListRowValueElement = "dd";
 
         public TagBuilder GenerateSummaryList(
-            IDictionary<string, string> attributes,
+            AttributeDictionary? attributes,
             IEnumerable<SummaryListRow> rows)
         {
             Guard.ArgumentNotNull(nameof(rows), rows);

@@ -1,7 +1,7 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public TagBuilder GenerateWarningText(
             string iconFallbackText,
             IHtmlContent content,
-            IDictionary<string, string>? attributes)
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(iconFallbackText), iconFallbackText);
             Guard.ArgumentNotNull(nameof(content), content);

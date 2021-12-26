@@ -126,7 +126,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     DescribedBy,
                     Disabled,
                     selectContext.Items,
-                    SelectAttributes);
+                    SelectAttributes.ToAttributeDictionary());
             }
         }
 

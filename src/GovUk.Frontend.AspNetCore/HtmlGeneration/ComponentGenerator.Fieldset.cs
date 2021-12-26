@@ -1,7 +1,7 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -16,9 +16,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             string? role,
             bool? legendIsPageHeading,
             IHtmlContent? legendContent,
-            IDictionary<string, string>? legendAttributes,
+            AttributeDictionary? legendAttributes,
             IHtmlContent content,
-            IDictionary<string, string>? attributes)
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(content), content);
 

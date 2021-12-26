@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -21,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             string? describedBy,
             bool hasFieldset,
             IEnumerable<CheckboxesItemBase> items,
-            IDictionary<string, string>? attributes)
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(idPrefix), idPrefix);
             Guard.ArgumentNotNull(nameof(items), items);

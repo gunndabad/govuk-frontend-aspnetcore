@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
@@ -16,11 +17,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public IReadOnlyList<SummaryListRowAction> Actions => _actions;
 
-        public IDictionary<string, string>? ActionsAttributes { get; private set; }
+        public AttributeDictionary? ActionsAttributes { get; private set; }
 
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Key { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Key { get; private set; }
 
-        public (IDictionary<string, string> Attributes, IHtmlContent Content)? Value { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Value { get; private set; }
 
         public void AddAction(SummaryListRowAction action)
         {
@@ -29,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             _actions.Add(action);
         }
 
-        public void SetActionsAttributes(IDictionary<string, string> attributes)
+        public void SetActionsAttributes(AttributeDictionary attributes)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
 
@@ -50,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             ActionsAttributes = attributes;
         }
 
-        public void SetKey(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetKey(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);
@@ -86,7 +87,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Key = (attributes, content);
         }
 
-        public void SetValue(IDictionary<string, string> attributes, IHtmlContent content)
+        public void SetValue(AttributeDictionary attributes, IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(attributes), attributes);
             Guard.ArgumentNotNull(nameof(content), content);

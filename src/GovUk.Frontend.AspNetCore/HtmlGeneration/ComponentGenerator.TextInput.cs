@@ -1,7 +1,7 @@
 #nullable enable
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
@@ -25,11 +25,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             string? inputMode,
             bool? spellcheck,
             bool disabled,
-            IDictionary<string, string>? attributes,
+            AttributeDictionary? attributes,
             IHtmlContent? prefixContent,
-            IDictionary<string, string>? prefixAttributes,
+            AttributeDictionary? prefixAttributes,
             IHtmlContent? suffixContent,
-            IDictionary<string, string>? suffixAttributes)
+            AttributeDictionary? suffixAttributes)
         {
             Guard.ArgumentNotNull(nameof(id), id);
             Guard.ArgumentNotNull(nameof(name), name);

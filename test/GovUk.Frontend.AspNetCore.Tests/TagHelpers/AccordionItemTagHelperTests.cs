@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -33,8 +34,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = context.GetContextItem<AccordionItemContext>();
-                    itemContext.SetHeading(Attributes.Empty(), new HtmlString("Heading"));
-                    itemContext.SetSummary(Attributes.Empty(), new HtmlString("Summary"));
+                    itemContext.SetHeading(new AttributeDictionary(), new HtmlString("Heading"));
+                    itemContext.SetSummary(new AttributeDictionary(), new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Content");
@@ -76,7 +77,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = context.GetContextItem<AccordionItemContext>();
-                    itemContext.SetSummary(Attributes.Empty(), new HtmlString("Summary"));
+                    itemContext.SetSummary(new AttributeDictionary(), new HtmlString("Summary"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     tagHelperContent.SetContent("Content");

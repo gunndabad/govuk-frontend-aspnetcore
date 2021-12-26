@@ -118,7 +118,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     DescribedBy,
                     haveFieldset,
                     items: checkboxesContext.Items,
-                    attributes: CheckboxesAttributes);
+                    attributes: CheckboxesAttributes.ToAttributeDictionary());
             }
         }
 

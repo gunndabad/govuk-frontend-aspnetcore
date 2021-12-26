@@ -172,8 +172,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     } :
                     null,
                 Id = Id,
-                InputAttributes = InputAttributes,
-                LabelAttributes = LabelAttributes,
+                InputAttributes = InputAttributes.ToAttributeDictionary(),
+                LabelAttributes = LabelAttributes.ToAttributeDictionary(),
                 LabelContent = childContent.Snapshot(),
                 Name = Name,
                 Value = Value

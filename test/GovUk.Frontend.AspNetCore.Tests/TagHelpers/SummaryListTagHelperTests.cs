@@ -4,6 +4,7 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -44,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                             {
                                 new SummaryListRowAction()
                                 {
-                                    Attributes = new Dictionary<string, string>()
+                                    Attributes = new AttributeDictionary()
                                     {
                                         { "href", "row1action1" }
                                     },
@@ -53,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                                 },
                                 new SummaryListRowAction()
                                 {
-                                    Attributes = new Dictionary<string, string>()
+                                    Attributes = new AttributeDictionary()
                                     {
                                         { "href", "row1action2" }
                                     },

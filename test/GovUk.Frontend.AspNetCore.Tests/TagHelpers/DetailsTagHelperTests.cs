@@ -5,6 +5,7 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -30,10 +31,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(Attributes.Empty(), summary);
+                    detailsContext.SetSummary(new AttributeDictionary(), summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(Attributes.Empty(), text);
+                    detailsContext.SetText(new AttributeDictionary(), text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -74,10 +75,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(Attributes.Empty(), summary);
+                    detailsContext.SetSummary(new AttributeDictionary(), summary);
 
                     var text = new HtmlString("The text");
-                    detailsContext.SetText(Attributes.Empty(), text);
+                    detailsContext.SetText(new AttributeDictionary(), text);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -149,7 +150,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
 
                     var summary = new HtmlString("The summary");
-                    detailsContext.SetSummary(Attributes.Empty(), summary);
+                    detailsContext.SetSummary(new AttributeDictionary(), summary);
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -7,7 +7,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         private protected RadiosItemBase() { }
 
-        public IDictionary<string, string> Attributes { get; set; }
+        public AttributeDictionary Attributes { get; set; }
     }
 
     public class RadiosItem : RadiosItemBase
@@ -19,11 +19,11 @@ namespace GovUk.Frontend.AspNetCore
         public IHtmlContent Content { get; set; }
         public string ConditionalId { get; set; }
         public IHtmlContent ConditionalContent { get; set; }
-        public IDictionary<string, string> ConditionalAttributes { get; set; }
-        public IDictionary<string, string> HintAttributes { get; set; }
+        public AttributeDictionary ConditionalAttributes { get; set; }
+        public AttributeDictionary HintAttributes { get; set; }
         public string HintId { get; set; }
         public IHtmlContent HintContent { get; set; }
-        public IDictionary<string, string> InputAttributes { get; set; }
+        public AttributeDictionary InputAttributes { get; set; }
     }
 
     public class RadiosItemDivider : RadiosItemBase
