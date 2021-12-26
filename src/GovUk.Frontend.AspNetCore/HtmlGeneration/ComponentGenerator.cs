@@ -145,7 +145,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     @for: item.Id,
                     isPageHeading: false,
                     content: item.Label,
-                    attributes: null);
+                    attributes: null)!;
                 itemLabel.MergeCssClass("govuk-date-input__label");
 
                 var contentBuilder = new HtmlContentBuilder()
@@ -348,7 +348,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 tagBuilder.InnerHtml.AppendHtml(input);
 
-                var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null);
+                var label = GenerateLabel(item.Id, isPageHeading: false, content: item.Content, attributes: null)!;
                 label.MergeCssClass("govuk-radios__label");
                 tagBuilder.InnerHtml.AppendHtml(label);
 
