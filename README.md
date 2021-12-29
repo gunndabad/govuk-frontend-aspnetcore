@@ -75,3 +75,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Tag](docs/components/tag.md)
 - [Text input](docs/components/text-input.md)
 - [Warning text](docs/components/warning-text.md)
+
+## Validators
+
+- [Max words validator](docs/validation/maxwords.md)
