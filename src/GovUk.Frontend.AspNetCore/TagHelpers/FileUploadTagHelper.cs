@@ -67,6 +67,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected override IHtmlContent GenerateFormGroupContent(
             TagHelperContext context,
             FormGroupContext formGroupContext,
+            TagHelperOutput tagHelperOutput,
+            IHtmlContent childContent,
             out bool haveError)
         {
             var contentBuilder = new HtmlContentBuilder();

@@ -1,8 +1,7 @@
-using System;
-using System.Linq;
+#nullable enable
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration
+namespace GovUk.Frontend.AspNetCore
 {
     internal static class TagBuilderExtensions
     {
@@ -17,24 +16,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         {
             Guard.ArgumentNotNull(nameof(tagBuilder), tagBuilder);
 
-            if (string.IsNullOrEmpty(value))
-            {
-                return;
-            }
-
-            if (tagBuilder.Attributes.TryGetValue("class", out var currentValue))
-            {
-                var classes = currentValue.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (!classes.Contains(value, StringComparer.OrdinalIgnoreCase))
-                {
-                    tagBuilder.Attributes["class"] = value + " " + currentValue;
-                }
-            }
-            else
-            {
-                tagBuilder.Attributes.Add("class", value);
-            }
+            tagBuilder.Attributes.MergeCssClass(value);
         }
     }
 }
