@@ -10,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(CheckboxesTagHelper.ErrorMessageTagName, ParentTag = CheckboxesTagHelper.TagName)]
     [HtmlTargetElement(CheckboxesTagHelper.ErrorMessageTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(CharacterCountTagHelper.ErrorMessageTagName, ParentTag = CharacterCountTagHelper.TagName)]
     [HtmlTargetElement(FileUploadTagHelper.ErrorMessageTagName, ParentTag = FileUploadTagHelper.TagName)]
     [HtmlTargetElement(SelectTagHelper.ErrorMessageTagName, ParentTag = SelectTagHelper.TagName)]
     [HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]

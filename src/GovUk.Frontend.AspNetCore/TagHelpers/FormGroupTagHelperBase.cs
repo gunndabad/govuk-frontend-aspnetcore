@@ -74,15 +74,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             using (context.SetScopedContextItem(formGroupContext))
             using (context.SetScopedContextItem(formGroupContext.GetType(), formGroupContext))
             {
-                await output.GetChildContentAsync();
+                var childContent = await output.GetChildContentAsync();
 
-                content = GenerateFormGroupContent(context, formGroupContext, out haveError);
+                content = GenerateFormGroupContent(context, formGroupContext, output, childContent, out haveError);
             }
 
-            var tagBuilder = Generator.GenerateFormGroup(
-                haveError,
-                content,
-                output.Attributes.ToAttributesDictionary());
+            var tagBuilder = CreateTagBuilder(haveError, content, output);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -108,6 +105,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return $"{describedBy} {value}";
             }
         }
+
+        private protected virtual TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput) =>
+            Generator.GenerateFormGroup(
+                haveError,
+                content,
+                tagHelperOutput.Attributes.ToAttributesDictionary());
 
         internal IHtmlContent? GenerateErrorMessage(FormGroupContext formGroupContext)
         {
@@ -188,6 +191,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected abstract IHtmlContent GenerateFormGroupContent(
             TagHelperContext context,
             FormGroupContext formGroupContext,
+            TagHelperOutput tagHelperOutput,
+            IHtmlContent childContent,
             out bool haveError);
 
         private protected abstract string ResolveIdPrefix();
