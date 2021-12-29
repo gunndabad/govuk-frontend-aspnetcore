@@ -2,6 +2,8 @@
 
 [GDS Character count component](https://design-system.service.gov.uk/components/character-count/)
 
+Check out the [max words validator](../validation/maxwords.md) for adding server-side validation when `max-words` is used.
+
 ## Example
 
 ```razor
