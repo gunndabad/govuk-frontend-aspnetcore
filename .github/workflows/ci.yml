@@ -50,8 +50,8 @@ jobs:
 
     - name: Test
       run: |
-        dotnet test test/GovUk.FrontEnd.AspNetCore.Tests --configuration Release --no-build
-        dotnet test test/GovUk.FrontEnd.AspNetCore.ConformanceTests --configuration Release --no-build
+        dotnet test test/GovUk.FrontEnd.AspNetCore.Tests/ --configuration Release --no-build
+        dotnet test test/GovUk.FrontEnd.AspNetCore.ConformanceTests/ --configuration Release --no-build
 
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
