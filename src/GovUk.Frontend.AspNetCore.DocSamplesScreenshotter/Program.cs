@@ -46,6 +46,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("Checkboxes/CheckboxesWithError", "checkboxes-with-error.png"),
                 ("Checkboxes/CheckboxesWithNone", "checkboxes-with-none.png"),
                 ("Checkboxes/CheckboxesWithoutFieldset", "checkboxes-without-fieldset.png"),
+                ("CharacterCount/CharacterCount", "character-count.png"),
                 ("Details/Details", "details.png"),
                 ("Details/DetailsExpanded", "details-expanded.png"),
                 ("ErrorMessage/ErrorMessageWithSpecifiedContent", "error-message-with-specified-content.png"),
