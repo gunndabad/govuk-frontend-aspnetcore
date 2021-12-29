@@ -130,27 +130,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
 
         private static void Configure(IApplicationBuilder app)
         {
-#if NETCOREAPP2_1
-            app.UseMvc();
-#else
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
             });
-#endif
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddGovUkFrontend();
 
-#if NETCOREAPP2_1
-            services.AddMvc();
-#else
             services.AddRazorPages();
-#endif
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-#if NETSTANDARD2_0
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
-#endif
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -18,14 +15,10 @@ namespace GovUk.Frontend.AspNetCore
         static DefaultModelHelper()
         {
             s_getFullHtmlFieldNameDelegate =
-#if NETSTANDARD2_0
-                NameAndIdProvider.GetFullHtmlFieldName;
-#else
                 (GetFullHtmlFieldNameDelegate)typeof(IHtmlGenerator).Assembly
                     .GetType("Microsoft.AspNetCore.Mvc.ViewFeatures.NameAndIdProvider", throwOnError: true)
                     .GetMethod("GetFullHtmlFieldName", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
                     .CreateDelegate(typeof(GetFullHtmlFieldNameDelegate));
-#endif
         }
 
         public virtual string GetDisplayName(
