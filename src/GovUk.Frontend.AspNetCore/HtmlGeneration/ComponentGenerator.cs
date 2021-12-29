@@ -64,8 +64,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             IHtmlContent GetHint()
             {
                 var content = maxWords.HasValue ?
-                    $"You can enter up to {maxWords.Value} words" :
-                    $"You can enter up to {maxLength.Value} characters";
+                    $"You can enter up to {maxWords} words" :
+                    $"You can enter up to {maxLength} characters";
 
                 var hintId = $"{elementId}-info";
                 var hintContent = new HtmlString(content);
@@ -224,7 +224,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public virtual TagBuilder GenerateFormGroup(
             bool haveError,
             IHtmlContent content,
-            AttributeDictionary attributes)
+            AttributeDictionary? attributes)
         {
             if (content == null)
             {
@@ -530,7 +530,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             return tagBuilder;
         }
 
-        private static void AppendToDescribedBy(ref string describedBy, string value)
+        private static void AppendToDescribedBy(ref string? describedBy, string value)
         {
             if (value == null)
             {
