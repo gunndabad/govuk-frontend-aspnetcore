@@ -25,6 +25,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
 
     public class CharacterCountCountMessage
     {
-        public IDictionary<string, object> Attributes { get; set; }
+        public string Classes { get; set; }
     }
 }

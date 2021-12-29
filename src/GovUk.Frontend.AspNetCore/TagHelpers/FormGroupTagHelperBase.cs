@@ -79,10 +79,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 content = GenerateFormGroupContent(context, formGroupContext, output, childContent, out haveError);
             }
 
-            var tagBuilder = Generator.GenerateFormGroup(
-                haveError,
-                content,
-                output.Attributes.ToAttributesDictionary());
+            var tagBuilder = CreateTagBuilder(haveError, content, output);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -108,6 +105,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return $"{describedBy} {value}";
             }
         }
+
+        private protected virtual TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput) =>
+            Generator.GenerateFormGroup(
+                haveError,
+                content,
+                tagHelperOutput.Attributes.ToAttributesDictionary());
 
         internal IHtmlContent? GenerateErrorMessage(FormGroupContext formGroupContext)
         {

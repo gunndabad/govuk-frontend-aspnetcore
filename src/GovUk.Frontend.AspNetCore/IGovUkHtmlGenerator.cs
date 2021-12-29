@@ -37,11 +37,12 @@ namespace GovUk.Frontend.AspNetCore
             AttributeDictionary attributes);
 
         TagBuilder GenerateCharacterCount(
-            string elementId,
+            string textAreaId,
             int? maxLength,
             int? maxWords,
             decimal? threshold,
-            IHtmlContent formGroup);
+            IHtmlContent formGroup,
+            AttributeDictionary countMessageAttributes);
 
         TagBuilder GenerateCheckboxes(
             string idPrefix,

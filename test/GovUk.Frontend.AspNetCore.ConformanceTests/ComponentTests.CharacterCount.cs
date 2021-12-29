@@ -1,5 +1,6 @@
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -29,6 +30,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         options.ErrorMessage with { Id = options.Id + "-error" } :
                         null;
 
+                    var countMessageAttributes = new AttributeDictionary()
+                        .MergeAttribute("class", options.CountMessage?.Classes);
+
                     var content = new HtmlString(GenerateFormGroup(
                         labelOptions,
                         hintOptions,
@@ -52,7 +56,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 attributes);
                         }));
 
-                    return generator.GenerateCharacterCount(options.Id, options.MaxLength, options.MaxWords, options.Threshold, content)
+                    return generator.GenerateCharacterCount(options.Id, options.MaxLength, options.MaxWords, options.Threshold, content, countMessageAttributes)
                         .RenderToString();
                 });
     }
