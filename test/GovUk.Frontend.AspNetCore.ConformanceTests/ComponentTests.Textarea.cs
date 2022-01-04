@@ -1,3 +1,4 @@
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Xunit;
 
@@ -41,11 +42,11 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 haveError,
                                 options.Id,
                                 options.Name,
-                                options.Rows ?? ComponentDefaults.TextArea.Rows,
+                                options.Rows ?? ComponentGenerator.TextAreaDefaultRows,
                                 describedBy,
                                 options.Autocomplete,
                                 options.Spellcheck,
-                                ComponentDefaults.TextArea.Disabled,
+                                ComponentGenerator.TextAreaDefaultDisabled,
                                 new HtmlString(options.Value),
                                 attributes);
                         });

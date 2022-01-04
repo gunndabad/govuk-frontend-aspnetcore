@@ -130,6 +130,71 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Fact]
+        public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-character-count",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-character-count",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var characterCountContext = context.GetContextItem<CharacterCountContext>();
+
+                    characterCountContext.SetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        content: new HtmlString("The label"));
+
+                    characterCountContext.SetHint(
+                        attributes: null,
+                        content: new HtmlString("The hint"));
+
+                    characterCountContext.SetErrorMessage(
+                        visuallyHiddenText: null,
+                        attributes: null,
+                        content: new HtmlString("The error"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new CharacterCountTagHelper()
+            {
+                Id = "my-id",
+                Name = "my-name",
+                MaxWords = 10
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var expectedHtml = @"
+<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"">
+    <div class=""govuk-form-group govuk-form-group--error"">
+        <label class=""govuk-label"" for=""my-id"">The label</label>
+        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
+        <span id=""my-id-error"" class=""govuk-error-message"">
+            <span class=""govuk-visually-hidden"">Error:</span>
+            The error
+        </span>
+        <textarea class=""govuk-textarea govuk-js-character-count govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
+    </div>
+    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"" aria-live=""polite"">
+        You can enter up to 10 words
+    </div>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+        }
+
+        [Fact]
         public async Task ProcessAsync_NoMaxLengthOrMaxWords_ThrowsInvalidOperationException()
         {
             // Arrange

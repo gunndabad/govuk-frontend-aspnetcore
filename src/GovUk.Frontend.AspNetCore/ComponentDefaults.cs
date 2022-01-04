@@ -16,11 +16,5 @@ namespace GovUk.Frontend.AspNetCore
         {
             public const string Title = "Contents";
         }
-
-        public static class TextArea
-        {
-            public const bool Disabled = false;
-            public const int Rows = 5;
-        }
     }
 }

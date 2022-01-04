@@ -1,12 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -28,42 +29,43 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (TextAreaBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                    textAreaContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
-                    formGroupContext.TrySetElementContent(new HtmlString("The content"));
+
+                    textAreaContext.SetHint(
+                        attributes: null,
+                        content: new HtmlString("The hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper()
             {
                 Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-id",
-                Rows = 6,
-                Autocomplete = "username"
+                Name = "my-name"
             };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            var textarea = node.ChildNodes.FindFirst("textarea");
-            Assert.Equal(
-                "<textarea aria-describedby=\"describedby\" autocomplete=\"username\" class=\"govuk-textarea\" id=\"my-id\" name=\"my-id\" rows=\"6\">" +
-                "The content" +
-                "</textarea>",
-                textarea.OuterHtml);
+            var expectedHtml = @"
+<div class=""govuk-form-group"">
+    <label class=""govuk-label"" for=""my-id"">The label</label>
+    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
+    <textarea class=""govuk-textarea govuk-js-textarea"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_NoContentOrAspForThrowsInvalidOperationException()
+        public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -77,80 +79,52 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (TextAreaBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                    textAreaContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
 
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-id",
-                Rows = 6,
-                Autocomplete = "username"
-            };
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Content must be specified when the 'asp-for' attribute is not specified.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_HasErrorClassWhenErrorSpecified()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-textarea",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-textarea",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var formGroupContext = (TextAreaBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
-                        isPageHeading: false,
+                    textAreaContext.SetHint(
                         attributes: null,
-                        content: new HtmlString("The label"));
-                    formGroupContext.TrySetErrorMessage(
+                        content: new HtmlString("The hint"));
+
+                    textAreaContext.SetErrorMessage(
                         visuallyHiddenText: null,
                         attributes: null,
-                        content: new HtmlString("Error"));
-                    formGroupContext.TrySetElementContent(new HtmlString("The content"));
+                        content: new HtmlString("The error"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper()
             {
                 Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-id",
-                Rows = 6,
-                Autocomplete = "username"
+                Name = "my-name"
             };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            Assert.Contains("govuk-textarea--error", node.ChildNodes.FindFirst("textarea").GetCssClasses());
+            var expectedHtml = @"
+<div class=""govuk-form-group govuk-form-group--error"">
+    <label class=""govuk-label"" for=""my-id"">The label</label>
+    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
+    <span id=""my-id-error"" class=""govuk-error-message"">
+        <span class=""govuk-visually-hidden"">Error:</span>
+        The error
+    </span>
+    <textarea class=""govuk-textarea govuk-js-textarea govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
 
         [Fact]
-        public async Task ProcessAsync_NoRowsSpecifiedUsesDefaultRows()
+        public async Task ProcessAsync_NoValueOrAspFor_RendersEmptyTextArea()
         {
             // Arrange
             var context = new TagHelperContext(
@@ -164,36 +138,188 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 attributes: new TagHelperAttributeList(),
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
-                    var formGroupContext = (TextAreaBuilder)context.Items[typeof(FormGroupBuilder)];
-                    formGroupContext.TrySetLabel(
+                    var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                    textAreaContext.SetLabel(
                         isPageHeading: false,
                         attributes: null,
                         content: new HtmlString("The label"));
-                    formGroupContext.TrySetElementContent(new HtmlString("The content"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new TextAreaTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+            var tagHelper = new TextAreaTagHelper()
             {
-                Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-id",
-                Autocomplete = "username"
+                Name = "my-name"
             };
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
-            var node = HtmlNode.CreateNode(html);
-            var textarea = node.ChildNodes.FindFirst("textarea");
-            Assert.Equal("5", textarea.Attributes["rows"].Value);
+            var element = output.RenderToElement();
+            var textarea = element.GetElementsByTagName("textarea")[0];
+            Assert.Empty(textarea.InnerHtml);
         }
 
-        public class Model
+        [Fact]
+        public async Task ProcessAsync_WithAspFor_RendersTextAreaWithModelValue()
+        {
+            // Arrange
+            var modelValue = "Foo value";
+            var model = new Model()
+            {
+                Foo = modelValue
+            };
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+                .GetExplorerForProperty(nameof(Model.Foo));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.Foo);
+
+            var modelHelper = new Mock<IModelHelper>();
+            modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
+
+            var context = new TagHelperContext(
+                tagName: "govuk-textarea",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-textarea",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                    textAreaContext.SetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        content: new HtmlString("The label"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new TextAreaTagHelper(modelHelper: modelHelper.Object)
+            {
+                AspFor = new ModelExpression(modelExpression, modelExplorer),
+                Name = "my-name",
+                ViewContext = viewContext
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var element = output.RenderToElement();
+            var textarea = element.GetElementsByTagName("textarea")[0];
+            Assert.Equal("Foo value", textarea.InnerHtml);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithValue_RendersTextAreaWithValue()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-textarea",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-textarea",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                    textAreaContext.SetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        content: new HtmlString("The label"));
+
+                    textAreaContext.SetValue(new HtmlString("Value"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new TextAreaTagHelper()
+            {
+                Name = "my-name"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var element = output.RenderToElement();
+            var textarea = element.GetElementsByTagName("textarea")[0];
+            Assert.Equal("Value", textarea.InnerHtml);
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithValueAndAspFor_RendersTextAreaWithValue()
+        {
+            // Arrange
+            var modelValue = "Foo value";
+            var model = new Model()
+            {
+                Foo = modelValue
+            };
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+                .GetExplorerForProperty(nameof(Model.Foo));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.Foo);
+
+            var modelHelper = new Mock<IModelHelper>();
+            modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
+
+            var context = new TagHelperContext(
+                tagName: "govuk-textarea",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-textarea",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                    textAreaContext.SetLabel(
+                        isPageHeading: false,
+                        attributes: null,
+                        content: new HtmlString("The label"));
+
+                    textAreaContext.SetValue(new HtmlString("Value"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new TextAreaTagHelper(modelHelper: modelHelper.Object)
+            {
+                AspFor = new ModelExpression(modelExpression, modelExplorer),
+                Name = "my-name",
+                ViewContext = viewContext
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var element = output.RenderToElement();
+            var textarea = element.GetElementsByTagName("textarea")[0];
+            Assert.Equal("Value", textarea.InnerHtml);
+        }
+
+        private class Model
         {
             public string Foo { get; set; }
         }
