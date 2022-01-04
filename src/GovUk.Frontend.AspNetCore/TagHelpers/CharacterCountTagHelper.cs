@@ -21,7 +21,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         internal const string LabelTagName = "govuk-character-count-label";
         internal const string TagName = "govuk-character-count";
 
-        private const string AttributesPrefix = "textarea-";
         private const string AutocompleteAttributeName = "autocomplete";
         private const string CountMessageAttributesPrefix = "count-message-";
         private const string DisabledAttributeName = "disabled";
@@ -32,6 +31,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string NameAttributeName = "name";
         private const string RowsAttributeName = "rows";
         private const string SpellcheckAttributeName = "spellcheck";
+        private const string TextareaAttributesPrefix = "textarea-";
         private const string ThresholdAttributeName = "threshold";
 
         private decimal? _threshold;
@@ -69,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether the <c>disabled</c> attribute should be added to the generated <c>textarea</c> element.
         /// </summary>
         [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; } = ComponentDefaults.TextArea.Disabled;
+        public bool Disabled { get; set; } = ComponentGenerator.TextAreaDefaultDisabled;
 
         /// <summary>
         /// Additional attributes to add to the generated form-group wrapper element.
@@ -148,7 +148,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// The default is <c>5</c>.
         /// </remarks>
         [HtmlAttributeName(RowsAttributeName)]
-        public int Rows { get; set; } = ComponentDefaults.TextArea.Rows;
+        public int Rows { get; set; } = ComponentGenerator.TextAreaDefaultRows;
 
         /// <summary>
         /// The <c>spellcheck</c> attribute for the generated <c>textarea</c> element.
@@ -159,7 +159,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// <summary>
         /// Additional attributes to add to the generated <c>textarea</c> element.
         /// </summary>
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
+        [HtmlAttributeName(DictionaryAttributePrefix = TextareaAttributesPrefix)]
         public IDictionary<string, string> TextAreaAttributes { get; set; } = new Dictionary<string, string>();
 
         /// <summary>

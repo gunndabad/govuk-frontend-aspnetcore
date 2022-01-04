@@ -1,127 +1,189 @@
-using System;
+#nullable enable
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-textarea")]
-    [RestrictChildren("govuk-textarea-label", "govuk-textarea-hint", "govuk-textarea-error-message", "govuk-textarea-element")]
-    public class TextAreaTagHelper : LegacyFormGroupTagHelperBase
+    /// <summary>
+    /// Generates a GDS textarea component.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, TextAreaValueTagHelper.TagName)]
+    [OutputElementHint(ComponentGenerator.FormGroupElement)]
+    public class TextAreaTagHelper : FormGroupTagHelperBase
     {
-        private const string AttributesPrefix = "textarea-";
+        internal const string ErrorMessageTagName = "govuk-textarea-error-message";
+        internal const string HintTagName = "govuk-textarea-hint";
+        internal const string LabelTagName = "govuk-textarea-label";
+        internal const string TagName = "govuk-textarea";
+
         private const string AutocompleteAttributeName = "autocomplete";
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
+        private const string NameAttributeName = "name";
         private const string RowsAttributeName = "rows";
         private const string SpellcheckAttributeName = "spellcheck";
+        private const string TextareaAttributesPrefix = "textarea-";
 
-        public TextAreaTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
-            : base(htmlGenerator, modelHelper)
+        /// <summary>
+        /// Creates an <see cref="TextAreaTagHelper"/>.
+        /// </summary>
+        public TextAreaTagHelper()
+            : this(htmlGenerator: null, modelHelper: null)
         {
         }
 
-        [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
+        internal TextAreaTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
+            : base(
+                  htmlGenerator ?? new ComponentGenerator(),
+                  modelHelper ?? new DefaultModelHelper())
+        {
+        }
 
+        /// <summary>
+        /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
+        /// </summary>
         [HtmlAttributeName(AutocompleteAttributeName)]
-        public string Autocomplete { get; set; }
+        public string? Autocomplete { get; set; }
 
+        /// <summary>
+        /// Whether the <c>disabled</c> attribute should be added to the generated <c>textarea</c> element.
+        /// </summary>
         [HtmlAttributeName(DisabledAttributeName)]
-        public bool Disabled { get; set; } = ComponentDefaults.TextArea.Disabled;
+        public bool Disabled { get; set; } = ComponentGenerator.TextAreaDefaultDisabled;
 
+        /// <summary>
+        /// The <c>id</c> attribute for the generated <c>textarea</c> element.
+        /// </summary>
+        /// <remarks>
+        /// If not specified then a value is generated from the <c>name</c> attribute.
+        /// </remarks>
         [HtmlAttributeName(IdAttributeName)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
+        /// <summary>
+        /// The <c>name</c> attribute for the generated <c>textarea</c> element.
+        /// </summary>
+        /// <remarks>
+        /// Required unless <see cref="FormGroupTagHelperBase.AspFor"/> is specified.
+        /// </remarks>
+        [HtmlAttributeName(NameAttributeName)]
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// The <c>rows</c> attribute for the generated <c>textarea</c> element.
+        /// </summary>
+        /// <remarks>
+        /// The default is <c>5</c>.
+        /// </remarks>
         [HtmlAttributeName(RowsAttributeName)]
-        public int Rows { get; set; } = ComponentDefaults.TextArea.Rows;
+        public int Rows { get; set; } = ComponentGenerator.TextAreaDefaultRows;
 
+        /// <summary>
+        /// The <c>spellcheck</c> attribute for the generated <c>textarea</c> element.
+        /// </summary>
         [HtmlAttributeName(SpellcheckAttributeName)]
         public bool? Spellcheck { get; set; }
 
-        protected override FormGroupBuilder CreateFormGroupBuilder() => new TextAreaBuilder();
+        /// <summary>
+        /// Additional attributes to add to the generated <c>textarea</c> element.
+        /// </summary>
+        [HtmlAttributeName(DictionaryAttributePrefix = TextareaAttributesPrefix)]
+        public IDictionary<string, string> TextAreaAttributes { get; set; } = new Dictionary<string, string>();
 
-        protected override TagBuilder GenerateElement(
+        private protected override FormGroupContext CreateFormGroupContext() => new TextAreaContext();
+
+        private protected override IHtmlContent GenerateFormGroupContent(
             TagHelperContext context,
-            FormGroupBuilder builder,
-            FormGroupElementContext elementContext)
+            FormGroupContext formGroupContext,
+            TagHelperOutput tagHelperOutput,
+            IHtmlContent childContent,
+            out bool haveError)
         {
-            var textAreaBuilder = (TextAreaBuilder)builder;
+            var contentBuilder = new HtmlContentBuilder();
 
-            if (textAreaBuilder.Content == null && AspFor == null)
+            var label = GenerateLabel(formGroupContext);
+            contentBuilder.AppendHtml(label);
+
+            var hint = GenerateHint(formGroupContext);
+            if (hint != null)
             {
-                throw new InvalidOperationException(
-                    $"Content must be specified when the '{AspForAttributeName}' attribute is not specified.");
+                contentBuilder.AppendHtml(hint);
             }
 
-            var resolvedContent = textAreaBuilder.Content ??
-                new HtmlString(ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name));
+            var errorMessage = GenerateErrorMessage(formGroupContext);
+            if (errorMessage != null)
+            {
+                contentBuilder.AppendHtml(errorMessage);
+            }
 
-            return Generator.GenerateTextArea(
-                elementContext.HaveError,
-                ResolvedId,
-                ResolvedName,
-                Rows,
-                DescribedBy,
-                Autocomplete,
-                Spellcheck,
-                Disabled,
-                resolvedContent,
-                Attributes.ToAttributeDictionary());
+            haveError = errorMessage != null;
+
+            var textAreaTagBuilder = GenerateTextArea(haveError);
+            contentBuilder.AppendHtml(textAreaTagBuilder);
+
+            return contentBuilder;
+
+            TagBuilder GenerateTextArea(bool haveError)
+            {
+                var textAreaContext = context.GetContextItem<TextAreaContext>();
+
+                var resolvedId = ResolveIdPrefix();
+                var resolvedName = ResolveName();
+
+                var resolvedContent = textAreaContext.Value ??
+                    new HtmlString(AspFor != null ? ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : string.Empty);
+
+                var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
+                resolvedTextAreaAttributes.MergeCssClass("govuk-js-textarea");
+
+                return Generator.GenerateTextArea(
+                    haveError,
+                    resolvedId,
+                    resolvedName,
+                    Rows,
+                    DescribedBy,
+                    Autocomplete,
+                    Spellcheck,
+                    Disabled,
+                    resolvedContent,
+                    resolvedTextAreaAttributes);
+            }
         }
 
-        protected override string GetIdPrefix() => Id;
-    }
-
-    [HtmlTargetElement("govuk-textarea-label", ParentTag = "govuk-textarea")]
-    public class TextAreaLabelTagHelper : FormGroupLabelTagHelperBase
-    {
-    }
-
-    [HtmlTargetElement("govuk-textarea-hint", ParentTag = "govuk-textarea")]
-    public class TextAreaHintTagHelper : FormGroupHintTagHelperBase
-    {
-    }
-
-    [HtmlTargetElement("govuk-textarea-error-message", ParentTag = "govuk-textarea")]
-    public class TextAreaErrorMessageTagHelper : FormGroupErrorMessageTagHelperBase
-    {
-    }
-
-    [HtmlTargetElement("govuk-textarea-element", ParentTag = "govuk-textarea")]
-    public class TextAreaElementTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        private protected override string ResolveIdPrefix()
         {
-            var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
-
-            var formGroupContext = (TextAreaBuilder)context.Items[typeof(FormGroupBuilder)];
-            if (!formGroupContext.TrySetElementContent(childContent))
+            if (Id != null)
             {
-                throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
+                return Id;
             }
 
-            output.SuppressOutput();
+            if (Name == null && AspFor == null)
+            {
+                throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
+                    IdAttributeName,
+                    NameAttributeName,
+                    AspForAttributeName);
+            }
+
+            var resolvedName = ResolveName();
+
+            return TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
         }
-    }
 
-    internal class TextAreaBuilder : FormGroupBuilder
-    {
-        public IHtmlContent Content { get; private set; }
-
-        public bool TrySetElementContent(IHtmlContent content)
+        private string ResolveName()
         {
-            if (TrySetElementRenderStage())
+            if (Name == null && AspFor == null)
             {
-                Content = content;
-                return true;
+                throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
+                    NameAttributeName,
+                    AspForAttributeName);
             }
-            else
-            {
-                return false;
-            }
+
+            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor!.Name);
         }
     }
 }
