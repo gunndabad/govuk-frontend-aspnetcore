@@ -1,7 +1,5 @@
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -9,15 +7,14 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     public partial class ComponentTests
     {
         [Theory]
-        [ComponentFixtureData("character-count", typeof(OptionsJson.CharacterCount))]
-        public void CharacterCount(ComponentTestCaseData<OptionsJson.CharacterCount> data) =>
+        [ComponentFixtureData("textarea", typeof(OptionsJson.Textarea))]
+        public void Textarea(ComponentTestCaseData<OptionsJson.Textarea> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
                 (generator, options) =>
                 {
                     var attributes = options.Attributes.ToAttributesDictionary()
-                        .MergeAttribute("class", options.Classes)
-                        .MergeAttribute("class", "govuk-js-character-count");   // FIXME yuk
+                        .MergeAttribute("class", options.Classes);
 
                     var labelOptions = options.Label != null ?
                         options.Label with { For = options.Id } :
@@ -31,10 +28,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         options.ErrorMessage with { Id = options.Id + "-error" } :
                         null;
 
-                    var countMessageAttributes = new AttributeDictionary()
-                        .MergeAttribute("class", options.CountMessage?.Classes);
-
-                    var content = new HtmlString(GenerateFormGroup(
+                    return GenerateFormGroup(
                         labelOptions,
                         hintOptions,
                         errorMessageOptions,
@@ -42,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         fieldset: null,
                         generateElement: (haveError, describedBy) =>
                         {
-                            AppendToDescribedBy(ref describedBy, options.Id + "-info");
+                            AppendToDescribedBy(ref describedBy, options.DescribedBy);
 
                             return generator.GenerateTextArea(
                                 haveError,
@@ -50,15 +44,12 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 options.Name,
                                 options.Rows ?? ComponentGenerator.TextAreaDefaultRows,
                                 describedBy,
-                                /* spellcheck: */ null,
+                                options.Autocomplete,
                                 options.Spellcheck,
                                 ComponentGenerator.TextAreaDefaultDisabled,
                                 new HtmlString(options.Value),
                                 attributes);
-                        }));
-
-                    return generator.GenerateCharacterCount(options.Id, options.MaxLength, options.MaxWords, options.Threshold, content, countMessageAttributes)
-                        .RenderToString();
+                        });
                 });
     }
 }
