@@ -25,7 +25,7 @@ jobs:
   build:
 
     name: "Build & package"
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -50,8 +50,8 @@ jobs:
 
     - name: Test
       run: |
-        dotnet test test/GovUk.FrontEnd.AspNetCore.Tests/ --configuration Release --no-build
-        dotnet test test/GovUk.FrontEnd.AspNetCore.ConformanceTests/ --configuration Release --no-build
+        dotnet test test/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
+        dotnet test test/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
 
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
@@ -68,7 +68,7 @@ jobs:
   release:
 
     name: "Release"
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
 
@@ -79,6 +79,6 @@ jobs:
         name: GovUk.Frontend.AspNetCore.nupkg
 
     - name: Publish package to NuGet
-      run: dotnet nuget push "*.nupkg" --api-key ${env:NUGET_TOKEN} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push **/*.nupkg --api-key ${env:NUGET_TOKEN} --source https://api.nuget.org/v3/index.json --skip-duplicate
       env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
