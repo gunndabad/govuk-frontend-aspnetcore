@@ -220,8 +220,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                         return null;
                     }
 
-                    var (year, month, day) = Value.Value;
-                    return (day, month, year);
+                    var date = Value.Value;
+                    return (date.Day, date.Month, date.Year);
                 }
 
                 if (AspFor != null && AspFor.Model is not null)
