@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore", "src\GovUk.Frontend.AspNetCore\GovUk.Frontend.AspNetCore.csproj", "{E44813ED-0397-4BBC-9817-18735FF47916}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F85128C9-8470-4F7A-B16F-5AEC17BC0924}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AED24400-DECA-43E7-872C-4ADCFB02A3B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.IntegrationTests", "test\GovUk.Frontend.AspNetCore.IntegrationTests\GovUk.Frontend.AspNetCore.IntegrationTests.csproj", "{AECA829F-DC59-4CA2-88C2-54218D4BD817}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -126,6 +128,18 @@ Global
 		{64A0B1FF-882D-4270-AD3B-A3B6ABD74957}.Release|x64.Build.0 = Release|Any CPU
 		{64A0B1FF-882D-4270-AD3B-A3B6ABD74957}.Release|x86.ActiveCfg = Release|Any CPU
 		{64A0B1FF-882D-4270-AD3B-A3B6ABD74957}.Release|x86.Build.0 = Release|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Debug|x64.Build.0 = Debug|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Debug|x86.Build.0 = Debug|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x64.ActiveCfg = Release|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x64.Build.0 = Release|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x86.ActiveCfg = Release|Any CPU
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +151,7 @@ Global
 		{36C36B87-7385-48B1-A82D-ADEDB54D574B} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
 		{1AB2352D-1151-4F82-83F4-5C327A436B70} = {AED24400-DECA-43E7-872C-4ADCFB02A3B2}
 		{64A0B1FF-882D-4270-AD3B-A3B6ABD74957} = {AED24400-DECA-43E7-872C-4ADCFB02A3B2}
+		{AECA829F-DC59-4CA2-88C2-54218D4BD817} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56670F00-D357-4E76-A289-2114015DDFE5}
