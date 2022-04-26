@@ -4,12 +4,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using GovUk.Frontend.AspNetCore.Tests.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
+namespace GovUk.Frontend.AspNetCore.IntegrationTests
 {
     public class StartupFilterTests
     {
@@ -19,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
         public async Task HostsStaticAssets(string path)
         {
             // Arrange
-            using var fixture = new StartupFilterTestFixture(services => { });
+            await using var fixture = new StartupFilterTestFixture(services => { });
             await fixture.InitializeAsync();
 
             var resolvedPath = path.Replace("{version}", HtmlSnippets.GdsLibraryVersion);
@@ -37,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
         public async Task AddImportsToHtmlIsFalse_DoesNotAddStyleAndScriptImportsToRazorViews()
         {
             // Arrange
-            using var fixture = new StartupFilterTestFixture(services =>
+            await using var fixture = new StartupFilterTestFixture(services =>
             {
                 services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.AddImportsToHtml = false);
             });
@@ -82,7 +81,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
         public async Task AddImportsToHtmlIsTrue_AddsStyleAndScriptImportsToRazorViews()
         {
             // Arrange
-            using var fixture = new StartupFilterTestFixture(services =>
+            await using var fixture = new StartupFilterTestFixture(services =>
             {
                 services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.AddImportsToHtml = true);
             });
@@ -124,14 +123,21 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
         }
     }
 
-    public class StartupFilterTestFixture : TestServerFixtureBase
+    public class StartupFilterTestFixture : ServerFixture
     {
         private readonly Action<IServiceCollection> _configureServices;
 
         public StartupFilterTestFixture(Action<IServiceCollection> configureServices)
         {
             _configureServices = configureServices;
+
+            HttpClient = new HttpClient()
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
         }
+
+        public HttpClient HttpClient { get; }
 
         protected override void Configure(IApplicationBuilder app)
         {
