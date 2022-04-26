@@ -20,6 +20,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
         {
             // Arrange
             using var fixture = new StartupFilterTestFixture(services => { });
+            await fixture.InitializeAsync();
 
             var resolvedPath = path.Replace("{version}", HtmlSnippets.GdsLibraryVersion);
 
@@ -40,6 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
             {
                 services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.AddImportsToHtml = false);
             });
+            await fixture.InitializeAsync();
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/Empty");
 
@@ -84,6 +86,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
             {
                 services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.AddImportsToHtml = true);
             });
+            await fixture.InitializeAsync();
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/Empty");
 
@@ -123,14 +126,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
 
     public class StartupFilterTestFixture : TestServerFixtureBase
     {
+        private readonly Action<IServiceCollection> _configureServices;
+
         public StartupFilterTestFixture(Action<IServiceCollection> configureServices)
-            : base((Action<IServiceCollection>)Delegate.Combine((Action<IServiceCollection>)ConfigureServices, configureServices), Configure)
         {
+            _configureServices = configureServices;
         }
 
-        private static void Configure(IApplicationBuilder app)
+        protected override void Configure(IApplicationBuilder app)
         {
-            app.UseRouting();
+            base.Configure(app);
 
             app.UseEndpoints(endpoints =>
             {
@@ -138,11 +143,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.FunctionalTests
             });
         }
 
-        private static void ConfigureServices(IServiceCollection services)
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            services.AddGovUkFrontend();
+            base.ConfigureServices(services);
 
             services.AddRazorPages();
+
+            _configureServices?.Invoke(services);
         }
     }
 }
