@@ -206,11 +206,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-radios");
+            tagBuilder.Attributes.Add("data-module", "govuk-radios");
 
             if (isConditional)
             {
                 tagBuilder.MergeCssClass("govuk-radios--conditional");
-                tagBuilder.Attributes.Add("data-module", "govuk-radios");
             }
 
             foreach (var item in items)
