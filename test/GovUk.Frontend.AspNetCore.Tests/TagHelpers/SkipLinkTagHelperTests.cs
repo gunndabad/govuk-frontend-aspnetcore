@@ -39,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var expectedHtml = @"
-<a class=""govuk-skip-link"" href=""#main"">Link content</a>";
+<a class=""govuk-skip-link"" href=""#main"" data-module=""govuk-skip-link"">Link content</a>";
 
             AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
