@@ -42,10 +42,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var expectedHtml = @"
-<span class=""govuk-error-message"">
+<p class=""govuk-error-message"">
     <span class=""govuk-visually-hidden"">Error:</span>
     An error!
-</span>";
+</p>";
 
             AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
@@ -80,10 +80,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var expectedHtml = @"
-<span class=""govuk-error-message"">
+<p class=""govuk-error-message"">
     <span class=""govuk-visually-hidden"">Overriden:</span>
     An error!
-</span>";
+</p>";
 
             AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }
@@ -131,10 +131,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var expectedHtml = @"
-<span class=""govuk-error-message"">
+<p class=""govuk-error-message"">
     <span class=""govuk-visually-hidden"">Error:</span>
     An error!
-</span>";
+</p>";
 
             AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
         }

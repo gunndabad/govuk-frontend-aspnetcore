@@ -67,7 +67,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
-                "<div class=\"govuk-radios\">" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "<div class=\"govuk-radios__item\">" +
                 "<input class=\"govuk-radios__input\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
@@ -218,7 +218,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
                 "<div class=\"govuk-hint\" id=\"my-id-hint\">The hint</div>" +
-                "<div class=\"govuk-radios\">" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "</div>" +
                 "</div>",
                 html);
@@ -262,8 +262,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group--error govuk-form-group\">" +
-                "<span class=\"govuk-error-message\" id=\"my-id-error\"><span class=\"govuk-visually-hidden\">Error:</span>A error</span>" +
-                "<div class=\"govuk-radios\">" +
+                "<p class=\"govuk-error-message\" id=\"my-id-error\"><span class=\"govuk-visually-hidden\">Error:</span>A error</p>" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "</div>" +
                 "</div>",
                 html);
@@ -314,7 +314,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
-                "<div class=\"govuk-radios\">" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "<div class=\"govuk-radios__item\">" +
                 "<input aria-describedby=\"first-hint\" class=\"govuk-radios__input\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
@@ -513,7 +513,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 "<div class=\"govuk-form-group\">" +
                 "<fieldset aria-describedby=\"describedby\" class=\"govuk-fieldset\">" +
                 "<legend class=\"govuk-fieldset__legend\">Legend</legend>" +
-                "<div class=\"govuk-radios\">" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "</div>" +
                 "</fieldset>" +
                 "</div>",

@@ -7,7 +7,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
     public partial class ComponentGenerator
     {
-        internal const string ErrorMessageElement = "span";
+        internal const string ErrorMessageElement = "p";
         internal const string ErrorMessageDefaultVisuallyHiddenText = "Error";
 
         public TagBuilder GenerateErrorMessage(

@@ -133,7 +133,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var expectedHtml = @"
 <div class=""govuk-form-group govuk-form-group--error"">
-    <span class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>A error</span>
+    <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>A error</p>
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
             <input class=""govuk-checkboxes__input"" id=""first"" name=""testcheckboxes"" type=""checkbox"" value=""first"" aria-describedby=""my-id-error"" disabled=""disabled"" />

@@ -103,10 +103,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             </ul>
         </dd>
     </div>
-    <div class=""govuk-summary-list__row"">
+    <div class=""govuk-summary-list__row govuk-summary-list__row--no-actions"">
         <dt class=""govuk-summary-list__key"">Row 2 key</dt>
         <dd class=""govuk-summary-list__value"">Row 2 value</dd>
-        <span class=""govuk-summary-list__actions""></span>
     </div>
 </dl>";
 

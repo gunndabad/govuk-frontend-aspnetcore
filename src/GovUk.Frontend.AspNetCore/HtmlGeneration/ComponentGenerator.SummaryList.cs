@@ -54,9 +54,16 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     row.Value.Content,
                     row.Value.Content != null);
 
+                var thisRowHasActions = row.Actions?.Items.Any() == true;
+
                 var rowTagBuilder = new TagBuilder(SummaryListRowElement);
                 rowTagBuilder.MergeAttributes(row.Attributes);
                 rowTagBuilder.MergeCssClass("govuk-summary-list__row");
+
+                if (anyRowHasActions && !thisRowHasActions)
+                {
+                    rowTagBuilder.MergeCssClass("govuk-summary-list__row--no-actions");
+                }
 
                 var dt = new TagBuilder(SummaryListRowKeyElement);
                 dt.MergeAttributes(row.Key.Attributes);
@@ -70,43 +77,34 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 dd.InnerHtml.AppendHtml(row.Value.Content);
                 rowTagBuilder.InnerHtml.AppendHtml(dd);
 
-                if (anyRowHasActions)
+                if (thisRowHasActions)
                 {
-                    if (row.Actions?.Items.Any() == true)
+                    var actionsDd = new TagBuilder(SummaryListRowActionsElement);
+                    actionsDd.MergeAttributes(row.Actions!.Attributes);
+                    actionsDd.MergeCssClass("govuk-summary-list__actions");
+
+                    if (row.Actions.Items.Count() == 1)
                     {
-                        var actionsDd = new TagBuilder(SummaryListRowActionsElement);
-                        actionsDd.MergeAttributes(row.Actions.Attributes);
-                        actionsDd.MergeCssClass("govuk-summary-list__actions");
-
-                        if (row.Actions.Items.Count() == 1)
-                        {
-                            actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Items.Single()));
-                        }
-                        else
-                        {
-                            var ul = new TagBuilder("ul");
-                            ul.MergeCssClass("govuk-summary-list__actions-list");
-
-                            foreach (var action in row.Actions.Items!)
-                            {
-                                var li = new TagBuilder("li");
-                                li.MergeCssClass("govuk-summary-list__actions-list-item");
-                                li.InnerHtml.AppendHtml(GenerateLink(action));
-
-                                ul.InnerHtml.AppendHtml(li);
-                            }
-
-                            actionsDd.InnerHtml.AppendHtml(ul);
-                        }
-
-                        rowTagBuilder.InnerHtml.AppendHtml(actionsDd);
+                        actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Items.Single()));
                     }
                     else
                     {
-                        var span = new TagBuilder("span");
-                        span.MergeCssClass("govuk-summary-list__actions");
-                        rowTagBuilder.InnerHtml.AppendHtml(span);
+                        var ul = new TagBuilder("ul");
+                        ul.MergeCssClass("govuk-summary-list__actions-list");
+
+                        foreach (var action in row.Actions.Items!)
+                        {
+                            var li = new TagBuilder("li");
+                            li.MergeCssClass("govuk-summary-list__actions-list-item");
+                            li.InnerHtml.AppendHtml(GenerateLink(action));
+
+                            ul.InnerHtml.AppendHtml(li);
+                        }
+
+                        actionsDd.InnerHtml.AppendHtml(ul);
                     }
+
+                    rowTagBuilder.InnerHtml.AppendHtml(actionsDd);
                 }
 
                 tagBuilder.InnerHtml.AppendHtml(rowTagBuilder);

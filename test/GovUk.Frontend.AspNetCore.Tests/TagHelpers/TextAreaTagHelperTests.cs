@@ -113,10 +113,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 <div class=""govuk-form-group govuk-form-group--error"">
     <label class=""govuk-label"" for=""my-id"">The label</label>
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-    <span id=""my-id-error"" class=""govuk-error-message"">
+    <p id=""my-id-error"" class=""govuk-error-message"">
         <span class=""govuk-visually-hidden"">Error:</span>
         The error
-    </span>
+    </p>
     <textarea class=""govuk-textarea govuk-js-textarea govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
 </div>";
 

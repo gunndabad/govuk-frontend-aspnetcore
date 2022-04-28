@@ -107,10 +107,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var expectedHtml = @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <label for=""my-id"" class=""govuk-label"">The label</label>
-    <span id=""my-id-error"" class=""govuk-error-message"">
+    <p id=""my-id-error"" class=""govuk-error-message"">
         <span class=""govuk-visually-hidden"">Error:</span>
         The error
-    </span>
+    </p>
     <input aria-describedby=""describedby my-id-error"" class=""govuk-file-upload govuk-file-upload--error"" id=""my-id"" name=""my-id"" type=""file"">
 </div>";
 

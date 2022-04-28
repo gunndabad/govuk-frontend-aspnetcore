@@ -756,7 +756,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.RenderToString();
             Assert.Contains(
-                "<span class=\"govuk-error-message\" id=\"Foo-error\"><span class=\"govuk-visually-hidden\">Error:</span>An error</span>",
+                "<p class=\"govuk-error-message\" id=\"Foo-error\"><span class=\"govuk-visually-hidden\">Error:</span>An error</p>",
                 html);
         }
 
@@ -885,7 +885,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.RenderToString();
             Assert.Contains(
-                "<span class=\"govuk-error-message\" id=\"Foo-error\"><span class=\"govuk-visually-hidden\">Bang:</span>Boom!</span>",
+                "<p class=\"govuk-error-message\" id=\"Foo-error\"><span class=\"govuk-visually-hidden\">Bang:</span>Boom!</p>",
                 html);
         }
 
