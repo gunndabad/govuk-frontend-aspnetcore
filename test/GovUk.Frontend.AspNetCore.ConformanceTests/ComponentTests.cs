@@ -99,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
                 content = _componentGenerator.GenerateFieldset(
                     describedBy,
-                    role: null,
+                    role: fieldset.Role,
                     fieldset.Legend?.IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
                     legendContent: TextOrHtmlHelper.GetHtmlContent(
                         fieldset.Legend?.Text,

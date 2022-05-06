@@ -43,14 +43,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync() :
                 null;
 
+            SetErrorMessage(childContent, context, output);
+
+            output.SuppressOutput();
+        }
+
+        private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
+        {
             var formGroupContext = context.GetContextItem<FormGroupContext>();
 
             formGroupContext.SetErrorMessage(
                 VisuallyHiddenText,
                 output.Attributes.ToAttributesDictionary(),
                 childContent?.Snapshot());
-
-            output.SuppressOutput();
         }
     }
 }
