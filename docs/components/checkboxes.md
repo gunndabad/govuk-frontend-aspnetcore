@@ -155,7 +155,7 @@ A container element used when checkboxes content should be contained with a `fie
 When used every `<govuk-checkboxes-hint>`, `<govuk-checkboxes-error-message>`, `<govuk-checkboxes-item>` and `<govuk-checkboxes-divider>` must be placed inside this element, not the root `<govuk-checkboxes>`.\
 Must be inside a `<govuk-checkboxes>` element.
 
-### `<govuk-checkboxes-fieldset-fieldset>`
+### `<govuk-checkboxes-fieldset-legend>`
 
 *Required* when a `<govuk-checkboxes-fieldset>` is specified\
 The content is the HTML to use within the legend.\

@@ -4,10 +4,8 @@
     ViewData["Title"] = "Home page";
 }
 
-<form asp-page="Index">
-    <govuk-date-input asp-for="DateOfBirth">
-        <govuk-date-input-label>My date</govuk-date-input-label>
-    </govuk-date-input>
+<form asp-page="Index" novalidate>
+    <govuk-date-input asp-for="DateOfBirth" />
 
     <govuk-button type="submit">Save</govuk-button>
 </form>

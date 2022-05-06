@@ -48,7 +48,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             await _host.StartAsync();
 
             _playright = await Playwright.CreateAsync();
-            Browser = await _playright.Chromium.LaunchAsync();
+            Browser = await _playright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions() { /*Headless = false*/ });
         }
 
         protected virtual void Configure(IApplicationBuilder app)

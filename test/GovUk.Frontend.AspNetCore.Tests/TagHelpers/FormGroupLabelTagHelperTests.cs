@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     public class FormGroupLabelTagHelperTests
     {
         [Fact]
-        public async Task ProcessAsync_SetsErrorMessageOnContext()
+        public async Task ProcessAsync_SetsLabelOnContext()
         {
             // Arrange
             var formGroupContext = new TestFormGroupContext();

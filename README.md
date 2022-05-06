@@ -63,6 +63,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Button](docs/components/button.md)
 - [Checkboxes](docs/components/checkboxes.md)
 - [Character count](docs/components/character-count.md)
+- [Date input](docs/components/date-input.md)
 - [Details](docs/components/details.md)
 - [Error message](docs/components/error-message.md)
 - [Fieldset](docs/components/fieldset.md)

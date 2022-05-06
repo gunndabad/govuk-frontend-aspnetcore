@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -13,6 +14,30 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
 {
     public static class AssertEx
     {
+        public static async Task CollectionAsync<T>(IEnumerable<T> collection, params Func<T, Task>[] elementInspectors)
+        {
+            var elements = collection.ToArray();
+            var expectedCount = elementInspectors.Length;
+            var actualCount = elements.Length;
+
+            if (expectedCount != actualCount)
+            {
+                throw new CollectionException(collection, expectedCount, actualCount);
+            }
+
+            for (var idx = 0; idx < actualCount; idx++)
+            {
+                try
+                {
+                    await elementInspectors[idx](elements[idx]);
+                }
+                catch (Exception ex)
+                {
+                    throw new CollectionException(collection, expectedCount, actualCount, idx, ex);
+                }
+            }
+        }
+
         public static async Task<IDocument> GetHtmlDocument(this HttpResponseMessage response)
         {
             var html = await response.Content.ReadAsStringAsync();

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,46 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding
 {
-    public class DateInputModelBinderProvider : IModelBinderProvider
+    internal class DateInputModelBinder : IModelBinder
     {
-        private readonly DateInputModelConverter[] _dateInputModelConverters;
-
-        public DateInputModelBinderProvider(GovUkFrontendAspNetCoreOptions options)
-        {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            _dateInputModelConverters = options.DateInputModelConverters.ToArray();
-        }
-
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var modelType = context.Metadata.ModelType;
-
-            foreach (var converter in _dateInputModelConverters)
-            {
-                if (converter.CanConvertModelType(modelType))
-                {
-                    return new DateInputModelBinder(converter);
-                }
-            }
-
-            return null;
-        }
-    }
-
-    public class DateInputModelBinder : IModelBinder
-    {
-        internal const string DayComponentName = "Day";
-        internal const string MonthComponentName = "Month";
-        internal const string YearComponentName = "Year";
+        private const string DayComponentName = "Day";
+        private const string MonthComponentName = "Month";
+        private const string YearComponentName = "Year";
 
         private readonly DateInputModelConverter _dateInputModelConverter;
 
@@ -87,11 +53,12 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
                 dayValueProviderResult.FirstValue,
                 monthValueProviderResult.FirstValue,
                 yearValueProviderResult.FirstValue,
-                out var dateComponents);
+                out var date);
 
             if (parseErrors == DateInputParseErrors.None)
             {
-                var model = _dateInputModelConverter.CreateModelFromElements(modelType, dateComponents);
+                Debug.Assert(date.HasValue);
+                var model = _dateInputModelConverter.CreateModelFromDate(modelType, date!.Value);
                 bindingContext.Result = ModelBindingResult.Success(model);
             }
             else
@@ -155,58 +122,44 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
         }
 
         // internal for testing
-        internal static DateInputParseErrors Parse(
-            string day,
-            string month,
-            string year,
-            out (int Day, int Month, int Year) dateComponents)
+        internal static DateInputParseErrors Parse(string? day, string? month, string? year, out Date? date)
         {
-            if (year is null)
-            {
-                throw new ArgumentNullException(nameof(year));
-            }
-
-            if (month is null)
-            {
-                throw new ArgumentNullException(nameof(month));
-            }
-
-            if (day is null)
-            {
-                throw new ArgumentNullException(nameof(day));
-            }
+            day ??= string.Empty;
+            month ??= string.Empty;
+            year ??= string.Empty;
 
             var errors = DateInputParseErrors.None;
+            int parsedYear = 0, parsedMonth = 0, parsedDay = 0;
 
-            if (!int.TryParse(year, out int parsedYear))
+            if (string.IsNullOrEmpty(year))
             {
                 errors |= DateInputParseErrors.MissingYear;
             }
-            else if (parsedYear < 1 || parsedYear > 9999)
+            else if (!int.TryParse(year, out parsedYear) || parsedYear < 1 || parsedYear > 9999)
             {
                 errors |= DateInputParseErrors.InvalidYear;
             }
 
-            if (!int.TryParse(month, out int parsedMonth))
+            if (string.IsNullOrEmpty(month))
             {
                 errors |= DateInputParseErrors.MissingMonth;
             }
-            else if (parsedMonth < 1 || parsedMonth > 12)
+            else if (!int.TryParse(month, out parsedMonth) || parsedMonth < 1 || parsedMonth > 12)
             {
                 errors |= DateInputParseErrors.InvalidMonth;
             }
 
-            if (!int.TryParse(day, out int parsedDay))
+            if (string.IsNullOrEmpty(day))
             {
                 errors |= DateInputParseErrors.MissingDay;
             }
-            else if (parsedDay < 1 || parsedDay > 31 ||
+            else if (!int.TryParse(day, out parsedDay) || parsedDay < 1 || parsedDay > 31 ||
                 (errors == DateInputParseErrors.None && parsedDay > DateTime.DaysInMonth(parsedYear, parsedMonth)))
             {
                 errors |= DateInputParseErrors.InvalidDay;
             }
 
-            dateComponents = errors == DateInputParseErrors.None ? (parsedDay, parsedMonth, parsedYear) : default;
+            date = errors == DateInputParseErrors.None ? new(parsedYear, parsedMonth, parsedDay) : default;
             return errors;
         }
     }

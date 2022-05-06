@@ -8,18 +8,17 @@ namespace Samples.DateInput
     {
         public override bool CanConvertModelType(Type modelType) => modelType == typeof(LocalDate) || modelType == typeof(LocalDate?);
 
-        public override object CreateModelFromElements(Type modelType, (int Day, int Month, int Year) components)
+        public override object CreateModelFromDate(Type modelType, Date date)
         {
-            var (day, month, year) = components;
-            return new LocalDate(year, month, day);
+            return new LocalDate(date.Year, date.Month, date.Day);
         }
 
-        public override (int Day, int Month, int Year)? GetElementsFromModel(Type modelType, object model)
+        public override Date? GetDateFromModel(Type modelType, object model)
         {
             var localDate = (LocalDate?)model;
 
             return localDate.HasValue ?
-                (localDate.Value.Day, localDate.Value.Month, localDate.Value.Year) :
+                new Date(localDate.Value.Year, localDate.Value.Month, localDate.Value.Day) :
                 null;
         }
     }
