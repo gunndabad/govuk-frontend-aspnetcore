@@ -66,7 +66,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
 
             converterMock
-                .Setup(mock => mock.CreateModelFromElements(modelType, new ValueTuple<int, int, int>(1, 4, 2020)))
+                .Setup(mock => mock.CreateModelFromDate(modelType, new Date(2020, 4, 1)))
                 .Returns(new Date(2020, 4, 1))
                 .Verifiable();
 
@@ -238,12 +238,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
         [InlineData("0", "4", "2020", DateInputParseErrors.InvalidDay)]
         [InlineData("-1", "4", "2020", DateInputParseErrors.InvalidDay)]
         [InlineData("32", "4", "2020", DateInputParseErrors.InvalidDay)]
+        [InlineData("x", "4", "2020", DateInputParseErrors.InvalidDay)]
         [InlineData("1", "0", "2020", DateInputParseErrors.InvalidMonth)]
         [InlineData("1", "-1", "2020", DateInputParseErrors.InvalidMonth)]
         [InlineData("1", "13", "2020", DateInputParseErrors.InvalidMonth)]
+        [InlineData("1", "x", "2020", DateInputParseErrors.InvalidMonth)]
         [InlineData("1", "4", "0", DateInputParseErrors.InvalidYear)]
         [InlineData("1", "4", "-1", DateInputParseErrors.InvalidYear)]
         [InlineData("1", "4", "10000", DateInputParseErrors.InvalidYear)]
+        [InlineData("1", "4", "x", DateInputParseErrors.InvalidYear)]
         public void Parse_InvalidDate_ComputesExpectedParseErrors(
             string day, string month, string year, DateInputParseErrors expectedParseErrors)
         {

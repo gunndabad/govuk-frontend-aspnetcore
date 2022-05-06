@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore
 
             if (attributeDictionary.TryGetValue("class", out var currentValue))
             {
-                var classes = currentValue.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var classes = currentValue!.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (!classes.Contains(value, StringComparer.OrdinalIgnoreCase))
                 {

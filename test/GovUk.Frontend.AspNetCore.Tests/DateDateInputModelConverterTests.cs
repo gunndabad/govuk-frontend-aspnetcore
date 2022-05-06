@@ -6,49 +6,49 @@ namespace GovUk.Frontend.AspNetCore.Tests
     public class DateDateInputModelConverterTests
     {
         [Theory]
-        [MemberData(nameof(CreateModelFromElementsData))]
-        public void CreateModelFromComponents_ReturnsExpectedResult(
+        [MemberData(nameof(CreateDateFromElementsData))]
+        public void CreateDateFromComponents_ReturnsExpectedResult(
             Type modelType,
-            (int Year, int Month, int Day) components,
+            Date date,
             object expectedResult)
         {
             // Arrange
             var converter = new DateDateInputModelConverter();
 
             // Act
-            var result = converter.CreateModelFromElements(modelType, components);
+            var result = converter.CreateModelFromDate(modelType, date);
 
             // Assert
             Assert.Equal(expectedResult, result);
         }
 
         [Theory]
-        [MemberData(nameof(GetElementsFromModelData))]
-        public void GetComponentsFromModel_ReturnsExpectedResult(
+        [MemberData(nameof(GetDateFromModelData))]
+        public void GetDateFromModel_ReturnsExpectedResult(
            Type modelType,
            object model,
-           (int Year, int Month, int Day)? expectedResult)
+           Date? expectedResult)
         {
             // Arrange
             var converter = new DateDateInputModelConverter();
 
             // Act
-            var result = converter.GetElementsFromModel(modelType, model);
+            var result = converter.GetDateFromModel(modelType, model);
 
             // Assert
             Assert.Equal(expectedResult, result);
         }
 
-        public static TheoryData<Type, (int, int, int)?, object> CreateModelFromElementsData { get; } = new TheoryData<Type, (int, int, int)?, object>()
+        public static TheoryData<Type, Date?, object> CreateDateFromElementsData { get; } = new TheoryData<Type, Date?, object>()
         {
-            { typeof(Date), (1, 4, 2020), new Date(2020, 4, 1) },
-            { typeof(Date?), (1, 4, 2020), (Date?)new Date(2020, 4, 1) }
+            { typeof(Date), new Date(2020, 4, 1), new Date(2020, 4, 1) },
+            { typeof(Date?), new Date(2020, 4, 1), (Date?)new Date(2020, 4, 1) }
         };
 
-        public static TheoryData<Type, object, (int, int, int)?> GetElementsFromModelData { get; } = new TheoryData<Type, object, (int, int, int)?>()
+        public static TheoryData<Type, object, Date?> GetDateFromModelData { get; } = new TheoryData<Type, object, Date?>()
         {
-            { typeof(Date), new Date(2020, 4, 1), (1, 4, 2020) },
-            { typeof(Date?), (Date?)new Date(2020, 4, 1), (1, 4, 2020) },
+            { typeof(Date), new Date(2020, 4, 1), new Date(2020, 4, 1) },
+            { typeof(Date?), (Date?)new Date(2020, 4, 1), new Date(2020, 4, 1) },
             { typeof(Date?), null, null }
         };
     }
