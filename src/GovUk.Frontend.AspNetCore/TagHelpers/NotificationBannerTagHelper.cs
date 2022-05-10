@@ -80,7 +80,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 notificationBannerContext.Title?.HeadingLevel,
                 notificationBannerContext.Title?.Content,
                 childContent.Snapshot(),
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

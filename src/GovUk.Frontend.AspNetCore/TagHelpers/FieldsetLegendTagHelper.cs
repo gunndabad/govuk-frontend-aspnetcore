@@ -38,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             fieldsetContext.SetLegend(
                 IsPageHeading,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 childContent.Snapshot());
 
             output.SuppressOutput();

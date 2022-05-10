@@ -54,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(
                 CollapseOnMobile,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 breadcrumbsContext.Items);
 
             output.TagName = tagBuilder.TagName;

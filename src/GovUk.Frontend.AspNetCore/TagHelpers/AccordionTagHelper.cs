@@ -98,7 +98,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var tagBuilder = _htmlGenerator.GenerateAccordion(
                 Id,
                 HeadingLevel,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 accordionContext.Items);
 
             output.TagName = tagBuilder.TagName;

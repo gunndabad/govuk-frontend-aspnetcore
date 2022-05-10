@@ -109,7 +109,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             Generator.GenerateFormGroup(
                 haveError,
                 content,
-                tagHelperOutput.Attributes.ToAttributesDictionary());
+                tagHelperOutput.Attributes.ToAttributeDictionary());
 
         internal IHtmlContent? GenerateErrorMessage(FormGroupContext formGroupContext)
         {

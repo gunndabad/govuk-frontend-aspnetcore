@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            itemContext.SetConditional(output.Attributes.ToAttributesDictionary(), childContent.Snapshot());
+            itemContext.SetConditional(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
             output.SuppressOutput();
         }

@@ -32,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributesDictionary(), content: content.Snapshot());
+            fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content.Snapshot());
 
             output.SuppressOutput();
         }

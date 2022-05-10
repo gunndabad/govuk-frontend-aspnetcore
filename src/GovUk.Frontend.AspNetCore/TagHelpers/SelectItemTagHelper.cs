@@ -98,7 +98,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             selectContext.AddItem(new SelectItem()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Content = content.Snapshot(),
                 Disabled = Disabled,
                 Selected = resolvedSelected,

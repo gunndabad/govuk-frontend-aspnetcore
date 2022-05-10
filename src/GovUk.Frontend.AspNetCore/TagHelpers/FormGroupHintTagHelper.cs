@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var formGroupContext = context.GetContextItem<FormGroupContext>();
 
-            formGroupContext.SetHint(output.Attributes.ToAttributesDictionary(), childContent?.Snapshot());
+            formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
 
             output.SuppressOutput();
         }

@@ -71,7 +71,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Disabled,
                 PreventDoubleClick,
                 childContent,
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

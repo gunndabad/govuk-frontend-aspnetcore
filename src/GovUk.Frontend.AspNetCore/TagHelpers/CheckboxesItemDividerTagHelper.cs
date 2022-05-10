@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             checkboxesContext.AddItem(new CheckboxesItemDivider()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Content = content.Snapshot()
             });
 

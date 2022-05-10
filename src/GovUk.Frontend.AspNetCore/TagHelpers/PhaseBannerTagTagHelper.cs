@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            phaseBannerContext.SetTag(output.Attributes.ToAttributesDictionary(), childContent.Snapshot());
+            phaseBannerContext.SetTag(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
             output.SuppressOutput();
         }

@@ -35,7 +35,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = await output.GetChildContentAsync();
 
-            var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributesDictionary());
+            var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

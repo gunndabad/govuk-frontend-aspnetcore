@@ -6,7 +6,7 @@ namespace GovUk.Frontend.AspNetCore
 {
     internal static class TagHelperAttributeListExtensions
     {
-        public static AttributeDictionary ToAttributesDictionary(this TagHelperAttributeList? list)
+        public static AttributeDictionary ToAttributeDictionary(this TagHelperAttributeList? list)
         {
             var attributeDictionary = new AttributeDictionary();
 

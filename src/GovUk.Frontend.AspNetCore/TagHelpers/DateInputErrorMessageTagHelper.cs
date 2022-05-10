@@ -29,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             dateInputContext.SetErrorMessage(
                 ErrorItems,
                 VisuallyHiddenText,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 childContent?.Snapshot());
         }
     }

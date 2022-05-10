@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            itemContext.SetHint(output.Attributes.ToAttributesDictionary(), childContent.Snapshot());
+            itemContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
             output.SuppressOutput();
         }

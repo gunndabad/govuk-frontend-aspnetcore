@@ -60,7 +60,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 detailsContext.Summary?.Attributes,
                 detailsContext.Text?.Content,
                 detailsContext.Text?.Attributes,
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             formGroupContext.SetLabel(
                 IsPageHeading,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 childContent?.Snapshot());
 
             output.SuppressOutput();

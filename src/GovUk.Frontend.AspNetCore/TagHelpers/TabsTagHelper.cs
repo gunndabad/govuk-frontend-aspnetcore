@@ -39,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, output.Attributes.ToAttributesDictionary(), tabsContext.Items);
+            var tagBuilder = _htmlGenerator.GenerateTabs(Id, Title, output.Attributes.ToAttributeDictionary(), tabsContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -86,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Id = resolvedId,
                 Label = Label,
-                PanelAttributes = output.Attributes.ToAttributesDictionary(),
+                PanelAttributes = output.Attributes.ToAttributeDictionary(),
                 PanelContent = content.Snapshot()
             });
 

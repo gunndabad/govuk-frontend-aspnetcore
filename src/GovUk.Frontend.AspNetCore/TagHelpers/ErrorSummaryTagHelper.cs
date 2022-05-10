@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 errorSummaryContext.Title?.attributes,
                 errorSummaryContext.Description?.content,
                 errorSummaryContext.Description?.attributes,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 errorSummaryContext.Items);
 
             output.TagName = tagBuilder.TagName;
@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!errorSummaryContext.TrySetTitle(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
+            if (!errorSummaryContext.TrySetTitle(output.Attributes.ToAttributeDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -81,7 +81,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            if (!errorSummaryContext.TrySetDescription(output.Attributes.ToAttributesDictionary(), childContent.Snapshot()))
+            if (!errorSummaryContext.TrySetDescription(output.Attributes.ToAttributeDictionary(), childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here.");
             }
@@ -169,7 +169,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             errorSummaryContext.AddItem(new ErrorSummaryItem()
             {
                 Content = itemContent,
-                Attributes = output.Attributes.ToAttributesDictionary()
+                Attributes = output.Attributes.ToAttributeDictionary()
             });
 
             output.SuppressOutput();
