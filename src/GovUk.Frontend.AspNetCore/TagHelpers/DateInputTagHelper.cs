@@ -113,23 +113,23 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected override FormGroupContext CreateFormGroupContext() => new DateInputContext(haveExplicitValue: _valueSpecified);
 
         private protected override IHtmlContent GenerateFormGroupContent(
-            TagHelperContext context,
+            TagHelperContext tagHelperContext,
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,
             out bool haveError)
         {
-            var dateInputContext = context.GetContextItem<DateInputContext>();
+            var dateInputContext = tagHelperContext.GetContextItem<DateInputContext>();
 
             var contentBuilder = new HtmlContentBuilder();
 
-            var hint = GenerateHint(formGroupContext);
+            var hint = GenerateHint(tagHelperContext, formGroupContext);
             if (hint != null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
-            var errorMessage = GenerateErrorMessage(formGroupContext);
+            var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
             if (errorMessage != null)
             {
                 contentBuilder.AppendHtml(errorMessage);
@@ -155,6 +155,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 return contentBuilder;
             }
+        }
+
+        private protected override string GetErrorFieldId(TagHelperContext context)
+        {
+            var dateInputContext = context.GetContextItem<DateInputContext>();
+            var errorItems = GetErrorComponents(dateInputContext);
+            Debug.Assert(errorItems != DateInputErrorComponents.None);
+
+            string suffix;
+
+            if (errorItems.HasFlag(DateInputErrorComponents.Day))
+            {
+                suffix = $".{DefaultDayItemName}";
+            }
+            else if (errorItems.HasFlag(DateInputErrorComponents.Month))
+            {
+                suffix = $".{DefaultMonthItemName}";
+            }
+            else
+            {
+                suffix = $".{DefaultYearItemName}";
+            }
+
+            return $"{ResolveIdPrefix()}{suffix}";
         }
 
         private protected override string ResolveIdPrefix()
@@ -183,7 +207,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var dateInputModelConverters = _options.DateInputModelConverters;
 
             var valueAsDate = GetValueAsDate() ?? (AspFor != null ? GetValueFromModel() : null);
-            var errorItems = GetErrorComponents();
+            var errorItems = GetErrorComponents(dateInputContext);
 
             var day = CreateDateInputItem(
                 getComponentFromValue: date => date?.Day.ToString(),
@@ -290,33 +314,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 }
             }
 
-            DateInputErrorComponents GetErrorComponents()
-            {
-                if (dateInputContext.ErrorComponents != null)
-                {
-                    return dateInputContext.ErrorComponents.Value;
-                }
-
-                if (AspFor == null)
-                {
-                    return DateInputErrorComponents.All;
-                }
-
-                Debug.Assert(AspFor != null);
-                Debug.Assert(ViewContext != null);
-
-                var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
-
-                if (_dateInputParseErrorsProvider.TryGetErrorsForModel(fullName, out var parseErrors))
-                {
-                    return parseErrors.GetErrorComponents();
-                }
-                else
-                {
-                    return DateInputErrorComponents.All;
-                }
-            }
-
             Date? GetValueAsDate()
             {
                 if (Value is null)
@@ -356,6 +353,33 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 }
 
                 return null;
+            }
+        }
+
+        private DateInputErrorComponents GetErrorComponents(DateInputContext dateInputContext)
+        {
+            if (dateInputContext.ErrorComponents != null)
+            {
+                return dateInputContext.ErrorComponents.Value;
+            }
+
+            if (AspFor == null)
+            {
+                return DateInputErrorComponents.All;
+            }
+
+            Debug.Assert(AspFor != null);
+            Debug.Assert(ViewContext != null);
+
+            var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+
+            if (_dateInputParseErrorsProvider.TryGetErrorsForModel(fullName, out var parseErrors))
+            {
+                return parseErrors.GetErrorComponents();
+            }
+            else
+            {
+                return DateInputErrorComponents.All;
             }
         }
     }

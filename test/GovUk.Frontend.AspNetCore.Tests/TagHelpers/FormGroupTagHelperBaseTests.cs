@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -35,8 +36,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_ErrorMessageSetOnContext_ReturnsContent()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Error message"));
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Error message"));
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -46,17 +53,60 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.NotNull(errorMessage);
         }
 
         [Fact]
+        public void GenerateErrorMessage_AddsErrorToFormErrorContext()
+        {
+            // Arrange
+            var formErrorContext = new FormErrorContext();
+
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(FormErrorContext), formErrorContext }
+                },
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Error message"));
+
+            var modelHelper = new Mock<IModelHelper>();
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                Id = "test"
+            };
+
+            // Act
+            tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
+
+            // Assert
+            Assert.Collection(
+                formErrorContext.Errors,
+                error =>
+                {
+                    Assert.Equal("Error message", error.Content.RenderToString());
+                });
+        }
+
+        [Fact]
         public void GenerateErrorMessage_AspForModelStateHasErrors_ReturnsContent()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -74,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.NotNull(errorMessage);
@@ -84,8 +134,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_ErrorMessageOnContextAndModelStateUsesContextError_ReturnsContent()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Context error"));
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Context error"));
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -103,7 +159,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.NotNull(errorMessage);
@@ -114,7 +170,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_AspForModelStateHasErrorsButIgnoreModelStateErrorsSet_ReturnsNull()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -133,7 +195,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.Null(errorMessage);
@@ -143,7 +205,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_NoErrorMessageOnContextOrModelStateErrors_ReturnsNull()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -161,7 +229,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.Null(errorMessage);
@@ -171,7 +239,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_NoErrorMessageOnContextOrAspFor_ReturnsNull()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -181,7 +255,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.Null(errorMessage);
@@ -191,8 +265,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_NonEmptyErrorMessage_AddsErrorMessageIdToDescribedBy()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("Context error"));
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("Context error"));
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -202,7 +282,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var errorMessage = tagHelper.GenerateErrorMessage(context);
+            var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             var element = errorMessage.RenderToElement();
@@ -214,7 +294,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateErrorMessage_EmptyErrorMessage_DoesNotAddErrorMessageIdToDescribedBy()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -224,7 +310,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            tagHelper.GenerateErrorMessage(context);
+            tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.DoesNotContain("test-error", tagHelper.DescribedBy?.Split(' ') ?? Array.Empty<string>());
@@ -234,8 +320,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateHint_HintOnContext_ReturnsContent()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetHint(attributes: null, content: new HtmlString("Hint"));
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetHint(attributes: null, content: new HtmlString("Hint"));
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -245,7 +337,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var hint = tagHelper.GenerateHint(context);
+            var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.NotNull(hint);
@@ -255,7 +347,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateHint_NonEmptyModelMetadataDescription_ReturnsContent()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var formGroupContext = new TestFormGroupContext();
+
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -273,7 +371,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var hint = tagHelper.GenerateHint(context);
+            var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.NotNull(hint);
@@ -283,8 +381,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateHint_HintOnContextAndModelMetadataDescriptionUsesContextHint_ReturnsContent()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetHint(attributes: null, content: new HtmlString("Context hint"));
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetHint(attributes: null, content: new HtmlString("Context hint"));
+
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -302,7 +406,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var hint = tagHelper.GenerateHint(context);
+            var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.NotNull(hint);
@@ -313,7 +417,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateHint_NoHintOnContextOrModelMetadataDescription_ReturnsNull()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -323,7 +433,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var hint = tagHelper.GenerateHint(context);
+            var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.Null(hint);
@@ -333,8 +443,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateHint_NonEmptyHint_AddsHintIdToDescribedBy()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetHint(attributes: null, content: new HtmlString("Hint"));
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetHint(attributes: null, content: new HtmlString("Hint"));
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -344,7 +460,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var hint = tagHelper.GenerateHint(context);
+            var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
             var element = hint.RenderToElement();
@@ -356,7 +472,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateHint_EmptyHint_DoesNotAddHintIdToDescribedBy()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var tagHelperContext = new TagHelperContext(
+                tagName: "test",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var formGroupContext = new TestFormGroupContext();
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -366,7 +488,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            tagHelper.GenerateHint(context);
+            tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
             Assert.DoesNotContain("test-hint", tagHelper.DescribedBy?.Split(' ') ?? Array.Empty<string>());
@@ -376,7 +498,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateLabel_NoLabelContentOnContextOrAspFor_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var formGroupContext = new TestFormGroupContext();
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -386,7 +508,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var ex = Record.Exception(() => tagHelper.GenerateLabel(context));
+            var ex = Record.Exception(() => tagHelper.GenerateLabel(formGroupContext));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -397,8 +519,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateLabel_LabelContentOnContext_ReturnsContentFromContext()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Context label"));
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Context label"));
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -408,7 +530,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var label = tagHelper.GenerateLabel(context);
+            var label = tagHelper.GenerateLabel(formGroupContext);
 
             // Assert
             Assert.NotNull(label);
@@ -419,7 +541,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateLabel_NoLabelContentOnContext_ReturnsContentFromAspFor()
         {
             // Arrange
-            var context = new TestFormGroupContext();
+            var formGroupContext = new TestFormGroupContext();
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -437,7 +559,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var label = tagHelper.GenerateLabel(context);
+            var label = tagHelper.GenerateLabel(formGroupContext);
 
             // Assert
             Assert.NotNull(label);
@@ -448,8 +570,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void GenerateLabel_LabelContentOnContextAndAspFor_ReturnsContentFromContext()
         {
             // Arrange
-            var context = new TestFormGroupContext();
-            context.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Context label"));
+            var formGroupContext = new TestFormGroupContext();
+            formGroupContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Context label"));
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -467,7 +589,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var label = tagHelper.GenerateLabel(context);
+            var label = tagHelper.GenerateLabel(formGroupContext);
 
             // Assert
             Assert.NotNull(label);
@@ -491,7 +613,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             private protected override FormGroupContext CreateFormGroupContext() => new TestFormGroupContext();
 
             private protected override IHtmlContent GenerateFormGroupContent(
-                TagHelperContext context,
+                TagHelperContext tagHelperContext,
                 FormGroupContext formGroupContext,
                 TagHelperOutput tagHelperOutput,
                 IHtmlContent childContent,
@@ -502,13 +624,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 var label = GenerateLabel(formGroupContext);
                 contentBuilder.AppendHtml(label);
 
-                var hint = GenerateHint(formGroupContext);
+                var hint = GenerateHint(tagHelperContext, formGroupContext);
                 if (hint != null)
                 {
                     contentBuilder.AppendHtml(hint);
                 }
 
-                var errorMessage = GenerateErrorMessage(formGroupContext);
+                var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
                 if (errorMessage != null)
                 {
                     contentBuilder.AppendHtml(errorMessage);

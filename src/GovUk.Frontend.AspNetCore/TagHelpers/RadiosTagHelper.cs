@@ -68,23 +68,23 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected override FormGroupContext CreateFormGroupContext() => new RadiosContext(Name, AspFor);
 
         private protected override IHtmlContent GenerateFormGroupContent(
-            TagHelperContext context,
+            TagHelperContext tagHelperContext,
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,
             out bool haveError)
         {
-            var radiosContext = context.GetContextItem<RadiosContext>();
+            var radiosContext = tagHelperContext.GetContextItem<RadiosContext>();
 
             var contentBuilder = new HtmlContentBuilder();
 
-            var hint = GenerateHint(formGroupContext);
+            var hint = GenerateHint(tagHelperContext, formGroupContext);
             if (hint != null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
-            var errorMessage = GenerateErrorMessage(formGroupContext);
+            var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
             if (errorMessage != null)
             {
                 contentBuilder.AppendHtml(errorMessage);
