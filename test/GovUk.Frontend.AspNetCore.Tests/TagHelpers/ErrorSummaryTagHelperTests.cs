@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -35,41 +30,134 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-                    errorSummaryContext.TrySetTitle(attributes: null, new HtmlString("Title"));
-                    errorSummaryContext.TrySetDescription(attributes: null, new HtmlString("Description"));
+                    errorSummaryContext.SetTitle(attributes: null, new HtmlString("Title"));
+                    errorSummaryContext.SetDescription(attributes: null, new HtmlString("Description"));
 
                     errorSummaryContext.AddItem(new ErrorSummaryItem()
                     {
-                        Content = new HtmlString("First message")
+                        Content = new HtmlString("First message"),
+                        Href = "#Field1"
                     });
 
                     errorSummaryContext.AddItem(new ErrorSummaryItem()
                     {
-                        Content = new HtmlString("Second message")
+                        Content = new HtmlString("Second message"),
+                        Href = "#Field2"
                     });
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+            var tagHelper = new ErrorSummaryTagHelper();
 
             // Act
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal(
-                "<div aria-labelledby=\"error-summary-title\" class=\"govuk-error-summary\" data-module=\"govuk-error-summary\" role=\"alert\" tabindex=\"-1\">" +
-                "<h2 class=\"govuk-error-summary__title\" id=\"error-summary-title\">Title</h2>" +
-                "<div class=\"govuk-error-summary__body\">" +
-                "<p>Description</p>" +
-                "<ul class=\"govuk-error-summary__list govuk-list\">" +
-                "<li>First message</li>" +
-                "<li>Second message</li>" +
-                "</ul>" +
-                "</div>" +
-                "</div>",
-                output.RenderToString());
+            var expectedHtml = @"
+<div aria-labelledby=""error-summary-title"" class=""govuk-error-summary"" data-module=""govuk-error-summary"" role=""alert"">
+    <h2 class=""govuk-error-summary__title"" id=""error-summary-title"">Title</h2>
+    <div class=""govuk-error-summary__body"">
+        <p>Description</p>
+        <ul class=""govuk-error-summary__list govuk-list"">
+            <li><a href=""#Field1"">First message</a></li>
+            <li><a href=""#Field2"">Second message</a></li>
+        </ul>
+    </div>
+</div>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithDisableAutoFocus_RendersDataAttribute()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-summary",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-summary",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                    errorSummaryContext.SetTitle(attributes: null, new HtmlString("Title"));
+                    errorSummaryContext.SetDescription(attributes: null, new HtmlString("Description"));
+
+                    errorSummaryContext.AddItem(new ErrorSummaryItem()
+                    {
+                        Content = new HtmlString("First message"),
+                        Href = "#Field1"
+                    });
+
+                    errorSummaryContext.AddItem(new ErrorSummaryItem()
+                    {
+                        Content = new HtmlString("Second message"),
+                        Href = "#Field2"
+                    });
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new ErrorSummaryTagHelper()
+            {
+                DisableAutoFocus = true
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var element = output.RenderToElement();
+            Assert.NotNull(element.GetAttribute("data-disable-auto-focus"));
+        }
+
+        [Fact]
+        public async Task ProcessAsync_ItemWithEmptyLink_DoesNotRenderAnchorTag()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-error-summary",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-error-summary",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                    errorSummaryContext.SetTitle(attributes: null, new HtmlString("Title"));
+                    errorSummaryContext.SetDescription(attributes: null, new HtmlString("Description"));
+
+                    errorSummaryContext.AddItem(new ErrorSummaryItem()
+                    {
+                        Content = new HtmlString("Message"),
+                        Href = null
+                    });
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new ErrorSummaryTagHelper();
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var element = output.RenderToElement();
+            var itemElement = element.QuerySelector("li");
+            Assert.NotEqual("a", itemElement.FirstChild.NodeName, StringComparer.OrdinalIgnoreCase);
         }
 
         [Fact]
@@ -137,317 +225,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var html = output.RenderToString();
             Assert.Empty(html);
-        }
-    }
-
-    public class ErrorSummaryTitleTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_AddsTitleToContext()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-title",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-title",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Some title");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryTitleTagHelper();
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal("Some title", errorSummaryContext.Title?.content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_AlreadyHaveTitleThrowsInvalidOperationException()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-            errorSummaryContext.TrySetTitle(attributes: null, new HtmlString("Existing title"));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-title",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-title",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Some title");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryTitleTagHelper();
-
-            // Act
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Cannot render <govuk-error-summary-title> here.", ex.Message);
-        }
-    }
-
-    public class ErrorSummaryDescriptionTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_AddsDescriptionToContext()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-description",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-description",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Some description");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryDescriptionTagHelper();
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal("Some description", errorSummaryContext.Description?.content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_AlreadyHaveDescriptionThrowsInvalidOperationException()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-            errorSummaryContext.TrySetDescription(attributes: null, new HtmlString("Existing description"));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-description",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-description",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Some description");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryDescriptionTagHelper();
-
-            // Act
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Cannot render <govuk-error-summary-description> here.", ex.Message);
-        }
-    }
-
-    public class ErrorSummaryItemTagHelperTests
-    {
-        [Fact]
-        public async Task ProcessAsync_AddsItemToContext()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("An error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper());
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal(1, errorSummaryContext.Items.Count);
-
-            var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("An error message", firstItem.Content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoContentAndNoAspForThrowsInvalidOperationException()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("An error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper());
-
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => tagHelper.ProcessAsync(context, output));
-            Assert.Equal("Content is required when the 'asp-for' attribute is not specified.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_LinkAttributesSpecifiedGeneratesExpectedContent()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("An error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                For = "field"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal(1, errorSummaryContext.Items.Count);
-
-            var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"#field\">An error message</a>", firstItem.Content.RenderToString());
-        }
-
-        [Fact]
-        public async Task ProcessAsync_AspForSpecifiedGeneratesExpectedContent()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var modelHelperMock = new Mock<IModelHelper>();
-
-            modelHelperMock
-                .Setup(mock => mock.GetFullHtmlFieldName(
-                    /*viewContext: */It.IsAny<ViewContext>(),
-                    /*expression: */It.IsAny<string>()))
-                .Returns("Foo");
-
-            modelHelperMock
-                .Setup(mock => mock.GetValidationMessage(
-                    /*viewContext: */It.IsAny<ViewContext>(),
-                    /*modelExplorer: */It.IsAny<ModelExplorer>(),
-                    /*expression: */It.IsAny<string>()))
-                .Returns("Generated error");
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), "Foo");
-
-            var tagHelper = new ErrorSummaryItemTagHelper(new ComponentGenerator(), modelHelperMock.Object)
-            {
-                AspFor = new ModelExpression("Foo", modelExplorer),
-                ViewContext = new ViewContext()
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Equal(1, errorSummaryContext.Items.Count);
-
-            var firstItem = errorSummaryContext.Items.First();
-            Assert.Equal("<a href=\"#Foo\">Generated error</a>", firstItem.Content.RenderToString());
         }
     }
 }
