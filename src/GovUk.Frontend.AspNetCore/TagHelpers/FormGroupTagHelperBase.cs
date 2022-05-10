@@ -111,7 +111,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 content,
                 tagHelperOutput.Attributes.ToAttributeDictionary());
 
-        internal IHtmlContent? GenerateErrorMessage(FormGroupContext formGroupContext)
+        private protected virtual string GetErrorFieldId(TagHelperContext context) => ResolveIdPrefix();
+
+        internal IHtmlContent? GenerateErrorMessage(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
         {
             var visuallyHiddenText = formGroupContext.ErrorMessage?.VisuallyHiddenText ??
                 ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;
@@ -134,6 +136,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (content != null)
             {
+                AddErrorToFormErrorContext();
+
                 var resolvedIdPrefix = ResolveIdPrefix();
                 var errorId = resolvedIdPrefix + "-error";
                 DescribedBy = AppendToDescribedBy(DescribedBy, errorId);
@@ -147,9 +151,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 return null;
             }
+
+            void AddErrorToFormErrorContext()
+            {
+                if (tagHelperContext.Items.TryGetValue(typeof(FormErrorContext), out var formErrorContextObj) &&
+                    formErrorContextObj is FormErrorContext formErrorContext)
+                {
+                    var errorFieldId = GetErrorFieldId(tagHelperContext);
+                    var href = "#" + errorFieldId;
+
+                    formErrorContext.AddError(content, href);
+                }
+            }
         }
 
-        internal IHtmlContent? GenerateHint(FormGroupContext formGroupContext)
+        internal IHtmlContent? GenerateHint(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
         {
             var content = formGroupContext.Hint?.Content;
             var attributes = formGroupContext.Hint?.Attributes;
@@ -201,7 +217,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected abstract FormGroupContext CreateFormGroupContext();
 
         private protected abstract IHtmlContent GenerateFormGroupContent(
-            TagHelperContext context,
+            TagHelperContext tagHelperContext,
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,

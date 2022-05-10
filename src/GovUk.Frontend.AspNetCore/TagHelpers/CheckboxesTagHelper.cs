@@ -67,23 +67,23 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected override FormGroupContext CreateFormGroupContext() => new CheckboxesContext(Name, AspFor);
 
         private protected override IHtmlContent GenerateFormGroupContent(
-            TagHelperContext context,
+            TagHelperContext tagHelperContext,
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,
             out bool haveError)
         {
-            var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+            var checkboxesContext = tagHelperContext.GetContextItem<CheckboxesContext>();
 
             var contentBuilder = new HtmlContentBuilder();
 
-            var hint = GenerateHint(formGroupContext);
+            var hint = GenerateHint(tagHelperContext, formGroupContext);
             if (hint != null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
-            var errorMessage = GenerateErrorMessage(formGroupContext);
+            var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
             if (errorMessage != null)
             {
                 contentBuilder.AppendHtml(errorMessage);
