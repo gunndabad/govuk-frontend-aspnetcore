@@ -65,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected override FormGroupContext CreateFormGroupContext() => new FileUploadContext();
 
         private protected override IHtmlContent GenerateFormGroupContent(
-            TagHelperContext context,
+            TagHelperContext tagHelperContext,
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,
@@ -76,13 +76,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var label = GenerateLabel(formGroupContext);
             contentBuilder.AppendHtml(label);
 
-            var hint = GenerateHint(formGroupContext);
+            var hint = GenerateHint(tagHelperContext, formGroupContext);
             if (hint != null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
-            var errorMessage = GenerateErrorMessage(formGroupContext);
+            var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
             if (errorMessage != null)
             {
                 contentBuilder.AppendHtml(errorMessage);

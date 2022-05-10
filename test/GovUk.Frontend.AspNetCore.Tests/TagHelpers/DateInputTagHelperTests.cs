@@ -1029,6 +1029,62 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             }
         }
 
+        [Theory]
+        [InlineData(DateInputErrorComponents.Day, "my-id.Day")]
+        [InlineData(DateInputErrorComponents.Day | DateInputErrorComponents.Month, "my-id.Day")]
+        [InlineData(DateInputErrorComponents.Day | DateInputErrorComponents.Month | DateInputErrorComponents.Year, "my-id.Day")]
+        [InlineData(DateInputErrorComponents.Month, "my-id.Month")]
+        [InlineData(DateInputErrorComponents.Month | DateInputErrorComponents.Year, "my-id.Month")]
+        [InlineData(null, "my-id.Day")]
+        public async Task ProcessAsync_WithError_AddsErrorWithCorrectFieldIdToFormErrorContext(
+            DateInputErrorComponents? errorComponents,
+            string expectedErrorFieldId)
+        {
+            // Arrange
+            var formErrorContext = new FormErrorContext();
+
+            var context = new TagHelperContext(
+                tagName: "govuk-date-input",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(FormErrorContext), formErrorContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-date-input",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var dateInputContext = context.GetContextItem<DateInputContext>();
+                    dateInputContext.SetErrorMessage(errorComponents, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
+
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+            {
+                Id = "my-id",
+                DescribedBy = "describedby",
+                NamePrefix = "my-name",
+                Value = new Date(2020, 4, 1)
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Collection(
+                formErrorContext.Errors,
+                error =>
+                {
+                    Assert.Equal("Error", error.Content?.RenderToString());
+                    Assert.Equal("#" + expectedErrorFieldId, error.Href);
+                });
+        }
+
         private static void SetModelErrors(
             string modelName,
             DateInputParseErrors dateInputParseErrors,

@@ -2,6 +2,10 @@
 
 [GDS Error summary component](https://design-system.service.gov.uk/components/error-summary/)
 
+Note that by default an Error summary will be added to the top of your form containing links to all the errors on the page.
+If you do not want this you can selectively disable this behaviour by adding `gfa-prepend-error-summary="false"` to the form.
+To disable globally set the `PrependErrorSummaryToForms` property on `GovUkFrontendAspNetCoreOptions` to `false`.
+
 ## Example
 
 ```razor

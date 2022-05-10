@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -14,12 +14,21 @@ namespace GovUk.Frontend.AspNetCore
                 new DateTimeDateInputModelConverter()
             };
 
+            PrependErrorSummaryToForms = true;
             PrependErrorToTitle = true;
         }
 
         public bool AddImportsToHtml { get; set; }
 
         public List<DateInputModelConverter> DateInputModelConverters { get; }
+
+        /// <summary>
+        /// Whether to prepend an error summary component to forms.
+        /// </summary>
+        /// <remarks>
+        /// This can be overriden on a form-by-form basis by setting the <c>gfa-prepend-error-summary</c> attribute.
+        /// </remarks>
+        public bool PrependErrorSummaryToForms { get; set; }
 
         /// <summary>
         /// Whether to prepend 'Error: ' to the &lt;title&gt; element when ModelState is not valid.

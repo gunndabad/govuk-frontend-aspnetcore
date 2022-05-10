@@ -151,26 +151,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private protected override FormGroupContext CreateFormGroupContext() => new TextInputContext();
 
         private protected override IHtmlContent GenerateFormGroupContent(
-            TagHelperContext context,
+            TagHelperContext tagHelperContext,
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,
             out bool haveError)
         {
-            var inputContext = context.GetContextItem<TextInputContext>();
+            var inputContext = tagHelperContext.GetContextItem<TextInputContext>();
 
             var contentBuilder = new HtmlContentBuilder();
 
             var label = GenerateLabel(formGroupContext);
             contentBuilder.AppendHtml(label);
 
-            var hint = GenerateHint(formGroupContext);
+            var hint = GenerateHint(tagHelperContext, formGroupContext);
             if (hint != null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
-            var errorMessage = GenerateErrorMessage(formGroupContext);
+            var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
             if (errorMessage != null)
             {
                 contentBuilder.AppendHtml(errorMessage);
