@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     Items = rowContext.Actions,
                     Attributes = rowContext.ActionsAttributes
                 },
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Key = new SummaryListRowKey()
                 {
                     Content = rowContext.Key!.Value.Content,

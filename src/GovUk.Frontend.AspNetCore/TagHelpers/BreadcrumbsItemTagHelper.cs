@@ -40,7 +40,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             breadcrumbsContext.AddItem(new BreadcrumbsItem()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Href = href,
                 LinkAttributes = LinkAttributes.ToAttributeDictionary(),
                 Content = childContent.Snapshot()

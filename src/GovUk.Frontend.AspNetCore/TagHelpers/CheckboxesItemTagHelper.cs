@@ -153,7 +153,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             checkboxesContext.AddItem(new CheckboxesItem()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Behavior = Behavior,
                 Checked = resolvedChecked,
                 Conditional = itemContext.Conditional != null ?

@@ -124,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var itemContext = new DateInputContextItem()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Autocomplete = Autocomplete,
                 Id = Id,
                 InputMode = InputMode,

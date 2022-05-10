@@ -20,7 +20,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = await output.GetChildContentAsync();
 
             var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
-            detailsContext.SetText(output.Attributes.ToAttributesDictionary(), childContent);
+            detailsContext.SetText(output.Attributes.ToAttributeDictionary(), childContent);
 
             output.SuppressOutput();
         }

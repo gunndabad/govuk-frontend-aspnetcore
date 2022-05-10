@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            inputContext.SetSuffix(output.Attributes.ToAttributesDictionary(), content.Snapshot());
+            inputContext.SetSuffix(output.Attributes.ToAttributeDictionary(), content.Snapshot());
 
             output.SuppressOutput();
         }

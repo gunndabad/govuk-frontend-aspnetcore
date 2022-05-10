@@ -54,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             formGroupContext.SetErrorMessage(
                 VisuallyHiddenText,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 childContent?.Snapshot());
         }
     }

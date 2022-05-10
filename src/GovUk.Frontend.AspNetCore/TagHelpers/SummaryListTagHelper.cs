@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateSummaryList(
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 summaryListContext.Rows);
 
             output.TagName = tagBuilder.TagName;

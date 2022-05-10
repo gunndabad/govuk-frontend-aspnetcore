@@ -60,7 +60,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 IsStartButton,
                 Disabled,
                 childContent.Snapshot(),
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

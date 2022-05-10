@@ -32,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            dateInputItemContext.SetLabel(childContent.Snapshot(), output.Attributes.ToAttributesDictionary());
+            dateInputItemContext.SetLabel(childContent.Snapshot(), output.Attributes.ToAttributeDictionary());
 
             output.SuppressOutput();
         }

@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var rowContext = context.GetContextItem<SummaryListRowContext>();
-            rowContext.SetActionsAttributes(output.Attributes.ToAttributesDictionary());
+            rowContext.SetActionsAttributes(output.Attributes.ToAttributeDictionary());
 
             await output.GetChildContentAsync();
 

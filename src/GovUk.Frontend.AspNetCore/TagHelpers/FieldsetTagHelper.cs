@@ -67,7 +67,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 fieldsetContext.Legend?.Content,
                 fieldsetContext.Legend?.Attributes,
                 childContent,
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

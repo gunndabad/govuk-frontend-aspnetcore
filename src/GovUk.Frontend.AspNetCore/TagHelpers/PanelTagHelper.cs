@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 HeadingLevel,
                 panelContext.Title,
                 panelContext.Body,
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

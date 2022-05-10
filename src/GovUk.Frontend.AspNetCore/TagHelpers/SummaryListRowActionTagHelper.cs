@@ -31,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             summaryListRowContext.AddAction(new SummaryListRowAction()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Content = content.Snapshot(),
                 VisuallyHiddenText = VisuallyHiddenText
             });

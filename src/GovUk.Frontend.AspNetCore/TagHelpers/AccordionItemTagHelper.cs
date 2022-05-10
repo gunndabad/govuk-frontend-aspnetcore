@@ -49,7 +49,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 SummaryContent = itemContext.Summary?.Content,
                 SummaryAttributes = itemContext.Summary?.Attributes,
                 Content = childContent.Snapshot(),
-                Attributes = output.Attributes.ToAttributesDictionary()
+                Attributes = output.Attributes.ToAttributeDictionary()
             });
 
             output.SuppressOutput();

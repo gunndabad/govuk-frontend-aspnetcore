@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var tagBuilder = _htmlGenerator.GenerateInsetText(
                 Id,
                 childContent,
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

@@ -49,7 +49,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 phaseBannerContext.Tag?.Content,
                 phaseBannerContext.Tag?.Attributes,
                 childContent,
-                output.Attributes.ToAttributesDictionary());
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
             }
 
-            FormGroupAttributes = output.Attributes.ToAttributesDictionary();
+            FormGroupAttributes = output.Attributes.ToAttributeDictionary();
             var builder = CreateFormGroupBuilder();
 
             using (context.SetScopedContextItem(typeof(FormGroupBuilder), builder))
@@ -220,7 +220,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-            if (!formGroupContext.TrySetLabel(IsPageHeading, output.Attributes.ToAttributesDictionary(), childContent?.Snapshot()))
+            if (!formGroupContext.TrySetLabel(IsPageHeading, output.Attributes.ToAttributeDictionary(), childContent?.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -240,7 +240,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-            if (!formGroupContext.TrySetHint(output.Attributes.ToAttributesDictionary(), childContent?.Snapshot()))
+            if (!formGroupContext.TrySetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }
@@ -265,7 +265,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
             var formGroupContext = (FormGroupBuilder)context.Items[typeof(FormGroupBuilder)];
-            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, output.Attributes.ToAttributesDictionary(), childContent?.Snapshot()))
+            if (!formGroupContext.TrySetErrorMessage(VisuallyHiddenText, output.Attributes.ToAttributeDictionary(), childContent?.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{context.TagName}> here.");
             }

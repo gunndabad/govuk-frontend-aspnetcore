@@ -99,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             radiosContext.AddItem(new RadiosItemDivider()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 Content = content.Snapshot()
             });
 
@@ -124,7 +124,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             radiosContext.SetFieldset(new RadiosFieldset()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 LegendIsPageHeading = fieldsetContext.Legend?.isPageHeading,
                 LegendContent = fieldsetContext.Legend?.content,
                 LegendAttributes = fieldsetContext.Legend?.attributes
@@ -150,7 +150,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (!fieldsetContext.TrySetLegend(
                 IsPageHeading,
-                output.Attributes.ToAttributesDictionary(),
+                output.Attributes.ToAttributeDictionary(),
                 childContent.Snapshot()))
             {
                 throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
@@ -227,7 +227,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             radiosContext.AddItem(new RadiosItem()
             {
-                Attributes = output.Attributes.ToAttributesDictionary(),
+                Attributes = output.Attributes.ToAttributeDictionary(),
                 IsChecked = resolvedChecked,
                 ConditionalContent = itemContext.Conditional?.content,
                 ConditionalAttributes = itemContext.Conditional?.attributes,
@@ -260,7 +260,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            itemContext.SetConditional(output.Attributes.ToAttributesDictionary(), content.Snapshot());
+            itemContext.SetConditional(output.Attributes.ToAttributeDictionary(), content.Snapshot());
 
             output.SuppressOutput();
         }
@@ -275,7 +275,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            itemContext.SetHint(output.Attributes.ToAttributesDictionary(), content.Snapshot());
+            itemContext.SetHint(output.Attributes.ToAttributeDictionary(), content.Snapshot());
 
             output.SuppressOutput();
         }

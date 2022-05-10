@@ -53,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var childContent = await output.GetChildContentAsync();
 
-            var tagBuilder = _htmlGenerator.GenerateSkipLink(Href, childContent, output.Attributes.ToAttributesDictionary());
+            var tagBuilder = _htmlGenerator.GenerateSkipLink(Href, childContent, output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;
