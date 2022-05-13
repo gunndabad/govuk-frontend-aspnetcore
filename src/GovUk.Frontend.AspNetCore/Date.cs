@@ -29,6 +29,11 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         /// <summary>
+        /// Gets the current date.
+        /// </summary>
+        public static Date Today => new(DateTime.Today);
+
+        /// <summary>
         /// Gets the day component of the date.
         /// </summary>
         public int Day => _dt.Day;
