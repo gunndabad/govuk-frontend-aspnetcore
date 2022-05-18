@@ -9,7 +9,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
     {
         internal const bool DateInputDefaultDisabled = false;
         internal const string DateInputDefaultInputMode = "numeric";
-        internal const string DateInputDefaultPattern = "[0-9]*";
         internal const string DateInputDefaultDayLabel = "Day";
         internal const string DateInputDefaultMonthLabel = "Month";
         internal const string DateInputDefaultYearLabel = "Year";

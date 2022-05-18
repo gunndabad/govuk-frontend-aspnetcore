@@ -54,7 +54,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var hintContent = new HtmlString(content);
 
                 var attributes = countMessageAttributes.ToAttributeDictionary();
-                attributes["aria-live"] = "polite";
                 attributes.MergeCssClass("govuk-character-count__message");
 
                 return this.GenerateHint(hintId, hintContent, attributes);

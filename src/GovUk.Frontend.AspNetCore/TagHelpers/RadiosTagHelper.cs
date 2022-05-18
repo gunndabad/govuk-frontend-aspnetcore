@@ -64,7 +64,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = Generator.GenerateRadios(
                 ResolvedName,
-                radiosContext.IsConditional,
                 radiosContext.Items,
                 RadiosAttributes.ToAttributeDictionary());
             contentBuilder.AppendHtml(tagBuilder);
@@ -242,11 +241,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Value = Value
             });
 
-            if (itemContext.Conditional != null)
-            {
-                radiosContext.SetIsConditional();
-            }
-
             output.SuppressOutput();
         }
     }
@@ -310,7 +304,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public RadiosFieldset Fieldset { get; private set; }
         public string IdPrefix { get; }
-        public bool IsConditional { get; private set; }
         public IReadOnlyCollection<RadiosItemBase> Items => _items;
         public string ResolvedName { get; }
         public ViewContext ViewContext { get; }
@@ -342,8 +335,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             Fieldset = fieldset;
         }
-
-        public void SetIsConditional() => IsConditional = true;
     }
 
     internal class RadiosFieldsetContext

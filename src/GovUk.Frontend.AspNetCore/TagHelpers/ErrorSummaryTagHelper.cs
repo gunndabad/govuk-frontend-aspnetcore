@@ -13,12 +13,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [RestrictChildren("govuk-error-summary-title", "govuk-error-summary-description", "govuk-error-summary-item")]
     public class ErrorSummaryTagHelper : TagHelper
     {
+        private const string DisableAutofocusAttributeName = "disable-autofocus";
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
         public ErrorSummaryTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
             _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
         }
+
+        [HtmlAttributeName(DisableAutofocusAttributeName)]
+        public bool? DisableAutofocus { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -38,6 +43,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateErrorSummary(
+                DisableAutofocus ?? ComponentDefaults.ErrorSummary.DisableAutofocus,
                 errorSummaryContext.Title?.content ?? new HtmlString(ComponentDefaults.ErrorSummary.Title),
                 errorSummaryContext.Title?.attributes,
                 errorSummaryContext.Description?.content,

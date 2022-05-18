@@ -261,7 +261,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     Name = resolvedItemName,
                     LabelContent = resolvedItemLabel,
                     LabelAttributes = contextItem?.LabelAttributes?.ToAttributeDictionary(),
-                    Pattern = contextItem?.Pattern ?? ComponentGenerator.DateInputDefaultPattern,
+                    Pattern = contextItem?.Pattern,
                     Value = resolvedItemValue
                 };
 
