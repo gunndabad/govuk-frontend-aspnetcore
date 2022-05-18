@@ -170,6 +170,10 @@ Must be inside a `<govuk-checkboxes-fieldset>` element.
 The content is the HTML to use within the component's hint.\
 Must be inside a `<govuk-checkboxes>` or `<govuk-checkboxes-fieldset>` element.
 
+If the `asp-for` attribute is specified on the parent `<govuk-checkboxes>` then content for the hint will be generated from the model expression.\
+If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
+`<govuk-checkboxes-hint class="some-additional-class" />`.
+
 ### `<govuk-checkboxes-error-message>`
 
 The content is the HTML to use within the component's error message.\

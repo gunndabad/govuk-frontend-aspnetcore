@@ -21,8 +21,10 @@ namespace GovUk.Frontend.AspNetCore
                     .CreateDelegate(typeof(GetFullHtmlFieldNameDelegate));
         }
 
+        public virtual string GetDescription(ModelExplorer modelExplorer) => modelExplorer.Metadata.Description;
+
         public virtual string GetDisplayName(
-            ViewContext viewContext,
+            ViewContext viewContext,  // TODO Remove - not used
             ModelExplorer modelExplorer,
             string expression)
         {

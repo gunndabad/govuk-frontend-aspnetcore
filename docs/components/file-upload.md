@@ -39,7 +39,6 @@
 
 ### `<govuk-file-upload-label>`
 
-*Required*\
 The content is the HTML to use within the component's label.\
 Must be inside a `<govuk-file-upload>` element.
 
@@ -51,6 +50,10 @@ Must be inside a `<govuk-file-upload>` element.
 
 The content is the HTML to use within the component's hint.\
 Must be inside a `<govuk-file-upload>` element.
+
+If the `asp-for` attribute is specified on the parent `<govuk-file-upload>` then content for the hint will be generated from the model expression.\
+If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
+`<govuk-file-upload-hint class="some-additional-class" />`.
 
 ### `<govuk-file-upload-error-message>`
 
