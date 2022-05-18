@@ -26,6 +26,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         }
 
         public virtual TagBuilder GenerateErrorSummary(
+            bool disableAutofocus,
             IHtmlContent titleContent,
             AttributeDictionary titleAttributes,
             IHtmlContent descriptionContent,
@@ -45,6 +46,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.Attributes.Add("role", "alert");
             tagBuilder.Attributes.Add("tabindex", "-1");
             tagBuilder.Attributes.Add("data-module", "govuk-error-summary");
+
+            if (disableAutofocus)
+            {
+                tagBuilder.Attributes.Add("data-disable-auto-focus", "true");
+            }
 
             var heading = new TagBuilder("h2");
             heading.MergeAttributes(titleAttributes);
@@ -109,7 +115,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
         public virtual TagBuilder GenerateRadios(
             string name,
-            bool isConditional,
             IEnumerable<RadiosItemBase> items,
             AttributeDictionary attributes)
         {
@@ -122,11 +127,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-radios");
             tagBuilder.Attributes.Add("data-module", "govuk-radios");
-
-            if (isConditional)
-            {
-                tagBuilder.MergeCssClass("govuk-radios--conditional");
-            }
 
             foreach (var item in items)
             {

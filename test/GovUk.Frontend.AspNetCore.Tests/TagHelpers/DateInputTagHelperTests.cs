@@ -55,19 +55,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
@@ -118,19 +118,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
@@ -182,19 +182,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""3"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""3"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""5"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""5"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2022"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2022"">
             </div>
         </div>
     </div>
@@ -253,19 +253,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             <div class=""govuk-date-input__item"">
                 <div class=""govuk-form-group"">
                     <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                    <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                    <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
                 </div>
             </div>
             <div class=""govuk-date-input__item"">
                 <div class=""govuk-form-group"">
                     <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                    <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                    <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
                 </div>
             </div>
             <div class=""govuk-date-input__item"">
                 <div class=""govuk-form-group"">
                     <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                    <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                    <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
                 </div>
             </div>
         </div>
@@ -325,19 +325,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
@@ -386,19 +386,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
@@ -447,19 +447,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
@@ -510,19 +510,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
@@ -793,19 +793,19 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" pattern=""[0-9]*"" type=""text"" value=""1"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" pattern=""[0-9]*"" type=""text"" value=""4"">
+                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
             </div>
         </div>
         <div class=""govuk-date-input__item"">
             <div class=""govuk-form-group"">
                 <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" pattern=""[0-9]*"" type=""text"" value=""2020"">
+                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
             </div>
         </div>
     </div>
