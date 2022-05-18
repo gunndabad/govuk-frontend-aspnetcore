@@ -353,8 +353,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Value = "first"
                     });
 
-                    radiosContext.SetIsConditional();
-
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
@@ -372,7 +370,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
-                "<div class=\"govuk-radios--conditional govuk-radios\" data-module=\"govuk-radios\">" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "<div class=\"govuk-radios__item\">" +
                 "<input class=\"govuk-radios__input\" data-aria-controls=\"conditional-first\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
@@ -411,8 +409,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Value = "first"
                     });
 
-                    radiosContext.SetIsConditional();
-
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
@@ -430,7 +426,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var html = output.RenderToString();
             Assert.Equal(
                 "<div class=\"govuk-form-group\">" +
-                "<div class=\"govuk-radios--conditional govuk-radios\" data-module=\"govuk-radios\">" +
+                "<div class=\"govuk-radios\" data-module=\"govuk-radios\">" +
                 "<div class=\"govuk-radios__item\">" +
                 "<input checked=\"checked\" class=\"govuk-radios__input\" data-aria-controls=\"conditional-first\" id=\"first\" name=\"testradios\" type=\"radio\" value=\"first\" />" +
                 "<label class=\"govuk-radios__label govuk-label\" for=\"first\">First</label>" +
@@ -828,93 +824,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal("prefix-1", radiosContext.Items.OfType<RadiosItem>().Single().Id);
             Assert.Equal("prefix-1-item-hint", radiosContext.Items.OfType<RadiosItem>().Single().HintId);
             Assert.Equal("conditional-prefix-1", radiosContext.Items.OfType<RadiosItem>().Single().ConditionalId);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_ConditionalContentSpecifiedSetsIsConditional()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(
-                idPrefix: "prefix",
-                resolvedName: "myradios",
-                viewContext: null,
-                aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
-                    itemContext.SetConditional(attributes: null, new HtmlString("Conditional"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Label"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IsChecked = true,
-                Value = "V"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.True(radiosContext.IsConditional);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_ConditionalContentNotSpecifiedDoesNotSetIsConditional()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(
-                idPrefix: "prefix",
-                resolvedName: "myradios",
-                viewContext: null,
-                aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Label"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IsChecked = true,
-                Value = "V"
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.False(radiosContext.IsConditional);
         }
 
         [Fact]

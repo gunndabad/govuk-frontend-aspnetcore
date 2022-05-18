@@ -86,7 +86,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 inputItem.Id ??= $"{options.Id}-{inputItem.Name}";
                                 inputItem.LabelContent ??= new HtmlString(Capitalize(inputItem.Name));
                                 inputItem.InputMode ??= ComponentGenerator.DateInputDefaultInputMode;
-                                inputItem.Pattern ??= ComponentGenerator.DateInputDefaultPattern;
 
                                 if (options.NamePrefix != null)
                                 {

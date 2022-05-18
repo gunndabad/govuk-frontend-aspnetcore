@@ -74,6 +74,7 @@ namespace GovUk.Frontend.AspNetCore
             AttributeDictionary attributes);
 
         TagBuilder GenerateErrorSummary(
+            bool disableAutofocus,
             IHtmlContent titleContent,
             AttributeDictionary titleAttributes,
             IHtmlContent descriptionContent,
@@ -133,7 +134,6 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateRadios(
             string name,
-            bool isConditional,
             IEnumerable<RadiosItemBase> items,
             AttributeDictionary attributes);
 

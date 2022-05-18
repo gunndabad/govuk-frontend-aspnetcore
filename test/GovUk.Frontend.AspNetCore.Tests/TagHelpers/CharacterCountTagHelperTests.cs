@@ -64,7 +64,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
         <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
     </div>
-    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"" aria-live=""polite"">
+    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
         You can enter up to 10 words
     </div>
 </div>";
@@ -121,7 +121,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
         <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
     </div>
-    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"" aria-live=""polite"">
+    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
         You can enter up to 200 characters
     </div>
 </div>";
@@ -186,7 +186,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         </p>
         <textarea class=""govuk-textarea govuk-js-character-count govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
     </div>
-    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"" aria-live=""polite"">
+    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
         You can enter up to 10 words
     </div>
 </div>";

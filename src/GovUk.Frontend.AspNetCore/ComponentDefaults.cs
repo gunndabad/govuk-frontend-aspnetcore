@@ -4,6 +4,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         public static class ErrorSummary
         {
+            public const bool DisableAutofocus = false;
             public const string Title = "There is a problem";
         }
 
