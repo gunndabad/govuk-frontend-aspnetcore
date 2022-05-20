@@ -30,20 +30,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string NameAttributeName = "name";
         private const string ValueAttributeName = "value";
 
-        private readonly IModelHelper _modelHelper;
         private string? _value;
 
         /// <summary>
         /// Creates a new <see cref="CheckboxesItemTagHelper"/>.
         /// </summary>
         public CheckboxesItemTagHelper()
-            : this(modelHelper: null)
         {
-        }
-
-        internal CheckboxesItemTagHelper(IModelHelper? modelHelper = null)
-        {
-            _modelHelper = modelHelper ?? new DefaultModelHelper();
         }
 
         /// <summary>
@@ -188,8 +181,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 if (modelExpression.Metadata.IsEnumerableType)
                 {
-                    var values = ((IEnumerable)model).Cast<object>();
-                    return values.Any(v => v?.ToString() == Value);
+                    var values = ((IEnumerable)model)?.Cast<object>();
+                    return values?.Any(v => v?.ToString() == Value) == true;
                 }
 
                 return model?.ToString() == Value;
