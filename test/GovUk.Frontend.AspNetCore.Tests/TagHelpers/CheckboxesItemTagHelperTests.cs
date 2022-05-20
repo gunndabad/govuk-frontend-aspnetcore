@@ -189,8 +189,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var viewContext = new ViewContext();
             var modelExpression = nameof(Model.Foo);
 
-            var modelHelper = new Mock<IModelHelper>();
-
             var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
 
             var context = new TagHelperContext(
@@ -211,7 +209,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(modelHelper.Object)
+            var tagHelper = new CheckboxesItemTagHelper()
             {
                 Checked = null,
                 Value = "bar",
@@ -250,7 +248,58 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var viewContext = new ViewContext();
             var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
 
-            var modelHelper = new Mock<IModelHelper>();
+            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+            var context = new TagHelperContext(
+                tagName: "govuk-checkboxes-item",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>()
+                {
+                    { typeof(CheckboxesContext), checkboxesContext }
+                },
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-checkboxes-item",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var tagHelper = new CheckboxesItemTagHelper()
+            {
+                ViewContext = viewContext,
+                Value = itemValue
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            Assert.Collection(
+                checkboxesContext.Items,
+                item =>
+                {
+                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                    Assert.Equal(expectedChecked, checkboxesItem.Checked);
+                });
+        }
+
+        [Fact]
+        public async Task ProcessAsync_WithNullCollectionModelExpression_ExecutesSuccessfully()
+        {
+            // Arrange
+            var model = new ModelWithCollectionProperty()
+            {
+                CollectionProperty = null
+            };
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
+                .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
 
             var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
 
@@ -272,10 +321,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new CheckboxesItemTagHelper(modelHelper.Object)
+            var tagHelper = new CheckboxesItemTagHelper()
             {
                 ViewContext = viewContext,
-                Value = itemValue
+                Value = "2"
             };
 
             // Act
@@ -287,7 +336,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal(expectedChecked, checkboxesItem.Checked);
+                    Assert.False(checkboxesItem.Checked);
                 });
         }
 
