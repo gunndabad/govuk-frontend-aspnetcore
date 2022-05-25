@@ -95,7 +95,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
             Debug.Assert(parseErrors != DateInputParseErrors.None);
             Debug.Assert(parseErrors != (DateInputParseErrors.MissingDay | DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingYear));
 
-            var displayName = modelMetadata.DisplayName;
+            var displayName = modelMetadata.DisplayName ?? modelMetadata.PropertyName;
 
             var missingComponents = new List<string>();
 
