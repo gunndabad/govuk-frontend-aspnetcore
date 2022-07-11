@@ -147,7 +147,7 @@
 | checkboxes-* | | Additional attributes to add to the generated container element that wraps the items. |
 | id-prefix | `string` | The prefix to use when generating IDs for the hint, error message and items. If not specified then a value is generated from the `name` attribute. Required unless the `asp-for` attribute or `name` atribute is specified. |
 | ignore-modelstate-errors | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| name | `string` | The `name` attribute for the generated `select` element. Required unless the `asp-for` attribute or `id-prefix` attribute is specified. |
+| name | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute or `id-prefix` attribute is specified. |
 
 ### `<govuk-checkboxes-fieldset>`
 

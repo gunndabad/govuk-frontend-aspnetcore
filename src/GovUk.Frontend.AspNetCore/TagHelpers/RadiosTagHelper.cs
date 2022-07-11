@@ -1,404 +1,159 @@
-using System;
+#nullable enable
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
-    [HtmlTargetElement("govuk-radios", TagStructure = TagStructure.NormalOrSelfClosing)]
-    [RestrictChildren("govuk-radios-divider", "govuk-radios-fieldset", "govuk-radios-item", "govuk-radios-hint", "govuk-radios-error-message")]
-    public class RadiosTagHelper : LegacyFormGroupTagHelperBase
+    /// <summary>
+    /// Generates a GDS checkboxes component.
+    /// </summary>
+    [HtmlTargetElement(TagName)]
+    [RestrictChildren(RadiosFieldsetTagHelper.TagName, RadiosItemTagHelper.TagName, RadiosItemDividerTagHelper.TagName, HintTagName, ErrorMessageTagName)]
+    [OutputElementHint(ComponentGenerator.RadiosElement)]
+    public class RadiosTagHelper : FormGroupTagHelperBase
     {
+        internal const string ErrorMessageTagName = "govuk-radios-error-message";
+        internal const string HintTagName = "govuk-radios-hint";
+        internal const string TagName = "govuk-radios";
+
         private const string IdPrefixAttributeName = "id-prefix";
+        private const string NameAttributeName = "name";
         private const string RadiosAttributesPrefix = "radios-";
 
-        public RadiosTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
-            : base(htmlGenerator, modelHelper)
+        /// <summary>
+        /// Creates a new <see cref="RadiosTagHelper"/>.
+        /// </summary>
+        public RadiosTagHelper()
+            : this(htmlGenerator: null, modelHelper: null)
         {
         }
 
+        internal RadiosTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
+            : base(
+                  htmlGenerator ?? new ComponentGenerator(),
+                  modelHelper ?? new DefaultModelHelper())
+        {
+        }
+
+        /// <summary>
+        /// The prefix to use when generating IDs for the hint, error message and items.
+        /// </summary>
+        /// <remarks>
+        /// Required unless <see cref="FormGroupTagHelperBase.AspFor"/> or <see cref="Name"/> is specified.
+        /// </remarks>
         [HtmlAttributeName(IdPrefixAttributeName)]
-        public string IdPrefix { get; set; }
+        public string? IdPrefix { get; set; }
 
+        /// <summary>
+        /// The <c>name</c> attribute for the generated <c>input</c> elements.
+        /// </summary>
+        /// <remarks>
+        /// Required unless <see cref="FormGroupTagHelperBase.AspFor"/> or <see cref="IdPrefix"/> is specified.
+        /// </remarks>
+        [HtmlAttributeName(NameAttributeName)]
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Additional attributes for the container element that wraps the items.
+        /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = RadiosAttributesPrefix)]
-        public IDictionary<string, string> RadiosAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string>? RadiosAttributes { get; set; } = new Dictionary<string, string>();
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        private protected override FormGroupContext CreateFormGroupContext() => new RadiosContext(Name, AspFor);
+
+        private protected override IHtmlContent GenerateFormGroupContent(
+            TagHelperContext context,
+            FormGroupContext formGroupContext,
+            TagHelperOutput tagHelperOutput,
+            IHtmlContent childContent,
+            out bool haveError)
         {
-            if (Name == null && AspFor == null)
-            {
-                throw new InvalidOperationException(
-                    $"At least one of the '{NameAttributeName}' and '{AspForAttributeName}' attributes must be specified.");
-            }
-
-            var radiosContext = new RadiosContext(ResolvedId, ResolvedName, ViewContext, AspFor);
-            using (context.SetScopedContextItem(typeof(RadiosContext), radiosContext))
-            {
-                await base.ProcessAsync(context, output);
-            }
-        }
-
-        protected override TagBuilder GenerateContent(TagHelperContext context, FormGroupBuilder builder)
-        {
-            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
+            var radiosContext = context.GetContextItem<RadiosContext>();
 
             var contentBuilder = new HtmlContentBuilder();
 
-            var hint = GenerateHint(builder);
+            var hint = GenerateHint(formGroupContext);
             if (hint != null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
-            var errorMessage = GenerateErrorMessage(builder);
+            var errorMessage = GenerateErrorMessage(formGroupContext);
             if (errorMessage != null)
             {
                 contentBuilder.AppendHtml(errorMessage);
             }
 
-            var haveError = errorMessage != null;
+            haveError = errorMessage != null;
+            var haveFieldset = radiosContext.Fieldset != null;
 
-            var tagBuilder = Generator.GenerateRadios(
-                ResolvedName,
-                radiosContext.Items,
-                RadiosAttributes.ToAttributeDictionary());
-            contentBuilder.AppendHtml(tagBuilder);
+            var radiosTagBuilder = GenerateRadios();
+            contentBuilder.AppendHtml(radiosTagBuilder);
 
-            IHtmlContent content = contentBuilder;
-            if (radiosContext.Fieldset != null)
+            if (haveFieldset)
             {
-                content = Generator.GenerateFieldset(
+                return Generator.GenerateFieldset(
                     DescribedBy,
                     role: null,
-                    radiosContext.Fieldset.LegendIsPageHeading,
-                    legendContent: radiosContext.Fieldset.LegendContent,
-                    legendAttributes: radiosContext.Fieldset.LegendAttributes,
-                    content: content,
-                    attributes: radiosContext.Fieldset.Attributes);
+                    radiosContext.Fieldset!.Legend?.IsPageHeading,
+                    radiosContext.Fieldset.Legend?.Content,
+                    radiosContext.Fieldset.Legend?.Attributes,
+                    content: contentBuilder,
+                    radiosContext.Fieldset.Attributes);
             }
 
-            return Generator.GenerateFormGroup(haveError, content, FormGroupAttributes.ToAttributeDictionary());
+            return contentBuilder;
+
+            TagBuilder GenerateRadios()
+            {
+                var resolvedIdPrefix = ResolveIdPrefix();
+                TryResolveName(out var resolvedName);
+
+                return Generator.GenerateRadios(
+                    resolvedIdPrefix,
+                    resolvedName,
+                    items: radiosContext.Items,
+                    attributes: RadiosAttributes.ToAttributeDictionary());
+            }
         }
 
-        protected override string GetIdPrefix() => IdPrefix ?? Name;
-    }
-
-    [HtmlTargetElement("govuk-radios-divider", ParentTag = "govuk-radios")]
-    public class RadiosDividerTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        private protected override string ResolveIdPrefix()
         {
-            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
-
-            var content = await output.GetChildContentAsync();
-
-            radiosContext.AddItem(new RadiosItemDivider()
+            if (IdPrefix != null)
             {
-                Attributes = output.Attributes.ToAttributeDictionary(),
-                Content = content.Snapshot()
-            });
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-radios-fieldset", ParentTag = "govuk-radios", TagStructure = TagStructure.NormalOrSelfClosing)]
-    [RestrictChildren("govuk-radios-fieldset-legend")]
-    public class RadiosFieldsetTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
-
-            var fieldsetContext = new RadiosFieldsetContext();
-
-            using (context.SetScopedContextItem(typeof(RadiosFieldsetContext), fieldsetContext))
-            {
-                await output.GetChildContentAsync();
+                return IdPrefix;
             }
 
-            radiosContext.SetFieldset(new RadiosFieldset()
+            if (Name == null && AspFor == null)
             {
-                Attributes = output.Attributes.ToAttributeDictionary(),
-                LegendIsPageHeading = fieldsetContext.Legend?.isPageHeading,
-                LegendContent = fieldsetContext.Legend?.content,
-                LegendAttributes = fieldsetContext.Legend?.attributes
-            });
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-radios-fieldset-legend", ParentTag = "govuk-radios-fieldset")]
-    public class RadiosFieldsetLegendTagHelper : TagHelper
-    {
-        private const string IsPageHeadingAttributeName = "is-page-heading";
-
-        [HtmlAttributeName(IsPageHeadingAttributeName)]
-        public bool IsPageHeading { get; set; } = ComponentGenerator.FieldsetLegendDefaultIsPageHeading;
-
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var fieldsetContext = (RadiosFieldsetContext)context.Items[typeof(RadiosFieldsetContext)];
-
-            var childContent = await output.GetChildContentAsync();
-
-            if (!fieldsetContext.TrySetLegend(
-                IsPageHeading,
-                output.Attributes.ToAttributeDictionary(),
-                childContent.Snapshot()))
-            {
-                throw new InvalidOperationException($"Cannot render <{output.TagName}> here");
+                throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
+                    IdPrefixAttributeName,
+                    NameAttributeName,
+                    AspForAttributeName);
             }
 
-            output.SuppressOutput();
-        }
-    }
+            TryResolveName(out var resolvedName);
+            Debug.Assert(resolvedName != null);
 
-    [HtmlTargetElement("govuk-radios-item", ParentTag = "govuk-radios")]
-    public class RadiosItemTagHelper : TagHelper
-    {
-        private const string IdAttributeName = "id";
-        private const string InputAttributesPrefix = "input-";
-        private const string IsCheckedAttributeName = "checked";
-        private const string IsDisabledAttributeName = "disabled";
-        private const string ValueAttributeName = "value";
-
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
-        private readonly IModelHelper _modelHelper;
-
-        public RadiosItemTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
-        {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
-            _modelHelper = modelHelper ?? throw new ArgumentNullException(nameof(modelHelper));
+            return TagBuilder.CreateSanitizedId(resolvedName!, Constants.IdAttributeDotReplacement);
         }
 
-        [HtmlAttributeName(IdAttributeName)]
-        public string Id { get; set; }
-
-        [HtmlAttributeName(DictionaryAttributePrefix = InputAttributesPrefix)]
-        public IDictionary<string, string> InputAttributes { get; set; } = new Dictionary<string, string>();
-
-        [HtmlAttributeName(IsCheckedAttributeName)]
-        public bool? IsChecked { get; set; }
-
-        [HtmlAttributeName(IsDisabledAttributeName)]
-        public bool IsDisabled { get; set; }
-
-        [HtmlAttributeName(ValueAttributeName)]
-        public string Value { get; set; }
-
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        private bool TryResolveName([NotNullWhen(true)] out string? name)
         {
-            if (Value == null)
+            if (Name == null && AspFor == null)
             {
-                throw new InvalidOperationException($"The '{ValueAttributeName}' attribute must be specified.");
-            }
-
-            // REVIEW Consider throwing if Checked is null && there is no AspFor
-
-            var radiosContext = (RadiosContext)context.Items[typeof(RadiosContext)];
-
-            var index = radiosContext.Items.Count;
-            var resolvedId = Id ?? (index == 0 ? radiosContext.IdPrefix : $"{radiosContext.IdPrefix}-{index}");
-            var conditionalId = "conditional-" + resolvedId;
-            var hintId = resolvedId + "-item-hint";
-
-            var resolvedChecked = IsChecked ??
-                (radiosContext.HaveModelExpression ?
-                    _modelHelper.GetModelValue(
-                        radiosContext.ViewContext,
-                        radiosContext.AspFor.ModelExplorer,
-                        radiosContext.AspFor.Name) == Value :
-                 false);
-
-            var itemContext = new RadiosItemContext();
-
-            TagHelperContent childContent;
-            using (context.SetScopedContextItem(typeof(RadiosItemContext), itemContext))
-            {
-                childContent = await output.GetChildContentAsync();
-            }
-
-            radiosContext.AddItem(new RadiosItem()
-            {
-                Attributes = output.Attributes.ToAttributeDictionary(),
-                IsChecked = resolvedChecked,
-                ConditionalContent = itemContext.Conditional?.content,
-                ConditionalAttributes = itemContext.Conditional?.attributes,
-                ConditionalId = conditionalId,
-                Content = childContent.Snapshot(),
-                IsDisabled = IsDisabled,
-                HintAttributes = itemContext.Hint?.attributes,
-                HintContent = itemContext.Hint?.content,
-                HintId = hintId,
-                Id = resolvedId,
-                InputAttributes = InputAttributes.ToAttributeDictionary(),
-                Value = Value
-            });
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-radios-item-conditional", ParentTag = "govuk-radios-item")]
-    public class RadiosItemConditionalTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
-
-            var content = await output.GetChildContentAsync();
-
-            itemContext.SetConditional(output.Attributes.ToAttributeDictionary(), content.Snapshot());
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-radios-item-hint", ParentTag = "govuk-radios-item")]
-    public class RadiosItemHintTagHelper : TagHelper
-    {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var itemContext = (RadiosItemContext)context.Items[typeof(RadiosItemContext)];
-
-            var content = await output.GetChildContentAsync();
-
-            itemContext.SetHint(output.Attributes.ToAttributeDictionary(), content.Snapshot());
-
-            output.SuppressOutput();
-        }
-    }
-
-    [HtmlTargetElement("govuk-radios-hint", ParentTag = "govuk-radios")]
-    public class RadiosHintTagHelper : FormGroupHintTagHelperBase
-    {
-    }
-
-    [HtmlTargetElement("govuk-radios-error-message", ParentTag = "govuk-radios")]
-    public class RadiosErrorMessageTagHelper : FormGroupErrorMessageTagHelperBase
-    {
-    }
-
-    internal class RadiosContext
-    {
-        private readonly List<RadiosItemBase> _items;
-
-        public RadiosContext(
-            string idPrefix,
-            string resolvedName,
-            ViewContext viewContext,
-            ModelExpression aspFor)
-        {
-            IdPrefix = idPrefix ?? throw new ArgumentNullException(nameof(idPrefix));
-            ResolvedName = resolvedName ?? throw new ArgumentNullException(nameof(resolvedName));
-            ViewContext = viewContext;
-            AspFor = aspFor;
-            _items = new List<RadiosItemBase>();
-        }
-
-        public RadiosFieldset Fieldset { get; private set; }
-        public string IdPrefix { get; }
-        public IReadOnlyCollection<RadiosItemBase> Items => _items;
-        public string ResolvedName { get; }
-        public ViewContext ViewContext { get; }
-        public ModelExpression AspFor { get; }
-
-        public bool HaveModelExpression => AspFor != null;
-
-        public void AddItem(RadiosItemBase item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            _items.Add(item);
-        }
-
-        public void SetFieldset(RadiosFieldset fieldset)
-        {
-            if (fieldset == null)
-            {
-                throw new ArgumentNullException(nameof(fieldset));
-            }
-
-            if (Fieldset != null)
-            {
-                throw new InvalidOperationException("Fieldset has already been specified.");
-            }
-
-            Fieldset = fieldset;
-        }
-    }
-
-    internal class RadiosFieldsetContext
-    {
-        public (bool isPageHeading, AttributeDictionary attributes, IHtmlContent content)? Legend { get; private set; }
-
-        public bool TrySetLegend(bool isPageHeading, AttributeDictionary attributes, IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Legend != null)
-            {
+                name = default;
                 return false;
             }
 
-            Legend = (isPageHeading, attributes, content);
+            name = Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
             return true;
         }
-    }
-
-    internal class RadiosItemContext
-    {
-        public (AttributeDictionary attributes, IHtmlContent content)? Conditional { get; private set; }
-        public (AttributeDictionary attributes, IHtmlContent content)? Hint { get; private set; }
-
-        public void SetConditional(AttributeDictionary attributes, IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Conditional != null)
-            {
-                throw new InvalidOperationException("Conditional content has already been set.");
-            }
-
-            Conditional = (attributes, content);
-        }
-
-        public void SetHint(AttributeDictionary attributes, IHtmlContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-
-            if (Hint != null)
-            {
-                throw new InvalidOperationException("Hint content has already been set.");
-            }
-
-            Hint = (attributes, content);
-        }
-    }
-
-    internal class RadiosFieldset
-    {
-        public AttributeDictionary Attributes { get; set; }
-        public bool? LegendIsPageHeading { get; set; }
-        public IHtmlContent LegendContent { get; set; }
-        public AttributeDictionary LegendAttributes { get; set; }
     }
 }

@@ -1,0 +1,41 @@
+﻿@page
+
+<govuk-radios name="how-contacted" id-prefix="contact">
+    <govuk-radios-fieldset>
+        <govuk-radios-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l">
+            How would you prefer to be contacted?
+        </govuk-radios-fieldset-legend>
+
+        <govuk-radios-hint>
+            Select one option.
+        </govuk-radios-hint>
+
+        <govuk-radios-item value="email">
+            Email
+            <govuk-radios-item-conditional>
+                <govuk-input id="contact-by-email" name="contact-by-email" type="email" autocomplete="email" spellcheck="false" class="govuk-!-width-one-half">
+                    <govuk-input-label>Email address</govuk-input-label>
+                    <govuk-input-error-message>Email address cannot be blank</govuk-input-error-message>
+                </govuk-input>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+
+        <govuk-radios-item value="phone">
+            Phone
+            <govuk-radios-item-conditional>
+                <govuk-input id="contact-by-phone" name="contact-by-phone" type="tel" autocomplete="tel" class="govuk-!-width-one-third">
+                    <govuk-input-label>Phone number</govuk-input-label>
+                </govuk-input>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+
+        <govuk-radios-item value="text">
+            Text message
+            <govuk-radios-item-conditional>
+                <govuk-input id="contact-by-text" name="contact-by-text" type="tel" autocomplete="tel" class="govuk-!-width-one-third">
+                    <govuk-input-label>Mobile phone number</govuk-input-label>
+                </govuk-input>
+            </govuk-radios-item-conditional>
+        </govuk-radios-item>
+    </govuk-radios-fieldset>
+</govuk-radios>
