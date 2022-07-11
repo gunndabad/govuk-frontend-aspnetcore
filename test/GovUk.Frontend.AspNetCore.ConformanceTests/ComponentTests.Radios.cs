@@ -9,10 +9,10 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     {
         [Theory]
         [ComponentFixtureData(
-            "checkboxes",
-            typeof(OptionsJson.Checkboxes),
-            exclude: "with falsey values")]
-        public void Checkboxes(ComponentTestCaseData<OptionsJson.Checkboxes> data) =>
+            "radios",
+            typeof(OptionsJson.Radios),
+            exclude: "with falsey items")]
+        public void Radios(ComponentTestCaseData<OptionsJson.Radios> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
                 (generator, options) =>
@@ -22,19 +22,18 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var items = options.Items
                         .Select((item, index) =>
                             item.Divider != null ?
-                                (CheckboxesItemBase)new CheckboxesItemDivider() { Content = new HtmlString(item.Divider) } :
-                                (CheckboxesItemBase)new CheckboxesItem()
+                                (RadiosItemBase)new RadiosItemDivider() { Content = new HtmlString(item.Divider) } :
+                                (RadiosItemBase)new RadiosItem()
                                 {
-                                    Behavior = item.Behaviour == "exclusive" ? CheckboxesItemBehavior.Exclusive : CheckboxesItemBehavior.Default,
                                     Conditional = item.Conditional?.Html != null ?
-                                        new CheckboxesItemConditional()
+                                        new RadiosItemConditional()
                                         {
                                             Content = new HtmlString(item.Conditional.Html)
                                         } :
                                         null,
                                     LabelContent = TextOrHtmlHelper.GetHtmlContent(item.Text, item.Html),
                                     Hint = item.Hint != null ?
-                                        new CheckboxesItemHint()
+                                        new RadiosItemHint()
                                         {
                                             Attributes = item.Hint.Attributes?.ToAttributesDictionary(),
                                             Content = TextOrHtmlHelper.GetHtmlContent(item.Hint.Text, item.Hint.Html)
@@ -46,7 +45,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                         .MergeAttribute("class", item.Label?.Classes),
                                     Checked = item.Checked ?? ComponentGenerator.CheckboxesItemDefaultChecked,
                                     Disabled = item.Disabled ?? ComponentGenerator.CheckboxesItemDefaultDisabled,
-                                    Name = item.Name,
                                     Value = item.Value ?? string.Empty
                                 }
                         );
@@ -70,13 +68,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         options.Fieldset,
                         (haveError, describedBy) =>
                         {
-                            AppendToDescribedBy(ref describedBy, options.DescribedBy);
-
-                            return generator.GenerateCheckboxes(
-                                idPrefix,
+                            return generator.GenerateRadios(
+                                options.IdPrefix,
                                 options.Name,
-                                describedBy,
-                                hasFieldset: options.Fieldset != null,
                                 items: items,
                                 attributes: attributes);
                         });

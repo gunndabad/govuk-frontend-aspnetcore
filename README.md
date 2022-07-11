@@ -72,6 +72,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Notification banner](docs/components/notification-banner.md)
 - [Panel](docs/components/panel.md)
 - [Phase banner](docs/components/phase-banner.md)
+- [Radios](docs/components/radios.md)
 - [Select](docs/components/select.md)
 - [Skip link](docs/components/skip-link.md)
 - [Summary list](docs/components/summary-list.md)

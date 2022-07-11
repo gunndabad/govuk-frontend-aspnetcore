@@ -133,6 +133,7 @@ namespace GovUk.Frontend.AspNetCore
             AttributeDictionary attributes);
 
         TagBuilder GenerateRadios(
+            string idPrefix,
             string name,
             IEnumerable<RadiosItemBase> items,
             AttributeDictionary attributes);
