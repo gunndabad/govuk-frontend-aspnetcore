@@ -17,14 +17,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         internal const bool CheckboxesItemDefaultDisabled = false;
 
         public TagBuilder GenerateCheckboxes(
-            string idPrefix,
+            string? idPrefix,
             string? name,
             string? describedBy,
             bool hasFieldset,
             IEnumerable<CheckboxesItemBase> items,
             AttributeDictionary? attributes)
         {
-            Guard.ArgumentNotNull(nameof(idPrefix), idPrefix);
             Guard.ArgumentNotNull(nameof(items), items);
 
             var isConditional = items.OfType<CheckboxesItem>().Any(i => i.Conditional != null);
@@ -57,12 +56,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             void AddDivider(CheckboxesItemDivider divider)
             {
-                var itemTagBuilder = new TagBuilder(CheckboxesDividerItemElement);
-                itemTagBuilder.MergeAttributes(divider.Attributes);
-                itemTagBuilder.MergeCssClass("govuk-checkboxes__divider");
-                itemTagBuilder.InnerHtml.AppendHtml(divider.Content);
+                var dividerTagBuilder = new TagBuilder(CheckboxesDividerItemElement);
+                dividerTagBuilder.MergeAttributes(divider.Attributes);
+                dividerTagBuilder.MergeCssClass("govuk-checkboxes__divider");
+                dividerTagBuilder.InnerHtml.AppendHtml(divider.Content);
 
-                tagBuilder.InnerHtml.AppendHtml(itemTagBuilder);
+                tagBuilder.InnerHtml.AppendHtml(dividerTagBuilder);
             }
 
             void AddItem(CheckboxesItem item)
@@ -77,6 +76,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Name)} cannot be null when {nameof(name)} is null.",
                     item.Name != null || name != null);
+
+                Guard.ArgumentValid(
+                    nameof(items),
+                    $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Id)} cannot be null when {nameof(idPrefix)} is null.",
+                    item.Id != null || idPrefix != null);
 
                 var itemId = item.Id ?? (itemIndex == 0 ? idPrefix : $"{idPrefix}-{itemIndex + 1}");
                 var hintId = itemId + "-item-hint";
