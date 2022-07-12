@@ -149,14 +149,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        internal IHtmlContent? GenerateHint(FormGroupContext builder)
+        internal IHtmlContent? GenerateHint(FormGroupContext formGroupContext)
         {
-            if (builder.Hint != null)
+            var content = formGroupContext.Hint?.Content;
+            var attributes = formGroupContext.Hint?.Attributes;
+
+            if (content == null && AspFor != null)
+            {
+                var description = ModelHelper.GetDescription(AspFor.ModelExplorer);
+
+                if (description != null)
+                {
+                    content = new HtmlString(description);
+                }
+            }
+
+            if (content != null)
             {
                 var resolvedIdPrefix = ResolveIdPrefix();
                 var hintId = resolvedIdPrefix + "-hint";
                 DescribedBy = AppendToDescribedBy(DescribedBy, hintId);
-                return Generator.GenerateHint(hintId, builder.Hint.Value.Content, builder.Hint.Value.Attributes);
+                return Generator.GenerateHint(hintId, content, attributes);
             }
             else
             {
