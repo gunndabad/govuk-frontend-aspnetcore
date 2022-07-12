@@ -252,7 +252,65 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Fact]
-        public void GenerateHint_NoHintOnContext_ReturnsNull()
+        public void GenerateHint_NonEmptyModelMetadataDescription_ReturnsContent()
+        {
+            // Arrange
+            var context = new TestFormGroupContext();
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.SimpleProperty);
+
+            var modelHelper = new Mock<IModelHelper>();
+            modelHelper.Setup(mock => mock.GetDescription(modelExplorer)).Returns("ModelState hint");
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                AspFor = new ModelExpression(modelExpression, modelExplorer),
+                Id = "test",
+                ViewContext = viewContext
+            };
+
+            // Act
+            var hint = tagHelper.GenerateHint(context);
+
+            // Assert
+            Assert.NotNull(hint);
+        }
+
+        [Fact]
+        public void GenerateHint_HintOnContextAndModelMetadataDescriptionUsesContextHint_ReturnsContent()
+        {
+            // Arrange
+            var context = new TestFormGroupContext();
+            context.SetHint(attributes: null, content: new HtmlString("Context hint"));
+
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.SimpleProperty);
+
+            var modelHelper = new Mock<IModelHelper>();
+            modelHelper.Setup(mock => mock.GetDescription(modelExplorer)).Returns("ModelState hint");
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                AspFor = new ModelExpression(modelExpression, modelExplorer),
+                Id = "test",
+                ViewContext = viewContext
+            };
+
+            // Act
+            var hint = tagHelper.GenerateHint(context);
+
+            // Assert
+            Assert.NotNull(hint);
+            Assert.Contains("Context hint", hint.RenderToString());
+        }
+
+        [Fact]
+        public void GenerateHint_NoHintOnContextOrModelMetadataDescription_ReturnsNull()
         {
             // Arrange
             var context = new TestFormGroupContext();

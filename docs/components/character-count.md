@@ -56,6 +56,10 @@ Must be inside a `<govuk-character-count>` element.
 The content is the HTML to use within the component's hint.\
 Must be inside a `<govuk-character-count>` element.
 
+If the `asp-for` attribute is specified on the parent `<govuk-character-count>` then content for the hint will be generated from the model expression.\
+If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
+`<govuk-character-count-hint class="some-additional-class" />`.
+
 ### `<govuk-character-count-error-message>`
 
 The content is the HTML to use within the component's error message.\

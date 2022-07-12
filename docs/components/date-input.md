@@ -94,6 +94,10 @@ The content is the HTML to use within the generated component.
 The content is the HTML to use within the component's hint.\
 Must be inside a `<govuk-date-input>` or `<govuk-date-input-fieldset>` element.
 
+If the `asp-for` attribute is specified on the parent `<govuk-date-input>` then content for the hint will be generated from the model expression.\
+If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
+`<govuk-date-input-hint class="some-additional-class" />`.
+
 ### `<govuk-date-input-error-message>`
 
 The content is the HTML to use within the component's error message.\
