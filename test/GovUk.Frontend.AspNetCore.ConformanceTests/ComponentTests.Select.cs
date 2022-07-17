@@ -11,7 +11,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         [ComponentFixtureData(
             "select",
             typeof(OptionsJson.Select),
-            only: "default",
             exclude: new[]
             {
                 "with falsey values"
