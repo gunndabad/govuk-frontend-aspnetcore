@@ -518,6 +518,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 });
         }
 
+        private class Model
+        {
+            public string Foo { get; set; }
+        }
+
         private class ModelWithBooleanProperty
         {
             public bool BooleanProperty { get; set; }

@@ -10,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.InputPrefixElement)]
-    public class TextInputPrefixTagHelper : FormGroupErrorMessageTagHelperBase
+    public class TextInputPrefixTagHelper : TagHelper
     {
         internal const string TagName = "govuk-input-prefix";
 
