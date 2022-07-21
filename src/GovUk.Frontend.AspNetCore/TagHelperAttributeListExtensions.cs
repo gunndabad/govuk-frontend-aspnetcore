@@ -16,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore
                 {
                     attributeDictionary.Add(
                         attribute.Name,
-                        attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ? string.Empty : attribute.Value.ToString());
+                        attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ? string.Empty : (attribute.Value ?? string.Empty).ToString());
                 }
             }
 
