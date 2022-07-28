@@ -33,16 +33,6 @@ public class Startup
 }
 ```
 
-This will register a [Tag Helper Component](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/th-components?view=aspnetcore-5.0) that automatically adds stylesheet and script imports to your Razor views.
-If you do *not* want this then use the overload of `AddGovUkFrontend` that takes an `Action<GovUkFrontendAspNetCoreOptions>` argument and set `AddImportsToHtml` to `false`:
-
-```cs
-services.AddGovUkFrontend(options =>
-{
-    options.AddImportsToHtml = false;
-});
-```
-
 ### 3. Register tag helpers
 
 In your `_ViewImports.cshtml` file:
@@ -50,6 +40,60 @@ In your `_ViewImports.cshtml` file:
 ```razor:
 @addTagHelper *, GovUk.Frontend.AspNetCore
 ```
+
+### 4. Configure your page template
+
+You have several options for configuring your [page template](https://design-system.service.gov.uk/styles/page-template/).
+
+#### Using the `_GovUkPageTemplate` Razor view
+
+A Razor view is provided with the standard page template markup and Razor sections where you can add in your header, footer and any custom markup you require.
+
+In your `_Layout.cshtml` file:
+
+```razor:
+@{
+    Layout = "_GovUkPageTemplate";
+}
+
+@section Header {
+    @* your header markup goes here *@
+}
+
+@RenderBody()
+
+@section Footer {
+    @* your footer markup goes here *@
+}
+```
+
+As well as `Header` and `Footer` the view defines `EndHead`, `StartBody` and `EndBody` sections.
+Any custom stylesheets and scripts can be imported from within these sections.
+
+Define `ViewBag.Title` in your views to set the `<title>` tag.
+
+#### Create your own Razor view
+
+If the standard template above is not sufficient, you can create your own Razor view.
+
+By default references to the GDS frontend CSS and script assets will be added automatically to the `<head>` and `<body>` elements.
+
+If you want to control the asset references yourself you can disable the automatic import:
+```cs
+services.AddGovUkFrontend(options => options.AddImportsToHtml = false);
+```
+
+The `HtmlSnippets` class defines several members that can simplify the CSS and script imports.
+`HtmlSnippets.StyleImports` imports CSS stylesheets and should be added to `<head>`.
+`HtmlSnippets.BodyInitScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
+`HtmlSnippets.ScriptImports` imports JavaScript files and should be added to the end of `<body>`.
+
+Use `Html.Raw()` to ensure the contents are not double-escaped e.g.
+
+```razor
+@Html.Raw(GovUk.Frontend.AspNetCore.HtmlSnippets.StyleImports)
+```
+
 
 ## GDS assets
 

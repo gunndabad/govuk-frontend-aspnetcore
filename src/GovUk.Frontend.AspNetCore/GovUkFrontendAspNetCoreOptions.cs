@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -18,6 +18,13 @@ namespace GovUk.Frontend.AspNetCore
             PrependErrorToTitle = true;
         }
 
+        /// <summary>
+        /// Whether <c>style</c> and <c>script</c> tags to import GDS assets are added to <c>head</c> and <c>body</c>
+        /// elements automatically in Razor views.
+        /// </summary>
+        /// <remarks>
+        /// The default is <c>false</c>.
+        /// </remarks>
         public bool AddImportsToHtml { get; set; }
 
         public List<DateInputModelConverter> DateInputModelConverters { get; }

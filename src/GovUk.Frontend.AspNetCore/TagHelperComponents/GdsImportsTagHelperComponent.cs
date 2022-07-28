@@ -1,6 +1,8 @@
 using System;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 
@@ -17,9 +19,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelperComponents
 
         public override int Order => 1;
 
+        [ViewContext]
+        [HtmlAttributeNotBound]
+        public ViewContext ViewContext { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (!_options.AddImportsToHtml)
+            if (!_options.AddImportsToHtml || ViewContext.ViewData.ContainsKey(nameof(NoAppendHtmlSnippetsMarker)))
             {
                 return;
             }
