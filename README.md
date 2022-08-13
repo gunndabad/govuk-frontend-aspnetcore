@@ -114,6 +114,8 @@ services.AddGovUkFrontend(options =>
 });
 ```
 
+See the `Samples.MvcStarter` project for an example of this working.
+
 
 ## GDS assets
 
