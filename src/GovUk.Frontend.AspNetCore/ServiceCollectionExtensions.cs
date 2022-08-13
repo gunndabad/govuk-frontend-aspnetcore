@@ -38,6 +38,7 @@ namespace GovUk.Frontend.AspNetCore
             services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureMvcOptions>();
             services.AddScoped<DateInputParseErrorsProvider>();
             services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
+            services.AddTransient<PageTemplateHelper>();
 
             services.Configure(configureOptions);
 

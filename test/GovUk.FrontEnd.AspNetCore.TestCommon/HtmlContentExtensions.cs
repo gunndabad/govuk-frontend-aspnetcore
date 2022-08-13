@@ -13,6 +13,12 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
             return HtmlHelper.ParseHtmlElement(html);
         }
 
+        public static IElement[] RenderToElements(this IHtmlContent content)
+        {
+            var html = content.RenderToString();
+            return HtmlHelper.ParseHtmlElements(html);
+        }
+
         public static string RenderToString(this IHtmlContent content)
         {
             using var writer = new StringWriter();

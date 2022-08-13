@@ -83,16 +83,38 @@ If you want to control the asset references yourself you can disable the automat
 services.AddGovUkFrontend(options => options.AddImportsToHtml = false);
 ```
 
-The `HtmlSnippets` class defines several members that can simplify the CSS and script imports.
-`HtmlSnippets.StyleImports` imports CSS stylesheets and should be added to `<head>`.
-`HtmlSnippets.BodyInitScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
-`HtmlSnippets.ScriptImports` imports JavaScript files and should be added to the end of `<body>`.
+The `PageTemplateHelper` class defines several methods that can simplify the CSS and script imports.
+`GenerateStyleImports` imports CSS stylesheets and should be added to `<head>`.
+`GenerateJsEnabledScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
+`GenerateScriptImports` imports JavaScript files and should be added to the end of `<body>`.
 
-Use `Html.Raw()` to ensure the contents are not double-escaped e.g.
+The latter two methods take an optional `cspNonce` parameter; when provided a `nonce` attribute will be added to the inline scripts.
 
+`PageTemplateHelper` can be injected into your view and used like so:
 ```razor
-@Html.Raw(GovUk.Frontend.AspNetCore.HtmlSnippets.StyleImports)
+@inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
+
+@PageTemplateHelper.GenerateStyleImports()
 ```
+
+#### Content security policy (CSP)
+
+There are two built-in mechanisms to help in generating a `script-src` CSP directive that works correctly with the inline scripts used by the page template.
+
+The preferred option is to use the `GetCspScriptHashes` method on `PageTemplateHelper`. This will return a string that can be inserted directly into the `script-src` directive in your CSP.
+
+Alternatively, a CSP nonce can be appended to the generated `script` tags. A delegate must be configured on `GovUkFrontendOptions` that retrieves a nonce for a given `HttpContext`.
+```cs
+services.AddGovUkFrontend(options =>
+{
+    options.GetCspNonceForRequest = context =>
+    {
+        // Return your nonce here
+    };
+});
+```
+
+See the `Samples.MvcStarter` project for an example of this working.
 
 
 ## GDS assets

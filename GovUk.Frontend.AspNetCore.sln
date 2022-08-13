@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AED24400-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.IntegrationTests", "test\GovUk.Frontend.AspNetCore.IntegrationTests\GovUk.Frontend.AspNetCore.IntegrationTests.csproj", "{AECA829F-DC59-4CA2-88C2-54218D4BD817}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.MvcStarter", "samples\Samples.MvcStarter\Samples.MvcStarter.csproj", "{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +142,18 @@ Global
 		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x64.Build.0 = Release|Any CPU
 		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x86.ActiveCfg = Release|Any CPU
 		{AECA829F-DC59-4CA2-88C2-54218D4BD817}.Release|x86.Build.0 = Release|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Debug|x64.Build.0 = Debug|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Release|x64.Build.0 = Release|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +166,7 @@ Global
 		{1AB2352D-1151-4F82-83F4-5C327A436B70} = {AED24400-DECA-43E7-872C-4ADCFB02A3B2}
 		{64A0B1FF-882D-4270-AD3B-A3B6ABD74957} = {AED24400-DECA-43E7-872C-4ADCFB02A3B2}
 		{AECA829F-DC59-4CA2-88C2-54218D4BD817} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
+		{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4} = {E35F1D11-247E-4AA2-AC23-C4FA59901186}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56670F00-D357-4E76-A289-2114015DDFE5}

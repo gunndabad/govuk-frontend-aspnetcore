@@ -1,4 +1,7 @@
+#nullable enable
+using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -26,6 +29,14 @@ namespace GovUk.Frontend.AspNetCore
         /// The default is <c>false</c>.
         /// </remarks>
         public bool AddImportsToHtml { get; set; }
+
+        /// <summary>
+        /// A delegate for retrieving a CSP nonce for the current request.
+        /// </summary>
+        /// <remarks>
+        /// This is invoked when the page template utilities generate style and script import tags to add a <c>nonce</c> attribute.
+        /// </remarks>
+        public Func<HttpContext, string?>? GetCspNonceForRequest { get; set; }
 
         public List<DateInputModelConverter> DateInputModelConverters { get; }
 
