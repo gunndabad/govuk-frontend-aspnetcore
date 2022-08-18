@@ -13,7 +13,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
             typeof(OptionsJson.Select),
             exclude: new[]
             {
-                "with falsey values"
+                "with falsey values",
+                "item selected overrides value"  // Fixture doesn't have an 'id' :-(
             })]
         public void Select(ComponentTestCaseData<OptionsJson.Select> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
@@ -28,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             Attributes = i.Attributes.ToAttributesDictionary(),
                             Content = new HtmlString(i.Text),
                             Disabled = i.Disabled ?? ComponentGenerator.SelectItemDefaultDisabled,
-                            Selected = i.Selected ?? ComponentGenerator.SelectItemDefaultSelected,
+                            Selected = i.Selected ?? (options.Value == i.Value ? (bool?)true : null) ?? ComponentGenerator.SelectItemDefaultSelected,
                             Value = i.Value ?? string.Empty
                         });
 

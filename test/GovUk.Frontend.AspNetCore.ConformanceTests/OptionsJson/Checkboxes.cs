@@ -15,6 +15,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public string IdPrefix { get; set; }
         public string Name { get; set; }
         public IList<CheckboxesItem> Items { get; set; }
+        public IList<string> Values { get; set; }
         public string Classes { get; set; }
         public IDictionary<string, object> Attributes { get; set; }
     }
