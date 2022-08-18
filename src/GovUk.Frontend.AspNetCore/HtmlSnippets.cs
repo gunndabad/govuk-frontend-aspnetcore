@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore
 {
     public static class HtmlSnippets
     {
-        public static string GdsLibraryVersion { get; } = "4.1.0";
+        public static string GdsLibraryVersion { get; } = "4.2.0";
 
         /// <summary>
         /// The initialization javascript for the GDS page template.
@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore
         /// The contents of this property should be inserted at the end of the <c>body</c> tag.
         /// </remarks>
         [Obsolete("Use the GenerateScriptImports() method on PageTemplateHelper instead.")]
-        public const string ScriptImports = @"<script src=""/govuk-frontend-4.1.0.min.js""></script>
+        public const string ScriptImports = @"<script src=""/govuk-frontend-4.2.0.min.js""></script>
 <script>window.GOVUKFrontend.initAll()</script>";
 
         /// <summary>
@@ -35,10 +35,10 @@ namespace GovUk.Frontend.AspNetCore
         /// </remarks>
         [Obsolete("Use the GenerateStyleImports() method on PageTemplateHelper instead.")]
         public const string StyleImports = @"<!--[if !IE 8]><!-->
-    <link rel=""stylesheet"" href=""/govuk-frontend-4.1.0.min.css"">
+    <link rel=""stylesheet"" href=""/govuk-frontend-4.2.0.min.css"">
 <!--<![endif]-->
 <!--[if IE 8]>
-    <link rel = ""stylesheet"" href=""/govuk-frontend-ie8-4.1.0.min.css"">
+    <link rel = ""stylesheet"" href=""/govuk-frontend-ie8-4.2.0.min.css"">
 <![endif]-->";
     }
 }

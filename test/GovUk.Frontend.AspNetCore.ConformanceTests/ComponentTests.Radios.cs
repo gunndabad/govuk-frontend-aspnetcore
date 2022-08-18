@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                     InputAttributes = item.Attributes.ToAttributesDictionary(),
                                     LabelAttributes = item.Label?.Attributes.ToAttributesDictionary()
                                         .MergeAttribute("class", item.Label?.Classes),
-                                    Checked = item.Checked ?? ComponentGenerator.CheckboxesItemDefaultChecked,
+                                    Checked = item.Checked ?? (options.Value == item.Value ? (bool?)true : null) ?? ComponentGenerator.CheckboxesItemDefaultChecked,
                                     Disabled = item.Disabled ?? ComponentGenerator.CheckboxesItemDefaultDisabled,
                                     Value = item.Value ?? string.Empty
                                 }

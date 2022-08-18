@@ -14,6 +14,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public string IdPrefix { get; set; }
         public string Name { get; set; }
         public IList<RadiosItem> Items { get; set; }
+        public string Value { get; set; }
         public string Classes { get; set; }
         public IDictionary<string, object> Attributes { get; set; }
     }

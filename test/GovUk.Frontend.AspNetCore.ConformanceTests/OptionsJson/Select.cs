@@ -7,6 +7,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public string Id { get; set; }
         public string Name { get; set; }
         public IEnumerable<SelectItem> Items { get; set; }
+        public string Value { get; set; }
         public string DescribedBy { get; set; }
         public Label Label { get; set; }
         public Hint Hint { get; set; }

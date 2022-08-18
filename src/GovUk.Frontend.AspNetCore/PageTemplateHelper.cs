@@ -65,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore
             TagBuilder GenerateImportScript()
             {
                 var tagBuilder = new TagBuilder("script");
-                tagBuilder.MergeAttribute("src", "/govuk-frontend-4.1.0.min.js");
+                tagBuilder.MergeAttribute("src", "/govuk-frontend-4.2.0.min.js");
                 return tagBuilder;
             }
 
@@ -92,10 +92,10 @@ namespace GovUk.Frontend.AspNetCore
         /// </remarks>
         /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
         public IHtmlContent GenerateStyleImports() => new HtmlString(@"<!--[if !IE 8]><!-->
-    <link rel=""stylesheet"" href=""/govuk-frontend-4.1.0.min.css"">
+    <link rel=""stylesheet"" href=""/govuk-frontend-4.2.0.min.css"">
 <!--<![endif]-->
 <!--[if IE 8]>
-    <link rel = ""stylesheet"" href=""/govuk-frontend-ie8-4.1.0.min.css"">
+    <link rel = ""stylesheet"" href=""/govuk-frontend-ie8-4.2.0.min.css"">
 <![endif]-->");
 
         /// <summary>
