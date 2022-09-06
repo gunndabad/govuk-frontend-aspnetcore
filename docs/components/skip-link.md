@@ -22,4 +22,4 @@ The content is the HTML to use within the generated link.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| href | string | The 'href' attribute for the link. The default is '#content'. Cannot be `null` or empty. |
+| `href` | `string` | The 'href' attribute for the link. The default is '#content'. Cannot be `null` or empty. |

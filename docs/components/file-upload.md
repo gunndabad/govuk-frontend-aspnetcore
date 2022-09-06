@@ -30,12 +30,12 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| asp-for | ModelExpression | The model expression used to generate the `name` and `id` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
-| described-by | string | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element. |
-| id | string | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
-| ignore-modelstate-errors | bool | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| input-* | | Additional attributes to add to the generated `input` element. |
-| name | string | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified. |
+| `asp-for` | `ModelExpression` | The model expression used to generate the `name` and `id` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
+| `described-by` | `string` | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element. |
+| `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
+| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
+| `input-*` | | Additional attributes to add to the generated `input` element. |
+| `name` | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified. |
 
 ### `<govuk-file-upload-label>`
 
@@ -44,7 +44,7 @@ Must be inside a `<govuk-file-upload>` element.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| is-page-heading | bool | Whether the label also acts as the heading for the page. The default is `false`. |
+| `is-page-heading` | `bool` | Whether the label also acts as the heading for the page. The default is `false`. |
 
 ### `<govuk-file-upload-hint>`
 
@@ -67,4 +67,4 @@ If you want to retain the generated content and specify additional attributes th
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| visually-hidden-text | string | The visually hidden prefix used before the error message. The default is `Error`. |
+| `visually-hidden-text` | `string` | The visually hidden prefix used before the error message. The default is `Error`. |

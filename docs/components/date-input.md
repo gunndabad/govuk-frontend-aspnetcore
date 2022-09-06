@@ -81,13 +81,13 @@ The content is the HTML to use within the generated component.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| asp-for | `ModelExpression` | The model expression used to generate the `name-prefix`, `id` and `value` attributes as well as the error message content. The model type should be a `Date`, `DateTime` or a type that has a custom converter registered. See [custom date types](#custom-date-types) and [documentation on forms](forms.md) for more information. |
-| date-input-* | | Additional attributes for the container element that wraps the items. |
-| disabled | `bool` | Whether the inputs should be disabled. The default is `false`. |
-| id | `string` | The `id` attribute for the main component. Required unless the `asp-for` attribute is specified. |
-| ignore-modelstate-errors | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| name-prefix | `string` | Optional prefix for the `name` attribute on each item's input. |
-| value | `object` | The date to populate the item values with. The value should be a `Date`, `DateTime` or a type that has a custom converter registered. See [custom date types](#custom-date-types) for more information. |
+| `asp-for` | `ModelExpression` | The model expression used to generate the `name-prefix`, `id` and `value` attributes as well as the error message content. The model type should be a `Date`, `DateTime` or a type that has a custom converter registered. See [custom date types](#custom-date-types) and [documentation on forms](forms.md) for more information. |
+| `date-input-`*` | | Additional attributes for the container element that wraps the items. |
+| `disabled` | `bool` | Whether the inputs should be disabled. The default is `false`. |
+| `id` | `string` | The `id` attribute for the main component. Required unless the `asp-for` attribute is specified. |
+| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
+| `name-prefix` | `string` | Optional prefix for the `name` attribute on each item's input. |
+| `value` | `object` | The date to populate the item values with. The value should be a `Date`, `DateTime` or a type that has a custom converter registered. See [custom date types](#custom-date-types) for more information. |
 
 ### `<govuk-date-input-hint>`
 
@@ -110,8 +110,8 @@ If you want to retain the generated content and specify additional attributes th
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| error-items | `DateInputErrorComponents?` | The components of the date that have errors (day, month and/or year). By default this is resolved by looking up the errors that occurred on model binding. The fallback is `DateInputErrorComponents.All`. |
-| visually-hidden-text | string | The visually hidden prefix used before the error message. The default is `Error`. |
+| `error-items` | `DateInputErrorComponents?` | The components of the date that have errors (day, month and/or year). By default this is resolved by looking up the errors that occurred on model binding. The fallback is `DateInputErrorComponents.All`. |
+| `visually-hidden-text` | `string` | The visually hidden prefix used before the error message. The default is `Error`. |
 
 ### `<govuk-date-input-fieldset>`
 
@@ -135,12 +135,12 @@ Must be inside a `<govuk-date-input>` or `<govuk-date-input-fieldset>` element.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| autocomplete | `string` | The `autocomplete` attribute for the generated `input` element. |
-| id | `string` | The `id` attribute for the item's geneated `input` element. |
-| inputmode | `string` | The `inputmode` attribute for the item's generated `input` element. The default is `numeric`. |
-| name | `string` | The `name` attribute for the item's generated `input` element. |
-| pattern | `string` | The `pattern` attribute for the item's generated `input` element. The default is `[0-9]*`. |
-| value | `int?` | The `value` attribute for the item's generated `input` element. |
+| `autocomplete` | `string` | The `autocomplete` attribute for the generated `input` element. |
+| `id` | `string` | The `id` attribute for the item's geneated `input` element. |
+| `inputmode` | `string` | The `inputmode` attribute for the item's generated `input` element. The default is `numeric`. |
+| `name` | `string` | The `name` attribute for the item's generated `input` element. |
+| `pattern` | `string` | The `pattern` attribute for the item's generated `input` element. The default is `[0-9]*`. |
+| `value` | `int?` | The `value` attribute for the item's generated `input` element. |
 
 ### `<govuk-date-input-day-label>`, `<govuk-date-input-month-label>`, `<govuk-date-input-year-label>`
 

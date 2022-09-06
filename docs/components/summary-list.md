@@ -126,7 +126,7 @@ Must be inside a `<govuk-summary-list-row>` element.
 | Attribute | Type | Description |
 | --- | --- | --- |
 | (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
-| visually-hidden-text | string | The visually hidden text for the link. |
+| `visually-hidden-text` | `string` | The visually hidden text for the link. |
 
 The content is the HTML to use within the generated link.\
 Must be inside a `<govuk-summary-list-row-actions>` element.

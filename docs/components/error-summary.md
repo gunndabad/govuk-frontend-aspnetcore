@@ -68,5 +68,5 @@ Must be inside a `<govuk-error-summary>` element.
 | Attribute | Type | Description |
 | --- | --- | --- |
 | `asp-for` | `ModelExpression` | The model expression used to generate the error message. If content is specified this attribute is ignored. See [documentation on forms](../forms.md) for more information. |
-| link-* | | Additional attributes to add to the generated `a` element. |
+| `link-*` | | Additional attributes to add to the generated `a` element. |
 | (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |

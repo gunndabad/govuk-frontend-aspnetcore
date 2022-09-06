@@ -46,19 +46,19 @@ The content is the HTML to use within the generated component.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| asp-for | ModelExpression | The model expression used to generate the `name`, `id` and `value` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
-| autocomplete | string | The `autocomplete` attribute for the generated `input` element. |
-| described-by | string | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element. |
-| disabled | bool | Whether the input should be disabled. The default is `false`. |
-| id | string | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
-| ignore-modelstate-errors | bool | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| input-* | | Additional attributes to add to the generated `input` element. |
-| name | string | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified. |
-| inputmode | string | The `inputmode` attribute for the generated `input` element. |
-| pattern | string | The `pattern` attribute for the generated `input` element. |
-| spellcheck | bool? | The `spellcheck` attribute for the generated `input` element. The default is `null`. |
-| type | string | The `type` attribute for the generated `input` element. The default is `text`. |
-| value | string | The `value` attribute for the generated `input` element. |
+| `asp-for` | `ModelExpression` | The model expression used to generate the `name`, `id` and `value` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
+| `autocomplete` | `string` | The `autocomplete` attribute for the generated `input` element. |
+| `described-by` | `string` | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element. |
+| `disabled` | `bool` | Whether the input should be disabled. The default is `false`. |
+| `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
+| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
+| `input-*` | | Additional attributes to add to the generated `input` element. |
+| `name` | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified. |
+| `inputmode` | `string` | The `inputmode` attribute for the generated `input` element. |
+| `pattern` | `string` | The `pattern` attribute for the generated `input` element. |
+| `spellcheck` | `bool?` | The `spellcheck` attribute for the generated `input` element. The default is `null`. |
+| `type` | `string` | The `type` attribute for the generated `input` element. The default is `text`. |
+| `value` | `string` | The `value` attribute for the generated `input` element. |
 
 ### `<govuk-input-label>`
 
@@ -67,7 +67,7 @@ Must be inside a `<govuk-input>` element.
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| is-page-heading | bool | Whether the label also acts as the heading for the page. The default is `false`. |
+| `is-page-heading` | `bool` | Whether the label also acts as the heading for the page. The default is `false`. |
 
 ### `<govuk-input-hint>`
 
@@ -90,7 +90,7 @@ If you want to retain the generated content and specify additional attributes th
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| visually-hidden-text | string | The visually hidden prefix used before the error message. The default is `Error`. |
+| `visually-hidden-text` | `string` | The visually hidden prefix used before the error message. The default is `Error`. |
 
 ### `<govuk-input-prefix>`
 
