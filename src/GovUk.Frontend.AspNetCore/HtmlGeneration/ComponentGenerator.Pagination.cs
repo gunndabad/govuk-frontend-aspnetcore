@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +7,23 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
-        internal const string PaginationElement = "nav";
         internal const string PaginationDefaultLandmarkLabel = "results";
         internal const string PaginationDefaultPreviousText = "Previous";
         internal const string PaginationDefaultNextText = "Next";
+        internal const string PaginationElement = "nav";
+        internal const string PaginationEllipsisElement = "li";
+        internal const string PaginationItemElement = "li";
+        internal const string PaginationNextElement = "div";
+        internal const string PaginationPreviousElement = "div";
 
         public TagBuilder GeneratePagination(
             IEnumerable<PaginationItemBase> items,
             PaginationPrevious? previous,
             PaginationNext? next,
             string? landmarkLabel,
-            AttributeDictionary? attributes)
+            AttributeDictionary attributes)
         {
             Guard.ArgumentNotNull(nameof(items), items);
 
@@ -39,17 +42,19 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             if (previous is not null)
             {
-                Guard.ArgumentNotNullOrEmpty($"{nameof(previous)}.{nameof(previous.Href)}", previous.Href);
-
-                var previousTagBuilder = new TagBuilder("div");
-                previousTagBuilder.MergeAttributes(previous.Attributes);
+                var previousTagBuilder = new TagBuilder(PaginationPreviousElement);
+                previousTagBuilder.MergeOptionalAttributes(previous.Attributes);
                 previousTagBuilder.MergeCssClass("govuk-pagination__prev");
 
                 var link = new TagBuilder("a");
-                link.MergeAttributes(previous.LinkAttributes);
+                link.MergeOptionalAttributes(previous.LinkAttributes);
                 link.MergeCssClass("govuk-link govuk-pagination__link");
-                link.Attributes.Add("href", previous.Href);
                 link.Attributes.Add("rel", "prev");
+
+                if (previous.Href is not null)
+                {
+                    link.Attributes.Add("href", previous.Href);
+                }
 
                 var previousArrow = GeneratePreviousArrow();
                 link.InnerHtml.AppendHtml(previousArrow);
@@ -62,7 +67,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     title.AddCssClass("govuk-pagination__link-title--decorated");
                 }
 
-                title.InnerHtml.Append(previous.Text ?? PaginationDefaultPreviousText);
+                title.InnerHtml.AppendHtml(previous.Text ?? new HtmlString(PaginationDefaultPreviousText));
 
                 link.InnerHtml.AppendHtml(title);
 
@@ -97,18 +102,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     {
                         Guard.ArgumentValidNotNull(
                             nameof(items),
-                            $"Item {itemIndex} is not valid; {nameof(PaginationItem.Href)} cannot be null.",
-                            paginationItem.Href,
-                            paginationItem.Href != null);
-
-                        Guard.ArgumentValidNotNull(
-                            nameof(items),
                             $"Item {itemIndex} is not valid; {nameof(PaginationItem.Number)} cannot be null.",
                             paginationItem.Number,
                             paginationItem.Number != null);
 
-                        var li = new TagBuilder("li");
-                        li.MergeAttributes(paginationItem.Attributes);
+                        var li = new TagBuilder(PaginationItemElement);
+                        li.MergeOptionalAttributes(paginationItem.Attributes);
                         li.AddCssClass("govuk-pagination__item");
 
                         if (paginationItem.IsCurrent)
@@ -117,18 +116,22 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                         }
 
                         var itemLink = new TagBuilder("a");
-                        li.MergeAttributes(paginationItem.Attributes);
+                        li.MergeOptionalAttributes(paginationItem.Attributes);
                         itemLink.AddCssClass("govuk-link");
                         itemLink.AddCssClass("govuk-pagination__link");
-                        itemLink.Attributes.Add("href", paginationItem.Href);
                         itemLink.Attributes.Add("aria-label", paginationItem.VisuallyHiddenText ?? $"Page {paginationItem.Number}");
+
+                        if (paginationItem.Href is not null)
+                        {
+                            itemLink.Attributes.Add("href", paginationItem.Href);
+                        }
 
                         if (paginationItem.IsCurrent)
                         {
                             itemLink.Attributes.Add("aria-current", "page");
                         }
 
-                        itemLink.InnerHtml.Append(paginationItem.Number);
+                        itemLink.InnerHtml.AppendHtml(paginationItem.Number);
 
                         li.InnerHtml.AppendHtml(itemLink);
 
@@ -136,8 +139,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     }
                     else if (item is PaginationItemEllipsis ellipsisItem)
                     {
-                        var li = new TagBuilder("li");
-                        li.MergeAttributes(ellipsisItem.Attributes);
+                        var li = new TagBuilder(PaginationEllipsisElement);
+                        li.MergeOptionalAttributes(ellipsisItem.Attributes);
                         li.AddCssClass("govuk-pagination__item govuk-pagination__item--ellipses");
                         li.InnerHtml.AppendHtml(new HtmlString("&ctdot;"));
                         ul.InnerHtml.AppendHtml(li);
@@ -155,19 +158,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             if (next is not null)
             {
-                Guard.ArgumentNotNullOrEmpty($"{nameof(next)}.{nameof(next.Href)}", next.Href);
-
                 var nextArrow = GenerateNextArrow();
 
-                var nextTagBuilder = new TagBuilder("div");
-                nextTagBuilder.MergeAttributes(next.Attributes);
+                var nextTagBuilder = new TagBuilder(PaginationNextElement);
+                nextTagBuilder.MergeOptionalAttributes(next.Attributes);
                 nextTagBuilder.MergeCssClass("govuk-pagination__next");
 
                 var link = new TagBuilder("a");
-                link.MergeAttributes(next.LinkAttributes);
+                link.MergeOptionalAttributes(next.LinkAttributes);
                 link.MergeCssClass("govuk-link govuk-pagination__link");
-                link.Attributes.Add("href", next.Href);
                 link.Attributes.Add("rel", "next");
+
+                if (next.Href is not null)
+                {
+                    link.Attributes.Add("href", next.Href);
+                }
 
                 if (blockLevel)
                 {
@@ -182,7 +187,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     title.AddCssClass("govuk-pagination__link-title--decorated");
                 }
 
-                title.InnerHtml.Append(next.Text ?? PaginationDefaultNextText);
+                title.InnerHtml.AppendHtml(next.Text ?? new HtmlString(PaginationDefaultNextText));
 
                 link.InnerHtml.AppendHtml(title);
 

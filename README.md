@@ -157,6 +157,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [File upload](docs/components/file-upload.md)
 - [Inset text](docs/components/inset-text.md)
 - [Notification banner](docs/components/notification-banner.md)
+- [Pagination](docs/components/pagination.md)
 - [Panel](docs/components/panel.md)
 - [Phase banner](docs/components/phase-banner.md)
 - [Radios](docs/components/radios.md)

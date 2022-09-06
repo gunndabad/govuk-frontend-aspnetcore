@@ -1,6 +1,7 @@
 using System.Linq;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -22,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 Attributes = i.Attributes.ToAttributesDictionary(),
                                 Href = i.Href ?? string.Empty,
                                 IsCurrent = i.Current,
-                                Number = i.Number,
+                                Number = new HtmlString(i.Number),
                                 VisuallyHiddenText = i.VisuallyHiddenText
                             });
 
@@ -32,7 +33,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             LinkAttributes = options.Previous.Attributes.ToAttributesDictionary(),
                             Href = options.Previous.Href ?? string.Empty,
                             LabelText = options.Previous.LabelText,
-                            Text = options.Previous.Text
+                            Text = options.Previous.Text != null ? new HtmlString(options.Previous.Text) : null
                         } :
                         null;
 
@@ -42,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             LinkAttributes = options.Next.Attributes.ToAttributesDictionary(),
                             Href = options.Next.Href ?? string.Empty,
                             LabelText = options.Next.LabelText,
-                            Text = options.Next.Text
+                            Text = options.Next.Text != null ? new HtmlString(options.Next.Text) : null
                         } :
                         null;
 
