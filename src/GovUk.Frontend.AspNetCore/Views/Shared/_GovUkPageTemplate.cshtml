@@ -6,52 +6,79 @@
 @{
     ViewData.Add("NoAppendHtmlSnippetsMarker", true);
     var cspNonce = OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
+
+    var htmlLang = ViewBag.HtmlLang ?? "en";
+    string themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
 }
 <!DOCTYPE html>
-<html lang="en" class="govuk-template ">
+<html lang="@htmlLang" class="govuk-template @ViewBag.HtmlClasses">
 
 <head>
     <meta charset="utf-8">
-    <title>@ViewBag.Title</title>
+    <title lang="@ViewBag.TitleLang">@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0c0c">
+    <meta name="theme-color" content="@themeColor">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
-    <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="#0b0c0c">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+    @if (IsSectionDefined("HeadIcons"))
+    {
+        @RenderSection("HeadIcons")
+    }
+    else
+    {
+        <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
+        <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="@themeColor">
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
+        <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+    }
 
-    @PageTemplateHelper.GenerateStyleImports()
+    @if (IsSectionDefined("Head"))
+    {
+        @RenderSection("Head")
+    }
+    else
+    {
+        @PageTemplateHelper.GenerateStyleImports()
+    }
 
-    <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
-
-    @RenderSection("EndHead", required: false)
+    <meta property="og:image" content="@(ViewBag.OpengraphImageUrl ?? "/assets/images/govuk-opengraph-image.png")">
 </head>
 
-<body class="govuk-template__body ">
+<body class="govuk-template__body @ViewBag.BodyClasses">
     @PageTemplateHelper.GenerateJsEnabledScript(cspNonce)
+    @RenderSection("BodyStart", required: false)
 
-    @RenderSection("StartBody", required: false)
-
-    <govuk-skip-link />
+    @if (IsSectionDefined("SkipLink"))
+    {
+        @RenderSection("SkipLink")
+    }
+    else
+    {
+        <govuk-skip-link href="#main-content">Skip to main content</govuk-skip-link>
+    }
 
     @RenderSection("Header", required: false)
 
-    <div class="govuk-width-container ">
-        <main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-width-container @ViewBag.ContainerClasses">
+        @RenderSection("BeforeContent", required: false)
+        <main class="govuk-main-wrapper @ViewBag.MainClasses" id="main-content" role="main" lang="@ViewBag.MainLang">
             @RenderBody()
         </main>
     </div>
 
     @RenderSection("Footer", required: false)
 
-    @PageTemplateHelper.GenerateScriptImports(cspNonce)
-
-    @RenderSection("EndBody", required: false)
+    @if (IsSectionDefined("BodyEnd"))
+    {
+        @RenderSection("BodyEnd")
+    }
+    else
+    {
+        @PageTemplateHelper.GenerateScriptImports(cspNonce)
+    }
 </body>
 
 </html>
