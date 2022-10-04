@@ -71,11 +71,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 dt.InnerHtml.AppendHtml(row.Key.Content);
                 rowTagBuilder.InnerHtml.AppendHtml(dt);
 
-                var dd = new TagBuilder(SummaryListRowValueElement);
-                dd.MergeAttributes(row.Value.Attributes);
-                dd.MergeCssClass("govuk-summary-list__value");
-                dd.InnerHtml.AppendHtml(row.Value.Content);
-                rowTagBuilder.InnerHtml.AppendHtml(dd);
+                if (row.Value is not null)
+                {
+                    var dd = new TagBuilder(SummaryListRowValueElement);
+                    dd.MergeAttributes(row.Value.Attributes);
+                    dd.MergeCssClass("govuk-summary-list__value");
+                    dd.InnerHtml.AppendHtml(row.Value.Content);
+                    rowTagBuilder.InnerHtml.AppendHtml(dd);
+                }
 
                 if (thisRowHasActions)
                 {
