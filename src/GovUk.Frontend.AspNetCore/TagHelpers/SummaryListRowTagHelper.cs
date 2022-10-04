@@ -42,11 +42,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     Content = rowContext.Key!.Value.Content,
                     Attributes = rowContext.Key!.Value.Attributes
                 },
-                Value = new SummaryListRowValue()
-                {
-                    Content = rowContext.Value!.Value.Content,
-                    Attributes = rowContext.Value!.Value.Attributes
-                }
+                Value = rowContext.Value is not null ?
+                    new SummaryListRowValue()
+                    {
+                        Content = rowContext.Value.Value.Content,
+                        Attributes = rowContext.Value.Value.Attributes
+                    } :
+                    null
             });
 
             output.SuppressOutput();

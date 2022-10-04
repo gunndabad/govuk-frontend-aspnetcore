@@ -122,11 +122,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 throw ExceptionHelper.AChildElementMustBeProvided(SummaryListRowKeyTagHelper.TagName);
             }
-
-            if (Value == null)
-            {
-                throw ExceptionHelper.AChildElementMustBeProvided(SummaryListRowValueTagHelper.TagName);
-            }
         }
     }
 }
