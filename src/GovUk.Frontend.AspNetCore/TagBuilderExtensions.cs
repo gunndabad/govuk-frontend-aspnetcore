@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    internal static class TagBuilderExtensions
+    /// <summary>
+    /// Utility extensions for <see cref="TagBuilder"/>.
+    /// </summary>
+    public static class TagBuilderExtensions
     {
         /// <summary>
         /// Adds a CSS class to the list of CSS classes in the tag if it does not already specified.

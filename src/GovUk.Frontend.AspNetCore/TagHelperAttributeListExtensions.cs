@@ -4,8 +4,15 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    internal static class TagHelperAttributeListExtensions
+    /// <summary>
+    /// Utility extensions for <see cref="TagHelperAttributeList"/>.
+    /// </summary>
+    public static class TagHelperAttributeListExtensions
     {
+        /// <summary>
+        /// Creates an <see cref="AttributeDictionary"/> from a <see cref="TagHelperAttributeList"/>.
+        /// </summary>
+        /// <param name="list">The <see cref="TagHelperAttributeList"/> to retrieve attributes from.</param>
         public static AttributeDictionary ToAttributeDictionary(this TagHelperAttributeList? list)
         {
             var attributeDictionary = new AttributeDictionary();

@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    internal static class AttributeDictionaryExtensions
+    /// <summary>
+    /// Utility extensions for <see cref="AttributeDictionary"/>.
+    /// </summary>
+    public static class AttributeDictionaryExtensions
     {
         /// <summary>
         /// Adds a CSS class to the list of CSS classes in the tag if it does not already specified.
