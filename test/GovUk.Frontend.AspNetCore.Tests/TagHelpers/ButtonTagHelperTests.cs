@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -29,7 +30,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper();
+            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+            var tagHelper = new ButtonTagHelper(options);
 
             // Act
             await tagHelper.ProcessAsync(context, output);
@@ -63,7 +66,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper()
+            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+            var tagHelper = new ButtonTagHelper(options)
             {
                 IsStartButton = true
             };
@@ -101,7 +106,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper()
+            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+            var tagHelper = new ButtonTagHelper(options)
             {
                 Disabled = true
             };
@@ -137,7 +144,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var tagHelper = new ButtonTagHelper()
+            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+            var tagHelper = new ButtonTagHelper(options)
             {
                 PreventDoubleClick = true
             };

@@ -1,6 +1,8 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Http;
 
 namespace GovUk.Frontend.AspNetCore
@@ -29,6 +31,14 @@ namespace GovUk.Frontend.AspNetCore
         /// The default is <c>true</c>.
         /// </remarks>
         public bool AddImportsToHtml { get; set; }
+
+        /// <summary>
+        /// The default value for <see cref="ButtonTagHelper.PreventDoubleClick"/>.
+        /// </summary>
+        /// <remarks>
+        /// The default is <c>false</c>.
+        /// </remarks>
+        public bool DefaultButtonPreventDoubleClick { get; set; } = ComponentGenerator.ButtonDefaultPreventDoubleClick;
 
         /// <summary>
         /// A delegate for retrieving a CSP nonce for the current request.

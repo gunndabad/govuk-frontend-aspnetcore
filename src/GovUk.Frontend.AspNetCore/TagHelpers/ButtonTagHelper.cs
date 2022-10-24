@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
@@ -24,14 +25,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// <summary>
         /// Creates a new <see cref="ButtonTagHelper"/>.
         /// </summary>
-        public ButtonTagHelper()
-            : this(htmlGenerator: null)
+        public ButtonTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+            : this(optionsAccessor, htmlGenerator: null)
         {
         }
 
-        internal ButtonTagHelper(IGovUkHtmlGenerator? htmlGenerator)
+        internal ButtonTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor, IGovUkHtmlGenerator? htmlGenerator)
         {
+            var options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
             _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+
+            PreventDoubleClick = options.DefaultButtonPreventDoubleClick;
         }
 
         /// <summary>
@@ -56,10 +60,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
         /// </summary>
         /// <remarks>
-        /// The default is <c>false</c>.
+        /// The default is set for the application in <see cref="GovUkFrontendAspNetCoreOptions.DefaultButtonPreventDoubleClick"/>.
         /// </remarks>
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
-        public bool PreventDoubleClick { get; set; } = ComponentGenerator.ButtonDefaultPreventDoubleClick;
+        public bool PreventDoubleClick { get; set; }
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
