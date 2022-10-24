@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore
         /// elements automatically in Razor views.
         /// </summary>
         /// <remarks>
-        /// The default is <c>false</c>.
+        /// The default is <c>true</c>.
         /// </remarks>
         public bool AddImportsToHtml { get; set; }
 
@@ -44,7 +44,8 @@ namespace GovUk.Frontend.AspNetCore
         /// Whether to prepend an error summary component to forms.
         /// </summary>
         /// <remarks>
-        /// This can be overriden on a form-by-form basis by setting the <c>gfa-prepend-error-summary</c> attribute.
+        /// <para>This can be overriden on a form-by-form basis by setting the <c>gfa-prepend-error-summary</c> attribute.</para>
+        /// <para>The default is <c>true</c>.</para>
         /// </remarks>
         public bool PrependErrorSummaryToForms { get; set; }
 
@@ -52,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore
         /// Whether to prepend 'Error: ' to the &lt;title&gt; element when ModelState is not valid.
         /// </summary>
         /// <remarks>
-        /// The default is <see langword="true"/>.
+        /// The default is <c>true</c>.
         /// </remarks>
         public bool PrependErrorToTitle { get; set; }
     }
