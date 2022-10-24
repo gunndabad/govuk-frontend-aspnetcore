@@ -19,6 +19,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string DisabledAttributeName = "disabled";
         private const string IsStartButtonAttributeName = "is-start-button";
         private const string PreventDoubleClickAttributeName = "prevent-double-click";
+        private const string TypeAttributeName = "type";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
@@ -65,17 +66,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
         public bool PreventDoubleClick { get; set; }
 
+        /// <summary>
+        /// The <c>type</c> attribute for the generated <c>button</c> element.
+        /// </summary>
+        [HtmlAttributeName(TypeAttributeName)]
+        public string? Type { get; set; }
+
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             var childContent = await output.GetChildContentAsync();
+
+            var attributes = output.Attributes.ToAttributeDictionary();
+
+            if (Type is not null)
+            {
+                attributes.Add("type", Type);
+            }
 
             var tagBuilder = _htmlGenerator.GenerateButton(
                 IsStartButton,
                 Disabled,
                 PreventDoubleClick,
                 childContent,
-                output.Attributes.ToAttributeDictionary());
+                attributes);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

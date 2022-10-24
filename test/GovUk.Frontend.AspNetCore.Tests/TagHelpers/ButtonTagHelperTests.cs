@@ -47,6 +47,45 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Fact]
+        public async Task ProcessAsync_WithType_GeneratesExpectedOutput()
+        {
+            // Arrange
+            var context = new TagHelperContext(
+                tagName: "govuk-button",
+                allAttributes: new TagHelperAttributeList(),
+                items: new Dictionary<object, object>(),
+                uniqueId: "test");
+
+            var output = new TagHelperOutput(
+                "govuk-button",
+                attributes: new TagHelperAttributeList(),
+                getChildContentAsync: (useCachedResult, encoder) =>
+                {
+                    var tagHelperContent = new DefaultTagHelperContent();
+                    tagHelperContent.SetContent("Button text");
+                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                });
+
+            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+            var tagHelper = new ButtonTagHelper(options)
+            {
+                Type = "submit"
+            };
+
+            // Act
+            await tagHelper.ProcessAsync(context, output);
+
+            // Assert
+            var expectedHtml = @"
+<button class=""govuk-button"" data-module=""govuk-button"" type=""submit"">
+    Button text
+</button>";
+
+            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+        }
+
+        [Fact]
         public async Task ProcessAsync_IsStartButton_AddsIconToOutput()
         {
             // Arrange
