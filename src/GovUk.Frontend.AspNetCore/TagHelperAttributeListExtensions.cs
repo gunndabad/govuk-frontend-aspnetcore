@@ -1,4 +1,6 @@
 #nullable enable
+using System.Web;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -23,7 +25,10 @@ namespace GovUk.Frontend.AspNetCore
                 {
                     attributeDictionary.Add(
                         attribute.Name,
-                        attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ? string.Empty : (attribute.Value ?? string.Empty).ToString());
+                        attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
+                            string.Empty :
+                            attribute.Value is HtmlString htmlString ? HttpUtility.HtmlDecode(htmlString.Value) :
+                            (attribute.Value ?? string.Empty).ToString());
                 }
             }
 
