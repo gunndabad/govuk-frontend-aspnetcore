@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var checkboxesContext = context.GetContextItem<CheckboxesContext>();
             checkboxesContext.OpenFieldset();
 
-            var fieldsetContext = new CheckboxesFieldsetContext(output.Attributes.ToAttributeDictionary());
+            var fieldsetContext = new CheckboxesFieldsetContext(output.Attributes.ToAttributeDictionary(), checkboxesContext.AspFor);
 
             using (context.SetScopedContextItem(fieldsetContext))
             {

@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var checkboxesContext = new CheckboxesContext(name: null, aspFor: null);
 
             checkboxesContext.OpenFieldset();
-            var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null);
+            var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
             checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
             checkboxesContext.CloseFieldset(checkboxesFieldsetContext);
 

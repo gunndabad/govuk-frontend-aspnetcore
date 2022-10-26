@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             context.OpenFieldset();
-            var fieldsetContext = new RadiosFieldsetContext(attributes: null);
+            var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
             context.CloseFieldset(fieldsetContext);
 
             // Act
@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new RadiosContext(name: null, aspFor: null);
 
             context.OpenFieldset();
-            context.CloseFieldset(new RadiosFieldsetContext(attributes: null));
+            context.CloseFieldset(new RadiosFieldsetContext(attributes: null, aspFor: null));
 
             // Act
             var ex = Record.Exception(() => context.OpenFieldset());
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new RadiosContext(name: null, aspFor: null);
 
             // Act
-            var ex = Record.Exception(() => context.CloseFieldset(new RadiosFieldsetContext(attributes: null)));
+            var ex = Record.Exception(() => context.CloseFieldset(new RadiosFieldsetContext(attributes: null, aspFor: null)));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -187,7 +187,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             context.OpenFieldset();
-            var fieldsetContext = new RadiosFieldsetContext(attributes: null);
+            var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
             context.CloseFieldset(fieldsetContext);
 
             // Act
@@ -234,7 +234,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             context.OpenFieldset();
-            var fieldsetContext = new RadiosFieldsetContext(attributes: null);
+            var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
             context.CloseFieldset(fieldsetContext);
 
             // Act

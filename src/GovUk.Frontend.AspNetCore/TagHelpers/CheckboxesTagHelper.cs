@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -97,11 +98,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (haveFieldset)
             {
+                var resolvedFieldsetLegendContent = ResolveFieldsetLegendContent(checkboxesContext.Fieldset!);
+
                 return Generator.GenerateFieldset(
                     DescribedBy,
                     role: null,
                     checkboxesContext.Fieldset!.Legend?.IsPageHeading,
-                    checkboxesContext.Fieldset.Legend?.Content,
+                    resolvedFieldsetLegendContent,
                     checkboxesContext.Fieldset.Legend?.Attributes,
                     content: contentBuilder,
                     checkboxesContext.Fieldset.Attributes);

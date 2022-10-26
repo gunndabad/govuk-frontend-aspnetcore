@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var radiosContext = new RadiosContext(name: null, aspFor: null);
 
             radiosContext.OpenFieldset();
-            var radiosFieldsetContext = new RadiosFieldsetContext(attributes: null);
+            var radiosFieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
             radiosFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
             radiosContext.CloseFieldset(radiosFieldsetContext);
 

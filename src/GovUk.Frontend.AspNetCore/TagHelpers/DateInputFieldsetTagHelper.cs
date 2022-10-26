@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var dateInputContext = context.GetContextItem<DateInputContext>();
             dateInputContext.OpenFieldset();
 
-            var fieldsetContext = new DateInputFieldsetContext(output.Attributes.ToAttributeDictionary());
+            var fieldsetContext = new DateInputFieldsetContext(output.Attributes.ToAttributeDictionary(), dateInputContext.AspFor);
 
             using (context.SetScopedContextItem(fieldsetContext))
             {

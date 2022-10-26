@@ -15,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_AddsFieldsetToContext()
         {
             // Arrange
-            var dateInputContext = new DateInputContext(haveExplicitValue: false);
+            var dateInputContext = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-date-input-fieldset",
@@ -52,10 +52,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ParentAlreadyHasFieldset_ThrowsInvalidOperationException()
         {
             // Arrange
-            var dateInputContext = new DateInputContext(haveExplicitValue: false);
+            var dateInputContext = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
             dateInputContext.OpenFieldset();
-            var checkboxesFieldsetContext = new DateInputFieldsetContext(attributes: null);
+            var checkboxesFieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
             checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
             dateInputContext.CloseFieldset(checkboxesFieldsetContext);
 

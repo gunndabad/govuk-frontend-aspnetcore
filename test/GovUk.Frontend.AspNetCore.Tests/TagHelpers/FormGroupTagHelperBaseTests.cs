@@ -596,6 +596,133 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Contains("Context label", label.RenderToString());
         }
 
+        [Fact]
+        public void ResolveFieldsetLegendContent_ContextHasContent_ReturnsContextContent()
+        {
+            // Arrange
+            ModelExpression aspFor = null;
+
+            var modelHelper = new Mock<IModelHelper>();
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                Id = "test",
+                AspFor = aspFor
+            };
+
+            var fieldsetContext = new TestFormGroupFieldsetContext(
+                fieldsetTagName: "test-fieldset",
+                legendTagName: "test-fieldset-legend",
+                attributes: new AttributeDictionary(),
+                aspFor);
+
+            fieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Context name"));
+
+            // Act
+            var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
+
+            // Assert
+            Assert.Equal("Context name", result.RenderToString());
+        }
+
+        [Fact]
+        public void ResolveFieldsetLegendContent_ContextDoesNotHaveContentButAspForIsSpecified_ReturnsModelMetadataDisplayName()
+        {
+            // Arrange
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.SimpleProperty);
+
+            var modelHelper = new Mock<IModelHelper>();
+            modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata name");
+
+            var aspFor = new ModelExpression(modelExpression, modelExplorer);
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                AspFor = aspFor,
+                Id = "test",
+                ViewContext = viewContext
+            };
+
+            var fieldsetContext = new TestFormGroupFieldsetContext(
+                fieldsetTagName: "test-fieldset",
+                legendTagName: "test-fieldset-legend",
+                attributes: new AttributeDictionary(),
+                aspFor);
+
+            // Act
+            var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
+
+            // Assert
+            Assert.Equal("ModelMetadata name", result.RenderToString());
+        }
+
+        [Fact]
+        public void ResolveFieldsetLegendContent_ContextHasBothContentAndAspForIsSpecified_ReturnsContextContent()
+        {
+            // Arrange
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+                .GetExplorerForProperty(nameof(Model.SimpleProperty));
+            var viewContext = new ViewContext();
+            var modelExpression = nameof(Model.SimpleProperty);
+
+            var modelHelper = new Mock<IModelHelper>();
+            modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata name");
+
+            var aspFor = new ModelExpression(modelExpression, modelExplorer);
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                AspFor = aspFor,
+                Id = "test",
+                ViewContext = viewContext
+            };
+
+            var fieldsetContext = new TestFormGroupFieldsetContext(
+                fieldsetTagName: "test-fieldset",
+                legendTagName: "test-fieldset-legend",
+                attributes: new AttributeDictionary(),
+                aspFor);
+
+            fieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Context name"));
+
+            // Act
+            var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
+
+            // Assert
+            Assert.Equal("Context name", result.RenderToString());
+        }
+
+        [Fact]
+        public void ResolveFieldsetLegendContent_ContextHasNoContentAndAspForNotIsSpecified_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            ModelExpression aspFor = null;
+
+            var modelHelper = new Mock<IModelHelper>();
+
+            var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
+            {
+                Id = "test",
+                AspFor = aspFor
+            };
+
+            var fieldsetContext = new TestFormGroupFieldsetContext(
+                fieldsetTagName: "test-fieldset",
+                legendTagName: "test-fieldset-legend",
+                attributes: new AttributeDictionary(),
+                aspFor);
+
+            // Act
+            var ex = Record.Exception(() => tagHelper.ResolveFieldsetLegendContent(fieldsetContext));
+
+            // Assert
+            Assert.IsType<InvalidOperationException>(ex);
+            Assert.Equal("Fieldset legend content must be specified the 'asp-for' attribute is not specified.", ex.Message);
+        }
+
         private class Model
         {
             public string SimpleProperty { get; set; }
@@ -655,6 +782,18 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             protected override string LabelTagName => "test-label";
 
             protected override string RootTagName => "test";
+        }
+
+        private class TestFormGroupFieldsetContext : FormGroupFieldsetContext
+        {
+            public TestFormGroupFieldsetContext(
+                string fieldsetTagName,
+                string legendTagName,
+                AttributeDictionary attributes,
+                ModelExpression aspFor)
+                : base(fieldsetTagName, legendTagName, attributes, aspFor)
+            {
+            }
         }
     }
 }

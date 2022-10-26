@@ -110,7 +110,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        private protected override FormGroupContext CreateFormGroupContext() => new DateInputContext(haveExplicitValue: _valueSpecified);
+        private protected override FormGroupContext CreateFormGroupContext() =>
+            new DateInputContext(haveExplicitValue: _valueSpecified, AspFor);
 
         private protected override IHtmlContent GenerateFormGroupContent(
             TagHelperContext tagHelperContext,
@@ -142,11 +143,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (dateInputContext.Fieldset != null)
             {
+                var resolvedFieldsetLegendContent = ResolveFieldsetLegendContent(dateInputContext.Fieldset!);
+
                 return Generator.GenerateFieldset(
                     DescribedBy,
                     role: "group",
                     dateInputContext.Fieldset.Legend?.IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
-                    legendContent: dateInputContext.Fieldset.Legend?.Content,
+                    legendContent: resolvedFieldsetLegendContent,
                     legendAttributes: dateInputContext.Fieldset.Legend?.Attributes,
                     content: contentBuilder,
                     attributes: dateInputContext.Fieldset.Attributes);

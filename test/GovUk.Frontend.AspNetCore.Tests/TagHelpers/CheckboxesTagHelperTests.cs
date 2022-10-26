@@ -336,7 +336,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var checkboxesContext = context.GetContextItem<CheckboxesContext>();
 
                     checkboxesContext.OpenFieldset();
-                    var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null);
+                    var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
                     checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
 
                     checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));

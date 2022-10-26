@@ -214,6 +214,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
         }
 
+        internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
+        {
+            var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
+                (AspFor is not null ? new HtmlString(ModelHelper.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name)) : null);
+
+            if (resolvedFieldsetLegendContent is null)
+            {
+                throw new InvalidOperationException(
+                    $"Fieldset legend content must be specified the '{AspForAttributeName}' attribute is not specified.");
+            }
+
+            return resolvedFieldsetLegendContent;
+        }
+
         private protected abstract FormGroupContext CreateFormGroupContext();
 
         private protected abstract IHtmlContent GenerateFormGroupContent(

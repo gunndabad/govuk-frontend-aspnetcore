@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var radiosContext = context.GetContextItem<RadiosContext>();
             radiosContext.OpenFieldset();
 
-            var fieldsetContext = new RadiosFieldsetContext(output.Attributes.ToAttributeDictionary());
+            var fieldsetContext = new RadiosFieldsetContext(output.Attributes.ToAttributeDictionary(), radiosContext.AspFor);
 
             using (context.SetScopedContextItem(fieldsetContext))
             {

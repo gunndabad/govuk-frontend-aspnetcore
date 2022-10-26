@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_SetsErrorMessageAndErrorComponentsOnContext()
         {
             // Arrange
-            var dateInputContext = new DateInputContext(haveExplicitValue: false);
+            var dateInputContext = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-date-input-error-message",

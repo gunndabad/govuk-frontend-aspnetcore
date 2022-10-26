@@ -8,25 +8,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         private readonly string _fieldsetTagName;
         private readonly string _legendTagName;
+        private readonly ModelExpression? _aspFor;
 
         protected FormGroupFieldsetContext(
             string fieldsetTagName,
             string legendTagName,
-            AttributeDictionary? attributes)
+            AttributeDictionary? attributes,
+            ModelExpression? aspFor)
         {
             _fieldsetTagName = Guard.ArgumentNotNull(nameof(fieldsetTagName), fieldsetTagName);
             _legendTagName = Guard.ArgumentNotNull(nameof(legendTagName), legendTagName);
             Attributes = attributes;
+            _aspFor = aspFor;
         }
 
         public AttributeDictionary? Attributes { get; private set; }
 
-        public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
+        public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent? Content)? Legend { get; private set; }
 
-        public virtual void SetLegend(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent content)
+        public virtual void SetLegend(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
         {
-            Guard.ArgumentNotNull(nameof(content), content);
-
             if (Legend != null)
             {
                 throw ExceptionHelper.OnlyOneElementIsPermittedIn(_legendTagName, _fieldsetTagName);
@@ -37,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void ThrowIfNotComplete()
         {
-            if (Legend == null)
+            if (Legend == null && _aspFor is null)
             {
                 throw ExceptionHelper.AChildElementMustBeProvided(_legendTagName);
             }

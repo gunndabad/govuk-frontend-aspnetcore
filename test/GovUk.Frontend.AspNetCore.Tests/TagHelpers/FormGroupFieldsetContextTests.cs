@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetLegend_SetsLegendOnContext()
         {
             // Arrange
-            var context = new TestContext(attributes: null);
+            var context = new TestContext(attributes: null, aspFor: null);
 
             // Act
             context.SetLegend(isPageHeading: true, null, new HtmlString("Legend"));
@@ -27,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void SetLegend_AlreadySet_ThrowsInvalidOperationException()
         {
             // Arrange
-            var context = new TestContext(attributes: null);
+            var context = new TestContext(attributes: null, aspFor: null);
 
             context.SetLegend(false, null, new HtmlString("Existing legend"));
 
@@ -41,8 +41,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class TestContext : FormGroupFieldsetContext
         {
-            public TestContext(AttributeDictionary attributes) :
-                base(fieldsetTagName: "test-fieldset", legendTagName : "test-fieldset-legend", attributes)
+            public TestContext(AttributeDictionary attributes, ModelExpression aspFor) :
+                base(fieldsetTagName: "test-fieldset", legendTagName : "test-fieldset-legend", attributes, aspFor)
             {
             }
         }

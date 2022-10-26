@@ -15,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_AddsLegendToContext()
         {
             // Arrange
-            var fieldsetContext = new RadiosFieldsetContext(attributes: null);
+            var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
 
             var context = new TagHelperContext(
                 tagName: "govuk-radios-fieldset-legend",
@@ -53,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public async Task ProcessAsync_ParentAlreadyHasLegend_ThrowsInvalidOperationException()
         {
             // Arrange
-            var fieldsetContext = new RadiosFieldsetContext(attributes: null);
+            var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
 
             fieldsetContext.SetLegend(
                 isPageHeading: false,

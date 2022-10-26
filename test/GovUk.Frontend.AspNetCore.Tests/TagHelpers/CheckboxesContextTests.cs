@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             context.OpenFieldset();
-            var fieldsetContext = new CheckboxesFieldsetContext(attributes: null);
+            var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
             context.CloseFieldset(fieldsetContext);
 
             // Act
@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new CheckboxesContext(name: null, aspFor: null);
 
             context.OpenFieldset();
-            context.CloseFieldset(new CheckboxesFieldsetContext(attributes: null));
+            context.CloseFieldset(new CheckboxesFieldsetContext(attributes: null, aspFor: null));
 
             // Act
             var ex = Record.Exception(() => context.OpenFieldset());
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new CheckboxesContext(name: null, aspFor: null);
 
             // Act
-            var ex = Record.Exception(() => context.CloseFieldset(new CheckboxesFieldsetContext(attributes: null)));
+            var ex = Record.Exception(() => context.CloseFieldset(new CheckboxesFieldsetContext(attributes: null, aspFor: null)));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -187,7 +187,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             context.OpenFieldset();
-            var fieldsetContext = new CheckboxesFieldsetContext(attributes: null);
+            var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
             context.CloseFieldset(fieldsetContext);
 
             // Act
@@ -234,7 +234,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             context.OpenFieldset();
-            var fieldsetContext = new CheckboxesFieldsetContext(attributes: null);
+            var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
             context.CloseFieldset(fieldsetContext);
 
             // Act

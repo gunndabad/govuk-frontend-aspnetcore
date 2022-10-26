@@ -98,11 +98,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             if (haveFieldset)
             {
+                var resolvedFieldsetLegendContent = ResolveFieldsetLegendContent(radiosContext.Fieldset!);
+
                 return Generator.GenerateFieldset(
                     DescribedBy,
                     role: null,
                     radiosContext.Fieldset!.Legend?.IsPageHeading,
-                    radiosContext.Fieldset.Legend?.Content,
+                    resolvedFieldsetLegendContent,
                     radiosContext.Fieldset.Legend?.Attributes,
                     content: contentBuilder,
                     radiosContext.Fieldset.Attributes);

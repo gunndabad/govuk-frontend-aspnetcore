@@ -20,11 +20,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private readonly SortedDictionary<DateInputItemType, DateInputContextItem> _items;
         private readonly bool _haveValue;
 
-        public DateInputContext(bool haveExplicitValue)
+        public DateInputContext(bool haveExplicitValue, ModelExpression? aspFor)
         {
             _items = new SortedDictionary<DateInputItemType, DateInputContextItem>();
             _haveValue = haveExplicitValue;
+            AspFor = aspFor;
         }
+
+        public ModelExpression? AspFor { get; }
 
         public DateInputFieldsetContext? Fieldset { get; private set; }
 

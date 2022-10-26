@@ -221,7 +221,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var dateInputContext = context.GetContextItem<DateInputContext>();
 
                     dateInputContext.OpenFieldset();
-                    var dateInputFieldsetContext = new DateInputFieldsetContext(attributes: null);
+                    var dateInputFieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
                     dateInputFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
 
                     dateInputContext.CloseFieldset(dateInputFieldsetContext);

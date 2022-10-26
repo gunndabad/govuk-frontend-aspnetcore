@@ -5,8 +5,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class CheckboxesFieldsetContext : FormGroupFieldsetContext
     {
-        public CheckboxesFieldsetContext(AttributeDictionary? attributes) :
-            base(CheckboxesFieldsetTagHelper.TagName, CheckboxesFieldsetLegendTagHelper.TagName, attributes)
+        public CheckboxesFieldsetContext(AttributeDictionary? attributes, ModelExpression? aspFor) :
+            base(CheckboxesFieldsetTagHelper.TagName, CheckboxesFieldsetLegendTagHelper.TagName, attributes, aspFor)
         {
         }
     }

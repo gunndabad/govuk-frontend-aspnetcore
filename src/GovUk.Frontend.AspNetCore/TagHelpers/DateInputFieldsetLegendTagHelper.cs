@@ -30,9 +30,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var fieldsetContext = context.GetContextItem<DateInputFieldsetContext>();
 
-            var content = await output.GetChildContentAsync();
+            var content = output.TagMode == TagMode.StartTagAndEndTag ?
+                (await output.GetChildContentAsync()).Snapshot() :
+                null;
 
-            fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content.Snapshot());
+            fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content);
 
             output.SuppressOutput();
         }
