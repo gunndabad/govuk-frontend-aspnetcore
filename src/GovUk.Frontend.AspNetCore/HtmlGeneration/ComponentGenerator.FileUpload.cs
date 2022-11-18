@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.Attributes.Add("name", name);
             tagBuilder.Attributes.Add("type", "file");
 
-            if (describedBy != null)
+            if (!string.IsNullOrEmpty(describedBy))
             {
                 tagBuilder.Attributes.Add("aria-describedby", describedBy);
             }

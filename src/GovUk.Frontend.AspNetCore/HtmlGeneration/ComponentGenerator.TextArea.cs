@@ -39,12 +39,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.Attributes.Add("name", name);
             tagBuilder.Attributes.Add("rows", rows.ToString());
 
-            if (describedBy != null)
+            if (!string.IsNullOrEmpty(describedBy))
             {
                 tagBuilder.Attributes.Add("aria-describedby", describedBy);
             }
 
-            if (autocomplete != null)
+            if (!string.IsNullOrEmpty(autocomplete))
             {
                 tagBuilder.Attributes.Add("autocomplete", autocomplete);
             }
