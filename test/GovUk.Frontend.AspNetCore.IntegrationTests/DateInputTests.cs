@@ -247,7 +247,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
     {
         [Display(Name = "Date of birth")]
         [Required(ErrorMessage = "Enter your date of birth")]
-        public Date? Date { get; set; }
+        public DateOnly? Date { get; set; }
 
         [Display(Name = "Date of birth")]
         [Required(ErrorMessage = "Enter your date of birth")]
@@ -272,9 +272,9 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
     {
         public override bool CanConvertModelType(Type modelType) => modelType == typeof(CustomDateType);
 
-        public override object CreateModelFromDate(Type modelType, Date date) => new CustomDateType(date.Year, date.Month, date.Day);
+        public override object CreateModelFromDate(Type modelType, DateOnly date) => new CustomDateType(date.Year, date.Month, date.Day);
 
-        public override Date? GetDateFromModel(Type modelType, object model)
+        public override DateOnly? GetDateFromModel(Type modelType, object model)
         {
             if (model is null)
             {
@@ -282,7 +282,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             }
 
             var cdt = (CustomDateType)model;
-            return new Date(cdt.Y, cdt.M, cdt.D);
+            return new DateOnly(cdt.Y, cdt.M, cdt.D);
         }
     }
 }

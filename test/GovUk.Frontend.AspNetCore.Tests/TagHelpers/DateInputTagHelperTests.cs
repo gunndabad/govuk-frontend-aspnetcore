@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -95,7 +95,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new Date(2020, 4, 1) })
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
                 .GetExplorerForProperty(nameof(Model.Date));
 
             var viewContext = new ViewContext();
@@ -158,7 +158,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new Date(2020, 4, 1) })
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
                 .GetExplorerForProperty(nameof(Model.Date));
 
             var viewContext = new ViewContext();
@@ -169,7 +169,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Id = "my-id",
                 NamePrefix = "my-name",
                 ViewContext = viewContext,
-                Value = new Date(2022, 5, 3)
+                Value = new DateOnly(2022, 5, 3)
             };
 
             // Act
@@ -235,7 +235,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 DescribedBy = "describedby",
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -372,7 +372,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -433,7 +433,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -495,7 +495,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -560,7 +560,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -604,7 +604,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -646,7 +646,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -853,7 +853,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Id = "my-id",
                 DescribedBy = "describedby",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -921,7 +921,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new Date(2020, 4, 1) })
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
                 .GetExplorerForProperty(nameof(Model.Date));
 
             var viewContext = new ViewContext();
@@ -989,7 +989,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
                 });
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new Date(2020, 4, 1) })
+            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
                 .GetExplorerForProperty(nameof(Model.Date));
 
             var viewContext = new ViewContext();
@@ -1069,7 +1069,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Id = "my-id",
                 DescribedBy = "describedby",
                 NamePrefix = "my-name",
-                Value = new Date(2020, 4, 1)
+                Value = new DateOnly(2020, 4, 1)
             };
 
             // Act
@@ -1098,7 +1098,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public Date? Date { get; set; }
+            public DateOnly? Date { get; set; }
             public CustomDateType? CustomDate { get; set; }
         }
 
@@ -1120,9 +1120,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             public override bool CanConvertModelType(Type modelType) => modelType == typeof(CustomDateType);
 
-            public override object CreateModelFromDate(Type modelType, Date date) => new CustomDateType(date.Year, date.Month, date.Day);
+            public override object CreateModelFromDate(Type modelType, DateOnly date) => new CustomDateType(date.Year, date.Month, date.Day);
 
-            public override Date? GetDateFromModel(Type modelType, object model)
+            public override DateOnly? GetDateFromModel(Type modelType, object model)
             {
                 if (model is null)
                 {
@@ -1130,7 +1130,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 }
 
                 var cdt = (CustomDateType)model;
-                return new Date(cdt.Y, cdt.M, cdt.D);
+                return new DateOnly(cdt.Y, cdt.M, cdt.D);
             }
         }
     }

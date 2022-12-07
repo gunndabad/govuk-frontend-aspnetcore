@@ -21,7 +21,8 @@ namespace GovUk.Frontend.AspNetCore
             DateInputModelConverters = new List<DateInputModelConverter>()
             {
                 new DateDateInputModelConverter(),
-                new DateTimeDateInputModelConverter()
+                new DateTimeDateInputModelConverter(),
+                new DateOnlyDateInputModelConverter()
             };
 
             PrependErrorSummaryToForms = true;

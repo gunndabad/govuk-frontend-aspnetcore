@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
         {
             Guard.ArgumentNotNull(nameof(bindingContext), bindingContext);
 
-            var modelType = bindingContext.ModelType;
+            var modelType = bindingContext.ModelMetadata.UnderlyingOrModelType;
             if (!_dateInputModelConverter.CanConvertModelType(modelType))
             {
                 throw new InvalidOperationException($"Cannot bind {modelType.Name}.");
@@ -118,7 +118,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
         }
 
         // internal for testing
-        internal static DateInputParseErrors Parse(string? day, string? month, string? year, out Date? date)
+        internal static DateInputParseErrors Parse(string? day, string? month, string? year, out DateOnly? date)
         {
             day ??= string.Empty;
             month ??= string.Empty;

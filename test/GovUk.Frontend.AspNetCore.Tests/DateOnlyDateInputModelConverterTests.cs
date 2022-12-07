@@ -1,10 +1,9 @@
-#pragma warning disable CS0618 // Type or member is obsolete
 using System;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests
 {
-    public class DateDateInputModelConverterTests
+    public class DateOnlyDateInputModelConverterTests
     {
         [Theory]
         [MemberData(nameof(CreateDateFromElementsData))]
@@ -14,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
             object expectedResult)
         {
             // Arrange
-            var converter = new DateDateInputModelConverter();
+            var converter = new DateOnlyDateInputModelConverter();
 
             // Act
             var result = converter.CreateModelFromDate(modelType, date);
@@ -31,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
            DateOnly? expectedResult)
         {
             // Arrange
-            var converter = new DateDateInputModelConverter();
+            var converter = new DateOnlyDateInputModelConverter();
 
             // Act
             var result = converter.GetDateFromModel(modelType, model);
@@ -42,14 +41,14 @@ namespace GovUk.Frontend.AspNetCore.Tests
 
         public static TheoryData<Type, DateOnly?, object> CreateDateFromElementsData { get; } = new()
         {
-            { typeof(Date), new DateOnly(2020, 4, 1), new Date(2020, 4, 1) },
-            { typeof(Date?), new DateOnly(2020, 4, 1), (Date?)new Date(2020, 4, 1) }
+            { typeof(DateOnly), new DateOnly(2020, 4, 1), new DateOnly(2020, 4, 1) },
+            { typeof(DateOnly?), new DateOnly(2020, 4, 1), (DateOnly?)new DateOnly(2020, 4, 1) }
         };
 
         public static TheoryData<Type, object, DateOnly?> GetDateFromModelData { get; } = new()
         {
-            { typeof(Date), new Date(2020, 4, 1), new DateOnly(2020, 4, 1) },
-            { typeof(Date?), (Date?)new Date(2020, 4, 1), new Date(2020, 4, 1) },
+            { typeof(DateOnly), new DateOnly(2020, 4, 1), new DateOnly(2020, 4, 1) },
+            { typeof(DateOnly?), (DateOnly?)new DateOnly(2020, 4, 1), new DateOnly(2020, 4, 1) },
         };
     }
 }
