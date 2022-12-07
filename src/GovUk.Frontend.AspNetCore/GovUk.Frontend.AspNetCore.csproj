@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <Copyright>Copyright © 2020 James Gunn</Copyright>
+    <Copyright>Copyright © James Gunn</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</RepositoryUrl>
