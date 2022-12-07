@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(items), items);
 
             var tagBuilder = new TagBuilder(BreadcrumbsElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-breadcrumbs");
 
             if (collapseOnMobile)
@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 }
 
                 var li = new TagBuilder(BreadcrumbsItemElement);
-                li.MergeAttributes(item.Attributes);
+                li.MergeOptionalAttributes(item.Attributes);
                 li.MergeCssClass("govuk-breadcrumbs__list-item");
 
                 IHtmlContent itemContent;
@@ -51,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (item.Href != null)
                 {
                     var itemLink = new TagBuilder("a");
-                    itemLink.MergeAttributes(item.LinkAttributes);
+                    itemLink.MergeOptionalAttributes(item.LinkAttributes);
                     itemLink.MergeCssClass("govuk-breadcrumbs__link");
                     itemLink.Attributes.Add("href", item.Href);
                     itemLink.InnerHtml.AppendHtml(item.Content);

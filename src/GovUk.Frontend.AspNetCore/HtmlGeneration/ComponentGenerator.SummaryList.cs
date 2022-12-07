@@ -21,43 +21,43 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         {
             Guard.ArgumentNotNull(nameof(rows), rows);
 
-            var anyRowHasActions = rows.Any(r => r.Actions?.Items.Any() == true);
+            var anyRowHasActions = rows.Any(r => r.Actions?.Items?.Any() == true);
 
             var tagBuilder = new TagBuilder(SummaryListElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-summary-list");
 
-            var index = 0;
+            var rowIndex = 0;
             foreach (var row in rows)
             {
                 Guard.ArgumentValidNotNull(
                     nameof(rows),
-                    $"Row {index} is not valid; {nameof(SummaryListRow.Key)} cannot be null.",
+                    $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Key)} cannot be null.",
                     row.Key,
                     row.Key != null);
 
                 Guard.ArgumentValidNotNull(
                     nameof(rows),
-                    $"Row {index} is not valid; {nameof(SummaryListRow.Key)}.{nameof(SummaryListRow.Key.Content)} cannot be null.",
+                    $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Key)}.{nameof(SummaryListRow.Key.Content)} cannot be null.",
                     row.Key.Content,
                     row.Key.Content != null);
 
                 Guard.ArgumentValidNotNull(
                     nameof(rows),
-                    $"Row {index} is not valid; {nameof(SummaryListRow.Value)} cannot be null.",
+                    $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Value)} cannot be null.",
                     row.Value,
                     row.Value != null);
 
                 Guard.ArgumentValidNotNull(
                     nameof(rows),
-                    $"Row {index} is not valid; {nameof(SummaryListRow.Value)}.{nameof(SummaryListRow.Value.Content)} cannot be null.",
+                    $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Value)}.{nameof(SummaryListRow.Value.Content)} cannot be null.",
                     row.Value.Content,
                     row.Value.Content != null);
 
-                var thisRowHasActions = row.Actions?.Items.Any() == true;
+                var thisRowHasActions = row.Actions?.Items?.Any() == true;
 
                 var rowTagBuilder = new TagBuilder(SummaryListRowElement);
-                rowTagBuilder.MergeAttributes(row.Attributes);
+                rowTagBuilder.MergeOptionalAttributes(row.Attributes);
                 rowTagBuilder.MergeCssClass("govuk-summary-list__row");
 
                 if (anyRowHasActions && !thisRowHasActions)
@@ -66,7 +66,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 }
 
                 var dt = new TagBuilder(SummaryListRowKeyElement);
-                dt.MergeAttributes(row.Key.Attributes);
+                dt.MergeOptionalAttributes(row.Key.Attributes);
                 dt.MergeCssClass("govuk-summary-list__key");
                 dt.InnerHtml.AppendHtml(row.Key.Content);
                 rowTagBuilder.InnerHtml.AppendHtml(dt);
@@ -74,7 +74,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (row.Value is not null)
                 {
                     var dd = new TagBuilder(SummaryListRowValueElement);
-                    dd.MergeAttributes(row.Value.Attributes);
+                    dd.MergeOptionalAttributes(row.Value.Attributes);
                     dd.MergeCssClass("govuk-summary-list__value");
                     dd.InnerHtml.AppendHtml(row.Value.Content);
                     rowTagBuilder.InnerHtml.AppendHtml(dd);
@@ -83,12 +83,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (thisRowHasActions)
                 {
                     var actionsDd = new TagBuilder(SummaryListRowActionsElement);
-                    actionsDd.MergeAttributes(row.Actions!.Attributes);
+                    actionsDd.MergeOptionalAttributes(row.Actions!.Attributes);
                     actionsDd.MergeCssClass("govuk-summary-list__actions");
 
-                    if (row.Actions.Items.Count() == 1)
+                    if (row.Actions.Items!.Count == 1)
                     {
-                        actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Items.Single()));
+                        actionsDd.InnerHtml.AppendHtml(GenerateLink(row.Actions.Items![0], rowIndex));
                     }
                     else
                     {
@@ -99,7 +99,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                         {
                             var li = new TagBuilder("li");
                             li.MergeCssClass("govuk-summary-list__actions-list-item");
-                            li.InnerHtml.AppendHtml(GenerateLink(action));
+                            li.InnerHtml.AppendHtml(GenerateLink(action, rowIndex));
 
                             ul.InnerHtml.AppendHtml(li);
                         }
@@ -112,15 +112,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 tagBuilder.InnerHtml.AppendHtml(rowTagBuilder);
 
-                index++;
+                rowIndex++;
             }
 
             return tagBuilder;
 
-            static TagBuilder GenerateLink(SummaryListRowAction action)
+            static TagBuilder GenerateLink(SummaryListRowAction action, int rowIndex)
             {
+                Guard.ArgumentValidNotNull(
+                    nameof(rows),
+                    $"Row {rowIndex} is not valid; {nameof(SummaryListRowAction.Content)} cannot be null.",
+                    action.Content,
+                    action.Content != null);
+
                 var anchor = new TagBuilder(SummaryListRowActionElement);
-                anchor.MergeAttributes(action.Attributes);
+                anchor.MergeOptionalAttributes(action.Attributes);
                 anchor.MergeCssClass("govuk-link");
                 anchor.InnerHtml.AppendHtml(action.Content);
 

@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(id), type);
 
             var tagBuilder = new TagBuilder(InputElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-input");
 
             if (haveError)
@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (prefixContent != null)
                 {
                     var prefix = new TagBuilder(InputPrefixElement);
-                    prefix.MergeAttributes(prefixAttributes);
+                    prefix.MergeOptionalAttributes(prefixAttributes);
                     prefix.MergeCssClass("govuk-input__prefix");
                     prefix.Attributes.Add("aria-hidden", "true");
                     prefix.InnerHtml.AppendHtml(prefixContent);
@@ -104,7 +104,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (suffixContent != null)
                 {
                     var suffix = new TagBuilder(InputSuffixElement);
-                    suffix.MergeAttributes(suffixAttributes);
+                    suffix.MergeOptionalAttributes(suffixAttributes);
                     suffix.MergeCssClass("govuk-input__suffix");
                     suffix.Attributes.Add("aria-hidden", "true");
                     suffix.InnerHtml.AppendHtml(suffixContent);

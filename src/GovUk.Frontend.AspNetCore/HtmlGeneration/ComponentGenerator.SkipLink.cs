@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(SkipLinkElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-skip-link");
             tagBuilder.Attributes.Add("href", href);
             tagBuilder.Attributes.Add("data-module", "govuk-skip-link");

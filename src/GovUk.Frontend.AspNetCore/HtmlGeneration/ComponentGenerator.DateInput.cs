@@ -27,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(year), year);
 
             var tagBuilder = new TagBuilder("div");
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.AddCssClass("govuk-date-input");
             tagBuilder.Attributes.Add("id", id);
 

@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(PhaseBannerElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-phase-banner");
 
             var contentTagBuilder = new TagBuilder("p");

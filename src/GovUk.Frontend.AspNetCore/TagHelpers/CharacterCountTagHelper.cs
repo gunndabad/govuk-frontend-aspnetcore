@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated count message hint element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = CountMessageAttributesPrefix)]
-        public IDictionary<string, string> CountMessageAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> CountMessageAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// Whether the <c>disabled</c> attribute should be added to the generated <c>textarea</c> element.
@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated form-group wrapper element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = FormGroupAttributesPrefix)]
-        public IDictionary<string, string> FormGroupAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> FormGroupAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// The <c>id</c> attribute for the generated <c>textarea</c> element.
@@ -160,7 +160,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated <c>textarea</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = TextareaAttributesPrefix)]
-        public IDictionary<string, string> TextAreaAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> TextAreaAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// The percentage value of the limit at which point the count message is displayed.

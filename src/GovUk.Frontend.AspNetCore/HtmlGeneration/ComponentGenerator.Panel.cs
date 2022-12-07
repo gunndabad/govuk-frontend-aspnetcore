@@ -29,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(titleContent), titleContent);
 
             var tagBuilder = new TagBuilder(PanelElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-panel");
             tagBuilder.MergeCssClass("govuk-panel--confirmation");
 

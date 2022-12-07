@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(TextAreaElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-textarea");
 
             if (haveError)

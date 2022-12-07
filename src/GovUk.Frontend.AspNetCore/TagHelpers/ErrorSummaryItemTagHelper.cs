@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated <c>a</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = LinkAttributesPrefix)]
-        public IDictionary<string, string>? LinkAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?>? LinkAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// Gets the <see cref="ViewContext"/> of the executing view.

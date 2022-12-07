@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(ButtonElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-button");
             tagBuilder.Attributes.Add("data-module", "govuk-button");
 
@@ -90,7 +90,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         {
             var icon = new TagBuilder("svg");
             icon.MergeCssClass("govuk-button__start-icon");
-            icon.MergeAttributes(new Dictionary<string, string>()
+            icon.MergeAttributes(new Dictionary<string, string?>()
             {
                 { "xmlns", "http://www.w3.org/2000/svg" },
                 { "width", "17.5" },
@@ -101,7 +101,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             });
 
             var path = new TagBuilder("path");
-            path.MergeAttributes(new Dictionary<string, string>()
+            path.MergeAttributes(new Dictionary<string, string?>()
             {
                 { "fill", "currentColor" },
                 { "d", "M0 0h13l20 20-20 20H0l20-20z" }

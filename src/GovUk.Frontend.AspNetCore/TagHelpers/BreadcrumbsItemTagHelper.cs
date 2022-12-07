@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes for the generated <c>a</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = LinkAttributesPrefix)]
-        public IDictionary<string, string> LinkAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> LinkAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

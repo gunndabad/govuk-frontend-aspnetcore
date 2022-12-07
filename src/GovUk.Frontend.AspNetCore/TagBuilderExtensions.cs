@@ -1,5 +1,6 @@
 #nullable enable
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -20,6 +21,14 @@ namespace GovUk.Frontend.AspNetCore
             Guard.ArgumentNotNull(nameof(tagBuilder), tagBuilder);
 
             tagBuilder.Attributes.MergeCssClass(value);
+        }
+
+        internal static void MergeOptionalAttributes(this TagBuilder tagBuilder, AttributeDictionary? attributes)
+        {
+            if (attributes is not null)
+            {
+                tagBuilder.MergeAttributes(attributes);
+            }
         }
     }
 }

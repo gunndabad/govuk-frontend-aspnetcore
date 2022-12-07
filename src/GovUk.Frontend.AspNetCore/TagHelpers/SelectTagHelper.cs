@@ -79,7 +79,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated <c>select</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string>? SelectAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?>? SelectAttributes { get; set; } = new Dictionary<string, string?>();
 
         private protected override FormGroupContext CreateFormGroupContext() => new SelectContext(AspFor);
 

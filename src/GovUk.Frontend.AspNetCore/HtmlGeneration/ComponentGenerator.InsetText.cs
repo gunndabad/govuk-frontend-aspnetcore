@@ -17,7 +17,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(InsetTextElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-inset-text");
 
             if (id != null)

@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(items), items);
 
             var tagBuilder = new TagBuilder("select");
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-select");
 
             if (haveError)
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     item.Content != null);
 
                 var option = new TagBuilder("option");
-                option.MergeAttributes(item.Attributes);
+                option.MergeOptionalAttributes(item.Attributes);
 
                 if (item.Value != null)
                 {

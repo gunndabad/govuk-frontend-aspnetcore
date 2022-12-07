@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(FieldsetElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-fieldset");
 
             if (role != null)
@@ -39,7 +39,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             if (legendContent != null)
             {
                 var legend = new TagBuilder(FieldsetLegendElement);
-                legend.MergeAttributes(legendAttributes);
+                legend.MergeOptionalAttributes(legendAttributes);
                 legend.MergeCssClass("govuk-fieldset__legend");
 
                 if (legendIsPageHeading == true)

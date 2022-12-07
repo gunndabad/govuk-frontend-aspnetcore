@@ -49,7 +49,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Install Playwright
-      run: pwsh ./test/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/netcoreapp3.1/playwright.ps1 install
+      run: pwsh ./test/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net6.0/playwright.ps1 install
 
     - name: Test
       run: |

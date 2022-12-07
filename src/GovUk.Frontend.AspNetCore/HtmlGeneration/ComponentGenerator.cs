@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
 
             var tagBuilder = new TagBuilder(FormGroupElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-form-group");
 
             if (haveError)

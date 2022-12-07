@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes for the container element that wraps the items.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = RadiosAttributesPrefix)]
-        public IDictionary<string, string>? RadiosAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?>? RadiosAttributes { get; set; } = new Dictionary<string, string?>();
 
         private protected override FormGroupContext CreateFormGroupContext() => new RadiosContext(Name, AspFor);
 

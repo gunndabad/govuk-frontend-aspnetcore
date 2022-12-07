@@ -57,15 +57,22 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             ul.MergeCssClass("govuk-list");
             ul.MergeCssClass("govuk-error-summary__list");
 
+            var itemIndex = 0;
             foreach (var item in items)
             {
+                Guard.ArgumentValidNotNull(
+                    nameof(items),
+                    $"Item {itemIndex} is not valid; {nameof(ErrorSummaryItem.Content)} cannot be null.",
+                    item.Content,
+                    item.Content != null);
+
                 var li = new TagBuilder("li");
-                li.MergeAttributes(item.Attributes);
+                li.MergeOptionalAttributes(item.Attributes);
 
                 if (item.Href != null)
                 {
                     var a = new TagBuilder("a");
-                    a.MergeAttributes(item.LinkAttributes);
+                    a.MergeOptionalAttributes(item.LinkAttributes);
                     a.MergeAttribute("href", item.Href);
                     a.InnerHtml.AppendHtml(item.Content);
 
@@ -77,6 +84,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 }
 
                 ul.InnerHtml.AppendHtml(li);
+
+                itemIndex++;
             }
 
             body.InnerHtml.AppendHtml(ul);

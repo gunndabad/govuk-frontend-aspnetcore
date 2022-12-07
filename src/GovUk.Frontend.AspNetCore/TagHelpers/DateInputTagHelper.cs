@@ -72,7 +72,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes for the container element that wraps the items.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = DateInputAttributesPrefix)]
-        public IDictionary<string, string>? DateInputAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?>? DateInputAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> elements.
@@ -272,7 +272,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 var resolvedItemHaveError = haveError && (errorItems & errorSource) != 0;
 
-                var resolvedAttributes = contextItem?.Attributes ?? new Dictionary<string, string>();
+                var resolvedAttributes = contextItem?.Attributes ?? new Dictionary<string, string?>();
                 if (!resolvedAttributes.ContainsKey("class"))
                 {
                     resolvedAttributes.Add("class", defaultClass);

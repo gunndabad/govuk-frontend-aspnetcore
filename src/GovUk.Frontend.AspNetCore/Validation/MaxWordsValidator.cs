@@ -38,7 +38,7 @@ namespace GovUk.Frontend.AspNetCore.Validation
         /// <param name="value">The value to validate.</param>
         /// <returns>A value indicating whether validation was successful.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="value"/> argument is null.</exception>
-        public bool IsValid(string value)
+        public bool IsValid(string? value)
         {
             if (value == null)
             {

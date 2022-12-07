@@ -29,7 +29,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             var isConditional = items.OfType<CheckboxesItem>().Any(i => i.Conditional != null);
 
             var tagBuilder = new TagBuilder(CheckboxesElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-checkboxes");
             tagBuilder.Attributes.Add("data-module", "govuk-checkboxes");
 
@@ -56,8 +56,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             void AddDivider(CheckboxesItemDivider divider)
             {
+                Guard.ArgumentValidNotNull(
+                    nameof(items),
+                    $"Item {itemIndex} is not valid; {nameof(CheckboxesItemDivider.Content)} cannot be null.",
+                    divider.Content,
+                    divider.Content != null);
+
                 var dividerTagBuilder = new TagBuilder(CheckboxesDividerItemElement);
-                dividerTagBuilder.MergeAttributes(divider.Attributes);
+                dividerTagBuilder.MergeOptionalAttributes(divider.Attributes);
                 dividerTagBuilder.MergeCssClass("govuk-checkboxes__divider");
                 dividerTagBuilder.InnerHtml.AppendHtml(divider.Content);
 
@@ -89,11 +95,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var itemName = item.Name ?? name;
 
                 var itemTagBuilder = new TagBuilder(CheckboxesItemElement);
-                itemTagBuilder.MergeAttributes(item.Attributes);
+                itemTagBuilder.MergeOptionalAttributes(item.Attributes);
                 itemTagBuilder.MergeCssClass("govuk-checkboxes__item");
 
                 var input = new TagBuilder("input");
-                input.MergeAttributes(item.InputAttributes);
+                input.MergeOptionalAttributes(item.InputAttributes);
                 input.TagRenderMode = TagRenderMode.SelfClosing;
                 input.MergeCssClass("govuk-checkboxes__input");
                 input.Attributes.Add("id", itemId);
@@ -136,8 +142,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 itemTagBuilder.InnerHtml.AppendHtml(input);
 
                 var label = GenerateLabel(itemId, isPageHeading: false, content: item.LabelContent, item.LabelAttributes);
-                label?.MergeCssClass("govuk-checkboxes__label");
-                itemTagBuilder.InnerHtml.AppendHtml(label);
+                if (label != null)
+                {
+                    label.MergeCssClass("govuk-checkboxes__label");
+                    itemTagBuilder.InnerHtml.AppendHtml(label);
+                }
 
                 if (item.Hint != null)
                 {
@@ -156,8 +165,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 if (item.Conditional != null)
                 {
+                    Guard.ArgumentValidNotNull(
+                        nameof(items),
+                        $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Conditional.Content)} cannot be null.",
+                        item.Conditional.Content,
+                        item.Conditional.Content != null);
+
                     var conditional = new TagBuilder("div");
-                    conditional.MergeAttributes(item.Conditional.Attributes);
+                    conditional.MergeOptionalAttributes(item.Conditional.Attributes);
                     conditional.MergeCssClass("govuk-checkboxes__conditional");
 
                     if (!item.Checked)
