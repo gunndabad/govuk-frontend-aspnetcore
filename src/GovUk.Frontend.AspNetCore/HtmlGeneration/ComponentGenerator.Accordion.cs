@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNullOrEmpty(nameof(items), items);
 
             var tagBuilder = new TagBuilder(AccordionElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-accordion");
             tagBuilder.Attributes.Add("data-module", "govuk-accordion");
             tagBuilder.Attributes.Add("id", id);
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var idSuffix = index + 1;
 
                 var section = new TagBuilder(AccordionItemElement);
-                section.MergeAttributes(item.Attributes);
+                section.MergeOptionalAttributes(item.Attributes);
                 section.MergeCssClass("govuk-accordion__section");
 
                 if (item.Expanded)
@@ -70,7 +70,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 var headingId = $"{id}-heading-{idSuffix}";
                 var heading = new TagBuilder($"h{headingLevel}");
-                heading.MergeAttributes(item.HeadingAttributes);
+                heading.MergeOptionalAttributes(item.HeadingAttributes);
                 heading.MergeCssClass("govuk-accordion__section-heading");
                 var headingContent = new TagBuilder("span");
                 headingContent.MergeCssClass("govuk-accordion__section-button");
@@ -83,7 +83,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 {
                     var summaryId = $"{id}-summary-{idSuffix}";
                     var summary = new TagBuilder(AccordionItemSummaryElement);
-                    summary.MergeAttributes(item.SummaryAttributes);
+                    summary.MergeOptionalAttributes(item.SummaryAttributes);
                     summary.MergeCssClass("govuk-accordion__section-summary");
                     summary.MergeCssClass("govuk-body");
                     summary.Attributes.Add("id", summaryId);

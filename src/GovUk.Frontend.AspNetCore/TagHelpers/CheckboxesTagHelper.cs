@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes for the container element that wraps the items.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-        public IDictionary<string, string>? CheckboxesAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?>? CheckboxesAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// The prefix to use when generating IDs for the hint, error message and items.

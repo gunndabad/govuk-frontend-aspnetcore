@@ -92,7 +92,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated <c>textarea</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = TextareaAttributesPrefix)]
-        public IDictionary<string, string> TextAreaAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> TextAreaAttributes { get; set; } = new Dictionary<string, string?>();
 
         private protected override FormGroupContext CreateFormGroupContext() => new TextAreaContext();
 

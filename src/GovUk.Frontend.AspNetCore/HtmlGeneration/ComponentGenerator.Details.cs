@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             Guard.ArgumentNotNull(nameof(textContent), textContent);
 
             var tagBuilder = new TagBuilder(DetailsElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-details");
             tagBuilder.Attributes.Add("data-module", "govuk-details");
 
@@ -34,7 +34,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             }
 
             var summaryTagBuilder = new TagBuilder(DetailsSummaryElement);
-            summaryTagBuilder.MergeAttributes(summaryAttributes);
+            summaryTagBuilder.MergeOptionalAttributes(summaryAttributes);
             summaryTagBuilder.MergeCssClass("govuk-details__summary");
 
             var summaryTextTagBuilder = new TagBuilder("span");
@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.InnerHtml.AppendHtml(summaryTagBuilder);
 
             var textTagBuilder = new TagBuilder(DetailsTextElement);
-            textTagBuilder.MergeAttributes(textAttributes);
+            textTagBuilder.MergeOptionalAttributes(textAttributes);
             textTagBuilder.MergeCssClass("govuk-details__text");
             textTagBuilder.InnerHtml.AppendHtml(textContent);
             tagBuilder.InnerHtml.AppendHtml(textTagBuilder);

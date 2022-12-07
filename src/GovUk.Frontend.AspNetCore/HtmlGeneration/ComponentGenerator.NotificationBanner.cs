@@ -52,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             titleId ??= NotificationBannerDefaultTitleId;
 
             var tagBuilder = new TagBuilder(NotificationBannerElement);
-            tagBuilder.MergeAttributes(attributes);
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-notification-banner");
             tagBuilder.Attributes.Add("data-module", "govuk-notification-banner");
 

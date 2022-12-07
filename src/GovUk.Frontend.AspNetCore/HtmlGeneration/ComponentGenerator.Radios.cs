@@ -64,12 +64,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var conditionalId = "conditional-" + itemId;
 
                 var itemTagBuilder = new TagBuilder(RadiosItemElement);
-                itemTagBuilder.MergeAttributes(item.Attributes);
+                itemTagBuilder.MergeOptionalAttributes(item.Attributes);
                 itemTagBuilder.MergeCssClass("govuk-radios__item");
 
                 var input = new TagBuilder("input");
                 input.TagRenderMode = TagRenderMode.SelfClosing;
-                input.MergeAttributes(item.InputAttributes);
+                input.MergeOptionalAttributes(item.InputAttributes);
                 input.MergeCssClass("govuk-radios__input");
                 input.Attributes.Add("id", itemId);
                 input.Attributes.Add("name", name);
@@ -119,8 +119,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 if (item.Conditional != null)
                 {
+                    Guard.ArgumentValidNotNull(
+                        nameof(items),
+                        $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Conditional.Content)} cannot be null.",
+                        item.Conditional.Content,
+                        item.Conditional.Content != null);
+
                     var conditional = new TagBuilder("div");
-                    conditional.MergeAttributes(item.Conditional.Attributes);
+                    conditional.MergeOptionalAttributes(item.Conditional.Attributes);
                     conditional.MergeCssClass("govuk-radios__conditional");
 
                     if (!item.Checked)
@@ -138,8 +144,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             void AddDivider(RadiosItemDivider divider)
             {
+                Guard.ArgumentValidNotNull(
+                    nameof(items),
+                    $"Item {itemIndex} is not valid; {nameof(CheckboxesItemDivider.Content)} cannot be null.",
+                    divider.Content,
+                    divider.Content != null);
+
                 var dividerTagBuilder = new TagBuilder(RadiosDividerItemElement);
-                dividerTagBuilder.MergeAttributes(divider.Attributes);
+                dividerTagBuilder.MergeOptionalAttributes(divider.Attributes);
                 dividerTagBuilder.MergeCssClass("govuk-radios__divider");
                 dividerTagBuilder.InnerHtml.AppendHtml(divider.Content);
                 

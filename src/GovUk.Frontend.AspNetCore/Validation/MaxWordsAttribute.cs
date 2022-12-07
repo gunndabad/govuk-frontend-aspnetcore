@@ -24,7 +24,7 @@ namespace GovUk.Frontend.AspNetCore.Validation
         public int Words { get; }
 
         /// <inheritdoc/>
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             if (Words < 0)
             {
@@ -32,7 +32,7 @@ namespace GovUk.Frontend.AspNetCore.Validation
             }
 
             var validator = new MaxWordsValidator(Words);
-            return validator.IsValid((string)value);
+            return validator.IsValid((string?)value);
         }
     }
 }

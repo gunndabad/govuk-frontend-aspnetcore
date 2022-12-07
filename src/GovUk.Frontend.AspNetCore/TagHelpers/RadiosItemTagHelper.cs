@@ -66,13 +66,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// Additional attributes to add to the generated <c>input</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = InputAttributesPrefix)]
-        public IDictionary<string, string> InputAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> InputAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// Additional attributes to add to the generated <c>label</c> element.
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = LabelAttributesPrefix)]
-        public IDictionary<string, string> LabelAttributes { get; set; } = new Dictionary<string, string>();
+        public IDictionary<string, string?> LabelAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
         /// The <c>value</c> attribute for the item.
