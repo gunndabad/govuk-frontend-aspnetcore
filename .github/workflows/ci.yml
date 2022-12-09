@@ -52,11 +52,20 @@ jobs:
     - name: Install Playwright
       run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install
 
-    - name: Test
-      run: |
-        dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
-        dotnet test tests/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
-        dotnet test tests/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
+#    - name: Test
+#      run: |
+#        dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
+#        dotnet test tests/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
+#        dotnet test tests/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
+
+    - name: Check documentation images
+      run:
+        DOCS_ROOT=$(realpath docs/images) dotnet run --project src/GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
+
+        git diff --cached --quiet docs/images || (
+          echo "::error ::Documentation images are stale"
+          exit 1
+        )
 
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
