@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    public class DefaultModelHelper : IModelHelper
+    internal class DefaultModelHelper : IModelHelper
     {
         private delegate string GetFullHtmlFieldNameDelegate(ViewContext viewContext, string expression);
 
