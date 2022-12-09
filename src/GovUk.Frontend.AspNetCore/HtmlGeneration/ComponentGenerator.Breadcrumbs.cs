@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
         internal const string BreadcrumbsElement = "div";
         internal const bool BreadcrumbsDefaultCollapseOnMobile = false;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class ErrorSummaryItem
+    internal class ErrorSummaryItem
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }

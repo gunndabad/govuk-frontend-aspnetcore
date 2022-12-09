@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
         internal const bool NotificationBannerDefaultDisableAutoFocus = false;
         internal const string NotificationBannerDefaultRole = "region";

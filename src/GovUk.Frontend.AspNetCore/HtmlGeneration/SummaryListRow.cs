@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class SummaryListRow
+    internal class SummaryListRow
     {
         public SummaryListRowKey? Key { get; set; }
         public SummaryListRowValue? Value { get; set; }
@@ -12,26 +12,26 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public SummaryListRowActions? Actions { get; set; }
     }
 
-    public class SummaryListRowActions
+    internal class SummaryListRowActions
     {
         public IReadOnlyList<SummaryListRowAction>? Items { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class SummaryListRowAction
+    internal class SummaryListRowAction
     {
         public string? VisuallyHiddenText { get; set; }
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class SummaryListRowKey
+    internal class SummaryListRowKey
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class SummaryListRowValue
+    internal class SummaryListRowValue
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }

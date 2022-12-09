@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class CheckboxesItemBase
+    internal class CheckboxesItemBase
     {
         private protected CheckboxesItemBase() { }
 
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class CheckboxesItem : CheckboxesItemBase
+    internal class CheckboxesItem : CheckboxesItemBase
     {
         public string? Id { get; set; }
         public string? Name { get; set; }
@@ -25,19 +25,19 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public AttributeDictionary? InputAttributes { get; set; }
     }
 
-    public class CheckboxesItemConditional
+    internal class CheckboxesItemConditional
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class CheckboxesItemHint
+    internal class CheckboxesItemHint
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class CheckboxesItemDivider : CheckboxesItemBase
+    internal class CheckboxesItemDivider : CheckboxesItemBase
     {
         public IHtmlContent? Content { get; set; }
     }

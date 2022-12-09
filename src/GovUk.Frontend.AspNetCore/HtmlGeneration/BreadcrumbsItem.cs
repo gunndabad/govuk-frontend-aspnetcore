@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class BreadcrumbsItem
+    internal class BreadcrumbsItem
     {
         public string? Href { get; set; }
         public AttributeDictionary? LinkAttributes { get; set; }

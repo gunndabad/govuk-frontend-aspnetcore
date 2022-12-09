@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class AccordionItem
+    internal class AccordionItem
     {
         public bool Expanded { get; set; }
         public IHtmlContent? HeadingContent { get; set; }

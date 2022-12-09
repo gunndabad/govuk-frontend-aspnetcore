@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
         internal const int PanelDefaultHeadingLevel = 1;
         internal const string PanelElement = "div";

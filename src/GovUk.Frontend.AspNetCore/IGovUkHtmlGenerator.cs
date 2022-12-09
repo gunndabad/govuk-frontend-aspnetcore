@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    public interface IGovUkHtmlGenerator
+    internal interface IGovUkHtmlGenerator
     {
         TagBuilder GenerateAccordion(
             string id,

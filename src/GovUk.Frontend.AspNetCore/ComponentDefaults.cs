@@ -1,4 +1,3 @@
-#nullable disable
 namespace GovUk.Frontend.AspNetCore
 {
     public static class ComponentDefaults

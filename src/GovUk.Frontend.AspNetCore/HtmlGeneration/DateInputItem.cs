@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class DateInputItem
+    internal class DateInputItem
     {
         [DisallowNull]
         public string? Id { get; set; }

@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator : IGovUkHtmlGenerator
+    internal partial class ComponentGenerator : IGovUkHtmlGenerator
     {
         internal const string FormGroupElement = "div";
 

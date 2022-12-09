@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
         internal const string LabelElement = "label";
         internal const bool LabelDefaultIsPageHeading = false;

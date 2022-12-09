@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public class SelectItem
+    internal class SelectItem
     {
         public string? Value { get; set; }
         [DisallowNull]

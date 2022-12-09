@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
         internal const string ErrorSummaryDefaultTitle = "There is a problem";
         internal const bool ErrorSummaryDefaultDisableAutoFocus = false;

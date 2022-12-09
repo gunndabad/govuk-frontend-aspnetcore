@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -17,9 +18,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-        public TabsTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        public TabsTagHelper()
+            : this(htmlGenerator: null)
         {
-            _htmlGenerator = Guard.ArgumentNotNull(nameof(htmlGenerator), htmlGenerator);
+        }
+
+        internal TabsTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        {
+            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
         }
 
         [HtmlAttributeName(IdAttributeName)]

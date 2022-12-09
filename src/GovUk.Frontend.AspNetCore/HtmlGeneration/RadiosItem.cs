@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public abstract class RadiosItemBase
+    internal abstract class RadiosItemBase
     {
         private protected RadiosItemBase() { }
 
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class RadiosItem : RadiosItemBase
+    internal class RadiosItem : RadiosItemBase
     {
         public string? Id { get; set; }
         public string? Value { get; set; }
@@ -23,19 +23,19 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public AttributeDictionary? InputAttributes { get; set; }
     }
 
-    public class RadiosItemConditional
+    internal class RadiosItemConditional
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class RadiosItemHint
+    internal class RadiosItemHint
     {
         public IHtmlContent? Content { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 
-    public class RadiosItemDivider : RadiosItemBase
+    internal class RadiosItemDivider : RadiosItemBase
     {
         public IHtmlContent? Content { get; set; }
     }
