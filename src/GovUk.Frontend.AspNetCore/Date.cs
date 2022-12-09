@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace GovUk.Frontend.AspNetCore
@@ -6,10 +7,12 @@ namespace GovUk.Frontend.AspNetCore
     /// <summary>
     /// Represents a date.
     /// </summary>
+    [Obsolete("Use DateOnly instead.", error: false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     [StructLayout(LayoutKind.Auto)]
     public readonly struct Date : IComparable, IComparable<Date>, IEquatable<Date>
     {
-        private readonly DateTime _dt;
+        private readonly DateOnly _d;
 
         /// <summary>
         /// Creates a new instance of the <see cref="Date"/> structure to the specified year, month and day.
@@ -18,34 +21,40 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="month">The month (1 through 12).</param>
         /// <param name="day">The day (1 through the number of days in <paramref name="month" />).</param>
         public Date(int year, int month, int day)
-            : this(new DateTime(year, month, day))
+            : this(new DateOnly(year, month, day))
         {
         }
 
-        private Date(DateTime dateTime)
+        private Date(DateOnly date)
         {
-            _dt = dateTime;
+            _d = date;
         }
 
         /// <summary>
         /// Gets the current date.
         /// </summary>
-        public static Date Today => new(DateTime.Today);
+        public static Date Today => new(DateOnly.FromDateTime(DateTime.Today));
 
         /// <summary>
         /// Gets the day component of the date.
         /// </summary>
-        public int Day => _dt.Day;
+        public int Day => _d.Day;
 
         /// <summary>
         /// Gets the month component of the date.
         /// </summary>
-        public int Month => _dt.Month;
+        public int Month => _d.Month;
 
         /// <summary>
         /// Gets the year component of the date.
         /// </summary>
-        public int Year => _dt.Year;
+        public int Year => _d.Year;
+
+        /// <summary>
+        /// Converts the specified <see cref="Date"/> to a <see cref="DateOnly"/>.
+        /// </summary>
+        /// <param name="date">The <see cref="Date"/> to convert.</param>
+        public static implicit operator DateOnly(Date date) => date._d;
 
         /// <summary>
         /// Determines whether two specified instances of <see cref="Date"/> are equal.
@@ -69,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
         /// <returns><see langword="true"/> if left is earlier than right; otherwise, <see langword="false"/>.</returns>
-        public static bool operator <(Date left, Date right) => left._dt < right._dt;
+        public static bool operator <(Date left, Date right) => left._d < right._d;
 
         /// <summary>
         /// Determines whether one specified <see cref="Date"/> represents a date that is the same as or earlier than another specified <see cref="Date"/>.
@@ -77,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
         /// <returns><see langword="true"/> if left is the same as or earlier than right; otherwise, <see langword="false"/>.</returns>
-        public static bool operator <=(Date left, Date right) => left._dt <= right._dt;
+        public static bool operator <=(Date left, Date right) => left._d <= right._d;
 
         /// <summary>
         /// Determines whether one specified <see cref="Date"/> is later than another specified <see cref="Date"/>.
@@ -85,7 +94,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
         /// <returns><see langword="true"/> if left is later than right; otherwise, <see langword="false"/>.</returns>
-        public static bool operator >(Date left, Date right) => left._dt > right._dt;
+        public static bool operator >(Date left, Date right) => left._d > right._d;
 
         /// <summary>
         /// Determines whether one specified <see cref="Date"/> represents a date that is the same as or later than another specified <see cref="Date"/>.
@@ -93,7 +102,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="left">The first object to compare.</param>
         /// <param name="right">The second object to compare.</param>
         /// <returns><see langword="true"/> if left is the same as or later than right; otherwise, <see langword="false"/>.</returns>
-        public static bool operator >=(Date left, Date right) => left._dt >= right._dt;
+        public static bool operator >=(Date left, Date right) => left._d >= right._d;
 
         /// <inheritdoc/>
         public int CompareTo(object? value)
@@ -112,7 +121,7 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         /// <inheritdoc/>
-        public int CompareTo(Date value) => _dt.CompareTo(value);
+        public int CompareTo(Date value) => _d.CompareTo(value);
 
         /// <inheritdoc/>
         public override bool Equals(object? obj) => obj is Date date && Equals(date);
@@ -128,7 +137,7 @@ namespace GovUk.Frontend.AspNetCore
         /// </summary>
         /// <param name="value">The <see cref="DateTime"/> instance.</param>
         /// <returns>The <see cref="Date"/> instance composed of the date part of the specified input time <see cref="DateTime"/> instance.</returns>
-        public static Date FromDateTime(DateTime value) => new(value);
+        public static Date FromDateTime(DateTime value) => new(value.Year, value.Minute, value.Day);
 
         /// <summary>
         /// Returns a <see cref="DateTime"/> that is set to the date of this <see cref="Date"/> instance.

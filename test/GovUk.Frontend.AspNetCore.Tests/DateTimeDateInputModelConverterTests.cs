@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
         [MemberData(nameof(CreateModelFromDateData))]
         public void CreateModelFromDate_ReturnsExpectedResult(
             Type modelType,
-            Date date,
+            DateOnly date,
             object expectedResult)
         {
             // Arrange
@@ -27,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
         public void GetDateFromModel_ReturnsExpectedResult(
            Type modelType,
            object model,
-           Date? expectedResult)
+           DateOnly? expectedResult)
         {
             // Arrange
             var converter = new DateTimeDateInputModelConverter();
@@ -39,16 +39,16 @@ namespace GovUk.Frontend.AspNetCore.Tests
             Assert.Equal(expectedResult, result);
         }
 
-        public static TheoryData<Type, Date?, object> CreateModelFromDateData { get; } = new TheoryData<Type, Date?, object>()
+        public static TheoryData<Type, DateOnly?, object> CreateModelFromDateData { get; } = new()
         {
-            { typeof(DateTime), new Date(2020, 4, 1), new DateTime(2020, 4, 1) },
-            { typeof(DateTime?), new Date(2020, 4, 1), (DateTime?)new DateTime(2020, 4, 1) }
+            { typeof(DateTime), new DateOnly(2020, 4, 1), new DateTime(2020, 4, 1) },
+            { typeof(DateTime?), new DateOnly(2020, 4, 1), (DateTime?)new DateTime(2020, 4, 1) }
         };
 
-        public static TheoryData<Type, object, Date?> GetDateFromModelData { get; } = new TheoryData<Type, object, Date?>()
+        public static TheoryData<Type, object, DateOnly?> GetDateFromModelData { get; } = new()
         {
-            { typeof(DateTime), new DateTime(2020, 4, 1), new Date(2020, 4, 1) },
-            { typeof(DateTime?), (DateTime?)new DateTime(2020, 4, 1), new Date(2020, 4, 1) }
+            { typeof(DateTime), new DateTime(2020, 4, 1), new DateOnly(2020, 4, 1) },
+            { typeof(DateTime?), (DateTime?)new DateTime(2020, 4, 1), new DateOnly(2020, 4, 1) },
         };
     }
 }

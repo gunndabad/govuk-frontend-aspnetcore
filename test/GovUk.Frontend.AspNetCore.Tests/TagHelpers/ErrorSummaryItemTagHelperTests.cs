@@ -454,7 +454,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public Date? Date { get; set; }
+            public DateOnly? Date { get; set; }
             public string? Field { get; set; }
         }
     }

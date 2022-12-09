@@ -4,6 +4,7 @@ using System.Diagnostics;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
@@ -244,7 +245,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 DateInputAttributes.ToAttributeDictionary());
 
             DateInputItem CreateDateInputItem(
-                Func<Date?, string?> getComponentFromValue,
+                Func<DateOnly?, string?> getComponentFromValue,
                 string defaultLabel,
                 string defaultName,
                 string defaultClass,
@@ -316,7 +317,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 }
             }
 
-            Date? GetValueAsDate()
+            DateOnly? GetValueAsDate()
             {
                 if (Value is null)
                 {
@@ -337,12 +338,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 return null;
             }
 
-            Date? GetValueFromModel()
+            DateOnly? GetValueFromModel()
             {
                 Debug.Assert(AspFor != null);
 
                 var modelValue = AspFor!.Model;
-                var modelType = AspFor.ModelExplorer.ModelType;
+                var underlyingModelType = Nullable.GetUnderlyingType(AspFor.ModelExplorer.ModelType) ?? AspFor.ModelExplorer.ModelType;
 
                 if (modelValue is null)
                 {
@@ -353,9 +354,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 foreach (var converter in dateInputModelConverters)
                 {
-                    if (converter.CanConvertModelType(modelType))
+                    if (converter.CanConvertModelType(underlyingModelType))
                     {
-                        return converter.GetDateFromModel(modelType, modelValue);
+                        return converter.GetDateFromModel(underlyingModelType, modelValue);
                     }
                 }
 

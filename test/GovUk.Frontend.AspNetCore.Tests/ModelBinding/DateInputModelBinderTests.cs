@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
         public async Task BindModelAsync_AllComponentsEmpty_DoesNotBind()
         {
             // Arrange
-            var modelType = typeof(Date);
+            var modelType = typeof(DateOnly);
 
             ModelBindingContext bindingContext = new DefaultModelBindingContext()
             {
@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
         public async Task BindModelAsync_AllComponentsProvided_PassesValuesToConverterAndBindsResult()
         {
             // Arrange
-            var modelType = typeof(Date);
+            var modelType = typeof(DateOnly);
 
             ModelBindingContext bindingContext = new DefaultModelBindingContext()
             {
@@ -66,8 +66,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
 
             converterMock
-                .Setup(mock => mock.CreateModelFromDate(modelType, new Date(2020, 4, 1)))
-                .Returns(new Date(2020, 4, 1))
+                .Setup(mock => mock.CreateModelFromDate(modelType, new DateOnly(2020, 4, 1)))
+                .Returns(new DateOnly(2020, 4, 1))
                 .Verifiable();
 
             var modelBinder = new DateInputModelBinder(converterMock.Object);
@@ -80,7 +80,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
 
             Assert.True(bindingContext.Result.IsModelSet);
 
-            var date = Assert.IsType<Date>(bindingContext.Result.Model);
+            var date = Assert.IsType<DateOnly>(bindingContext.Result.Model);
             Assert.Equal(2020, date.Year);
             Assert.Equal(4, date.Month);
             Assert.Equal(1, date.Day);
@@ -108,7 +108,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
         public async Task BindModelAsync_MissingOrInvalidComponents_FailsBinding(string day, string month, string year)
         {
             // Arrange
-            var modelType = typeof(Date);
+            var modelType = typeof(DateOnly);
 
             var valueProvider = new SimpleValueProvider();
 
@@ -275,7 +275,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
         private class DisplayNameModelMetadata : ModelMetadata
         {
             public DisplayNameModelMetadata(string displayName)
-                : base(ModelMetadataIdentity.ForType(typeof(Date?)))
+                : base(ModelMetadataIdentity.ForType(typeof(DateOnly?)))
             {
                 DisplayName = displayName;
             }

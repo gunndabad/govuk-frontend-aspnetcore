@@ -20,7 +20,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="modelType">The model type to convert to.</param>
         /// <param name="date">The <see cref="Date"/> instance to convert.</param>
         /// <returns>An instance of <paramref name="modelType"/> that represents the <paramref name="date"/> argument.</returns>
-        public abstract object CreateModelFromDate(Type modelType, Date date);
+        public abstract object CreateModelFromDate(Type modelType, DateOnly date);
 
         /// <summary>
         /// Converts <paramref name="model"/> to instance of <see cref="Date"/>.
@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <param name="modelType">The model type to convert from.</param>
         /// <param name="model">The model instance to convert.</param>
         /// <returns>The converted model instance.</returns>
-        public abstract Date? GetDateFromModel(Type modelType, object model);
+        public abstract DateOnly? GetDateFromModel(Type modelType, object model);
 
         /// <summary>
         /// Creates an instance of the specified model type from a set of parse errors.

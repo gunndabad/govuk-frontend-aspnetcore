@@ -167,7 +167,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             {
                 Debug.Assert(AspFor != null);
 
-                var modelType = AspFor!.Metadata.ModelType;
+                var modelType = Nullable.GetUnderlyingType(AspFor!.Metadata.ModelType) ?? AspFor!.Metadata.ModelType;
                 return _options.DateInputModelConverters.Any(c => c.CanConvertModelType(modelType));
             }
         }
