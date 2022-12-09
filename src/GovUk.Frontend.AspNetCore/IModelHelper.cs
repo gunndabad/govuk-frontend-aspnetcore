@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    public interface IModelHelper
+    internal interface IModelHelper
     {
         string? GetDescription(ModelExplorer modelExplorer);
 
