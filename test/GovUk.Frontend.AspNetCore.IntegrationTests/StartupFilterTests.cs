@@ -21,7 +21,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             await using var fixture = new StartupFilterTestFixture(services => { });
             await fixture.InitializeAsync();
 
-            var resolvedPath = path.Replace("{version}", HtmlSnippets.GdsLibraryVersion);
+            var resolvedPath = path.Replace("{version}", Constants.GdsLibraryVersion);
 
             var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
 
@@ -57,7 +57,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             var linkTags = head.QuerySelectorAll("link");
 
             Assert.DoesNotContain(
-                $"/govuk-frontend-{HtmlSnippets.GdsLibraryVersion}.min.css",
+                $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.css",
                 linkTags
                     .Where(t => t.GetAttribute("rel") == "stylesheet")
                     .Select(t => t.GetAttribute("href")));
@@ -69,7 +69,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             var bodyScriptTags = body.QuerySelectorAll("script");
 
             Assert.DoesNotContain(
-                $"/govuk-frontend-{HtmlSnippets.GdsLibraryVersion}.min.js",
+                $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.js",
                 bodyScriptTags.Select(t => t.GetAttribute("src")));
 
             Assert.DoesNotContain(
@@ -102,7 +102,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             var linkTags = head.QuerySelectorAll("link");
 
             Assert.Contains(
-                $"/govuk-frontend-{HtmlSnippets.GdsLibraryVersion}.min.css",
+                $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.css",
                 linkTags
                     .Where(t => t.GetAttribute("rel") == "stylesheet")
                     .Select(t => t.GetAttribute("href")));
@@ -114,7 +114,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             var bodyScriptTags = body.QuerySelectorAll("script");
 
             Assert.Contains(
-                $"/govuk-frontend-{HtmlSnippets.GdsLibraryVersion}.min.js",
+                $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.js",
                 bodyScriptTags.Select(t => t.GetAttribute("src")));
 
             Assert.Contains(
