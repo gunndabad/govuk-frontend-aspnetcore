@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

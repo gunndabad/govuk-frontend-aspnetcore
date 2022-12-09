@@ -20,6 +20,7 @@
     <WarningsNotAsErrors>CS1591</WarningsNotAsErrors>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿namespace GovUk.Frontend.AspNetCore
+#nullable disable
+namespace GovUk.Frontend.AspNetCore
 {
     internal static class Constants
     {

@@ -1,4 +1,3 @@
-#nullable enable
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;

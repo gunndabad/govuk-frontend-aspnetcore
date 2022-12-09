@@ -1,4 +1,3 @@
-#nullable enable
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding

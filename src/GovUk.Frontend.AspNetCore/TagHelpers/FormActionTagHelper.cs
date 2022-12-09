@@ -1,4 +1,3 @@
-#nullable enable
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
