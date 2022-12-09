@@ -11,19 +11,33 @@ using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore
 {
+    /// <summary>
+    /// Extension methods for setting up GovUk.Frontend.AspNetCore services in an <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds GovUk.Frontend.AspNetCore services to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
         public static IServiceCollection AddGovUkFrontend(this IServiceCollection services)
         {
             return AddGovUkFrontend(services, _ => { });
         }
 
+        /// <summary>
+        /// Adds GovUk.Frontend.AspNetCore services to the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+        /// <param name="setupAction">An <see cref="Action{GovUkFrontendAspNetCoreOptions}"/> to configure the provided <see cref="GovUkFrontendAspNetCoreOptions"/>.</param>
+        /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
         public static IServiceCollection AddGovUkFrontend(
             this IServiceCollection services,
-            Action<GovUkFrontendAspNetCoreOptions> configureOptions)
+            Action<GovUkFrontendAspNetCoreOptions> setupAction)
         {
             Guard.ArgumentNotNull(nameof(services), services);
-            Guard.ArgumentNotNull(nameof(configureOptions), configureOptions);
+            Guard.ArgumentNotNull(nameof(setupAction), setupAction);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
@@ -33,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore
             services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
             services.AddTransient<PageTemplateHelper>();
 
-            services.Configure(configureOptions);
+            services.Configure(setupAction);
 
             return services;
         }

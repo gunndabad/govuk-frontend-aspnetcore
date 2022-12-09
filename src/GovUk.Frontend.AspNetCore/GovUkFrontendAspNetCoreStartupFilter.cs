@@ -5,7 +5,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace GovUk.Frontend.AspNetCore
 {
-    public class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
+    internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
         {

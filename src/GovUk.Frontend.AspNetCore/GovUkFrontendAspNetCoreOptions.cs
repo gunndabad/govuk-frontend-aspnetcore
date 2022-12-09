@@ -6,8 +6,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace GovUk.Frontend.AspNetCore
 {
+    /// <summary>
+    /// Options for configuring GovUk.Frontend.AspNetCore.
+    /// </summary>
     public class GovUkFrontendAspNetCoreOptions
     {
+        /// <summary>
+        /// Creates a new <see cref="GovUkFrontendAspNetCoreOptions"/>.
+        /// </summary>
         public GovUkFrontendAspNetCoreOptions()
         {
             AddImportsToHtml = true;
@@ -47,6 +53,9 @@ namespace GovUk.Frontend.AspNetCore
         /// </remarks>
         public Func<HttpContext, string?>? GetCspNonceForRequest { get; set; }
 
+        /// <summary>
+        /// Gets a list of <see cref="DateInputModelConverter"/> used by the application.
+        /// </summary>
         public List<DateInputModelConverter> DateInputModelConverters { get; }
 
         /// <summary>
