@@ -134,7 +134,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 var resolvedName = ResolveName();
 
                 var resolvedContent = textAreaContext.Value ??
-                    new HtmlString(AspFor != null ? ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) : string.Empty);
+                    new HtmlString(AspFor != null ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) : string.Empty);
 
                 var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
                 resolvedTextAreaAttributes.MergeCssClass("govuk-js-textarea");
@@ -182,7 +182,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     AspForAttributeName);
             }
 
-            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor!.Name);
+            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
         }
     }
 }

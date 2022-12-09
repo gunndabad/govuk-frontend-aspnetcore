@@ -53,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 errorSummaryContext.Items,
                 item =>
                 {
-                    Assert.Equal("Error message", item.Content.RenderToString());
+                    Assert.Equal("Error message", item.Content?.RenderToString());
                 });
         }
 
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 errorSummaryContext.Items,
                 item =>
                 {
-                    Assert.Equal("ModelState error message", item.Content.RenderToString());
+                    Assert.Equal("ModelState error message", item.Content?.RenderToString());
                 });
         }
 
@@ -197,7 +197,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 errorSummaryContext.Items,
                 item =>
                 {
-                    Assert.Equal("Error message", item.Content.RenderToString());
+                    Assert.Equal("Error message", item.Content?.RenderToString());
                 });
         }
 
@@ -455,7 +455,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         private class Model
         {
             public Date? Date { get; set; }
-            public string Field { get; set; }
+            public string? Field { get; set; }
         }
     }
 }

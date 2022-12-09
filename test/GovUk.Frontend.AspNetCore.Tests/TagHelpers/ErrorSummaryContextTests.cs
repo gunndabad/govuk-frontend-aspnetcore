@@ -3,6 +3,7 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -29,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 context.Items,
                 item =>
                 {
-                    Assert.Equal("An error message", item.Content.RenderToString());
+                    Assert.Equal("An error message", item.Content?.RenderToString());
                     Assert.Equal("#TheField", item.Href);
                 });
         }
@@ -41,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new ErrorSummaryContext();
 
             // Act
-            context.SetDescription(attributes: null, content: new HtmlString("Description"));
+            context.SetDescription(new AttributeDictionary(), content: new HtmlString("Description"));
 
             // Assert
             Assert.Equal("Description", context.Description?.Content?.RenderToString());
@@ -52,10 +53,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new ErrorSummaryContext();
-            context.SetDescription(attributes: null, content: new HtmlString("Existing description"));
+            context.SetDescription(new AttributeDictionary(), content: new HtmlString("Existing description"));
 
             // Act
-            var ex = Record.Exception(() => context.SetDescription(attributes: null, content: new HtmlString("Description")));
+            var ex = Record.Exception(() => context.SetDescription(new AttributeDictionary(), content: new HtmlString("Description")));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -69,7 +70,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new ErrorSummaryContext();
 
             // Act
-            context.SetTitle(attributes: null, content: new HtmlString("Title"));
+            context.SetTitle(new AttributeDictionary(), content: new HtmlString("Title"));
 
             // Assert
             Assert.Equal("Title", context.Title?.Content?.RenderToString());
@@ -80,10 +81,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new ErrorSummaryContext();
-            context.SetTitle(attributes: null, content: new HtmlString("Existing title"));
+            context.SetTitle(new AttributeDictionary(), content: new HtmlString("Existing title"));
 
             // Act
-            var ex = Record.Exception(() => context.SetTitle(attributes: null, content: new HtmlString("Title")));
+            var ex = Record.Exception(() => context.SetTitle(new AttributeDictionary(), content: new HtmlString("Title")));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);

@@ -51,9 +51,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, accordionContext.Items.Count);
 
             var firstItem = accordionContext.Items.First();
-            Assert.Equal("Heading", firstItem.HeadingContent.RenderToString());
-            Assert.Equal("Summary", firstItem.SummaryContent.RenderToString());
-            Assert.Equal("Content", firstItem.Content.RenderToString());
+            Assert.Equal("Heading", firstItem.HeadingContent?.RenderToString());
+            Assert.Equal("Summary", firstItem.SummaryContent?.RenderToString());
+            Assert.Equal("Content", firstItem.Content?.RenderToString());
         }
 
         [Fact]

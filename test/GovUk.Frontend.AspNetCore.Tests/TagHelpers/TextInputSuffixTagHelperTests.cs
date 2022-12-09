@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.True(inputContext.Suffix.HasValue);
-            Assert.Equal("Suffix", inputContext.Suffix.Value.Content.RenderToString());
+            Assert.Equal("Suffix", inputContext.Suffix?.Content?.RenderToString());
         }
     }
 }

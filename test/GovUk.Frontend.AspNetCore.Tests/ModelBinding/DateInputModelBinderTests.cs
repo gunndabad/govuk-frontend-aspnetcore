@@ -147,9 +147,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             // Assert
             Assert.Equal(ModelBindingResult.Failed(), bindingContext.Result);
 
-            Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"].AttemptedValue);
-            Assert.Equal(month, bindingContext.ModelState["TheModelName.Month"].AttemptedValue);
-            Assert.Equal(year, bindingContext.ModelState["TheModelName.Year"].AttemptedValue);
+            Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"]?.AttemptedValue);
+            Assert.Equal(month, bindingContext.ModelState["TheModelName.Month"]?.AttemptedValue);
+            Assert.Equal(year, bindingContext.ModelState["TheModelName.Year"]?.AttemptedValue);
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             };
 
             var parseErrors = DateInputParseErrors.InvalidYear;
-            object modelFromErrors = new CustomDateType() { ParseErrors = parseErrors };
+            object? modelFromErrors = new CustomDateType() { ParseErrors = parseErrors };
 
             var converterMock = new Mock<DateInputModelConverter>();
             converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
@@ -199,9 +199,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
 
             Assert.Same(modelFromErrors, bindingContext.Result.Model);
 
-            Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"].AttemptedValue);
-            Assert.Equal(month, bindingContext.ModelState["TheModelName.Month"].AttemptedValue);
-            Assert.Equal(year, bindingContext.ModelState["TheModelName.Year"].AttemptedValue);
+            Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"]?.AttemptedValue);
+            Assert.Equal(month, bindingContext.ModelState["TheModelName.Month"]?.AttemptedValue);
+            Assert.Equal(year, bindingContext.ModelState["TheModelName.Year"]?.AttemptedValue);
 
             Assert.Equal(0, bindingContext.ModelState.ErrorCount);
         }
@@ -350,7 +350,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
 
             public override Func<object, object> PropertyGetter => throw new NotImplementedException();
 
-            public override Action<object, object> PropertySetter => throw new NotImplementedException();
+            public override Action<object, object?> PropertySetter => throw new NotImplementedException();
         }
 
         private class CustomDateType

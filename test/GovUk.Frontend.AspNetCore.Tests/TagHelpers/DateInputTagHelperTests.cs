@@ -1090,7 +1090,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             DateInputParseErrors dateInputParseErrors,
             DateInputParseErrorsProvider dateInputParseErrorsProvider,
             ViewContext viewContext,
-            string modelStateError = null)
+            string? modelStateError = null)
         {
             dateInputParseErrorsProvider.SetErrorsForModel(modelName, dateInputParseErrors);
             viewContext.ModelState.AddModelError(modelName, modelStateError ?? $"{modelName} must be a real date.");
@@ -1099,7 +1099,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         private class Model
         {
             public Date? Date { get; set; }
-            public CustomDateType CustomDate { get; set; }
+            public CustomDateType? CustomDate { get; set; }
         }
 
         private class CustomDateType

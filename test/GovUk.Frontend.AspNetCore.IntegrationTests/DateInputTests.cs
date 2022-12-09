@@ -14,7 +14,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
     {
         public DateInputTests(DateInputTestsFixture fixture)
         {
-            Browser = fixture.Browser;
+            Browser = fixture.Browser!;
         }
 
         public IBrowser Browser { get; }
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
             string expectedDay,
             string expectedMonth,
             string expectedYear,
-            string expectedErrorMessage = null,
+            string? expectedErrorMessage = null,
             bool? expectDayToHaveError = null,
             bool? expectMonthToHaveError = null,
             bool? expectYearToHaveError = null)
@@ -159,7 +159,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
 
             if (expectedErrorMessage != null)
             {
-                var error = (await page.TextContentAsync(".govuk-error-message")).TrimStart("Error:".ToCharArray());
+                var error = (await page.TextContentAsync(".govuk-error-message"))?.TrimStart("Error:".ToCharArray());
                 Assert.Equal(expectedErrorMessage, error);
             }
 
@@ -251,7 +251,7 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
 
         [Display(Name = "Date of birth")]
         [Required(ErrorMessage = "Enter your date of birth")]
-        public CustomDateType CustomDate { get; set; }
+        public CustomDateType? CustomDate { get; set; }
     }
 
     public class CustomDateType

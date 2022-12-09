@@ -42,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.True(inputContext.Prefix.HasValue);
-            Assert.Equal("Prefix", inputContext.Prefix.Value.Content.RenderToString());
+            Assert.Equal("Prefix", inputContext.Prefix?.Content?.RenderToString());
         }
     }
 }

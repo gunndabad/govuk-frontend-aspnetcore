@@ -123,7 +123,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (content == null && AspFor != null && IgnoreModelStateErrors != true)
             {
                 var validationMessage = ModelHelper.GetValidationMessage(
-                    ViewContext,
+                    ViewContext!,
                     AspFor!.ModelExplorer,
                     AspFor.Name);
 
@@ -208,7 +208,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var attributes = formGroupContext.Label?.Attributes;
 
             var resolvedContent = content ??
-                new HtmlString(ModelHelper.GetDisplayName(ViewContext, AspFor!.ModelExplorer, AspFor.Name));
+                new HtmlString(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name));
 
             return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
         }
@@ -216,7 +216,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
         {
             var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
-                (AspFor is not null ? new HtmlString(ModelHelper.GetDisplayName(ViewContext, AspFor.ModelExplorer, AspFor.Name)) : null);
+                (AspFor is not null ? new HtmlString(ModelHelper.GetDisplayName(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null);
 
             if (resolvedFieldsetLegendContent is null)
             {

@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var divider = Assert.IsType<RadiosItemDivider>(item);
-                    Assert.Equal("Divider", divider.Content.ToString());
+                    Assert.Equal("Divider", divider.Content?.ToString());
                 });
         }
     }

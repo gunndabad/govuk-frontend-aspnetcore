@@ -86,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (resolvedContent == null && AspFor != null)
             {
                 var validationMessage = _modelHelper.GetValidationMessage(
-                    ViewContext,
+                    ViewContext!,
                     AspFor.ModelExplorer,
                     AspFor.Name);
 

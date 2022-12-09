@@ -321,7 +321,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public string Foo { get; set; }
+            public string? Foo { get; set; }
         }
     }
 }

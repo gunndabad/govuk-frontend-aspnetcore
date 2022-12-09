@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Value content", rowContext.Value.Value.Content.RenderToString());
+            Assert.Equal("Value content", rowContext.Value?.Content?.RenderToString());
         }
 
         [Fact]

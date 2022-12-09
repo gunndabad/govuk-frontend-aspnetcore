@@ -91,7 +91,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Debug.Assert(AspFor != null);
 
                 var validationMessage = _modelHelper.GetValidationMessage(
-                    ViewContext,
+                    ViewContext!,
                     AspFor!.ModelExplorer,
                     AspFor.Name);
 
@@ -113,7 +113,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             else if (AspFor != null)
             {
                 var errorFieldId = TagBuilder.CreateSanitizedId(
-                    _modelHelper.GetFullHtmlFieldName(ViewContext, AspFor!.Name),
+                    _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
                     Constants.IdAttributeDotReplacement);
 
                 // Date inputs are special; they don't have an element with ID which exactly corresponds to the name derived above;

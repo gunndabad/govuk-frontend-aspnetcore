@@ -262,7 +262,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = context.GetContextItem<RadiosItemContext>();
-                    itemContext.SetHint(attributes: null, content: new HtmlString("Hint"));
+                    itemContext.SetHint(new AttributeDictionary(), content: new HtmlString("Hint"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -282,7 +282,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal("Hint", radiosItem.Hint.Content.RenderToString());
+                    Assert.Equal("Hint", radiosItem.Hint?.Content?.RenderToString());
                 });
         }
 
@@ -349,7 +349,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 getChildContentAsync: (useCachedResult, encoder) =>
                 {
                     var itemContext = context.GetContextItem<RadiosItemContext>();
-                    itemContext.SetConditional(attributes: null, content: new HtmlString("Conditional"));
+                    itemContext.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"));
 
                     var tagHelperContent = new DefaultTagHelperContent();
                     return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -369,7 +369,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal("Conditional", radiosItem.Conditional.Content.RenderToString());
+                    Assert.Equal("Conditional", radiosItem.Conditional?.Content?.RenderToString());
                 });
         }
 
@@ -417,7 +417,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public string Foo { get; set; }
+            public string? Foo { get; set; }
         }
 
         private class ModelWithBooleanProperty
@@ -427,7 +427,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class ModelWithCollectionProperty
         {
-            public IEnumerable<int> CollectionProperty { get; set; }
+            public IEnumerable<int>? CollectionProperty { get; set; }
         }
     }
 }

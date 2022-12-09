@@ -54,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 selectContext.Items,
                 item =>
                 {
-                    Assert.Equal("Item text", item.Content.RenderToString());
+                    Assert.Equal("Item text", item.Content?.RenderToString());
                     Assert.True(item.Disabled);
                     Assert.True(item.Selected);
                     Assert.Equal("value", item.Value);
@@ -169,7 +169,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public string SimpleProperty { get; set; }
+            public string? SimpleProperty { get; set; }
         }
     }
 }

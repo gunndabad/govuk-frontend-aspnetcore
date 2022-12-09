@@ -117,7 +117,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 var fullyQualifiedPagePath = $"{baseUrl}/{pagePath}";
 
                 var fullyQualifiedScreenshotPath = Path.GetFullPath($"{docsRoot}/{screenshotPath}");
-                var screenShotDirectory = Path.GetDirectoryName(fullyQualifiedScreenshotPath);
+                var screenShotDirectory = Path.GetDirectoryName(fullyQualifiedScreenshotPath)!;
                 Directory.CreateDirectory(screenShotDirectory);
 
                 await using var page = await browser.NewPageAsync();

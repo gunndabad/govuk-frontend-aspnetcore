@@ -14,7 +14,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.Infrastructure
         {
         }
 
-        public SimpleValueProvider(CultureInfo culture)
+        public SimpleValueProvider(CultureInfo? culture)
             : base(StringComparer.OrdinalIgnoreCase)
         {
             _culture = culture ?? CultureInfo.InvariantCulture;
@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.Infrastructure
                 {
                     var array = (Array)rawValue;
 
-                    var stringValues = new string[array.Length];
+                    var stringValues = new string?[array.Length];
                     for (var i = 0; i < array.Length; i++)
                     {
                         stringValues[i] = array.GetValue(i) as string ?? Convert.ToString(array.GetValue(i), _culture);

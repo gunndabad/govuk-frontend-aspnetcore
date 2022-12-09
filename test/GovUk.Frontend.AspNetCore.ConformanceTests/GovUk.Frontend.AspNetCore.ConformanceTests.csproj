@@ -5,6 +5,7 @@
 
     <IsPackable>false</IsPackable>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

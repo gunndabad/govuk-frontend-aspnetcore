@@ -44,7 +44,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.Validation
         public class Model
         {
             [MaxWords(words: 3, ErrorMessage = "TheString must be 3 words or fewer")]
-            public string TheString { get; set; }
+            public string? TheString { get; set; }
         }
     }
 }

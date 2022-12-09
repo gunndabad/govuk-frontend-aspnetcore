@@ -53,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 rowContext.Actions,
                 action =>
                 {
-                    Assert.Equal("Change", action.Content.RenderToString());
+                    Assert.Equal("Change", action.Content?.RenderToString());
                     Assert.Equal("vht", action.VisuallyHiddenText);
 
                     Assert.Collection(

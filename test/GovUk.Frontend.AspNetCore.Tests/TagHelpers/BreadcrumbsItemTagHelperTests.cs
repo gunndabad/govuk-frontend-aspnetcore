@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var lastItem = breadcrumbsContext.Items.Last();
             Assert.Null(lastItem.Href);
-            Assert.Equal("The item", lastItem.Content.RenderToString());
+            Assert.Equal("The item", lastItem.Content?.RenderToString());
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var lastItem = breadcrumbsContext.Items.Last();
             Assert.Equal("place.com", lastItem.Href);
-            Assert.Equal("The item", lastItem.Content.RenderToString());
+            Assert.Equal("The item", lastItem.Content?.RenderToString());
         }
     }
 }

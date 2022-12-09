@@ -3,6 +3,7 @@
     <LangVersion>9.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     <RepoRoot>$([MSBuild]::EnsureTrailingSlash('$(MSBuildThisFileDirectory)'))</RepoRoot>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

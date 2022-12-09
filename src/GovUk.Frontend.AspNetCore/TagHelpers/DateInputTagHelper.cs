@@ -192,14 +192,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             return Id ??
                 TagBuilder.CreateSanitizedId(
-                    ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor!.Name),
+                    ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
                     Constants.IdAttributeDotReplacement);
         }
 
         private TagBuilder GenerateDateInput(DateInputContext dateInputContext, bool haveError)
         {
             var resolvedId = ResolveIdPrefix();
-            var resolvedName = AspFor != null ? ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name) : null;
+            var resolvedName = AspFor != null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor.Name) : null;
 
             // This is a deliberate deviation from the GDS implementation so it works better with ASP.NET Core's model binding system
             var resolvedNamePrefix = NamePrefix != null ? NamePrefix + "." :
@@ -304,7 +304,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     //   From that extract the Day/Month/Year.
 
                     var expression = $"{AspFor.Name}.{defaultName}";
-                    var modelStateKey = ModelHelper.GetFullHtmlFieldName(ViewContext, expression);
+                    var modelStateKey = ModelHelper.GetFullHtmlFieldName(ViewContext!, expression);
 
                     if (ViewContext!.ModelState.TryGetValue(modelStateKey, out var modelStateEntry) &&
                         modelStateEntry.AttemptedValue != null)
@@ -343,6 +343,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 var modelValue = AspFor!.Model;
                 var modelType = AspFor.ModelExplorer.ModelType;
+
+                if (modelValue is null)
+                {
+                    return null;
+                }
 
                 var dateInputModelConverters = _options.DateInputModelConverters;
 

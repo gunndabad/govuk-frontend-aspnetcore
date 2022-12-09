@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamples.Pages.ErrorSummary
 {
     public class ErrorSummaryWithModelStateErrorModel : PageModel
     {
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         public void OnGet()
         {

@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(notificationBannerContext.Title);
-            Assert.Equal("Title", notificationBannerContext.Title?.Content.RenderToString());
+            Assert.Equal("Title", notificationBannerContext.Title?.Content?.RenderToString());
             Assert.Equal(3, notificationBannerContext.Title?.HeadingLevel);
             Assert.Equal("my-title", notificationBannerContext.Title?.Id);
         }

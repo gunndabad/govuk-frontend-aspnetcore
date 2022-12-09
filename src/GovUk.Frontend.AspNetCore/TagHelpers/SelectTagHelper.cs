@@ -160,7 +160,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     AspForAttributeName);
             }
 
-            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor!.Name);
+            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
         }
     }
 }

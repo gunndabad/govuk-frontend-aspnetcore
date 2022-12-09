@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            Assert.Equal("Legend content", fieldsetContext.Legend?.Content.RenderToString());
+            Assert.Equal("Legend content", fieldsetContext.Legend?.Content?.RenderToString());
             Assert.True(fieldsetContext.Legend?.IsPageHeading);
         }
 

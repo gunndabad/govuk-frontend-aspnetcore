@@ -190,7 +190,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 var resolvedValue = _valueSpecified ?
                     Value :
-                    AspFor != null ? ModelHelper.GetModelValue(ViewContext, AspFor.ModelExplorer, AspFor.Name) :
+                    AspFor != null ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) :
                     null;
 
                 return Generator.GenerateTextInput(
@@ -242,7 +242,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     AspForAttributeName);
             }
 
-            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor!.Name);
+            return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
         }
     }
 }

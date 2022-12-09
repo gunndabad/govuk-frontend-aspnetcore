@@ -1,6 +1,7 @@
 using System;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
@@ -14,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new CheckboxesItemContext();
 
             // Act
-            context.SetConditional(attributes: null, content: new HtmlString("Conditional"));
+            context.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"));
 
             // Assert
             Assert.Equal("Conditional", context.Conditional?.Content?.ToString());
@@ -25,10 +26,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new CheckboxesItemContext();
-            context.SetConditional(attributes: null, content: new HtmlString("Existing conditional"));
+            context.SetConditional(new AttributeDictionary(), content: new HtmlString("Existing conditional"));
 
             // Act
-            var ex = Record.Exception(() => context.SetConditional(attributes: null, content: new HtmlString("Conditional")));
+            var ex = Record.Exception(() => context.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional")));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -42,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var context = new CheckboxesItemContext();
 
             // Act
-            context.SetHint(attributes: null, content: new HtmlString("Hint"));
+            context.SetHint(new AttributeDictionary(), content: new HtmlString("Hint"));
 
             // Assert
             Assert.Equal("Hint", context.Hint?.Content?.ToString());
@@ -53,10 +54,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new CheckboxesItemContext();
-            context.SetConditional(attributes: null, content: new HtmlString("Existing conditional"));
+            context.SetConditional(new AttributeDictionary(), content: new HtmlString("Existing conditional"));
 
             // Act
-            var ex = Record.Exception(() => context.SetHint(attributes: null, content: new HtmlString("Hint")));
+            var ex = Record.Exception(() => context.SetHint(new AttributeDictionary(), content: new HtmlString("Hint")));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -68,10 +69,10 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         {
             // Arrange
             var context = new CheckboxesItemContext();
-            context.SetHint(attributes: null, content: new HtmlString("Existing hint"));
+            context.SetHint(new AttributeDictionary(), content: new HtmlString("Existing hint"));
 
             // Act
-            var ex = Record.Exception(() => context.SetHint(attributes: null, content: new HtmlString("Hint")));
+            var ex = Record.Exception(() => context.SetHint(new AttributeDictionary(), content: new HtmlString("Hint")));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);

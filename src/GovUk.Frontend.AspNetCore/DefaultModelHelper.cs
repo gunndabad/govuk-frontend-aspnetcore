@@ -1,5 +1,3 @@
-#nullable disable
-using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,14 +15,14 @@ namespace GovUk.Frontend.AspNetCore
         {
             s_getFullHtmlFieldNameDelegate =
                 (GetFullHtmlFieldNameDelegate)typeof(IHtmlGenerator).Assembly
-                    .GetType("Microsoft.AspNetCore.Mvc.ViewFeatures.NameAndIdProvider", throwOnError: true)
-                    .GetMethod("GetFullHtmlFieldName", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+                    .GetType("Microsoft.AspNetCore.Mvc.ViewFeatures.NameAndIdProvider", throwOnError: true)!
+                    .GetMethod("GetFullHtmlFieldName", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)!
                     .CreateDelegate(typeof(GetFullHtmlFieldNameDelegate));
         }
 
-        public virtual string GetDescription(ModelExplorer modelExplorer) => modelExplorer.Metadata.Description;
+        public virtual string? GetDescription(ModelExplorer modelExplorer) => modelExplorer.Metadata.Description;
 
-        public virtual string GetDisplayName(
+        public virtual string? GetDisplayName(
             ViewContext viewContext,  // TODO Remove - not used
             ModelExplorer modelExplorer,
             string expression)
@@ -44,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore
         public virtual string GetFullHtmlFieldName(ViewContext viewContext, string expression) =>
             s_getFullHtmlFieldNameDelegate(viewContext, expression);
 
-        public virtual string GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
+        public virtual string? GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
         {
             Guard.ArgumentNotNull(nameof(viewContext), viewContext);
             Guard.ArgumentNotNull(nameof(modelExplorer), modelExplorer);
@@ -69,7 +67,7 @@ namespace GovUk.Frontend.AspNetCore
             return value;
         }
 
-        public virtual string GetValidationMessage(
+        public virtual string? GetValidationMessage(
             ViewContext viewContext,
             ModelExplorer modelExplorer,
             string expression)
@@ -83,10 +81,9 @@ namespace GovUk.Frontend.AspNetCore
                 return null;
             }
 
-            var tryGetModelStateResult = viewContext.ViewData.ModelState.TryGetValue(fullName, out var entry);
-            var modelErrors = tryGetModelStateResult ? entry.Errors : null;
+            var modelErrors = viewContext.ViewData.ModelState.TryGetValue(fullName, out var entry) ? entry.Errors : null;
 
-            ModelError modelError = null;
+            ModelError? modelError = null;
             if (modelErrors != null && modelErrors.Count != 0)
             {
                 modelError = modelErrors.FirstOrDefault(m => !string.IsNullOrEmpty(m.ErrorMessage)) ?? modelErrors[0];

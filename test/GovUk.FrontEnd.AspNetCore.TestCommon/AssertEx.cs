@@ -49,7 +49,7 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
         public static void HtmlEqual(
             string expected,
             string actual,
-            Predicate<IDiff> excludeDiff = null,
+            Predicate<IDiff>? excludeDiff = null,
             bool outputFullMarkupOnFailure = false)
         {
             excludeDiff ??= _ => false;

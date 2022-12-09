@@ -166,7 +166,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     /*viewContext: */It.IsAny<ViewContext>(),
                     /*modelExplorer: */It.IsAny<ModelExplorer>(),
                     /*expression: */It.IsAny<string>()))
-                .Returns((string)null);
+                .Returns((string?)null);
 
             var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
                 .GetExplorerForProperty(nameof(Model.SimpleProperty));
@@ -218,7 +218,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public string SimpleProperty { get; set; }
+            public string? SimpleProperty { get; set; }
         }
     }
 }

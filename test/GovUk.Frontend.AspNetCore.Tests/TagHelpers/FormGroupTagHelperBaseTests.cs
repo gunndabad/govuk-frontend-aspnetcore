@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -163,7 +164,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(errorMessage);
-            Assert.Contains("Context error", errorMessage.RenderToString());
+            Assert.Contains("Context error", errorMessage?.RenderToString());
         }
 
         [Fact]
@@ -219,7 +220,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var modelExpression = "Foo";
 
             var modelHelper = new Mock<IModelHelper>();
-            modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns((string)null);
+            modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns((string?)null);
 
             var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
             {
@@ -285,7 +286,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
 
             // Assert
-            var element = errorMessage.RenderToElement();
+            Assert.NotNull(errorMessage);
+            var element = errorMessage!.RenderToElement();
             Assert.Equal("test-error", element.GetAttribute("id"));
             Assert.Contains("test-error", tagHelper.DescribedBy?.Split(' ') ?? Array.Empty<string>());
         }
@@ -410,7 +412,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(hint);
-            Assert.Contains("Context hint", hint.RenderToString());
+            Assert.Contains("Context hint", hint!.RenderToString());
         }
 
         [Fact]
@@ -463,7 +465,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
 
             // Assert
-            var element = hint.RenderToElement();
+            Assert.NotNull(hint);
+            var element = hint!.RenderToElement();
             Assert.Equal("test-hint", element.GetAttribute("id"));
             Assert.Contains("test-hint", tagHelper.DescribedBy?.Split(' ') ?? Array.Empty<string>());
         }
@@ -600,7 +603,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void ResolveFieldsetLegendContent_ContextHasContent_ReturnsContextContent()
         {
             // Arrange
-            ModelExpression aspFor = null;
+            ModelExpression? aspFor = null;
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -699,7 +702,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         public void ResolveFieldsetLegendContent_ContextHasNoContentAndAspForNotIsSpecified_ThrowsInvalidOperationException()
         {
             // Arrange
-            ModelExpression aspFor = null;
+            ModelExpression? aspFor = null;
 
             var modelHelper = new Mock<IModelHelper>();
 
@@ -725,7 +728,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
         private class Model
         {
-            public string SimpleProperty { get; set; }
+            public string? SimpleProperty { get; set; }
         }
 
         private class TestFormGroupTagHelper : FormGroupTagHelperBase
@@ -735,7 +738,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
             }
 
-            public string Id { get; set; }
+            public string? Id { get; set; }
 
             private protected override FormGroupContext CreateFormGroupContext() => new TestFormGroupContext();
 
@@ -770,7 +773,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 return contentBuilder;
             }
 
-            private protected override string ResolveIdPrefix() => Id;
+            private protected override string ResolveIdPrefix() => Id ?? throw new InvalidOperationException("Id has not been set.");
         }
 
         private class TestFormGroupContext : FormGroupContext
@@ -790,7 +793,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 string fieldsetTagName,
                 string legendTagName,
                 AttributeDictionary attributes,
-                ModelExpression aspFor)
+                ModelExpression? aspFor)
                 : base(fieldsetTagName, legendTagName, attributes, aspFor)
             {
             }

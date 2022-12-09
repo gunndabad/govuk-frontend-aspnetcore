@@ -13,11 +13,11 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests
     {
         public const string BaseUrl = "http://localhost:55342";
 
-        private IHost _host;
-        private IPlaywright _playright;
+        private IHost? _host;
+        private IPlaywright? _playright;
         private bool _disposed = false;
 
-        public IBrowser Browser { get; private set; }
+        public IBrowser? Browser { get; private set; }
 
         public async virtual Task DisposeAsync()
         {

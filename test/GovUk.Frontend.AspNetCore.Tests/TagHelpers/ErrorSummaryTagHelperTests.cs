@@ -6,6 +6,7 @@ using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -30,8 +31,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-                    errorSummaryContext.SetTitle(attributes: null, new HtmlString("Title"));
-                    errorSummaryContext.SetDescription(attributes: null, new HtmlString("Description"));
+                    errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                    errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
 
                     errorSummaryContext.AddItem(new ErrorSummaryItem()
                     {
@@ -87,8 +88,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-                    errorSummaryContext.SetTitle(attributes: null, new HtmlString("Title"));
-                    errorSummaryContext.SetDescription(attributes: null, new HtmlString("Description"));
+                    errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                    errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
 
                     errorSummaryContext.AddItem(new ErrorSummaryItem()
                     {
@@ -136,8 +137,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-                    errorSummaryContext.SetTitle(attributes: null, new HtmlString("Title"));
-                    errorSummaryContext.SetDescription(attributes: null, new HtmlString("Description"));
+                    errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                    errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
 
                     errorSummaryContext.AddItem(new ErrorSummaryItem()
                     {

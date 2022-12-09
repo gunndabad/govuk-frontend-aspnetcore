@@ -48,8 +48,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
         public static TheoryData<Type, object, Date?> GetDateFromModelData { get; } = new TheoryData<Type, object, Date?>()
         {
             { typeof(Date), new Date(2020, 4, 1), new Date(2020, 4, 1) },
-            { typeof(Date?), (Date?)new Date(2020, 4, 1), new Date(2020, 4, 1) },
-            { typeof(Date?), null, null }
+            { typeof(Date?), (Date?)new Date(2020, 4, 1), new Date(2020, 4, 1) }
         };
     }
 }
