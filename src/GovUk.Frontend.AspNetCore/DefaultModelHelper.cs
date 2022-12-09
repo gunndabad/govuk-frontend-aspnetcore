@@ -45,20 +45,9 @@ namespace GovUk.Frontend.AspNetCore
 
         public virtual string GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
         {
-            if (viewContext == null)
-            {
-                throw new ArgumentNullException(nameof(viewContext));
-            }
-
-            if (modelExplorer == null)
-            {
-                throw new ArgumentNullException(nameof(modelExplorer));
-            }
-
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            Guard.ArgumentNotNull(nameof(viewContext), viewContext);
+            Guard.ArgumentNotNull(nameof(modelExplorer), modelExplorer);
+            Guard.ArgumentNotNull(nameof(expression), expression);
 
             var fullName = GetFullHtmlFieldName(viewContext, expression);
 

@@ -40,10 +40,7 @@ namespace GovUk.Frontend.AspNetCore.Validation
         /// <exception cref="ArgumentNullException">The <paramref name="value"/> argument is null.</exception>
         public bool IsValid(string? value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            Guard.ArgumentNotNull(nameof(value), value);
 
             var wordCount = _pattern.Matches(value).Count;
             return wordCount <= MaxWords;

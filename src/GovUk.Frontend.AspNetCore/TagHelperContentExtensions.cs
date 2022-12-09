@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -14,10 +13,7 @@ namespace GovUk.Frontend.AspNetCore
         /// </summary>
         public static IHtmlContent Snapshot(this TagHelperContent content)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             return new HtmlString(content.GetContent());
         }

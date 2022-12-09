@@ -22,15 +22,8 @@ namespace GovUk.Frontend.AspNetCore
             this IServiceCollection services,
             Action<GovUkFrontendAspNetCoreOptions> configureOptions)
         {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
-            if (configureOptions == null)
-            {
-                throw new ArgumentNullException(nameof(configureOptions));
-            }
+            Guard.ArgumentNotNull(nameof(services), services);
+            Guard.ArgumentNotNull(nameof(configureOptions), configureOptions);
 
             services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();

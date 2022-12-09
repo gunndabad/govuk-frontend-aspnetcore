@@ -1,5 +1,4 @@
 #nullable enable
-using System;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding
@@ -10,20 +9,14 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
 
         public DateInputModelBinderProvider(GovUkFrontendAspNetCoreOptions options)
         {
-            if (options is null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            Guard.ArgumentNotNull(nameof(options), options);
 
             _dateInputModelConverters = options.DateInputModelConverters.ToArray();
         }
 
         public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            Guard.ArgumentNotNull(nameof(context), context);
 
             var modelType = context.Metadata.UnderlyingOrModelType;
 

@@ -9,10 +9,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
         {
-            if (next == null)
-            {
-                throw new ArgumentNullException(nameof(next));
-            }
+            Guard.ArgumentNotNull(nameof(next), next);
 
             return app =>
             {

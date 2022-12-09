@@ -7,11 +7,9 @@ namespace GovUk.Frontend.AspNetCore
     internal static class TagHelperContextExtensions
     {
         public static TItem GetContextItem<TItem>(this TagHelperContext context)
+            where TItem : class
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            Guard.ArgumentNotNull(nameof(context), context);
 
             if (!context.Items.TryGetValue(typeof(TItem), out var item))
             {
@@ -22,16 +20,10 @@ namespace GovUk.Frontend.AspNetCore
         }
 
         public static IDisposable SetScopedContextItem<TItem>(this TagHelperContext context, TItem item)
+            where TItem : class
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            Guard.ArgumentNotNull(nameof(context), context);
+            Guard.ArgumentNotNull(nameof(item), item);
 
             return SetScopedContextItem(context, typeof(TItem), item);
         }
@@ -41,20 +33,9 @@ namespace GovUk.Frontend.AspNetCore
             object key,
             object value)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            Guard.ArgumentNotNull(nameof(context), context);
+            Guard.ArgumentNotNull(nameof(key), key);
+            Guard.ArgumentNotNull(nameof(value), value);
 
             context.Items.TryGetValue(key, out var previousValue);
             context.Items[key] = value;
@@ -73,8 +54,8 @@ namespace GovUk.Frontend.AspNetCore
                 object key,
                 object? previousValue)
             {
-                _context = context ?? throw new ArgumentNullException(nameof(context));
-                _key = key ?? throw new ArgumentNullException(nameof(key));
+                _context = Guard.ArgumentNotNull(nameof(context), context);
+                _key = Guard.ArgumentNotNull(nameof(key), key);
                 _previousValue = previousValue;
             }
 

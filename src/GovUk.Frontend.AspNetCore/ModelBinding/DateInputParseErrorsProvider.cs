@@ -27,10 +27,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
         /// <exception cref="ArgumentNullException">The <paramref name="modelName"/> argument is null.</exception>
         public void SetErrorsForModel(string modelName, DateInputParseErrors parseErrors)
         {
-            if (modelName is null)
-            {
-                throw new ArgumentNullException(nameof(modelName));
-            }
+            Guard.ArgumentNotNull(nameof(modelName), modelName);
 
             _errors[modelName] = parseErrors;
         }
@@ -44,10 +41,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
         /// <exception cref="ArgumentNullException">The <paramref name="modelName"/> argument is null.</exception>
         public bool TryGetErrorsForModel(string modelName, out DateInputParseErrors errors)
         {
-            if (modelName is null)
-            {
-                throw new ArgumentNullException(nameof(modelName));
-            }
+            Guard.ArgumentNotNull(nameof(modelName), modelName);
 
             return _errors.TryGetValue(modelName, out errors);
         }

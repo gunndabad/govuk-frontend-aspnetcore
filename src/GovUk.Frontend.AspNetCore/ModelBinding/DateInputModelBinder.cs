@@ -18,15 +18,12 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
 
         public DateInputModelBinder(DateInputModelConverter dateInputModelConverter)
         {
-            _dateInputModelConverter = dateInputModelConverter ?? throw new ArgumentNullException(nameof(dateInputModelConverter));
+            _dateInputModelConverter = Guard.ArgumentNotNull(nameof(dateInputModelConverter), dateInputModelConverter);
         }
 
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            if (bindingContext == null)
-            {
-                throw new ArgumentNullException(nameof(bindingContext));
-            }
+            Guard.ArgumentNotNull(nameof(bindingContext), bindingContext);
 
             var modelType = bindingContext.ModelType;
             if (!_dateInputModelConverter.CanConvertModelType(modelType))

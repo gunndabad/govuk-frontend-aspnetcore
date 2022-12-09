@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -12,28 +13,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
     {
         internal const string FormGroupElement = "div";
 
-        public TagBuilder GenerateAnchor(string href)
-        {
-            if (href == null)
-            {
-                throw new ArgumentNullException(nameof(href));
-            }
-
-            var tagBuilder = new TagBuilder("a");
-            tagBuilder.Attributes.Add("href", href);
-
-            return tagBuilder;
-        }
-
         public virtual TagBuilder GenerateFormGroup(
             bool haveError,
             IHtmlContent content,
             AttributeDictionary? attributes)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+            Guard.ArgumentNotNull(nameof(content), content);
 
             var tagBuilder = new TagBuilder(FormGroupElement);
             tagBuilder.MergeOptionalAttributes(attributes);
@@ -55,15 +40,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             AttributeDictionary attributes,
             IEnumerable<TabsItem> items)
         {
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            if (title == null)
-            {
-                throw new ArgumentNullException(nameof(title));
-            }
+            Guard.ArgumentNotNull(nameof(items), items);
+            Guard.ArgumentNotNull(nameof(title), title);
 
             var tagBuilder = new TagBuilder("div");
             tagBuilder.MergeAttributes(attributes);

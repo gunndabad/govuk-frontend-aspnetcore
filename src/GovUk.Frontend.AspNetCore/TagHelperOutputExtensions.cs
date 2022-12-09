@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -8,10 +8,7 @@ namespace GovUk.Frontend.AspNetCore
     {
         public static void ThrowIfOutputHasAttributes(this TagHelperOutput output)
         {
-            if (output == null)
-            {
-                throw new ArgumentNullException(nameof(output));
-            }
+            Guard.ArgumentNotNull(nameof(output), output);
 
             if (output.Attributes.Count != 0)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public TabsTagHelper(IGovUkHtmlGenerator htmlGenerator)
         {
-            _htmlGenerator = htmlGenerator ?? throw new ArgumentNullException(nameof(htmlGenerator));
+            _htmlGenerator = Guard.ArgumentNotNull(nameof(htmlGenerator), htmlGenerator);
         }
 
         [HtmlAttributeName(IdAttributeName)]
@@ -109,10 +109,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public void AddItem(TabsItem item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            Guard.ArgumentNotNull(nameof(item), item);
 
             _items.Add(item);
         }
