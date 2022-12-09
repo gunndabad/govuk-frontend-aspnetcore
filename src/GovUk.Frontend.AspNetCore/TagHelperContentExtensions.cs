@@ -1,4 +1,3 @@
-#nullable disable
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 

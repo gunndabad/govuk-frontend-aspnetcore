@@ -1,4 +1,3 @@
-#nullable disable
 using System;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
