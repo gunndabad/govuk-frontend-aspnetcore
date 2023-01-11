@@ -1,6 +1,8 @@
 using System.Linq;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -25,7 +27,9 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var items = options.Items
                         .Select(i => new AccordionItem()
                         {
-                            Content = TextOrHtmlHelper.GetHtmlContent(i.Content.Text, i.Content.Html),
+                            Content = i.Content.Text != null ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Content.Text) + "</p>") :
+                                i.Content.Html != null ? new HtmlString(i.Content.Html) :
+                                null,
                             Expanded = i.Expanded ?? ComponentGenerator.AccordionItemDefaultExpanded,
                             HeadingContent = i.Heading != null ? TextOrHtmlHelper.GetHtmlContent(i.Heading.Text, i.Heading.Html) : null,
                             SummaryContent = i.Summary != null ? TextOrHtmlHelper.GetHtmlContent(i.Summary.Text, i.Summary.Html) : null

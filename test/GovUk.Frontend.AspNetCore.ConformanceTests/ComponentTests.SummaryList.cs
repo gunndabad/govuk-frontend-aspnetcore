@@ -33,7 +33,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                             .MergeAttribute("class", a.Classes)
                                             .MergeAttribute("href", a.Href),
                                         Content = TextOrHtmlHelper.GetHtmlContent(a.Text, a.Html),
-                                        VisuallyHiddenText = a.VisuallyHiddenText
+                                        VisuallyHiddenText = a.VisuallyHiddenText is string vht ? vht : null
                                     })).OrEmpty().ToList(),
                                 Attributes = new AttributeDictionary().MergeAttribute("class", r.Actions?.Classes)
                             },
