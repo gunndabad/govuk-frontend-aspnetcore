@@ -133,7 +133,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     AppendToDescribedBy(ref itemDescribedBy, hintId);
                 }
 
-                if (itemDescribedBy != null)
+                if (!string.IsNullOrEmpty(itemDescribedBy))
                 {
                     input.Attributes.Add("aria-describedby", itemDescribedBy);
                 }

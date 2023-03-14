@@ -25,12 +25,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-fieldset");
 
-            if (role != null)
+            if (!string.IsNullOrEmpty(role))
             {
                 tagBuilder.Attributes.Add("role", role);
             }
 
-            if (describedBy != null)
+            if (!string.IsNullOrEmpty(describedBy))
             {
                 tagBuilder.Attributes.Add("aria-describedby", describedBy);
             }
