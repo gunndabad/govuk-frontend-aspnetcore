@@ -159,6 +159,10 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateTag(IHtmlContent content, AttributeDictionary attributes);
 
+        TagBuilder GenerateTaskList(AttributeDictionary? attributes, IEnumerable<TaskListTask> tasks);
+
+        TagBuilder GenerateTaskListSummary(TaskListSummary taskListSummary);
+
         TagBuilder GenerateTextArea(
             bool haveError,
             string id,
