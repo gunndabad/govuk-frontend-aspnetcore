@@ -151,6 +151,8 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateSummaryList(AttributeDictionary attributes, IEnumerable<SummaryListRow> rows);
 
+        TagBuilder GenerateSummaryCard(SummaryCard summaryCard);
+
         TagBuilder GenerateTabs(
             string id,
             string title,
