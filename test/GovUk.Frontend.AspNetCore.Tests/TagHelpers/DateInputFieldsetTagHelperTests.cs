@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
@@ -45,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.True(dateInputContext.Fieldset?.Legend?.IsPageHeading);
-            Assert.Equal("Legend", dateInputContext.Fieldset?.Legend?.Content?.RenderToString());
+            Assert.Equal("Legend", dateInputContext.Fieldset?.Legend?.Content?.ToHtmlString());
         }
 
         [Fact]

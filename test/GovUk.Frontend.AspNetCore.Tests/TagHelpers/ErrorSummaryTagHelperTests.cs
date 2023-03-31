@@ -68,7 +68,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -193,7 +193,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
+            var html = output.ToHtmlString();
             var node = HtmlNode.CreateNode(html);
             var h2 = node.ChildNodes.FindFirst("h2");
             Assert.Equal("There is a problem", h2.InnerHtml);
@@ -224,7 +224,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
+            var html = output.ToHtmlString();
             Assert.Empty(html);
         }
     }

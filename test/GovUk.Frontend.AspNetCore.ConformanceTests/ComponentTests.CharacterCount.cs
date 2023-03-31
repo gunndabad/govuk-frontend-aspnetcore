@@ -58,7 +58,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         }));
 
                     return generator.GenerateCharacterCount(options.Id, options.MaxLength, options.MaxWords, options.Threshold, content, countMessageAttributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

@@ -89,7 +89,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </select>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </select>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
     }
 }

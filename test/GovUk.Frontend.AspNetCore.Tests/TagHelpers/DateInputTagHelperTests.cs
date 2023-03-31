@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -73,7 +74,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -136,7 +137,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -200,7 +201,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -272,7 +273,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </fieldset>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -343,7 +344,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -404,7 +405,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -465,7 +466,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -528,7 +529,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -811,7 +812,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Theory]
@@ -1080,7 +1081,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 formErrorContext.Errors,
                 error =>
                 {
-                    Assert.Equal("Error", error.Content?.RenderToString());
+                    Assert.Equal("Error", error.Content?.ToHtmlString());
                     Assert.Equal("#" + expectedErrorFieldId, error.Href);
                 });
         }

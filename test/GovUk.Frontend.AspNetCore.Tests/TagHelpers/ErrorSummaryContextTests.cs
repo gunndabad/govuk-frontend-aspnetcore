@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 context.Items,
                 item =>
                 {
-                    Assert.Equal("An error message", item.Content?.RenderToString());
+                    Assert.Equal("An error message", item.Content?.ToHtmlString());
                     Assert.Equal("#TheField", item.Href);
                 });
         }
@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             context.SetDescription(new AttributeDictionary(), content: new HtmlString("Description"));
 
             // Assert
-            Assert.Equal("Description", context.Description?.Content?.RenderToString());
+            Assert.Equal("Description", context.Description?.Content?.ToHtmlString());
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             context.SetTitle(new AttributeDictionary(), content: new HtmlString("Title"));
 
             // Assert
-            Assert.Equal("Title", context.Title?.Content?.RenderToString());
+            Assert.Equal("Title", context.Title?.Content?.ToHtmlString());
         }
 
         [Fact]

@@ -16,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 {
                     var labelOptions = options with { For = options.For };
 
-                    return BuildLabel(generator, labelOptions).RenderToString();
+                    return BuildLabel(generator, labelOptions).ToHtmlString();
                 });
 
         private static IHtmlContent BuildLabel(ComponentGenerator generator, OptionsJson.Label options)

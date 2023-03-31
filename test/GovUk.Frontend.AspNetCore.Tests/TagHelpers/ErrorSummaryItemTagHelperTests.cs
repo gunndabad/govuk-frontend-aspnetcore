@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -53,7 +53,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 errorSummaryContext.Items,
                 item =>
                 {
-                    Assert.Equal("Error message", item.Content?.RenderToString());
+                    Assert.Equal("Error message", item.Content?.ToHtmlString());
                 });
         }
 
@@ -144,7 +144,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 errorSummaryContext.Items,
                 item =>
                 {
-                    Assert.Equal("ModelState error message", item.Content?.RenderToString());
+                    Assert.Equal("ModelState error message", item.Content?.ToHtmlString());
                 });
         }
 
@@ -197,7 +197,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 errorSummaryContext.Items,
                 item =>
                 {
-                    Assert.Equal("Error message", item.Content?.RenderToString());
+                    Assert.Equal("Error message", item.Content?.ToHtmlString());
                 });
         }
 

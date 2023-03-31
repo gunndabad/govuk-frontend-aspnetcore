@@ -78,7 +78,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </nav>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -109,8 +109,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     {
                         Href = "/page2",
                         Number = new HtmlString("2"),
-                        IsCurrent = true,
-                        VisuallyHiddenText = "2nd page"
+                        IsCurrent = true
                     });
 
                     paginationContext.AddItem(new PaginationItemEllipsis());
@@ -135,7 +134,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var actual = output.RenderToString();
+            var actual = output.ToHtmlString();
             var expectedHtml = @"
 <nav aria-label=""search"" class=""govuk-pagination"" role=""navigation"">
     <ul class=""govuk-pagination__list"">
@@ -143,7 +142,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             <a aria-label=""1st page"" class=""govuk-link govuk-pagination__link"" href=""/page1"">1</a>
         </li>
         <li class=""govuk-pagination__item govuk-pagination__item--current"">
-            <a aria-current=""page"" aria-label=""2nd page"" class=""govuk-link govuk-pagination__link"" href=""/page2"">2</a>
+            <a aria-current=""page"" aria-label=""Page 2"" class=""govuk-link govuk-pagination__link"" href=""/page2"">2</a>
         </li>
         <li class=""govuk-pagination__item govuk-pagination__item--ellipses"">&ctdot;</li>
         <li class=""govuk-pagination__item"">
@@ -152,7 +151,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </ul>
 </nav>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
     }
 }

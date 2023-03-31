@@ -382,7 +382,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal("Hint", checkboxesItem.Hint?.Content?.RenderToString());
+                    Assert.Equal("Hint", checkboxesItem.Hint?.Content?.ToHtmlString());
                 });
         }
 
@@ -471,7 +471,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal("Conditional", checkboxesItem.Conditional?.Content?.RenderToString());
+                    Assert.Equal("Conditional", checkboxesItem.Conditional?.Content?.ToHtmlString());
                 });
         }
 

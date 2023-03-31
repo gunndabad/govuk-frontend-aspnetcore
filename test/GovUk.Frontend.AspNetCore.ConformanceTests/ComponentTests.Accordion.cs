@@ -37,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .OrEmpty();
 
                     return generator.GenerateAccordion(options.Id, headingLevel, attributes, items)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

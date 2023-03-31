@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     Assert.Equal("off", item.Autocomplete);
                     Assert.Equal("my-day", item.Id);
                     Assert.Equal("im", item.InputMode);
-                    Assert.Equal("Label", item.LabelContent?.RenderToString());
+                    Assert.Equal("Label", item.LabelContent?.ToHtmlString());
                     Assert.Equal("my_day", item.Name);
                     Assert.Equal("*", item.Pattern);
                     Assert.Equal(2, item.Value);

@@ -47,7 +47,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     An error!
 </p>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     An error!
 </p>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     An error!
 </p>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]

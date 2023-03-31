@@ -43,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             descriptionAttributes: null,
                             attributes,
                             items)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

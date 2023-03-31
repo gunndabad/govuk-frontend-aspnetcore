@@ -115,7 +115,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     haveError,
                     content,
                     attributes)
-                .RenderToString();
+                .ToHtmlString();
         }
     }
 }

@@ -52,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .OrEmpty();
 
                     return generator.GenerateSummaryList(attributes, rows)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

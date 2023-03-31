@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         public void Hint(ComponentTestCaseData<OptionsJson.Hint> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
-                (generator, options) => BuildHint(generator, options).RenderToString());
+                (generator, options) => BuildHint(generator, options).ToHtmlString());
 
         private static IHtmlContent BuildHint(ComponentGenerator generator, OptionsJson.Hint options)
         {

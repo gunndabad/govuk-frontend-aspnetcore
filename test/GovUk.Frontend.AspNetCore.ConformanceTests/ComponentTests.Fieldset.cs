@@ -40,7 +40,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             legendAttributes,
                             content,
                             attributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

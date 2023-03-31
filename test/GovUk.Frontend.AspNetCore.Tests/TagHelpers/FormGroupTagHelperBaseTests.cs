@@ -93,7 +93,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 formErrorContext.Errors,
                 error =>
                 {
-                    Assert.Equal("Error message", error.Content.RenderToString());
+                    Assert.Equal("Error message", error.Content.ToHtmlString());
                 });
         }
 
@@ -164,7 +164,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(errorMessage);
-            Assert.Contains("Context error", errorMessage?.RenderToString());
+            Assert.Contains("Context error", errorMessage?.ToHtmlString());
         }
 
         [Fact]
@@ -412,7 +412,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(hint);
-            Assert.Contains("Context hint", hint!.RenderToString());
+            Assert.Contains("Context hint", hint!.ToHtmlString());
         }
 
         [Fact]
@@ -537,7 +537,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(label);
-            Assert.Contains("Context label", label.RenderToString());
+            Assert.Contains("Context label", label.ToHtmlString());
         }
 
         [Fact]
@@ -566,7 +566,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(label);
-            Assert.Contains("ModelMetadata label", label.RenderToString());
+            Assert.Contains("ModelMetadata label", label.ToHtmlString());
         }
 
         [Fact]
@@ -596,7 +596,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(label);
-            Assert.Contains("Context label", label.RenderToString());
+            Assert.Contains("Context label", label.ToHtmlString());
         }
 
         [Fact]
@@ -625,7 +625,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
 
             // Assert
-            Assert.Equal("Context name", result.RenderToString());
+            Assert.Equal("Context name", result.ToHtmlString());
         }
 
         [Fact]
@@ -659,7 +659,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
 
             // Assert
-            Assert.Equal("ModelMetadata name", result.RenderToString());
+            Assert.Equal("ModelMetadata name", result.ToHtmlString());
         }
 
         [Fact]
@@ -695,7 +695,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
 
             // Assert
-            Assert.Equal("Context name", result.RenderToString());
+            Assert.Equal("Context name", result.ToHtmlString());
         }
 
         [Fact]

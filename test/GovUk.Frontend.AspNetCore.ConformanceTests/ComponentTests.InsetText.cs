@@ -1,4 +1,4 @@
-using GovUk.Frontend.AspNetCore.TestCommon;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .MergeAttribute("class", options.Classes);
 
                     return generator.GenerateInsetText(id, content, attributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

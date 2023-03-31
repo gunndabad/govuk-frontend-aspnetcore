@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -54,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 selectContext.Items,
                 item =>
                 {
-                    Assert.Equal("Item text", item.Content?.RenderToString());
+                    Assert.Equal("Item text", item.Content?.ToHtmlString());
                     Assert.True(item.Disabled);
                     Assert.True(item.Selected);
                     Assert.Equal("value", item.Value);

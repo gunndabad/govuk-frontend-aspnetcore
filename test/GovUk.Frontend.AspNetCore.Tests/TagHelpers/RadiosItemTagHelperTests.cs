@@ -282,7 +282,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal("Hint", radiosItem.Hint?.Content?.RenderToString());
+                    Assert.Equal("Hint", radiosItem.Hint?.Content?.ToHtmlString());
                 });
         }
 
@@ -369,7 +369,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 item =>
                 {
                     var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal("Conditional", radiosItem.Conditional?.Content?.RenderToString());
+                    Assert.Equal("Conditional", radiosItem.Conditional?.Content?.ToHtmlString());
                 });
         }
 

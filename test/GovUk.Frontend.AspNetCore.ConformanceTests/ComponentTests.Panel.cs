@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .MergeAttribute("class", options.Classes);
 
                     return generator.GeneratePanel(headingLevel, titleContent, content, attributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

@@ -50,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     <div class=""govuk-panel__body"">Body</div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]

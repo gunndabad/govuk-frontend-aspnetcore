@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
@@ -42,7 +43,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.True(inputContext.Prefix.HasValue);
-            Assert.Equal("Prefix", inputContext.Prefix?.Content?.RenderToString());
+            Assert.Equal("Prefix", inputContext.Prefix?.Content?.ToHtmlString());
         }
     }
 }

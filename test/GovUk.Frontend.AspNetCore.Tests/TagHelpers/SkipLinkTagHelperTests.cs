@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -41,7 +42,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var expectedHtml = @"
 <a class=""govuk-skip-link"" href=""#main"" data-module=""govuk-skip-link"">Link content</a>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]

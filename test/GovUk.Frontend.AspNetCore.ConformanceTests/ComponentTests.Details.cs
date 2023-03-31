@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             textContent,
                             textAttributes: null,
                             attributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

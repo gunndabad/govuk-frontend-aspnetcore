@@ -49,7 +49,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </strong>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]

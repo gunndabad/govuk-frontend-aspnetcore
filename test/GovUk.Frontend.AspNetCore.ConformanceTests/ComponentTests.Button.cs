@@ -49,7 +49,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         isButtonLink ?
                             generator.GenerateButtonLink(isStartButton, disabled, content, attributes) :
                             generator.GenerateButton(isStartButton, disabled, preventDoubleClick, content, attributes)
-                        ).RenderToString();
+                        ).ToHtmlString();
                 });
     }
 }

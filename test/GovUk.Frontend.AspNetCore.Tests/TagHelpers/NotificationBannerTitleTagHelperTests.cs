@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             Assert.NotNull(notificationBannerContext.Title);
-            Assert.Equal("Title", notificationBannerContext.Title?.Content?.RenderToString());
+            Assert.Equal("Title", notificationBannerContext.Title?.Content?.ToHtmlString());
             Assert.Equal(3, notificationBannerContext.Title?.HeadingLevel);
             Assert.Equal("my-title", notificationBannerContext.Title?.Id);
         }

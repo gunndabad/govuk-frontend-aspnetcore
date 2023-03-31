@@ -64,7 +64,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </ol>
 </div>";
 
-            AssertEx.HtmlEqual(@expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
         }
     }
 }

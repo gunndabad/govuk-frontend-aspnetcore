@@ -119,7 +119,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                         li.MergeOptionalAttributes(paginationItem.Attributes);
                         itemLink.AddCssClass("govuk-link");
                         itemLink.AddCssClass("govuk-pagination__link");
-                        itemLink.Attributes.Add("aria-label", paginationItem.VisuallyHiddenText ?? $"Page {paginationItem.Number}");
+                        itemLink.Attributes.Add("aria-label", paginationItem.VisuallyHiddenText ?? $"Page {paginationItem.Number.ToHtmlString()}");
 
                         if (paginationItem.Href is not null)
                         {

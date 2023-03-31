@@ -77,7 +77,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -202,7 +202,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -258,7 +258,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -315,7 +315,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -394,7 +394,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </fieldset>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
     }
 }

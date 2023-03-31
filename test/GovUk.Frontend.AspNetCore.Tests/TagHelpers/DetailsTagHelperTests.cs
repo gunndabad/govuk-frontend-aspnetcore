@@ -54,7 +54,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     <div class=""govuk-details__text"">The text</div>
 </details>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]

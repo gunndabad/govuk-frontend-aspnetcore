@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
+            var html = output.ToHtmlString();
             Assert.Equal(
                 "<div class=\"govuk-tabs\" data-module=\"govuk-tabs\" id=\"my-tabs\">" +
                 "<h2 class=\"govuk-tabs__title\">Title</h2>" +
@@ -117,7 +117,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             await tagHelper.ProcessAsync(context, output);
 
             // Assert
-            var html = output.RenderToString();
+            var html = output.ToHtmlString();
             var node = HtmlNode.CreateNode(html);
             Assert.Equal("Contents", node.SelectSingleNode("h2").InnerText);
         }

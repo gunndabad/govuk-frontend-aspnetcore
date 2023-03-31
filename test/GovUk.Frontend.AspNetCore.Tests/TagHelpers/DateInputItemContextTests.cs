@@ -1,6 +1,6 @@
 using System;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             context.SetLabel(content: new HtmlString("Label"), attributes: new AttributeDictionary());
 
             // Assert
-            Assert.Equal("Label", context.Label?.Content?.RenderToString());
+            Assert.Equal("Label", context.Label?.Content?.ToHtmlString());
         }
 
         [Fact]

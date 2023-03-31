@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         });
 
                     return generator.GenerateBreadcrumbs(collapseOnMobile, attributes, items)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

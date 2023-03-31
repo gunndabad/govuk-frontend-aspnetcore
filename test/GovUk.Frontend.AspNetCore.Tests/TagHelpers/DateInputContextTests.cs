@@ -1,6 +1,6 @@
 using System;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Xunit;
 
@@ -225,7 +225,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     Assert.Equal("off", value.Autocomplete);
                     Assert.Equal("id", value.Id);
                     Assert.Equal("im", value.InputMode);
-                    Assert.Equal("Month", value.LabelContent?.RenderToString());
+                    Assert.Equal("Month", value.LabelContent?.ToHtmlString());
                     Assert.Equal("name", value.Name);
                     Assert.Equal("pattern", value.Pattern);
                     Assert.Equal(42, value.Value);

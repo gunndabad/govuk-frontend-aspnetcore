@@ -50,7 +50,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var paginationItem = Assert.IsType<PaginationItem>(item);
                     Assert.True(paginationItem.IsCurrent);
-                    Assert.Equal("Page 42", paginationItem.Number?.RenderToString());
+                    Assert.Equal("Page 42", paginationItem.Number?.ToHtmlString());
                 });
         }
     }

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -51,9 +51,9 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             Assert.Equal(1, accordionContext.Items.Count);
 
             var firstItem = accordionContext.Items.First();
-            Assert.Equal("Heading", firstItem.HeadingContent?.RenderToString());
-            Assert.Equal("Summary", firstItem.SummaryContent?.RenderToString());
-            Assert.Equal("Content", firstItem.Content?.RenderToString());
+            Assert.Equal("Heading", firstItem.HeadingContent?.ToHtmlString());
+            Assert.Equal("Summary", firstItem.SummaryContent?.ToHtmlString());
+            Assert.Equal("Content", firstItem.Content?.ToHtmlString());
         }
 
         [Fact]

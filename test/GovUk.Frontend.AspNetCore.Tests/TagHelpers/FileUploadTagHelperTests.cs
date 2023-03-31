@@ -59,7 +59,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     <input aria-describedby=""describedby my-id-hint"" class=""govuk-file-upload"" id=""my-id"" name=""my-id"" type=""file"">
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     <input aria-describedby=""describedby my-id-error"" class=""govuk-file-upload govuk-file-upload--error"" id=""my-id"" name=""my-id"" type=""file"">
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.RenderToString());
+            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
     }
 }

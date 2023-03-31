@@ -46,7 +46,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                             titleContent,
                             content,
                             attributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

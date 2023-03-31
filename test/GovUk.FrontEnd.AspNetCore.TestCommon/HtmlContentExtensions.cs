@@ -1,6 +1,5 @@
-using System.IO;
-using System.Text.Encodings.Web;
 using AngleSharp.Dom;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.TestCommon
@@ -9,21 +8,14 @@ namespace GovUk.Frontend.AspNetCore.TestCommon
     {
         public static IElement RenderToElement(this IHtmlContent content)
         {
-            var html = content.RenderToString();
+            var html = content.ToHtmlString();
             return HtmlHelper.ParseHtmlElement(html);
         }
 
         public static IElement[] RenderToElements(this IHtmlContent content)
         {
-            var html = content.RenderToString();
+            var html = content.ToHtmlString();
             return HtmlHelper.ParseHtmlElements(html);
-        }
-
-        public static string RenderToString(this IHtmlContent content)
-        {
-            using var writer = new StringWriter();
-            content.WriteTo(writer, HtmlEncoder.Default);
-            return writer.ToString();
         }
     }
 }

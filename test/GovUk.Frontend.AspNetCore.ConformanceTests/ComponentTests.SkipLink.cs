@@ -22,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                        var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? new HtmlString("");
 
                        return generator.GenerateSkipLink(href, content, attributes)
-                           .RenderToString();
+                           .ToHtmlString();
                    });
     }
 }

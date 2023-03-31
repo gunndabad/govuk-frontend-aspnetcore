@@ -55,7 +55,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         previous,
                         next,
                         options.LandmarkLabel,
-                        attributes).RenderToString();
+                        attributes).ToHtmlString();
                 });
     }
 }

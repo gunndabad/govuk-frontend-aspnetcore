@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         new HtmlString(ComponentGenerator.BackLinkDefaultContent);
 
                     return generator.GenerateBackLink(content, attributes)
-                        .RenderToString();
+                        .ToHtmlString();
                 });
     }
 }

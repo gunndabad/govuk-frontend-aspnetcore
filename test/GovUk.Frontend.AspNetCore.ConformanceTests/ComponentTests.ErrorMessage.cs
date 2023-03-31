@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         public void ErrorMessage(ComponentTestCaseData<OptionsJson.ErrorMessage> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
-                (generator, options) => BuildErrorMessage(generator, options).RenderToString());
+                (generator, options) => BuildErrorMessage(generator, options).ToHtmlString());
 
         private static IHtmlContent BuildErrorMessage(ComponentGenerator generator, OptionsJson.ErrorMessage options)
         {
