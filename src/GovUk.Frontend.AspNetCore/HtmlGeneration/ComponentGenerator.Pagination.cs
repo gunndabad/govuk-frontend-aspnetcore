@@ -216,7 +216,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             return tagBuilder;
 
-            TagBuilder GeneratePreviousArrow()
+            IHtmlContent GeneratePreviousArrow()
             {
                 var svg = new TagBuilder("svg");
                 svg.AddCssClass("govuk-pagination__icon");
@@ -233,10 +233,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 svg.InnerHtml.AppendHtml(path);
 
-                return svg;
+                var builder = new HtmlContentBuilder();
+                builder.AppendHtml(svg);
+                builder.AppendHtml(" ");
+
+                return builder;
             }
 
-            TagBuilder GenerateNextArrow()
+            IHtmlContent GenerateNextArrow()
             {
                 var svg = new TagBuilder("svg");
                 svg.AddCssClass("govuk-pagination__icon");
@@ -253,7 +257,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 svg.InnerHtml.AppendHtml(path);
 
-                return svg;
+                var builder = new HtmlContentBuilder();
+                builder.AppendHtml(svg);
+                builder.AppendHtml(" ");
+
+                return builder;
             }
         }
     }
