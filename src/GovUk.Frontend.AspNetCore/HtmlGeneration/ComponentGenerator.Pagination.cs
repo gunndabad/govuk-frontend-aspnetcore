@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -58,6 +59,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 var previousArrow = GeneratePreviousArrow();
                 link.InnerHtml.AppendHtml(previousArrow);
+                link.InnerHtml.Append(" ");
 
                 var title = new TagBuilder("span");
                 title.AddCssClass("govuk-pagination__link-title");
@@ -119,7 +121,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                         li.MergeOptionalAttributes(paginationItem.Attributes);
                         itemLink.AddCssClass("govuk-link");
                         itemLink.AddCssClass("govuk-pagination__link");
-                        itemLink.Attributes.Add("aria-label", paginationItem.VisuallyHiddenText ?? $"Page {paginationItem.Number}");
+                        itemLink.Attributes.Add("aria-label", paginationItem.VisuallyHiddenText ?? $"Page {GetString(paginationItem.Number)}");
 
                         if (paginationItem.Href is not null)
                         {
@@ -177,6 +179,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (blockLevel)
                 {
                     link.InnerHtml.AppendHtml(nextArrow);
+                    link.InnerHtml.Append(" ");
                 }
 
                 var title = new TagBuilder("span");
@@ -207,6 +210,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 if (!blockLevel)
                 {
                     link.InnerHtml.AppendHtml(nextArrow);
+                    link.InnerHtml.Append(" ");
                 }
 
                 nextTagBuilder.InnerHtml.AppendHtml(link);
@@ -254,6 +258,15 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 svg.InnerHtml.AppendHtml(path);
 
                 return svg;
+            }
+        }
+
+        private static string GetString(IHtmlContent content)
+        {
+            using (var writer = new System.IO.StringWriter())
+            {
+                content.WriteTo(writer, HtmlEncoder.Default);
+                return writer.ToString();
             }
         }
     }
