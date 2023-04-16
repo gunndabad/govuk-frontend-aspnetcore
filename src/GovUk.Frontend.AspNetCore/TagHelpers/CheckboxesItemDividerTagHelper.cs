@@ -9,10 +9,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = CheckboxesTagHelper.TagName)]
     [HtmlTargetElement(TagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = CheckboxesFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesFieldsetTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.CheckboxesDividerItemElement)]
     public class CheckboxesItemDividerTagHelper : TagHelper
     {
         internal const string TagName = "govuk-checkboxes-divider";
+        internal const string ShortTagName = "checkboxes-divider";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

@@ -8,17 +8,25 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the fieldset in a GDS date input component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = DateInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = DateInputTagHelper.TagName)]
     [RestrictChildren(
         DateInputFieldsetLegendTagHelper.TagName,
+        DateInputFieldsetLegendTagHelper.ShortTagName,
         DateInputTagHelper.HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
         DateInputTagHelper.ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName,
         DateInputItemTagHelper.DayTagName,
+        DateInputItemTagHelper.ShortDayTagName,
         DateInputItemTagHelper.MonthTagName,
-        DateInputItemTagHelper.YearTagName)]
+        DateInputItemTagHelper.ShortMonthTagName,
+        DateInputItemTagHelper.YearTagName,
+        DateInputItemTagHelper.ShortYearTagName)]
     [OutputElementHint(ComponentGenerator.FieldsetElement)]
     public class DateInputFieldsetTagHelper : TagHelper
     {
         internal const string TagName = "govuk-date-input-fieldset";
+        internal const string ShortTagName = "date-input-fieldset";
 
         private const string DescribedByAttributeName = "described-by";
 

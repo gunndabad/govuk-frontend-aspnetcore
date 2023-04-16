@@ -10,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class CharacterCountValueTagHelper : TagHelper
     {
         internal const string TagName = "govuk-character-count-value";
+        internal const string ShortTagName = "value";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

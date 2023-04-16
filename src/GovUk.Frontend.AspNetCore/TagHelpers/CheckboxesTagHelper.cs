@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -13,7 +12,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS checkboxes component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(CheckboxesFieldsetTagHelper.TagName, CheckboxesItemTagHelper.TagName, CheckboxesItemDividerTagHelper.TagName, HintTagName, ErrorMessageTagName)]
+    [RestrictChildren(
+        CheckboxesFieldsetTagHelper.TagName,
+        CheckboxesFieldsetTagHelper.ShortTagName,
+        CheckboxesItemTagHelper.TagName,
+        CheckboxesItemTagHelper.ShortTagName,
+        CheckboxesItemDividerTagHelper.TagName,
+        CheckboxesItemDividerTagHelper.ShortTagName,
+        HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
     public class CheckboxesTagHelper : FormGroupTagHelperBase
     {

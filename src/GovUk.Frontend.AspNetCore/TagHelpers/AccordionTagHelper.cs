@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(TagName)]
     [OutputElementHint(ComponentGenerator.AccordionElement)]
-    [RestrictChildren(AccordionItemTagHelper.TagName)]
+    [RestrictChildren(AccordionItemTagHelper.TagName, AccordionItemTagHelper.ShortTagName)]
     public class AccordionTagHelper : TagHelper
     {
         internal const string TagName = "govuk-accordion";

@@ -7,9 +7,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the body in a GDS panel component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = PanelTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = PanelTagHelper.TagName)]
     public class PanelBodyTagHelper : TagHelper
     {
         internal const string TagName = "govuk-panel-body";
+        internal const string ShortTagName = "body";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

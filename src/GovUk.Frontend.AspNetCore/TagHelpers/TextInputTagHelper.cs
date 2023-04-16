@@ -11,7 +11,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS input component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, TextInputPrefixTagHelper.TagName, TextInputSuffixTagHelper.TagName)]
+    [RestrictChildren(
+        LabelTagName,
+        FormGroupLabelTagHelper.ShortTagName,
+        HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName,
+        TextInputPrefixTagHelper.TagName,
+        TextInputPrefixTagHelper.ShortTagName,
+        TextInputSuffixTagHelper.TagName,
+        TextInputSuffixTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
     public class TextInputTagHelper : FormGroupTagHelperBase
     {

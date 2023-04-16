@@ -9,10 +9,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents an item in a GDS accordion component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = AccordionTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = AccordionTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.AccordionItemElement)]
     public class AccordionItemTagHelper : TagHelper
     {
         internal const string TagName = "govuk-accordion-item";
+        internal const string ShortTagName = "accordion-item";
 
         private const string ExpandedAttributeName = "expanded";
 

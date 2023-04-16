@@ -11,7 +11,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS character count component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, CharacterCountValueTagHelper.TagName)]
+    [RestrictChildren(
+        LabelTagName,
+        FormGroupLabelTagHelper.ShortTagName,
+        HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName,
+        CharacterCountValueTagHelper.TagName,
+        CharacterCountValueTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.CharacterCountElement)]
     public class CharacterCountTagHelper : FormGroupTagHelperBase
     {

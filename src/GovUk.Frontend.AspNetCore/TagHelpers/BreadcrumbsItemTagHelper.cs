@@ -9,10 +9,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents an item in a GDS breadcrumbs component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = BreadcrumbsTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = BreadcrumbsTagHelper.TagName)]
     //[OutputElementHint(ComponentGenerator.BreadcrumbsItemElement)]  // Omitted since it produces intellisense warnings
     public class BreadcrumbsItemTagHelper : TagHelper
     {
         internal const string TagName = "govuk-breadcrumbs-item";
+        internal const string ShortTagName = "breadcrumbs-item";
 
         private const string LinkAttributesPrefix = "link-";
 

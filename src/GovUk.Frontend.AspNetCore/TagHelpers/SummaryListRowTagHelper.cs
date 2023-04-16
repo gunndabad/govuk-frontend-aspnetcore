@@ -8,11 +8,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents a row in a GDS summary list component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = SummaryListTagHelper.TagName)]
-    [RestrictChildren(SummaryListRowKeyTagHelper.TagName, SummaryListRowValueTagHelper.TagName, SummaryListRowActionsTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SummaryListTagHelper.TagName)]
+    [RestrictChildren(
+        SummaryListRowKeyTagHelper.TagName,
+        SummaryListRowKeyTagHelper.ShortTagName,
+        SummaryListRowValueTagHelper.TagName,
+        SummaryListRowValueTagHelper.ShortTagName,
+        SummaryListRowActionsTagHelper.TagName,
+        SummaryListRowActionsTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.SummaryListRowElement)]
     public class SummaryListRowTagHelper : TagHelper
     {
         internal const string TagName = "govuk-summary-list-row";
+        internal const string ShortTagName = "summary-list-row";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

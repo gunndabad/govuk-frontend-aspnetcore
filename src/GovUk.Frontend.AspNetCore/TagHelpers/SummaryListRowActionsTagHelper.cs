@@ -8,11 +8,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the actions wrapper in a GDS summary list component row.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = SummaryListRowTagHelper.TagName)]
-    [RestrictChildren(SummaryListRowActionTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = SummaryListRowTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SummaryListRowTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SummaryListRowTagHelper.ShortTagName)]
+    [RestrictChildren(SummaryListRowActionTagHelper.TagName, SummaryListRowActionTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.SummaryListRowActionsElement)]
     public class SummaryListRowActionsTagHelper : TagHelper
     {
         internal const string TagName = "govuk-summary-list-row-actions";
+        internal const string ShortTagName = "actions";
 
         /// <summary>
         /// Creates a new <see cref="SummaryListRowActionsTagHelper"/>.

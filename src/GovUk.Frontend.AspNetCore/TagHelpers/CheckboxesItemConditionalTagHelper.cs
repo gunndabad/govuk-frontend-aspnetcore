@@ -7,9 +7,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the conditional reveal of a checkbox item in a GDS checkboxes component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = CheckboxesItemTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesItemTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = CheckboxesItemTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesItemTagHelper.ShortTagName)]
     public class CheckboxesItemConditionalTagHelper : TagHelper
     {
         internal const string TagName = "govuk-checkboxes-item-conditional";
+        internal const string ShortTagName = "conditional";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

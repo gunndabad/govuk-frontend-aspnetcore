@@ -12,10 +12,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents an item in a GDS pagination component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = PaginationTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = PaginationTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.PaginationItemElement)]
     public class PaginationItemTagHelper : TagHelper
     {
         internal const string TagName = "govuk-pagination-item";
+        internal const string ShortTagName = "pagination-item";
 
         private const string IsCurrentAttributeName = "is-current";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";

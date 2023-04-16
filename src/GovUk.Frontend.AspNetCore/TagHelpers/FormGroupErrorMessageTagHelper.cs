@@ -8,17 +8,32 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the error message in a GDS form group component.
     /// </summary>
     [HtmlTargetElement(CheckboxesTagHelper.ErrorMessageTagName, ParentTag = CheckboxesTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesTagHelper.TagName)]
     [HtmlTargetElement(CheckboxesTagHelper.ErrorMessageTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(CheckboxesTagHelper.ErrorMessageTagName, ParentTag = CheckboxesFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesFieldsetTagHelper.ShortTagName)]
     [HtmlTargetElement(CharacterCountTagHelper.ErrorMessageTagName, ParentTag = CharacterCountTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CharacterCountTagHelper.TagName)]
     [HtmlTargetElement(FileUploadTagHelper.ErrorMessageTagName, ParentTag = FileUploadTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = FileUploadTagHelper.TagName)]
     [HtmlTargetElement(RadiosTagHelper.ErrorMessageTagName, ParentTag = RadiosTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosTagHelper.TagName)]
     [HtmlTargetElement(RadiosTagHelper.ErrorMessageTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(RadiosTagHelper.ErrorMessageTagName, ParentTag = RadiosFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosFieldsetTagHelper.ShortTagName)]
     [HtmlTargetElement(SelectTagHelper.ErrorMessageTagName, ParentTag = SelectTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SelectTagHelper.TagName)]
     [HtmlTargetElement(TextAreaTagHelper.ErrorMessageTagName, ParentTag = TextAreaTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextAreaTagHelper.TagName)]
     [HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.ErrorMessageElement)]
     public class FormGroupErrorMessageTagHelper : TagHelper
     {
+        internal const string ShortTagName = "error-message";
+
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
         /// <summary>

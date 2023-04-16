@@ -12,17 +12,36 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(DayTagName, ParentTag = DateInputTagHelper.TagName)]
     [HtmlTargetElement(DayTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(DayTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortDayTagName, ParentTag = DateInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortDayTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortDayTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
     [HtmlTargetElement(MonthTagName, ParentTag = DateInputTagHelper.TagName)]
     [HtmlTargetElement(MonthTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(MonthTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortMonthTagName, ParentTag = DateInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortMonthTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortMonthTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
     [HtmlTargetElement(YearTagName, ParentTag = DateInputTagHelper.TagName)]
     [HtmlTargetElement(YearTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(YearTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortYearTagName, ParentTag = DateInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortYearTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortYearTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
-    [RestrictChildren(DateInputItemLabelTagHelper.DayTagName, DateInputItemLabelTagHelper.MonthTagName, DateInputItemLabelTagHelper.YearTagName)]
+    [RestrictChildren(
+        DateInputItemLabelTagHelper.DayTagName,
+        DateInputItemLabelTagHelper.MonthTagName,
+        DateInputItemLabelTagHelper.YearTagName,
+        DateInputItemLabelTagHelper.ShortTagName)]
     public class DateInputItemTagHelper : TagHelper
     {
         internal const string DayTagName = "govuk-date-input-day";
+        internal const string ShortDayTagName = "day";
         internal const string MonthTagName = "govuk-date-input-month";
+        internal const string ShortMonthTagName = "month";
         internal const string YearTagName = "govuk-date-input-year";
+        internal const string ShortYearTagName = "year";
 
         private const string AutocompleteAttributeName = "autocomplete";
         private const string IdAttributeName = "id";

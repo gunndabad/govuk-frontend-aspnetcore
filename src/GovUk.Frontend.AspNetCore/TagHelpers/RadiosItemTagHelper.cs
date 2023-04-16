@@ -11,10 +11,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = RadiosTagHelper.TagName)]
     [HtmlTargetElement(TagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = RadiosFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosFieldsetTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.RadiosItemElement)]
     public class RadiosItemTagHelper : TagHelper
     {
         internal const string TagName = "govuk-radios-item";
+        internal const string ShortTagName = "radios-item";
 
         private const string CheckedAttributeName = "checked";
         private const string DisabledAttributeName = "disabled";

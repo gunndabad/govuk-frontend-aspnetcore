@@ -8,10 +8,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the summary in a GDS accordion component item.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = AccordionItemTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = AccordionItemTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = AccordionItemTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = AccordionItemTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.AccordionItemSummaryElement)]
     public class AccordionItemSummaryTagHelper : TagHelper
     {
         internal const string TagName = "govuk-accordion-item-summary";
+        internal const string ShortTagName = "summary";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

@@ -11,9 +11,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents an item in a GDS select component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = SelectTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SelectTagHelper.TagName)]
     public class SelectItemTagHelper : TagHelper
     {
         internal const string TagName = "govuk-select-item";
+        internal const string ShortTagName = "select-item";
 
         private const string DisabledAttributeName = "disabled";
         private const string SelectedAttributeName = "selected";

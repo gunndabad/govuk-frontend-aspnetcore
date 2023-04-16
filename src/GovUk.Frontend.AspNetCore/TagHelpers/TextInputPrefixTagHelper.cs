@@ -8,10 +8,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the prefix element in a GDS input component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.InputPrefixElement)]
     public class TextInputPrefixTagHelper : TagHelper
     {
         internal const string TagName = "govuk-input-prefix";
+        internal const string ShortTagName = "prefix";
 
         /// <summary>
         /// Creates an <see cref="TextInputPrefixTagHelper"/>.

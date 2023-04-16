@@ -8,13 +8,20 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the label in a GDS form group component.
     /// </summary>
     [HtmlTargetElement(CharacterCountTagHelper.LabelTagName, ParentTag = CharacterCountTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CharacterCountTagHelper.TagName)]
     [HtmlTargetElement(FileUploadTagHelper.LabelTagName, ParentTag = FileUploadTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = FileUploadTagHelper.TagName)]
     [HtmlTargetElement(SelectTagHelper.LabelTagName, ParentTag = SelectTagHelper.TagName)]	
+    [HtmlTargetElement(ShortTagName, ParentTag = SelectTagHelper.TagName)]
     [HtmlTargetElement(TextAreaTagHelper.LabelTagName, ParentTag = TextAreaTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextAreaTagHelper.TagName)]
     [HtmlTargetElement(TextInputTagHelper.LabelTagName, ParentTag = TextInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.LabelElement)]
     public class FormGroupLabelTagHelper : TagHelper
     {
+        internal const string ShortTagName = "label";
+
         private const string IsPageHeadingAttributeName = "is-page-heading";
 
         /// <summary>

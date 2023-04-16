@@ -4,7 +4,6 @@ using System.Diagnostics;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
@@ -17,11 +16,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement(TagName)]
     [RestrictChildren(
         DateInputFieldsetTagHelper.TagName,
+        DateInputFieldsetTagHelper.ShortTagName,
         HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
         ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName,
         DateInputItemTagHelper.DayTagName,
+        DateInputItemTagHelper.ShortDayTagName,
         DateInputItemTagHelper.MonthTagName,
-        DateInputItemTagHelper.YearTagName)]
+        DateInputItemTagHelper.ShortMonthTagName,
+        DateInputItemTagHelper.YearTagName,
+        DateInputItemTagHelper.ShortYearTagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
     public class DateInputTagHelper : FormGroupTagHelperBase
     {

@@ -9,10 +9,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = RadiosTagHelper.TagName)]
     [HtmlTargetElement(TagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = RadiosFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = RadiosFieldsetTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.RadiosDividerItemElement)]
     public class RadiosItemDividerTagHelper : TagHelper
     {
         internal const string TagName = "govuk-radios-divider";
+        internal const string ShortTagName = "radios-divider";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

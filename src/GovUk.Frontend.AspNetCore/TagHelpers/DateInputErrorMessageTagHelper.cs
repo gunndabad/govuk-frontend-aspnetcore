@@ -6,6 +6,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// <inheritdoc/>
     [HtmlTargetElement(DateInputTagHelper.ErrorMessageTagName, ParentTag = DateInputTagHelper.TagName)]
     [HtmlTargetElement(DateInputTagHelper.ErrorMessageTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(DateInputTagHelper.ErrorMessageTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = DateInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.ErrorMessageElement)]
     public class DateInputErrorMessageTagHelper : FormGroupErrorMessageTagHelper
     {

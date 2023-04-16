@@ -8,10 +8,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the prefix suffix in a GDS input component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.InputSuffixElement)]
     public class TextInputSuffixTagHelper : TagHelper
     {
         internal const string TagName = "govuk-input-suffix";
+        internal const string ShortTagName = "suffix";
 
         /// <summary>
         /// Creates an <see cref="TextInputSuffixTagHelper"/>.
