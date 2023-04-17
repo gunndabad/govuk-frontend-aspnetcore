@@ -165,8 +165,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         internal static DateInputItemType GetItemTypeFromTagName(string tagName) => tagName switch
         {
             DateInputItemTagHelper.DayTagName => DateInputItemType.Day,
+            DateInputItemTagHelper.ShortDayTagName => DateInputItemType.Day,
             DateInputItemTagHelper.MonthTagName => DateInputItemType.Month,
+            DateInputItemTagHelper.ShortMonthTagName => DateInputItemType.Month,
             DateInputItemTagHelper.YearTagName => DateInputItemType.Year,
+            DateInputItemTagHelper.ShortYearTagName => DateInputItemType.Year,
             _ => throw new ArgumentException($"Unknown tag name: '{tagName}'.", nameof(tagName))
         };
 

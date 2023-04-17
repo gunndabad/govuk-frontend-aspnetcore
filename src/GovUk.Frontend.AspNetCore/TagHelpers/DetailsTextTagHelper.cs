@@ -8,10 +8,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the text in a GDS details component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = DetailsTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = DetailsTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.DetailsTextElement)]
     public class DetailsTextTagHelper : TagHelper
     {
         internal const string TagName = "govuk-details-text";
+        internal const string ShortTagName = "text";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

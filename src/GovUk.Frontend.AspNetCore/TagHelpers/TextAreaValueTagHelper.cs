@@ -7,9 +7,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the value of a GDS character count component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = TextAreaTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = TextAreaTagHelper.TagName)]
     public class TextAreaValueTagHelper : TagHelper
     {
         internal const string TagName = "govuk-textarea-value";
+        internal const string ShortTagName = "value";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

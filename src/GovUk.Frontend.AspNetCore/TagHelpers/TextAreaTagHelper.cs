@@ -10,7 +10,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS textarea component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, TextAreaValueTagHelper.TagName)]
+    [RestrictChildren(
+        LabelTagName,
+        FormGroupLabelTagHelper.ShortTagName,
+        HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName,
+        TextAreaValueTagHelper.TagName,
+        TextAreaValueTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
     public class TextAreaTagHelper : FormGroupTagHelperBase
     {

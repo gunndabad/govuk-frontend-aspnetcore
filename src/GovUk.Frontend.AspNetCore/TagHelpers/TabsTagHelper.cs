@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     [HtmlTargetElement("govuk-tabs", TagStructure = TagStructure.NormalOrSelfClosing)]
-    [RestrictChildren("govuk-tabs-item")]
+    [RestrictChildren("govuk-tabs-item", "item")]
     public class TabsTagHelper : TagHelper
     {
         internal const string IdPrefixAttributeName = "id-prefix";
@@ -59,6 +59,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     }
 
     [HtmlTargetElement("govuk-tabs-item", ParentTag = "govuk-tabs", TagStructure = TagStructure.NormalOrSelfClosing)]
+    [HtmlTargetElement("item", ParentTag = "govuk-tabs", TagStructure = TagStructure.NormalOrSelfClosing)]
     public class TabsItemTagHelper : TagHelper
     {
         private const string IdAttributeName = "id";

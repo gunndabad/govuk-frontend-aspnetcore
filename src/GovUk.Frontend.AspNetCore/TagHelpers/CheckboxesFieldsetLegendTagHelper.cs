@@ -8,10 +8,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the legend in a GDS checkboxes component fieldset.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = CheckboxesFieldsetTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesFieldsetTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FieldsetLegendElement)]
     public class CheckboxesFieldsetLegendTagHelper : TagHelper
     {
         internal const string TagName = "govuk-checkboxes-fieldset-legend";
+        internal const string ShortTagName = "legend";
 
         private const string IsPageHeadingAttributeName = "is-page-heading";
 

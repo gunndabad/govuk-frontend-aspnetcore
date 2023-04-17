@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,7 +12,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS checkboxes component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(RadiosFieldsetTagHelper.TagName, RadiosItemTagHelper.TagName, RadiosItemDividerTagHelper.TagName, HintTagName, ErrorMessageTagName)]
+    [RestrictChildren(
+        RadiosFieldsetTagHelper.TagName,
+        RadiosFieldsetTagHelper.ShortTagName,
+        RadiosItemTagHelper.TagName,
+        RadiosItemTagHelper.ShortTagName,
+        RadiosItemDividerTagHelper.TagName,
+        RadiosItemDividerTagHelper.ShortTagName,
+        HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.RadiosElement)]
     public class RadiosTagHelper : FormGroupTagHelperBase
     {

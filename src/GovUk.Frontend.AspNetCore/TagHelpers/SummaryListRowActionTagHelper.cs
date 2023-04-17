@@ -8,10 +8,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents an action in a GDS summary list row.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = SummaryListRowActionsTagHelper.TagName)]
+    [HtmlTargetElement(TagName, ParentTag = SummaryListRowActionsTagHelper.ShortTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SummaryListRowActionsTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = SummaryListRowActionsTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.SummaryListRowActionElement)]
     public class SummaryListRowActionTagHelper : TagHelper
     {
         internal const string TagName = "govuk-summary-list-row-action";
+        internal const string ShortTagName = "action";
 
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 

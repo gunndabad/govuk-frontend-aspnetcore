@@ -12,9 +12,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     [HtmlTargetElement(TagName)]
     [RestrictChildren(
         PaginationPreviousTagHelper.TagName,
+        PaginationPreviousTagHelper.ShortTagName,
         PaginationItemTagHelper.TagName,
+        PaginationItemTagHelper.ShortTagName,
         PaginationEllipsisItemTagHelper.TagName,
-        PaginationNextTagHelper.TagName)]
+        PaginationEllipsisItemTagHelper.ShortTagName,
+        PaginationNextTagHelper.TagName,
+        PaginationNextTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.PaginationElement)]
     public class PaginationTagHelper : TagHelper
     {

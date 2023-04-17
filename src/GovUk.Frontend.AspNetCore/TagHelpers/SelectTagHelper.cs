@@ -10,7 +10,15 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GDS select component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(SelectItemTagHelper.TagName, LabelTagName, HintTagName, ErrorMessageTagName)]
+    [RestrictChildren(
+        SelectItemTagHelper.TagName,
+        SelectItemTagHelper.ShortTagName,
+        LabelTagName,
+        FormGroupLabelTagHelper.ShortTagName,
+        HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FormGroupElement)]
     public class SelectTagHelper : FormGroupTagHelperBase
     {

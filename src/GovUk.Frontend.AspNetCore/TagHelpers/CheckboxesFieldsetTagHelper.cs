@@ -8,11 +8,23 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the fieldset in a GDS checkboxes component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = CheckboxesTagHelper.TagName)]
-    [RestrictChildren(CheckboxesFieldsetLegendTagHelper.TagName, CheckboxesItemTagHelper.TagName, CheckboxesItemDividerTagHelper.TagName, CheckboxesTagHelper.HintTagName, CheckboxesTagHelper.ErrorMessageTagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = CheckboxesTagHelper.TagName)]
+    [RestrictChildren(
+        CheckboxesFieldsetLegendTagHelper.TagName,
+        CheckboxesFieldsetLegendTagHelper.ShortTagName,
+        CheckboxesItemTagHelper.TagName,
+        CheckboxesItemTagHelper.ShortTagName,
+        CheckboxesItemDividerTagHelper.TagName,
+        CheckboxesItemDividerTagHelper.ShortTagName,
+        CheckboxesTagHelper.HintTagName,
+        FormGroupHintTagHelper.ShortTagName,
+        CheckboxesTagHelper.ErrorMessageTagName,
+        FormGroupErrorMessageTagHelper.ShortTagName)]
     [OutputElementHint(ComponentGenerator.FieldsetElement)]
     public class CheckboxesFieldsetTagHelper : TagHelper
     {
         internal const string TagName = "govuk-checkboxes-fieldset";
+        internal const string ShortTagName = "checkboxes-fieldset";  // 'fieldset' clashes with FieldsetTagHelper
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

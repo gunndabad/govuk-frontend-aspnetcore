@@ -7,9 +7,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents the description in a GDS error summary component.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = ErrorSummaryTagHelper.TagName)]
+    [HtmlTargetElement(ShortTagName, ParentTag = ErrorSummaryTagHelper.TagName)]
     public class ErrorSummaryDescriptionTagHelper : TagHelper
     {
         internal const string TagName = "govuk-error-summary-description";
+        internal const string ShortTagName = "description";
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
