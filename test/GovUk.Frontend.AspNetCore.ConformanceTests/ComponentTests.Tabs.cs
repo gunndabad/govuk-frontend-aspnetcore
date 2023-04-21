@@ -1,5 +1,7 @@
 using System.Linq;
-using GovUk.Frontend.AspNetCore.TestCommon;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -16,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                 data,
                 (generator, options) =>
                 {
-                    var title = options.Title ?? ComponentDefaults.Tabs.Title;
+                    var title = options.Title ?? ComponentGenerator.TabsDefaultTitle;
 
                     var attributes = options.Attributes.ToAttributesDictionary()
                         .MergeAttribute("class", options.Classes);
@@ -25,13 +27,16 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         {
                             Id = i.Id,
                             Label = i.Label,
+                            LinkAttributes = i.Attributes.ToAttributesDictionary(),
                             PanelAttributes = i.Panel.Attributes.ToAttributesDictionary(),
-                            PanelContent = TextOrHtmlHelper.GetHtmlContent(i.Panel.Text, i.Panel.Html)
+                            PanelContent = !string.IsNullOrEmpty(i.Panel.Text) ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Panel.Text) + "</p>") :
+                                i.Panel.Html is not null ? new HtmlString(i.Panel.Html) :
+                                null
                         }))
                         .OrEmpty();
 
-                    return generator.GenerateTabs(options.Id, title, attributes, items)
-                        .RenderToString();
+                    return generator.GenerateTabs(options.Id, options.IdPrefix, title, attributes, items)
+                        .ToHtmlString();
                 });
     }
 }

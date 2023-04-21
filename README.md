@@ -164,6 +164,7 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Select](docs/components/select.md)
 - [Skip link](docs/components/skip-link.md)
 - [Summary list](docs/components/summary-list.md)
+- [Tabs](docs/components/tabs.md)
 - [Tag](docs/components/tag.md)
 - [Textarea](docs/components/textarea.md)
 - [Text input](docs/components/text-input.md)

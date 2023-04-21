@@ -78,6 +78,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("SummaryList/SummaryListWithActions", "summary-list-with-actions.png"),
                 ("SummaryList/SummaryListWithoutActions", "summary-list-without-actions.png"),
                 ("PhaseBanner/PhaseBanner", "phase-banner.png"),
+                ("Tabs/Tabs", "tabs.png"),
                 ("Tag/DefaultTag", "tag-default.png"),
                 ("Tag/TagWithClass", "tag-with-class.png"),
                 ("TextArea/TextArea", "textarea.png"),
