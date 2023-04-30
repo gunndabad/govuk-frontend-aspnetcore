@@ -159,6 +159,7 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateTabs(
             string id,
+            string idPrefix,
             string title,
             AttributeDictionary attributes,
             IEnumerable<TabsItem> items);
