@@ -97,6 +97,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 contentDiv.MergeCssClass("govuk-accordion__section-content");
                 contentDiv.Attributes.Add("id", contentId);
                 contentDiv.Attributes.Add("aria-labelledby", headingId);
+                contentDiv.MergeOptionalAttributes(item.ContentAttributes);
                 contentDiv.InnerHtml.AppendHtml(item.Content);
                 section.InnerHtml.AppendHtml(contentDiv);
 

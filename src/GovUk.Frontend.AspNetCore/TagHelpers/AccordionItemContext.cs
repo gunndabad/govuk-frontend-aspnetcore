@@ -8,6 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         public (AttributeDictionary Attributes, IHtmlContent Content)? Heading { get; private set; }
         public (AttributeDictionary Attributes, IHtmlContent Content)? Summary { get; private set; }
+        public (AttributeDictionary Attributes, IHtmlContent Content)? Content { get; private set; }
 
         public void SetHeading(AttributeDictionary attributes, IHtmlContent content)
         {
@@ -26,6 +27,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemSummaryTagHelper.TagName}>.");
             }
 
+            if (Content != null)
+            {
+                throw new InvalidOperationException(
+                    $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>.");
+            }
+
             Heading = (attributes, content);
         }
 
@@ -40,7 +47,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     $"Only one <{AccordionItemSummaryTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
             }
 
+            if (Content != null)
+            {
+                throw new InvalidOperationException(
+                    $"<{AccordionItemSummaryTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>.");
+            }
+
             Summary = (attributes, content);
+        }
+
+        public void SetContent(AttributeDictionary attributes, IHtmlContent content)
+        {
+            Guard.ArgumentNotNull(nameof(attributes), attributes);
+            Guard.ArgumentNotNull(nameof(content), content);
+
+            if (Content != null)
+            {
+                throw new InvalidOperationException(
+                    $"Only one <{AccordionItemContentTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
+            }
+
+            Content = (attributes, content);
         }
 
         public void ThrowIfIncomplete()
@@ -48,6 +75,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             if (Heading == null)
             {
                 throw ExceptionHelper.AChildElementMustBeProvided(AccordionItemHeadingTagHelper.TagName);
+            }
+
+            if (Content == null)
+            {
+                throw ExceptionHelper.AChildElementMustBeProvided(AccordionItemContentTagHelper.TagName);
             }
         }
     }

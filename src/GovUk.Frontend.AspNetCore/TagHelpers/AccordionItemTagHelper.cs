@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -10,6 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = AccordionTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.AccordionItemElement)]
+    [RestrictChildren(AccordionItemHeadingTagHelper.TagName, AccordionItemSummaryTagHelper.TagName, AccordionItemContentTagHelper.TagName)]
     public class AccordionItemTagHelper : TagHelper
     {
         internal const string TagName = "govuk-accordion-item";
@@ -32,10 +32,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var itemContext = new AccordionItemContext();
 
-            TagHelperContent childContent;
             using (context.SetScopedContextItem(itemContext))
             {
-                childContent = await output.GetChildContentAsync();
+                await output.GetChildContentAsync();
             }
 
             itemContext.ThrowIfIncomplete();
@@ -47,7 +46,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 HeadingAttributes = itemContext.Heading.Value.Attributes,
                 SummaryContent = itemContext.Summary?.Content,
                 SummaryAttributes = itemContext.Summary?.Attributes,
-                Content = childContent.Snapshot(),
+                Content = itemContext.Content?.Content,
+                ContentAttributes = itemContext.Content?.Attributes,
                 Attributes = output.Attributes.ToAttributeDictionary()
             });
 

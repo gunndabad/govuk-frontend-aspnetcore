@@ -11,6 +11,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public IHtmlContent? SummaryContent { get; set; }
         public AttributeDictionary? SummaryAttributes { get; set; }
         public IHtmlContent? Content { get; set; }
+        public AttributeDictionary? ContentAttributes { get; set; }
         public AttributeDictionary? Attributes { get; set; }
     }
 }
