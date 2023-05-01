@@ -1,7 +1,8 @@
 using System;
+using GovUk.Frontend.AspNetCore.ModelBinding;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests
+namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
 {
     public class DateOnlyDateInputModelConverterTests
     {

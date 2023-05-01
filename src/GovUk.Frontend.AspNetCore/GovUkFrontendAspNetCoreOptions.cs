@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Http;
 
@@ -20,7 +21,6 @@ namespace GovUk.Frontend.AspNetCore
 
             DateInputModelConverters = new List<DateInputModelConverter>()
             {
-                new DateDateInputModelConverter(),
                 new DateTimeDateInputModelConverter(),
                 new DateOnlyDateInputModelConverter()
             };

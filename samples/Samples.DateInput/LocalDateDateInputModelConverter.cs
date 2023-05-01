@@ -1,5 +1,5 @@
 using System;
-using GovUk.Frontend.AspNetCore;
+using GovUk.Frontend.AspNetCore.ModelBinding;
 using NodaTime;
 
 namespace Samples.DateInput

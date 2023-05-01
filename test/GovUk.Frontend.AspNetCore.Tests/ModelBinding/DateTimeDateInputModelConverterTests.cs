@@ -1,20 +1,20 @@
-#pragma warning disable CS0618 // Type or member is obsolete
 using System;
+using GovUk.Frontend.AspNetCore.ModelBinding;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests
+namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
 {
-    public class DateDateInputModelConverterTests
+    public class DateTimeDateInputModelConverterTests
     {
         [Theory]
-        [MemberData(nameof(CreateDateFromElementsData))]
-        public void CreateDateFromComponents_ReturnsExpectedResult(
+        [MemberData(nameof(CreateModelFromDateData))]
+        public void CreateModelFromDate_ReturnsExpectedResult(
             Type modelType,
             DateOnly date,
             object expectedResult)
         {
             // Arrange
-            var converter = new DateDateInputModelConverter();
+            var converter = new DateTimeDateInputModelConverter();
 
             // Act
             var result = converter.CreateModelFromDate(modelType, date);
@@ -31,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore.Tests
            DateOnly? expectedResult)
         {
             // Arrange
-            var converter = new DateDateInputModelConverter();
+            var converter = new DateTimeDateInputModelConverter();
 
             // Act
             var result = converter.GetDateFromModel(modelType, model);
@@ -40,16 +40,16 @@ namespace GovUk.Frontend.AspNetCore.Tests
             Assert.Equal(expectedResult, result);
         }
 
-        public static TheoryData<Type, DateOnly?, object> CreateDateFromElementsData { get; } = new()
+        public static TheoryData<Type, DateOnly?, object> CreateModelFromDateData { get; } = new()
         {
-            { typeof(Date), new DateOnly(2020, 4, 1), new Date(2020, 4, 1) },
-            { typeof(Date?), new DateOnly(2020, 4, 1), (Date?)new Date(2020, 4, 1) }
+            { typeof(DateTime), new DateOnly(2020, 4, 1), new DateTime(2020, 4, 1) },
+            { typeof(DateTime?), new DateOnly(2020, 4, 1), (DateTime?)new DateTime(2020, 4, 1) }
         };
 
         public static TheoryData<Type, object, DateOnly?> GetDateFromModelData { get; } = new()
         {
-            { typeof(Date), new Date(2020, 4, 1), new DateOnly(2020, 4, 1) },
-            { typeof(Date?), (Date?)new Date(2020, 4, 1), new Date(2020, 4, 1) },
+            { typeof(DateTime), new DateTime(2020, 4, 1), new DateOnly(2020, 4, 1) },
+            { typeof(DateTime?), (DateTime?)new DateTime(2020, 4, 1), new DateOnly(2020, 4, 1) },
         };
     }
 }

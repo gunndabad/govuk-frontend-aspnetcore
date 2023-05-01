@@ -1,6 +1,6 @@
 using System;
 
-namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore.ModelBinding
 {
     /// <summary>
     /// The errors that occurred when parsing the components of a date input component.
@@ -54,8 +54,8 @@ namespace GovUk.Frontend.AspNetCore
         /// </summary>
         public static DateInputErrorComponents GetErrorComponents(this DateInputParseErrors parseErrors) =>
             DateInputErrorComponents.None |
-            (((parseErrors & (DateInputParseErrors.MissingDay | DateInputParseErrors.InvalidDay)) != 0) ? DateInputErrorComponents.Day : 0) |
-            (((parseErrors & (DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidMonth)) != 0) ? DateInputErrorComponents.Month : 0) |
-            (((parseErrors & (DateInputParseErrors.MissingYear | DateInputParseErrors.InvalidYear)) != 0) ? DateInputErrorComponents.Year : 0);
+            ((parseErrors & (DateInputParseErrors.MissingDay | DateInputParseErrors.InvalidDay)) != 0 ? DateInputErrorComponents.Day : 0) |
+            ((parseErrors & (DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidMonth)) != 0 ? DateInputErrorComponents.Month : 0) |
+            ((parseErrors & (DateInputParseErrors.MissingYear | DateInputParseErrors.InvalidYear)) != 0 ? DateInputErrorComponents.Year : 0);
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore.ModelBinding
 {
     internal class DateTimeDateInputModelConverter : DateInputModelConverter
     {
