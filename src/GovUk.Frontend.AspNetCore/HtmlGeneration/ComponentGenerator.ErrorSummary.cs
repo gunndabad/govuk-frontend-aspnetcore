@@ -8,11 +8,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
     internal partial class ComponentGenerator
     {
         internal const string ErrorSummaryDefaultTitle = "There is a problem";
-        internal const bool ErrorSummaryDefaultDisableAutoFocus = false;
         internal const string ErrorSummaryElement = "div";
 
         public TagBuilder GenerateErrorSummary(
-            bool disableAutoFocus,
+            bool? disableAutoFocus,
             IHtmlContent titleContent,
             AttributeDictionary titleAttributes,
             IHtmlContent descriptionContent,
@@ -25,21 +24,21 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             var tagBuilder = new TagBuilder(ErrorSummaryElement);
             tagBuilder.MergeAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-error-summary");
-            tagBuilder.Attributes.Add("aria-labelledby", "error-summary-title");
-            tagBuilder.Attributes.Add("role", "alert");
             tagBuilder.Attributes.Add("data-module", "govuk-error-summary");
 
-            if (disableAutoFocus)
+            if (disableAutoFocus.HasValue)
             {
-                tagBuilder.Attributes.Add("data-disable-auto-focus", "true");
+                tagBuilder.Attributes.Add("data-disable-auto-focus", disableAutoFocus.Value ? "true" : "false");
             }
+
+            var alert = new TagBuilder("div");
+            alert.Attributes.Add("role", "alert");
 
             var heading = new TagBuilder("h2");
             heading.MergeAttributes(titleAttributes);
             heading.MergeCssClass("govuk-error-summary__title");
-            heading.Attributes.Add("id", "error-summary-title");
             heading.InnerHtml.AppendHtml(titleContent);
-            tagBuilder.InnerHtml.AppendHtml(heading);
+            alert.InnerHtml.AppendHtml(heading);
 
             var body = new TagBuilder("div");
             body.MergeCssClass("govuk-error-summary__body");
@@ -89,7 +88,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             body.InnerHtml.AppendHtml(ul);
 
-            tagBuilder.InnerHtml.AppendHtml(body);
+            alert.InnerHtml.AppendHtml(body);
+
+            tagBuilder.InnerHtml.AppendHtml(alert);
 
             return tagBuilder;
         }

@@ -19,9 +19,6 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         NotificationBannerType.Success :
                         NotificationBannerType.Default;
 
-                    var disableAutoFocus = options.DisableAutoFocus ??
-                        ComponentGenerator.NotificationBannerDefaultDisableAutoFocus;
-
                     var titleContent = TextOrHtmlHelper.GetHtmlContent(options.TitleText, options.TitleHtml);
 
                     // The 'text' option gets wrapped in a <p>
@@ -40,7 +37,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     return generator.GenerateNotificationBanner(
                             type,
                             options.Role,
-                            disableAutoFocus,
+                            options.DisableAutoFocus,
                             options.TitleId,
                             options.TitleHeadingLevel ?? ComponentGenerator.NotificationBannerDefaultTitleHeadingLevel,
                             titleContent,

@@ -13,6 +13,12 @@ namespace GovUk.Frontend.AspNetCore
             string id,
             int headingLevel,
             AttributeDictionary attributes,
+            string hideAllSectionsText,
+            string hideSectionText,
+            string hideSectionAriaLabelText,
+            string showAllSectionsText,
+            string showSectionText,
+            string showSectionAriaLabelText,
             IEnumerable<AccordionItem> items);
 
         TagBuilder GenerateBackLink(IHtmlContent content, AttributeDictionary attributes);
@@ -25,7 +31,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateButton(
             bool isStartButton,
             bool disabled,
-            bool preventDoubleClick,
+            bool? preventDoubleClick,
             IHtmlContent content,
             AttributeDictionary attributes);
 
@@ -41,7 +47,14 @@ namespace GovUk.Frontend.AspNetCore
             int? maxWords,
             decimal? threshold,
             IHtmlContent formGroup,
-            AttributeDictionary countMessageAttributes);
+            AttributeDictionary countMessageAttributes,
+            string textAreaDescriptionText,
+            (string Other, string One)? charactersUnderLimitText,
+            string charactersAtLimitText,
+            (string Other, string One)? charactersOverLimitText,
+            (string Other, string One)? wordsUnderLimitText,
+            string wordsAtLimitText,
+            (string Other, string One)? wordsOverLimitText);
 
         TagBuilder GenerateCheckboxes(
             string idPrefix,
@@ -73,7 +86,7 @@ namespace GovUk.Frontend.AspNetCore
             AttributeDictionary attributes);
 
         TagBuilder GenerateErrorSummary(
-            bool disableAutofocus,
+            bool? disableAutofocus,
             IHtmlContent titleContent,
             AttributeDictionary titleAttributes,
             IHtmlContent descriptionContent,
@@ -112,7 +125,7 @@ namespace GovUk.Frontend.AspNetCore
         TagBuilder GenerateNotificationBanner(
             NotificationBannerType type,
             string role,
-            bool disableAutoFocus,
+            bool? disableAutoFocus,
             string titleId,
             int? titleHeadingLevel,
             IHtmlContent titleContent,

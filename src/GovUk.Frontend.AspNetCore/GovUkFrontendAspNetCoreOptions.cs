@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Http;
@@ -41,10 +40,7 @@ namespace GovUk.Frontend.AspNetCore
         /// <summary>
         /// The default value for <see cref="ButtonTagHelper.PreventDoubleClick"/>.
         /// </summary>
-        /// <remarks>
-        /// The default is <c>false</c>.
-        /// </remarks>
-        public bool DefaultButtonPreventDoubleClick { get; set; } = ComponentGenerator.ButtonDefaultPreventDoubleClick;
+        public bool? DefaultButtonPreventDoubleClick { get; set; }
 
         /// <summary>
         /// A delegate for retrieving a CSP nonce for the current request.
@@ -69,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore
         public bool PrependErrorSummaryToForms { get; set; }
 
         /// <summary>
-        /// Whether to prepend 'Error: ' to the &lt;title&gt; element when ModelState is not valid.
+        /// Whether to prepend &quot;Error: &quot; to the &lt;title&gt; element when ModelState is not valid.
         /// </summary>
         /// <remarks>
         /// The default is <c>true</c>.

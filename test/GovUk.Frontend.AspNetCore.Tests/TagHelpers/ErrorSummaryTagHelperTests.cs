@@ -57,14 +57,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
 
             // Assert
             var expectedHtml = @"
-<div aria-labelledby=""error-summary-title"" class=""govuk-error-summary"" data-module=""govuk-error-summary"" role=""alert"">
-    <h2 class=""govuk-error-summary__title"" id=""error-summary-title"">Title</h2>
-    <div class=""govuk-error-summary__body"">
-        <p>Description</p>
-        <ul class=""govuk-error-summary__list govuk-list"">
-            <li><a href=""#Field1"">First message</a></li>
-            <li><a href=""#Field2"">Second message</a></li>
-        </ul>
+<div class=""govuk-error-summary"" data-module=""govuk-error-summary"">
+    <div role=""alert"">
+        <h2 class=""govuk-error-summary__title"">Title</h2>
+        <div class=""govuk-error-summary__body"">
+            <p>Description</p>
+            <ul class=""govuk-error-summary__list govuk-list"">
+                <li><a href=""#Field1"">First message</a></li>
+                <li><a href=""#Field2"">Second message</a></li>
+            </ul>
+        </div>
     </div>
 </div>";
 

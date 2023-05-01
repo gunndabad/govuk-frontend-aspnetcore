@@ -197,50 +197,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         }
 
         [Fact]
-        public async Task ProcessAsync_NoMaxLengthOrMaxWords_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-character-count",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-character-count",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var characterCountContext = context.GetContextItem<CharacterCountContext>();
-
-                    characterCountContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    characterCountContext.SetHint(
-                        attributes: null,
-                        content: new HtmlString("The hint"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CharacterCountTagHelper()
-            {
-                Id = "my-id",
-                Name = "my-name"
-            };
-
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("One of the 'max-length' and 'max-words' attributes must be specified.", ex.Message);
-        }
-
-        [Fact]
         public async Task ProcessAsync_BothMaxLengthAndMaxWords_ThrowsInvalidOperationException()
         {
             // Arrange

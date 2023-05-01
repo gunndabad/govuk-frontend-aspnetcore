@@ -18,7 +18,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         internal const string TagName = "govuk-accordion";
 
         private const string HeadingLevelAttributeName = "heading-level";
+        private const string HideAllSectionsTextAttributeName = "hide-all-sections-text";
+        private const string HideSectionTextAttributeName = "hide-section-text";
+        private const string HideSectionAriaLabelTextAttributeName = "hide-section-aria-label-text";
         private const string IdAttributeName = "id";
+        private const string ShowAllSectionsTextAttributeName = "show-all-sections-text";
+        private const string ShowSectionTextAttributeName = "show-section-text";
+        private const string ShowSectionAriaLabelTextAttributeName = "show-section-aria-label-text";
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
         private string? _id;
@@ -62,6 +68,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         }
 
         /// <summary>
+        /// The text content of the &quot;Hide all sections&quot; button at the top of the accordion when all sections
+        /// are expanded.
+        /// </summary>
+        [HtmlAttributeName(HideAllSectionsTextAttributeName)]
+        public string? HideAllSectionsText { get; set; }
+
+        /// <summary>
+        /// The text content of the &quot;Hide&quot; button within each section of the accordion, which is visible when the
+        /// section is expanded.
+        /// </summary>
+        [HtmlAttributeName(HideSectionTextAttributeName)]
+        public string? HideSectionText { get; set; }
+
+        /// <summary>
+        /// The text made available to assistive technologies, like screen-readers, as the final part of the toggle's
+        /// accessible name when the section is expanded.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to <c>&quot;Hide this section&quot;</c>.
+        /// </remarks>
+        [HtmlAttributeName(HideSectionAriaLabelTextAttributeName)]
+        public string? HideSectionAriaLabelText { get; set; }
+
+        /// <summary>
         /// The <c>id</c> attribute for the accordion.
         /// </summary>
         /// <remarks>
@@ -78,6 +108,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 _id = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
             }
         }
+
+        /// <summary>
+        /// The text content of the &quot;Show all sections&quot; button at the top of the accordion, which is visible when the
+        /// section is collapsed.
+        /// </summary>
+        [HtmlAttributeName(ShowAllSectionsTextAttributeName)]
+        public string? ShowAllSectionsText { get; set; }
+
+        /// <summary>
+        /// The text content of the &quot;Show&quot; button within each section of the accordion, which is visible when the
+        /// section is collapsed.
+        /// </summary>
+        [HtmlAttributeName(ShowSectionTextAttributeName)]
+        public string? ShowSectionText { get; set; }
+
+        /// <summary>
+        /// The text made available to assistive technologies, like screen-readers, as the final part of the toggle's
+        /// accessible name when the section is collapsed.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to <c>&quot;Show this section&quot;</c>.
+        /// </remarks>
+        [HtmlAttributeName(ShowSectionAriaLabelTextAttributeName)]
+        public string? ShowSectionAriaLabelText { get; set; }
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -98,7 +152,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 Id,
                 HeadingLevel,
                 output.Attributes.ToAttributeDictionary(),
-                accordionContext.Items);
+                ShowAllSectionsText,
+                ShowSectionText,
+                ShowSectionAriaLabelText,
+                HideAllSectionsText,
+                HideSectionText,
+                HideSectionAriaLabelText,
+                items: accordionContext.Items);
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

@@ -1,6 +1,5 @@
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests
@@ -28,7 +27,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
                     var isStartButton = options.IsStartButton ?? ComponentGenerator.ButtonDefaultIsStartButton;
                     var disabled = options.Disabled ?? ComponentGenerator.ButtonDefaultDisabled;
-                    var preventDoubleClick = options.PreventDoubleClick ?? ComponentGenerator.ButtonDefaultPreventDoubleClick;
+                    var preventDoubleClick = options.PreventDoubleClick;
                     var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
 
                     var attributes = options.Attributes.ToAttributesDictionary()

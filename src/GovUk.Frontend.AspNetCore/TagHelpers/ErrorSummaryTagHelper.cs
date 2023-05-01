@@ -37,11 +37,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// <summary>
         /// Whether to disable the behavior that focuses the error summary when the page loads.
         /// </summary>
-        /// <remarks>
-        /// The default is <c>false</c>.
-        /// </remarks>
         [HtmlAttributeName(DisableAutoFocusAttributeName)]
-        public bool DisableAutoFocus { get; set; } = ComponentGenerator.ErrorSummaryDefaultDisableAutoFocus;
+        public bool? DisableAutoFocus { get; set; }
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

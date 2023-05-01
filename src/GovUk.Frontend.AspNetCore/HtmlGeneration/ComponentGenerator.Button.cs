@@ -9,14 +9,13 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
     {
         internal const bool ButtonDefaultDisabled = false;
         internal const bool ButtonDefaultIsStartButton = false;
-        internal const bool ButtonDefaultPreventDoubleClick = false;
         internal const string ButtonElement = "button";
         internal const string ButtonLinkElement = "a";
 
         public TagBuilder GenerateButton(
             bool isStartButton,
             bool disabled,
-            bool preventDoubleClick,
+            bool? preventDoubleClick,
             IHtmlContent content,
             AttributeDictionary? attributes)
         {
@@ -34,9 +33,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 tagBuilder.Attributes.Add("aria-disabled", "true");
             }
 
-            if (preventDoubleClick)
+            if (preventDoubleClick.HasValue)
             {
-                tagBuilder.Attributes.Add("data-prevent-double-click", "true");
+                tagBuilder.Attributes.Add("data-prevent-double-click", preventDoubleClick.Value ? "true" : "false");
             }
 
             tagBuilder.InnerHtml.AppendHtml(content);

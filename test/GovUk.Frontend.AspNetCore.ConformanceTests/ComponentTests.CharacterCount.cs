@@ -57,7 +57,20 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                                 attributes);
                         }));
 
-                    return generator.GenerateCharacterCount(options.Id, options.MaxLength, options.MaxWords, options.Threshold, content, countMessageAttributes)
+                    return generator.GenerateCharacterCount(
+                            options.Id,
+                            options.MaxLength,
+                            options.MaxWords,
+                            options.Threshold,
+                            content,
+                            countMessageAttributes,
+                            options.TextareaDescriptionText,
+                            options.CharactersUnderLimitText is not null ? (options.CharactersUnderLimitText.Other, options.CharactersUnderLimitText.One) : null,
+                            options.CharactersAtLimitText,
+                            options.CharactersOverLimitText is not null ? (options.CharactersOverLimitText.Other, options.CharactersOverLimitText.One) : null,
+                            options.WordsUnderLimitText is not null ? (options.WordsUnderLimitText.Other, options.WordsUnderLimitText.One) : null,
+                            options.WordsAtLimitText,
+                            options.WordsOverLimitText is not null ? (options.WordsOverLimitText.Other, options.WordsOverLimitText.One) : null)
                         .ToHtmlString();
                 });
     }

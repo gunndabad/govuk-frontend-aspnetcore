@@ -63,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// The default is set for the application in <see cref="GovUkFrontendAspNetCoreOptions.DefaultButtonPreventDoubleClick"/>.
         /// </remarks>
         [HtmlAttributeName(PreventDoubleClickAttributeName)]
-        public bool PreventDoubleClick { get; set; }
+        public bool? PreventDoubleClick { get; set; }
 
         /// <summary>
         /// The <c>type</c> attribute for the generated <c>button</c> element.

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -21,6 +22,24 @@ namespace GovUk.Frontend.AspNetCore
 
             tagBuilder.Attributes.MergeCssClass(value);
         }
+
+        // See govukPluralisedI18nAttributes nunjucks macro
+        internal static void AddPluralisedI18nAttributes(
+            this TagBuilder tagBuilder,
+            string translationKey,
+            params (string PluralType, string Message)[] pluralForms)
+        {
+            foreach (var (pluralType, message) in pluralForms)
+            {
+                tagBuilder.Attributes.Add($"data-i18n.{translationKey}.{pluralType}", message);
+            }
+        }
+
+        internal static void AddPluralisedI18nAttributes(
+            this TagBuilder tagBuilder,
+            string translationKey,
+            string pluralType,
+            string message) => AddPluralisedI18nAttributes(tagBuilder, translationKey, new[] { (pluralType, message) });
 
         internal static void MergeOptionalAttributes(this TagBuilder tagBuilder, AttributeDictionary? attributes)
         {

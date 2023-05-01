@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Xunit;
 
@@ -36,7 +35,17 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         })
                         .OrEmpty();
 
-                    return generator.GenerateAccordion(options.Id, headingLevel, attributes, items)
+                    return generator.GenerateAccordion(
+                            options.Id,
+                            headingLevel,
+                            attributes,
+                            options.HideAllSectionsText,
+                            options.HideSectionText,
+                            options.HideSectionAriaLabelText,
+                            options.ShowAllSectionsText,
+                            options.ShowSectionText,
+                            options.ShowSectionAriaLabelText,
+                            items)
                         .ToHtmlString();
                 });
     }
