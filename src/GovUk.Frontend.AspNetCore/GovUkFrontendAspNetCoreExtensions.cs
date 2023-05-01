@@ -4,6 +4,7 @@ using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelperComponents;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -12,9 +13,9 @@ using Microsoft.Extensions.Options;
 namespace GovUk.Frontend.AspNetCore
 {
     /// <summary>
-    /// Extension methods for setting up GovUk.Frontend.AspNetCore services in an <see cref="IServiceCollection"/>.
+    /// Extension methods for setting up GovUk.Frontend.AspNetCore.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static class GovUkFrontendAspNetCoreExtensions
     {
         /// <summary>
         /// Adds GovUk.Frontend.AspNetCore services to the specified <see cref="IServiceCollection"/>.
@@ -52,6 +53,32 @@ namespace GovUk.Frontend.AspNetCore
             services.Configure(setupAction);
 
             return services;
+        }
+
+        /// <summary>
+        /// Replaces the <see cref="IModelBinderProvider"/> of type <typeparamref name="T"/> with <paramref name="modelBinderProvider"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the <see cref="IModelBinderProvider"/> to replace.</typeparam>
+        /// <param name="mvcOptions">The <see cref="MvcOptions"/>.</param>
+        /// <param name="modelBinderProvider">The <see cref="IModelBinderProvider"/> to replace with.</param>
+        /// <returns><see langword="true"/> if a <see cref="IModelBinderProvider"/> was replaced otherwise <see langword="false"/>.</returns>
+        public static bool ReplaceModelBinderProvider<T>(this MvcOptions mvcOptions, IModelBinderProvider modelBinderProvider)
+            where T : IModelBinderProvider
+        {
+            Guard.ArgumentNotNull(nameof(mvcOptions), mvcOptions);
+
+            var modelBinderProviders = mvcOptions.ModelBinderProviders;
+
+            for (var i = 0; i < modelBinderProviders.Count; i++)
+            {
+                if (modelBinderProviders[i] is T)
+                {
+                    modelBinderProviders[i] = modelBinderProvider;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
