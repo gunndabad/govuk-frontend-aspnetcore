@@ -33,7 +33,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             var converterMock = new Mock<DateInputModelConverter>();
             converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
 
-            var modelBinder = new DateInputModelBinder(converterMock.Object);
+            var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
 
             // Act
             await modelBinder.BindModelAsync(bindingContext);
@@ -70,7 +70,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
                 .Returns(new DateOnly(2020, 4, 1))
                 .Verifiable();
 
-            var modelBinder = new DateInputModelBinder(converterMock.Object);
+            var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
 
             // Act
             await modelBinder.BindModelAsync(bindingContext);
@@ -139,7 +139,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             var converterMock = new Mock<DateInputModelConverter>();
             converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
 
-            var modelBinder = new DateInputModelBinder(converterMock.Object);
+            var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
 
             // Act
             await modelBinder.BindModelAsync(bindingContext);
@@ -187,7 +187,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
                 .Returns(true)
                 .Verifiable();
 
-            var modelBinder = new DateInputModelBinder(converterMock.Object);
+            var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
 
             // Act
             await modelBinder.BindModelAsync(bindingContext);
@@ -225,7 +225,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             var modelMetadata = new DisplayNameModelMetadata("Date of birth");
 
             // Act
-            var result = DateInputModelBinder.GetModelStateErrorMessage(parseErrors, modelMetadata);
+            var result = DateInputModelConverterModelBinder.GetModelStateErrorMessage(parseErrors, modelMetadata);
 
             // Assert
             Assert.Equal(expectedMessage, result);
@@ -253,7 +253,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding
             // Arrange
 
             // Act
-            var result = DateInputModelBinder.Parse(day, month, year, out var dateComponents);
+            var result = DateInputModelConverterModelBinder.Parse(day, month, year, out var dateComponents);
 
             // Assert
             Assert.Equal(default, dateComponents);

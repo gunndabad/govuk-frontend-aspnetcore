@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding
 {
-    internal class DateInputModelBinder : IModelBinder
+    internal class DateInputModelConverterModelBinder : IModelBinder
     {
         private const string DayComponentName = "Day";
         private const string MonthComponentName = "Month";
@@ -15,7 +15,7 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
 
         private readonly DateInputModelConverter _dateInputModelConverter;
 
-        public DateInputModelBinder(DateInputModelConverter dateInputModelConverter)
+        public DateInputModelConverterModelBinder(DateInputModelConverter dateInputModelConverter)
         {
             _dateInputModelConverter = Guard.ArgumentNotNull(nameof(dateInputModelConverter), dateInputModelConverter);
         }

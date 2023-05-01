@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GovUk.Frontend.AspNetCore
 {
@@ -77,35 +75,5 @@ namespace GovUk.Frontend.AspNetCore
         /// The default is <c>true</c>.
         /// </remarks>
         public bool PrependErrorToTitle { get; set; }
-
-        /// <summary>
-        /// Creates an <see cref="IModelBinder"/> for Date input components using the <see cref="DateInputModelConverter"/>
-        /// registered in <see cref="DateInputModelConverters"/> for the specified <see cref="Type"/>.
-        /// </summary>
-        /// <param name="dateModelType">The type that the created <see cref="IModelBinder"/> should support.</param>
-        /// <returns>
-        /// A <see cref="IModelBinder"/>
-        /// or <see langword="null"/> if there is no <see cref="DateInputModelConverter"/> registered that supports <paramref name="dateModelType"/>.
-        /// </returns>
-        public IModelBinder? GetDateInputModelBinder(Type dateModelType)
-        {
-            foreach (var converter in DateInputModelConverters)
-            {
-                if (converter.CanConvertModelType(dateModelType))
-                {
-                    return GetDateInputModelBinder(converter);
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IModelBinder"/> for Date input components using the specified <see cref="DateInputModelConverter"/>.
-        /// </summary>
-        /// <param name="converter">The <see cref="DateInputModelConverter"/> to use to convert to and from a <see cref="Date"/>.</param>
-        /// <returns>A <see cref="IModelBinder"/>.</returns>
-        public IModelBinder GetDateInputModelBinder(DateInputModelConverter converter) =>
-            new DateInputModelBinder(converter);
     }
 }

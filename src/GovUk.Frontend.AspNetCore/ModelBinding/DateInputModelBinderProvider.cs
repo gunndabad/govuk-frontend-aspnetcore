@@ -2,10 +2,16 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding
 {
-    internal class DateInputModelBinderProvider : IModelBinderProvider
+    /// <summary>
+    /// An <see cref="IModelBinderProvider"/> for binding Date input components.
+    /// </summary>
+    public class DateInputModelBinderProvider : IModelBinderProvider
     {
         private readonly GovUkFrontendAspNetCoreOptions _options;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateInputModelBinderProvider"/> class.
+        /// </summary>
         public DateInputModelBinderProvider(GovUkFrontendAspNetCoreOptions options)
         {
             Guard.ArgumentNotNull(nameof(options), options);
@@ -13,12 +19,22 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding
             _options = options;
         }
 
+        /// <inheritdoc/>
         public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
             Guard.ArgumentNotNull(nameof(context), context);
 
             var modelType = context.Metadata.UnderlyingOrModelType;
-            return _options.GetDateInputModelBinder(modelType);
+
+            foreach (var converter in _options.DateInputModelConverters)
+            {
+                if (converter.CanConvertModelType(modelType))
+                {
+                    return new DateInputModelConverterModelBinder(converter);
+                }
+            }
+
+            return null;
         }
     }
 }

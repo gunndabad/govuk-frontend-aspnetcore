@@ -39,6 +39,8 @@ namespace GovUk.Frontend.AspNetCore
             Guard.ArgumentNotNull(nameof(services), services);
             Guard.ArgumentNotNull(nameof(setupAction), setupAction);
 
+            services.AddMvcCore();
+
             services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
             services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
             services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
@@ -63,7 +65,7 @@ namespace GovUk.Frontend.AspNetCore
 
             public void Configure(MvcOptions options)
             {
-                options.ModelBinderProviders.Insert(0, new DateInputModelBinderProvider(_gfaOptions));
+                options.ModelBinderProviders.Insert(2, new DateInputModelBinderProvider(_gfaOptions));
             }
         }
     }
