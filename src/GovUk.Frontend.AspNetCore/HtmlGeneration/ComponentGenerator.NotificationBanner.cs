@@ -1,4 +1,5 @@
 using System;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -43,10 +44,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 NotificationBannerDefaultSuccessRole :
                 NotificationBannerDefaultRole;
 
-            titleContent ??= new HtmlString(
+            titleContent ??= new HtmlString(HtmlEncoder.Default.Encode(
                 type == NotificationBannerType.Success ?
                     NotificationBannerDefaultSuccessTitle :
-                    NotificationBannerDefaultTitle);
+                    NotificationBannerDefaultTitle));
 
             titleId ??= NotificationBannerDefaultTitleId;
 

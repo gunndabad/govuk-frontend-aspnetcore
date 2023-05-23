@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -134,7 +135,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 var resolvedName = ResolveName();
 
                 var resolvedContent = textAreaContext.Value ??
-                    new HtmlString(AspFor != null ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) : string.Empty);
+                    new HtmlString(AspFor != null ? HtmlEncoder.Default.Encode(ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty) : string.Empty);
 
                 var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
                 resolvedTextAreaAttributes.MergeCssClass("govuk-js-textarea");

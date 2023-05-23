@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
@@ -62,7 +63,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var tagBuilder = _htmlGenerator.GenerateErrorSummary(
                 DisableAutoFocus,
-                errorSummaryContext.Title?.Content ?? new HtmlString(ComponentGenerator.ErrorSummaryDefaultTitle),
+                errorSummaryContext.Title?.Content ?? new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.ErrorSummaryDefaultTitle)),
                 errorSummaryContext.Title?.Attributes,
                 errorSummaryContext.Description?.Content,
                 errorSummaryContext.Description?.Attributes,

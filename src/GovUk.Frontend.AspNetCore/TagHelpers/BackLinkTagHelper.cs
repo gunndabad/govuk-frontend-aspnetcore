@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
@@ -15,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     {
         internal const string TagName = "govuk-back-link";
 
-        private static readonly HtmlString _defaultContent = new HtmlString(ComponentGenerator.BackLinkDefaultContent);
+        private static readonly HtmlString _defaultContent = new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.BackLinkDefaultContent));
 
         private readonly IGovUkHtmlGenerator _htmlGenerator;
 

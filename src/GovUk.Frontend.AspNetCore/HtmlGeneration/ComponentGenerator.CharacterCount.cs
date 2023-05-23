@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -50,7 +51,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var content = maxWords.HasValue ?
                     $"You can enter up to {maxWords} words" :
                     $"You can enter up to {maxLength} characters";
-                var hintContent = new HtmlString(content);
+                var hintContent = new HtmlString(HtmlEncoder.Default.Encode(content));
 
                 var attributes = countMessageAttributes.ToAttributeDictionary();
                 attributes.MergeCssClass("govuk-character-count__message");

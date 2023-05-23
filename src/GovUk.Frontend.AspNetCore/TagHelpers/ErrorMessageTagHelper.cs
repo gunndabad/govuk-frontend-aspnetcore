@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
@@ -92,7 +93,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 if (validationMessage != null)
                 {
-                    resolvedContent = new HtmlString(validationMessage);
+                    resolvedContent = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
                 }
             }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -67,7 +68,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     title.AddCssClass("govuk-pagination__link-title--decorated");
                 }
 
-                title.InnerHtml.AppendHtml(previous.Text ?? new HtmlString(PaginationDefaultPreviousText));
+                title.InnerHtml.AppendHtml(previous.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultPreviousText)));
 
                 link.InnerHtml.AppendHtml(title);
 
@@ -187,7 +188,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                     title.AddCssClass("govuk-pagination__link-title--decorated");
                 }
 
-                title.InnerHtml.AppendHtml(next.Text ?? new HtmlString(PaginationDefaultNextText));
+                title.InnerHtml.AppendHtml(next.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultNextText)));
 
                 link.InnerHtml.AppendHtml(title);
 
