@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
@@ -268,7 +269,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 var resolvedItemId = contextItem?.Id ?? $"{resolvedId}.{contextItem?.Name ?? defaultName}";
 
-                var resolvedItemLabel = contextItem?.LabelContent ?? new HtmlString(defaultLabel);
+                var resolvedItemLabel = contextItem?.LabelContent ?? new HtmlString(HtmlEncoder.Default.Encode(defaultLabel));
 
                 var resolvedItemHaveError = haveError && (errorItems & errorSource) != 0;
 

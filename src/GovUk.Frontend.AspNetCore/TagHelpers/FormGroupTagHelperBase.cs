@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
@@ -129,7 +130,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 if (validationMessage != null)
                 {
-                    content = new HtmlString(validationMessage);
+                    content = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
                 }
             }
 
@@ -175,7 +176,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
                 if (description != null)
                 {
-                    content = new HtmlString(description);
+                    content = new HtmlString(HtmlEncoder.Default.Encode(description));
                 }
             }
 
@@ -208,7 +209,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var attributes = formGroupContext.Label?.Attributes;
 
             var resolvedContent = content ??
-                new HtmlString(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name));
+                new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
 
             return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
         }
@@ -216,7 +217,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
         {
             var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
-                (AspFor is not null ? new HtmlString(ModelHelper.GetDisplayName(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null);
+                (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
 
             if (resolvedFieldsetLegendContent is null)
             {

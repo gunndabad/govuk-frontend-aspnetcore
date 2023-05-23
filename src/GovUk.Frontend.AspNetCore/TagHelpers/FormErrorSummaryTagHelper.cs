@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
@@ -75,7 +76,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var errorSummary = _htmlGenerator.GenerateErrorSummary(
                 ComponentGenerator.ErrorSummaryDefaultDisableAutoFocus,
-                titleContent: new HtmlString(ComponentGenerator.ErrorSummaryDefaultTitle),
+                titleContent: new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.ErrorSummaryDefaultTitle)),
                 titleAttributes: null,
                 descriptionContent: null,
                 descriptionAttributes: null,

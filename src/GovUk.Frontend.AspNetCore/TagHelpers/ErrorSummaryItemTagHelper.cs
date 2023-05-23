@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
@@ -100,7 +101,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                     return;
                 }
 
-                itemContent = new HtmlString(validationMessage);
+                itemContent = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
             }
 
             string? resolvedHref = null;
