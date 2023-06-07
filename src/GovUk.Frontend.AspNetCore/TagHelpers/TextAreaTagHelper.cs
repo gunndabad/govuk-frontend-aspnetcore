@@ -23,6 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string AutocompleteAttributeName = "autocomplete";
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
+        private const string LabelClassAttributeName = "label-class";
         private const string NameAttributeName = "name";
         private const string RowsAttributeName = "rows";
         private const string SpellcheckAttributeName = "spellcheck";
@@ -65,6 +66,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public string? Id { get; set; }
 
         /// <summary>
+        /// Additional classes for the generated <c>label</c> element.
+        /// </summary>
+        [HtmlAttributeName(LabelClassAttributeName)]
+        public string? LabelClass { get; set; }
+
+        /// <summary>
         /// The <c>name</c> attribute for the generated <c>textarea</c> element.
         /// </summary>
         /// <remarks>
@@ -105,7 +112,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var contentBuilder = new HtmlContentBuilder();
 
-            var label = GenerateLabel(formGroupContext);
+            var label = GenerateLabel(formGroupContext, LabelClass);
             contentBuilder.AppendHtml(label);
 
             var hint = GenerateHint(tagHelperContext, formGroupContext);

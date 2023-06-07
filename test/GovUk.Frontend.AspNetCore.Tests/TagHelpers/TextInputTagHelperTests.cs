@@ -50,7 +50,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 InputMode = "numeric",
                 Pattern = "[0-9]*",
                 Type = "number",
-                Value = "42"
+                Value = "42",
+                LabelClass = "additional-label-class"
             };
 
             // Act
@@ -59,7 +60,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var expectedHtml = @"
 <div class=""govuk-form-group"">
-    <label for=""my-id"" class=""govuk-label"">The label</label>
+    <label for=""my-id"" class=""govuk-label additional-label-class"">The label</label>
     <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
     <input
         aria-describedby=""describedby my-id-hint""

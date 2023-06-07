@@ -16,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore
         /// </summary>
         /// <param name="attributeDictionary">The <see cref="AttributeDictionary"/> to add the CSS class name to.</param>
         /// <param name="value">The CSS class name to add.</param>
-        public static void MergeCssClass(this AttributeDictionary attributeDictionary, string value)
+        public static void MergeCssClass(this AttributeDictionary attributeDictionary, string? value)
         {
             Guard.ArgumentNotNull(nameof(attributeDictionary), attributeDictionary);
 

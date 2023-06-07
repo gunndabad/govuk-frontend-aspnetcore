@@ -53,6 +53,7 @@ The content is the HTML to use within the generated component.
 | `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
 | `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
 | `input-*` | | Additional attributes to add to the generated `input` element. |
+| `label-class` | `string` | Additional classes for the generated `label` element. |
 | `name` | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified. |
 | `inputmode` | `string` | The `inputmode` attribute for the generated `input` element. |
 | `pattern` | `string` | The `pattern` attribute for the generated `input` element. |

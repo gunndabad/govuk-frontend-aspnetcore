@@ -48,7 +48,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var tagHelper = new TextAreaTagHelper()
             {
                 Id = "my-id",
-                Name = "my-name"
+                Name = "my-name",
+                LabelClass = "additional-label-class"
             };
 
             // Act
@@ -57,7 +58,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var expectedHtml = @"
 <div class=""govuk-form-group"">
-    <label class=""govuk-label"" for=""my-id"">The label</label>
+    <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
     <textarea class=""govuk-textarea govuk-js-textarea"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
 </div>";

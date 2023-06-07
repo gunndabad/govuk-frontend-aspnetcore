@@ -26,6 +26,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string DisabledAttributeName = "disabled";
         private const string IdAttributeName = "id";
         private const string InputModeAttributeName = "inputmode";
+        private const string LabelClassAttributeName = "label-class";
         private const string NameAttributeName = "name";
         private const string PatternAttributeName = "pattern";
         private const string SpellcheckAttributeName = "spellcheck";
@@ -46,8 +47,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         internal TextInputTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
             : base(
-                  htmlGenerator ?? new ComponentGenerator(),
-                  modelHelper ?? new DefaultModelHelper())
+                htmlGenerator ?? new ComponentGenerator(),
+                modelHelper ?? new DefaultModelHelper())
         {
         }
 
@@ -87,6 +88,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
         public IDictionary<string, string?>? InputAttributes { get; set; } = new Dictionary<string, string?>();
+
+        /// <summary>
+        /// Additional classes for the generated <c>label</c> element.
+        /// </summary>
+        [HtmlAttributeName(LabelClassAttributeName)]
+        public string? LabelClass { get; set; }
 
         /// <summary>
         /// The <c>name</c> attribute for the generated <c>input</c> element.
@@ -160,7 +167,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var contentBuilder = new HtmlContentBuilder();
 
-            var label = GenerateLabel(formGroupContext);
+            var label = GenerateLabel(formGroupContext, LabelClass);
             contentBuilder.AppendHtml(label);
 
             var hint = GenerateHint(tagHelperContext, formGroupContext);

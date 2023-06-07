@@ -70,7 +70,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 Id = "my-id",
                 DescribedBy = "describedby",
-                Name = "my-name"
+                Name = "my-name",
+                LabelClass = "additional-label-class"
             };
 
             // Act
@@ -79,7 +80,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             // Assert
             var expectedHtml = @"
 <div class=""govuk-form-group"">
-    <label for=""my-id"" class=""govuk-label"">The label</label>
+    <label for=""my-id"" class=""govuk-label additional-label-class"">The label</label>
     <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
     <select aria-describedby=""describedby my-id-hint"" class=""govuk-select"" id=""my-id"" name=""my-name"">
         <option>First</option>

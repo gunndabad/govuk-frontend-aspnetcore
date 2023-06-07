@@ -511,7 +511,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var ex = Record.Exception(() => tagHelper.GenerateLabel(formGroupContext));
+            var ex = Record.Exception(() => tagHelper.GenerateLabel(formGroupContext, labelClass: null));
 
             // Assert
             Assert.IsType<InvalidOperationException>(ex);
@@ -533,7 +533,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var label = tagHelper.GenerateLabel(formGroupContext);
+            var label = tagHelper.GenerateLabel(formGroupContext, labelClass: null);
 
             // Assert
             Assert.NotNull(label);
@@ -562,7 +562,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var label = tagHelper.GenerateLabel(formGroupContext);
+            var label = tagHelper.GenerateLabel(formGroupContext, labelClass: null);
 
             // Assert
             Assert.NotNull(label);
@@ -592,7 +592,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             };
 
             // Act
-            var label = tagHelper.GenerateLabel(formGroupContext);
+            var label = tagHelper.GenerateLabel(formGroupContext, labelClass: null);
 
             // Assert
             Assert.NotNull(label);
@@ -751,7 +751,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             {
                 var contentBuilder = new HtmlContentBuilder();
 
-                var label = GenerateLabel(formGroupContext);
+                var label = GenerateLabel(formGroupContext, labelClass: null);
                 contentBuilder.AppendHtml(label);
 
                 var hint = GenerateHint(tagHelperContext, formGroupContext);

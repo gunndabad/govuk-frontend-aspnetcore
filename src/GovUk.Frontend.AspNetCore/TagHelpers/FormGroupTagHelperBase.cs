@@ -193,7 +193,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
         }
 
-        internal IHtmlContent GenerateLabel(FormGroupContext formGroupContext)
+        internal IHtmlContent GenerateLabel(FormGroupContext formGroupContext, string? labelClass)
         {
             // We need some content for the label; if AspFor is null then label content must have been specified
             if (AspFor == null && formGroupContext.Label?.Content == null)
@@ -206,7 +206,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var isPageHeading = formGroupContext.Label?.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading;
             var content = formGroupContext.Label?.Content;
-            var attributes = formGroupContext.Label?.Attributes;
+
+            var attributes = formGroupContext.Label?.Attributes?.ToAttributeDictionary() ?? new();
+            attributes.MergeCssClass(labelClass);
 
             var resolvedContent = content ??
                 new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));

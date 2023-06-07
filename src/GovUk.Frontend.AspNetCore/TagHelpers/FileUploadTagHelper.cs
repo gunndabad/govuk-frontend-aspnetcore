@@ -20,6 +20,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private const string AttributesPrefix = "input-";
         private const string IdAttributeName = "id";
+        private const string LabelClassAttributeName = "label-class";
         private const string NameAttributeName = "name";
 
         /// <summary>
@@ -53,6 +54,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         public IDictionary<string, string?> InputAttributes { get; set; } = new Dictionary<string, string?>();
 
         /// <summary>
+        /// Additional classes for the generated <c>label</c> element.
+        /// </summary>
+        [HtmlAttributeName(LabelClassAttributeName)]
+        public string? LabelClass { get; set; }
+
+        /// <summary>
         /// The <c>name</c> attribute for the generated <c>input</c> element.
         /// </summary>
         /// <remarks>
@@ -72,7 +79,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var contentBuilder = new HtmlContentBuilder();
 
-            var label = GenerateLabel(formGroupContext);
+            var label = GenerateLabel(formGroupContext, LabelClass);
             contentBuilder.AppendHtml(label);
 
             var hint = GenerateHint(tagHelperContext, formGroupContext);

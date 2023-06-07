@@ -51,7 +51,8 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 Id = "my-id",
                 Name = "my-name",
                 MaxWords = 10,
-                Threshold = 90
+                Threshold = 90,
+                LabelClass = "additional-label-class"
             };
 
             // Act
@@ -61,7 +62,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var expectedHtml = @"
 <div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"" data-threshold=""90"">
     <div class=""govuk-form-group"">
-        <label class=""govuk-label"" for=""my-id"">The label</label>
+        <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
         <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
         <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
     </div>

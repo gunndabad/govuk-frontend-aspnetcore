@@ -26,6 +26,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string DisabledAttributeName = "disabled";
         private const string FormGroupAttributesPrefix = "form-group-";
         private const string IdAttributeName = "id";
+        private const string LabelClassAttributeName = "label-class";
         private const string MaxLengthAttributeName = "max-length";
         private const string MaxWordsLengthAttributeName = "max-words";
         private const string NameAttributeName = "name";
@@ -85,6 +86,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// </remarks>
         [HtmlAttributeName(IdAttributeName)]
         public string? Id { get; set; }
+
+        /// <summary>
+        /// Additional classes for the generated <c>label</c> element.
+        /// </summary>
+        [HtmlAttributeName(LabelClassAttributeName)]
+        public string? LabelClass { get; set; }
 
         /// <summary>
         /// The maximum number of characters the generated <c>textarea</c> may contain.
@@ -217,7 +224,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var contentBuilder = new HtmlContentBuilder();
 
-            var label = GenerateLabel(formGroupContext);
+            var label = GenerateLabel(formGroupContext, LabelClass);
             contentBuilder.AppendHtml(label);
 
             var hint = GenerateHint(tagHelperContext, formGroupContext);

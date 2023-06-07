@@ -33,6 +33,7 @@ Check out the [max words validator](../validation/maxwords.md) for adding server
 | `form-group-*` | | Additional attributes to add to the generated form-group wrapper element. |
 | `id` | `string` | The `id` attribute for the generated `textarea` element. If not specified then a value is generated from the `name` attribute. |
 | `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
+| `label-class` | `string` | Additional classes for the generated `label` element. |
 | `max-length` | `int?` | The maximum number of characters the generated `textarea` may contain. Required unless the `max-words` attribute is specified. |
 | `max-words` | `int?` | The maximum number of words the generated `textarea` may contain. Required unless the `max-length` attribute is specified. |
 | `name` | `string` | The `name` attribute for the generated `textarea` element. Required unless the `asp-for` attribute is specified. |
