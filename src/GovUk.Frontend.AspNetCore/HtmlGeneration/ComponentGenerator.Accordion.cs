@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -19,6 +20,12 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             string id,
             int headingLevel,
             AttributeDictionary? attributes,
+            string? hideAllSectionsText,
+            string? hideSectionText,
+            string? hideSectionAriaLabelText,
+            string? showAllSectionsText,
+            string? showSectionText,
+            string? showSectionAriaLabelText,
             IEnumerable<AccordionItem> items)
         {
             Guard.ArgumentNotNullOrEmpty(nameof(id), id);
@@ -37,6 +44,36 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.MergeCssClass("govuk-accordion");
             tagBuilder.Attributes.Add("data-module", "govuk-accordion");
             tagBuilder.Attributes.Add("id", id);
+
+            if (hideAllSectionsText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.hide-all-sections", hideAllSectionsText);
+            }
+
+            if (hideSectionText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.hide-section", hideSectionText);
+            }
+
+            if (hideSectionAriaLabelText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.hide-section-aria-label", hideSectionAriaLabelText);
+            }
+
+            if (showAllSectionsText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.show-all-sections", showAllSectionsText);
+            }
+
+            if (showSectionText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.show-section", showSectionText);
+            }
+
+            if (showSectionAriaLabelText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.show-section-aria-label", showSectionAriaLabelText);
+            }
 
             var index = 0;
             foreach (var item in items)

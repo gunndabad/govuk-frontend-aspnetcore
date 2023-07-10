@@ -15,10 +15,19 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             int? maxWords,
             decimal? threshold,
             IHtmlContent formGroup,
-            AttributeDictionary? countMessageAttributes)
+            AttributeDictionary? countMessageAttributes,
+            string? textAreaDescriptionText,
+            (string Other, string One)? charactersUnderLimitText,
+            string? charactersAtLimitText,
+            (string Other, string One)? charactersOverLimitText,
+            (string Other, string One)? wordsUnderLimitText,
+            string? wordsAtLimitText,
+            (string Other, string One)? wordsOverLimitText)
         {
             Guard.ArgumentNotNull(nameof(textAreaId), textAreaId);
             Guard.ArgumentNotNull(nameof(formGroup), formGroup);
+
+            var hasNoLimit = maxLength is null && maxWords is null;
 
             var tagBuilder = new TagBuilder(CharacterCountElement);
             tagBuilder.MergeCssClass("govuk-character-count");
@@ -39,6 +48,53 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 tagBuilder.Attributes.Add("data-maxwords", maxWords.Value.ToString());
             }
 
+            if (hasNoLimit && textAreaDescriptionText is not null)
+            {
+                tagBuilder.AddPluralisedI18nAttributes("textarea-description", "other", textAreaDescriptionText);
+            }
+
+            if (charactersUnderLimitText is not null)
+            {
+                tagBuilder.AddPluralisedI18nAttributes(
+                    "characters-under-limit",
+                    ("other", charactersUnderLimitText!.Value.Other),
+                    ("one", charactersUnderLimitText.Value!.One));
+            }
+
+            if (charactersAtLimitText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.characters-at-limit", charactersAtLimitText);
+            }
+
+            if (charactersOverLimitText is not null)
+            {
+                tagBuilder.AddPluralisedI18nAttributes(
+                    "characters-over-limit",
+                    ("other", charactersOverLimitText!.Value.Other),
+                    ("one", charactersOverLimitText.Value!.One));
+            }
+
+            if (wordsUnderLimitText is not null)
+            {
+                tagBuilder.AddPluralisedI18nAttributes(
+                    "words-under-limit",
+                    ("other", wordsUnderLimitText!.Value.Other),
+                    ("one", wordsUnderLimitText.Value!.One));
+            }
+
+            if (wordsAtLimitText is not null)
+            {
+                tagBuilder.Attributes.Add("data-i18n.words-at-limit", wordsAtLimitText);
+            }
+
+            if (wordsOverLimitText is not null)
+            {
+                tagBuilder.AddPluralisedI18nAttributes(
+                    "words-over-limit",
+                    ("other", wordsOverLimitText!.Value.Other),
+                    ("one", wordsOverLimitText.Value!.One));
+            }
+
             tagBuilder.InnerHtml.AppendHtml(formGroup);
             tagBuilder.InnerHtml.AppendHtml(GenerateHint());
 
@@ -48,9 +104,10 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             {
                 var hintId = $"{textAreaId}-info";
 
-                var content = maxWords.HasValue ?
-                    $"You can enter up to {maxWords} words" :
-                    $"You can enter up to {maxLength} characters";
+                var content = hasNoLimit ? "" :
+                    (textAreaDescriptionText ?? $"You can enter up to %{{count}} {(maxWords.HasValue ? "words" : "characters")}")
+                        .Replace("%{count}", (maxWords.HasValue ? maxWords : maxLength).ToString());
+
                 var hintContent = new HtmlString(HtmlEncoder.Default.Encode(content));
 
                 var attributes = countMessageAttributes.ToAttributeDictionary();

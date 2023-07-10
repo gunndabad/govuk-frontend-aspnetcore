@@ -75,7 +75,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             });
 
             var errorSummary = _htmlGenerator.GenerateErrorSummary(
-                ComponentGenerator.ErrorSummaryDefaultDisableAutoFocus,
+                disableAutofocus: null,  // TODO Should we have an attribute to configure this?
                 titleContent: new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.ErrorSummaryDefaultTitle)),
                 titleAttributes: null,
                 descriptionContent: null,

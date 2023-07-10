@@ -8,7 +8,6 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
     internal partial class ComponentGenerator
     {
-        internal const bool NotificationBannerDefaultDisableAutoFocus = false;
         internal const string NotificationBannerDefaultRole = "region";
         internal const string NotificationBannerDefaultSuccessRole = "alert";
         internal const string NotificationBannerDefaultSuccessTitle = "Success";
@@ -23,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         public TagBuilder GenerateNotificationBanner(
             NotificationBannerType type,
             string? role,
-            bool disableAutoFocus,
+            bool? disableAutoFocus,
             string? titleId,
             int? titleHeadingLevel,
             IHtmlContent? titleContent,
@@ -64,9 +63,9 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
             tagBuilder.Attributes.Add("role", role);
             tagBuilder.Attributes.Add("aria-labelledby", titleId);
 
-            if (disableAutoFocus)
+            if (disableAutoFocus.HasValue)
             {
-                tagBuilder.Attributes.Add("data-disable-auto-focus", "true");
+                tagBuilder.Attributes.Add("data-disable-auto-focus", disableAutoFocus.Value ? "true" : "false");
             }
 
             tagBuilder.InnerHtml.AppendHtml(GenerateHeading());

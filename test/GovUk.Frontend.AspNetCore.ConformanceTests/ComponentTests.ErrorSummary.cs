@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .MergeAttribute("class", options.Classes);
 
                     return generator.GenerateErrorSummary(
-                            options.DisableAutoFocus ?? ComponentGenerator.ErrorSummaryDefaultDisableAutoFocus,
+                            options.DisableAutoFocus,
                             titleContent,
                             titleAttributes: null,
                             descriptionContent,

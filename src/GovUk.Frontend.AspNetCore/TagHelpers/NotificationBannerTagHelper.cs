@@ -38,10 +38,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         /// </summary>
         /// <remarks>
         /// Only applies when <see cref="Type"/> is <see cref="NotificationBannerType.Success"/>.
-        /// The default is <c>false</c>.
         /// </remarks>
         [HtmlAttributeName(DisableAutoFocusAttributeName)]
-        public bool DisableAutoFocus { get; set; } = ComponentGenerator.NotificationBannerDefaultDisableAutoFocus;
+        public bool? DisableAutoFocus { get; set; }
 
         /// <summary>
         /// The <c>role</c> attribute for the notification banner.

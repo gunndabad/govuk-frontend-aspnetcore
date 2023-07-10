@@ -9,7 +9,8 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
     {
         [Theory]
         [ComponentFixtureData("label", typeof(OptionsJson.Label), exclude: "empty")]
-        public void Label(ComponentTestCaseData<OptionsJson.Label> data) =>
+        public void Label(ComponentTestCaseData<OptionsJson.Label> data)
+        {
             CheckComponentHtmlMatchesExpectedHtml(
                 data,
                 (generator, options) =>
@@ -18,6 +19,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
 
                     return BuildLabel(generator, labelOptions).ToHtmlString();
                 });
+        }
 
         private static IHtmlContent BuildLabel(ComponentGenerator generator, OptionsJson.Label options)
         {

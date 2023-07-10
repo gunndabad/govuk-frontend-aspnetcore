@@ -8,6 +8,12 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
         public int? HeadingLevel { get; set; }
         public string Classes { get; set; }
         public IDictionary<string, object> Attributes { get; set; }
+        public string HideAllSectionsText { get; set; }
+        public string HideSectionText { get; set; }
+        public string HideSectionAriaLabelText { get; set; }
+        public string ShowAllSectionsText { get; set; }
+        public string ShowSectionText { get; set; }
+        public string ShowSectionAriaLabelText { get; set; }
         public IList<AccordionItem> Items { get; set; }
     }
 

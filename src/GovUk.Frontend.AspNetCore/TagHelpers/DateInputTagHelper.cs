@@ -167,22 +167,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             var errorItems = GetErrorComponents(dateInputContext);
             Debug.Assert(errorItems != DateInputErrorComponents.None);
 
-            string suffix;
+            var suffix = errorItems.HasFlag(DateInputErrorComponents.Day) ? DefaultDayItemName :
+                errorItems.HasFlag(DateInputErrorComponents.Month) ? DefaultMonthItemName :
+                DefaultYearItemName;
 
-            if (errorItems.HasFlag(DateInputErrorComponents.Day))
-            {
-                suffix = $".{DefaultDayItemName}";
-            }
-            else if (errorItems.HasFlag(DateInputErrorComponents.Month))
-            {
-                suffix = $".{DefaultMonthItemName}";
-            }
-            else
-            {
-                suffix = $".{DefaultYearItemName}";
-            }
-
-            return $"{ResolveIdPrefix()}{suffix}";
+            return $"{ResolveIdPrefix()}.{suffix}";
         }
 
         private protected override string ResolveIdPrefix()

@@ -194,11 +194,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private protected override TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput)
         {
-            if (!MaxLength.HasValue && !MaxWords.HasValue)
-            {
-                throw new InvalidOperationException($"One of the '{MaxLengthAttributeName}' and '{MaxWordsLengthAttributeName}' attributes must be specified.");
-            }
-            else if (MaxLength.HasValue && MaxWords.HasValue)
+            if (MaxLength.HasValue && MaxWords.HasValue)
             {
                 throw new InvalidOperationException($"Only one of the '{MaxLengthAttributeName}' or '{MaxWordsLengthAttributeName}' attributes can be specified.");
             }
@@ -210,7 +206,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
                 FormGroupAttributes.ToAttributeDictionary());
 
             var resolvedId = ResolveIdPrefix();
-            return Generator.GenerateCharacterCount(resolvedId, MaxLength, MaxWords, Threshold, formGroup, CountMessageAttributes.ToAttributeDictionary());
+
+            return Generator.GenerateCharacterCount(
+                resolvedId,
+                MaxLength,
+                MaxWords,
+                Threshold,
+                formGroup,
+                CountMessageAttributes.ToAttributeDictionary(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
         }
 
         private protected override FormGroupContext CreateFormGroupContext() => new CharacterCountContext();
