@@ -57,6 +57,15 @@ jobs:
         dotnet test test/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
         dotnet test test/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
 
+    - name: Check documentation images
+      run:
+        DOCS_ROOT=$(realpath docs/images) dotnet run --project src/GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
+
+        git diff --cached --quiet docs/images || (
+          echo "::error ::Documentation images are stale"
+          exit 1
+        )
+
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
       env:
