@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
+    <IsTestProject>false</IsTestProject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectCapability Remove="TestContainer" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AngleSharp.Diffing" Version="0.14.0" />
