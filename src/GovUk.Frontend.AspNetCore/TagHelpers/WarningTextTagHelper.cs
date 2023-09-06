@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -18,7 +17,7 @@ public class WarningTextTagHelper : TagHelper
     private const string IconFallbackTextAttributeName = "icon-fallback-text";
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
-    private string? _iconFallbackText;
+    private string _iconFallbackText = ComponentGenerator.WarningTextDefaultIconFallbackText;
 
     /// <summary>
     /// Creates a new <see cref="WarningTextTagHelper"/>.
@@ -40,24 +39,15 @@ public class WarningTextTagHelper : TagHelper
     /// Cannot be <c>null</c> or empty.
     /// </remarks>
     [HtmlAttributeName(IconFallbackTextAttributeName)]
-    [DisallowNull]
-    public string? IconFallbackText
+    public string IconFallbackText
     {
         get => _iconFallbackText;
-        set
-        {
-            _iconFallbackText = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-        }
+        set => _iconFallbackText = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
     }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (IconFallbackText == null)
-        {
-            throw ExceptionHelper.TheAttributeMustBeSpecified(IconFallbackTextAttributeName);
-        }
-
         var childContent = await output.GetChildContentAsync();
 
         var tagBuilder = _htmlGenerator.GenerateWarningText(

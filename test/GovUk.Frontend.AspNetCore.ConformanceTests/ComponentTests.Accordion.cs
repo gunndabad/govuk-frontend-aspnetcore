@@ -39,6 +39,7 @@ public partial class ComponentTests
                         options.Id,
                         headingLevel,
                         attributes,
+                        options.RememberExpanded ?? ComponentGenerator.AccordionDefaultRememberExpanded,
                         options.HideAllSectionsText,
                         options.HideSectionText,
                         options.HideSectionAriaLabelText,

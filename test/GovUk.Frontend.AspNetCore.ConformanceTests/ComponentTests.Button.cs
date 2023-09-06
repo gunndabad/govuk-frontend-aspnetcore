@@ -16,7 +16,8 @@ public partial class ComponentTests
             "input disabled",
             "input attributes",
             "input classes",
-            "input type"
+            "input type",
+            "id"  // uses input type
         })]
     public void Button(ComponentTestCaseData<OptionsJson.Button> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

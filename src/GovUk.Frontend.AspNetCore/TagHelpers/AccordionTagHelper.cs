@@ -22,6 +22,7 @@ public class AccordionTagHelper : TagHelper
     private const string HideSectionTextAttributeName = "hide-section-text";
     private const string HideSectionAriaLabelTextAttributeName = "hide-section-aria-label-text";
     private const string IdAttributeName = "id";
+    private const string RememberExpandedAttributeName = "remember-expanded";
     private const string ShowAllSectionsTextAttributeName = "show-all-sections-text";
     private const string ShowSectionTextAttributeName = "show-section-text";
     private const string ShowSectionAriaLabelTextAttributeName = "show-section-aria-label-text";
@@ -95,7 +96,7 @@ public class AccordionTagHelper : TagHelper
     /// The <c>id</c> attribute for the accordion.
     /// </summary>
     /// <remarks>
-    /// Must be unique across the domain of your service.
+    /// Must be unique across the domain of your service if <see cref="RememberExpanded"/> is <c>true</c>.
     /// Cannot be <c>null</c> or empty.
     /// </remarks>
     [HtmlAttributeName(IdAttributeName)]
@@ -108,6 +109,15 @@ public class AccordionTagHelper : TagHelper
             _id = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
         }
     }
+
+    /// <summary>
+    /// Whether the expanded/collapsed state of the accordion should be saved when a user leaves the page and restored when they return.
+    /// </summary>
+    /// <remarks>
+    /// Defaults to <c>true</c>.
+    /// </remarks>
+    [HtmlAttributeName(RememberExpandedAttributeName)]
+    public bool RememberExpanded { get; set; } = ComponentGenerator.AccordionDefaultRememberExpanded;
 
     /// <summary>
     /// The text content of the &quot;Show all sections&quot; button at the top of the accordion, which is visible when the
@@ -152,6 +162,7 @@ public class AccordionTagHelper : TagHelper
             Id,
             HeadingLevel,
             output.Attributes.ToAttributeDictionary(),
+            RememberExpanded,
             ShowAllSectionsText,
             ShowSectionText,
             ShowSectionAriaLabelText,

@@ -13,6 +13,7 @@ internal interface IGovUkHtmlGenerator
         string id,
         int headingLevel,
         AttributeDictionary attributes,
+        bool rememberExpanded,
         string hideAllSectionsText,
         string hideSectionText,
         string hideSectionAriaLabelText,

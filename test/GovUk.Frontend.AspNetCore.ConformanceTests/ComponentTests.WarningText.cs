@@ -12,7 +12,7 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
-                var iconFallbackText = options.IconFallbackText;
+                var iconFallbackText = options.IconFallbackText ?? ComponentGenerator.WarningTextDefaultIconFallbackText;
                 var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html) ?? _emptyContent;
 
                 var attributes = options.Attributes.ToAttributesDictionary()
