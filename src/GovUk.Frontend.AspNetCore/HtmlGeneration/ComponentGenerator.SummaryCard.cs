@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 var titleTagBuilder = new TagBuilder($"h{title.HeadingLevel ?? SummaryCardDefaultHeadingLevel}");
                 titleTagBuilder.MergeOptionalAttributes(title.Attributes);
                 titleTagBuilder.MergeCssClass("govuk-summary-card__title");
-                titleTagBuilder.InnerHtml.AppendHtml(title.Content);
+                titleTagBuilder.InnerHtml.AppendHtml(title.Content ?? new HtmlString(""));
 
                 headerTagBuilder.InnerHtml.AppendHtml(titleTagBuilder);
             }
