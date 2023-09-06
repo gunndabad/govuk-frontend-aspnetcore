@@ -49,6 +49,9 @@ jobs:
     - name: Restore
       run: dotnet restore
 
+    - name: Format
+      run: dotnet format --verify-no-changes
+
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
