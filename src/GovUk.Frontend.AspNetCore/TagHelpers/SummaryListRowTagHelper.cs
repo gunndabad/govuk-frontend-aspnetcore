@@ -30,7 +30,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             summaryListContext.AddRow(new SummaryListRow()
             {
-                Actions = new SummaryListRowActions()
+                Actions = new SummaryListActions()
                 {
                     Items = rowContext.Actions,
                     Attributes = rowContext.ActionsAttributes

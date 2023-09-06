@@ -41,15 +41,23 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             }
 
             var tagBuilder = _htmlGenerator.GenerateSummaryList(
-                output.Attributes.ToAttributeDictionary(),
-                summaryListContext.Rows);
+                summaryListContext.Rows,
+                output.Attributes.ToAttributeDictionary());
 
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
+            if (context.TryGetContextItem<SummaryCardContext>(out var cardContext))
+            {
+                cardContext.SetSummaryList(tagBuilder);
+                output.SuppressOutput();
+            }
+            else
+            {
+                output.TagName = tagBuilder.TagName;
+                output.TagMode = TagMode.StartTagAndEndTag;
 
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+                output.Attributes.Clear();
+                output.MergeAttributes(tagBuilder);
+                output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            }
         }
     }
 }

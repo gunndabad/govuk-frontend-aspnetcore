@@ -15,8 +15,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
         internal const string SummaryListRowValueElement = "dd";
 
         public TagBuilder GenerateSummaryList(
-            AttributeDictionary? attributes,
-            IEnumerable<SummaryListRow> rows)
+            IEnumerable<SummaryListRow> rows,
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentNotNull(nameof(rows), rows);
 
@@ -116,11 +116,11 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
             return tagBuilder;
 
-            static TagBuilder GenerateLink(SummaryListRowAction action, int rowIndex)
+            static TagBuilder GenerateLink(SummaryListAction action, int rowIndex)
             {
                 Guard.ArgumentValidNotNull(
                     nameof(rows),
-                    $"Row {rowIndex} is not valid; {nameof(SummaryListRowAction.Content)} cannot be null.",
+                    $"Row {rowIndex} is not valid; {nameof(SummaryListAction.Content)} cannot be null.",
                     action.Content,
                     action.Content != null);
 

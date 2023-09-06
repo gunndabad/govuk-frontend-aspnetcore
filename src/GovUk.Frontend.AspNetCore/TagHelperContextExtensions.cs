@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore
@@ -40,6 +42,20 @@ namespace GovUk.Frontend.AspNetCore
             context.Items[key] = value;
 
             return new RestoreItemsOnDispose(context, key, previousValue);
+        }
+
+        public static bool TryGetContextItem<TItem>(this TagHelperContext context, [NotNullWhen(true)] out TItem? item)
+        {
+            if (context.Items.TryGetValue(typeof(TItem), out var itemObj))
+            {
+                item = (TItem)itemObj;
+                return true;
+            }
+            else
+            {
+                item = default;
+                return false;
+            }
         }
 
         internal class RestoreItemsOnDispose : IDisposable
