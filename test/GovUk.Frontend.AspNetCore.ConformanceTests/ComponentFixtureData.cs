@@ -9,26 +9,31 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 
 public class ComponentFixtureData : DataAttribute
 {
-    private readonly string _fixtureFolder;
+    private readonly string _fixtureFileName;
     private readonly Type _optionsType;
     private readonly string _only;
     private readonly HashSet<string> _exclude;
 
     public ComponentFixtureData(
-        string fixtureFolder,
+        string fixtureFileName,
         Type optionsType,
         string only = null,
         params string[] exclude)
     {
-        _fixtureFolder = fixtureFolder ?? throw new ArgumentNullException(nameof(fixtureFolder));
+        _fixtureFileName = fixtureFileName ?? throw new ArgumentNullException(nameof(fixtureFileName));
         _optionsType = optionsType ?? throw new ArgumentNullException(nameof(optionsType));
         _only = only;
         _exclude = new HashSet<string>(exclude ?? Array.Empty<string>());
+
+        if (!_fixtureFileName.EndsWith(".json"))
+        {
+            _fixtureFileName += ".json";
+        }
     }
 
     public override IEnumerable<object[]> GetData(MethodInfo testMethod)
     {
-        var fixturesFile = Path.Combine("Fixtures", _fixtureFolder, "fixtures.json");
+        var fixturesFile = Path.Combine("Fixtures", _fixtureFileName);
 
         if (!File.Exists(fixturesFile))
         {

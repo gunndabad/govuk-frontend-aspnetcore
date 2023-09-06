@@ -27,9 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <FixtureFiles Include="$(RepoRoot)\lib\govuk-frontend\package\govuk\components\*\fixtures.json" />
+    <FixtureFiles Include="$(RepoRoot)\lib\govuk-frontend\package\govuk\components\*\fixtures.json">
+      <ComponentName>$([MSBuild]::ValueOrDefault('%(RecursiveDir)', '').TrimEnd('/\'))</ComponentName>
+    </FixtureFiles>
     <Content Include="@(FixtureFiles)">
-      <Link>\Fixtures\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>\Fixtures\%(ComponentName).json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
