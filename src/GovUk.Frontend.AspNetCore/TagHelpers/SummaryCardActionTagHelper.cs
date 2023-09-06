@@ -8,7 +8,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Represents an action in a GDS summary card.
     /// </summary>
     [HtmlTargetElement(TagName, ParentTag = SummaryCardActionsTagHelper.TagName)]
-    [OutputElementHint(ComponentGenerator.SummaryCardActionElement)]
     public class SummaryCardActionTagHelper : TagHelper
     {
         internal const string TagName = "govuk-summary-card-action";
@@ -16,16 +15,10 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
         /// <summary>
-        /// The destination URL for the action link.
-        /// </summary>
-        [HtmlAttributeName("href")]
-        public string Href { get; set; }
-
-        /// <summary>
         /// The visually hidden text for the action link.
         /// </summary>
         [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
-        public string VisuallyHiddenText { get; set; }
+        public string? VisuallyHiddenText { get; set; }
 
         /// <inheritdoc/>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -34,12 +27,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            cardContext.AddAction(new SummaryCardAction
+            cardContext.AddAction(new SummaryListAction()
             {
                 Attributes = output.Attributes.ToAttributeDictionary(),
                 Content = content.Snapshot(),
-                VisuallyHiddenText = VisuallyHiddenText,
-                Href = Href
+                VisuallyHiddenText = VisuallyHiddenText
             });
 
             output.SuppressOutput();

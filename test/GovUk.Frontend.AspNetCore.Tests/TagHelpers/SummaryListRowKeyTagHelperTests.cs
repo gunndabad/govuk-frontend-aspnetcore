@@ -173,7 +173,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             var summaryListContext = new SummaryListContext();
 
             var rowContext = new SummaryListRowContext();
-            rowContext.AddAction(new HtmlGeneration.SummaryListRowAction()
+            rowContext.AddAction(new HtmlGeneration.SummaryListAction()
             {
                 Content = new HtmlString("Action")
             });

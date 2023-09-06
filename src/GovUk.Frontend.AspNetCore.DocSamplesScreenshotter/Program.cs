@@ -76,6 +76,7 @@ namespace GovUk.Frontend.AspNetCore.DocSamplesScreenshotter
                 ("Radios/RadiosWithError", "radios-with-error.png"),
                 ("Select/Select", "select.png"),
                 ("SummaryList/SummaryListWithActions", "summary-list-with-actions.png"),
+                ("SummaryList/SummaryListWithCard", "summary-list-with-card.png"),
                 ("SummaryList/SummaryListWithoutActions", "summary-list-without-actions.png"),
                 ("PhaseBanner/PhaseBanner", "phase-banner.png"),
                 ("Tabs/Tabs", "tabs.png"),

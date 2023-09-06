@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     /// Generates a GOV.UK summary card component.
     /// </summary>
     [HtmlTargetElement(TagName)]
-    [RestrictChildren(SummaryListTagHelper.TagName, SummaryCardTitleTagHelper.TagName, SummaryCardActionsTagHelper.TagName)]
+    [RestrictChildren(SummaryCardTitleTagHelper.TagName, SummaryCardActionsTagHelper.TagName, SummaryListTagHelper.TagName)]
     [OutputElementHint(ComponentGenerator.SummaryCardElement)]
     public class SummaryCardTagHelper : TagHelper
     {
@@ -25,7 +25,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
         }
 
-        internal SummaryCardTagHelper(IGovUkHtmlGenerator htmlGenerator)
+        internal SummaryCardTagHelper(IGovUkHtmlGenerator? htmlGenerator)
         {
             _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
         }
@@ -35,25 +35,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
         {
             var cardContext = new SummaryCardContext();
 
-            TagHelperContent summaryList = null;
             using (context.SetScopedContextItem(cardContext))
             {
-                summaryList = await output.GetChildContentAsync();
+                await output.GetChildContentAsync();
             }
 
-            var tagBuilder = _htmlGenerator.GenerateSummaryCard(new SummaryCard
-            {
-                CardAttributes = output.Attributes.ToAttributeDictionary(),
-                TitleContent = cardContext.Title?.Content,
-                TitleAttributes = cardContext.Title?.Attributes,
-                HeadingLevel = cardContext.HeadingLevel,
-                SummaryList = summaryList?.Snapshot(),
-                Actions = new SummaryCardActions
+            cardContext.ThrowIfNotComplete();
+
+            var tagBuilder = _htmlGenerator.GenerateSummaryCard(
+                new SummaryCardTitle()
                 {
-                    Items = cardContext.Actions,
-                    Attributes = cardContext.ActionsAttributes
-                }
-            });
+                    Content = cardContext.Title?.Content,
+                    HeadingLevel = cardContext.Title?.HeadingLevel,
+                    Attributes = cardContext.Title?.Attributes,
+                },
+                new SummaryListActions()
+                {
+                    Attributes = cardContext.ActionsAttributes,
+                    Items = cardContext.Actions
+                },
+                cardContext.SummaryList,
+                output.Attributes.ToAttributeDictionary());
 
             output.TagName = tagBuilder.TagName;
             output.TagMode = TagMode.StartTagAndEndTag;

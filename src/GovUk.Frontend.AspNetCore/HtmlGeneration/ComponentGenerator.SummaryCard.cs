@@ -1,90 +1,90 @@
-#nullable enable
-
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 {
-    public partial class ComponentGenerator
+    internal partial class ComponentGenerator
     {
         internal const string SummaryCardElement = "div";
         internal const int SummaryCardDefaultHeadingLevel = 2;
         internal const int SummaryCardMinHeadingLevel = 1;
         internal const int SummaryCardMaxHeadingLevel = 6;
-        internal const string SummaryCardActionsElement = "ul";
-        internal const string SummaryCardActionElement = "li";
 
-        public TagBuilder GenerateSummaryCard(SummaryCard summaryCard)
+        public TagBuilder GenerateSummaryCard(
+            SummaryCardTitle? title,
+            SummaryListActions? actions,
+            IHtmlContent summaryList,
+            AttributeDictionary? attributes)
         {
             Guard.ArgumentValidNotNull(
-                nameof(summaryCard.TitleContent),
-                $"Summary card is not valid; {nameof(summaryCard.TitleContent)} cannot be null.",
-                summaryCard.TitleContent,
-                summaryCard.TitleContent != null);
-
-            Guard.ArgumentValidNotNull(
-               nameof(summaryCard.SummaryList),
-               $"Summary card is not valid; {nameof(summaryCard.SummaryList)} cannot be null.",
-               summaryCard.SummaryList,
-               summaryCard.SummaryList != null && !string.IsNullOrWhiteSpace(summaryCard.SummaryList.ToString()));
+                nameof(summaryList),
+                $"Summary card is not valid; {nameof(summaryList)} cannot be null.",
+                summaryList,
+                summaryList != null);
 
             var tagBuilder = new TagBuilder(SummaryCardElement);
-            if (summaryCard.CardAttributes != null) { tagBuilder.MergeAttributes(summaryCard.CardAttributes); }
+            tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-summary-card");
-
-            var titleTagBuilder = new TagBuilder($"h{summaryCard.HeadingLevel}");
-            if (summaryCard.TitleAttributes != null) { titleTagBuilder.MergeAttributes(summaryCard.TitleAttributes); }
-            titleTagBuilder.MergeCssClass("govuk-summary-card__title");
-            titleTagBuilder.InnerHtml.AppendHtml(summaryCard.TitleContent);
 
             var headerTagBuilder = new TagBuilder("div");
             headerTagBuilder.MergeCssClass("govuk-summary-card__title-wrapper");
-            headerTagBuilder.InnerHtml.AppendHtml(titleTagBuilder);
             tagBuilder.InnerHtml.AppendHtml(headerTagBuilder);
 
-            if (summaryCard.Actions?.Items != null && summaryCard.Actions.Items.Count > 0)
+            if (title is not null)
             {
-                var actionsWrapper = new TagBuilder(summaryCard.Actions.Items.Count == 1 ? "div" : SummaryCardActionsElement);
-                if (summaryCard.Actions.Attributes != null) { actionsWrapper.MergeAttributes(summaryCard.Actions.Attributes); }
+                var titleTagBuilder = new TagBuilder($"h{title.HeadingLevel ?? SummaryCardDefaultHeadingLevel}");
+                titleTagBuilder.MergeOptionalAttributes(title.Attributes);
+                titleTagBuilder.MergeCssClass("govuk-summary-card__title");
+                titleTagBuilder.InnerHtml.AppendHtml(title.Content);
+
+                headerTagBuilder.InnerHtml.AppendHtml(titleTagBuilder);
+            }
+
+            if (actions?.Items?.Count > 0)
+            {
+                var actionsWrapper = new TagBuilder(actions.Items.Count == 1 ? "div" : "ul");
+                actionsWrapper.MergeOptionalAttributes(actions.Attributes);
                 actionsWrapper.MergeCssClass("govuk-summary-card__actions");
 
-                var actionIndex = 1;
-                foreach (var action in summaryCard.Actions.Items)
+                if (actions.Items!.Count == 1)
                 {
-                    var actionElement = new TagBuilder(summaryCard.Actions.Items.Count == 1 ? "div" : SummaryCardActionElement);
-                    if (action.Attributes != null) { actionElement.MergeAttributes(action.Attributes); }
-                    actionElement.MergeCssClass("govuk-summary-card__action");
-                    actionElement.InnerHtml.AppendHtml(GenerateLink(action, actionIndex));
+                    actionsWrapper.InnerHtml.AppendHtml(GenerateLink(actions.Items![0], actionIndex: 0));
+                }
+                else
+                {
+                    var actionIndex = 0;
+                    foreach (var action in actions.Items)
+                    {
+                        var li = new TagBuilder("li");
+                        li.MergeCssClass("govuk-summary-card__action");
+                        li.InnerHtml.AppendHtml(GenerateLink(action, actionIndex++));
 
-                    actionsWrapper.InnerHtml.AppendHtml(actionElement);
-                    actionIndex++;
+                        actionsWrapper.InnerHtml.AppendHtml(li);
+                    }
                 }
 
                 headerTagBuilder.InnerHtml.AppendHtml(actionsWrapper);
             }
 
-            if (summaryCard.SummaryList != null)
-            {
-                var contentTagBuilder = new TagBuilder("div");
-                contentTagBuilder.MergeCssClass("govuk-summary-card__content");
-                tagBuilder.InnerHtml.AppendHtml(contentTagBuilder);
-                contentTagBuilder.InnerHtml.AppendHtml(summaryCard.SummaryList);
-            }
+            var contentTagBuilder = new TagBuilder("div");
+            contentTagBuilder.MergeCssClass("govuk-summary-card__content");
+            tagBuilder.InnerHtml.AppendHtml(contentTagBuilder);
+            contentTagBuilder.InnerHtml.AppendHtml(summaryList);
 
             return tagBuilder;
         }
 
-        static TagBuilder GenerateLink(SummaryCardAction action, int actionIndex)
+        static TagBuilder GenerateLink(SummaryListAction action, int actionIndex)
         {
             Guard.ArgumentValidNotNull(
                 nameof(SummaryCard.Actions),
-                $"Action {actionIndex} is not valid; {nameof(SummaryCardAction.Content)} cannot be null.",
+                $"Action {actionIndex} is not valid; {nameof(SummaryListAction.Content)} cannot be null.",
                 action.Content,
                 action.Content != null);
 
-            Guard.ArgumentNotNullOrEmpty(nameof(action.Href), action.Href);
-
-            var anchor = new TagBuilder("a");
-            anchor.MergeAttribute("href", action.Href);
+            var anchor = new TagBuilder(SummaryListRowActionElement);
+            anchor.MergeOptionalAttributes(action.Attributes);
             anchor.MergeCssClass("govuk-link");
             anchor.InnerHtml.AppendHtml(action.Content);
 

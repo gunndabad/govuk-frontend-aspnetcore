@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var content = await output.GetChildContentAsync();
 
-            summaryListRowContext.AddAction(new SummaryListRowAction()
+            summaryListRowContext.AddAction(new SummaryListAction()
             {
                 Attributes = output.Attributes.ToAttributeDictionary(),
                 Content = content.Snapshot(),

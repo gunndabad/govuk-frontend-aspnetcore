@@ -12,6 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
     public class SummaryCardTitleTagHelper : TagHelper
     {
         internal const string TagName = "govuk-summary-card-title";
+
         private int _headingLevel = ComponentGenerator.SummaryCardDefaultHeadingLevel;
 
         /// <summary>
@@ -45,8 +46,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             var childContent = await output.GetChildContentAsync();
 
-            cardContext.SetTitle(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
-            cardContext.HeadingLevel = HeadingLevel;
+            cardContext.SetTitle(childContent.Snapshot(), HeadingLevel, output.Attributes.ToAttributeDictionary());
 
             output.SuppressOutput();
         }

@@ -39,11 +39,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         {
                             Content = new HtmlString("Row 1 value")
                         },
-                        Actions = new SummaryListRowActions()
+                        Actions = new SummaryListActions()
                         {
                             Items = new[]
                             {
-                                new SummaryListRowAction()
+                                new SummaryListAction()
                                 {
                                     Attributes = new AttributeDictionary()
                                     {
@@ -52,7 +52,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                                     Content = new HtmlString("Row 1 action 1 content"),
                                     VisuallyHiddenText = "row1action1vht"
                                 },
-                                new SummaryListRowAction()
+                                new SummaryListAction()
                                 {
                                     Attributes = new AttributeDictionary()
                                     {
@@ -178,54 +178,4 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
             AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
         }
     }
-
-        //public class SummaryListRowActionTagHelperTests
-        //{
-        //    [Fact]
-        //    public async Task ProcessAsync_AddsActionToContext()
-        //    {
-        //        // Arrange
-        //        var summaryListContext = new SummaryListContext();
-        //        var rowContext = new SummaryListRowContext();
-
-        //        var context = new TagHelperContext(
-        //            tagName: "govuk-summary-list-row-action",
-        //            allAttributes: new TagHelperAttributeList(),
-        //            items: new Dictionary<object, object>()
-        //            {
-        //                { typeof(SummaryListContext), summaryListContext },
-        //                { typeof(SummaryListRowContext), rowContext }
-        //            },
-        //            uniqueId: "test");
-
-        //        var output = new TagHelperOutput(
-        //            "govuk-summary-list-row-action",
-        //            attributes: new TagHelperAttributeList(),
-        //            getChildContentAsync: (useCachedResult, encoder) =>
-        //            {
-        //                var tagHelperContent = new DefaultTagHelperContent();
-        //                tagHelperContent.SetContent("Action content");
-        //                return Task.FromResult<TagHelperContent>(tagHelperContent);
-        //            });
-
-        //        var tagHelper = new SummaryListRowActionTagHelper(
-        //            new ComponentGenerator(),
-        //            Mock.Of<IUrlHelperFactory>())
-        //        {
-        //            Href = "href",
-        //            VisuallyHiddenText = "vht"
-        //        };
-
-        //        // Act
-        //        await tagHelper.ProcessAsync(context, output);
-
-        //        // Assert
-        //        Assert.Equal(1, rowContext.Actions.Count);
-
-        //        var firstAction = rowContext.Actions.First();
-        //        Assert.Equal("vht", firstAction.VisuallyHiddenText);
-        //        Assert.Equal("href", firstAction.Href);
-        //        Assert.Equal("Action content", firstAction.Content.RenderToString());
-        //    }
-        //}
-    }
+}

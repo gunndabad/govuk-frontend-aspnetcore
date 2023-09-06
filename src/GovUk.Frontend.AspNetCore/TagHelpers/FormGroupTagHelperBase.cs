@@ -154,8 +154,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
             void AddErrorToFormErrorContext()
             {
-                if (tagHelperContext.Items.TryGetValue(typeof(FormErrorContext), out var formErrorContextObj) &&
-                    formErrorContextObj is FormErrorContext formErrorContext)
+                if (tagHelperContext.TryGetContextItem<FormErrorContext>(out var formErrorContext))
                 {
                     var errorFieldId = GetErrorFieldId(tagHelperContext);
                     var href = "#" + errorFieldId;

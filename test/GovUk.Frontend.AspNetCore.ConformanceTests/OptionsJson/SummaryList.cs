@@ -5,8 +5,25 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
     public record SummaryList
     {
         public IList<SummaryListRow> Rows { get; set; }
+        public SummaryListCard Card { get; set; }
         public string Classes { get; set; }
         public IDictionary<string, object> Attributes { get; set; }
+    }
+
+    public record SummaryListCard
+    {
+        public SummaryListCardTitle Title { get; set; }
+        public SummaryListRowActions Actions { get; set; }
+        public string Classes { get; set; }
+        public IDictionary<string, object> Attributes { get; set; }
+    }
+
+    public record SummaryListCardTitle
+    {
+        public string Text { get; set; }
+        public string Html { get; set; }
+        public int? HeadingLevel { get; set; }
+        public string Classes { get; set; }
     }
 
     public record SummaryListRow
