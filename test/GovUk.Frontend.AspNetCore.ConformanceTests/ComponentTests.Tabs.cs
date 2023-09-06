@@ -24,15 +24,15 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         .MergeAttribute("class", options.Classes);
 
                     var items = (options.Items?.Select(i => new TabsItem()
-                        {
-                            Id = i.Id,
-                            Label = i.Label,
-                            LinkAttributes = i.Attributes.ToAttributesDictionary(),
-                            PanelAttributes = i.Panel.Attributes.ToAttributesDictionary(),
-                            PanelContent = !string.IsNullOrEmpty(i.Panel.Text) ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Panel.Text) + "</p>") :
+                    {
+                        Id = i.Id,
+                        Label = i.Label,
+                        LinkAttributes = i.Attributes.ToAttributesDictionary(),
+                        PanelAttributes = i.Panel.Attributes.ToAttributesDictionary(),
+                        PanelContent = !string.IsNullOrEmpty(i.Panel.Text) ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Panel.Text) + "</p>") :
                                 i.Panel.Html is not null ? new HtmlString(i.Panel.Html) :
                                 null
-                        }))
+                    }))
                         .OrEmpty();
 
                     return generator.GenerateTabs(options.Id, options.IdPrefix, title, attributes, items)

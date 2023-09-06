@@ -41,7 +41,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         private class TestContext : FormGroupFieldsetContext
         {
             public TestContext(AttributeDictionary attributes, ModelExpression? aspFor) :
-                base(fieldsetTagName: "test-fieldset", legendTagName : "test-fieldset-legend", attributes, aspFor)
+                base(fieldsetTagName: "test-fieldset", legendTagName: "test-fieldset-legend", attributes, aspFor)
             {
             }
         }
