@@ -1,7 +1,6 @@
-namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
+namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson;
+
+public record FormGroup
 {
-    public record FormGroup
-    {
-        public string Classes { get; set; }
-    }
+    public string Classes { get; set; }
 }

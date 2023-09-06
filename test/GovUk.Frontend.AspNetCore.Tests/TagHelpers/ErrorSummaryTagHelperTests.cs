@@ -10,53 +10,53 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class ErrorSummaryTagHelperTests
 {
-    public class ErrorSummaryTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-error-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
+
+                errorSummaryContext.AddItem(new ErrorSummaryItem()
                 {
-                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
-
-                    errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
-                    errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
-
-                    errorSummaryContext.AddItem(new ErrorSummaryItem()
-                    {
-                        Content = new HtmlString("First message"),
-                        Href = "#Field1"
-                    });
-
-                    errorSummaryContext.AddItem(new ErrorSummaryItem()
-                    {
-                        Content = new HtmlString("Second message"),
-                        Href = "#Field2"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Content = new HtmlString("First message"),
+                    Href = "#Field1"
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper();
+                errorSummaryContext.AddItem(new ErrorSummaryItem()
+                {
+                    Content = new HtmlString("Second message"),
+                    Href = "#Field2"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new ErrorSummaryTagHelper();
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-error-summary"" data-module=""govuk-error-summary"">
     <div role=""alert"">
         <h2 class=""govuk-error-summary__title"">Title</h2>
@@ -70,164 +70,163 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithDisableAutoFocus_RendersDataAttribute()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithDisableAutoFocus_RendersDataAttribute()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-error-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
-
-                    errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
-                    errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
-
-                    errorSummaryContext.AddItem(new ErrorSummaryItem()
-                    {
-                        Content = new HtmlString("First message"),
-                        Href = "#Field1"
-                    });
-
-                    errorSummaryContext.AddItem(new ErrorSummaryItem()
-                    {
-                        Content = new HtmlString("Second message"),
-                        Href = "#Field2"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new ErrorSummaryTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                DisableAutoFocus = true
-            };
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
 
-            // Assert
-            var element = output.RenderToElement();
-            Assert.NotNull(element.GetAttribute("data-disable-auto-focus"));
-        }
-
-        [Fact]
-        public async Task ProcessAsync_ItemWithEmptyLink_DoesNotRenderAnchorTag()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+                errorSummaryContext.AddItem(new ErrorSummaryItem()
                 {
-                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
-
-                    errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
-                    errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
-
-                    errorSummaryContext.AddItem(new ErrorSummaryItem()
-                    {
-                        Content = new HtmlString("Message"),
-                        Href = null
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Content = new HtmlString("First message"),
+                    Href = "#Field1"
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper();
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            var element = output.RenderToElement();
-            var itemElement = element.QuerySelector("li");
-            Assert.NotEqual("a", itemElement.FirstChild.NodeName, StringComparer.OrdinalIgnoreCase);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoTitleSpecified_UsesDefaultTitle()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+                errorSummaryContext.AddItem(new ErrorSummaryItem()
                 {
-                    var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
-
-                    errorSummaryContext.AddItem(new ErrorSummaryItem()
-                    {
-                        Content = new HtmlString("First message")
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Content = new HtmlString("Second message"),
+                    Href = "#Field2"
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            var html = output.ToHtmlString();
-            var node = HtmlNode.CreateNode(html);
-            var h2 = node.ChildNodes.FindFirst("h2");
-            Assert.Equal("There is a problem", h2.InnerHtml);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoTitleDescriptionOrItems_RendersNothing()
+        var tagHelper = new ErrorSummaryTagHelper()
         {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+            DisableAutoFocus = true
+        };
 
-            var output = new TagHelperOutput(
-                "govuk-error-summary",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var element = output.RenderToElement();
+        Assert.NotNull(element.GetAttribute("data-disable-auto-focus"));
+    }
+
+    [Fact]
+    public async Task ProcessAsync_ItemWithEmptyLink_DoesNotRenderAnchorTag()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
+
+                errorSummaryContext.AddItem(new ErrorSummaryItem()
                 {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Content = new HtmlString("Message"),
+                    Href = null
                 });
 
-            var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new ErrorSummaryTagHelper();
 
-            // Assert
-            var html = output.ToHtmlString();
-            Assert.Empty(html);
-        }
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var element = output.RenderToElement();
+        var itemElement = element.QuerySelector("li");
+        Assert.NotEqual("a", itemElement.FirstChild.NodeName, StringComparer.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_NoTitleSpecified_UsesDefaultTitle()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                errorSummaryContext.AddItem(new ErrorSummaryItem()
+                {
+                    Content = new HtmlString("First message")
+                });
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var html = output.ToHtmlString();
+        var node = HtmlNode.CreateNode(html);
+        var h2 = node.ChildNodes.FindFirst("h2");
+        Assert.Equal("There is a problem", h2.InnerHtml);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_NoTitleDescriptionOrItems_RendersNothing()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var html = output.ToHtmlString();
+        Assert.Empty(html);
     }
 }

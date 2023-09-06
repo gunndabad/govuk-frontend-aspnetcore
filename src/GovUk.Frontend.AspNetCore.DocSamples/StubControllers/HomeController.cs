@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GovUk.Frontend.AspNetCore.DocSamples.StubControllers
+namespace GovUk.Frontend.AspNetCore.DocSamples.StubControllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
-    {
-        [HttpGet("")]
-        public IActionResult Index() => Ok();
-    }
+    [HttpGet("")]
+    public IActionResult Index() => Ok();
 }

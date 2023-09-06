@@ -4,53 +4,52 @@ using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class FormGroupLabelTagHelperTests
 {
-    public class FormGroupLabelTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_SetsLabelOnContext()
     {
-        [Fact]
-        public async Task ProcessAsync_SetsLabelOnContext()
-        {
-            // Arrange
-            var formGroupContext = new TestFormGroupContext();
+        // Arrange
+        var formGroupContext = new TestFormGroupContext();
 
-            var context = new TagHelperContext(
-                tagName: "test-label",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(FormGroupContext), formGroupContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "test-label",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(FormGroupContext), formGroupContext }
+            },
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "test-label",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Label");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "test-label",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Label");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new FormGroupLabelTagHelper();
+        var tagHelper = new FormGroupLabelTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            Assert.Equal("Label", formGroupContext.Label?.Content?.ToString());
-        }
+        // Assert
+        Assert.Equal("Label", formGroupContext.Label?.Content?.ToString());
+    }
 
-        private class TestFormGroupContext : FormGroupContext
-        {
-            protected override string ErrorMessageTagName => "test-error-message";
+    private class TestFormGroupContext : FormGroupContext
+    {
+        protected override string ErrorMessageTagName => "test-error-message";
 
-            protected override string HintTagName => "test-hint";
+        protected override string HintTagName => "test-hint";
 
-            protected override string LabelTagName => "test-label";
+        protected override string LabelTagName => "test-label";
 
-            protected override string RootTagName => "test";
-        }
+        protected override string RootTagName => "test";
     }
 }

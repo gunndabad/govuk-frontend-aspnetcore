@@ -11,70 +11,69 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Samples.MvcStarter
+namespace Samples.MvcStarter;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllersWithViews();
+
+        services.AddGovUkFrontend(options =>
         {
-            Configuration = configuration;
+            // Un-comment this block if you want to use a CSP nonce instead of hashes
+            //options.GetCspNonceForRequest = context =>
+            //{
+            //    var cspService = context.RequestServices.GetRequiredService<ICspNonceService>();
+            //    return cspService.GetNonce();
+            //};
+        });
+
+        services.AddCsp(nonceByteAmount: 32);
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        app.UseCsp(csp =>
         {
-            services.AddControllersWithViews();
+            var pageTemplateHelper = app.ApplicationServices.GetRequiredService<PageTemplateHelper>();
 
-            services.AddGovUkFrontend(options =>
-            {
-                // Un-comment this block if you want to use a CSP nonce instead of hashes
-                //options.GetCspNonceForRequest = context =>
-                //{
-                //    var cspService = context.RequestServices.GetRequiredService<ICspNonceService>();
-                //    return cspService.GetNonce();
-                //};
-            });
+            csp.ByDefaultAllow
+                .FromSelf();
 
-            services.AddCsp(nonceByteAmount: 32);
-        }
+            csp.AllowScripts
+                .FromSelf()
+                //.AddNonce()
+                .From(pageTemplateHelper.GetCspScriptHashes());
+        });
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-            }
-
-            app.UseCsp(csp =>
-            {
-                var pageTemplateHelper = app.ApplicationServices.GetRequiredService<PageTemplateHelper>();
-
-                csp.ByDefaultAllow
-                    .FromSelf();
-
-                csp.AllowScripts
-                    .FromSelf()
-                    //.AddNonce()
-                    .From(pageTemplateHelper.GetCspScriptHashes());
-            });
-
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
-        }
+            endpoints.MapDefaultControllerRoute();
+        });
     }
 }

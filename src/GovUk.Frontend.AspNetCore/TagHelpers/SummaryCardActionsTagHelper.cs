@@ -1,26 +1,25 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Represents the actions wrapper in a GDS summary card.
+/// </summary>
+[HtmlTargetElement(TagName, ParentTag = SummaryCardTagHelper.TagName)]
+[RestrictChildren(SummaryCardActionTagHelper.TagName)]
+public class SummaryCardActionsTagHelper : TagHelper
 {
-    /// <summary>
-    /// Represents the actions wrapper in a GDS summary card.
-    /// </summary>
-    [HtmlTargetElement(TagName, ParentTag = SummaryCardTagHelper.TagName)]
-    [RestrictChildren(SummaryCardActionTagHelper.TagName)]
-    public class SummaryCardActionsTagHelper : TagHelper
+    internal const string TagName = "govuk-summary-card-actions";
+
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        internal const string TagName = "govuk-summary-card-actions";
+        var cardContext = context.GetContextItem<SummaryCardContext>();
+        cardContext.SetActionsAttributes(output.Attributes.ToAttributeDictionary());
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var cardContext = context.GetContextItem<SummaryCardContext>();
-            cardContext.SetActionsAttributes(output.Attributes.ToAttributeDictionary());
+        await output.GetChildContentAsync();
 
-            await output.GetChildContentAsync();
-
-            output.SuppressOutput();
-        }
+        output.SuppressOutput();
     }
 }

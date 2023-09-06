@@ -3,70 +3,69 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Generates a GDS details component.
+/// </summary>
+[HtmlTargetElement(TagName)]
+[RestrictChildren(DetailsSummaryTagHelper.TagName, DetailsTextTagHelper.TagName)]
+[OutputElementHint(ComponentGenerator.DetailsElement)]
+public class DetailsTagHelper : TagHelper
 {
+    internal const string TagName = "govuk-details";
+
+    private const string OpenAttributeName = "open";
+
+    private readonly IGovUkHtmlGenerator _htmlGenerator;
+
     /// <summary>
-    /// Generates a GDS details component.
+    /// Creates a new <see cref="DetailsTagHelper"/>.
     /// </summary>
-    [HtmlTargetElement(TagName)]
-    [RestrictChildren(DetailsSummaryTagHelper.TagName, DetailsTextTagHelper.TagName)]
-    [OutputElementHint(ComponentGenerator.DetailsElement)]
-    public class DetailsTagHelper : TagHelper
+    public DetailsTagHelper()
+        : this(htmlGenerator: null)
     {
-        internal const string TagName = "govuk-details";
+    }
 
-        private const string OpenAttributeName = "open";
+    internal DetailsTagHelper(IGovUkHtmlGenerator? htmlGenerator)
+    {
+        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+    }
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
+    /// <summary>
+    /// Whether the details element should be expanded.
+    /// </summary>
+    /// <remarks>
+    /// The default is <c>false</c>.
+    /// </remarks>
+    [HtmlAttributeName(OpenAttributeName)]
+    public bool Open { get; set; } = ComponentGenerator.DetailsDefaultOpen;
 
-        /// <summary>
-        /// Creates a new <see cref="DetailsTagHelper"/>.
-        /// </summary>
-        public DetailsTagHelper()
-            : this(htmlGenerator: null)
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var detailsContext = new DetailsContext();
+
+        using (context.SetScopedContextItem(detailsContext))
         {
+            await output.GetChildContentAsync();
         }
 
-        internal DetailsTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-        {
-            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-        }
+        detailsContext.ThrowIfNotComplete();
 
-        /// <summary>
-        /// Whether the details element should be expanded.
-        /// </summary>
-        /// <remarks>
-        /// The default is <c>false</c>.
-        /// </remarks>
-        [HtmlAttributeName(OpenAttributeName)]
-        public bool Open { get; set; } = ComponentGenerator.DetailsDefaultOpen;
+        var tagBuilder = _htmlGenerator.GenerateDetails(
+            Open,
+            detailsContext.Summary?.Content,
+            detailsContext.Summary?.Attributes,
+            detailsContext.Text?.Content,
+            detailsContext.Text?.Attributes,
+            output.Attributes.ToAttributeDictionary());
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var detailsContext = new DetailsContext();
+        output.TagName = tagBuilder.TagName;
+        output.TagMode = TagMode.StartTagAndEndTag;
 
-            using (context.SetScopedContextItem(detailsContext))
-            {
-                await output.GetChildContentAsync();
-            }
-
-            detailsContext.ThrowIfNotComplete();
-
-            var tagBuilder = _htmlGenerator.GenerateDetails(
-                Open,
-                detailsContext.Summary?.Content,
-                detailsContext.Summary?.Attributes,
-                detailsContext.Text?.Content,
-                detailsContext.Text?.Attributes,
-                output.Attributes.ToAttributeDictionary());
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
+        output.Attributes.Clear();
+        output.MergeAttributes(tagBuilder);
+        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
     }
 }

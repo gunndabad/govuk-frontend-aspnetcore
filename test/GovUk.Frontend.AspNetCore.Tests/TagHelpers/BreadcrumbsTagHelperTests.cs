@@ -7,55 +7,55 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class BreadcrumbsTagHelperTests
 {
-    public class BreadcrumbsTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-breadcrumbs",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-breadcrumbs",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-breadcrumbs",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-breadcrumbs",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var breadcrumbsContext = context.GetContextItem<BreadcrumbsContext>();
+
+                breadcrumbsContext.AddItem(new BreadcrumbsItem()
                 {
-                    var breadcrumbsContext = context.GetContextItem<BreadcrumbsContext>();
-
-                    breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                    {
-                        Href = "first",
-                        Content = new HtmlString("First")
-                    });
-
-                    breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                    {
-                        Href = "second",
-                        Content = new HtmlString("Second")
-                    });
-
-                    breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                    {
-                        Content = new HtmlString("Last")
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Href = "first",
+                    Content = new HtmlString("First")
                 });
 
-            var tagHelper = new BreadcrumbsTagHelper();
+                breadcrumbsContext.AddItem(new BreadcrumbsItem()
+                {
+                    Href = "second",
+                    Content = new HtmlString("Second")
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                breadcrumbsContext.AddItem(new BreadcrumbsItem()
+                {
+                    Content = new HtmlString("Last")
+                });
 
-            // Assert
-            var expectedHtml = @"
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new BreadcrumbsTagHelper();
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-breadcrumbs"">
     <ol class=""govuk-breadcrumbs__list"">
         <li class=""govuk-breadcrumbs__list-item""><a class=""govuk-breadcrumbs__link"" href=""first"">First</a></li>
@@ -64,7 +64,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </ol>
 </div>";
 
-            AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
     }
 }

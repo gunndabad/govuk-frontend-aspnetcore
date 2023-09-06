@@ -2,32 +2,31 @@ using System;
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class TabsContext
 {
-    internal class TabsContext
+    private readonly List<TabsItem> _items;
+    private readonly bool _haveIdPrefix;
+
+    public TabsContext(bool haveIdPrefix)
     {
-        private readonly List<TabsItem> _items;
-        private readonly bool _haveIdPrefix;
+        _items = new List<TabsItem>();
+        _haveIdPrefix = haveIdPrefix;
+    }
 
-        public TabsContext(bool haveIdPrefix)
+    public IReadOnlyList<TabsItem> Items => _items;
+
+    public void AddItem(TabsItem item)
+    {
+        Guard.ArgumentNotNull(nameof(item), item);
+
+        if (item.Id == null && !_haveIdPrefix)
         {
-            _items = new List<TabsItem>();
-            _haveIdPrefix = haveIdPrefix;
+            throw new InvalidOperationException(
+                $"Item must have the '{TabsItemTagHelper.IdAttributeName}' attribute specified.");
         }
 
-        public IReadOnlyList<TabsItem> Items => _items;
-
-        public void AddItem(TabsItem item)
-        {
-            Guard.ArgumentNotNull(nameof(item), item);
-
-            if (item.Id == null && !_haveIdPrefix)
-            {
-                throw new InvalidOperationException(
-                    $"Item must have the '{TabsItemTagHelper.IdAttributeName}' attribute specified.");
-            }
-
-            _items.Add(item);
-        }
+        _items.Add(item);
     }
 }

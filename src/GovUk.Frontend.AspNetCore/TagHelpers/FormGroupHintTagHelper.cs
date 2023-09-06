@@ -2,44 +2,43 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Represents the hint in a GDS form group component.
+/// </summary>
+[HtmlTargetElement(CheckboxesTagHelper.HintTagName, ParentTag = CheckboxesTagHelper.TagName)]
+[HtmlTargetElement(CheckboxesTagHelper.HintTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
+[HtmlTargetElement(CharacterCountTagHelper.HintTagName, ParentTag = CharacterCountTagHelper.TagName)]
+[HtmlTargetElement(DateInputTagHelper.HintTagName, ParentTag = DateInputTagHelper.TagName)]
+[HtmlTargetElement(DateInputTagHelper.HintTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(FileUploadTagHelper.HintTagName, ParentTag = FileUploadTagHelper.TagName)]
+[HtmlTargetElement(RadiosTagHelper.HintTagName, ParentTag = RadiosTagHelper.TagName)]
+[HtmlTargetElement(RadiosTagHelper.HintTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
+[HtmlTargetElement(SelectTagHelper.HintTagName, ParentTag = SelectTagHelper.TagName)]
+[HtmlTargetElement(TextAreaTagHelper.HintTagName, ParentTag = TextAreaTagHelper.TagName)]
+[HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
+[OutputElementHint(ComponentGenerator.HintElement)]
+public class FormGroupHintTagHelper : TagHelper
 {
     /// <summary>
-    /// Represents the hint in a GDS form group component.
+    /// Creates a <see cref="FormGroupHintTagHelper"/>.
     /// </summary>
-    [HtmlTargetElement(CheckboxesTagHelper.HintTagName, ParentTag = CheckboxesTagHelper.TagName)]
-    [HtmlTargetElement(CheckboxesTagHelper.HintTagName, ParentTag = CheckboxesFieldsetTagHelper.TagName)]
-    [HtmlTargetElement(CharacterCountTagHelper.HintTagName, ParentTag = CharacterCountTagHelper.TagName)]
-    [HtmlTargetElement(DateInputTagHelper.HintTagName, ParentTag = DateInputTagHelper.TagName)]
-    [HtmlTargetElement(DateInputTagHelper.HintTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
-    [HtmlTargetElement(FileUploadTagHelper.HintTagName, ParentTag = FileUploadTagHelper.TagName)]
-    [HtmlTargetElement(RadiosTagHelper.HintTagName, ParentTag = RadiosTagHelper.TagName)]
-    [HtmlTargetElement(RadiosTagHelper.HintTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
-    [HtmlTargetElement(SelectTagHelper.HintTagName, ParentTag = SelectTagHelper.TagName)]
-    [HtmlTargetElement(TextAreaTagHelper.HintTagName, ParentTag = TextAreaTagHelper.TagName)]
-    [HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
-    [OutputElementHint(ComponentGenerator.HintElement)]
-    public class FormGroupHintTagHelper : TagHelper
+    public FormGroupHintTagHelper()
     {
-        /// <summary>
-        /// Creates a <see cref="FormGroupHintTagHelper"/>.
-        /// </summary>
-        public FormGroupHintTagHelper()
-        {
-        }
+    }
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-                await output.GetChildContentAsync() :
-                null;
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
+            await output.GetChildContentAsync() :
+            null;
 
-            var formGroupContext = context.GetContextItem<FormGroupContext>();
+        var formGroupContext = context.GetContextItem<FormGroupContext>();
 
-            formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
+        formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
 
-            output.SuppressOutput();
-        }
+        output.SuppressOutput();
     }
 }

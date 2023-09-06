@@ -12,422 +12,421 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class RadiosItemTagHelperTests
 {
-    public class RadiosItemTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_AddsItemToContext()
     {
-        [Fact]
-        public async Task ProcessAsync_AddsItemToContext()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "test", aspFor: null);
+        // Arrange
+        var radiosContext = new RadiosContext(name: "test", aspFor: null);
 
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper()
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Checked = true,
-                Disabled = true,
-                Id = "id",
-                Value = "value"
-            };
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.True(radiosItem.Checked);
-                    Assert.True(radiosItem.Disabled);
-                    Assert.Equal("id", radiosItem.Id);
-                    Assert.Equal("value", radiosItem.Value);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoValue_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "test", aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper();
-
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("The 'value' attribute must be specified.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoNameButParentHasName_DoesNotThrowInvalidOperationException()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "parent", aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Value = "value"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-            // Assert
-            Assert.Null(ex);
-        }
-
-        [Theory]
-        [InlineData("bar", true)]
-        [InlineData("baz", false)]
-        public async Task ProcessAsync_WithModelExpression_DeducesCheckedFromModelExpression(string modelValue, bool expectedChecked)
+        var tagHelper = new RadiosItemTagHelper()
         {
-            // Arrange
-            var model = new Model()
+            Checked = true,
+            Disabled = true,
+            Id = "id",
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
             {
-                Foo = modelValue
-            };
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.True(radiosItem.Checked);
+                Assert.True(radiosItem.Disabled);
+                Assert.Equal("id", radiosItem.Id);
+                Assert.Equal("value", radiosItem.Value);
+            });
+    }
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
-                .GetExplorerForProperty(nameof(Model.Foo));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(Model.Foo);
+    [Fact]
+    public async Task ProcessAsync_NoValue_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var radiosContext = new RadiosContext(name: "test", aspFor: null);
 
-            var radiosContext = new RadiosContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper()
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Checked = null,
-                Value = "bar"
-            };
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal(expectedChecked, radiosItem.Checked);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithNullCollectionModelExpression_ExecutesSuccessfully()
-        {
-            // Arrange
-            var model = new ModelWithCollectionProperty()
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                CollectionProperty = null
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
-                .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
+        var tagHelper = new RadiosItemTagHelper();
 
-            var radiosContext = new RadiosContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
+        // Assert
+        Assert.IsType<InvalidOperationException>(ex);
+        Assert.Equal("The 'value' attribute must be specified.", ex.Message);
+    }
 
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+    [Fact]
+    public async Task ProcessAsync_NoNameButParentHasName_DoesNotThrowInvalidOperationException()
+    {
+        // Arrange
+        var radiosContext = new RadiosContext(name: "parent", aspFor: null);
 
-            var tagHelper = new RadiosItemTagHelper()
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Value = "2"
-            };
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.False(radiosItem.Checked);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithHint_SetsHintOnContext()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "test", aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = context.GetContextItem<RadiosItemContext>();
-                    itemContext.SetHint(new AttributeDictionary(), content: new HtmlString("Hint"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Value = "value"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal("Hint", radiosItem.Hint?.Content?.ToHtmlString());
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithoutHint_DoesNotSetHintOnContext()
+        var tagHelper = new RadiosItemTagHelper()
         {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "test", aspFor: null);
+            Value = "value"
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        // Assert
+        Assert.Null(ex);
+    }
 
-            var tagHelper = new RadiosItemTagHelper()
+    [Theory]
+    [InlineData("bar", true)]
+    [InlineData("baz", false)]
+    public async Task ProcessAsync_WithModelExpression_DeducesCheckedFromModelExpression(string modelValue, bool expectedChecked)
+    {
+        // Arrange
+        var model = new Model()
+        {
+            Foo = modelValue
+        };
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+            .GetExplorerForProperty(nameof(Model.Foo));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(Model.Foo);
+
+        var radiosContext = new RadiosContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Value = "value"
-            };
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Null(radiosItem.Hint);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithConditional_SetsConditionalOnContext()
-        {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "test", aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = context.GetContextItem<RadiosItemContext>();
-                    itemContext.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Value = "value"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Equal("Conditional", radiosItem.Conditional?.Content?.ToHtmlString());
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithoutConditional_DoesNotSetConditionalOnContext()
+        var tagHelper = new RadiosItemTagHelper()
         {
-            // Arrange
-            var radiosContext = new RadiosContext(name: "test", aspFor: null);
+            Checked = null,
+            Value = "bar"
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-radios-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(RadiosContext), radiosContext }
-                },
-                uniqueId: "test");
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var output = new TagHelperOutput(
-                "govuk-radios-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new RadiosItemTagHelper()
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
             {
-                Value = "value"
-            };
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.Equal(expectedChecked, radiosItem.Checked);
+            });
+    }
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                radiosContext.Items,
-                item =>
-                {
-                    var radiosItem = Assert.IsType<RadiosItem>(item);
-                    Assert.Null(radiosItem.Conditional);
-                });
-        }
-
-        private class Model
+    [Fact]
+    public async Task ProcessAsync_WithNullCollectionModelExpression_ExecutesSuccessfully()
+    {
+        // Arrange
+        var model = new ModelWithCollectionProperty()
         {
-            public string? Foo { get; set; }
-        }
+            CollectionProperty = null
+        };
 
-        private class ModelWithBooleanProperty
-        {
-            public bool BooleanProperty { get; set; }
-        }
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
+            .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
 
-        private class ModelWithCollectionProperty
+        var radiosContext = new RadiosContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new RadiosItemTagHelper()
         {
-            public IEnumerable<int>? CollectionProperty { get; set; }
-        }
+            Value = "2"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
+            {
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.False(radiosItem.Checked);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithHint_SetsHintOnContext()
+    {
+        // Arrange
+        var radiosContext = new RadiosContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var itemContext = context.GetContextItem<RadiosItemContext>();
+                itemContext.SetHint(new AttributeDictionary(), content: new HtmlString("Hint"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new RadiosItemTagHelper()
+        {
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
+            {
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.Equal("Hint", radiosItem.Hint?.Content?.ToHtmlString());
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithoutHint_DoesNotSetHintOnContext()
+    {
+        // Arrange
+        var radiosContext = new RadiosContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new RadiosItemTagHelper()
+        {
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
+            {
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.Null(radiosItem.Hint);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithConditional_SetsConditionalOnContext()
+    {
+        // Arrange
+        var radiosContext = new RadiosContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var itemContext = context.GetContextItem<RadiosItemContext>();
+                itemContext.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new RadiosItemTagHelper()
+        {
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
+            {
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.Equal("Conditional", radiosItem.Conditional?.Content?.ToHtmlString());
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithoutConditional_DoesNotSetConditionalOnContext()
+    {
+        // Arrange
+        var radiosContext = new RadiosContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-radios-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(RadiosContext), radiosContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-radios-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new RadiosItemTagHelper()
+        {
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            radiosContext.Items,
+            item =>
+            {
+                var radiosItem = Assert.IsType<RadiosItem>(item);
+                Assert.Null(radiosItem.Conditional);
+            });
+    }
+
+    private class Model
+    {
+        public string? Foo { get; set; }
+    }
+
+    private class ModelWithBooleanProperty
+    {
+        public bool BooleanProperty { get; set; }
+    }
+
+    private class ModelWithCollectionProperty
+    {
+        public IEnumerable<int>? CollectionProperty { get; set; }
     }
 }

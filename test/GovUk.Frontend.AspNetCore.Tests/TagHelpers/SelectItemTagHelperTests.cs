@@ -10,166 +10,165 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class SelectItemTagHelperTests
 {
-    public class SelectItemTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_AddItemsToContext()
     {
-        [Fact]
-        public async Task ProcessAsync_AddItemsToContext()
-        {
-            // Arrange
-            var selectContext = new SelectContext(aspFor: null);
+        // Arrange
+        var selectContext = new SelectContext(aspFor: null);
 
-            var context = new TagHelperContext(
-                tagName: "govuk-select-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(SelectContext), selectContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-select-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Item text"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new SelectItemTagHelper()
+        var context = new TagHelperContext(
+            tagName: "govuk-select-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Disabled = true,
-                Selected = true,
-                Value = "value"
-            };
+                { typeof(SelectContext), selectContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                selectContext.Items,
-                item =>
-                {
-                    Assert.Equal("Item text", item.Content?.ToHtmlString());
-                    Assert.True(item.Disabled);
-                    Assert.True(item.Selected);
-                    Assert.Equal("value", item.Value);
-                });
-        }
-
-        [Theory]
-        [InlineData("bar", true)]
-        [InlineData("baz", false)]
-        public async Task ProcessAsync_DeducesSelectedFromModelExpression(string modelValue, bool expectedSelected)
-        {
-            // Arrange
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
-                .GetExplorerForProperty(nameof(Model.SimpleProperty));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(Model.SimpleProperty);
-
-            var modelHelper = new Mock<IModelHelper>();
-            modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
-
-            var selectContext = new SelectContext(aspFor: new ModelExpression(modelExpression, modelExplorer));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-select-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(SelectContext), selectContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-select-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Item text"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new SelectItemTagHelper(modelHelper.Object)
+        var output = new TagHelperOutput(
+            "govuk-select-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Value = "bar",
-                ViewContext = viewContext
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.AppendHtml(new HtmlString("Item text"));
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                selectContext.Items,
-                item =>
-                {
-                    Assert.Equal(expectedSelected, item.Selected);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_SelectedAttributeExplicitlySet_IgnoresModelExpression()
+        var tagHelper = new SelectItemTagHelper()
         {
-            // Arrange
-            var modelValue = "bar";
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
-                .GetExplorerForProperty(nameof(Model.SimpleProperty));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(Model.SimpleProperty);
+            Disabled = true,
+            Selected = true,
+            Value = "value"
+        };
 
-            var modelHelper = new Mock<IModelHelper>();
-            modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var selectContext = new SelectContext(aspFor: new ModelExpression(modelExpression, modelExplorer));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-select-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(SelectContext), selectContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-select-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Item text"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new SelectItemTagHelper(modelHelper.Object)
+        // Assert
+        Assert.Collection(
+            selectContext.Items,
+            item =>
             {
-                Selected = false,
-                Value = modelValue,
-                ViewContext = viewContext
-            };
+                Assert.Equal("Item text", item.Content?.ToHtmlString());
+                Assert.True(item.Disabled);
+                Assert.True(item.Selected);
+                Assert.Equal("value", item.Value);
+            });
+    }
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+    [Theory]
+    [InlineData("bar", true)]
+    [InlineData("baz", false)]
+    public async Task ProcessAsync_DeducesSelectedFromModelExpression(string modelValue, bool expectedSelected)
+    {
+        // Arrange
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(Model.SimpleProperty);
 
-            // Assert
-            Assert.Collection(
-                selectContext.Items,
-                item =>
-                {
-                    Assert.False(item.Selected);
-                });
-        }
+        var modelHelper = new Mock<IModelHelper>();
+        modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
 
-        private class Model
+        var selectContext = new SelectContext(aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+        var context = new TagHelperContext(
+            tagName: "govuk-select-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(SelectContext), selectContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-select-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.AppendHtml(new HtmlString("Item text"));
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new SelectItemTagHelper(modelHelper.Object)
         {
-            public string? SimpleProperty { get; set; }
-        }
+            Value = "bar",
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            selectContext.Items,
+            item =>
+            {
+                Assert.Equal(expectedSelected, item.Selected);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_SelectedAttributeExplicitlySet_IgnoresModelExpression()
+    {
+        // Arrange
+        var modelValue = "bar";
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(Model.SimpleProperty);
+
+        var modelHelper = new Mock<IModelHelper>();
+        modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
+
+        var selectContext = new SelectContext(aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+        var context = new TagHelperContext(
+            tagName: "govuk-select-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(SelectContext), selectContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-select-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.AppendHtml(new HtmlString("Item text"));
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new SelectItemTagHelper(modelHelper.Object)
+        {
+            Selected = false,
+            Value = modelValue,
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            selectContext.Items,
+            item =>
+            {
+                Assert.False(item.Selected);
+            });
+    }
+
+    private class Model
+    {
+        public string? SimpleProperty { get; set; }
     }
 }

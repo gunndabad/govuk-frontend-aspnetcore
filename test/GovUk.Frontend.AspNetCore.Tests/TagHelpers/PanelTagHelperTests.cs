@@ -8,84 +8,83 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class PanelTagHelperTests
 {
-    public class PanelTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-panel",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-panel",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-panel",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
-                    panelContext.SetTitle(new HtmlString("Title"));
-                    panelContext.SetBody(new HtmlString("Body"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new PanelTagHelper(new ComponentGenerator())
+        var output = new TagHelperOutput(
+            "govuk-panel",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                HeadingLevel = 3
-            };
+                var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
+                panelContext.SetTitle(new HtmlString("Title"));
+                panelContext.SetBody(new HtmlString("Body"));
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new PanelTagHelper(new ComponentGenerator())
+        {
+            HeadingLevel = 3
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-panel--confirmation govuk-panel"">
     <h3 class=""govuk-panel__title"">Title</h3>
     <div class=""govuk-panel__body"">Body</div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_MissingTitle_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-panel",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_MissingTitle_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-panel",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-panel",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
-                    panelContext.SetBody(new HtmlString("Body"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new PanelTagHelper(new ComponentGenerator())
+        var output = new TagHelperOutput(
+            "govuk-panel",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                HeadingLevel = 3
-            };
+                var panelContext = (PanelContext)context.Items[typeof(PanelContext)];
+                panelContext.SetBody(new HtmlString("Body"));
 
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("A <govuk-panel-title> element must be provided.", ex.Message);
-        }
+        var tagHelper = new PanelTagHelper(new ComponentGenerator())
+        {
+            HeadingLevel = 3
+        };
+
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+        // Assert
+        Assert.IsType<InvalidOperationException>(ex);
+        Assert.Equal("A <govuk-panel-title> element must be provided.", ex.Message);
     }
 }

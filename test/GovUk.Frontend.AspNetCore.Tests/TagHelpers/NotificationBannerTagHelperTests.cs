@@ -7,37 +7,37 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class NotificationBannerTagHelperTests
 {
-    public class NotificationBannerTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_DefaultType_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_DefaultType_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-notification-banner",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-notification-banner",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-notification-banner",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The message.");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "govuk-notification-banner",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("The message.");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new NotificationBannerTagHelper();
+        var tagHelper = new NotificationBannerTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var expectedHtml = @"
+        // Assert
+        var expectedHtml = @"
 <div
     class=""govuk-notification-banner""
     role=""region""
@@ -53,39 +53,39 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_SuccessType_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-notification-banner",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_SuccessType_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-notification-banner",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-notification-banner",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The message.");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new NotificationBannerTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-notification-banner",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Type = NotificationBannerType.Success
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("The message.");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new NotificationBannerTagHelper()
+        {
+            Type = NotificationBannerType.Success
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div
     class=""govuk-notification-banner govuk-notification-banner--success""
     role=""alert""
@@ -101,40 +101,40 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithDisableAutoFocusSpecified_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-notification-banner",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithDisableAutoFocusSpecified_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-notification-banner",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-notification-banner",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The message.");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new NotificationBannerTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-notification-banner",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                DisableAutoFocus = true,
-                Type = NotificationBannerType.Success
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("The message.");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new NotificationBannerTagHelper()
+        {
+            DisableAutoFocus = true,
+            Type = NotificationBannerType.Success
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div
     class=""govuk-notification-banner govuk-notification-banner--success""
     role=""alert""
@@ -151,40 +151,40 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        // 
-        [Fact]
-        public async Task ProcessAsync_WithRoleSpecified_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-notification-banner",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    // 
+    [Fact]
+    public async Task ProcessAsync_WithRoleSpecified_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-notification-banner",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-notification-banner",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The message.");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new NotificationBannerTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-notification-banner",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Role = "custom-role"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("The message.");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new NotificationBannerTagHelper()
+        {
+            Role = "custom-role"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div
     class=""govuk-notification-banner""
     role=""custom-role""
@@ -200,39 +200,39 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithTitle_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-notification-banner",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithTitle_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-notification-banner",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-notification-banner",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var notificationBannerContext = context.GetContextItem<NotificationBannerContext>();
-                    notificationBannerContext.SetTitle(id: "title-id", headingLevel: 4, content: new HtmlString("Title"));
+        var output = new TagHelperOutput(
+            "govuk-notification-banner",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var notificationBannerContext = context.GetContextItem<NotificationBannerContext>();
+                notificationBannerContext.SetTitle(id: "title-id", headingLevel: 4, content: new HtmlString("Title"));
 
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("The message.");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("The message.");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new NotificationBannerTagHelper();
+        var tagHelper = new NotificationBannerTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var expectedHtml = @"
+        // Assert
+        var expectedHtml = @"
 <div
     class=""govuk-notification-banner""
     role=""region""
@@ -248,7 +248,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration
+namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
+
+internal class PaginationPrevious
 {
-    internal class PaginationPrevious
-    {
-        public string? Href { get; set; }
-        public AttributeDictionary? Attributes { get; set; }
-        public AttributeDictionary? LinkAttributes { get; set; }
-        public string? LabelText { get; set; }
-        public IHtmlContent? Text { get; set; }
-    }
+    public string? Href { get; set; }
+    public AttributeDictionary? Attributes { get; set; }
+    public AttributeDictionary? LinkAttributes { get; set; }
+    public string? LabelText { get; set; }
+    public IHtmlContent? Text { get; set; }
 }

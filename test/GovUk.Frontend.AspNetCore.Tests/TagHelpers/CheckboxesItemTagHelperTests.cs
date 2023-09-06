@@ -12,525 +12,524 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class CheckboxesItemTagHelperTests
 {
-    public class CheckboxesItemTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_AddsItemToContext()
     {
-        [Fact]
-        public async Task ProcessAsync_AddsItemToContext()
-        {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
 
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Checked = true,
-                Disabled = true,
-                Id = "id",
-                Name = "name",
-                Value = "value"
-            };
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.True(checkboxesItem.Checked);
-                    Assert.True(checkboxesItem.Disabled);
-                    Assert.Equal("id", checkboxesItem.Id);
-                    Assert.Equal("name", checkboxesItem.Name);
-                    Assert.Equal("value", checkboxesItem.Value);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoValue_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper();
-
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("The 'value' attribute must be specified.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoName_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: null, aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Value = "value"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("The 'name' attribute must be specified on each item when not specified on the parent <govuk-checkboxes>.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoNameButParentHasName_DoesNotThrowInvalidOperationException()
+        var tagHelper = new CheckboxesItemTagHelper()
         {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "parent", aspFor: null);
+            Checked = true,
+            Disabled = true,
+            Id = "id",
+            Name = "name",
+            Value = "value"
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
             {
-                Value = "value"
-            };
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.True(checkboxesItem.Checked);
+                Assert.True(checkboxesItem.Disabled);
+                Assert.Equal("id", checkboxesItem.Id);
+                Assert.Equal("name", checkboxesItem.Name);
+                Assert.Equal("value", checkboxesItem.Value);
+            });
+    }
 
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+    [Fact]
+    public async Task ProcessAsync_NoValue_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
 
-            // Assert
-            Assert.Null(ex);
-        }
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
 
-        [Theory]
-        [InlineData("bar", true)]
-        [InlineData("baz", false)]
-        public async Task ProcessAsync_WithSimpleModelExpression_DeducesCheckedFromModelExpression(string modelValue, bool expectedChecked)
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper();
+
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+        // Assert
+        Assert.IsType<InvalidOperationException>(ex);
+        Assert.Equal("The 'value' attribute must be specified.", ex.Message);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_NoName_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: null, aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper()
         {
-            // Arrange
-            var model = new Model()
+            Value = "value"
+        };
+
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+        // Assert
+        Assert.IsType<InvalidOperationException>(ex);
+        Assert.Equal("The 'name' attribute must be specified on each item when not specified on the parent <govuk-checkboxes>.", ex.Message);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_NoNameButParentHasName_DoesNotThrowInvalidOperationException()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "parent", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Foo = modelValue
-            };
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
-                .GetExplorerForProperty(nameof(Model.Foo));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(Model.Foo);
-
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Checked = null,
-                Value = "bar",
-                ViewContext = viewContext
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal(expectedChecked, checkboxesItem.Checked);
-                });
-        }
-
-        [Theory]
-        [InlineData(new[] { 2, 3 }, "3", true)]
-        [InlineData(new[] { 2, 3 }, "4", false)]
-        public async Task ProcessAsync_WithCollectionModelExpression_DeducesCheckedFromModelExpression(
-            int[] modelValues,
-            string itemValue,
-            bool expectedChecked)
+        var tagHelper = new CheckboxesItemTagHelper()
         {
-            // Arrange
-            var model = new ModelWithCollectionProperty()
-            {
-                CollectionProperty = modelValues
-            };
+            Value = "value"
+        };
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
-                .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+        // Assert
+        Assert.Null(ex);
+    }
 
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
-            {
-                ViewContext = viewContext,
-                Value = itemValue
-            };
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal(expectedChecked, checkboxesItem.Checked);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithNullCollectionModelExpression_ExecutesSuccessfully()
+    [Theory]
+    [InlineData("bar", true)]
+    [InlineData("baz", false)]
+    public async Task ProcessAsync_WithSimpleModelExpression_DeducesCheckedFromModelExpression(string modelValue, bool expectedChecked)
+    {
+        // Arrange
+        var model = new Model()
         {
-            // Arrange
-            var model = new ModelWithCollectionProperty()
+            Foo = modelValue
+        };
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+            .GetExplorerForProperty(nameof(Model.Foo));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(Model.Foo);
+
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                CollectionProperty = null
-            };
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
 
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
-                .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
-            var viewContext = new ViewContext();
-            var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
-
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
-
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                ViewContext = viewContext,
-                Value = "2"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.False(checkboxesItem.Checked);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithHint_SetsHintOnContext()
+        var tagHelper = new CheckboxesItemTagHelper()
         {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+            Checked = null,
+            Value = "bar",
+            ViewContext = viewContext
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = context.GetContextItem<CheckboxesItemContext>();
-                    itemContext.SetHint(new AttributeDictionary(), content: new HtmlString("Hint"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
             {
-                Name = "name",
-                Value = "value"
-            };
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.Equal(expectedChecked, checkboxesItem.Checked);
+            });
+    }
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal("Hint", checkboxesItem.Hint?.Content?.ToHtmlString());
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithoutHint_DoesNotSetHintOnContext()
+    [Theory]
+    [InlineData(new[] { 2, 3 }, "3", true)]
+    [InlineData(new[] { 2, 3 }, "4", false)]
+    public async Task ProcessAsync_WithCollectionModelExpression_DeducesCheckedFromModelExpression(
+        int[] modelValues,
+        string itemValue,
+        bool expectedChecked)
+    {
+        // Arrange
+        var model = new ModelWithCollectionProperty()
         {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+            CollectionProperty = modelValues
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
+            .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
 
-            var tagHelper = new CheckboxesItemTagHelper()
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                Name = "name",
-                Value = "value"
-            };
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Null(checkboxesItem.Hint);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithConditional_SetsConditionalOnContext()
-        {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
-
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var itemContext = context.GetContextItem<CheckboxesItemContext>();
-                    itemContext.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Name = "name",
-                Value = "value"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Equal("Conditional", checkboxesItem.Conditional?.Content?.ToHtmlString());
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_WithoutConditional_DoesNotSetConditionalOnContext()
+        var tagHelper = new CheckboxesItemTagHelper()
         {
-            // Arrange
-            var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+            ViewContext = viewContext,
+            Value = itemValue
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(CheckboxesContext), checkboxesContext }
-                },
-                uniqueId: "test");
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new CheckboxesItemTagHelper()
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
             {
-                Name = "name",
-                Value = "value"
-            };
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.Equal(expectedChecked, checkboxesItem.Checked);
+            });
+    }
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                checkboxesContext.Items,
-                item =>
-                {
-                    var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
-                    Assert.Null(checkboxesItem.Conditional);
-                });
-        }
-
-        private class Model
+    [Fact]
+    public async Task ProcessAsync_WithNullCollectionModelExpression_ExecutesSuccessfully()
+    {
+        // Arrange
+        var model = new ModelWithCollectionProperty()
         {
-            public string? Foo { get; set; }
-        }
+            CollectionProperty = null
+        };
 
-        private class ModelWithBooleanProperty
-        {
-            public bool BooleanProperty { get; set; }
-        }
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
+            .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
+        var viewContext = new ViewContext();
+        var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
 
-        private class ModelWithCollectionProperty
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper()
         {
-            public IEnumerable<int>? CollectionProperty { get; set; }
-        }
+            ViewContext = viewContext,
+            Value = "2"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
+            {
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.False(checkboxesItem.Checked);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithHint_SetsHintOnContext()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var itemContext = context.GetContextItem<CheckboxesItemContext>();
+                itemContext.SetHint(new AttributeDictionary(), content: new HtmlString("Hint"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper()
+        {
+            Name = "name",
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
+            {
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.Equal("Hint", checkboxesItem.Hint?.Content?.ToHtmlString());
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithoutHint_DoesNotSetHintOnContext()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper()
+        {
+            Name = "name",
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
+            {
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.Null(checkboxesItem.Hint);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithConditional_SetsConditionalOnContext()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var itemContext = context.GetContextItem<CheckboxesItemContext>();
+                itemContext.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper()
+        {
+            Name = "name",
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
+            {
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.Equal("Conditional", checkboxesItem.Conditional?.Content?.ToHtmlString());
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithoutConditional_DoesNotSetConditionalOnContext()
+    {
+        // Arrange
+        var checkboxesContext = new CheckboxesContext(name: "test", aspFor: null);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(CheckboxesContext), checkboxesContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-checkboxes-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesItemTagHelper()
+        {
+            Name = "name",
+            Value = "value"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            checkboxesContext.Items,
+            item =>
+            {
+                var checkboxesItem = Assert.IsType<CheckboxesItem>(item);
+                Assert.Null(checkboxesItem.Conditional);
+            });
+    }
+
+    private class Model
+    {
+        public string? Foo { get; set; }
+    }
+
+    private class ModelWithBooleanProperty
+    {
+        public bool BooleanProperty { get; set; }
+    }
+
+    private class ModelWithCollectionProperty
+    {
+        public IEnumerable<int>? CollectionProperty { get; set; }
     }
 }

@@ -7,68 +7,67 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Playwright;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.IntegrationTests
+namespace GovUk.Frontend.AspNetCore.IntegrationTests;
+
+public class ServerFixture : IAsyncLifetime
 {
-    public class ServerFixture : IAsyncLifetime
+    public const string BaseUrl = "http://localhost:55342";
+
+    private IHost? _host;
+    private IPlaywright? _playright;
+    private bool _disposed = false;
+
+    public IBrowser? Browser { get; private set; }
+
+    public async virtual Task DisposeAsync()
     {
-        public const string BaseUrl = "http://localhost:55342";
-
-        private IHost? _host;
-        private IPlaywright? _playright;
-        private bool _disposed = false;
-
-        public IBrowser? Browser { get; private set; }
-
-        public async virtual Task DisposeAsync()
+        if (_disposed)
         {
-            if (_disposed)
-            {
-                return;
-            }
-
-            _disposed = true;
-
-            if (Browser != null)
-            {
-                await Browser.DisposeAsync();
-            }
-
-            _playright?.Dispose();
-
-            if (_host != null)
-            {
-                await _host.StopAsync();
-                _host.Dispose();
-            }
+            return;
         }
 
-        public async virtual Task InitializeAsync()
-        {
-            _host = CreateHost();
-            await _host.StartAsync();
+        _disposed = true;
 
-            _playright = await Playwright.CreateAsync();
-            Browser = await _playright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions() { /*Headless = false*/ });
+        if (Browser != null)
+        {
+            await Browser.DisposeAsync();
         }
 
-        protected virtual void Configure(IApplicationBuilder app)
-        {
-            app.UseRouting();
-        }
+        _playright?.Dispose();
 
-        protected virtual void ConfigureServices(IServiceCollection services)
+        if (_host != null)
         {
-            services.AddGovUkFrontend();
+            await _host.StopAsync();
+            _host.Dispose();
         }
-
-        private IHost CreateHost() => Host.CreateDefaultBuilder(args: Array.Empty<string>())
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder
-                    .UseUrls(BaseUrl)
-                    .ConfigureServices((context, services) => ConfigureServices(services))
-                    .Configure(Configure);
-            })
-            .Build();
     }
+
+    public async virtual Task InitializeAsync()
+    {
+        _host = CreateHost();
+        await _host.StartAsync();
+
+        _playright = await Playwright.CreateAsync();
+        Browser = await _playright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions() { /*Headless = false*/ });
+    }
+
+    protected virtual void Configure(IApplicationBuilder app)
+    {
+        app.UseRouting();
+    }
+
+    protected virtual void ConfigureServices(IServiceCollection services)
+    {
+        services.AddGovUkFrontend();
+    }
+
+    private IHost CreateHost() => Host.CreateDefaultBuilder(args: Array.Empty<string>())
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder
+                .UseUrls(BaseUrl)
+                .ConfigureServices((context, services) => ConfigureServices(services))
+                .Configure(Configure);
+        })
+        .Build();
 }

@@ -7,62 +7,62 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class RadiosTagHelperTests
 {
-    public class RadiosTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-radios",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-radios",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-radios",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-radios",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var radiosContext = context.GetContextItem<RadiosContext>();
+
+                radiosContext.SetHint(attributes: null, content: new HtmlString("The hint"));
+
+                radiosContext.AddItem(new RadiosItem()
                 {
-                    var radiosContext = context.GetContextItem<RadiosContext>();
-
-                    radiosContext.SetHint(attributes: null, content: new HtmlString("The hint"));
-
-                    radiosContext.AddItem(new RadiosItem()
-                    {
-                        Checked = false,
-                        LabelContent = new HtmlString("First"),
-                        Disabled = true,
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    radiosContext.AddItem(new RadiosItem()
-                    {
-                        Checked = true,
-                        LabelContent = new HtmlString("Second"),
-                        Disabled = false,
-                        Id = "second",
-                        Value = "second"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Checked = false,
+                    LabelContent = new HtmlString("First"),
+                    Disabled = true,
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testradios"
-            };
+                radiosContext.AddItem(new RadiosItem()
+                {
+                    Checked = true,
+                    LabelContent = new HtmlString("Second"),
+                    Disabled = false,
+                    Id = "second",
+                    Value = "second"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testradios"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
     <div class=""govuk-radios"" data-module=""govuk-radios"">
@@ -77,61 +77,61 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-radios",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-radios",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-radios",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-radios",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var radiosContext = context.GetContextItem<RadiosContext>();
+
+                radiosContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("A error"));
+
+                radiosContext.AddItem(new RadiosItem()
                 {
-                    var radiosContext = context.GetContextItem<RadiosContext>();
-
-                    radiosContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("A error"));
-
-                    radiosContext.AddItem(new RadiosItem()
-                    {
-                        Checked = false,
-                        LabelContent = new HtmlString("First"),
-                        Disabled = true,
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    radiosContext.AddItem(new RadiosItem()
-                    {
-                        Checked = true,
-                        LabelContent = new HtmlString("Second"),
-                        Disabled = false,
-                        Id = "second",
-                        Value = "second"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Checked = false,
+                    LabelContent = new HtmlString("First"),
+                    Disabled = true,
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testradios"
-            };
+                radiosContext.AddItem(new RadiosItem()
+                {
+                    Checked = true,
+                    LabelContent = new HtmlString("Second"),
+                    Disabled = false,
+                    Id = "second",
+                    Value = "second"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testradios"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>A error</p>
     <div class=""govuk-radios"" data-module=""govuk-radios"">
@@ -146,52 +146,52 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithItemHint_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-radios",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithItemHint_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-radios",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-radios",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-radios",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var radiosContext = context.GetContextItem<RadiosContext>();
+
+                radiosContext.AddItem(new RadiosItem()
                 {
-                    var radiosContext = context.GetContextItem<RadiosContext>();
-
-                    radiosContext.AddItem(new RadiosItem()
+                    LabelContent = new HtmlString("First"),
+                    Hint = new RadiosItemHint()
                     {
-                        LabelContent = new HtmlString("First"),
-                        Hint = new RadiosItemHint()
-                        {
-                            Content = new HtmlString("First item hint")
-                        },
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("First item hint")
+                    },
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testradios"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testradios"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-radios"" data-module=""govuk-radios"">
         <div class=""govuk-radios__item"">
@@ -202,52 +202,52 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithUncheckedItemConditional_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-radios",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithUncheckedItemConditional_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-radios",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-radios",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-radios",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var radiosContext = context.GetContextItem<RadiosContext>();
+
+                radiosContext.AddItem(new RadiosItem()
                 {
-                    var radiosContext = context.GetContextItem<RadiosContext>();
-
-                    radiosContext.AddItem(new RadiosItem()
+                    LabelContent = new HtmlString("First"),
+                    Conditional = new RadiosItemConditional()
                     {
-                        LabelContent = new HtmlString("First"),
-                        Conditional = new RadiosItemConditional()
-                        {
-                            Content = new HtmlString("Item 1 conditional")
-                        },
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("Item 1 conditional")
+                    },
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testradios"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testradios"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-radios"" data-module=""govuk-radios"">
         <div class=""govuk-radios__item"">
@@ -258,53 +258,53 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithCheckedItemConditional_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-radios",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithCheckedItemConditional_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-radios",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-radios",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-radios",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var radiosContext = context.GetContextItem<RadiosContext>();
+
+                radiosContext.AddItem(new RadiosItem()
                 {
-                    var radiosContext = context.GetContextItem<RadiosContext>();
-
-                    radiosContext.AddItem(new RadiosItem()
+                    Checked = true,
+                    LabelContent = new HtmlString("First"),
+                    Conditional = new RadiosItemConditional()
                     {
-                        Checked = true,
-                        LabelContent = new HtmlString("First"),
-                        Conditional = new RadiosItemConditional()
-                        {
-                            Content = new HtmlString("Item 1 conditional")
-                        },
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("Item 1 conditional")
+                    },
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testradios"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testradios"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-radios"" data-module=""govuk-radios"">
         <div class=""govuk-radios__item"">
@@ -315,68 +315,68 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithFieldset_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-radios",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithFieldset_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-radios",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-radios",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-radios",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var radiosContext = context.GetContextItem<RadiosContext>();
+
+                radiosContext.OpenFieldset();
+                var radiosFieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
+                radiosFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
+
+                radiosContext.SetHint(attributes: null, content: new HtmlString("The hint"));
+
+                radiosContext.AddItem(new RadiosItem()
                 {
-                    var radiosContext = context.GetContextItem<RadiosContext>();
-
-                    radiosContext.OpenFieldset();
-                    var radiosFieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
-                    radiosFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
-
-                    radiosContext.SetHint(attributes: null, content: new HtmlString("The hint"));
-
-                    radiosContext.AddItem(new RadiosItem()
-                    {
-                        Checked = false,
-                        LabelContent = new HtmlString("First"),
-                        Disabled = true,
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    radiosContext.AddItem(new RadiosItem()
-                    {
-                        Checked = true,
-                        LabelContent = new HtmlString("Second"),
-                        Disabled = false,
-                        Id = "second",
-                        Value = "second"
-                    });
-
-                    radiosContext.CloseFieldset(radiosFieldsetContext);
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Checked = false,
+                    LabelContent = new HtmlString("First"),
+                    Disabled = true,
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                DescribedBy = "describedby",
-                IdPrefix = "my-id",
-                Name = "testradios"
-            };
+                radiosContext.AddItem(new RadiosItem()
+                {
+                    Checked = true,
+                    LabelContent = new HtmlString("Second"),
+                    Disabled = false,
+                    Id = "second",
+                    Value = "second"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                radiosContext.CloseFieldset(radiosFieldsetContext);
 
-            // Assert
-            var expectedHtml = @"
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            DescribedBy = "describedby",
+            IdPrefix = "my-id",
+            Name = "testradios"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <fieldset aria-describedby=""describedby my-id-hint"" class=""govuk-fieldset"">
         <legend class=""govuk-fieldset__legend"">Legend</legend>
@@ -394,7 +394,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </fieldset>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

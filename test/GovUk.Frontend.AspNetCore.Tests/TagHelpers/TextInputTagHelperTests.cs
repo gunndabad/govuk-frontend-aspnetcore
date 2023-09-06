@@ -7,58 +7,58 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class TextInputTagHelperTests
 {
-    public class TextInputTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var inputContext = context.GetContextItem<TextInputContext>();
-
-                    inputContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    inputContext.SetHint(
-                        attributes: null,
-                        content: new HtmlString("The hint"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextInputTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-name",
-                Autocomplete = "none",
-                InputMode = "numeric",
-                Pattern = "[0-9]*",
-                Type = "number",
-                Value = "42",
-                LabelClass = "additional-label-class"
-            };
+                var inputContext = context.GetContextItem<TextInputContext>();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("The label"));
 
-            // Assert
-            var expectedHtml = @"
+                inputContext.SetHint(
+                    attributes: null,
+                    content: new HtmlString("The hint"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new TextInputTagHelper()
+        {
+            Id = "my-id",
+            DescribedBy = "describedby",
+            Name = "my-name",
+            Autocomplete = "none",
+            InputMode = "numeric",
+            Pattern = "[0-9]*",
+            Type = "number",
+            Value = "42",
+            LabelClass = "additional-label-class"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <label for=""my-id"" class=""govuk-label additional-label-class"">The label</label>
     <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
@@ -74,56 +74,56 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         value=""42"">
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithError_RendersExpectedOutput()
-        {
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithError_RendersExpectedOutput()
+    {
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var inputContext = context.GetContextItem<TextInputContext>();
-
-                    inputContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    inputContext.SetHint(
-                        attributes: null,
-                        content: new HtmlString("The hint"));
-
-                    inputContext.SetErrorMessage(
-                        visuallyHiddenText: null,
-                        attributes: null,
-                        content: new HtmlString("The error"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextInputTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Id = "my-id",
-                DescribedBy = "describedby",
-                Name = "my-name",
-                Type = "text"
-            };
+                var inputContext = context.GetContextItem<TextInputContext>();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("The label"));
 
-            // Assert
-            var expectedHtml = @"
+                inputContext.SetHint(
+                    attributes: null,
+                    content: new HtmlString("The hint"));
+
+                inputContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    attributes: null,
+                    content: new HtmlString("The error"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new TextInputTagHelper()
+        {
+            Id = "my-id",
+            DescribedBy = "describedby",
+            Name = "my-name",
+            Type = "text"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <label for=""my-id"" class=""govuk-label"">The label</label>
     <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
@@ -139,89 +139,89 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
         type=""text"">
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_NoTypeSpecified_UsesDefaultType()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_NoTypeSpecified_UsesDefaultType()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var inputContext = context.GetContextItem<TextInputContext>();
-
-                    inputContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextInputTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Id = "my-id",
-                Name = "my-name"
-            };
+                var inputContext = context.GetContextItem<TextInputContext>();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("The label"));
 
-            // Assert
-            var element = output.RenderToElement();
-            var input = element.QuerySelector("input");
-            Assert.Equal("text", input.Attributes["type"].Value);
-        }
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-        [Fact]
-        public async Task ProcessAsync_WithPrefix_GeneratesExpectedOutput()
+        var tagHelper = new TextInputTagHelper()
         {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+            Id = "my-id",
+            Name = "my-name"
+        };
 
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var inputContext = context.GetContextItem<TextInputContext>();
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-                    inputContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
+        // Assert
+        var element = output.RenderToElement();
+        var input = element.QuerySelector("input");
+        Assert.Equal("text", input.Attributes["type"].Value);
+    }
 
-                    inputContext.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+    [Fact]
+    public async Task ProcessAsync_WithPrefix_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextInputTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Id = "my-id",
-                Name = "my-name"
-            };
+                var inputContext = context.GetContextItem<TextInputContext>();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("The label"));
 
-            // Assert
-            var expectedHtml = @"
+                inputContext.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new TextInputTagHelper()
+        {
+            Id = "my-id",
+            Name = "my-name"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <label for=""my-id"" class=""govuk-label"">The label</label>
     <div class=""govuk-input__wrapper"">
@@ -234,48 +234,48 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithSuffix_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithSuffix_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var inputContext = context.GetContextItem<TextInputContext>();
-
-                    inputContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    inputContext.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextInputTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Id = "my-id",
-                Name = "my-name"
-            };
+                var inputContext = context.GetContextItem<TextInputContext>();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("The label"));
 
-            // Assert
-            var expectedHtml = @"
+                inputContext.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new TextInputTagHelper()
+        {
+            Id = "my-id",
+            Name = "my-name"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <label for=""my-id"" class=""govuk-label"">The label</label>
     <div class=""govuk-input__wrapper"">
@@ -288,50 +288,50 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithPrefixAndSuffix_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-input",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithPrefixAndSuffix_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var inputContext = context.GetContextItem<TextInputContext>();
-
-                    inputContext.SetLabel(
-                        isPageHeading: false,
-                        attributes: null,
-                        content: new HtmlString("The label"));
-
-                    inputContext.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
-
-                    inputContext.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new TextInputTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Id = "my-id",
-                Name = "my-name"
-            };
+                var inputContext = context.GetContextItem<TextInputContext>();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("The label"));
 
-            // Assert
-            var expectedHtml = @"
+                inputContext.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+
+                inputContext.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new TextInputTagHelper()
+        {
+            Id = "my-id",
+            Name = "my-name"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <label for=""my-id"" class=""govuk-label"">The label</label>
     <div class=""govuk-input__wrapper"">
@@ -345,7 +345,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

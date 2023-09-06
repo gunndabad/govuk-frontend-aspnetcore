@@ -3,66 +3,65 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Generates a GOV.UK summary card component.
+/// </summary>
+[HtmlTargetElement(TagName)]
+[RestrictChildren(SummaryCardTitleTagHelper.TagName, SummaryCardActionsTagHelper.TagName, SummaryListTagHelper.TagName)]
+[OutputElementHint(ComponentGenerator.SummaryCardElement)]
+public class SummaryCardTagHelper : TagHelper
 {
+    internal const string TagName = "govuk-summary-card";
+
+    private readonly IGovUkHtmlGenerator _htmlGenerator;
+
     /// <summary>
-    /// Generates a GOV.UK summary card component.
+    /// Creates a new <see cref="SummaryCardTagHelper"/>.
     /// </summary>
-    [HtmlTargetElement(TagName)]
-    [RestrictChildren(SummaryCardTitleTagHelper.TagName, SummaryCardActionsTagHelper.TagName, SummaryListTagHelper.TagName)]
-    [OutputElementHint(ComponentGenerator.SummaryCardElement)]
-    public class SummaryCardTagHelper : TagHelper
+    public SummaryCardTagHelper()
+        : this(htmlGenerator: null)
     {
-        internal const string TagName = "govuk-summary-card";
+    }
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
+    internal SummaryCardTagHelper(IGovUkHtmlGenerator? htmlGenerator)
+    {
+        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+    }
 
-        /// <summary>
-        /// Creates a new <see cref="SummaryCardTagHelper"/>.
-        /// </summary>
-        public SummaryCardTagHelper()
-            : this(htmlGenerator: null)
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var cardContext = new SummaryCardContext();
+
+        using (context.SetScopedContextItem(cardContext))
         {
+            await output.GetChildContentAsync();
         }
 
-        internal SummaryCardTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-        {
-            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-        }
+        cardContext.ThrowIfNotComplete();
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var cardContext = new SummaryCardContext();
-
-            using (context.SetScopedContextItem(cardContext))
+        var tagBuilder = _htmlGenerator.GenerateSummaryCard(
+            new SummaryCardTitle()
             {
-                await output.GetChildContentAsync();
-            }
+                Content = cardContext.Title?.Content,
+                HeadingLevel = cardContext.Title?.HeadingLevel,
+                Attributes = cardContext.Title?.Attributes,
+            },
+            new SummaryListActions()
+            {
+                Attributes = cardContext.ActionsAttributes,
+                Items = cardContext.Actions
+            },
+            cardContext.SummaryList,
+            output.Attributes.ToAttributeDictionary());
 
-            cardContext.ThrowIfNotComplete();
+        output.TagName = tagBuilder.TagName;
+        output.TagMode = TagMode.StartTagAndEndTag;
 
-            var tagBuilder = _htmlGenerator.GenerateSummaryCard(
-                new SummaryCardTitle()
-                {
-                    Content = cardContext.Title?.Content,
-                    HeadingLevel = cardContext.Title?.HeadingLevel,
-                    Attributes = cardContext.Title?.Attributes,
-                },
-                new SummaryListActions()
-                {
-                    Attributes = cardContext.ActionsAttributes,
-                    Items = cardContext.Actions
-                },
-                cardContext.SummaryList,
-                output.Attributes.ToAttributeDictionary());
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
+        output.Attributes.Clear();
+        output.MergeAttributes(tagBuilder);
+        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
     }
 }

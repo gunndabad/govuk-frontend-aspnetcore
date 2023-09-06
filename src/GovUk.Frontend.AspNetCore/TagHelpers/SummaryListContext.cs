@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class SummaryListContext
 {
-    internal class SummaryListContext
+    private readonly List<SummaryListRow> _rows;
+
+    public SummaryListContext()
     {
-        private readonly List<SummaryListRow> _rows;
+        _rows = new List<SummaryListRow>();
+    }
 
-        public SummaryListContext()
-        {
-            _rows = new List<SummaryListRow>();
-        }
+    public IReadOnlyList<SummaryListRow> Rows => _rows;
 
-        public IReadOnlyList<SummaryListRow> Rows => _rows;
+    public void AddRow(SummaryListRow row)
+    {
+        Guard.ArgumentNotNull(nameof(row), row);
 
-        public void AddRow(SummaryListRow row)
-        {
-            Guard.ArgumentNotNull(nameof(row), row);
-
-            _rows.Add(row);
-        }
+        _rows.Add(row);
     }
 }

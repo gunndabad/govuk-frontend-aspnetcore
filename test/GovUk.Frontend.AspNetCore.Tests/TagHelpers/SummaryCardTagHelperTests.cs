@@ -8,61 +8,61 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class SummaryCardTagHelperTests
 {
-    public class SummaryCardTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-summary-card",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-summary-card",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-summary-card",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-summary-card",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var summaryCardContext = (SummaryCardContext)context.Items[typeof(SummaryCardContext)];
+
+                summaryCardContext.SetTitle(new HtmlString("My title"), headingLevel: 3, attributes: new AttributeDictionary());
+
+                summaryCardContext.AddAction(new SummaryListAction()
                 {
-                    var summaryCardContext = (SummaryCardContext)context.Items[typeof(SummaryCardContext)];
-
-                    summaryCardContext.SetTitle(new HtmlString("My title"), headingLevel: 3, attributes: new AttributeDictionary());
-
-                    summaryCardContext.AddAction(new SummaryListAction()
+                    Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
                     {
-                        Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
-                        {
-                            { "href", "#" }
-                        },
-                        Content = new HtmlString("Action 1"),
-                        VisuallyHiddenText = "vht"
-                    });
-
-                    summaryCardContext.AddAction(new SummaryListAction()
-                    {
-                        Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
-                        {
-                            { "href", "#" }
-                        },
-                        Content = new HtmlString("Action 2")
-                    });
-
-                    summaryCardContext.SetSummaryList(new HtmlString("<div></div>"));
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        { "href", "#" }
+                    },
+                    Content = new HtmlString("Action 1"),
+                    VisuallyHiddenText = "vht"
                 });
 
-            var tagHelper = new SummaryCardTagHelper(new ComponentGenerator());
+                summaryCardContext.AddAction(new SummaryListAction()
+                {
+                    Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
+                    {
+                        { "href", "#" }
+                    },
+                    Content = new HtmlString("Action 2")
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                summaryCardContext.SetSummaryList(new HtmlString("<div></div>"));
 
-            // Assert
-            var expectedHtml = @"
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new SummaryCardTagHelper(new ComponentGenerator());
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-summary-card"">
   <div class=""govuk-summary-card__title-wrapper"">
     <h3 class=""govuk-summary-card__title"">My title</h3>
@@ -84,7 +84,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
   </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

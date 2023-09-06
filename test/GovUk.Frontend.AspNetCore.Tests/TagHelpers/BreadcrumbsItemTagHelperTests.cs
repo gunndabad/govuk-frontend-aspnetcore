@@ -9,83 +9,82 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class BreadcrumbsItemTagHelperTests
 {
-    public class BreadcrumbsItemTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_NoLink_AddsItemToContext()
     {
-        [Fact]
-        public async Task ProcessAsync_NoLink_AddsItemToContext()
-        {
-            // Arrange
-            var breadcrumbsContext = new BreadcrumbsContext();
+        // Arrange
+        var breadcrumbsContext = new BreadcrumbsContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-breadcrumbs-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(BreadcrumbsContext), breadcrumbsContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "govuk-breadcrumbs-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(BreadcrumbsContext), breadcrumbsContext }
+            },
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-breadcrumbs-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetHtmlContent("The item");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "govuk-breadcrumbs-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetHtmlContent("The item");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new BreadcrumbsItemTagHelper();
+        var tagHelper = new BreadcrumbsItemTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var lastItem = breadcrumbsContext.Items.Last();
-            Assert.Null(lastItem.Href);
-            Assert.Equal("The item", lastItem.Content?.ToHtmlString());
-        }
+        // Assert
+        var lastItem = breadcrumbsContext.Items.Last();
+        Assert.Null(lastItem.Href);
+        Assert.Equal("The item", lastItem.Content?.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithLink_AddsItemToContext()
-        {
-            // Arrange
-            var breadcrumbsContext = new BreadcrumbsContext();
+    [Fact]
+    public async Task ProcessAsync_WithLink_AddsItemToContext()
+    {
+        // Arrange
+        var breadcrumbsContext = new BreadcrumbsContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-breadcrumbs-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(BreadcrumbsContext), breadcrumbsContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "govuk-breadcrumbs-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(BreadcrumbsContext), breadcrumbsContext }
+            },
+            uniqueId: "test");
 
-            var attributes = new TagHelperAttributeList();
-            var output = new TagHelperOutput(
-                "govuk-breadcrumbs-item",
-                attributes,
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    attributes.Add("href", "place.com");
+        var attributes = new TagHelperAttributeList();
+        var output = new TagHelperOutput(
+            "govuk-breadcrumbs-item",
+            attributes,
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                attributes.Add("href", "place.com");
 
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetHtmlContent("The item");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetHtmlContent("The item");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new BreadcrumbsItemTagHelper();
+        var tagHelper = new BreadcrumbsItemTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var lastItem = breadcrumbsContext.Items.Last();
-            Assert.Equal("place.com", lastItem.Href);
-            Assert.Equal("The item", lastItem.Content?.ToHtmlString());
-        }
+        // Assert
+        var lastItem = breadcrumbsContext.Items.Last();
+        Assert.Equal("place.com", lastItem.Href);
+        Assert.Equal("The item", lastItem.Content?.ToHtmlString());
     }
 }

@@ -9,197 +9,196 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class SummaryListRowTagHelperTests
 {
-    public class SummaryListRowTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_AddsRowToContext()
     {
-        [Fact]
-        public async Task ProcessAsync_AddsRowToContext()
-        {
-            // Arrange
-            var summaryListContext = new SummaryListContext();
+        // Arrange
+        var summaryListContext = new SummaryListContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-summary-list-row",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(SummaryListContext), summaryListContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "govuk-summary-list-row",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(SummaryListContext), summaryListContext }
+            },
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-summary-list-row",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-summary-list-row",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
+                rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
+                rowContext.SetValue(new AttributeDictionary(), new HtmlString("Value"));
+                rowContext.AddAction(new SummaryListAction()
                 {
-                    var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
-                    rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
-                    rowContext.SetValue(new AttributeDictionary(), new HtmlString("Value"));
-                    rowContext.AddAction(new SummaryListAction()
+                    Attributes = new AttributeDictionary()
                     {
-                        Attributes = new AttributeDictionary()
-                        {
-                            { "href", "first" }
-                        },
-                        Content = new HtmlString("First action"),
-                        VisuallyHiddenText = "vht1"
-                    });
-                    rowContext.AddAction(new SummaryListAction()
+                        { "href", "first" }
+                    },
+                    Content = new HtmlString("First action"),
+                    VisuallyHiddenText = "vht1"
+                });
+                rowContext.AddAction(new SummaryListAction()
+                {
+                    Attributes = new AttributeDictionary()
                     {
-                        Attributes = new AttributeDictionary()
-                        {
-                            { "href", "second" }
-                        },
-                        Content = new HtmlString("Second action"),
-                        VisuallyHiddenText = "vht2"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        { "href", "second" }
+                    },
+                    Content = new HtmlString("Second action"),
+                    VisuallyHiddenText = "vht2"
                 });
 
-            var tagHelper = new SummaryListRowTagHelper();
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new SummaryListRowTagHelper();
 
-            // Assert
-            Assert.Equal(1, summaryListContext.Rows.Count);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            Assert.Collection(
-                summaryListContext.Rows,
-                row =>
-                {
-                    Assert.Equal("Key", row.Key?.Content?.ToHtmlString());
-                    Assert.Equal("Value", row.Value?.Content?.ToHtmlString());
+        // Assert
+        Assert.Equal(1, summaryListContext.Rows.Count);
 
-                    Assert.Collection(
-                        row.Actions?.Items,
-                        action =>
-                        {
-                            Assert.Equal("First action", action.Content?.ToHtmlString());
-                            Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "first");
-                            Assert.Equal("vht1", action.VisuallyHiddenText);
-                        },
-                        action =>
-                        {
-                            Assert.Equal("Second action", action.Content?.ToHtmlString());
-                            Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
-                            Assert.Equal("vht2", action.VisuallyHiddenText);
-                        });
-                });
-        }
+        Assert.Collection(
+            summaryListContext.Rows,
+            row =>
+            {
+                Assert.Equal("Key", row.Key?.Content?.ToHtmlString());
+                Assert.Equal("Value", row.Value?.Content?.ToHtmlString());
 
-        [Fact]
-        public async Task ProcessAsync_WithNoValue_AddsRowToContext()
-        {
-            // Arrange
-            var summaryListContext = new SummaryListContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-summary-list-row",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(SummaryListContext), summaryListContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-summary-list-row",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
-                    rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
-                    rowContext.AddAction(new SummaryListAction()
+                Assert.Collection(
+                    row.Actions?.Items,
+                    action =>
                     {
-                        Attributes = new AttributeDictionary()
-                        {
-                            { "href", "first" }
-                        },
-                        Content = new HtmlString("First action"),
-                        VisuallyHiddenText = "vht1"
-                    });
-                    rowContext.AddAction(new SummaryListAction()
+                        Assert.Equal("First action", action.Content?.ToHtmlString());
+                        Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "first");
+                        Assert.Equal("vht1", action.VisuallyHiddenText);
+                    },
+                    action =>
                     {
-                        Attributes = new AttributeDictionary()
-                        {
-                            { "href", "second" }
-                        },
-                        Content = new HtmlString("Second action"),
-                        VisuallyHiddenText = "vht2"
+                        Assert.Equal("Second action", action.Content?.ToHtmlString());
+                        Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
+                        Assert.Equal("vht2", action.VisuallyHiddenText);
                     });
+            });
+    }
 
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+    [Fact]
+    public async Task ProcessAsync_WithNoValue_AddsRowToContext()
+    {
+        // Arrange
+        var summaryListContext = new SummaryListContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-summary-list-row",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(SummaryListContext), summaryListContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-summary-list-row",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
+                rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
+                rowContext.AddAction(new SummaryListAction()
+                {
+                    Attributes = new AttributeDictionary()
+                    {
+                        { "href", "first" }
+                    },
+                    Content = new HtmlString("First action"),
+                    VisuallyHiddenText = "vht1"
+                });
+                rowContext.AddAction(new SummaryListAction()
+                {
+                    Attributes = new AttributeDictionary()
+                    {
+                        { "href", "second" }
+                    },
+                    Content = new HtmlString("Second action"),
+                    VisuallyHiddenText = "vht2"
                 });
 
-            var tagHelper = new SummaryListRowTagHelper();
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new SummaryListRowTagHelper();
 
-            // Assert
-            Assert.Equal(1, summaryListContext.Rows.Count);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            Assert.Collection(
-                summaryListContext.Rows,
-                row =>
-                {
-                    Assert.Equal("Key", row.Key?.Content?.ToHtmlString());
-                    Assert.Null(row.Value);
+        // Assert
+        Assert.Equal(1, summaryListContext.Rows.Count);
 
-                    Assert.Collection(
-                        row.Actions?.Items,
-                        action =>
-                        {
-                            Assert.Equal("First action", action.Content?.ToHtmlString());
-                            Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "first");
-                            Assert.Equal("vht1", action.VisuallyHiddenText);
-                        },
-                        action =>
-                        {
-                            Assert.Equal("Second action", action.Content?.ToHtmlString());
-                            Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
-                            Assert.Equal("vht2", action.VisuallyHiddenText);
-                        });
-                });
-        }
+        Assert.Collection(
+            summaryListContext.Rows,
+            row =>
+            {
+                Assert.Equal("Key", row.Key?.Content?.ToHtmlString());
+                Assert.Null(row.Value);
 
-        [Fact]
-        public async Task ProcessAsync_RowIsMissingKey_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var summaryListContext = new SummaryListContext();
+                Assert.Collection(
+                    row.Actions?.Items,
+                    action =>
+                    {
+                        Assert.Equal("First action", action.Content?.ToHtmlString());
+                        Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "first");
+                        Assert.Equal("vht1", action.VisuallyHiddenText);
+                    },
+                    action =>
+                    {
+                        Assert.Equal("Second action", action.Content?.ToHtmlString());
+                        Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
+                        Assert.Equal("vht2", action.VisuallyHiddenText);
+                    });
+            });
+    }
 
-            var context = new TagHelperContext(
-                tagName: "govuk-summary-list-row",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(SummaryListContext), summaryListContext }
-                },
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_RowIsMissingKey_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var summaryListContext = new SummaryListContext();
 
-            var output = new TagHelperOutput(
-                "govuk-summary-list-row",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var context = new TagHelperContext(
+            tagName: "govuk-summary-list-row",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(SummaryListContext), summaryListContext }
+            },
+            uniqueId: "test");
 
-            var tagHelper = new SummaryListRowTagHelper();
+        var output = new TagHelperOutput(
+            "govuk-summary-list-row",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+        var tagHelper = new SummaryListRowTagHelper();
 
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("A <govuk-summary-list-row-key> element must be provided.", ex.Message);
-        }
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+        // Assert
+        Assert.IsType<InvalidOperationException>(ex);
+        Assert.Equal("A <govuk-summary-list-row-key> element must be provided.", ex.Message);
     }
 }

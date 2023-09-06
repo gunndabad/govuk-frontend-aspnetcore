@@ -8,86 +8,86 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class SummaryListTagHelperTests
 {
-    public class SummaryListTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-summary-list",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-summary-list",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-summary-list",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-summary-list",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var summaryListContent = (SummaryListContext)context.Items[typeof(SummaryListContext)];
+
+                summaryListContent.AddRow(new SummaryListRow()
                 {
-                    var summaryListContent = (SummaryListContext)context.Items[typeof(SummaryListContext)];
-
-                    summaryListContent.AddRow(new SummaryListRow()
+                    Key = new SummaryListRowKey()
                     {
-                        Key = new SummaryListRowKey()
+                        Content = new HtmlString("Row 1 key")
+                    },
+                    Value = new SummaryListRowValue()
+                    {
+                        Content = new HtmlString("Row 1 value")
+                    },
+                    Actions = new SummaryListActions()
+                    {
+                        Items = new[]
                         {
-                            Content = new HtmlString("Row 1 key")
-                        },
-                        Value = new SummaryListRowValue()
-                        {
-                            Content = new HtmlString("Row 1 value")
-                        },
-                        Actions = new SummaryListActions()
-                        {
-                            Items = new[]
+                            new SummaryListAction()
                             {
-                                new SummaryListAction()
+                                Attributes = new AttributeDictionary()
                                 {
-                                    Attributes = new AttributeDictionary()
-                                    {
-                                        { "href", "row1action1" }
-                                    },
-                                    Content = new HtmlString("Row 1 action 1 content"),
-                                    VisuallyHiddenText = "row1action1vht"
+                                    { "href", "row1action1" }
                                 },
-                                new SummaryListAction()
+                                Content = new HtmlString("Row 1 action 1 content"),
+                                VisuallyHiddenText = "row1action1vht"
+                            },
+                            new SummaryListAction()
+                            {
+                                Attributes = new AttributeDictionary()
                                 {
-                                    Attributes = new AttributeDictionary()
-                                    {
-                                        { "href", "row1action2" }
-                                    },
-                                    Content = new HtmlString("Row 1 action 2 content"),
-                                    VisuallyHiddenText = "row1action2vht"
-                                }
+                                    { "href", "row1action2" }
+                                },
+                                Content = new HtmlString("Row 1 action 2 content"),
+                                VisuallyHiddenText = "row1action2vht"
                             }
                         }
-                    });
-
-                    summaryListContent.AddRow(new SummaryListRow()
-                    {
-                        Key = new SummaryListRowKey()
-                        {
-                            Content = new HtmlString("Row 2 key")
-                        },
-                        Value = new SummaryListRowValue()
-                        {
-                            Content = new HtmlString("Row 2 value")
-                        }
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    }
                 });
 
-            var tagHelper = new SummaryListTagHelper(new ComponentGenerator());
+                summaryListContent.AddRow(new SummaryListRow()
+                {
+                    Key = new SummaryListRowKey()
+                    {
+                        Content = new HtmlString("Row 2 key")
+                    },
+                    Value = new SummaryListRowValue()
+                    {
+                        Content = new HtmlString("Row 2 value")
+                    }
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new SummaryListTagHelper(new ComponentGenerator());
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <dl class=""govuk-summary-list"">
     <div class=""govuk-summary-list__row"">
         <dt class=""govuk-summary-list__key"">Row 1 key</dt>
@@ -109,61 +109,61 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </dl>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_NoRowHasActions_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-summary-list",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_NoRowHasActions_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-summary-list",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-summary-list",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-summary-list",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var summaryListContent = (SummaryListContext)context.Items[typeof(SummaryListContext)];
+
+                summaryListContent.AddRow(new SummaryListRow()
                 {
-                    var summaryListContent = (SummaryListContext)context.Items[typeof(SummaryListContext)];
-
-                    summaryListContent.AddRow(new SummaryListRow()
+                    Key = new SummaryListRowKey()
                     {
-                        Key = new SummaryListRowKey()
-                        {
-                            Content = new HtmlString("Row 1 key")
-                        },
-                        Value = new SummaryListRowValue()
-                        {
-                            Content = new HtmlString("Row 1 value")
-                        }
-                    });
-
-                    summaryListContent.AddRow(new SummaryListRow()
+                        Content = new HtmlString("Row 1 key")
+                    },
+                    Value = new SummaryListRowValue()
                     {
-                        Key = new SummaryListRowKey()
-                        {
-                            Content = new HtmlString("Row 2 key")
-                        },
-                        Value = new SummaryListRowValue()
-                        {
-                            Content = new HtmlString("Row 2 value")
-                        }
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("Row 1 value")
+                    }
                 });
 
-            var tagHelper = new SummaryListTagHelper(new ComponentGenerator());
+                summaryListContent.AddRow(new SummaryListRow()
+                {
+                    Key = new SummaryListRowKey()
+                    {
+                        Content = new HtmlString("Row 2 key")
+                    },
+                    Value = new SummaryListRowValue()
+                    {
+                        Content = new HtmlString("Row 2 value")
+                    }
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new SummaryListTagHelper(new ComponentGenerator());
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <dl class=""govuk-summary-list"">
     <div class=""govuk-summary-list__row"">
         <dt class=""govuk-summary-list__key"">Row 1 key</dt>
@@ -175,7 +175,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </dl>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

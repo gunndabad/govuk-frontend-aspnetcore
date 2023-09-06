@@ -1,33 +1,32 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace GovUk.Frontend.AspNetCore.ConformanceTests
+namespace GovUk.Frontend.AspNetCore.ConformanceTests;
+
+public static class TagBuilderExtensions
 {
-    public static class TagBuilderExtensions
+    public static void AddAttribute(this TagBuilder tagBuilder, string key, bool value)
     {
-        public static void AddAttribute(this TagBuilder tagBuilder, string key, bool value)
+        tagBuilder.Attributes.Add(key, value ? "true" : "false");
+    }
+
+    public static void AddAttributes(this TagBuilder tagBuilder, IDictionary<string, object> attributes)
+    {
+        if (attributes == null)
         {
-            tagBuilder.Attributes.Add(key, value ? "true" : "false");
+            return;
         }
 
-        public static void AddAttributes(this TagBuilder tagBuilder, IDictionary<string, object> attributes)
+        foreach (var kvp in attributes)
         {
-            if (attributes == null)
+            var value = kvp.Value.ToString();
+
+            if (kvp.Value is bool boolValue)
             {
-                return;
+                value = boolValue ? "true" : "false";
             }
 
-            foreach (var kvp in attributes)
-            {
-                var value = kvp.Value.ToString();
-
-                if (kvp.Value is bool boolValue)
-                {
-                    value = boolValue ? "true" : "false";
-                }
-
-                tagBuilder.Attributes.Add(kvp.Key, value);
-            }
+            tagBuilder.Attributes.Add(kvp.Key, value);
         }
     }
 }

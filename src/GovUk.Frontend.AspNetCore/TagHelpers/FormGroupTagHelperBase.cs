@@ -10,234 +10,233 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Base class for tag helpers that generate a form group.
+/// </summary>
+public abstract class FormGroupTagHelperBase : TagHelper
 {
-    /// <summary>
-    /// Base class for tag helpers that generate a form group.
-    /// </summary>
-    public abstract class FormGroupTagHelperBase : TagHelper
+    private protected const string AspForAttributeName = "asp-for";
+    private protected const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
+
+    private protected FormGroupTagHelperBase(
+        IGovUkHtmlGenerator htmlGenerator,
+        IModelHelper modelHelper)
     {
-        private protected const string AspForAttributeName = "asp-for";
-        private protected const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
+        Generator = Guard.ArgumentNotNull(nameof(htmlGenerator), htmlGenerator);
+        ModelHelper = Guard.ArgumentNotNull(nameof(modelHelper), modelHelper);
+    }
 
-        private protected FormGroupTagHelperBase(
-            IGovUkHtmlGenerator htmlGenerator,
-            IModelHelper modelHelper)
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(AspForAttributeName)]
+    public ModelExpression? AspFor { get; set; }
+
+    /// <summary>
+    /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="AspFor"/> expression should be used
+    /// to deduce an error message.
+    /// </summary>
+    /// <remarks>
+    /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
+    /// <para>The default is <c>false</c>.</para>
+    /// </remarks>
+    [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
+    public bool IgnoreModelStateErrors { get; set; } = false;
+
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
+
+    internal string? DescribedBy { get; set; }
+
+    private protected IGovUkHtmlGenerator Generator { get; }
+
+    private protected IModelHelper ModelHelper { get; }
+
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var formGroupContext = CreateFormGroupContext();
+
+        IHtmlContent content;
+        bool haveError;
+
+        // Since implementations can return a derived FormGroupContext ensure we set both a context item
+        // for FormGroupContext and one for the specific type.
+        // N.B. we cannot make this context type a generic parameter since it's internal.
+        using (context.SetScopedContextItem(formGroupContext))
+        using (context.SetScopedContextItem(formGroupContext.GetType(), formGroupContext))
         {
-            Generator = Guard.ArgumentNotNull(nameof(htmlGenerator), htmlGenerator);
-            ModelHelper = Guard.ArgumentNotNull(nameof(modelHelper), modelHelper);
+            var childContent = await output.GetChildContentAsync();
+
+            content = GenerateFormGroupContent(context, formGroupContext, output, childContent, out haveError);
         }
 
-        /// <summary>
-        /// An expression to be evaluated against the current model.
-        /// </summary>
-        [HtmlAttributeName(AspForAttributeName)]
-        public ModelExpression? AspFor { get; set; }
+        var tagBuilder = CreateTagBuilder(haveError, content, output);
 
-        /// <summary>
-        /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="AspFor"/> expression should be used
-        /// to deduce an error message.
-        /// </summary>
-        /// <remarks>
-        /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
-        /// <para>The default is <c>false</c>.</para>
-        /// </remarks>
-        [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
-        public bool IgnoreModelStateErrors { get; set; } = false;
+        output.TagName = tagBuilder.TagName;
+        output.TagMode = TagMode.StartTagAndEndTag;
 
-        /// <summary>
-        /// Gets the <see cref="ViewContext"/> of the executing view.
-        /// </summary>
-        [HtmlAttributeNotBound]
-        [ViewContext]
-        [DisallowNull]
-        public ViewContext? ViewContext { get; set; }
+        output.Attributes.Clear();
+        output.MergeAttributes(tagBuilder);
+        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+    }
 
-        internal string? DescribedBy { get; set; }
-
-        private protected IGovUkHtmlGenerator Generator { get; }
-
-        private protected IModelHelper ModelHelper { get; }
-
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    internal static string? AppendToDescribedBy(string? describedBy, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
         {
-            var formGroupContext = CreateFormGroupContext();
-
-            IHtmlContent content;
-            bool haveError;
-
-            // Since implementations can return a derived FormGroupContext ensure we set both a context item
-            // for FormGroupContext and one for the specific type.
-            // N.B. we cannot make this context type a generic parameter since it's internal.
-            using (context.SetScopedContextItem(formGroupContext))
-            using (context.SetScopedContextItem(formGroupContext.GetType(), formGroupContext))
-            {
-                var childContent = await output.GetChildContentAsync();
-
-                content = GenerateFormGroupContent(context, formGroupContext, output, childContent, out haveError);
-            }
-
-            var tagBuilder = CreateTagBuilder(haveError, content, output);
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            return describedBy;
         }
 
-        internal static string? AppendToDescribedBy(string? describedBy, string? value)
+        if (string.IsNullOrWhiteSpace(describedBy))
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return describedBy;
-            }
-
-            if (string.IsNullOrWhiteSpace(describedBy))
-            {
-                return value;
-            }
-            else
-            {
-                return $"{describedBy} {value}";
-            }
+            return value;
         }
-
-        private protected virtual TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput) =>
-            Generator.GenerateFormGroup(
-                haveError,
-                content,
-                tagHelperOutput.Attributes.ToAttributeDictionary());
-
-        private protected virtual string GetErrorFieldId(TagHelperContext context) => ResolveIdPrefix();
-
-        internal IHtmlContent? GenerateErrorMessage(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
+        else
         {
-            var visuallyHiddenText = formGroupContext.ErrorMessage?.VisuallyHiddenText ??
-                ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;
+            return $"{describedBy} {value}";
+        }
+    }
 
-            var content = formGroupContext.ErrorMessage?.Content;
-            var attributes = formGroupContext.ErrorMessage?.Attributes;
+    private protected virtual TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput) =>
+        Generator.GenerateFormGroup(
+            haveError,
+            content,
+            tagHelperOutput.Attributes.ToAttributeDictionary());
 
-            if (content == null && AspFor != null && IgnoreModelStateErrors != true)
+    private protected virtual string GetErrorFieldId(TagHelperContext context) => ResolveIdPrefix();
+
+    internal IHtmlContent? GenerateErrorMessage(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
+    {
+        var visuallyHiddenText = formGroupContext.ErrorMessage?.VisuallyHiddenText ??
+            ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;
+
+        var content = formGroupContext.ErrorMessage?.Content;
+        var attributes = formGroupContext.ErrorMessage?.Attributes;
+
+        if (content == null && AspFor != null && IgnoreModelStateErrors != true)
+        {
+            var validationMessage = ModelHelper.GetValidationMessage(
+                ViewContext!,
+                AspFor!.ModelExplorer,
+                AspFor.Name);
+
+            if (validationMessage != null)
             {
-                var validationMessage = ModelHelper.GetValidationMessage(
-                    ViewContext!,
-                    AspFor!.ModelExplorer,
-                    AspFor.Name);
-
-                if (validationMessage != null)
-                {
-                    content = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
-                }
-            }
-
-            if (content != null)
-            {
-                AddErrorToFormErrorContext();
-
-                var resolvedIdPrefix = ResolveIdPrefix();
-                var errorId = resolvedIdPrefix + "-error";
-                DescribedBy = AppendToDescribedBy(DescribedBy, errorId);
-
-                attributes ??= new AttributeDictionary();
-                attributes["id"] = errorId;
-
-                return Generator.GenerateErrorMessage(visuallyHiddenText, content, attributes);
-            }
-            else
-            {
-                return null;
-            }
-
-            void AddErrorToFormErrorContext()
-            {
-                if (tagHelperContext.TryGetContextItem<FormErrorContext>(out var formErrorContext))
-                {
-                    var errorFieldId = GetErrorFieldId(tagHelperContext);
-                    var href = "#" + errorFieldId;
-
-                    formErrorContext.AddError(content, href);
-                }
+                content = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
             }
         }
 
-        internal IHtmlContent? GenerateHint(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
+        if (content != null)
         {
-            var content = formGroupContext.Hint?.Content;
-            var attributes = formGroupContext.Hint?.Attributes;
-
-            if (content == null && AspFor != null)
-            {
-                var description = ModelHelper.GetDescription(AspFor.ModelExplorer);
-
-                if (description != null)
-                {
-                    content = new HtmlString(HtmlEncoder.Default.Encode(description));
-                }
-            }
-
-            if (content != null)
-            {
-                var resolvedIdPrefix = ResolveIdPrefix();
-                var hintId = resolvedIdPrefix + "-hint";
-                DescribedBy = AppendToDescribedBy(DescribedBy, hintId);
-                return Generator.GenerateHint(hintId, content, attributes);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        internal IHtmlContent GenerateLabel(FormGroupContext formGroupContext, string? labelClass)
-        {
-            // We need some content for the label; if AspFor is null then label content must have been specified
-            if (AspFor == null && formGroupContext.Label?.Content == null)
-            {
-                throw new InvalidOperationException(
-                    $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");
-            }
+            AddErrorToFormErrorContext();
 
             var resolvedIdPrefix = ResolveIdPrefix();
+            var errorId = resolvedIdPrefix + "-error";
+            DescribedBy = AppendToDescribedBy(DescribedBy, errorId);
 
-            var isPageHeading = formGroupContext.Label?.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading;
-            var content = formGroupContext.Label?.Content;
+            attributes ??= new AttributeDictionary();
+            attributes["id"] = errorId;
 
-            var attributes = formGroupContext.Label?.Attributes?.ToAttributeDictionary() ?? new();
-            attributes.MergeCssClass(labelClass);
-
-            var resolvedContent = content ??
-                new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
-
-            return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
+            return Generator.GenerateErrorMessage(visuallyHiddenText, content, attributes);
         }
-
-        internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
+        else
         {
-            var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
-                (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
-
-            if (resolvedFieldsetLegendContent is null)
-            {
-                throw new InvalidOperationException(
-                    $"Fieldset legend content must be specified the '{AspForAttributeName}' attribute is not specified.");
-            }
-
-            return resolvedFieldsetLegendContent;
+            return null;
         }
 
-        private protected abstract FormGroupContext CreateFormGroupContext();
+        void AddErrorToFormErrorContext()
+        {
+            if (tagHelperContext.TryGetContextItem<FormErrorContext>(out var formErrorContext))
+            {
+                var errorFieldId = GetErrorFieldId(tagHelperContext);
+                var href = "#" + errorFieldId;
 
-        private protected abstract IHtmlContent GenerateFormGroupContent(
-            TagHelperContext tagHelperContext,
-            FormGroupContext formGroupContext,
-            TagHelperOutput tagHelperOutput,
-            IHtmlContent childContent,
-            out bool haveError);
-
-        private protected abstract string ResolveIdPrefix();
+                formErrorContext.AddError(content, href);
+            }
+        }
     }
+
+    internal IHtmlContent? GenerateHint(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
+    {
+        var content = formGroupContext.Hint?.Content;
+        var attributes = formGroupContext.Hint?.Attributes;
+
+        if (content == null && AspFor != null)
+        {
+            var description = ModelHelper.GetDescription(AspFor.ModelExplorer);
+
+            if (description != null)
+            {
+                content = new HtmlString(HtmlEncoder.Default.Encode(description));
+            }
+        }
+
+        if (content != null)
+        {
+            var resolvedIdPrefix = ResolveIdPrefix();
+            var hintId = resolvedIdPrefix + "-hint";
+            DescribedBy = AppendToDescribedBy(DescribedBy, hintId);
+            return Generator.GenerateHint(hintId, content, attributes);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    internal IHtmlContent GenerateLabel(FormGroupContext formGroupContext, string? labelClass)
+    {
+        // We need some content for the label; if AspFor is null then label content must have been specified
+        if (AspFor == null && formGroupContext.Label?.Content == null)
+        {
+            throw new InvalidOperationException(
+                $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");
+        }
+
+        var resolvedIdPrefix = ResolveIdPrefix();
+
+        var isPageHeading = formGroupContext.Label?.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading;
+        var content = formGroupContext.Label?.Content;
+
+        var attributes = formGroupContext.Label?.Attributes?.ToAttributeDictionary() ?? new();
+        attributes.MergeCssClass(labelClass);
+
+        var resolvedContent = content ??
+            new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
+
+        return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
+    }
+
+    internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
+    {
+        var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
+            (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
+
+        if (resolvedFieldsetLegendContent is null)
+        {
+            throw new InvalidOperationException(
+                $"Fieldset legend content must be specified the '{AspForAttributeName}' attribute is not specified.");
+        }
+
+        return resolvedFieldsetLegendContent;
+    }
+
+    private protected abstract FormGroupContext CreateFormGroupContext();
+
+    private protected abstract IHtmlContent GenerateFormGroupContent(
+        TagHelperContext tagHelperContext,
+        FormGroupContext formGroupContext,
+        TagHelperOutput tagHelperOutput,
+        IHtmlContent childContent,
+        out bool haveError);
+
+    private protected abstract string ResolveIdPrefix();
 }

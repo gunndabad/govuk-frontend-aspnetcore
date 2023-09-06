@@ -5,67 +5,66 @@ using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Xunit.Sdk;
 
-namespace GovUk.Frontend.AspNetCore.ConformanceTests
-{
-    public class ComponentFixtureData : DataAttribute
-    {
-        private readonly string _fixtureFolder;
-        private readonly Type _optionsType;
-        private readonly string _only;
-        private readonly HashSet<string> _exclude;
+namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 
-        public ComponentFixtureData(
-            string fixtureFolder,
-            Type optionsType,
-            string only = null,
-            params string[] exclude)
+public class ComponentFixtureData : DataAttribute
+{
+    private readonly string _fixtureFolder;
+    private readonly Type _optionsType;
+    private readonly string _only;
+    private readonly HashSet<string> _exclude;
+
+    public ComponentFixtureData(
+        string fixtureFolder,
+        Type optionsType,
+        string only = null,
+        params string[] exclude)
+    {
+        _fixtureFolder = fixtureFolder ?? throw new ArgumentNullException(nameof(fixtureFolder));
+        _optionsType = optionsType ?? throw new ArgumentNullException(nameof(optionsType));
+        _only = only;
+        _exclude = new HashSet<string>(exclude ?? Array.Empty<string>());
+    }
+
+    public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+    {
+        var fixturesFile = Path.Combine("Fixtures", _fixtureFolder, "fixtures.json");
+
+        if (!File.Exists(fixturesFile))
         {
-            _fixtureFolder = fixtureFolder ?? throw new ArgumentNullException(nameof(fixtureFolder));
-            _optionsType = optionsType ?? throw new ArgumentNullException(nameof(optionsType));
-            _only = only;
-            _exclude = new HashSet<string>(exclude ?? Array.Empty<string>());
+            throw new FileNotFoundException(
+                $"Could not find fixtures file at: '{fixturesFile}'.",
+                fixturesFile);
         }
 
-        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+        var fixturesJson = File.ReadAllText(fixturesFile);
+        var fixtures = JObject.Parse(fixturesJson).SelectToken("fixtures");
+
+        if (fixtures == null)
         {
-            var fixturesFile = Path.Combine("Fixtures", _fixtureFolder, "fixtures.json");
+            throw new InvalidOperationException($"Couldn't find fixtures in '{fixturesFile}'.");
+        }
 
-            if (!File.Exists(fixturesFile))
+        var testCaseDataType = typeof(ComponentTestCaseData<>).MakeGenericType(_optionsType);
+
+        foreach (var fixture in fixtures)
+        {
+            var name = fixture["name"].ToString();
+
+            if (_exclude.Contains(name) || (_only != null && name != _only))
             {
-                throw new FileNotFoundException(
-                    $"Could not find fixtures file at: '{fixturesFile}'.",
-                    fixturesFile);
+                continue;
             }
 
-            var fixturesJson = File.ReadAllText(fixturesFile);
-            var fixtures = JObject.Parse(fixturesJson).SelectToken("fixtures");
+            var options = fixture["options"].ToObject(_optionsType);
+            var html = fixture["html"].ToString();
 
-            if (fixtures == null)
+            var testCaseData = Activator.CreateInstance(testCaseDataType, name, options, html);
+
+            yield return new object[]
             {
-                throw new InvalidOperationException($"Couldn't find fixtures in '{fixturesFile}'.");
-            }
-
-            var testCaseDataType = typeof(ComponentTestCaseData<>).MakeGenericType(_optionsType);
-
-            foreach (var fixture in fixtures)
-            {
-                var name = fixture["name"].ToString();
-
-                if (_exclude.Contains(name) || (_only != null && name != _only))
-                {
-                    continue;
-                }
-
-                var options = fixture["options"].ToObject(_optionsType);
-                var html = fixture["html"].ToString();
-
-                var testCaseData = Activator.CreateInstance(testCaseDataType, name, options, html);
-
-                yield return new object[]
-                {
-                    testCaseData
-                };
-            }
+                testCaseData
+            };
         }
     }
 }

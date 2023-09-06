@@ -11,451 +11,450 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class ErrorSummaryItemTagHelperTests
 {
-    public class ErrorSummaryItemTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_AddsItemToContext()
     {
-        [Fact]
-        public async Task ProcessAsync_AddsItemToContext()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("Error message", item.Content?.ToHtmlString());
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_NoContentOrAspNetFor_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
-
-            // Act
-            var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-            // Assert
-            Assert.IsType<InvalidOperationException>(ex);
-            Assert.Equal("Content is required when the 'asp-for' attribute is not specified.", ex.Message);
-        }
-
-        [Fact]
-        public async Task ProcessAsync_AspForSpecified_UsesModelStateErrorMessageForContent()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
-                .GetExplorerForProperty(nameof(Model.Field));
-
-            var viewContext = new ViewContext();
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-                ViewContext = viewContext
-            };
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("ModelState error message", item.Content?.ToHtmlString());
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_BothContentAndAspNetForSpecified_UsesContent()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
-                .GetExplorerForProperty(nameof(Model.Field));
-
-            var viewContext = new ViewContext();
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-                ViewContext = viewContext
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Error message");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
 
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("Error message", item.Content?.ToHtmlString());
-                });
-        }
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
 
-        [Fact]
-        public async Task ProcessAsync_HrefAttributeSpecifiedOrDerived_SetsHrefOnItem()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList()
-                {
-                    { "href", "#TheField" }
-                },
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
-
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("#TheField", item.Href);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_AspForSpecified_GeneratesHrefFromModelExpression()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
-                .GetExplorerForProperty(nameof(Model.Field));
-
-            var viewContext = new ViewContext();
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
             {
-                AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-                ViewContext = viewContext
-            };
+                Assert.Equal("Error message", item.Content?.ToHtmlString());
+            });
+    }
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+    [Fact]
+    public async Task ProcessAsync_NoContentOrAspNetFor_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
 
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("#Field", item.Href);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_AspForSpecifiedForDateField_GeneratesHrefForDateComponentFromModelExpression()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
-                .GetExplorerForProperty(nameof(Model.Date));
-
-            var viewContext = new ViewContext();
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            var modelName = nameof(Model.Date);
-            viewContext.ModelState.AddModelError(modelName, "ModelState error message");
-            dateInputParseErrorsProvider.SetErrorsForModel(modelName, DateInputParseErrors.InvalidMonth | DateInputParseErrors.MissingYear);
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
             {
-                AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
-                ViewContext = viewContext
-            };
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
-
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("#Date.Month", item.Href);
-                });
-        }
-
-        [Fact]
-        public async Task ProcessAsync_BothHrefAndAspForSpecified_UsesHrefAttribute()
-        {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
-
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList()
-                {
-                    { "href", "#SomeHref" }
-                },
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
-
-            var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
-                .GetExplorerForProperty(nameof(Model.Field));
-
-            var viewContext = new ViewContext();
-
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-            viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
-
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-                ViewContext = viewContext
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
 
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Equal("#SomeHref", item.Href);
-                });
-        }
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
 
-        [Fact]
-        public async Task ProcessAsync_NoHrefAttributeOrAspFor_SetsNullHrefOnItem()
+        // Act
+        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
+
+        // Assert
+        Assert.IsType<InvalidOperationException>(ex);
+        Assert.Equal("Content is required when the 'asp-for' attribute is not specified.", ex.Message);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_AspForSpecified_UsesModelStateErrorMessageForContent()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.Field));
+
+        var viewContext = new ViewContext();
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            // Arrange
-            var errorSummaryContext = new ErrorSummaryContext();
+            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            ViewContext = viewContext
+        };
 
-            var context = new TagHelperContext(
-                tagName: "govuk-error-summary-item",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(ErrorSummaryContext), errorSummaryContext }
-                },
-                uniqueId: "test");
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            var output = new TagHelperOutput(
-                "govuk-error-summary-item",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Error message");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Equal("ModelState error message", item.Content?.ToHtmlString());
+            });
+    }
 
-            var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-            var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+    [Fact]
+    public async Task ProcessAsync_BothContentAndAspNetForSpecified_UsesContent()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
 
-            var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Error message");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            Assert.Collection(
-                errorSummaryContext.Items,
-                item =>
-                {
-                    Assert.Null(item.Href);
-                });
-        }
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.Field));
 
-        private class Model
+        var viewContext = new ViewContext();
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            public DateOnly? Date { get; set; }
-            public string? Field { get; set; }
-        }
+            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Equal("Error message", item.Content?.ToHtmlString());
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_HrefAttributeSpecifiedOrDerived_SetsHrefOnItem()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList()
+            {
+                { "href", "#TheField" }
+            },
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Error message");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Equal("#TheField", item.Href);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_AspForSpecified_GeneratesHrefFromModelExpression()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.Field));
+
+        var viewContext = new ViewContext();
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        {
+            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Equal("#Field", item.Href);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_AspForSpecifiedForDateField_GeneratesHrefForDateComponentFromModelExpression()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.Date));
+
+        var viewContext = new ViewContext();
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        var modelName = nameof(Model.Date);
+        viewContext.ModelState.AddModelError(modelName, "ModelState error message");
+        dateInputParseErrorsProvider.SetErrorsForModel(modelName, DateInputParseErrors.InvalidMonth | DateInputParseErrors.MissingYear);
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        {
+            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Equal("#Date.Month", item.Href);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_BothHrefAndAspForSpecified_UsesHrefAttribute()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList()
+            {
+                { "href", "#SomeHref" }
+            },
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.Field));
+
+        var viewContext = new ViewContext();
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        {
+            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Equal("#SomeHref", item.Href);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_NoHrefAttributeOrAspFor_SetsNullHrefOnItem()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Error message");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider);
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            errorSummaryContext.Items,
+            item =>
+            {
+                Assert.Null(item.Href);
+            });
+    }
+
+    private class Model
+    {
+        public DateOnly? Date { get; set; }
+        public string? Field { get; set; }
     }
 }

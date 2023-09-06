@@ -5,43 +5,42 @@ using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class PaginationEllipsisItemTagHelperTests
 {
-    public class PaginationEllipsisItemTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_AddsItemToContextItems()
     {
-        [Fact]
-        public async Task ProcessAsync_AddsItemToContextItems()
-        {
-            // Arrange
-            var paginationContext = new PaginationContext();
+        // Arrange
+        var paginationContext = new PaginationContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-pagination-ellipsis",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(PaginationContext), paginationContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "govuk-pagination-ellipsis",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(PaginationContext), paginationContext }
+            },
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-pagination-ellipsis",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "govuk-pagination-ellipsis",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new PaginationEllipsisItemTagHelper();
+        var tagHelper = new PaginationEllipsisItemTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            Assert.Collection(
-                paginationContext.Items,
-                item => Assert.IsType<PaginationItemEllipsis>(item));
-        }
+        // Assert
+        Assert.Collection(
+            paginationContext.Items,
+            item => Assert.IsType<PaginationItemEllipsis>(item));
     }
 }

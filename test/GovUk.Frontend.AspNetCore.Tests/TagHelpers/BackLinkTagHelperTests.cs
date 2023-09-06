@@ -6,79 +6,78 @@ using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class BackLinkTagHelperTests
 {
-    public class BackLinkTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-back-link",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-back-link",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-back-link",
-                attributes: new TagHelperAttributeList()
-                {
-                    { "href", "http://foo.com" }
-                },
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("My custom link content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.Content.SetContent("My custom link content");
+        var output = new TagHelperOutput(
+            "govuk-back-link",
+            attributes: new TagHelperAttributeList()
+            {
+                { "href", "http://foo.com" }
+            },
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("My custom link content");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.Content.SetContent("My custom link content");
 
-            var tagHelper = new BackLinkTagHelper();
+        var tagHelper = new BackLinkTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var expectedHtml = @"
+        // Assert
+        var expectedHtml = @"
 <a class=""govuk-back-link"" href=""http://foo.com"">My custom link content</a>";
 
-            AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithNoContent_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-back-link",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithNoContent_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-back-link",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-back-link",
-                attributes: new TagHelperAttributeList()
-                {
-                    { "href", "http://foo.com" }
-                },
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-            output.TagMode = TagMode.SelfClosing;
+        var output = new TagHelperOutput(
+            "govuk-back-link",
+            attributes: new TagHelperAttributeList()
+            {
+                { "href", "http://foo.com" }
+            },
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
 
-            var tagHelper = new BackLinkTagHelper();
+        var tagHelper = new BackLinkTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var expectedHtml = @"
+        // Assert
+        var expectedHtml = @"
 <a class=""govuk-back-link"" href=""http://foo.com"">Back</a>";
 
-            AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
     }
 }

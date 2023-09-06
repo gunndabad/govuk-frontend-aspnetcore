@@ -2,39 +2,38 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Represents an action in a GDS summary card.
+/// </summary>
+[HtmlTargetElement(TagName, ParentTag = SummaryCardActionsTagHelper.TagName)]
+public class SummaryCardActionTagHelper : TagHelper
 {
+    internal const string TagName = "govuk-summary-card-action";
+
+    private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
+
     /// <summary>
-    /// Represents an action in a GDS summary card.
+    /// The visually hidden text for the action link.
     /// </summary>
-    [HtmlTargetElement(TagName, ParentTag = SummaryCardActionsTagHelper.TagName)]
-    public class SummaryCardActionTagHelper : TagHelper
+    [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
+    public string? VisuallyHiddenText { get; set; }
+
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        internal const string TagName = "govuk-summary-card-action";
+        var cardContext = context.GetContextItem<SummaryCardContext>();
 
-        private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
+        var content = await output.GetChildContentAsync();
 
-        /// <summary>
-        /// The visually hidden text for the action link.
-        /// </summary>
-        [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
-        public string? VisuallyHiddenText { get; set; }
-
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        cardContext.AddAction(new SummaryListAction()
         {
-            var cardContext = context.GetContextItem<SummaryCardContext>();
+            Attributes = output.Attributes.ToAttributeDictionary(),
+            Content = content.Snapshot(),
+            VisuallyHiddenText = VisuallyHiddenText
+        });
 
-            var content = await output.GetChildContentAsync();
-
-            cardContext.AddAction(new SummaryListAction()
-            {
-                Attributes = output.Attributes.ToAttributeDictionary(),
-                Content = content.Snapshot(),
-                VisuallyHiddenText = VisuallyHiddenText
-            });
-
-            output.SuppressOutput();
-        }
+        output.SuppressOutput();
     }
 }

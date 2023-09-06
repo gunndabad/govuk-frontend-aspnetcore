@@ -2,25 +2,24 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration
+namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
+
+internal partial class ComponentGenerator
 {
-    internal partial class ComponentGenerator
+    internal const string BackLinkDefaultContent = "Back";
+    internal const string BackLinkElement = "a";
+
+    public virtual TagBuilder GenerateBackLink(
+        IHtmlContent content,
+        AttributeDictionary? attributes)
     {
-        internal const string BackLinkDefaultContent = "Back";
-        internal const string BackLinkElement = "a";
+        Guard.ArgumentNotNull(nameof(content), content);
 
-        public virtual TagBuilder GenerateBackLink(
-            IHtmlContent content,
-            AttributeDictionary? attributes)
-        {
-            Guard.ArgumentNotNull(nameof(content), content);
+        var tagBuilder = new TagBuilder(BackLinkElement);
+        tagBuilder.MergeOptionalAttributes(attributes);
+        tagBuilder.MergeCssClass("govuk-back-link");
+        tagBuilder.InnerHtml.AppendHtml(content);
 
-            var tagBuilder = new TagBuilder(BackLinkElement);
-            tagBuilder.MergeOptionalAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-back-link");
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
-        }
+        return tagBuilder;
     }
 }

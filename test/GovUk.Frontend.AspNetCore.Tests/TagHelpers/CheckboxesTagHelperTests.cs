@@ -7,62 +7,62 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class CheckboxesTagHelperTests
 {
-    public class CheckboxesTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-checkboxes",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+
+                checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));
+
+                checkboxesContext.AddItem(new CheckboxesItem()
                 {
-                    var checkboxesContext = context.GetContextItem<CheckboxesContext>();
-
-                    checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
-                    {
-                        Checked = false,
-                        LabelContent = new HtmlString("First"),
-                        Disabled = true,
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
-                    {
-                        Checked = true,
-                        LabelContent = new HtmlString("Second"),
-                        Disabled = false,
-                        Id = "second",
-                        Value = "second"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Checked = false,
+                    LabelContent = new HtmlString("First"),
+                    Disabled = true,
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testcheckboxes"
-            };
+                checkboxesContext.AddItem(new CheckboxesItem()
+                {
+                    Checked = true,
+                    LabelContent = new HtmlString("Second"),
+                    Disabled = false,
+                    Id = "second",
+                    Value = "second"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testcheckboxes"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
@@ -77,61 +77,61 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-checkboxes",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+
+                checkboxesContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("A error"));
+
+                checkboxesContext.AddItem(new CheckboxesItem()
                 {
-                    var checkboxesContext = context.GetContextItem<CheckboxesContext>();
-
-                    checkboxesContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("A error"));
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
-                    {
-                        Checked = false,
-                        LabelContent = new HtmlString("First"),
-                        Disabled = true,
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
-                    {
-                        Checked = true,
-                        LabelContent = new HtmlString("Second"),
-                        Disabled = false,
-                        Id = "second",
-                        Value = "second"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Checked = false,
+                    LabelContent = new HtmlString("First"),
+                    Disabled = true,
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testcheckboxes"
-            };
+                checkboxesContext.AddItem(new CheckboxesItem()
+                {
+                    Checked = true,
+                    LabelContent = new HtmlString("Second"),
+                    Disabled = false,
+                    Id = "second",
+                    Value = "second"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testcheckboxes"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>A error</p>
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
@@ -146,52 +146,52 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithItemHint_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithItemHint_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-checkboxes",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+
+                checkboxesContext.AddItem(new CheckboxesItem()
                 {
-                    var checkboxesContext = context.GetContextItem<CheckboxesContext>();
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
+                    LabelContent = new HtmlString("First"),
+                    Hint = new CheckboxesItemHint()
                     {
-                        LabelContent = new HtmlString("First"),
-                        Hint = new CheckboxesItemHint()
-                        {
-                            Content = new HtmlString("First item hint")
-                        },
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("First item hint")
+                    },
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testcheckboxes"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testcheckboxes"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
@@ -202,52 +202,52 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithUncheckedItemConditional_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithUncheckedItemConditional_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-checkboxes",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+
+                checkboxesContext.AddItem(new CheckboxesItem()
                 {
-                    var checkboxesContext = context.GetContextItem<CheckboxesContext>();
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
+                    LabelContent = new HtmlString("First"),
+                    Conditional = new CheckboxesItemConditional()
                     {
-                        LabelContent = new HtmlString("First"),
-                        Conditional = new CheckboxesItemConditional()
-                        {
-                            Content = new HtmlString("Item 1 conditional")
-                        },
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("Item 1 conditional")
+                    },
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testcheckboxes"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testcheckboxes"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
@@ -258,53 +258,53 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithCheckedItemConditional_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithCheckedItemConditional_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-checkboxes",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+
+                checkboxesContext.AddItem(new CheckboxesItem()
                 {
-                    var checkboxesContext = context.GetContextItem<CheckboxesContext>();
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
+                    Checked = true,
+                    LabelContent = new HtmlString("First"),
+                    Conditional = new CheckboxesItemConditional()
                     {
-                        Checked = true,
-                        LabelContent = new HtmlString("First"),
-                        Conditional = new CheckboxesItemConditional()
-                        {
-                            Content = new HtmlString("Item 1 conditional")
-                        },
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                        Content = new HtmlString("Item 1 conditional")
+                    },
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                IdPrefix = "my-id",
-                Name = "testcheckboxes"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            IdPrefix = "my-id",
+            Name = "testcheckboxes"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
@@ -315,68 +315,68 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithFieldset_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-checkboxes",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithFieldset_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-checkboxes",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-checkboxes",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-checkboxes",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var checkboxesContext = context.GetContextItem<CheckboxesContext>();
+
+                checkboxesContext.OpenFieldset();
+                var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
+                checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
+
+                checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));
+
+                checkboxesContext.AddItem(new CheckboxesItem()
                 {
-                    var checkboxesContext = context.GetContextItem<CheckboxesContext>();
-
-                    checkboxesContext.OpenFieldset();
-                    var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
-                    checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
-
-                    checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
-                    {
-                        Checked = false,
-                        LabelContent = new HtmlString("First"),
-                        Disabled = true,
-                        Id = "first",
-                        Value = "first"
-                    });
-
-                    checkboxesContext.AddItem(new CheckboxesItem()
-                    {
-                        Checked = true,
-                        LabelContent = new HtmlString("Second"),
-                        Disabled = false,
-                        Id = "second",
-                        Value = "second"
-                    });
-
-                    checkboxesContext.CloseFieldset(checkboxesFieldsetContext);
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Checked = false,
+                    LabelContent = new HtmlString("First"),
+                    Disabled = true,
+                    Id = "first",
+                    Value = "first"
                 });
 
-            var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
-            {
-                DescribedBy = "describedby",
-                IdPrefix = "my-id",
-                Name = "testcheckboxes"
-            };
+                checkboxesContext.AddItem(new CheckboxesItem()
+                {
+                    Checked = true,
+                    LabelContent = new HtmlString("Second"),
+                    Disabled = false,
+                    Id = "second",
+                    Value = "second"
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                checkboxesContext.CloseFieldset(checkboxesFieldsetContext);
 
-            // Assert
-            var expectedHtml = @"
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        {
+            DescribedBy = "describedby",
+            IdPrefix = "my-id",
+            Name = "testcheckboxes"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-form-group"">
     <fieldset aria-describedby=""describedby my-id-hint"" class=""govuk-fieldset"">
         <legend class=""govuk-fieldset__legend"">Legend</legend>
@@ -394,7 +394,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </fieldset>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class FormErrorContext
 {
-    internal class FormErrorContext
+    private readonly List<(IHtmlContent Content, string? Href)> _errors;
+
+    public FormErrorContext()
     {
-        private readonly List<(IHtmlContent Content, string? Href)> _errors;
+        _errors = new();
+    }
 
-        public FormErrorContext()
-        {
-            _errors = new();
-        }
+    public IReadOnlyCollection<(IHtmlContent Content, string? Href)> Errors => _errors.AsReadOnly();
 
-        public IReadOnlyCollection<(IHtmlContent Content, string? Href)> Errors => _errors.AsReadOnly();
+    public void AddError(IHtmlContent content, string? href)
+    {
+        Guard.ArgumentNotNull(nameof(content), content);
 
-        public void AddError(IHtmlContent content, string? href)
-        {
-            Guard.ArgumentNotNull(nameof(content), content);
-
-            _errors.Add((content, href));
-        }
+        _errors.Add((content, href));
     }
 }

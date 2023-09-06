@@ -3,35 +3,34 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore;
+
+/// <summary>
+/// Utility extensions for <see cref="TagHelperAttributeList"/>.
+/// </summary>
+public static class TagHelperAttributeListExtensions
 {
     /// <summary>
-    /// Utility extensions for <see cref="TagHelperAttributeList"/>.
+    /// Creates an <see cref="AttributeDictionary"/> from a <see cref="TagHelperAttributeList"/>.
     /// </summary>
-    public static class TagHelperAttributeListExtensions
+    /// <param name="list">The <see cref="TagHelperAttributeList"/> to retrieve attributes from.</param>
+    public static AttributeDictionary ToAttributeDictionary(this TagHelperAttributeList? list)
     {
-        /// <summary>
-        /// Creates an <see cref="AttributeDictionary"/> from a <see cref="TagHelperAttributeList"/>.
-        /// </summary>
-        /// <param name="list">The <see cref="TagHelperAttributeList"/> to retrieve attributes from.</param>
-        public static AttributeDictionary ToAttributeDictionary(this TagHelperAttributeList? list)
+        var attributeDictionary = new AttributeDictionary();
+
+        if (list != null)
         {
-            var attributeDictionary = new AttributeDictionary();
-
-            if (list != null)
+            foreach (var attribute in list)
             {
-                foreach (var attribute in list)
-                {
-                    attributeDictionary.Add(
-                        attribute.Name,
-                        attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
-                            string.Empty :
-                            attribute.Value is HtmlString htmlString ? HttpUtility.HtmlDecode(htmlString.Value) :
-                            (attribute.Value ?? string.Empty).ToString());
-                }
+                attributeDictionary.Add(
+                    attribute.Name,
+                    attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
+                        string.Empty :
+                        attribute.Value is HtmlString htmlString ? HttpUtility.HtmlDecode(htmlString.Value) :
+                        (attribute.Value ?? string.Empty).ToString());
             }
-
-            return attributeDictionary;
         }
+
+        return attributeDictionary;
     }
 }

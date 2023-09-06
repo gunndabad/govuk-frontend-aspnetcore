@@ -7,56 +7,56 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class TabsTagHelperTests
 {
-    public class TabsTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-tabs",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-tabs",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-tabs",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-tabs",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tabsContext = context.GetContextItem<TabsContext>(); ;
+
+                tabsContext.AddItem(new TabsItem()
                 {
-                    var tabsContext = context.GetContextItem<TabsContext>(); ;
-
-                    tabsContext.AddItem(new TabsItem()
-                    {
-                        Id = "first",
-                        Label = "First",
-                        PanelContent = new HtmlString("First panel content")
-                    });
-
-                    tabsContext.AddItem(new TabsItem()
-                    {
-                        Id = "second",
-                        Label = "Second",
-                        PanelContent = new HtmlString("Second panel content")
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Id = "first",
+                    Label = "First",
+                    PanelContent = new HtmlString("First panel content")
                 });
 
-            var tagHelper = new TabsTagHelper(new ComponentGenerator())
-            {
-                Id = "my-tabs",
-                Title = "Title"
-            };
+                tabsContext.AddItem(new TabsItem()
+                {
+                    Id = "second",
+                    Label = "Second",
+                    PanelContent = new HtmlString("Second panel content")
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var expectedHtml = @"
+        var tagHelper = new TabsTagHelper(new ComponentGenerator())
+        {
+            Id = "my-tabs",
+            Title = "Title"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <div class=""govuk-tabs"" data-module=""govuk-tabs"" id=""my-tabs"">
     <h2 class=""govuk-tabs__title"">Title</h2>
     <ul class=""govuk-tabs__list"">
@@ -67,55 +67,54 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     <div class=""govuk-tabs__panel--hidden govuk-tabs__panel"" id=""second"">Second panel content</div>
 </div>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithoutTitle_UsesDefaultTitle()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-tabs",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithoutTitle_UsesDefaultTitle()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-tabs",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-tabs",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-tabs",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tabsContext = context.GetContextItem<TabsContext>();
+
+                tabsContext.AddItem(new TabsItem()
                 {
-                    var tabsContext = context.GetContextItem<TabsContext>();
-
-                    tabsContext.AddItem(new TabsItem()
-                    {
-                        Id = "first",
-                        Label = "First",
-                        PanelContent = new HtmlString("First panel content")
-                    });
-
-                    tabsContext.AddItem(new TabsItem()
-                    {
-                        Id = "second",
-                        Label = "Second",
-                        PanelContent = new HtmlString("Second panel content")
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Id = "first",
+                    Label = "First",
+                    PanelContent = new HtmlString("First panel content")
                 });
 
-            var tagHelper = new TabsTagHelper(new ComponentGenerator())
-            {
-                Id = "my-tabs"
-            };
+                tabsContext.AddItem(new TabsItem()
+                {
+                    Id = "second",
+                    Label = "Second",
+                    PanelContent = new HtmlString("Second panel content")
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Assert
-            var element = output.RenderToElement();
-            Assert.Equal("Contents", element.QuerySelector("h2").TextContent);
-        }
+        var tagHelper = new TabsTagHelper(new ComponentGenerator())
+        {
+            Id = "my-tabs"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var element = output.RenderToElement();
+        Assert.Equal("Contents", element.QuerySelector("h2").TextContent);
     }
 }

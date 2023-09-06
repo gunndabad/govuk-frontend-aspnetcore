@@ -6,74 +6,73 @@ using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class SkipLinkTagHelperTests
 {
-    public class SkipLinkTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_WithHrefSpecified_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_WithHrefSpecified_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-skip-link",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-skip-link",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-skip-link",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Link content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
-
-            var tagHelper = new SkipLinkTagHelper()
+        var output = new TagHelperOutput(
+            "govuk-skip-link",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
-                Href = "#main"
-            };
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Link content");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        var tagHelper = new SkipLinkTagHelper()
+        {
+            Href = "#main"
+        };
 
-            // Assert
-            var expectedHtml = @"
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <a class=""govuk-skip-link"" href=""#main"" data-module=""govuk-skip-link"">Link content</a>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithNoHrefSpecified_UsesDefaultHref()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-skip-link",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithNoHrefSpecified_UsesDefaultHref()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-skip-link",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-skip-link",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.SetContent("Link content");
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "govuk-skip-link",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.SetContent("Link content");
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new SkipLinkTagHelper();
+        var tagHelper = new SkipLinkTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            var element = output.RenderToElement();
+        // Assert
+        var element = output.RenderToElement();
 
-            Assert.Equal("#content", element.GetAttribute("href"));
-        }
+        Assert.Equal("#content", element.GetAttribute("href"));
     }
 }

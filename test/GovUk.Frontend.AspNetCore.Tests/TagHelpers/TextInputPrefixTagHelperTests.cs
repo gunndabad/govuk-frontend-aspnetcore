@@ -7,43 +7,42 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class TextInputPrefixTagHelperTests
 {
-    public class TextInputPrefixTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_SetsPrefixOnContext()
     {
-        [Fact]
-        public async Task ProcessAsync_SetsPrefixOnContext()
-        {
-            // Arrange
-            var inputContext = new TextInputContext();
+        // Arrange
+        var inputContext = new TextInputContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-input-prefix",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(TextInputContext), inputContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "govuk-input-prefix",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(TextInputContext), inputContext }
+            },
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input-prefix",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Prefix"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "govuk-input-prefix",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.AppendHtml(new HtmlString("Prefix"));
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new TextInputPrefixTagHelper();
+        var tagHelper = new TextInputPrefixTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            Assert.True(inputContext.Prefix.HasValue);
-            Assert.Equal("Prefix", inputContext.Prefix?.Content?.ToHtmlString());
-        }
+        // Assert
+        Assert.True(inputContext.Prefix.HasValue);
+        Assert.Equal("Prefix", inputContext.Prefix?.Content?.ToHtmlString());
     }
 }

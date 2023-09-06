@@ -1,25 +1,24 @@
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.ConformanceTests
+namespace GovUk.Frontend.AspNetCore.ConformanceTests;
+
+public partial class ComponentTests
 {
-    public partial class ComponentTests
-    {
-        [Theory]
-        [ComponentFixtureData("inset-text", typeof(OptionsJson.InsetText))]
-        public void InsetText(ComponentTestCaseData<OptionsJson.InsetText> data) =>
-            CheckComponentHtmlMatchesExpectedHtml(
-                data,
-                (generator, options) =>
-                {
-                    var id = options.Id;
-                    var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
+    [Theory]
+    [ComponentFixtureData("inset-text", typeof(OptionsJson.InsetText))]
+    public void InsetText(ComponentTestCaseData<OptionsJson.InsetText> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) =>
+            {
+                var id = options.Id;
+                var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
-                    var attributes = options.Attributes.ToAttributesDictionary()
-                        .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary()
+                    .MergeAttribute("class", options.Classes);
 
-                    return generator.GenerateInsetText(id, content, attributes)
-                        .ToHtmlString();
-                });
-    }
+                return generator.GenerateInsetText(id, content, attributes)
+                    .ToHtmlString();
+            });
 }

@@ -7,54 +7,54 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class PaginationTagHelperTests
 {
-    public class PaginationTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_WithPreviousAndNextOnly_GeneratesExpectedOutput()
     {
-        [Fact]
-        public async Task ProcessAsync_WithPreviousAndNextOnly_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-pagination",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-pagination",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-pagination",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var paginationContext = context.GetContextItem<PaginationContext>();
-
-                    paginationContext.SetPrevious(new()
-                    {
-                        Href = "/previous",
-                        LabelText = "1 of 3",
-                        Text = new HtmlString("Previous page")
-                    });
-
-                    paginationContext.SetNext(new()
-                    {
-                        Href = "/next",
-                        LabelText = "3 of 3",
-                        Text = new HtmlString("Next page")
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                })
+        var output = new TagHelperOutput(
+            "govuk-pagination",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
             {
+                var paginationContext = context.GetContextItem<PaginationContext>();
 
-            };
-            var tagHelper = new PaginationTagHelper(new ComponentGenerator());
+                paginationContext.SetPrevious(new()
+                {
+                    Href = "/previous",
+                    LabelText = "1 of 3",
+                    Text = new HtmlString("Previous page")
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                paginationContext.SetNext(new()
+                {
+                    Href = "/next",
+                    LabelText = "3 of 3",
+                    Text = new HtmlString("Next page")
+                });
 
-            // Assert
-            var expectedHtml = @"
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            })
+        {
+
+        };
+        var tagHelper = new PaginationTagHelper(new ComponentGenerator());
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
 <nav aria-label=""results"" class=""govuk-pagination--block govuk-pagination"" role=""navigation"">
     <div class=""govuk-pagination__prev"">
         <a class=""govuk-link govuk-pagination__link"" href=""/previous"" rel=""prev"">
@@ -78,64 +78,64 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </div>
 </nav>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
 
-        [Fact]
-        public async Task ProcessAsync_WithItems_GeneratesExpectedOutput()
-        {
-            // Arrange
-            var context = new TagHelperContext(
-                tagName: "govuk-pagination",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>(),
-                uniqueId: "test");
+    [Fact]
+    public async Task ProcessAsync_WithItems_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-pagination",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-pagination",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
+        var output = new TagHelperOutput(
+            "govuk-pagination",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var paginationContext = context.GetContextItem<PaginationContext>();
+
+                paginationContext.AddItem(new PaginationItem()
                 {
-                    var paginationContext = context.GetContextItem<PaginationContext>();
-
-                    paginationContext.AddItem(new PaginationItem()
-                    {
-                        Href = "/page1",
-                        Number = new HtmlString("1"),
-                        VisuallyHiddenText = "1st page"
-                    });
-
-                    paginationContext.AddItem(new PaginationItem()
-                    {
-                        Href = "/page2",
-                        Number = new HtmlString("2"),
-                        IsCurrent = true
-                    });
-
-                    paginationContext.AddItem(new PaginationItemEllipsis());
-
-                    paginationContext.AddItem(new PaginationItem()
-                    {
-                        Href = "/page5",
-                        Number = new HtmlString("5"),
-                        VisuallyHiddenText = "5th page"
-                    });
-
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
+                    Href = "/page1",
+                    Number = new HtmlString("1"),
+                    VisuallyHiddenText = "1st page"
                 });
 
-            var tagHelper = new PaginationTagHelper(new ComponentGenerator())
-            {
-                LandmarkLabel = "search"
-            };
+                paginationContext.AddItem(new PaginationItem()
+                {
+                    Href = "/page2",
+                    Number = new HtmlString("2"),
+                    IsCurrent = true
+                });
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+                paginationContext.AddItem(new PaginationItemEllipsis());
 
-            // Assert
-            var actual = output.ToHtmlString();
-            var expectedHtml = @"
+                paginationContext.AddItem(new PaginationItem()
+                {
+                    Href = "/page5",
+                    Number = new HtmlString("5"),
+                    VisuallyHiddenText = "5th page"
+                });
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new PaginationTagHelper(new ComponentGenerator())
+        {
+            LandmarkLabel = "search"
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var actual = output.ToHtmlString();
+        var expectedHtml = @"
 <nav aria-label=""search"" class=""govuk-pagination"" role=""navigation"">
     <ul class=""govuk-pagination__list"">
         <li class=""govuk-pagination__item"">
@@ -151,7 +151,6 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
     </ul>
 </nav>";
 
-            AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-        }
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 }

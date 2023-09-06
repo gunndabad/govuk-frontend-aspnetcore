@@ -1,23 +1,22 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore;
+
+internal static class DictionaryExtensions
 {
-    internal static class DictionaryExtensions
+    public static AttributeDictionary ToAttributeDictionary(this IDictionary<string, string?>? dictionary)
     {
-        public static AttributeDictionary ToAttributeDictionary(this IDictionary<string, string?>? dictionary)
+        var attributeDictionary = new AttributeDictionary();
+
+        if (dictionary != null)
         {
-            var attributeDictionary = new AttributeDictionary();
-
-            if (dictionary != null)
+            foreach (var kvp in dictionary)
             {
-                foreach (var kvp in dictionary)
-                {
-                    attributeDictionary.Add(kvp.Key, kvp.Value);
-                }
+                attributeDictionary.Add(kvp.Key, kvp.Value);
             }
-
-            return attributeDictionary;
         }
+
+        return attributeDictionary;
     }
 }

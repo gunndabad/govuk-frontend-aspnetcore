@@ -3,45 +3,44 @@ using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Generates a GDS tag component.
+/// </summary>
+[HtmlTargetElement(TagName)]
+[OutputElementHint(ComponentGenerator.TagElement)]
+public class TagTagHelper : TagHelper
 {
+    internal const string TagName = "govuk-tag";
+
+    private readonly IGovUkHtmlGenerator _htmlGenerator;
+
     /// <summary>
-    /// Generates a GDS tag component.
+    /// Creates a new <see cref="TagTagHelper"/>.
     /// </summary>
-    [HtmlTargetElement(TagName)]
-    [OutputElementHint(ComponentGenerator.TagElement)]
-    public class TagTagHelper : TagHelper
+    public TagTagHelper()
+        : this(htmlGenerator: null)
     {
-        internal const string TagName = "govuk-tag";
+    }
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
+    internal TagTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
+    {
+        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+    }
 
-        /// <summary>
-        /// Creates a new <see cref="TagTagHelper"/>.
-        /// </summary>
-        public TagTagHelper()
-            : this(htmlGenerator: null)
-        {
-        }
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var childContent = await output.GetChildContentAsync();
 
-        internal TagTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-        {
-            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-        }
+        var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributeDictionary());
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-        {
-            var childContent = await output.GetChildContentAsync();
+        output.TagName = tagBuilder.TagName;
+        output.TagMode = TagMode.StartTagAndEndTag;
 
-            var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributeDictionary());
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
+        output.Attributes.Clear();
+        output.MergeAttributes(tagBuilder);
+        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
     }
 }

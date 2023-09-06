@@ -6,43 +6,42 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
-namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
+namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
+
+public class TextInputSuffixTagHelperTests
 {
-    public class TextInputSuffixTagHelperTests
+    [Fact]
+    public async Task ProcessAsync_SetsSuffixOnContext()
     {
-        [Fact]
-        public async Task ProcessAsync_SetsSuffixOnContext()
-        {
-            // Arrange
-            var inputContext = new TextInputContext();
+        // Arrange
+        var inputContext = new TextInputContext();
 
-            var context = new TagHelperContext(
-                tagName: "govuk-input-suffix",
-                allAttributes: new TagHelperAttributeList(),
-                items: new Dictionary<object, object>()
-                {
-                    { typeof(TextInputContext), inputContext }
-                },
-                uniqueId: "test");
+        var context = new TagHelperContext(
+            tagName: "govuk-input-suffix",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(TextInputContext), inputContext }
+            },
+            uniqueId: "test");
 
-            var output = new TagHelperOutput(
-                "govuk-input-suffix",
-                attributes: new TagHelperAttributeList(),
-                getChildContentAsync: (useCachedResult, encoder) =>
-                {
-                    var tagHelperContent = new DefaultTagHelperContent();
-                    tagHelperContent.AppendHtml(new HtmlString("Suffix"));
-                    return Task.FromResult<TagHelperContent>(tagHelperContent);
-                });
+        var output = new TagHelperOutput(
+            "govuk-input-suffix",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                tagHelperContent.AppendHtml(new HtmlString("Suffix"));
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
 
-            var tagHelper = new TextInputSuffixTagHelper();
+        var tagHelper = new TextInputSuffixTagHelper();
 
-            // Act
-            await tagHelper.ProcessAsync(context, output);
+        // Act
+        await tagHelper.ProcessAsync(context, output);
 
-            // Assert
-            Assert.True(inputContext.Suffix.HasValue);
-            Assert.Equal("Suffix", inputContext.Suffix?.Content?.ToHtmlString());
-        }
+        // Assert
+        Assert.True(inputContext.Suffix.HasValue);
+        Assert.Equal("Suffix", inputContext.Suffix?.Content?.ToHtmlString());
     }
 }
