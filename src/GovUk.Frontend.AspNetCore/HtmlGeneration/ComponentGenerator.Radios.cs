@@ -153,7 +153,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
                 dividerTagBuilder.MergeOptionalAttributes(divider.Attributes);
                 dividerTagBuilder.MergeCssClass("govuk-radios__divider");
                 dividerTagBuilder.InnerHtml.AppendHtml(divider.Content);
-                
+
                 tagBuilder.InnerHtml.AppendHtml(dividerTagBuilder);
             }
         }

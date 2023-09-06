@@ -23,7 +23,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         private const string AspForAttributeName = "asp-for";
         private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
-        
+
         private readonly IGovUkHtmlGenerator _htmlGenerator;
         private readonly IModelHelper _modelHelper;
 

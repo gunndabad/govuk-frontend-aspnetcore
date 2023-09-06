@@ -37,6 +37,10 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
+    - name: Install tools
+      run: |
+        dotnet tool restore --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json
+
     - name: Clean
       run: |
         dotnet clean --configuration Release
@@ -44,6 +48,9 @@ jobs:
 
     - name: Restore
       run: dotnet restore
+
+    - name: Format
+      run: dotnet format --verify-no-changes
 
     - name: Build
       run: dotnet build --configuration Release --no-restore

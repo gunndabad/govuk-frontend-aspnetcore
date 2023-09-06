@@ -13,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
             IHtmlContent content)
         {
             Guard.ArgumentNotNull(nameof(content), content);
-            
+
             if (Legend != null)
             {
                 throw ExceptionHelper.OnlyOneElementIsPermittedIn(

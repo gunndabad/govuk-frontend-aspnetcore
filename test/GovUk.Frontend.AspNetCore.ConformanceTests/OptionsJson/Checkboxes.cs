@@ -40,7 +40,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson
     public record CheckboxesItemConditional
     {
         [JsonConverter(typeof(CheckboxesItemConditionalHtmlJsonConverter))]
-        public string Html { get; set; }  
+        public string Html { get; set; }
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
