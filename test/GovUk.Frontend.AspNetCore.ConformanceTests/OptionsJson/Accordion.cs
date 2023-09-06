@@ -8,6 +8,7 @@ public record Accordion
     public int? HeadingLevel { get; set; }
     public string Classes { get; set; }
     public IDictionary<string, object> Attributes { get; set; }
+    public bool? RememberExpanded { get; set; }
     public string HideAllSectionsText { get; set; }
     public string HideSectionText { get; set; }
     public string HideSectionAriaLabelText { get; set; }

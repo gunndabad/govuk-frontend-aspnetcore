@@ -6,7 +6,13 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 public partial class ComponentTests
 {
     [Theory]
-    [ComponentFixtureData("input", typeof(OptionsJson.TextInput))]
+    [ComponentFixtureData(
+        "input",
+        typeof(OptionsJson.TextInput),
+        exclude: new[]
+        {
+            "with extra letter spacing"  // missing name attribute
+        })]
     public void TextInput(ComponentTestCaseData<OptionsJson.TextInput> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

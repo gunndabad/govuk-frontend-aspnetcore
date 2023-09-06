@@ -7,6 +7,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
 internal partial class ComponentGenerator
 {
     internal const string WarningTextElement = "div";
+    internal const string WarningTextDefaultIconFallbackText = "Warning";
 
     public TagBuilder GenerateWarningText(
         string iconFallbackText,

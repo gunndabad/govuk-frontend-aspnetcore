@@ -9,6 +9,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
 internal partial class ComponentGenerator
 {
     internal const int AccordionDefaultHeadingLevel = 2;
+    internal const bool AccordionDefaultRememberExpanded = true;
     internal const bool AccordionItemDefaultExpanded = false;
     internal const string AccordionElement = "div";
     internal const string AccordionItemElement = "div";
@@ -20,6 +21,7 @@ internal partial class ComponentGenerator
         string id,
         int headingLevel,
         AttributeDictionary? attributes,
+        bool rememberExpanded,
         string? hideAllSectionsText,
         string? hideSectionText,
         string? hideSectionAriaLabelText,
@@ -73,6 +75,11 @@ internal partial class ComponentGenerator
         if (showSectionAriaLabelText is not null)
         {
             tagBuilder.Attributes.Add("data-i18n.show-section-aria-label", showSectionAriaLabelText);
+        }
+
+        if (!rememberExpanded)
+        {
+            tagBuilder.Attributes.Add("data-remember-expanded", "false");
         }
 
         var index = 0;
