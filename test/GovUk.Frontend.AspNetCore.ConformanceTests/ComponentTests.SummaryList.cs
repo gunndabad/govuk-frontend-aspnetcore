@@ -1,6 +1,6 @@
 using System.Linq;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
@@ -12,6 +12,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
         [ComponentFixtureData(
             "summary-list",
             typeof(OptionsJson.SummaryList),
+            //only: "summary card with custom attributes",
             exclude: "with falsey values")]
         public void SummaryList(ComponentTestCaseData<OptionsJson.SummaryList> data) =>
             CheckComponentHtmlMatchesExpectedHtml(
@@ -24,10 +25,10 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                     var rows = options.Rows
                         .Select(r => new SummaryListRow()
                         {
-                            Actions = new SummaryListRowActions()
+                            Actions = new SummaryListActions()
                             {
                                 Items = (r.Actions?.Items
-                                    .Select(a => new SummaryListRowAction()
+                                    .Select(a => new SummaryListAction()
                                     {
                                         Attributes = a.Attributes.ToAttributesDictionary()
                                             .MergeAttribute("class", a.Classes)
@@ -51,8 +52,40 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests
                         })
                         .OrEmpty();
 
-                    return generator.GenerateSummaryList(attributes, rows)
-                        .ToHtmlString();
+                    var summaryList = generator.GenerateSummaryList(rows, attributes);
+
+                    if (options.Card != null)
+                    {
+                        return generator
+                            .GenerateSummaryCard(
+                                options.Card.Title is not null ?
+                                    new SummaryCardTitle()
+                                    {
+                                        Content = TextOrHtmlHelper.GetHtmlContent(options.Card.Title?.Text, options.Card.Title?.Html),
+                                        Attributes = options.Card.Attributes.ToAttributesDictionary(),
+                                        HeadingLevel = options.Card.Title.HeadingLevel
+                                    } :
+                                    null,
+                                new SummaryListActions()
+                                {
+                                    Attributes = new AttributeDictionary().MergeAttribute("class", options.Card.Actions?.Classes),
+                                    Items = options.Card.Actions?.Items?.Select(a => new SummaryListAction()
+                                    {
+                                        Attributes = a.Attributes.ToAttributesDictionary()
+                                            .MergeAttribute("class", a.Classes)
+                                            .MergeAttribute("href", a.Href),
+                                        Content = TextOrHtmlHelper.GetHtmlContent(a.Text, a.Html),
+                                        VisuallyHiddenText = a.VisuallyHiddenText is string vht && vht != string.Empty ? vht : null
+                                    }).OrEmpty().ToList()
+                                },
+                                summaryList,
+                                options.Card.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Card.Classes))
+                            .ToHtmlString();
+                    }
+                    else
+                    {
+                        return summaryList.ToHtmlString();
+                    }
                 });
     }
 }

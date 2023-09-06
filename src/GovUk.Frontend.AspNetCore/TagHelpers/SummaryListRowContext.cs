@@ -7,14 +7,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 {
     internal class SummaryListRowContext
     {
-        private readonly List<SummaryListRowAction> _actions;
+        private readonly List<SummaryListAction> _actions;
 
         public SummaryListRowContext()
         {
-            _actions = new List<SummaryListRowAction>();
+            _actions = new List<SummaryListAction>();
         }
 
-        public IReadOnlyList<SummaryListRowAction> Actions => _actions;
+        public IReadOnlyList<SummaryListAction> Actions => _actions;
 
         public AttributeDictionary? ActionsAttributes { get; private set; }
 
@@ -22,7 +22,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers
 
         public (AttributeDictionary Attributes, IHtmlContent Content)? Value { get; private set; }
 
-        public void AddAction(SummaryListRowAction action)
+        public void AddAction(SummaryListAction action)
         {
             Guard.ArgumentNotNull(nameof(action), action);
 

@@ -168,7 +168,9 @@ namespace GovUk.Frontend.AspNetCore
 
         TagBuilder GenerateSkipLink(string href, IHtmlContent content, AttributeDictionary attributes);
 
-        TagBuilder GenerateSummaryList(AttributeDictionary attributes, IEnumerable<SummaryListRow> rows);
+        TagBuilder GenerateSummaryCard(SummaryCardTitle title, SummaryListActions actions, IHtmlContent summaryList, AttributeDictionary attributes);
+
+        TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows, AttributeDictionary attributes);
 
         TagBuilder GenerateTabs(
             string id,

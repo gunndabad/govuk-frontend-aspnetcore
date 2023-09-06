@@ -36,7 +36,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                     var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
                     rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
                     rowContext.SetValue(new AttributeDictionary(), new HtmlString("Value"));
-                    rowContext.AddAction(new SummaryListRowAction()
+                    rowContext.AddAction(new SummaryListAction()
                     {
                         Attributes = new AttributeDictionary()
                         {
@@ -45,7 +45,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First action"),
                         VisuallyHiddenText = "vht1"
                     });
-                    rowContext.AddAction(new SummaryListRowAction()
+                    rowContext.AddAction(new SummaryListAction()
                     {
                         Attributes = new AttributeDictionary()
                         {
@@ -113,7 +113,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                 {
                     var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
                     rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
-                    rowContext.AddAction(new SummaryListRowAction()
+                    rowContext.AddAction(new SummaryListAction()
                     {
                         Attributes = new AttributeDictionary()
                         {
@@ -122,7 +122,7 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers
                         Content = new HtmlString("First action"),
                         VisuallyHiddenText = "vht1"
                     });
-                    rowContext.AddAction(new SummaryListRowAction()
+                    rowContext.AddAction(new SummaryListAction()
                     {
                         Attributes = new AttributeDictionary()
                         {
