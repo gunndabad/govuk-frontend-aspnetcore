@@ -18,6 +18,7 @@ public class GovUkFrontendAspNetCoreOptions
     {
         AcceptMonthNamesInDateInputs = true;
         AddImportsToHtml = true;
+        AddNovalidateAttributeToForms = true;
 
         DateInputModelConverters = new List<DateInputModelConverter>()
         {
@@ -45,6 +46,14 @@ public class GovUkFrontendAspNetCoreOptions
     /// The default is <c>true</c>.
     /// </remarks>
     public bool AddImportsToHtml { get; set; }
+
+    /// <summary>
+    /// Whether to add a <c>novalidate</c> attribute to form elements.
+    /// </summary>
+    /// <remarks>
+    /// The default is <c>true</c>.
+    /// </remarks>
+    public bool AddNovalidateAttributeToForms { get; set; }
 
     /// <summary>
     /// The default value for <see cref="ButtonTagHelper.PreventDoubleClick"/>.
