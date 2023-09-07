@@ -48,7 +48,7 @@ public class GovUkFrontendAspNetCoreOptions
     public bool AddImportsToHtml { get; set; }
 
     /// <summary>
-    /// Whether to add a <c>novalidate</c> attribute to form elements.
+    /// Whether to add a <c>novalidate</c> attribute to <c>form</c> elements.
     /// </summary>
     /// <remarks>
     /// The default is <c>true</c>.
