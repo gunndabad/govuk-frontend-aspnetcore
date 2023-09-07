@@ -16,6 +16,7 @@ public class ButtonTagHelper : TagHelper
     internal const string TagName = "govuk-button";
 
     private const string DisabledAttributeName = "disabled";
+    private const string IdAttributeName = "id";
     private const string IsStartButtonAttributeName = "is-start-button";
     private const string PreventDoubleClickAttributeName = "prevent-double-click";
     private const string TypeAttributeName = "type";
@@ -46,6 +47,12 @@ public class ButtonTagHelper : TagHelper
     /// </remarks>
     [HtmlAttributeName(DisabledAttributeName)]
     public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
+
+    /// <summary>
+    /// The <c>id</c> attribute.
+    /// </summary>
+    [HtmlAttributeName(IdAttributeName)]
+    public string? Id { get; set; }
 
     /// <summary>
     /// Whether this button is the main call to action on your service's start page.
@@ -87,6 +94,7 @@ public class ButtonTagHelper : TagHelper
             IsStartButton,
             Disabled,
             PreventDoubleClick,
+            Id,
             childContent,
             attributes);
 

@@ -16,4 +16,5 @@ public record Button
     public IDictionary<string, object> Attributes { get; set; }
     public bool? PreventDoubleClick { get; set; }
     public bool? IsStartButton { get; set; }
+    public string Id { get; set; }
 }

@@ -15,6 +15,7 @@ public class ButtonLinkTagHelper : TagHelper
     internal const string TagName = "govuk-button-link";
 
     private const string DisabledAttributeName = "disabled";
+    private const string IdAttributeName = "id";
     private const string IsStartButtonAttributeName = "is-start-button";
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -42,6 +43,12 @@ public class ButtonLinkTagHelper : TagHelper
     public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
 
     /// <summary>
+    /// The <c>id</c> attribute.
+    /// </summary>
+    [HtmlAttributeName(IdAttributeName)]
+    public string? Id { get; set; }
+
+    /// <summary>
     /// Whether this button is the main call to action on your service's start page.
     /// </summary>
     /// <remarks>
@@ -58,6 +65,7 @@ public class ButtonLinkTagHelper : TagHelper
         var tagBuilder = _htmlGenerator.GenerateButtonLink(
             IsStartButton,
             Disabled,
+            Id,
             childContent.Snapshot(),
             output.Attributes.ToAttributeDictionary());
 

@@ -1,5 +1,4 @@
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;
@@ -47,8 +46,8 @@ public partial class ComponentTests
 
                 return (
                     isButtonLink ?
-                        generator.GenerateButtonLink(isStartButton, disabled, content, attributes) :
-                        generator.GenerateButton(isStartButton, disabled, preventDoubleClick, content, attributes)
+                        generator.GenerateButtonLink(isStartButton, disabled, options.Id, content, attributes) :
+                        generator.GenerateButton(isStartButton, disabled, preventDoubleClick, options.Id, content, attributes)
                     ).ToHtmlString();
             });
 }

@@ -16,6 +16,7 @@ internal partial class ComponentGenerator
         bool isStartButton,
         bool disabled,
         bool? preventDoubleClick,
+        string? id,
         IHtmlContent content,
         AttributeDictionary? attributes)
     {
@@ -38,6 +39,11 @@ internal partial class ComponentGenerator
             tagBuilder.Attributes.Add("data-prevent-double-click", preventDoubleClick.Value ? "true" : "false");
         }
 
+        if (id != null)
+        {
+            tagBuilder.Attributes.Add("id", id);
+        }
+
         tagBuilder.InnerHtml.AppendHtml(content);
 
         if (isStartButton)
@@ -54,6 +60,7 @@ internal partial class ComponentGenerator
     public TagBuilder GenerateButtonLink(
         bool isStartButton,
         bool disabled,
+        string? id,
         IHtmlContent content,
         AttributeDictionary attributes)
     {
@@ -69,6 +76,11 @@ internal partial class ComponentGenerator
         if (disabled)
         {
             tagBuilder.MergeCssClass("govuk-button--disabled");
+        }
+
+        if (id != null)
+        {
+            tagBuilder.Attributes.Add("id", id);
         }
 
         tagBuilder.InnerHtml.AppendHtml(content);

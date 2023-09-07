@@ -33,12 +33,14 @@ internal interface IGovUkHtmlGenerator
         bool isStartButton,
         bool disabled,
         bool? preventDoubleClick,
+        string id,
         IHtmlContent content,
         AttributeDictionary attributes);
 
     TagBuilder GenerateButtonLink(
         bool isStartButton,
         bool disabled,
+        string id,
         IHtmlContent content,
         AttributeDictionary attributes);
 
