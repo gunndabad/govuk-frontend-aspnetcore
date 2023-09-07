@@ -14,15 +14,15 @@ public class DateInputModelBinder : IModelBinder
     /// <inheritdoc/>
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        var options = bindingContext.HttpContext.RequestServices.GetRequiredService<IOptions<GovUkFrontendAspNetCoreOptions>>().Value;
+        var optionsAccessor = bindingContext.HttpContext.RequestServices.GetRequiredService<IOptions<GovUkFrontendAspNetCoreOptions>>();
 
         var modelType = bindingContext.ModelMetadata.UnderlyingOrModelType;
 
-        foreach (var converter in options.DateInputModelConverters)
+        foreach (var converter in optionsAccessor.Value.DateInputModelConverters)
         {
             if (converter.CanConvertModelType(modelType))
             {
-                var innerBinder = new DateInputModelConverterModelBinder(converter);
+                var innerBinder = new DateInputModelConverterModelBinder(converter, optionsAccessor);
                 return innerBinder.BindModelAsync(bindingContext);
             }
         }

@@ -16,6 +16,7 @@ public class GovUkFrontendAspNetCoreOptions
     /// </summary>
     public GovUkFrontendAspNetCoreOptions()
     {
+        AcceptMonthNamesInDateInputs = true;
         AddImportsToHtml = true;
 
         DateInputModelConverters = new List<DateInputModelConverter>()
@@ -27,6 +28,14 @@ public class GovUkFrontendAspNetCoreOptions
         PrependErrorSummaryToForms = true;
         PrependErrorToTitle = true;
     }
+
+    /// <summary>
+    /// Whether to accept full and abbreviated month names in Date Input components.
+    /// </summary>
+    /// <remarks>
+    /// The default is <c>true</c>.
+    /// </remarks>
+    public bool AcceptMonthNamesInDateInputs { get; set; }
 
     /// <summary>
     /// Whether <c>style</c> and <c>script</c> tags to import GDS assets are added to <c>head</c> and <c>body</c>
