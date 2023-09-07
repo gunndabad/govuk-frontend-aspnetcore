@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -33,7 +34,9 @@ public class DateInputModelBinderTests
         var converterMock = new Mock<DateInputModelConverter>();
         converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
 
-        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
+        var gfaOptions = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object, gfaOptions);
 
         // Act
         await modelBinder.BindModelAsync(bindingContext);
@@ -70,7 +73,9 @@ public class DateInputModelBinderTests
             .Returns(new DateOnly(2020, 4, 1))
             .Verifiable();
 
-        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
+        var gfaOptions = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object, gfaOptions);
 
         // Act
         await modelBinder.BindModelAsync(bindingContext);
@@ -139,7 +144,9 @@ public class DateInputModelBinderTests
         var converterMock = new Mock<DateInputModelConverter>();
         converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
 
-        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
+        var gfaOptions = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object, gfaOptions);
 
         // Act
         await modelBinder.BindModelAsync(bindingContext);
@@ -187,7 +194,9 @@ public class DateInputModelBinderTests
             .Returns(true)
             .Verifiable();
 
-        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object);
+        var gfaOptions = Options.Create(new GovUkFrontendAspNetCoreOptions());
+
+        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object, gfaOptions);
 
         // Act
         await modelBinder.BindModelAsync(bindingContext);
@@ -251,14 +260,76 @@ public class DateInputModelBinderTests
         string day, string month, string year, DateInputParseErrors expectedParseErrors)
     {
         // Arrange
+        var acceptMonthNames = false;
 
         // Act
-        var result = DateInputModelConverterModelBinder.Parse(day, month, year, out var dateComponents);
+        var result = DateInputModelConverterModelBinder.Parse(day, month, year, acceptMonthNames, out var dateComponents);
 
         // Assert
         Assert.Equal(default, dateComponents);
         Assert.Equal(expectedParseErrors, result);
     }
+
+    [Theory]
+    [MemberData(nameof(ValidMonthNamesData))]
+    public void Parse_WithMonthNamesAndAcceptMonthNamesTrue_ParsesSuccessfully(string monthName)
+    {
+        // Arrange
+        var day = "1";
+        var year = "2000";
+        var acceptMonthNames = true;
+
+        // Act
+        var result = DateInputModelConverterModelBinder.Parse(day, monthName, year, acceptMonthNames, out var dateComponents);
+
+        // Assert
+        Assert.NotEqual(default, dateComponents);
+        Assert.Equal(DateInputParseErrors.None, result);
+    }
+
+    [Theory]
+    [MemberData(nameof(ValidMonthNamesData))]
+    public void Parse_WithMonthNamesButAcceptMonthNamesFalse_ReturnsParseError(string monthName)
+    {
+        // Arrange
+        var day = "1";
+        var year = "2000";
+        var acceptMonthNames = false;
+
+        // Act
+        var result = DateInputModelConverterModelBinder.Parse(day, monthName, year, acceptMonthNames, out var dateComponents);
+
+        // Assert
+        Assert.Equal(default, dateComponents);
+        Assert.Equal(DateInputParseErrors.InvalidMonth, result);
+    }
+
+    public static TheoryData<string> ValidMonthNamesData { get; } = new TheoryData<string>()
+    {
+        { "jan" },
+        { "january" },
+        { "feb" },
+        { "february" },
+        { "mar" },
+        { "march" },
+        { "apr" },
+        { "april" },
+        { "may" },
+        { "jun" },
+        { "june" },
+        { "jul" },
+        { "july" },
+        { "aug" },
+        { "august" },
+        { "sep" },
+        { "september" },
+        { "oct" },
+        { "october" },
+        { "nov" },
+        { "november" },
+        { "dec" },
+        { "december" }
+    };
 
     private static ActionContext CreateActionContextWithServices()
     {

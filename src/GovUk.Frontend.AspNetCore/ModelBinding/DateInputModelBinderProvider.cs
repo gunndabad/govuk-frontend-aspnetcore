@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
@@ -7,16 +8,16 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding;
 /// </summary>
 public class DateInputModelBinderProvider : IModelBinderProvider
 {
-    private readonly GovUkFrontendAspNetCoreOptions _options;
+    private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DateInputModelBinderProvider"/> class.
     /// </summary>
-    public DateInputModelBinderProvider(GovUkFrontendAspNetCoreOptions options)
+    public DateInputModelBinderProvider(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
-        Guard.ArgumentNotNull(nameof(options), options);
+        Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor);
 
-        _options = options;
+        _optionsAccessor = optionsAccessor;
     }
 
     /// <inheritdoc/>
@@ -26,11 +27,11 @@ public class DateInputModelBinderProvider : IModelBinderProvider
 
         var modelType = context.Metadata.UnderlyingOrModelType;
 
-        foreach (var converter in _options.DateInputModelConverters)
+        foreach (var converter in _optionsAccessor.Value.DateInputModelConverters)
         {
             if (converter.CanConvertModelType(modelType))
             {
-                return new DateInputModelConverterModelBinder(converter);
+                return new DateInputModelConverterModelBinder(converter, _optionsAccessor);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
@@ -14,10 +15,14 @@ internal class DateInputModelConverterModelBinder : IModelBinder
     private const string YearComponentName = "Year";
 
     private readonly DateInputModelConverter _dateInputModelConverter;
+    private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
-    public DateInputModelConverterModelBinder(DateInputModelConverter dateInputModelConverter)
+    public DateInputModelConverterModelBinder(
+        DateInputModelConverter dateInputModelConverter,
+        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
         _dateInputModelConverter = Guard.ArgumentNotNull(nameof(dateInputModelConverter), dateInputModelConverter);
+        _optionsAccessor = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor);
     }
 
     public Task BindModelAsync(ModelBindingContext bindingContext)
@@ -49,6 +54,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
             dayValueProviderResult.FirstValue,
             monthValueProviderResult.FirstValue,
             yearValueProviderResult.FirstValue,
+            _optionsAccessor.Value.AcceptMonthNamesInDateInputs,
             out var date);
 
         if (parseErrors == DateInputParseErrors.None)
@@ -118,7 +124,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
     }
 
     // internal for testing
-    internal static DateInputParseErrors Parse(string? day, string? month, string? year, out DateOnly? date)
+    internal static DateInputParseErrors Parse(string? day, string? month, string? year, bool acceptMonthNames, out DateOnly? date)
     {
         day ??= string.Empty;
         month ??= string.Empty;
@@ -131,7 +137,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         {
             errors |= DateInputParseErrors.MissingYear;
         }
-        else if (!int.TryParse(year, out parsedYear) || parsedYear < 1 || parsedYear > 9999)
+        else if (!TryParseYear(year, out parsedYear) || parsedYear < 1 || parsedYear > 9999)
         {
             errors |= DateInputParseErrors.InvalidYear;
         }
@@ -140,7 +146,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         {
             errors |= DateInputParseErrors.MissingMonth;
         }
-        else if (!int.TryParse(month, out parsedMonth) || parsedMonth < 1 || parsedMonth > 12)
+        else if (!TryParseMonth(month, out parsedMonth) || parsedMonth < 1 || parsedMonth > 12)
         {
             errors |= DateInputParseErrors.InvalidMonth;
         }
@@ -149,7 +155,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         {
             errors |= DateInputParseErrors.MissingDay;
         }
-        else if (!int.TryParse(day, out parsedDay) || parsedDay < 1 || parsedDay > 31 ||
+        else if (!TryParseDay(day, out parsedDay) || parsedDay < 1 || parsedDay > 31 ||
             (errors == DateInputParseErrors.None && parsedDay > DateTime.DaysInMonth(parsedYear, parsedMonth)))
         {
             errors |= DateInputParseErrors.InvalidDay;
@@ -157,5 +163,51 @@ internal class DateInputModelConverterModelBinder : IModelBinder
 
         date = errors == DateInputParseErrors.None ? new(parsedYear, parsedMonth, parsedDay) : default;
         return errors;
+
+        bool TryParseDay(string value, out int result) => int.TryParse(value, out result);
+
+        bool TryParseMonth(string value, out int result)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                result = 0;
+                return false;
+            }
+
+            if (!int.TryParse(value, out result) && acceptMonthNames)
+            {
+                result = value.ToLower() switch
+                {
+                    "jan" => 1,
+                    "january" => 1,
+                    "feb" => 2,
+                    "february" => 2,
+                    "mar" => 3,
+                    "march" => 3,
+                    "apr" => 4,
+                    "april" => 4,
+                    "may" => 5,
+                    "jun" => 6,
+                    "june" => 6,
+                    "jul" => 7,
+                    "july" => 7,
+                    "aug" => 8,
+                    "august" => 8,
+                    "sep" => 9,
+                    "september" => 9,
+                    "oct" => 10,
+                    "october" => 10,
+                    "nov" => 11,
+                    "november" => 11,
+                    "dec" => 12,
+                    "december" => 12,
+                    _ => 0
+                };
+            }
+
+            return result != 0;
+        }
+
+        bool TryParseYear(string value, out int result) => int.TryParse(value, out result);
     }
 }

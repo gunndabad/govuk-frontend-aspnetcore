@@ -83,16 +83,16 @@ public static class GovUkFrontendAspNetCoreExtensions
 
     private class ConfigureMvcOptions : IConfigureOptions<MvcOptions>
     {
-        private readonly GovUkFrontendAspNetCoreOptions _gfaOptions;
+        private readonly IOptions<GovUkFrontendAspNetCoreOptions> _gfaOptionsAccessor;
 
         public ConfigureMvcOptions(IOptions<GovUkFrontendAspNetCoreOptions> gfaOptionsAccessor)
         {
-            _gfaOptions = gfaOptionsAccessor.Value;
+            _gfaOptionsAccessor = gfaOptionsAccessor;
         }
 
         public void Configure(MvcOptions options)
         {
-            options.ModelBinderProviders.Insert(2, new DateInputModelBinderProvider(_gfaOptions));
+            options.ModelBinderProviders.Insert(2, new DateInputModelBinderProvider(_gfaOptionsAccessor));
         }
     }
 }
