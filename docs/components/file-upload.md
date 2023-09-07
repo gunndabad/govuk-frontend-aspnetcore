@@ -32,6 +32,7 @@
 | --- | --- | --- |
 | `asp-for` | `ModelExpression` | The model expression used to generate the `name` and `id` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
 | `described-by` | `string` | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element. |
+| `disabled` | `bool` | Whether the input should be disabled. The default is `false`. |
 | `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
 | `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
 | `input-*` | | Additional attributes to add to the generated `input` element. |

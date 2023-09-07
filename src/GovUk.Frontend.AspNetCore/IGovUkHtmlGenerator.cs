@@ -109,6 +109,7 @@ internal interface IGovUkHtmlGenerator
         string id,
         string name,
         string describedBy,
+        bool disabled,
         AttributeDictionary attributes);
 
     TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, AttributeDictionary attributes);

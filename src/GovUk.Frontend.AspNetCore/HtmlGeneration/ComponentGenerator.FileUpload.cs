@@ -6,12 +6,14 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
 internal partial class ComponentGenerator
 {
     internal const string FileUploadElement = "input";
+    internal const bool FileUploadDefaultDisabled = false;
 
     public TagBuilder GenerateFileUpload(
         bool haveError,
         string id,
         string name,
         string describedBy,
+        bool disabled,
         AttributeDictionary attributes)
     {
         Guard.ArgumentNotNull(nameof(id), id);
@@ -33,6 +35,11 @@ internal partial class ComponentGenerator
         if (!string.IsNullOrEmpty(describedBy))
         {
             tagBuilder.Attributes.Add("aria-describedby", describedBy);
+        }
+
+        if (disabled)
+        {
+            tagBuilder.Attributes.Add("disabled", "disabled");
         }
 
         return tagBuilder;

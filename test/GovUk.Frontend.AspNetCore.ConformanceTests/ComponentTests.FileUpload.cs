@@ -41,6 +41,7 @@ public partial class ComponentTests
                             options.Id,
                             options.Name,
                             describedBy,
+                            options.Disabled,
                             attributes);
                     });
             });

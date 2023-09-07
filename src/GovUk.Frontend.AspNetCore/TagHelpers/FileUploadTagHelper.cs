@@ -19,6 +19,7 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
     internal const string TagName = "govuk-file-upload";
 
     private const string AttributesPrefix = "input-";
+    private const string DisabledAttributeName = "disabled";
     private const string IdAttributeName = "id";
     private const string LabelClassAttributeName = "label-class";
     private const string NameAttributeName = "name";
@@ -37,6 +38,12 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
               modelHelper ?? new DefaultModelHelper())
     {
     }
+
+    /// <summary>
+    /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
+    /// </summary>
+    [HtmlAttributeName(DisabledAttributeName)]
+    public bool Disabled { get; set; } = ComponentGenerator.FileUploadDefaultDisabled;
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.
@@ -111,6 +118,7 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
                 resolvedId,
                 resolvedName,
                 DescribedBy,
+                Disabled,
                 InputAttributes.ToAttributeDictionary());
         }
     }
