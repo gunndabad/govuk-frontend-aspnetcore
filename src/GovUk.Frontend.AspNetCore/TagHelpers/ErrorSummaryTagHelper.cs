@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -40,6 +43,14 @@ public class ErrorSummaryTagHelper : TagHelper
     [HtmlAttributeName(DisableAutoFocusAttributeName)]
     public bool? DisableAutoFocus { get; set; }
 
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
+
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
@@ -57,6 +68,8 @@ public class ErrorSummaryTagHelper : TagHelper
             output.SuppressOutput();
             return;
         }
+
+        ViewContext!.ViewData.SetPageHasErrors(true);
 
         var tagBuilder = _htmlGenerator.GenerateErrorSummary(
             DisableAutoFocus,

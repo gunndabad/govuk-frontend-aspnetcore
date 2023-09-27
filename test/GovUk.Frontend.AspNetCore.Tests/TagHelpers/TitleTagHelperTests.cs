@@ -18,7 +18,7 @@ public class TitleTagHelperTests
     [InlineData(true, true, true)]
     public async Task ProcessAsync_GeneratesExpectedOutput(
         bool prependErrorToTitleOption,
-        bool modelStateHasErrors,
+        bool pageHasErrors,
         bool expectErrorInTitle)
     {
         // Arrange
@@ -43,11 +43,7 @@ public class TitleTagHelperTests
             });
 
         var viewContext = new ViewContext();
-
-        if (modelStateHasErrors)
-        {
-            viewContext.ModelState.AddModelError("Key", "An error");
-        }
+        viewContext.ViewData.SetPageHasErrors(pageHasErrors);
 
         var tagHelper = new TitleTagHelper(options)
         {

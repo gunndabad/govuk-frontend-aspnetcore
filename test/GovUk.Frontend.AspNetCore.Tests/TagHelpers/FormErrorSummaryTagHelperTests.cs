@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 using Xunit;
@@ -49,7 +50,8 @@ public class FormErrorSummaryTagHelperTests
 
         var tagHelper = new FormErrorSummaryTagHelper(options)
         {
-            PrependErrorSummary = prependErrorSummary
+            PrependErrorSummary = prependErrorSummary,
+            ViewContext = new ViewContext()
         };
 
         tagHelper.Init(context);

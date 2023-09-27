@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 
@@ -44,6 +47,14 @@ public class FormErrorSummaryTagHelper : TagHelper
     [HtmlAttributeName(PrependErrorSummaryAttributeName)]
     public bool? PrependErrorSummary { get; set; }
 
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
+
     /// <inheritdoc/>
     public override void Init(TagHelperContext context)
     {
@@ -67,6 +78,8 @@ public class FormErrorSummaryTagHelper : TagHelper
         {
             return;
         }
+
+        ViewContext!.ViewData.SetPageHasErrors(true);
 
         var errorItems = formErrorContext.Errors.Select(i => new ErrorSummaryItem()
         {
