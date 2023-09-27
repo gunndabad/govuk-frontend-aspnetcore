@@ -19,7 +19,7 @@ public class DateInputFieldsetLegendTagHelper : TagHelper
     /// Whether the legend also acts as the heading for the page.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>false</c>.
+    /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(IsPageHeadingAttributeName)]
     public bool IsPageHeading { get; set; } = ComponentGenerator.FieldsetLegendDefaultIsPageHeading;

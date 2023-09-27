@@ -32,7 +32,7 @@ public class FormGroupErrorMessageTagHelper : TagHelper
     /// A visually hidden prefix used before the error message.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>&quot;Error&quot;</c>.
+    /// The default is <c>&quot;Error&quot;</c>.
     /// </remarks>
     [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
     public string? VisuallyHiddenText { get; set; }

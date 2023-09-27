@@ -87,7 +87,7 @@ public class AccordionTagHelper : TagHelper
     /// accessible name when the section is expanded.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>&quot;Hide this section&quot;</c>.
+    /// The default is <c>&quot;Hide this section&quot;</c>.
     /// </remarks>
     [HtmlAttributeName(HideSectionAriaLabelTextAttributeName)]
     public string? HideSectionAriaLabelText { get; set; }
@@ -114,7 +114,7 @@ public class AccordionTagHelper : TagHelper
     /// Whether the expanded/collapsed state of the accordion should be saved when a user leaves the page and restored when they return.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>true</c>.
+    /// The default is <c>true</c>.
     /// </remarks>
     [HtmlAttributeName(RememberExpandedAttributeName)]
     public bool RememberExpanded { get; set; } = ComponentGenerator.AccordionDefaultRememberExpanded;
@@ -138,7 +138,7 @@ public class AccordionTagHelper : TagHelper
     /// accessible name when the section is collapsed.
     /// </summary>
     /// <remarks>
-    /// Defaults to <c>&quot;Show this section&quot;</c>.
+    /// The defaults is <c>&quot;Show this section&quot;</c>.
     /// </remarks>
     [HtmlAttributeName(ShowSectionAriaLabelTextAttributeName)]
     public string? ShowSectionAriaLabelText { get; set; }
