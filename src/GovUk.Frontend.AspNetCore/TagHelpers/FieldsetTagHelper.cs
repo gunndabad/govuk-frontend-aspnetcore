@@ -57,6 +57,11 @@ public class FieldsetTagHelper : TagHelper
             childContent = await output.GetChildContentAsync();
         }
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         fieldsetContext.ThrowIfNotComplete();
 
         var tagBuilder = _htmlGenerator.GenerateFieldset(

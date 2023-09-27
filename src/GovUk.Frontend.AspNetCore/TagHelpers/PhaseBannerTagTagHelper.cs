@@ -27,6 +27,11 @@ public class PhaseBannerTagTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         phaseBannerContext.SetTag(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
         output.SuppressOutput();

@@ -18,9 +18,14 @@ public class SummaryListRowKeyTagHelper : TagHelper
     {
         var summaryListRowContext = context.GetContextItem<SummaryListRowContext>();
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
 
-        summaryListRowContext.SetKey(output.Attributes.ToAttributeDictionary(), content.Snapshot());
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
+        summaryListRowContext.SetKey(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
         output.SuppressOutput();
     }

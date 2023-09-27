@@ -83,6 +83,11 @@ public class ButtonTagHelper : TagHelper
     {
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var attributes = output.Attributes.ToAttributeDictionary();
 
         if (Type is not null)

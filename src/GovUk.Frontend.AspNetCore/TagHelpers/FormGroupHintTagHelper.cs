@@ -35,6 +35,11 @@ public class FormGroupHintTagHelper : TagHelper
             await output.GetChildContentAsync() :
             null;
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var formGroupContext = context.GetContextItem<FormGroupContext>();
 
         formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());

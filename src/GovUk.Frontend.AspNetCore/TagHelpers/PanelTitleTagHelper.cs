@@ -18,6 +18,11 @@ public class PanelTitleTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         panelContext.SetTitle(childContent.Snapshot());
 
         output.SuppressOutput();

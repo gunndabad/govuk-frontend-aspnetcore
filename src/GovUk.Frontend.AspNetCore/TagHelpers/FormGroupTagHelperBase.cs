@@ -75,6 +75,11 @@ public abstract class FormGroupTagHelperBase : TagHelper
         {
             var childContent = await output.GetChildContentAsync();
 
+            if (output.Content.IsModified)
+            {
+                childContent = output.Content;
+            }
+
             content = GenerateFormGroupContent(context, formGroupContext, output, childContent, out haveError);
         }
 

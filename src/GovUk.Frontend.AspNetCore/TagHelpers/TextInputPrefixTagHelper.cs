@@ -25,9 +25,14 @@ public class TextInputPrefixTagHelper : TagHelper
     {
         var inputContext = (TextInputContext)context.Items[typeof(TextInputContext)];
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
 
-        inputContext.SetPrefix(output.Attributes.ToAttributeDictionary(), content.Snapshot());
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
+        inputContext.SetPrefix(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
         output.SuppressOutput();
     }

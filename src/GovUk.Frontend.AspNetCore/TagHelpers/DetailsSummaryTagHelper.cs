@@ -16,9 +16,15 @@ public class DetailsSummaryTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
+        var detailsContext = context.GetContextItem<DetailsContext>();
+
         var childContent = await output.GetChildContentAsync();
 
-        var detailsContext = context.GetContextItem<DetailsContext>();
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         detailsContext.SetSummary(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
         output.SuppressOutput();

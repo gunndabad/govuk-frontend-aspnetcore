@@ -46,6 +46,11 @@ public class SummaryCardTitleTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         cardContext.SetTitle(childContent.Snapshot(), HeadingLevel, output.Attributes.ToAttributeDictionary());
 
         output.SuppressOutput();

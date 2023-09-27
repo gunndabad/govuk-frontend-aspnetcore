@@ -50,6 +50,11 @@ public class WarningTextTagHelper : TagHelper
     {
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var tagBuilder = _htmlGenerator.GenerateWarningText(
             IconFallbackText,
             childContent,

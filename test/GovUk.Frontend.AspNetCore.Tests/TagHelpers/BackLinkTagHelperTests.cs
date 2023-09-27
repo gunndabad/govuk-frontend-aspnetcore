@@ -32,7 +32,6 @@ public class BackLinkTagHelperTests
                 tagHelperContent.SetContent("My custom link content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
-        output.Content.SetContent("My custom link content");
 
         var tagHelper = new BackLinkTagHelper();
 

@@ -52,7 +52,12 @@ public class PaginationItemTagHelper : TagHelper
     {
         var paginationContext = context.GetContextItem<PaginationContext>();
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
+
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
 
         string? href = null;
 
@@ -69,7 +74,7 @@ public class PaginationItemTagHelper : TagHelper
             Attributes = output.Attributes.ToAttributeDictionary(),
             Href = href,
             IsCurrent = isCurrent,
-            Number = content,
+            Number = childContent,
             VisuallyHiddenText = VisuallyHiddenText
         });
 

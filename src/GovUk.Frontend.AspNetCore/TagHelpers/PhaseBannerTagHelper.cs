@@ -42,6 +42,11 @@ public class PhaseBannerTagHelper : TagHelper
             childContent = await output.GetChildContentAsync();
         }
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         phaseBannerContext.ThrowIfIncomplete();
 
         var tagBuilder = _htmlGenerator.GeneratePhaseBanner(

@@ -35,6 +35,11 @@ public class FieldsetLegendTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         fieldsetContext.SetLegend(
             IsPageHeading,
             output.Attributes.ToAttributeDictionary(),

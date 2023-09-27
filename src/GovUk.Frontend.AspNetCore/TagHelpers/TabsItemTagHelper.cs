@@ -51,7 +51,12 @@ public class TabsItemTagHelper : TagHelper
 
         var tabsContext = context.GetContextItem<TabsContext>();
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
+
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
 
         tabsContext.AddItem(new TabsItem()
         {
@@ -59,7 +64,7 @@ public class TabsItemTagHelper : TagHelper
             Label = Label,
             LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
             PanelAttributes = output.Attributes.ToAttributeDictionary(),
-            PanelContent = content.Snapshot()
+            PanelContent = childContent.Snapshot()
         });
 
         output.SuppressOutput();

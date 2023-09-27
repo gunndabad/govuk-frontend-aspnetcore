@@ -18,6 +18,11 @@ public class ErrorSummaryDescriptionTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         errorSummaryContext.SetDescription(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
 
         output.SuppressOutput();

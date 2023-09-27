@@ -16,7 +16,13 @@ public class CharacterCountValueTagHelper : TagHelper
     {
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var characterCountContext = context.GetContextItem<CharacterCountContext>();
+
         characterCountContext.SetValue(childContent.Snapshot());
 
         output.SuppressOutput();

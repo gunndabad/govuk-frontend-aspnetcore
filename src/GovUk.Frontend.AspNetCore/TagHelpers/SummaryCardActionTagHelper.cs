@@ -25,12 +25,17 @@ public class SummaryCardActionTagHelper : TagHelper
     {
         var cardContext = context.GetContextItem<SummaryCardContext>();
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
+
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
 
         cardContext.AddAction(new SummaryListAction()
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = content.Snapshot(),
+            Content = childContent.Snapshot(),
             VisuallyHiddenText = VisuallyHiddenText
         });
 

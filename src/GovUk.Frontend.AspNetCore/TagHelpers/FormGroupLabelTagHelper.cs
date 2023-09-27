@@ -40,6 +40,11 @@ public class FormGroupLabelTagHelper : TagHelper
             await output.GetChildContentAsync() :
             null;
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var formGroupContext = context.GetContextItem<FormGroupContext>();
 
         formGroupContext.SetLabel(

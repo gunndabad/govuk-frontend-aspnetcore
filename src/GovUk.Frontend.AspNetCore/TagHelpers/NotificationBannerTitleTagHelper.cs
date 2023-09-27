@@ -73,6 +73,11 @@ public class NotificationBannerTitleTagHelper : TagHelper
             await output.GetChildContentAsync() :
             null;
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         notificationBannerContext.SetTitle(Id, HeadingLevel, childContent?.Snapshot());
 
         output.SuppressOutput();

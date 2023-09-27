@@ -18,6 +18,11 @@ public class PanelBodyTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         panelContext.SetBody(childContent.Snapshot());
 
         output.SuppressOutput();

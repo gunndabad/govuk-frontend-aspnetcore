@@ -52,6 +52,11 @@ public class SkipLinkTagHelper : TagHelper
     {
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var tagBuilder = _htmlGenerator.GenerateSkipLink(Href, childContent, output.Attributes.ToAttributeDictionary());
 
         output.TagName = tagBuilder.TagName;

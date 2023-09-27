@@ -31,6 +31,11 @@ public class DateInputItemLabelTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         dateInputItemContext.SetLabel(childContent.Snapshot(), output.Attributes.ToAttributeDictionary());
 
         output.SuppressOutput();

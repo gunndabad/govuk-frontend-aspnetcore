@@ -81,6 +81,11 @@ public class ErrorSummaryItemTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         IHtmlContent itemContent;
 
         if (output.TagMode == TagMode.StartTagAndEndTag)

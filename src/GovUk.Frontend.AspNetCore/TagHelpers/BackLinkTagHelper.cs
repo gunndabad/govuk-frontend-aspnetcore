@@ -40,7 +40,12 @@ public class BackLinkTagHelper : TagHelper
 
         if (output.TagMode == TagMode.StartTagAndEndTag)
         {
-            content = await output.GetChildContentAsync();
+            content = (await output.GetChildContentAsync()).Snapshot();
+        }
+
+        if (output.Content.IsModified)
+        {
+            content = output.Content;
         }
 
         var tagBuilder = _htmlGenerator.GenerateBackLink(content, output.Attributes.ToAttributeDictionary());

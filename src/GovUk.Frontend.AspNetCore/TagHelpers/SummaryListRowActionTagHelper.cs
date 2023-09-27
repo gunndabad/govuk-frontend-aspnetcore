@@ -26,12 +26,17 @@ public class SummaryListRowActionTagHelper : TagHelper
     {
         var summaryListRowContext = context.GetContextItem<SummaryListRowContext>();
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
+
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
 
         summaryListRowContext.AddAction(new SummaryListAction()
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = content.Snapshot(),
+            Content = childContent.Snapshot(),
             VisuallyHiddenText = VisuallyHiddenText
         });
 

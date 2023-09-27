@@ -34,9 +34,14 @@ public class PaginationNextTagHelper : TagHelper
     {
         var paginationContext = context.GetContextItem<PaginationContext>();
 
-        var content = output.TagMode == TagMode.StartTagAndEndTag ?
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
             await output.GetChildContentAsync() :
             null;
+
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
 
         string? href = null;
 
@@ -52,7 +57,7 @@ public class PaginationNextTagHelper : TagHelper
             Href = href,
             LabelText = LabelText,
             LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
-            Text = content
+            Text = childContent
         });
 
         output.SuppressOutput();

@@ -70,6 +70,11 @@ public class NotificationBannerTagHelper : TagHelper
             childContent = await output.GetChildContentAsync();
         }
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var tagBuilder = _htmlGenerator.GenerateNotificationBanner(
             Type,
             Role,

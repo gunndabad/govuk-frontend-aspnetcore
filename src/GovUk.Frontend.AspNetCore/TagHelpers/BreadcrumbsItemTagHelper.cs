@@ -29,6 +29,11 @@ public class BreadcrumbsItemTagHelper : TagHelper
 
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         string? href = null;
 
         if (output.Attributes.TryGetAttribute("href", out var hrefAttribute))

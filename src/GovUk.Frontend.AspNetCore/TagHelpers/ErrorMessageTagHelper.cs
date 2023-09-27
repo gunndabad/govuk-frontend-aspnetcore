@@ -77,6 +77,11 @@ public class ErrorMessageTagHelper : TagHelper
             await output.GetChildContentAsync() :
             null;
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         if (childContent == null && AspFor == null)
         {
             throw new InvalidOperationException(

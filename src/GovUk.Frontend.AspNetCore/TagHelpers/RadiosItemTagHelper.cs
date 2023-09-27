@@ -102,6 +102,11 @@ public class RadiosItemTagHelper : TagHelper
             childContent = await output.GetChildContentAsync();
         }
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var resolvedChecked = Checked ??
             (radiosContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null) ??
             ComponentGenerator.RadiosItemDefaultChecked;

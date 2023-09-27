@@ -34,6 +34,11 @@ public class TagTagHelper : TagHelper
     {
         var childContent = await output.GetChildContentAsync();
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributeDictionary());
 
         output.TagName = tagBuilder.TagName;

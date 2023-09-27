@@ -44,6 +44,11 @@ public class FormGroupErrorMessageTagHelper : TagHelper
             await output.GetChildContentAsync() :
             null;
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         SetErrorMessage(childContent, context, output);
 
         output.SuppressOutput();

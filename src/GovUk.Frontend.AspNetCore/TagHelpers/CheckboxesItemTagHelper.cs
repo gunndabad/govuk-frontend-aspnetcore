@@ -139,6 +139,11 @@ public class CheckboxesItemTagHelper : TagHelper
             childContent = await output.GetChildContentAsync();
         }
 
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         var resolvedChecked = Checked ??
             (checkboxesContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null) ??
             ComponentGenerator.CheckboxesItemDefaultChecked;

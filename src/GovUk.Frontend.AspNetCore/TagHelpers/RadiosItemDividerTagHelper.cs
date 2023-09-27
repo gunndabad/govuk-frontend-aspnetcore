@@ -19,12 +19,17 @@ public class RadiosItemDividerTagHelper : TagHelper
     {
         var radiosContext = context.GetContextItem<RadiosContext>();
 
-        var content = await output.GetChildContentAsync();
+        var childContent = await output.GetChildContentAsync();
+
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
 
         radiosContext.AddItem(new RadiosItemDivider()
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = content.Snapshot()
+            Content = childContent.Snapshot()
         });
 
         output.SuppressOutput();

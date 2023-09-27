@@ -29,11 +29,16 @@ public class RadiosFieldsetLegendTagHelper : TagHelper
     {
         var fieldsetContext = context.GetContextItem<RadiosFieldsetContext>();
 
-        var content = output.TagMode == TagMode.StartTagAndEndTag ?
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
             (await output.GetChildContentAsync()).Snapshot() :
             null;
 
-        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content);
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
+        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: childContent);
 
         output.SuppressOutput();
     }

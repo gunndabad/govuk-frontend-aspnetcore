@@ -33,6 +33,11 @@ public class DateInputFieldsetLegendTagHelper : TagHelper
             (await output.GetChildContentAsync()).Snapshot() :
             null;
 
+        if (output.Content.IsModified)
+        {
+            content = output.Content;
+        }
+
         fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content);
 
         output.SuppressOutput();

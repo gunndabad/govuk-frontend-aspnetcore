@@ -14,9 +14,15 @@ public class TextAreaValueTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
+        var characterCountContext = context.GetContextItem<TextAreaContext>();
+
         var childContent = await output.GetChildContentAsync();
 
-        var characterCountContext = context.GetContextItem<TextAreaContext>();
+        if (output.Content.IsModified)
+        {
+            childContent = output.Content;
+        }
+
         characterCountContext.SetValue(childContent.Snapshot());
 
         output.SuppressOutput();
