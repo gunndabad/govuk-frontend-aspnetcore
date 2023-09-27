@@ -6,6 +6,7 @@ using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -50,7 +51,10 @@ public class ErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper();
+        var tagHelper = new ErrorSummaryTagHelper()
+        {
+            ViewContext = new ViewContext()
+        };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -111,7 +115,8 @@ public class ErrorSummaryTagHelperTests
 
         var tagHelper = new ErrorSummaryTagHelper()
         {
-            DisableAutoFocus = true
+            DisableAutoFocus = true,
+            ViewContext = new ViewContext()
         };
 
         // Act
@@ -152,7 +157,10 @@ public class ErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper();
+        var tagHelper = new ErrorSummaryTagHelper()
+        {
+            ViewContext = new ViewContext()
+        };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -189,7 +197,10 @@ public class ErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+        var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator())
+        {
+            ViewContext = new ViewContext()
+        };
 
         // Act
         await tagHelper.ProcessAsync(context, output);

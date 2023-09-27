@@ -54,7 +54,7 @@ public class TitleTagHelper : TagHelper
     {
         await base.ProcessAsync(context, output);
 
-        if (_options.PrependErrorToTitle && !string.IsNullOrEmpty(ErrorPrefix) && !ViewContext!.ModelState.IsValid)
+        if (_options.PrependErrorToTitle && !string.IsNullOrEmpty(ErrorPrefix) && ViewContext!.ViewData.GetPageHasErrors())
         {
             output.PreContent.Append(ErrorPrefix + " ");
         }
