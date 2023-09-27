@@ -42,7 +42,13 @@ public class GdsImportsTagHelperComponent : TagHelperComponent
     /// <inheritdoc/>
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        if (!_options.AddImportsToHtml || ViewContext!.ViewData.ContainsKey(nameof(NoAppendHtmlSnippetsMarker)))
+        if (!_options.AddImportsToHtml)
+        {
+            return;
+        }
+
+        if (ViewContext!.ViewData.TryGetValue(NoAppendHtmlSnippetsMarker.ViewDataKey, out var noAppendHtmlSnippetsMarkerObj) &&
+            noAppendHtmlSnippetsMarkerObj == NoAppendHtmlSnippetsMarker.Instance)
         {
             return;
         }

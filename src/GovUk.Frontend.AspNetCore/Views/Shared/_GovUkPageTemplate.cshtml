@@ -4,7 +4,7 @@
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
-    ViewData.Add("NoAppendHtmlSnippetsMarker", true);
+    ViewData.Add(NoAppendHtmlSnippetsMarker.ViewDataKey, NoAppendHtmlSnippetsMarker.Instance);
     var cspNonce = OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
