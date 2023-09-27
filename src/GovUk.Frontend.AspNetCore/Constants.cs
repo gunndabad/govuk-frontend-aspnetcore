@@ -3,5 +3,5 @@ namespace GovUk.Frontend.AspNetCore;
 internal static class Constants
 {
     public const string IdAttributeDotReplacement = "_";
-    public const string GdsLibraryVersion = "4.6.0";
+    public const string GdsLibraryVersion = "4.7.0";
 }
