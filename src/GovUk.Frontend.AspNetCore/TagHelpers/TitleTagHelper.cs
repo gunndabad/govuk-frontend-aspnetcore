@@ -13,7 +13,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement("title")]
 public class TitleTagHelper : TagHelper
 {
+    private const string DefaultErrorPrefix = "Error:";
+    private const string ErrorPrefixAttributeName = "gfa-error-prefix";
+
     private readonly GovUkFrontendAspNetCoreOptions _options;
+
+    private string? _errorPrefix = DefaultErrorPrefix;
 
     /// <summary>
     /// Creates a new <see cref="TitleTagHelper"/>.
@@ -21,6 +26,19 @@ public class TitleTagHelper : TagHelper
     public TitleTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
         _options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
+    }
+
+    /// <summary>
+    /// The prefix to add to the <c>title</c> when the page has errors.
+    /// </summary>
+    /// <remarks>
+    ///  The default is <c>Error:</c>.
+    /// </remarks>
+    [HtmlAttributeName(ErrorPrefixAttributeName)]
+    public string? ErrorPrefix
+    {
+        get => _errorPrefix;
+        set => _errorPrefix = value;
     }
 
     /// <summary>
@@ -36,9 +54,9 @@ public class TitleTagHelper : TagHelper
     {
         await base.ProcessAsync(context, output);
 
-        if (_options.PrependErrorToTitle && !ViewContext!.ModelState.IsValid)
+        if (_options.PrependErrorToTitle && !string.IsNullOrEmpty(ErrorPrefix) && !ViewContext!.ModelState.IsValid)
         {
-            output.PreContent.Append("Error: ");
+            output.PreContent.Append(ErrorPrefix + " ");
         }
     }
 }
