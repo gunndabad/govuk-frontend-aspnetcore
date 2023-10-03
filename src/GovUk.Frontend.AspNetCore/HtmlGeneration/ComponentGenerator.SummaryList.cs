@@ -134,6 +134,7 @@ internal partial class ComponentGenerator
                 var vht = new TagBuilder("span");
                 vht.MergeCssClass("govuk-visually-hidden");
                 vht.InnerHtml.Append(action.VisuallyHiddenText);
+                anchor.InnerHtml.Append(" ");
                 anchor.InnerHtml.AppendHtml(vht);
             }
 
