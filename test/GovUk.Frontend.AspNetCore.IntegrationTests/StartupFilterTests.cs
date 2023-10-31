@@ -89,7 +89,7 @@ public class StartupFilterTests
         var linkTags = head.QuerySelectorAll("link");
 
         Assert.DoesNotContain(
-            $"/govuk/all.min.css",
+            "/govuk/all.min.css",
             linkTags
                 .Where(t => t.GetAttribute("rel") == "stylesheet")
                 .Select(t => t.GetAttribute("href")));
@@ -101,7 +101,7 @@ public class StartupFilterTests
         var bodyScriptTags = body.QuerySelectorAll("script");
 
         Assert.DoesNotContain(
-            $"/govuk/all.min.js",
+            "/govuk/all.min.js",
             bodyScriptTags.Select(t => t.GetAttribute("src")));
 
         Assert.DoesNotContain(
@@ -138,7 +138,7 @@ public class StartupFilterTests
         var linkTags = head.QuerySelectorAll("link");
 
         Assert.Contains(
-            $"/govuk/all.min.css",
+            "/govuk/all.min.css",
             linkTags
                 .Where(t => t.GetAttribute("rel") == "stylesheet")
                 .Select(t => t.GetAttribute("href")));
@@ -150,7 +150,7 @@ public class StartupFilterTests
         var bodyScriptTags = body.QuerySelectorAll("script");
 
         Assert.Contains(
-            $"/govuk/all.min.js",
+            "/govuk/all.min.js",
             bodyScriptTags.Select(t => t.GetAttribute("src")));
 
         Assert.Contains(

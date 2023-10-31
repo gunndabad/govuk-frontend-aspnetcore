@@ -19,6 +19,8 @@ public class ServerFixture : IAsyncLifetime
 
     public IBrowser? Browser { get; private set; }
 
+    public IServiceProvider Services => _host!.Services;
+
     public async virtual Task DisposeAsync()
     {
         if (_disposed)
