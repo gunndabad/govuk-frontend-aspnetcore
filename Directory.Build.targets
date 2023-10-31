@@ -1,0 +1,14 @@
+<Project>
+  <ItemGroup>
+    <AssemblyMetadata Include="GovUkFrontendVersion" Value="$(GovUkFrontendVersion)" />
+  </ItemGroup>
+
+  <Target Name="InstallGovUkFrontendPackage" BeforeTargets="Build" Condition="!Exists('$(_NpmLibPackageJson)')">
+    <MakeDir Directories="$(_NpmLibDirectory)" />
+    <Exec Command="npm install govuk-frontend@$(GovUkFrontendVersion)" WorkingDirectory="$(_NpmLibDirectory)" />
+  </Target>
+
+  <Target Name="CleanGovUkFrontendPackage" BeforeTargets="Clean">
+    <RemoveDir Directories="$(_NpmLibDirectory)" />
+  </Target>
+</Project>

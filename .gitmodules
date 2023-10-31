@@ -1,3 +1,0 @@
-[submodule "lib/govuk-frontend"]
-	path = lib/govuk-frontend
-	url = git@github.com:alphagov/govuk-frontend.git
