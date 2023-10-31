@@ -1,4 +1,4 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;
