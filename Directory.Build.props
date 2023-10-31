@@ -4,5 +4,10 @@
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     <RepoRoot>$([MSBuild]::EnsureTrailingSlash('$(MSBuildThisFileDirectory)'))</RepoRoot>
     <Nullable>enable</Nullable>
+    <GovUkFrontendVersion>5.0.0-beta.0</GovUkFrontendVersion>
+
+    <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib'))</_NpmLibDirectory>
+    <_NpmLibPackageJson>$([System.IO.Path]::Combine('$(_NpmLibDirectory)', 'package.json'))</_NpmLibPackageJson>
+    <GovUkFrontendLibrary>$([MSBuild]::NormalizeDirectory('$(_NpmLibDirectory)', 'node_modules', 'govuk-frontend', 'dist', 'govuk'))</GovUkFrontendLibrary>
   </PropertyGroup>
 </Project>
