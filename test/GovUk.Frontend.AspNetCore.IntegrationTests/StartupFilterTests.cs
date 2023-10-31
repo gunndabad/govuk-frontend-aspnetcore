@@ -21,7 +21,7 @@ public class StartupFilterTests
         await using var fixture = new StartupFilterTestFixture(services => { });
         await fixture.InitializeAsync();
 
-        var resolvedPath = path.Replace("{version}", Constants.GdsLibraryVersion);
+        var resolvedPath = path.Replace("{version}", fixture.PageTemplateHelper.GovUkFrontendVersion);
 
         var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
 
@@ -57,7 +57,7 @@ public class StartupFilterTests
         var linkTags = head.QuerySelectorAll("link");
 
         Assert.DoesNotContain(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.css",
+            $"/govuk-frontend-{fixture.PageTemplateHelper.GovUkFrontendVersion}.min.css",
             linkTags
                 .Where(t => t.GetAttribute("rel") == "stylesheet")
                 .Select(t => t.GetAttribute("href")));
@@ -69,7 +69,7 @@ public class StartupFilterTests
         var bodyScriptTags = body.QuerySelectorAll("script");
 
         Assert.DoesNotContain(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.js",
+            $"/govuk-frontend-{fixture.PageTemplateHelper.GovUkFrontendVersion}.min.js",
             bodyScriptTags.Select(t => t.GetAttribute("src")));
 
         Assert.DoesNotContain(
@@ -102,7 +102,7 @@ public class StartupFilterTests
         var linkTags = head.QuerySelectorAll("link");
 
         Assert.Contains(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.css",
+            $"/govuk-frontend-{fixture.PageTemplateHelper.GovUkFrontendVersion}.min.css",
             linkTags
                 .Where(t => t.GetAttribute("rel") == "stylesheet")
                 .Select(t => t.GetAttribute("href")));
@@ -114,7 +114,7 @@ public class StartupFilterTests
         var bodyScriptTags = body.QuerySelectorAll("script");
 
         Assert.Contains(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.js",
+            $"/govuk-frontend-{fixture.PageTemplateHelper.GovUkFrontendVersion}.min.js",
             bodyScriptTags.Select(t => t.GetAttribute("src")));
 
         Assert.Contains(
@@ -138,6 +138,8 @@ public class StartupFilterTestFixture : ServerFixture
     }
 
     public HttpClient HttpClient { get; }
+
+    public PageTemplateHelper PageTemplateHelper => Services.GetRequiredService<PageTemplateHelper>();
 
     protected override void Configure(IApplicationBuilder app)
     {

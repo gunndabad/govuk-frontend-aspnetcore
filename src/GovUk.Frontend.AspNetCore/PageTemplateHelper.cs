@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Html;
@@ -13,6 +15,13 @@ public class PageTemplateHelper
 {
     internal const string JsEnabledScript = "document.body.className = document.body.className + ' js-enabled';";
     internal const string InitScript = "window.GOVUKFrontend.initAll()";
+
+    private static readonly string _frontendVersion = GetGovUkFrontendVersion();
+
+    /// <summary>
+    /// Gets the version of the GOV.UK Frontend library.
+    /// </summary>
+    public string GovUkFrontendVersion => _frontendVersion;
 
     /// <summary>
     /// Generates the script that adds a <c>js-enabled</c> CSS class.
@@ -114,6 +123,12 @@ public class PageTemplateHelper
     /// </summary>
     /// <returns>A hash to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
     public string GetInitScriptCspHash() => GenerateCspHash(InitScript);
+
+    private static string GetGovUkFrontendVersion() =>
+        Assembly.GetExecutingAssembly().CustomAttributes
+            .OfType<AssemblyMetadataAttribute>()
+            .Single(a => a.Key == "GovUkFrontendVersion")
+            .Value!;
 
     private static string GenerateCspHash(string value)
     {
