@@ -4,10 +4,18 @@
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
-    var cspNonce = OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
+    var assetPath = ViewBag.AssetPath ?? OptionsAccessor.Value.StaticAssetsContentPath;
+    if (assetPath is null)
+    {
+        throw new InvalidOperationException(
+            $"Asset path is not set. Ensure either {nameof(GovUkFrontendAspNetCoreOptions.StaticAssetsContentPath)} on {nameof(GovUkFrontendAspNetCoreOptions)} or ViewBag.AssetPath is set.");
+    }
+
+    var cspNonce = ViewBag.CspNonce ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
-    string themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
+    var themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
+    var ogImage = ViewBag.OpengraphImageUrl ?? $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}{assetPath}/images/govuk-opengraph-image.png";
 }
 <!DOCTYPE html>
 <html lang="@htmlLang" class="govuk-template @ViewBag.HtmlClasses">
@@ -26,12 +34,12 @@
     }
     else
     {
-        <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
-        <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="@themeColor">
-        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
-        <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
-        <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+        <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="@(assetPath)/images/favicon.ico" type="image/x-icon">
+        <link rel="mask-icon" href="@(assetPath)/images/govuk-mask-icon.svg" color="@themeColor">
+        <link rel="apple-touch-icon" sizes="180x180" href="@(assetPath)/images/govuk-apple-touch-icon-180x180.png">
+        <link rel="apple-touch-icon" sizes="167x167" href="@(assetPath)/images/govuk-apple-touch-icon-167x167.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="@(assetPath)/images/govuk-apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" href="@(assetPath)/images/govuk-apple-touch-icon.png">
     }
 
     @if (IsSectionDefined("Head"))
@@ -43,7 +51,7 @@
         @PageTemplateHelper.GenerateStyleImports()
     }
 
-    <meta property="og:image" content="@(ViewBag.OpengraphImageUrl ?? "/assets/images/govuk-opengraph-image.png")">
+    <meta property="og:image" content="@(ogImage)">
 </head>
 
 <body class="govuk-template__body @ViewBag.BodyClasses">
