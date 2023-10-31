@@ -2,7 +2,7 @@ using System.IO;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
+namespace GovUk.Frontend.AspNetCore;
 
 /// <summary>
 /// Utility extensions for <see cref="IHtmlContent"/>.
