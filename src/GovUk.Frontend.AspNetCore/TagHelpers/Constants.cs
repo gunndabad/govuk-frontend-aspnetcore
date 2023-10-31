@@ -1,4 +1,4 @@
-namespace GovUk.Frontend.AspNetCore;
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal static class Constants
 {
