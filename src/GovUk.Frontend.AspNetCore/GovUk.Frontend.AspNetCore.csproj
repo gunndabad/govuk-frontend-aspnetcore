@@ -35,15 +35,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <_FrontendAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.css" ContentDirectory="" />
-    <_FrontendAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.js" ContentDirectory="" />
-    <_FrontendAssets Include="$(GovUkFrontendLibrary)assets\**\*" ContentDirectory="assets/" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="@(_FrontendAssets->'%(Identity)')">
-      <Link>Content/%(ContentDirectory)%(Filename)%(Extension)</Link>
-      <LogicalName>Content/%(ContentDirectory)%(Filename)%(Extension)</LogicalName>
+    <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.css">
+      <LinkedName>all.min.css</LinkedName>
+    </_CompiledAssets>
+    <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.js">
+      <LinkedName>all.min.js</LinkedName>
+    </_CompiledAssets>
+    
+    <EmbeddedResource Include="$(GovUkFrontendLibrary)assets\**\*">
+      <Link>Content/Assets/%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <LogicalName>Content/Assets/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="@(_CompiledAssets)">
+      <Link>Content/Compiled/%(LinkedName)</Link>
+      <LogicalName>Content/Compiled/%(LinkedName)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
