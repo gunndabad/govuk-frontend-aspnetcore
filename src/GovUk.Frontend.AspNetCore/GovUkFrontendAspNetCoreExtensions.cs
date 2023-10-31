@@ -1,11 +1,9 @@
 using System;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
-using GovUk.Frontend.AspNetCore.TagHelperComponents;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -47,7 +45,6 @@ public static class GovUkFrontendAspNetCoreExtensions
         services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
         services.AddSingleton<IConfigureOptions<MvcOptions>, ConfigureMvcOptions>();
         services.AddScoped<DateInputParseErrorsProvider>();
-        services.AddTransient<ITagHelperComponent, GdsImportsTagHelperComponent>();
         services.AddTransient<PageTemplateHelper>();
 
         services.Configure(setupAction);

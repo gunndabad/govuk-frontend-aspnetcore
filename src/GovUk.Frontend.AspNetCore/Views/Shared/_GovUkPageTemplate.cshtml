@@ -4,8 +4,6 @@
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
-    ViewData.Add(NoAppendHtmlSnippetsMarker.ViewDataKey, NoAppendHtmlSnippetsMarker.Instance);
-
     var assetPath = ViewBag.AssetPath ?? OptionsAccessor.Value.StaticAssetsContentPath;
     if (assetPath is null)
     {
