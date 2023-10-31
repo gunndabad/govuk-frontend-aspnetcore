@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class Textarea
+public class TextareaOptions
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
