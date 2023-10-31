@@ -63,9 +63,14 @@ public class StartupFilterTests
     public async Task AddImportsToHtmlIsFalse_DoesNotAddStyleAndScriptImportsToRazorViews()
     {
         // Arrange
+        // Arrange
         await using var fixture = new StartupFilterTestFixture(services =>
         {
-            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.AddImportsToHtml = false);
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options =>
+            {
+                options.AddImportsToHtml = false;
+                options.CompiledContentPath = "/govuk";
+            });
         });
         await fixture.InitializeAsync();
 
@@ -84,7 +89,7 @@ public class StartupFilterTests
         var linkTags = head.QuerySelectorAll("link");
 
         Assert.DoesNotContain(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.css",
+            $"/govuk/all.min.css",
             linkTags
                 .Where(t => t.GetAttribute("rel") == "stylesheet")
                 .Select(t => t.GetAttribute("href")));
@@ -96,11 +101,11 @@ public class StartupFilterTests
         var bodyScriptTags = body.QuerySelectorAll("script");
 
         Assert.DoesNotContain(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.js",
+            $"/govuk/all.min.js",
             bodyScriptTags.Select(t => t.GetAttribute("src")));
 
         Assert.DoesNotContain(
-            $"window.GOVUKFrontend.initAll()",
+            $"document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');",
             bodyScriptTags.Select(t => t.InnerHtml));
     }
 
@@ -110,7 +115,11 @@ public class StartupFilterTests
         // Arrange
         await using var fixture = new StartupFilterTestFixture(services =>
         {
-            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.AddImportsToHtml = true);
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options =>
+            {
+                options.AddImportsToHtml = true;
+                options.CompiledContentPath = "/govuk";
+            });
         });
         await fixture.InitializeAsync();
 
@@ -129,7 +138,7 @@ public class StartupFilterTests
         var linkTags = head.QuerySelectorAll("link");
 
         Assert.Contains(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.css",
+            $"/govuk/all.min.css",
             linkTags
                 .Where(t => t.GetAttribute("rel") == "stylesheet")
                 .Select(t => t.GetAttribute("href")));
@@ -141,11 +150,11 @@ public class StartupFilterTests
         var bodyScriptTags = body.QuerySelectorAll("script");
 
         Assert.Contains(
-            $"/govuk-frontend-{Constants.GdsLibraryVersion}.min.js",
+            $"/govuk/all.min.js",
             bodyScriptTags.Select(t => t.GetAttribute("src")));
 
         Assert.Contains(
-            $"window.GOVUKFrontend.initAll()",
+            $"document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');",
             bodyScriptTags.Select(t => t.InnerHtml));
     }
 }

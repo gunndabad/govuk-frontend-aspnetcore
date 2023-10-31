@@ -1,5 +1,6 @@
 using System.Linq;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests;
@@ -10,8 +11,9 @@ public class PageTemplateHelperTests
     public void GenerateJsEnabledScript_WithNonce_AppendsNonceToScript()
     {
         // Arrange
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
         var nonce = "nonce123";
-        var pageTemplateHelper = new PageTemplateHelper();
 
         // Act
         var result = pageTemplateHelper.GenerateJsEnabledScript(nonce);
@@ -25,7 +27,8 @@ public class PageTemplateHelperTests
     public void GenerateJsEnabledScript_WithoutNonce_DoesNotHaveNonceAttribute()
     {
         // Arrange
-        var pageTemplateHelper = new PageTemplateHelper();
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
 
         // Act
         var result = pageTemplateHelper.GenerateJsEnabledScript(cspNonce: null);
@@ -39,8 +42,9 @@ public class PageTemplateHelperTests
     public void GenerateScriptImports_WithNonce_AppendsNonceToScript()
     {
         // Arrange
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
         var nonce = "nonce123";
-        var pageTemplateHelper = new PageTemplateHelper();
 
         // Act
         var result = pageTemplateHelper.GenerateScriptImports(nonce);
@@ -54,7 +58,8 @@ public class PageTemplateHelperTests
     public void GenerateScriptImports_WithoutNonce_DoesNotHaveNonceAttribute()
     {
         // Arrange
-        var pageTemplateHelper = new PageTemplateHelper();
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
 
         // Act
         var result = pageTemplateHelper.GenerateScriptImports(cspNonce: null);
@@ -68,38 +73,41 @@ public class PageTemplateHelperTests
     public void GetCspScriptHashes()
     {
         // Arrange
-        var pageTemplateHelper = new PageTemplateHelper();
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
 
         // Act
         var result = pageTemplateHelper.GetCspScriptHashes();
 
         // Assert
-        Assert.Equal("'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ=' 'sha256-wmo5EWLjw+Yuj9jZzGNNeSsUOBQmBvE1pvSPVNQzJ34='", result);
+        Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", result);
     }
 
     [Fact]
     public void GetJsEnabledScriptCspHash()
     {
         // Arrange
-        var pageTemplateHelper = new PageTemplateHelper();
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
 
         // Act
         var result = pageTemplateHelper.GetJsEnabledScriptCspHash();
 
         // Assert
-        Assert.Equal("'sha256-wmo5EWLjw+Yuj9jZzGNNeSsUOBQmBvE1pvSPVNQzJ34='", result);
+        Assert.Equal("'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", result);
     }
 
     [Fact]
     public void GetInitScriptCspHash()
     {
         // Arrange
-        var pageTemplateHelper = new PageTemplateHelper();
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
 
         // Act
         var result = pageTemplateHelper.GetInitScriptCspHash();
 
         // Assert
-        Assert.Equal("'sha256-l1eTVSK8DTnK8+yloud7wZUqFrI0atVo6VlC6PJvYaQ='", result);
+        Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo='", result);
     }
 }
