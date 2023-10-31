@@ -16,7 +16,6 @@ public class GovUkFrontendAspNetCoreOptions
     public GovUkFrontendAspNetCoreOptions()
     {
         AcceptMonthNamesInDateInputs = true;
-        AddImportsToHtml = true;
         AddNovalidateAttributeToForms = true;
 
         DateInputModelConverters = new List<DateInputModelConverter>()
@@ -38,15 +37,6 @@ public class GovUkFrontendAspNetCoreOptions
     /// The default is <c>true</c>.
     /// </remarks>
     public bool AcceptMonthNamesInDateInputs { get; set; }
-
-    /// <summary>
-    /// Whether <c>style</c> and <c>script</c> tags to import GDS assets are added to <c>head</c> and <c>body</c>
-    /// elements automatically in Razor views.
-    /// </summary>
-    /// <remarks>
-    /// The default is <c>true</c>.
-    /// </remarks>
-    public bool AddImportsToHtml { get; set; }
 
     /// <summary>
     /// Whether to add a <c>novalidate</c> attribute to <c>form</c> elements.
