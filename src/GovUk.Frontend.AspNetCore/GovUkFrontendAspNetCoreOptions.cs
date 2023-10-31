@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.ModelBinding;
-using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Http;
 
 namespace GovUk.Frontend.AspNetCore;
@@ -54,11 +53,6 @@ public class GovUkFrontendAspNetCoreOptions
     /// The default is <c>true</c>.
     /// </remarks>
     public bool AddNovalidateAttributeToForms { get; set; }
-
-    /// <summary>
-    /// The default value for <see cref="ButtonTagHelper.PreventDoubleClick"/>.
-    /// </summary>
-    public bool? DefaultButtonPreventDoubleClick { get; set; }
 
     /// <summary>
     /// A delegate for retrieving a CSP nonce for the current request.
