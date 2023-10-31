@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -27,6 +28,26 @@ public static class TagHelperAttributeListExtensions
                     attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
                         string.Empty :
                         attribute.Value is HtmlString htmlString ? HttpUtility.HtmlDecode(htmlString.Value) :
+                        (attribute.Value ?? string.Empty).ToString());
+            }
+        }
+
+        return attributeDictionary;
+    }
+
+    internal static Dictionary<string, string?> ToEncodedAttributeDictionary(this TagHelperAttributeList? list)
+    {
+        var attributeDictionary = new Dictionary<string, string?>();
+
+        if (list != null)
+        {
+            foreach (var attribute in list)
+            {
+                attributeDictionary.Add(
+                    attribute.Name,
+                    attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
+                        null :
+                        attribute.Value is HtmlString htmlString ? htmlString.ToString() :
                         (attribute.Value ?? string.Empty).ToString());
             }
         }
