@@ -27,6 +27,8 @@ public class GovUkFrontendAspNetCoreOptions
 
         PrependErrorSummaryToForms = true;
         PrependErrorToTitle = true;
+        StaticAssetsContentPath = "/assets";
+        CompiledContentPath = "/govuk";
     }
 
     /// <summary>
@@ -53,6 +55,24 @@ public class GovUkFrontendAspNetCoreOptions
     /// The default is <c>true</c>.
     /// </remarks>
     public bool AddNovalidateAttributeToForms { get; set; }
+
+    /// <summary>
+    /// The path to serve GOV.UK Frontend static assets at.
+    /// </summary>
+    /// <remarks>
+    /// <para>If this is <c>null</c> the static assets will not be served.</para>
+    /// <para>The default is <c>/assets</c>.</para>
+    /// </remarks>
+    public string? StaticAssetsContentPath { get; set; }
+
+    /// <summary>
+    /// The path to serve GOV.UK Frontend compiled JavaScript and CSS at.
+    /// </summary>
+    /// <remarks>
+    /// <para>If this is <c>null</c> the compiled assets will not be served.</para>
+    /// <para>The default is <c>/govuk</c>.</para>
+    /// </remarks>
+    public string? CompiledContentPath { get; set; }
 
     /// <summary>
     /// A delegate for retrieving a CSP nonce for the current request.
