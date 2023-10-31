@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore;
 
@@ -11,8 +12,19 @@ namespace GovUk.Frontend.AspNetCore;
 /// </summary>
 public class PageTemplateHelper
 {
-    internal const string JsEnabledScript = "document.body.className = document.body.className + ' js-enabled';";
-    internal const string InitScript = "window.GOVUKFrontend.initAll()";
+    internal const string JsEnabledScript = "document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');";
+
+    private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PageTemplateHelper"/> class.
+    /// </summary>
+    /// <param name="optionsAccessor">The options.</param>
+    public PageTemplateHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+    {
+        ArgumentNullException.ThrowIfNull(optionsAccessor);
+        _optionsAccessor = optionsAccessor;
+    }
 
     /// <summary>
     /// Generates the script that adds a <c>js-enabled</c> CSS class.
@@ -49,35 +61,45 @@ public class PageTemplateHelper
     /// The contents of this property should be inserted at the end of the <c>body</c> tag.
     /// </para>
     /// <para>
-    /// Use the <see cref="GetInitScriptCspHash"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
+    /// Use the <see cref="GetInitScriptCspHash()"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
     /// </para>
     /// </remarks>
     /// <param name="cspNonce">The CSP nonce attribute to be added to the generated initialization <c>script</c> tag.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tags.</returns>
     public IHtmlContent GenerateScriptImports(string? cspNonce = null)
     {
+        var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
+        if (compiledContentPath is null)
+        {
+            throw new InvalidOperationException($"Cannot generate script imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
+        }
+
         var htmlContentBuilder = new HtmlContentBuilder();
         htmlContentBuilder.AppendHtml(GenerateImportScript());
+        htmlContentBuilder.AppendLine();
         htmlContentBuilder.AppendHtml(GenerateInitScript());
+        htmlContentBuilder.AppendLine();
         return htmlContentBuilder;
 
         TagBuilder GenerateImportScript()
         {
             var tagBuilder = new TagBuilder("script");
-            tagBuilder.MergeAttribute("src", "/govuk-frontend-4.8.0.min.js");
+            tagBuilder.MergeAttribute("type", "module");
+            tagBuilder.MergeAttribute("src", $"{compiledContentPath}/all.min.js");
             return tagBuilder;
         }
 
         TagBuilder GenerateInitScript()
         {
             var tagBuilder = new TagBuilder("script");
+            tagBuilder.MergeAttribute("type", "module");
 
             if (cspNonce is not null)
             {
                 tagBuilder.MergeAttribute("nonce", cspNonce);
             }
 
-            tagBuilder.InnerHtml.AppendHtml(new HtmlString(InitScript));
+            tagBuilder.InnerHtml.AppendHtml(new HtmlString(GetInitScriptContents()));
 
             return tagBuilder;
         }
@@ -90,12 +112,16 @@ public class PageTemplateHelper
     /// The contents of this property should be inserted in the <c>head</c> tag.
     /// </remarks>
     /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
-    public IHtmlContent GenerateStyleImports() => new HtmlString(@"<!--[if !IE 8]><!-->
-    <link rel=""stylesheet"" href=""/govuk-frontend-4.8.0.min.css"">
-<!--<![endif]-->
-<!--[if IE 8]>
-    <link rel = ""stylesheet"" href=""/govuk-frontend-ie8-4.8.0.min.css"">
-<![endif]-->");
+    public IHtmlContent GenerateStyleImports()
+    {
+        var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
+        if (compiledContentPath is null)
+        {
+            throw new InvalidOperationException($"Cannot generate style imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
+        }
+
+        return new HtmlString($"<link href=\"{compiledContentPath}/all.min.css\" rel=\"stylesheet\">");
+    }
 
     /// <summary>
     /// Gets all the CSP hashes for the inline scripts used in the page template.
@@ -113,7 +139,20 @@ public class PageTemplateHelper
     /// Gets the CSP hash for the GOV.UK Frontend initialization script.
     /// </summary>
     /// <returns>A hash to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
-    public string GetInitScriptCspHash() => GenerateCspHash(InitScript);
+    public string GetInitScriptCspHash() => GetInitScriptCspHash(GetInitScriptContents());
+
+    private string GetInitScriptContents()
+    {
+        var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
+        if (compiledContentPath is null)
+        {
+            throw new InvalidOperationException($"Cannot generate scripts when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
+        }
+
+        return $"\nimport {{ initAll }} from '{compiledContentPath}/all.min.js'\ninitAll()\n";
+    }
+
+    private string GetInitScriptCspHash(string initScript) => GenerateCspHash(initScript);
 
     private static string GenerateCspHash(string value)
     {
