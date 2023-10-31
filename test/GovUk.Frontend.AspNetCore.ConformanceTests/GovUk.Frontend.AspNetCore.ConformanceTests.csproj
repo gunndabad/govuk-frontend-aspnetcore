@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <FixtureFiles Include="$(RepoRoot)\lib\govuk-frontend\package\govuk\components\*\fixtures.json">
+    <FixtureFiles Include="$(GovUkFrontendLibrary)components\*\fixtures.json">
       <ComponentName>$([MSBuild]::ValueOrDefault('%(RecursiveDir)', '').TrimEnd('/\'))</ComponentName>
     </FixtureFiles>
     <Content Include="@(FixtureFiles)">
