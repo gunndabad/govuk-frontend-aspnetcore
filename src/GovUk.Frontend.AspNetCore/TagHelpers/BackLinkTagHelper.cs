@@ -1,8 +1,7 @@
-using System.Text.Encodings.Web;
+using System;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -11,36 +10,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS back link component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.BackLinkElement)]
+[OutputElementHint(DefaultComponentGenerator.BackLinkElement)]
 public class BackLinkTagHelper : TagHelper
 {
     internal const string TagName = "govuk-back-link";
 
-    private static readonly HtmlString _defaultContent = new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.BackLinkDefaultContent));
-
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    public BackLinkTagHelper()
-        : this(htmlGenerator: null)
+    public BackLinkTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal BackLinkTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
     }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        IHtmlContent content = _defaultContent;
+        IHtmlContent? content = null;
 
         if (output.TagMode == TagMode.StartTagAndEndTag)
         {
-            content = (await output.GetChildContentAsync()).Snapshot();
+            content = await output.GetChildContentAsync();
         }
 
         if (output.Content.IsModified)
@@ -48,13 +41,18 @@ public class BackLinkTagHelper : TagHelper
             content = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateBackLink(content, output.Attributes.ToAttributeDictionary());
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes)
+            .Remove("href", out var href);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateBackLink(new BackLinkOptions()
+        {
+            Html = content?.ToHtmlString(),
+            Href = href,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.WriteComponent(component);
     }
 }

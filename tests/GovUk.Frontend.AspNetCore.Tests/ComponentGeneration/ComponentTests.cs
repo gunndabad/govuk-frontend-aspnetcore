@@ -2,6 +2,7 @@ using System;
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.ComponentGeneration;
 
@@ -13,6 +14,13 @@ public class ComponentTests
     {
         _componentGenerator = new DefaultComponentGenerator();
     }
+
+    [Theory]
+    [ComponentFixtureData("back-link", typeof(BackLinkOptions))]
+    public void BackLink(ComponentTestCaseData<BackLinkOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateBackLink(options).ToHtmlString());
 
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
