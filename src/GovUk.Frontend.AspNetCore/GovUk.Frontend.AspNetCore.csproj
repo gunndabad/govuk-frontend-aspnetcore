@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor" InitialTargets="InstallGovUkFrontendPackage">
 
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
@@ -35,9 +35,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="$(RepoRoot)\lib\govuk-frontend\dist\**\*" Exclude="$(RepoRoot)\lib\govuk-frontend\dist\VERSION.txt">
-      <Link>Content/%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <LogicalName>Content/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+    <_FrontendAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.css" ContentDirectory="" />
+    <_FrontendAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.js" ContentDirectory="" />
+    <_FrontendAssets Include="$(GovUkFrontendLibrary)assets\**\*" ContentDirectory="assets/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="@(_FrontendAssets->'%(Identity)')">
+      <Link>Content/%(ContentDirectory)%(Filename)%(Extension)</Link>
+      <LogicalName>Content/%(ContentDirectory)%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
