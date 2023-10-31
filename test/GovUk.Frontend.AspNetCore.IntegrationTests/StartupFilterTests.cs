@@ -13,15 +13,42 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests;
 public class StartupFilterTests
 {
     [Theory]
-    [InlineData("govuk-frontend-{version}.min.css")]
-    [InlineData("govuk-frontend-{version}.min.js")]
-    public async Task HostsStaticAssets(string path)
+    [InlineData("all.min.css")]
+    [InlineData("all.min.js")]
+    public async Task HostsCompiledAssets(string fileName)
     {
         // Arrange
-        await using var fixture = new StartupFilterTestFixture(services => { });
+        await using var fixture = new StartupFilterTestFixture(services =>
+        {
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.CompiledContentPath = "/govuk");
+        });
         await fixture.InitializeAsync();
 
-        var resolvedPath = path.Replace("{version}", Constants.GdsLibraryVersion);
+        var resolvedPath = $"/govuk/{fileName}";
+
+        var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
+
+        // Act
+        var response = await fixture.HttpClient.SendAsync(request);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Theory]
+    [InlineData("images/favicon.ico")]
+    [InlineData("images/govuk-crest.png")]
+    [InlineData("fonts/bold-affa96571d-v2.woff")]
+    public async Task HostsStaticAssets(string fileName)
+    {
+        // Arrange
+        await using var fixture = new StartupFilterTestFixture(services =>
+        {
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.StaticAssetsContentPath = "/assets");
+        });
+        await fixture.InitializeAsync();
+
+        var resolvedPath = $"/assets/{fileName}";
 
         var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
 
