@@ -27,16 +27,13 @@ public class ButtonTagHelper : TagHelper
     /// Creates a new <see cref="ButtonTagHelper"/>.
     /// </summary>
     public ButtonTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
-        : this(optionsAccessor, htmlGenerator: null)
+        : this(htmlGenerator: null)
     {
     }
 
-    internal ButtonTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor, IGovUkHtmlGenerator? htmlGenerator)
+    internal ButtonTagHelper(IGovUkHtmlGenerator? htmlGenerator)
     {
-        var options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
         _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-
-        PreventDoubleClick = options.DefaultButtonPreventDoubleClick;
     }
 
     /// <summary>
@@ -66,9 +63,6 @@ public class ButtonTagHelper : TagHelper
     /// <summary>
     /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
     /// </summary>
-    /// <remarks>
-    /// The default is set for the application in <see cref="GovUkFrontendAspNetCoreOptions.DefaultButtonPreventDoubleClick"/>.
-    /// </remarks>
     [HtmlAttributeName(PreventDoubleClickAttributeName)]
     public bool? PreventDoubleClick { get; set; }
 
