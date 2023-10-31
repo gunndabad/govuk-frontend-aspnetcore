@@ -25,4 +25,15 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FixtureFiles Include="$(GovUkFrontendLibrary)components\*\fixtures.json">
+      <ComponentName>$([MSBuild]::ValueOrDefault('%(RecursiveDir)', '').TrimEnd('/\'))</ComponentName>
+    </FixtureFiles>
+    <Content Include="@(FixtureFiles)">
+      <Link>\ComponentGeneration\Fixtures\%(ComponentName).json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
 </Project>
