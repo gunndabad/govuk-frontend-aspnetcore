@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AssemblyMetadata Include="RepoRoot" Value="$(RepoRoot)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PuppeteerSharp" Version="2.0.4" />
   </ItemGroup>
 

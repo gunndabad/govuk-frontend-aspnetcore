@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.DocSamples;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +18,12 @@ class Program
     static async Task Main()
     {
         const string baseUrl = "http://localhost:9919";
-        const string docsRoot = "../../../../../docs/images/";
+
+        var repoRoot = typeof(Program).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
+            .Single(a => a.Key == "RepoRoot")
+            .Value!;
+
+        var docsRoot = Path.Combine(repoRoot, "docs", "images");
 
         var hostBuilder = CreateHostBuilder();
         using var host = hostBuilder.Build();
