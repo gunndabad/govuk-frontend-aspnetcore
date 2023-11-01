@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,62 +8,49 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS warning text component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.WarningTextElement)]
+[OutputElementHint(DefaultComponentGenerator.WarningTextElement)]
 public class WarningTextTagHelper : TagHelper
 {
     internal const string TagName = "govuk-warning-text";
 
     private const string IconFallbackTextAttributeName = "icon-fallback-text";
-
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
-    private string _iconFallbackText = ComponentGenerator.WarningTextDefaultIconFallbackText;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="WarningTextTagHelper"/>.
     /// </summary>
-    public WarningTextTagHelper()
-        : this(htmlGenerator: null)
+    public WarningTextTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal WarningTextTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
     /// The fallback text for the icon.
     /// </summary>
-    /// <remarks>
-    /// Cannot be <c>null</c> or empty.
-    /// </remarks>
     [HtmlAttributeName(IconFallbackTextAttributeName)]
-    public string IconFallbackText
-    {
-        get => _iconFallbackText;
-        set => _iconFallbackText = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? IconFallbackText { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateWarningText(
-            IconFallbackText,
-            childContent,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateWarningText(new WarningTextOptions()
+        {
+            Html = content?.ToHtmlString(),
+            IconFallbackText = IconFallbackText,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.WriteComponent(component);
     }
 }

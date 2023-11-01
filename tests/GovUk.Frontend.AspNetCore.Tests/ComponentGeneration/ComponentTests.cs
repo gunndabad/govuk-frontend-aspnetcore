@@ -29,6 +29,13 @@ public class ComponentTests
             data,
             (generator, options) => generator.GenerateButton(options).ToHtmlString());
 
+    [Theory]
+    [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
+    public void WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateWarningText(options).ToHtmlString());
+
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<IComponentGenerator, TOptions, string> generateComponent,

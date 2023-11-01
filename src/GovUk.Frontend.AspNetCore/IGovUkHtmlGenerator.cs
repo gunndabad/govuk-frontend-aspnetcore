@@ -197,9 +197,4 @@ internal interface IGovUkHtmlGenerator
         AttributeDictionary prefixAttributes,
         IHtmlContent suffixContent,
         AttributeDictionary suffixAttributes);
-
-    TagBuilder GenerateWarningText(
-        string iconFallbackText,
-        IHtmlContent content,
-        AttributeDictionary attributes);
 }
