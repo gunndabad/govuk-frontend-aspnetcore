@@ -22,6 +22,13 @@ public class ComponentTests
             data,
             (generator, options) => generator.GenerateBackLink(options).ToHtmlString());
 
+    [Theory]
+    [ComponentFixtureData("button", typeof(ButtonOptions))]
+    public void Button(ComponentTestCaseData<ButtonOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateButton(options).ToHtmlString());
+
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<IComponentGenerator, TOptions, string> generateComponent,

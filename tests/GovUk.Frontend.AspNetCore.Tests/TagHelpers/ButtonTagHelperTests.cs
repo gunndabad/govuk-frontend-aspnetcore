@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -11,9 +12,20 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class ButtonTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var disabled = true;
+        var id = "my-button";
+        var isStartButton = true;
+        var name = "MyButton";
+        var preventDoubleClick = true;
+        var type = "button";
+        var value = "Value";
+        var classes = "custom-class";
+        var dataFooAttrValue = "bar";
+        var content = "Button text";
+
         var context = new TagHelperContext(
             tagName: "govuk-button",
             allAttributes: new TagHelperAttributeList(),
@@ -22,179 +34,54 @@ public class ButtonTagHelperTests
 
         var output = new TagHelperOutput(
             "govuk-button",
-            attributes: new TagHelperAttributeList(),
+            attributes: new TagHelperAttributeList()
+            {
+                { "class", classes },
+                { "data-foo", dataFooAttrValue },
+            },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
+                tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ButtonOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
 
-        var tagHelper = new ButtonTagHelper(options);
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<button class=""govuk-button"" data-module=""govuk-button"">
-    Button text
-</button>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithType_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-button",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-button",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-
-        var tagHelper = new ButtonTagHelper(options)
+        var tagHelper = new ButtonTagHelper(componentGeneratorMock.Object)
         {
-            Type = "submit"
+            Disabled = disabled,
+            Id = id,
+            IsStartButton = isStartButton,
+            Name = name,
+            PreventDoubleClick = preventDoubleClick,
+            Type = type,
+            Value = value
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<button class=""govuk-button"" data-module=""govuk-button"" type=""submit"">
-    Button text
-</button>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_IsStartButton_AddsIconToOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-button",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-button",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-
-        var tagHelper = new ButtonTagHelper(options)
+        Assert.NotNull(actualOptions);
+        Assert.Equal("button", actualOptions!.Element);
+        Assert.Equal(HtmlEncoder.Default.Encode(content), actualOptions.Html);
+        Assert.Null(actualOptions.Text);
+        Assert.Equal(name, actualOptions.Name);
+        Assert.Equal(type, actualOptions.Type);
+        Assert.Equal(value, actualOptions.Value);
+        Assert.Equal(disabled, actualOptions.Disabled);
+        Assert.Null(actualOptions.Href);
+        Assert.Equal(classes, actualOptions.Classes);
+        Assert.Collection(actualOptions.Attributes, kvp =>
         {
-            IsStartButton = true
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-
-        Assert.Contains("govuk-button--start", element.ClassList);
-
-        Assert.Collection(
-            element.QuerySelectorAll("svg"),
-            svg => Assert.Contains("govuk-button__start-icon", svg.ClassList));
-    }
-
-    [Fact]
-    public async Task ProcessAsync_Disabled_AddsDisabledAttributesToOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-button",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-button",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-
-        var tagHelper = new ButtonTagHelper(options)
-        {
-            Disabled = true
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-
-        Assert.Equal("disabled", element.Attributes["disabled"].Value);
-        Assert.Equal("true", element.Attributes["aria-disabled"].Value);
-    }
-
-    [Fact]
-    public async Task ProcessAsync_PreventDoubleClickSpecified_AddsAttributesToOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-button",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-button",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
-
-        var tagHelper = new ButtonTagHelper(options)
-        {
-            PreventDoubleClick = true
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-
-        Assert.Equal("true", element.Attributes["data-prevent-double-click"].Value);
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(dataFooAttrValue, kvp.Value);
+        });
+        Assert.Equal(preventDoubleClick, actualOptions.PreventDoubleClick);
+        Assert.Equal(isStartButton, actualOptions.IsStartButton);
+        Assert.Equal(id, actualOptions.Id);
     }
 }

@@ -54,6 +54,14 @@ An additional `ViewData` key can now be passed to `_GovUkPageTemplate.cshtml` - 
 This is so that it's possible to differentiate between properties that have been explicitly initialized and those that have been left at the default values.
 With this, other tag helpers or tag helper initializers can be created that assign default values to these properties.
 
+#### `<govuk-button>`
+
+`name` and `value` attributes have been added.
+
+#### `<govuk-button-link>`
+
+The `disabled` attribute has been removed since the underlying template does not support disabled `<a>` elements.
+
 ### Breaking changes
 
 #### `AddImportsToHtml`

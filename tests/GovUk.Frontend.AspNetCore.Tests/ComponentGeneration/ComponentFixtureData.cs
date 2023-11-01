@@ -4,13 +4,20 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Xunit.Sdk;
 
 namespace GovUk.Frontend.AspNetCore.Tests.ComponentGeneration;
 
 public class ComponentFixtureData : DataAttribute
 {
-    private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions _serializerOptions;
+
+    static ComponentFixtureData()
+    {
+        _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        _serializerOptions.Converters.Insert(0, new PermissiveStringJsonConverter());
+    }
 
     private readonly string _componentName;
     private readonly Type _optionsType;
@@ -52,7 +59,12 @@ public class ComponentFixtureData : DataAttribute
 
         foreach (var fixture in fixtures)
         {
-            var name = fixture!["name"]!.ToString();
+            if (fixture!["hidden"]?.GetValue<bool>() != true)
+            {
+                continue;
+            }
+
+            var name = fixture["name"]!.ToString();
 
             if (_exclude.Contains(name) || _only != null && name != _only)
             {
@@ -68,6 +80,31 @@ public class ComponentFixtureData : DataAttribute
             {
                 testCaseData
             };
+        }
+    }
+
+    private class PermissiveStringJsonConverter : JsonConverter<string>
+    {
+        public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            switch (reader.TokenType)
+            {
+                case JsonTokenType.String:
+                    return reader.GetString();
+                case JsonTokenType.Number:
+                    return reader.GetInt64().ToString();
+                case JsonTokenType.Null:
+                    return null;
+                case JsonTokenType.False:
+                    return string.Empty;
+                default:
+                    throw new JsonException($"Cannot convert {reader.TokenType} tokens to a string.");
+            }
+        }
+
+        public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+        {
+            throw new NotSupportedException();
         }
     }
 }

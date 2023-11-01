@@ -27,21 +27,6 @@ internal interface IGovUkHtmlGenerator
         AttributeDictionary attributes,
         IEnumerable<BreadcrumbsItem> items);
 
-    TagBuilder GenerateButton(
-        bool isStartButton,
-        bool disabled,
-        bool? preventDoubleClick,
-        string id,
-        IHtmlContent content,
-        AttributeDictionary attributes);
-
-    TagBuilder GenerateButtonLink(
-        bool isStartButton,
-        bool disabled,
-        string id,
-        IHtmlContent content,
-        AttributeDictionary attributes);
-
     TagBuilder GenerateCharacterCount(
         string textAreaId,
         int? maxLength,
