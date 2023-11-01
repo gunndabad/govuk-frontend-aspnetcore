@@ -110,4 +110,18 @@ public class PageTemplateHelperTests
         // Assert
         Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo='", result);
     }
+
+    [Fact]
+    public void GetGovUkFrontendVersion_ReturnsVersion()
+    {
+        // Arrange
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { CompiledContentPath = "/govuk" });
+        var pageTemplateHelper = new PageTemplateHelper(options);
+
+        // Act
+        var result = pageTemplateHelper.GovUkFrontendVersion;
+
+        // Assert
+        Assert.NotNull(result);
+    }
 }

@@ -164,8 +164,7 @@ public class PageTemplateHelper
     private string GetInitScriptCspHash(string initScript) => GenerateCspHash(initScript);
 
     private static string GetGovUkFrontendVersion() =>
-        Assembly.GetExecutingAssembly().CustomAttributes
-            .OfType<AssemblyMetadataAttribute>()
+        typeof(PageTemplateHelper).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
             .Single(a => a.Key == "GovUkFrontendVersion")
             .Value!;
 
