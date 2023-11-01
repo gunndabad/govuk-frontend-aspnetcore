@@ -18,6 +18,6 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `icon-fallback-text` | `string` | *Required* The fallback text for the icon. Cannot be `null` or empty. |
+| `icon-fallback-text` | `string` | The fallback text for the icon. |
 
 The content is the HTML to use within the generated component.

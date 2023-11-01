@@ -62,6 +62,10 @@ With this, other tag helpers or tag helper initializers can be created that assi
 
 The `disabled` attribute has been removed since the underlying template does not support disabled `<a>` elements.
 
+#### `<govuk-warning-text>`
+
+The `icon-fallback-text` attribute now allows `null`.
+
 ### Breaking changes
 
 #### `AddImportsToHtml`
