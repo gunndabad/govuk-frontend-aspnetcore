@@ -18,5 +18,5 @@ public class TextareaOptions
     public FormGroupOptions? FormGroup { get; set; }
     public string? Classes { get; set; }
     public string? Autocomplete { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

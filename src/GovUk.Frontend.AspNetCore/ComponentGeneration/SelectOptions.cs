@@ -8,7 +8,7 @@ public class SelectOptions
 {
     public string? Id { get; set; }
     public string? Name { get; set; }
-    public SelectOptionsItem[]? Items { get; set; }
+    public IReadOnlyCollection<SelectOptionsItem>? Items { get; set; }
     public string? Value { get; set; }
     public string? DescribedBy { get; set; }
     public LabelOptions? Label { get; set; }
@@ -16,7 +16,7 @@ public class SelectOptions
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class SelectOptionsItem
@@ -25,5 +25,5 @@ public class SelectOptionsItem
     public string? Text { get; set; }
     public bool? Selected { get; set; }
     public bool? Disabled { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

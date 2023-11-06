@@ -10,7 +10,7 @@ public record WarningTextOptions
     public string? Html { get; set; }
     public string? IconFallbackText { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 
     internal void Validate()
     {

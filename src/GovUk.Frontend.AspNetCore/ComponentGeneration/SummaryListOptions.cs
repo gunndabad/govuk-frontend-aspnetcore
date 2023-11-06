@@ -6,10 +6,10 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class SummaryListOptions
 {
-    public SummaryListOptionsRow[]? Rows { get; set; }
+    public IReadOnlyCollection<SummaryListOptionsRow>? Rows { get; set; }
     public SummaryListOptionsCard? Card { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class SummaryListOptionsCard
@@ -17,7 +17,7 @@ public class SummaryListOptionsCard
     public SummaryListOptionsCardTitle? Title { get; set; }
     public SummaryListOptionsRowActions? Actions { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class SummaryListOptionsCardTitle
@@ -53,7 +53,7 @@ public class SummaryListOptionsRowValue
 public class SummaryListOptionsRowActions
 {
     public string? Classes { get; set; }
-    public SummaryListOptionsRowActionsItem[]? Items { get; set; }
+    public IReadOnlyCollection<SummaryListOptionsRowActionsItem>? Items { get; set; }
 }
 
 public class SummaryListOptionsRowActionsItem
@@ -63,5 +63,5 @@ public class SummaryListOptionsRowActionsItem
     public string? Html { get; set; }
     public string? VisuallyHiddenText { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

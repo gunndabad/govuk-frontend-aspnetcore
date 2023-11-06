@@ -16,5 +16,5 @@ public class FileUploadOptions
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

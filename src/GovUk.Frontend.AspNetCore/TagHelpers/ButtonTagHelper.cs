@@ -86,8 +86,8 @@ public class ButtonTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary();
-        attributes.Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes);
 
         var component = _componentGenerator.GenerateButton(new ButtonOptions()
         {

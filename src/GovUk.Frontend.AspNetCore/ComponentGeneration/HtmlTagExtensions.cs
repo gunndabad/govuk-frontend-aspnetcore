@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 internal static class HtmlTagExtensions
 {
-    public static HtmlTag MergeEncodedAttributes(this HtmlTag tag, IDictionary<string, string?>? attributes)
+    public static HtmlTag MergeEncodedAttributes(this HtmlTag tag, IReadOnlyDictionary<string, string?>? attributes)
     {
         if (attributes is null)
         {

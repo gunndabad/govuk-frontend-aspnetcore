@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using HtmlTags;
 
@@ -36,18 +36,17 @@ public partial class DefaultComponentGenerator
             classes += " govuk-button--start";
         }
 
-        var commonAttributes = options.Attributes.Merge(new Dictionary<string, string?>()
-        {
-            { "class", classes },
-            { "data-module", "govuk-button" },
-        });
-        commonAttributes.AddIfNotNull("id", options.Id.NormalizeEmptyString());
+        var commonAttributes = options.Attributes
+            .ToImmutableDictionary()
+            .Add("class", classes)
+            .Add("data-module", "govuk-button")
+            .AddIfNotNull("id", options.Id.NormalizeEmptyString());
 
-        var buttonAttributes = new Dictionary<string, string?>();
-        buttonAttributes.AddIfNotNull("name", options.Name.NormalizeEmptyString());
-        buttonAttributes.AddIf(options.Disabled == true, "disabled", null);
-        buttonAttributes.AddIf(options.Disabled == true, "aria-disabled", "true");
-        buttonAttributes.AddIfNotNull("data-prevent-double-click", options.PreventDoubleClick?.ToString().ToLower());
+        var buttonAttributes = ImmutableDictionary<string, string?>.Empty
+            .AddIfNotNull("name", options.Name.NormalizeEmptyString())
+            .AddIf(options.Disabled == true, "disabled", null)
+            .AddIf(options.Disabled == true, "aria-disabled", "true")
+            .AddIfNotNull("data-prevent-double-click", options.PreventDoubleClick?.ToString().ToLower());
 
         if (element == "a")
         {

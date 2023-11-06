@@ -11,5 +11,5 @@ public class LabelOptions
     public string? For { get; set; }
     public bool? IsPageHeading { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

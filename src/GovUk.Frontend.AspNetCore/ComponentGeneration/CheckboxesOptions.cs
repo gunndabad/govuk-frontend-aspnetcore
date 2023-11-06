@@ -13,10 +13,10 @@ public class CheckboxesOptions
     public FormGroupOptions? FormGroup { get; set; }
     public string? IdPrefix { get; set; }
     public string? Name { get; set; }
-    public CheckboxesOptionsItem[]? Items { get; set; }
-    public string[]? Values { get; set; }
+    public IReadOnlyCollection<CheckboxesOptionsItem>? Items { get; set; }
+    public IReadOnlyCollection<string>? Values { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string>? Attributes { get; set; }
 }
 
 public class CheckboxesOptionsItem
@@ -33,7 +33,7 @@ public class CheckboxesOptionsItem
     public CheckboxesOptionsItemConditional? Conditional { get; set; }
     public string? Behaviour { get; set; }
     public bool? Disabled { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class CheckboxesOptionsItemConditional

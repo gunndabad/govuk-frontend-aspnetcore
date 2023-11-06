@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -35,7 +36,7 @@ public static class TagHelperAttributeListExtensions
         return attributeDictionary;
     }
 
-    internal static Dictionary<string, string?> ToEncodedAttributeDictionary(this TagHelperAttributeList? list)
+    internal static ImmutableDictionary<string, string?> ToEncodedAttributeDictionary(this TagHelperAttributeList? list)
     {
         var attributeDictionary = new Dictionary<string, string?>();
 
@@ -52,6 +53,6 @@ public static class TagHelperAttributeListExtensions
             }
         }
 
-        return attributeDictionary;
+        return attributeDictionary.ToImmutableDictionary();
     }
 }

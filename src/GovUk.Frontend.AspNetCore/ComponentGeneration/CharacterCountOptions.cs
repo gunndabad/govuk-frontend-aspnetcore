@@ -19,7 +19,7 @@ public class CharacterCountOptions
     public FormGroupOptions? FormGroup { get; set; }
     public string? Classes { get; set; }
     public bool? Spellcheck { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
     public CharacterCountCountOptionsMessage? CountMessage { get; set; }
     public string? TextareaDescriptionText { get; set; }
     public CharacterCountOptionsLocalizedText? CharactersUnderLimitText { get; set; }

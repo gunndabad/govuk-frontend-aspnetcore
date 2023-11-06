@@ -22,7 +22,7 @@ public class TextInputOptions
     public string? Autocomplete { get; set; }
     public string? Pattern { get; set; }
     public bool? Spellcheck { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class TextInputOptionsPrefix
@@ -30,7 +30,7 @@ public class TextInputOptionsPrefix
     public string? Text { get; set; }
     public string? Html { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class TextInputOptionsSuffix
@@ -38,5 +38,5 @@ public class TextInputOptionsSuffix
     public string? Text { get; set; }
     public string? Html { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

@@ -9,7 +9,7 @@ public class AccordionOptions
     public string? Id { get; set; }
     public int? HeadingLevel { get; set; }
     public string? Classes { get; set; }
-    public IDictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
     public bool? RememberExpanded { get; set; }
     public string? HideAllSectionsText { get; set; }
     public string? HideSectionText { get; set; }

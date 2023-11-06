@@ -16,5 +16,5 @@ public class NotificationBannerOptions
     public string? TitleId { get; set; }
     public bool? DisableAutoFocus { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

@@ -8,13 +8,13 @@ public class DateInputOptions
 {
     public string? Id { get; set; }
     public string? NamePrefix { get; set; }
-    public DateInputOptionsItem[]? Items { get; set; }
+    public IReadOnlyCollection<DateInputOptionsItem>? Items { get; set; }
     public HintOptions? Hint { get; set; }
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
     public FieldsetOptions? Fieldset { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class DateInputOptionsItem
@@ -27,5 +27,5 @@ public class DateInputOptionsItem
     public string? InputMode { get; set; }
     public string? Pattern { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

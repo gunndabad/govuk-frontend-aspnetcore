@@ -11,5 +11,5 @@ public class ErrorMessageOptions
     public string? Id { get; set; }
     public string? VisuallyHiddenText { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

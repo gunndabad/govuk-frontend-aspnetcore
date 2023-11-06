@@ -11,7 +11,7 @@ public class PaginationOptions
     public PaginationOptionsNext? Next { get; set; }
     public string? LandmarkLabel { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class PaginationOptionsItem
@@ -21,7 +21,7 @@ public class PaginationOptionsItem
     public string? Href { get; set; }
     public bool? Current { get; set; }
     public bool? Ellipsis { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class PaginationOptionsPrevious
@@ -29,7 +29,7 @@ public class PaginationOptionsPrevious
     public string? Text { get; set; }
     public string? LabelText { get; set; }
     public string? Href { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class PaginationOptionsNext
@@ -37,5 +37,5 @@ public class PaginationOptionsNext
     public string? Text { get; set; }
     public string? LabelText { get; set; }
     public string? Href { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

@@ -12,10 +12,10 @@ public class RadiosOptions
     public FormGroupOptions? FormGroup { get; set; }
     public string? IdPrefix { get; set; }
     public string? Name { get; set; }
-    public RadiosOptionsItem[]? Items { get; set; }
+    public IReadOnlyCollection<RadiosOptionsItem>? Items { get; set; }
     public string? Value { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class RadiosOptionsItem
@@ -32,7 +32,7 @@ public class RadiosOptionsItem
     public RadiosOptionsItemConditional? Conditional { get; set; }
     public string? Behaviour { get; set; }
     public bool? Disabled { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
 public class RadiosOptionsItemConditional

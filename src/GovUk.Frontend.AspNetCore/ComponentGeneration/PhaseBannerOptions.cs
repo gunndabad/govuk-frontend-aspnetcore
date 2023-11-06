@@ -10,5 +10,5 @@ public class PhaseBannerOptions
     public string? Html { get; set; }
     public TagOptions? Tag { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }

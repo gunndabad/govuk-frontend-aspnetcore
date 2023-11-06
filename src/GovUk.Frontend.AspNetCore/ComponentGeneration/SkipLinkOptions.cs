@@ -10,5 +10,5 @@ public class SkipLinkOptions
     public string? Html { get; set; }
     public string? Href { get; set; }
     public string? Classes { get; set; }
-    public Dictionary<string, string?>? Attributes { get; set; }
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
