@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the prefix suffix in a GDS input component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.InputSuffixElement)]
+[OutputElementHint(DefaultComponentGenerator.InputSuffixElement)]
 public class TextInputSuffixTagHelper : TagHelper
 {
     internal const string TagName = "govuk-input-suffix";
@@ -32,7 +32,7 @@ public class TextInputSuffixTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        inputContext.SetSuffix(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        inputContext.SetSuffix(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString());
 
         output.SuppressOutput();
     }

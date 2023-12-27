@@ -13,6 +13,7 @@ public class TextInputSuffixTagHelperTests
     public async Task ProcessAsync_SetsSuffixOnContext()
     {
         // Arrange
+        var suffix = "Suffix";
         var inputContext = new TextInputContext();
 
         var context = new TagHelperContext(
@@ -30,7 +31,7 @@ public class TextInputSuffixTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.AppendHtml(new HtmlString("Suffix"));
+                tagHelperContent.AppendHtml(new HtmlString(suffix));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -40,7 +41,7 @@ public class TextInputSuffixTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.True(inputContext.Suffix.HasValue);
-        Assert.Equal("Suffix", inputContext.Suffix?.Content?.ToHtmlString());
+        Assert.NotNull(inputContext.Suffix);
+        Assert.Equal(suffix, inputContext.Suffix!.Html);
     }
 }

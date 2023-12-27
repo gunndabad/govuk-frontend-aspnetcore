@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(SelectTagHelper.HintTagName, ParentTag = SelectTagHelper.TagName)]
 [HtmlTargetElement(TextAreaTagHelper.HintTagName, ParentTag = TextAreaTagHelper.TagName)]
 [HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.HintElement)]
+[OutputElementHint(DefaultComponentGenerator.HintElement)]
 public class FormGroupHintTagHelper : TagHelper
 {
     /// <summary>
@@ -40,9 +40,9 @@ public class FormGroupHintTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var formGroupContext = context.GetContextItem<FormGroupContext>();
+        var formGroupContext = context.GetContextItem<FormGroupContext2>();
 
-        formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
+        formGroupContext.SetHint(output.Attributes.ToEncodedAttributeDictionary(), childContent?.ToHtmlString());
 
         output.SuppressOutput();
     }
