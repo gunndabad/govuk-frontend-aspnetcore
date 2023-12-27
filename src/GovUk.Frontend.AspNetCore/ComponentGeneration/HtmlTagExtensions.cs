@@ -44,4 +44,9 @@ internal static class HtmlTagExtensions
     {
         return AddEncodedAttributeIf(tag, value is not null, key, value);
     }
+
+    public static HtmlTag AppendIf(this HtmlTag tag, bool condition, HtmlTag child)
+    {
+        return condition ? tag.Append(child) : tag;
+    }
 }

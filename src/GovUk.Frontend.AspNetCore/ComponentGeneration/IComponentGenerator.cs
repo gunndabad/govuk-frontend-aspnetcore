@@ -20,6 +20,12 @@ public interface IComponentGenerator
     HtmlTag GenerateButton(ButtonOptions options);
 
     /// <summary>
+    /// Generates an error message component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateErrorMessage(ErrorMessageOptions options);
+
+    /// <summary>
     /// Generates a details component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
