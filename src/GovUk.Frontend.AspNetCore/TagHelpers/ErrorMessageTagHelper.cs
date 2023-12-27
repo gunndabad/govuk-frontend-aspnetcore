@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -16,31 +16,32 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS error message component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.ErrorMessageElement)]
+[OutputElementHint(DefaultComponentGenerator.ErrorMessageElement)]
 public class ErrorMessageTagHelper : TagHelper
 {
     internal const string TagName = "govuk-error-message";
 
     private const string AspForAttributeName = "asp-for";
+    private const string IdAttributeName = "id";
     private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
 
     /// <summary>
     /// Creates a <see cref="ErrorMessageTagHelper"/>.
     /// </summary>
-    public ErrorMessageTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
+    public ErrorMessageTagHelper(IComponentGenerator componentGenerator) :
+        this(componentGenerator, new DefaultModelHelper())
     {
     }
 
-    internal ErrorMessageTagHelper(
-        IGovUkHtmlGenerator? htmlGenerator,
-        IModelHelper? modelHelper)
+    internal ErrorMessageTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-        _modelHelper = modelHelper ?? new DefaultModelHelper();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(modelHelper);
+        _componentGenerator = componentGenerator;
+        _modelHelper = modelHelper;
     }
 
     /// <summary>
@@ -52,6 +53,12 @@ public class ErrorMessageTagHelper : TagHelper
     /// </remarks>
     [HtmlAttributeName(AspForAttributeName)]
     public ModelExpression? AspFor { get; set; }
+
+    /// <summary>
+    /// The <c>id</c> attribute for the error message.
+    /// </summary>
+    [HtmlAttributeName(IdAttributeName)]
+    public string? Id { get; set; }
 
     /// <summary>
     /// The visually hidden prefix used before the error message.
@@ -104,17 +111,22 @@ public class ErrorMessageTagHelper : TagHelper
 
         if (resolvedContent != null)
         {
-            var tagBuilder = _htmlGenerator.GenerateErrorMessage(
-                VisuallyHiddenText,
-                resolvedContent,
-                output.Attributes.ToAttributeDictionary());
+            var attributes = output.Attributes.ToEncodedAttributeDictionary()
+                .Remove("class", out var classes);
 
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
+            var component = _componentGenerator.GenerateErrorMessage(new ErrorMessageOptions()
+            {
+                Text = null,
+                Html = resolvedContent.ToHtmlString(),
+                Id = Id,
+                VisuallyHiddenText = VisuallyHiddenText,
+                Classes = classes,
+                Attributes = attributes
+            });
 
+            output.TagName = null;
             output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            output.Content.AppendHtml(component.ToHtmlString());
         }
         else
         {

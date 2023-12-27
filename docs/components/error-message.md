@@ -37,4 +37,5 @@ If `asp-for` is specified and there are no errors in `ModelState` then no output
 | Attribute | Type | Description |
 | --- | --- | --- |
 | `asp-for` | `ModelExpression` | The model expression used to generate the error message. If content is specified this attribute is ignored. See [documentation on forms](../forms.md) for more information. |
+| `id` | `string` | The `id` attribute for the error message. |
 | `visually-hidden-text` | `string` | The visually hidden prefix used before the error message. The default is `Error`. |
