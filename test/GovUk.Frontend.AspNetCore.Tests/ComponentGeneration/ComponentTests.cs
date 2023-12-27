@@ -65,6 +65,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateLabel(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("tag", typeof(TagOptions))]
+    public void Tag(ComponentTestCaseData<TagOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTag(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("input", typeof(TextInputOptions))]
     public void TextInput(ComponentTestCaseData<TextInputOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

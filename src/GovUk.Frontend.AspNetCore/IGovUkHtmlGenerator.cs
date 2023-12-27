@@ -158,8 +158,6 @@ internal interface IGovUkHtmlGenerator
         AttributeDictionary attributes,
         IEnumerable<TabsItem> items);
 
-    TagBuilder GenerateTag(IHtmlContent content, AttributeDictionary attributes);
-
     TagBuilder GenerateTextArea(
         bool haveError,
         string id,
