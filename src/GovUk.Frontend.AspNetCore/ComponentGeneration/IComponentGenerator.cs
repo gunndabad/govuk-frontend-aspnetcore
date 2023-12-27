@@ -32,6 +32,12 @@ public interface IComponentGenerator
     HtmlTag GenerateDetails(DetailsOptions options);
 
     /// <summary>
+    /// Generates a hint component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateHint(HintOptions options);
+
+    /// <summary>
     /// Generates a label component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>

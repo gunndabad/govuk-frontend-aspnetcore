@@ -44,6 +44,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateErrorMessage(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("hint", typeof(HintOptions))]
+    public void Hint(ComponentTestCaseData<HintOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateHint(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("label", typeof(LabelOptions), exclude: "empty")]
     public void Label(ComponentTestCaseData<LabelOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
