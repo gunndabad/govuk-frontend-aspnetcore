@@ -44,6 +44,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateErrorMessage(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("fieldset", typeof(FieldsetOptions))]
+    public void Fieldset(ComponentTestCaseData<FieldsetOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateFieldset(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("hint", typeof(HintOptions))]
     public void Hint(ComponentTestCaseData<HintOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

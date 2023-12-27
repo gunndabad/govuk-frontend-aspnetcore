@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -10,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS fieldset component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.FieldsetElement)]
+[OutputElementHint(DefaultComponentGenerator.FieldsetElement)]
 public class FieldsetTagHelper : TagHelper
 {
     internal const string TagName = "govuk-fieldset";
@@ -18,19 +17,14 @@ public class FieldsetTagHelper : TagHelper
     private const string DescribedByAttributeName = "described-by";
     private const string RoleAttributeName = "role";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="FieldsetTagHelper"/>.
     /// </summary>
-    public FieldsetTagHelper()
-        : this(htmlGenerator: null)
+    public FieldsetTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal FieldsetTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
@@ -62,22 +56,24 @@ public class FieldsetTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        fieldsetContext.ThrowIfNotComplete();
+        var legendOptions = fieldsetContext.GetLegendOptions();
 
-        var tagBuilder = _htmlGenerator.GenerateFieldset(
-            DescribedBy,
-            Role,
-            fieldsetContext.Legend?.IsPageHeading,
-            fieldsetContext.Legend?.Content,
-            fieldsetContext.Legend?.Attributes,
-            childContent,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateFieldset(new FieldsetOptions()
+        {
+            DescribedBy = DescribedBy,
+            Legend = legendOptions,
+            Role = Role,
+            Text = null,
+            Html = childContent.ToHtmlString(),
+            Classes = classes,
+            Attributes = attributes
+        });
 
+        output.TagName = null;
         output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.Content.AppendHtml(component.ToHtmlString());
     }
 }

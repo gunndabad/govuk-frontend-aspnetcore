@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -14,6 +14,8 @@ public class FieldsetLegendTagHelperTests
     public async Task ProcessAsync_AddsLegendToContext()
     {
         // Arrange
+        var legendHtml = "Legend content";
+        var legendIsPageHeading = true;
         var fieldsetContext = new FieldsetContext();
 
         var context = new TagHelperContext(
@@ -31,21 +33,21 @@ public class FieldsetLegendTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Legend content");
+                tagHelperContent.SetContent(legendHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
         var tagHelper = new FieldsetLegendTagHelper()
         {
-            IsPageHeading = true
+            IsPageHeading = legendIsPageHeading
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Legend content", fieldsetContext.Legend?.Content.ToHtmlString());
-        Assert.True(fieldsetContext.Legend?.IsPageHeading);
+        Assert.Equal(legendHtml, fieldsetContext.Legend?.Html);
+        Assert.Equal(legendIsPageHeading, fieldsetContext.Legend?.IsPageHeading);
     }
 
     [Fact]
@@ -56,8 +58,8 @@ public class FieldsetLegendTagHelperTests
 
         fieldsetContext.SetLegend(
             isPageHeading: false,
-            attributes: null,
-            content: new HtmlString("Existing legend"));
+            attributes: ImmutableDictionary<string, string?>.Empty,
+            html: "Existing legend");
 
         var context = new TagHelperContext(
             tagName: "govuk-fieldset-legend",

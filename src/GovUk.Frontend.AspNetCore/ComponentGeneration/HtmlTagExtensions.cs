@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HtmlTags;
 
@@ -37,9 +38,9 @@ internal static class HtmlTagExtensions
         return AddEncodedAttributeIf(tag, value is not null, key, value);
     }
 
-    public static HtmlTag AppendIf(this HtmlTag tag, bool condition, HtmlTag child)
+    public static HtmlTag AppendIf(this HtmlTag tag, bool condition, Func<HtmlTag> createChild)
     {
-        return condition ? tag.Append(child) : tag;
+        return condition ? tag.Append(createChild()) : tag;
     }
 
     public static HtmlTag AddClassIf(this HtmlTag tag, bool condition, string className)
