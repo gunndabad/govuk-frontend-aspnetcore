@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### `asp-for` attributes
+The `asp-for` attributes have been deprecated; the `for` attribute should be used instead.
+
 ## 2.2.0
 
 Targets GOV.UK Frontend v5.2.0.
@@ -62,7 +67,11 @@ With this, other tag helpers or tag helper initializers can be created that assi
 
 The `disabled` attribute has been removed since the underlying template does not support disabled `<a>` elements.
 
-#### `<govuk_details>`
+#### `<govuk-details>`
+
+An `id` attribute has been added.
+
+#### `<govuk-error-message>`
 
 An `id` attribute has been added.
 
