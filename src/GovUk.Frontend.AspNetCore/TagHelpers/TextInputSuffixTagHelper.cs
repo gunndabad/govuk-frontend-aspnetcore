@@ -32,7 +32,7 @@ public class TextInputSuffixTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        inputContext.SetSuffix(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        inputContext.SetSuffix(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString());
 
         output.SuppressOutput();
     }

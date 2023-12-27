@@ -1,8 +1,13 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -12,19 +17,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, TextInputPrefixTagHelper.TagName, TextInputSuffixTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.FormGroupElement)]
-public class TextInputTagHelper : FormGroupTagHelperBase
+[OutputElementHint(DefaultComponentGenerator.FormGroupElement)]
+public class TextInputTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-input-error-message";
     internal const string HintTagName = "govuk-input-hint";
     internal const string LabelTagName = "govuk-input-label";
     internal const string TagName = "govuk-input";
 
+    private const string AspForAttributeName = "asp-for";
     private const string AttributesPrefix = "input-";
     private const string AutocompleteAttributeName = "autocomplete";
     private const string DescribedByAttributeName = "described-by";
     private const string DisabledAttributeName = "disabled";
     private const string IdAttributeName = "id";
+    private const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
     private const string InputModeAttributeName = "inputmode";
     private const string LabelClassAttributeName = "label-class";
     private const string NameAttributeName = "name";
@@ -33,6 +40,9 @@ public class TextInputTagHelper : FormGroupTagHelperBase
     private const string TypeAttributeName = "type";
     private const string ValueAttributeName = "value";
 
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly IModelHelper _modelHelper;
+
     private string? _type = ComponentGenerator.InputDefaultType;
     private string? _value;
     private bool _valueSpecified;
@@ -40,17 +50,22 @@ public class TextInputTagHelper : FormGroupTagHelperBase
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public TextInputTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
+    public TextInputTagHelper(IComponentGenerator componentGenerator)
+        : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
 
-    internal TextInputTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-            htmlGenerator ?? new ComponentGenerator(),
-            modelHelper ?? new DefaultModelHelper())
+    internal TextInputTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
+        _componentGenerator = componentGenerator;
+        _modelHelper = modelHelper;
     }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(AspForAttributeName)]
+    public ModelExpression? AspFor { get; set; }
 
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>input</c> element.
@@ -62,11 +77,7 @@ public class TextInputTagHelper : FormGroupTagHelperBase
     /// One or more element IDs to add to the <c>aria-describedby</c> attribute of the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DescribedByAttributeName)]
-    public new string? DescribedBy
-    {
-        get => base.DescribedBy;
-        set => base.DescribedBy = value;
-    }
+    public string? DescribedBy { get; set; }
 
     /// <summary>
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
@@ -84,10 +95,21 @@ public class TextInputTagHelper : FormGroupTagHelperBase
     public string? Id { get; set; }
 
     /// <summary>
+    /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="AspFor"/> expression should be used
+    /// to deduce an error message.
+    /// </summary>
+    /// <remarks>
+    /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
+    /// <para>The default is <c>false</c>.</para>
+    /// </remarks>
+    [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
+    public bool IgnoreModelStateErrors { get; set; } = false;
+
+    /// <summary>
     /// Additional attributes to add to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
-    public IDictionary<string, string?>? InputAttributes { get; set; } = new Dictionary<string, string?>();
+    public IDictionary<string, string?> InputAttributes { get; set; } = new Dictionary<string, string?>();
 
     /// <summary>
     /// Additional classes for the generated <c>label</c> element.
@@ -154,101 +176,111 @@ public class TextInputTagHelper : FormGroupTagHelperBase
         }
     }
 
-    private protected override FormGroupContext CreateFormGroupContext() => new TextInputContext();
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
 
-    private protected override IHtmlContent GenerateFormGroupContent(
-        TagHelperContext tagHelperContext,
-        FormGroupContext formGroupContext,
-        TagHelperOutput tagHelperOutput,
-        IHtmlContent childContent,
-        out bool haveError)
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var inputContext = tagHelperContext.GetContextItem<TextInputContext>();
+        var textInputContext = new TextInputContext();
 
-        var contentBuilder = new HtmlContentBuilder();
-
-        var label = GenerateLabel(formGroupContext, LabelClass);
-        contentBuilder.AppendHtml(label);
-
-        var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        using (context.SetScopedContextItem(textInputContext))
+        using (context.SetScopedContextItem(typeof(FormGroupContext2), textInputContext))
         {
-            contentBuilder.AppendHtml(hint);
+            await output.GetChildContentAsync();
         }
 
-        var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        var name = ResolveName();
+        var id = ResolveId(name);
+        var value = ResolveValue();
+        var labelOptions = textInputContext.GetLabelOptions(AspFor, ViewContext!, _modelHelper, id, AspForAttributeName);
+        var hintOptions = textInputContext.GetHintOptions(AspFor, _modelHelper);
+        var errorMessageOptions = textInputContext.GetErrorMessageOptions(AspFor, ViewContext!, _modelHelper);
+        var prefixOptions = textInputContext.GetPrefixOptions();
+        var suffixOptions = textInputContext.GetSuffixOptions();
+
+        if (LabelClass is not null)
         {
-            contentBuilder.AppendHtml(errorMessage);
+            labelOptions.Classes += " " + LabelClass;
         }
 
-        haveError = errorMessage != null;
-
-        var inputTagBuilder = GenerateInput(haveError);
-        contentBuilder.AppendHtml(inputTagBuilder);
-
-        return contentBuilder;
-
-        TagBuilder GenerateInput(bool haveError)
+        var formGroupAttributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var formGroupClasses);
+        var formGroupOptions = new FormGroupOptions()
         {
-            var resolvedId = ResolveIdPrefix();
-            var resolvedName = ResolveName();
-            var resolvedType = Type ?? ComponentGenerator.InputDefaultType;
+            Attributes = formGroupAttributes,
+            Classes = formGroupClasses
+        };
 
-            var resolvedValue = _valueSpecified ?
-                Value :
-                AspFor != null ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) :
-                null;
+        var attributes = InputAttributes!.ToImmutableDictionary()
+            .Remove("class", out var classes);
 
-            return Generator.GenerateTextInput(
-                haveError,
-                resolvedId,
-                resolvedName,
-                resolvedType,
-                resolvedValue,
-                DescribedBy,
-                Autocomplete,
-                Pattern,
-                InputMode,
-                Spellcheck,
-                Disabled,
-                InputAttributes.ToAttributeDictionary(),
-                inputContext.Prefix?.Content,
-                inputContext.Prefix?.Attributes,
-                inputContext.Suffix?.Content,
-                inputContext.Suffix?.Attributes);
+        var component = _componentGenerator.GenerateTextInput(new TextInputOptions()
+        {
+            Id = id,
+            Name = name,
+            Type = Type,
+            Inputmode = InputMode,
+            Value = value,
+            Disabled = Disabled,
+            DescribedBy = DescribedBy,
+            Label = labelOptions,
+            Hint = hintOptions,
+            ErrorMessage = errorMessageOptions,
+            Prefix = prefixOptions,
+            Suffix = suffixOptions,
+            FormGroup = formGroupOptions,
+            Classes = classes,
+            Autocomplete = Autocomplete,
+            Pattern = Pattern,
+            Spellcheck = Spellcheck,
+            Attributes = attributes
+        });
+
+        output.TagName = null;
+        output.Attributes.Clear();
+        output.Content.AppendHtml(component.ToHtmlString());
+
+        if (errorMessageOptions is not null && context.TryGetContextItem<FormErrorContext>(out var formErrorContext))
+        {
+            formErrorContext.AddError(new HtmlString(errorMessageOptions.Html), href: "#" + id);
         }
     }
 
-    private protected override string ResolveIdPrefix()
+    private string ResolveId(string name)
     {
-        if (Id != null)
+        if (Id is not null)
         {
             return Id;
         }
 
-        if (Name == null && AspFor == null)
-        {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                IdAttributeName,
-                NameAttributeName,
-                AspForAttributeName);
-        }
-
-        var resolvedName = ResolveName();
-
-        return TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
+        return TagBuilder.CreateSanitizedId(name, Constants.IdAttributeDotReplacement);
     }
 
     private string ResolveName()
     {
-        if (Name == null && AspFor == null)
+        if (Name is null && AspFor is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+    }
+
+    private string? ResolveValue()
+    {
+        if (_valueSpecified)
+        {
+            return _value;
+        }
+
+        return AspFor != null ? _modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) : null;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using HtmlTags;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -8,6 +9,25 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 /// </summary>
 public partial class DefaultComponentGenerator : IComponentGenerator
 {
+    internal const string FormGroupElement = "div";
+
+    private protected static void AppendToDescribedBy(ref string describedBy, string value)
+    {
+        describedBy += " " + value;
+        describedBy = describedBy.Trim();
+    }
+
+    private protected virtual HtmlTag GenerateFormGroup(
+        FormGroupOptions? options,
+        bool haveError)
+    {
+        return new HtmlTag(FormGroupElement)
+            .AddClass("govuk-form-group")
+            .AddClassIf(haveError, "govuk-form-group--error")
+            .AddClasses(ExplodeClasses(options?.Classes))
+            .MergeEncodedAttributes(options?.Attributes);
+    }
+
     private static string[] ExplodeClasses(string? classes) =>
         classes is null ? Array.Empty<string>() : classes.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 

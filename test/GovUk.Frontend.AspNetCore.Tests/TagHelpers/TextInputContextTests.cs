@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Immutable;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -13,10 +13,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -29,10 +29,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -45,10 +45,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -61,10 +61,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -77,10 +77,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -93,10 +93,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -109,10 +109,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetPrefix(attributes: null, content: new HtmlString("Existing prefix"));
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(null, new HtmlString("Prefix")));
+        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -125,10 +125,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Suffix");
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(null, new HtmlString("Prefix")));
+        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -141,10 +141,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
 
-        context.SetSuffix(attributes: null, content: new HtmlString("Existing prefix"));
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix");
 
         // Act
-        var ex = Record.Exception(() => context.SetSuffix(null, new HtmlString("Prefix")));
+        var ex = Record.Exception(() => context.SetSuffix(ImmutableDictionary<string, string?>.Empty, "Prefix"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);

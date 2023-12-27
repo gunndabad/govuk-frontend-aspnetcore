@@ -41,4 +41,9 @@ internal static class HtmlTagExtensions
     {
         return condition ? tag.Append(child) : tag;
     }
+
+    public static HtmlTag AddClassIf(this HtmlTag tag, bool condition, string className)
+    {
+        return condition ? tag.AddClass(className) : tag;
+    }
 }

@@ -24,12 +24,12 @@ public class DetailsOptions
     {
         if (SummaryHtml.NormalizeEmptyString() is null && SummaryText.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException($"{nameof(SummaryHtml)} or {nameof(SummaryText)} must be specified.");
+            throw new InvalidOptionsException(GetType(), $"{nameof(SummaryHtml)} or {nameof(SummaryText)} must be specified.");
         }
 
         if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException($"{nameof(Html)} or {nameof(Text)} must be specified.");
+            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
         }
     }
 }

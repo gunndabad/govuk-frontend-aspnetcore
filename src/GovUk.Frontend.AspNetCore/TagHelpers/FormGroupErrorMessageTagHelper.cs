@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -16,7 +16,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(SelectTagHelper.ErrorMessageTagName, ParentTag = SelectTagHelper.TagName)]
 [HtmlTargetElement(TextAreaTagHelper.ErrorMessageTagName, ParentTag = TextAreaTagHelper.TagName)]
 [HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.ErrorMessageElement)]
+[OutputElementHint(DefaultComponentGenerator.ErrorMessageElement)]
 public class FormGroupErrorMessageTagHelper : TagHelper
 {
     private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
@@ -56,11 +56,11 @@ public class FormGroupErrorMessageTagHelper : TagHelper
 
     private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
     {
-        var formGroupContext = context.GetContextItem<FormGroupContext>();
+        var formGroupContext = context.GetContextItem<FormGroupContext2>();
 
         formGroupContext.SetErrorMessage(
             VisuallyHiddenText,
-            output.Attributes.ToAttributeDictionary(),
-            childContent?.Snapshot());
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent?.ToHtmlString());
     }
 }

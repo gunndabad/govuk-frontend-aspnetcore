@@ -32,7 +32,7 @@ public class TextInputPrefixTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        inputContext.SetPrefix(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        inputContext.SetPrefix(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString());
 
         output.SuppressOutput();
     }
