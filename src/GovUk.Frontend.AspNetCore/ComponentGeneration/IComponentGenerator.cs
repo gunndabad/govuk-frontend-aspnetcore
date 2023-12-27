@@ -44,6 +44,12 @@ public interface IComponentGenerator
     HtmlTag GenerateLabel(LabelOptions options);
 
     /// <summary>
+    /// Generates a text input component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateTextInput(TextInputOptions options);
+
+    /// <summary>
     /// Generates a warning text component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>

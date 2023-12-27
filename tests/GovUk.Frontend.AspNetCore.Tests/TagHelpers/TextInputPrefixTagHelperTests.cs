@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -14,6 +13,7 @@ public class TextInputPrefixTagHelperTests
     public async Task ProcessAsync_SetsPrefixOnContext()
     {
         // Arrange
+        var prefix = "Prefix";
         var inputContext = new TextInputContext();
 
         var context = new TagHelperContext(
@@ -31,7 +31,7 @@ public class TextInputPrefixTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.AppendHtml(new HtmlString("Prefix"));
+                tagHelperContent.AppendHtml(new HtmlString(prefix));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -41,7 +41,7 @@ public class TextInputPrefixTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.True(inputContext.Prefix.HasValue);
-        Assert.Equal("Prefix", inputContext.Prefix?.Content?.ToHtmlString());
+        Assert.NotNull(inputContext.Prefix);
+        Assert.Equal(prefix, inputContext.Prefix?.Html);
     }
 }

@@ -16,7 +16,7 @@ public class HintOptions
     {
         if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException($"{nameof(Html)} or {nameof(Text)} must be specified.");
+            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
         }
     }
 }

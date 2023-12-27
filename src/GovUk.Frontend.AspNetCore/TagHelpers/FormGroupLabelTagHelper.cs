@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -12,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(SelectTagHelper.LabelTagName, ParentTag = SelectTagHelper.TagName)]
 [HtmlTargetElement(TextAreaTagHelper.LabelTagName, ParentTag = TextAreaTagHelper.TagName)]
 [HtmlTargetElement(TextInputTagHelper.LabelTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.LabelElement)]
+[OutputElementHint(DefaultComponentGenerator.LabelElement)]
 public class FormGroupLabelTagHelper : TagHelper
 {
     private const string IsPageHeadingAttributeName = "is-page-heading";
@@ -31,7 +31,7 @@ public class FormGroupLabelTagHelper : TagHelper
     /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(IsPageHeadingAttributeName)]
-    public bool IsPageHeading { get; set; } = ComponentGenerator.LabelDefaultIsPageHeading;
+    public bool IsPageHeading { get; set; } = DefaultComponentGenerator.LabelDefaultIsPageHeading;
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -45,12 +45,12 @@ public class FormGroupLabelTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var formGroupContext = context.GetContextItem<FormGroupContext>();
+        var formGroupContext = context.GetContextItem<FormGroupContext2>();
 
         formGroupContext.SetLabel(
             IsPageHeading,
-            output.Attributes.ToAttributeDictionary(),
-            childContent?.Snapshot());
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent?.ToHtmlString());
 
         output.SuppressOutput();
     }

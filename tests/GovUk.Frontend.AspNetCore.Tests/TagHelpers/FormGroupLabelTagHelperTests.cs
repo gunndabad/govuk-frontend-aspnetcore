@@ -19,7 +19,7 @@ public class FormGroupLabelTagHelperTests
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormGroupContext), formGroupContext }
+                { typeof(FormGroupContext2), formGroupContext }
             },
             uniqueId: "test");
 
@@ -39,10 +39,10 @@ public class FormGroupLabelTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Label", formGroupContext.Label?.Content?.ToString());
+        Assert.Equal("Label", formGroupContext.Label?.Html);
     }
 
-    private class TestFormGroupContext : FormGroupContext
+    private class TestFormGroupContext : FormGroupContext2
     {
         protected override string ErrorMessageTagName => "test-error-message";
 
