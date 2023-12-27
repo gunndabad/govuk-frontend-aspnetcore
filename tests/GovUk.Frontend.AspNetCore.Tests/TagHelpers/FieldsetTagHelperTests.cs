@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -12,9 +13,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class FieldsetTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var describedBy = "describedby";
+        var role = "role";
+        var html = "Main content";
+        var legendHtml = "Legend text";
+        var legendIsPageHeading = true;
+
         var context = new TagHelperContext(
             tagName: "govuk-fieldset",
             allAttributes: new TagHelperAttributeList(),
@@ -29,82 +36,38 @@ public class FieldsetTagHelperTests
                 var fieldsetContext = context.GetContextItem<FieldsetContext>();
 
                 fieldsetContext.SetLegend(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("Legend text"));
+                    isPageHeading: legendIsPageHeading,
+                    attributes: ImmutableDictionary<string, string?>.Empty,
+                    html: legendHtml);
 
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Main content");
+                tagHelperContent.SetContent(html);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new FieldsetTagHelper()
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        FieldsetOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFieldset(It.IsAny<FieldsetOptions>())).Callback<FieldsetOptions>(o => actualOptions = o);
+
+        var tagHelper = new FieldsetTagHelper(componentGeneratorMock.Object)
         {
-            DescribedBy = "describedby",
-            Role = "therole"
+            DescribedBy = describedBy,
+            Role = role
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<fieldset aria-describedby=""describedby"" class=""govuk-fieldset"" role=""therole"">
-    <legend class=""govuk-fieldset__legend"">
-        Legend text
-    </legend>
-    Main content
-</fieldset>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_LegendHasIsPageHeading_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-fieldset",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-fieldset",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var fieldsetContext = context.GetContextItem<FieldsetContext>();
-
-                fieldsetContext.SetLegend(
-                    isPageHeading: true,
-                    attributes: null,
-                    content: new HtmlString("Legend text"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Main content");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new FieldsetTagHelper()
-        {
-            DescribedBy = "describedby",
-            Role = "therole"
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<fieldset aria-describedby=""describedby"" class=""govuk-fieldset"" role=""therole"">
-    <legend class=""govuk-fieldset__legend"">
-        <h1 class=""govuk-fieldset__heading"">Legend text</h1>
-    </legend>
-    Main content
-</fieldset>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(describedBy, actualOptions!.DescribedBy);
+        Assert.NotNull(actualOptions.Legend);
+        Assert.Equal(legendIsPageHeading, actualOptions.Legend!.IsPageHeading);
+        Assert.Null(actualOptions.Legend!.Text);
+        Assert.Equal(legendHtml, actualOptions.Legend!.Html);
+        Assert.Equal(role, actualOptions.Role);
+        Assert.Null(actualOptions.Text);
+        Assert.Equal(html, actualOptions.Html);
     }
 
     [Fact]
@@ -129,7 +92,9 @@ public class FieldsetTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new FieldsetTagHelper()
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+
+        var tagHelper = new FieldsetTagHelper(componentGeneratorMock.Object)
         {
             DescribedBy = "describedby",
             Role = "therole"

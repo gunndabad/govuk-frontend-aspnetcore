@@ -21,7 +21,7 @@ public partial class DefaultComponentGenerator
             .MergeEncodedAttributes(options.Attributes)
             .AppendIf(
                 options.VisuallyHiddenText != string.Empty,
-                new HtmlTag("span")
+                () => new HtmlTag("span")
                     .AddClass("govuk-visually-hidden")
                     .AppendText(options.VisuallyHiddenText ?? ErrorMessageDefaultVisuallyHiddenText)
                     .AppendText(": "))

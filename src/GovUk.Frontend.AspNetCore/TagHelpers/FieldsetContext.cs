@@ -1,18 +1,41 @@
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class FieldsetContext
 {
-    public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
+    internal record LegendInfo(bool IsPageHeading, ImmutableDictionary<string, string?> Attributes, string Html);
+
+    // internal for testing
+    internal LegendInfo? Legend;
+
+    public FieldsetOptionsLegend GetLegendOptions()
+    {
+        ThrowIfNotComplete();
+
+        var attributes = Legend.Attributes
+            .Remove("class", out var classes);
+
+        return new FieldsetOptionsLegend()
+        {
+            Text = null,
+            Html = Legend.Html,
+            IsPageHeading = Legend.IsPageHeading,
+            Classes = classes,
+            Attributes = attributes
+        };
+    }
 
     public void SetLegend(
         bool isPageHeading,
-        AttributeDictionary? attributes,
-        IHtmlContent content)
+        ImmutableDictionary<string, string?> attributes,
+        string html)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Legend != null)
         {
@@ -21,10 +44,11 @@ internal class FieldsetContext
                 FieldsetTagHelper.TagName);
         }
 
-        Legend = (isPageHeading, attributes, content);
+        Legend = new LegendInfo(isPageHeading, attributes, html);
     }
 
-    public void ThrowIfNotComplete()
+    [MemberNotNull(nameof(Legend))]
+    private void ThrowIfNotComplete()
     {
         if (Legend == null)
         {
