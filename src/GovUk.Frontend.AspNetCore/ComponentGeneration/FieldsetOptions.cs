@@ -13,6 +13,16 @@ public class FieldsetOptions
     public string? Html { get; set; }
     public string? Classes { get; set; }
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Legend is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Legend)} must be specified.");
+        }
+
+        Legend?.Validate();
+    }
 }
 
 public class FieldsetOptionsLegend
@@ -21,4 +31,15 @@ public class FieldsetOptionsLegend
     public string? Html { get; set; }
     public bool? IsPageHeading { get; set; }
     public string? Classes { get; set; }
+
+    [NonStandardParameter]
+    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
+        }
+    }
 }

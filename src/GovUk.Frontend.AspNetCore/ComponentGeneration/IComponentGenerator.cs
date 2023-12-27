@@ -32,6 +32,12 @@ public interface IComponentGenerator
     HtmlTag GenerateDetails(DetailsOptions options);
 
     /// <summary>
+    /// Generates a fieldset component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateFieldset(FieldsetOptions options);
+
+    /// <summary>
     /// Generates a hint component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>

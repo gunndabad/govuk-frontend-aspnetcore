@@ -42,8 +42,8 @@ public class FieldsetLegendTagHelper : TagHelper
 
         fieldsetContext.SetLegend(
             IsPageHeading,
-            output.Attributes.ToAttributeDictionary(),
-            childContent.Snapshot());
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent.ToHtmlString());
 
         output.SuppressOutput();
     }
