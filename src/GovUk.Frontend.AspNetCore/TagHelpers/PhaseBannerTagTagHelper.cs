@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the tag in a GDS phase banner component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = PhaseBannerTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.TagElement)]
+[OutputElementHint(DefaultComponentGenerator.TagElement)]
 public class PhaseBannerTagTagHelper : TagHelper
 {
     internal const string TagName = "govuk-phase-banner-tag";
@@ -32,7 +32,7 @@ public class PhaseBannerTagTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        phaseBannerContext.SetTag(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        phaseBannerContext.SetTag(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString());
 
         output.SuppressOutput();
     }

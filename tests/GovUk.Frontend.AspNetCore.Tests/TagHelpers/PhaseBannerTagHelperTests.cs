@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -14,9 +13,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class PhaseBannerTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var tagContent = "Alpha";
+        var message = "Phase message";
+
         var context = new TagHelperContext(
             tagName: "govuk-phase-banner",
             allAttributes: new TagHelperAttributeList(),
@@ -29,32 +31,30 @@ public class PhaseBannerTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var pbContext = context.GetContextItem<PhaseBannerContext>();
-                pbContext.SetTag(new AttributeDictionary(), content: new HtmlString("Alpha"));
+                pbContext.SetTag(ImmutableDictionary<string, string?>.Empty, html: tagContent);
 
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Phase message");
+                tagHelperContent.SetContent(message);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new PhaseBannerTagHelper();
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        PhaseBannerOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GeneratePhaseBanner(It.IsAny<PhaseBannerOptions>())).Callback<PhaseBannerOptions>(o => actualOptions = o);
+
+        var tagHelper = new PhaseBannerTagHelper(componentGeneratorMock.Object);
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-phase-banner"">
-    <p class=""govuk-phase-banner__content"">
-        <strong class=""govuk-phase-banner__content__tag govuk-tag"">Alpha</strong>
-        <span class=""govuk-phase-banner__text"">Phase message</span>
-    </p>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(tagContent, actualOptions!.Tag?.Html);
+        Assert.Equal(message, actualOptions!.Html);
     }
 
     [Fact]
-    public async Task ProcessAsync_MissingIconFallbackText_ThrowsInvalidOperationException()
+    public async Task ProcessAsync_MissingTag_ThrowsInvalidOperationException()
     {
         // Arrange
         var context = new TagHelperContext(
@@ -73,7 +73,9 @@ public class PhaseBannerTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new PhaseBannerTagHelper(new ComponentGenerator());
+        var componentGeneratorMock = new Mock<IComponentGenerator>();
+
+        var tagHelper = new PhaseBannerTagHelper(componentGeneratorMock.Object);
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));

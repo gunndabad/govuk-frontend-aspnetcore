@@ -50,6 +50,12 @@ public interface IComponentGenerator
     HtmlTag GenerateLabel(LabelOptions options);
 
     /// <summary>
+    /// Generates a phase banner component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GeneratePhaseBanner(PhaseBannerOptions options);
+
+    /// <summary>
     /// Generates a tag component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
