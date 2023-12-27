@@ -14,4 +14,22 @@ public class DetailsOptions
     public string? Text { get; set; }
     public string? Classes { get; set; }
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+
+    [NonStandardParameter]
+    internal IReadOnlyDictionary<string, string?>? SummaryAttributes { get; set; }
+    [NonStandardParameter]
+    internal IReadOnlyDictionary<string, string?>? TextAttributes { get; set; }
+
+    internal void Validate()
+    {
+        if (SummaryHtml.NormalizeEmptyString() is null && SummaryText.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException($"{nameof(SummaryHtml)} or {nameof(SummaryText)} must be specified.");
+        }
+
+        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException($"{nameof(Html)} or {nameof(Text)} must be specified.");
+        }
+    }
 }

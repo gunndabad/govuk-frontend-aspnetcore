@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -14,9 +12,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class DetailsTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "id";
+        var open = true;
+        var summaryHtml = "summary";
+        var content = "content";
+        var classes = "custom-class";
+        var dataFooAttrValue = "bar";
+
         var context = new TagHelperContext(
             tagName: "govuk-details",
             allAttributes: new TagHelperAttributeList(),
@@ -25,147 +30,49 @@ public class DetailsTagHelperTests
 
         var output = new TagHelperOutput(
             "govuk-details",
-            attributes: new TagHelperAttributeList(),
+            attributes: new TagHelperAttributeList()
+            {
+                { "class", classes },
+                { "data-foo", dataFooAttrValue },
+            },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
+                var detailsContext = context.GetContextItem<DetailsContext>();
 
-                var summary = new HtmlString("The summary");
-                detailsContext.SetSummary(new AttributeDictionary(), summary);
+                detailsContext.SetSummary(ImmutableDictionary<string, string?>.Empty, summaryHtml);
 
-                var text = new HtmlString("The text");
-                detailsContext.SetText(new AttributeDictionary(), text);
+                detailsContext.SetText(ImmutableDictionary<string, string?>.Empty, content);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new DetailsTagHelper(new ComponentGenerator());
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DetailsOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDetails(It.IsAny<DetailsOptions>())).Callback<DetailsOptions>(o => actualOptions = o);
 
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<details class=""govuk-details"">
-    <summary class=""govuk-details__summary"">
-        <span class=""govuk-details__summary-text"">The summary</span>
-    </summary>
-    <div class=""govuk-details__text"">The text</div>
-</details>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithOpenSpecified_AddsOpenAttributeToOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-details",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-details",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
-
-                var summary = new HtmlString("The summary");
-                detailsContext.SetSummary(new AttributeDictionary(), summary);
-
-                var text = new HtmlString("The text");
-                detailsContext.SetText(new AttributeDictionary(), text);
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DetailsTagHelper(new ComponentGenerator())
+        var tagHelper = new DetailsTagHelper(componentGeneratorMock.Object)
         {
-            Open = true
+            Id = id,
+            Open = open
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var element = output.RenderToElement();
-
-        Assert.Equal("", element.Attributes["open"].Value);
-    }
-
-    [Fact]
-    public async Task ProcessAsync_MissingSummary_ThrowsInvalidOperationException()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-details",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-details",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DetailsTagHelper(new ComponentGenerator())
+        Assert.NotNull(actualOptions);
+        Assert.Equal(id, actualOptions!.Id);
+        Assert.Equal(open, actualOptions.Open);
+        Assert.Equal(summaryHtml, actualOptions.SummaryHtml);
+        Assert.Null(actualOptions.SummaryText);
+        Assert.Equal(content, actualOptions.Html);
+        Assert.Null(actualOptions.Text);
+        Assert.Equal(classes, actualOptions.Classes);
+        Assert.Collection(actualOptions.Attributes, kvp =>
         {
-            Open = true
-        };
-
-        // Act
-        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-        // Assert
-        Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("A <govuk-details-summary> element must be provided.", ex.Message);
-    }
-
-    [Fact]
-    public async Task ProcessAsync_MissingText_ThrowsInvalidOperationException()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-details",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-details",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var detailsContext = (DetailsContext)context.Items[typeof(DetailsContext)];
-
-                var summary = new HtmlString("The summary");
-                detailsContext.SetSummary(new AttributeDictionary(), summary);
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DetailsTagHelper(new ComponentGenerator())
-        {
-            Open = true
-        };
-
-        // Act
-        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-        // Assert
-        Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("A <govuk-details-text> element must be provided.", ex.Message);
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(dataFooAttrValue, kvp.Value);
+        });
     }
 }

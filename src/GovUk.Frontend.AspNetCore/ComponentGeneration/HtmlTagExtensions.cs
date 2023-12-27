@@ -34,4 +34,14 @@ internal static class HtmlTagExtensions
         output.Attributes.Clear();
         output.Content.AppendHtml(tag.ToHtmlString());
     }
+    
+    public static HtmlTag AddEncodedAttributeIf(this HtmlTag tag, bool condition, string key, string? value)
+    {
+        return condition ? tag.UnencodedAttr(key, value) : tag;
+    }
+
+    public static HtmlTag AddEncodedAttributeIfNotNull(this HtmlTag tag, string key, string? value)
+    {
+        return AddEncodedAttributeIf(tag, value is not null, key, value);
+    }
 }

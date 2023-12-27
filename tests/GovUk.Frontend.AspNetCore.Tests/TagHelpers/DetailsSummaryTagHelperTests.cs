@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -12,10 +11,11 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class DetailsSummaryTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_SetsContentOnContext()
+    public async Task ProcessAsync_SetsSummaryOnContext()
     {
         // Arrange
         var detailsContext = new DetailsContext();
+        var summaryContent = "The summary";
 
         var context = new TagHelperContext(
             tagName: "govuk-details-summary",
@@ -32,7 +32,7 @@ public class DetailsSummaryTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("The summary");
+                tagHelperContent.SetContent(summaryContent);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -42,7 +42,7 @@ public class DetailsSummaryTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("The summary", detailsContext.Summary?.Content.ToHtmlString());
+        Assert.Equal(summaryContent, detailsContext.Summary?.Html);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class DetailsSummaryTagHelperTests
     {
         // Arrange
         var detailsContext = new DetailsContext();
-        detailsContext.SetSummary(new AttributeDictionary(), new HtmlString("The summary"));
+        detailsContext.SetSummary(ImmutableDictionary<string, string?>.Empty, "Existing summary");
 
         var context = new TagHelperContext(
             tagName: "govuk-details-summary",
@@ -86,7 +86,7 @@ public class DetailsSummaryTagHelperTests
     {
         // Arrange
         var detailsContext = new DetailsContext();
-        detailsContext.SetText(new AttributeDictionary(), new HtmlString("The text"));
+        detailsContext.SetText(ImmutableDictionary<string, string?>.Empty, "Existing text");
 
         var context = new TagHelperContext(
             tagName: "govuk-details-summary",

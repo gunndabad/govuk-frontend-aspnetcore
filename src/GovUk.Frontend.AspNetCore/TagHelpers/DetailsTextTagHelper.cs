@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the text in a GDS details component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = DetailsTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.DetailsTextElement)]
+[OutputElementHint(DefaultComponentGenerator.DetailsTextElement)]
 public class DetailsTextTagHelper : TagHelper
 {
     internal const string TagName = "govuk-details-text";
@@ -18,14 +18,14 @@ public class DetailsTextTagHelper : TagHelper
     {
         var detailsContext = context.GetContextItem<DetailsContext>();
 
-        var childContent = await output.GetChildContentAsync();
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        detailsContext.SetText(output.Attributes.ToAttributeDictionary(), childContent);
+        detailsContext.SetText(output.Attributes.ToEncodedAttributeDictionary(), content.ToHtmlString());
 
         output.SuppressOutput();
     }
