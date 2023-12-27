@@ -1,6 +1,6 @@
+using System;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -10,36 +10,36 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(DetailsSummaryTagHelper.TagName, DetailsTextTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.DetailsElement)]
+[OutputElementHint(DefaultComponentGenerator.DetailsElement)]
 public class DetailsTagHelper : TagHelper
 {
     internal const string TagName = "govuk-details";
 
+    private const string IdAttributeName = "id";
     private const string OpenAttributeName = "open";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="DetailsTagHelper"/>.
     /// </summary>
-    public DetailsTagHelper()
-        : this(htmlGenerator: null)
+    public DetailsTagHelper(IComponentGenerator componentGenerator)
     {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
     }
 
-    internal DetailsTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-    }
+    /// <summary>
+    /// The <c>id</c> attribute for the generated <c>details</c> element.
+    /// </summary>
+    [HtmlAttributeName(IdAttributeName)]
+    public string? Id { get; set; }
 
     /// <summary>
     /// Whether the details element should be expanded.
     /// </summary>
-    /// <remarks>
-    /// The default is <c>false</c>.
-    /// </remarks>
     [HtmlAttributeName(OpenAttributeName)]
-    public bool Open { get; set; } = ComponentGenerator.DetailsDefaultOpen;
+    public bool? Open { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -51,21 +51,26 @@ public class DetailsTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        detailsContext.ThrowIfNotComplete();
+        var (summaryAttributes, summaryHtml) = detailsContext.GetSummaryOptions();
+        var (textAttributes, textHtml) = detailsContext.GetTextOptions();
 
-        var tagBuilder = _htmlGenerator.GenerateDetails(
-            Open,
-            detailsContext.Summary?.Content,
-            detailsContext.Summary?.Attributes,
-            detailsContext.Text?.Content,
-            detailsContext.Text?.Attributes,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateDetails(new DetailsOptions()
+        {
+            Id = Id,
+            Open = Open,
+            SummaryHtml = summaryHtml,
+            SummaryText = null,
+            Html = textHtml,
+            Text = null,
+            Classes = classes,
+            Attributes = attributes,
+            SummaryAttributes = summaryAttributes,
+            TextAttributes = textAttributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.WriteComponent(component);
     }
 }

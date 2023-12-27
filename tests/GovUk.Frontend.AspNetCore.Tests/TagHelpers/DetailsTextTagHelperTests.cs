@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -16,7 +15,8 @@ public class DetailsTextTagHelperTests
     {
         // Arrange
         var detailsContext = new DetailsContext();
-        detailsContext.SetSummary(new AttributeDictionary(), new HtmlString("The summary"));
+        detailsContext.SetSummary(ImmutableDictionary<string, string?>.Empty, "The summary");
+        var textContent = "The text";
 
         var context = new TagHelperContext(
             tagName: "govuk-details-text",
@@ -33,7 +33,7 @@ public class DetailsTextTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("The text");
+                tagHelperContent.SetContent(textContent);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -43,7 +43,7 @@ public class DetailsTextTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("The text", detailsContext.Text?.Content.ToHtmlString());
+        Assert.Equal(textContent, detailsContext.Text?.Html);
     }
 
     [Fact]
@@ -51,8 +51,8 @@ public class DetailsTextTagHelperTests
     {
         // Arrange
         var detailsContext = new DetailsContext();
-        detailsContext.SetSummary(new AttributeDictionary(), new HtmlString("The summary"));
-        detailsContext.SetText(new AttributeDictionary(), new HtmlString("The text"));
+        detailsContext.SetSummary(ImmutableDictionary<string, string?>.Empty, "The summary");
+        detailsContext.SetText(ImmutableDictionary<string, string?>.Empty, "Existing text");
 
         var context = new TagHelperContext(
             tagName: "govuk-details-text",

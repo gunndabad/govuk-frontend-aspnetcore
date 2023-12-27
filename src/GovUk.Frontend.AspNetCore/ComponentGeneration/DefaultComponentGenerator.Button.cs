@@ -11,7 +11,6 @@ public partial class DefaultComponentGenerator
     public virtual HtmlTag GenerateButton(ButtonOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-
         options.Validate();
 
         var classes = ($"govuk-button " + options.Classes).TrimEnd();
