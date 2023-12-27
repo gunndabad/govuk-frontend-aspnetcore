@@ -64,6 +64,14 @@ public class ComponentTests
             data,
             (generator, options) => generator.GenerateLabel(options).ToHtmlString());
 
+    // Fixture data for Phase banner is poor - most of the variations don't specify 'tag', which isn't valid
+    [Theory]
+    [ComponentFixtureData("phase-banner", typeof(PhaseBannerOptions), exclude: new[] { "classes", "html", "html as text", "attributes", "text" })]
+    public void PhaseBanner(ComponentTestCaseData<PhaseBannerOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GeneratePhaseBanner(options).ToHtmlString());
+
     [Theory]
     [ComponentFixtureData("tag", typeof(TagOptions))]
     public void Tag(ComponentTestCaseData<TagOptions> data) =>

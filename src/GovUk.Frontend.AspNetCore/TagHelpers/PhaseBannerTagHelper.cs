@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -10,24 +9,19 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS phase banner component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.PhaseBannerElement)]
+[OutputElementHint(DefaultComponentGenerator.PhaseBannerElement)]
 public class PhaseBannerTagHelper : TagHelper
 {
     internal const string TagName = "govuk-phase-banner";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a <see cref="PhaseBannerTagHelper"/>.
     /// </summary>
-    public PhaseBannerTagHelper()
-        : this(htmlGenerator: null)
+    public PhaseBannerTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal PhaseBannerTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        _componentGenerator = componentGenerator;
     }
 
     /// <inheritdoc/>
@@ -47,19 +41,20 @@ public class PhaseBannerTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        phaseBannerContext.ThrowIfIncomplete();
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes);
 
-        var tagBuilder = _htmlGenerator.GeneratePhaseBanner(
-            phaseBannerContext.Tag?.Content,
-            phaseBannerContext.Tag?.Attributes,
-            childContent,
-            output.Attributes.ToAttributeDictionary());
+        var tagOptions = phaseBannerContext.GetTagOptions();
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GeneratePhaseBanner(new PhaseBannerOptions()
+        {
+            Text = null,
+            Html = childContent.ToHtmlString(),
+            Tag = tagOptions,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.WriteComponent(component);
     }
 }
