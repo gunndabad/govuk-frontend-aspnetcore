@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -15,6 +14,7 @@ public class PhaseBannerTagTagHelperTests
     public async Task ProcessAsync_AddsToContext()
     {
         // Arrange
+        var legendHtml = "Legend content";
         var phaseBannerContext = new PhaseBannerContext();
 
         var context = new TagHelperContext(
@@ -32,7 +32,7 @@ public class PhaseBannerTagTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Legend message");
+                tagHelperContent.SetContent(legendHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -42,7 +42,7 @@ public class PhaseBannerTagTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Legend message", phaseBannerContext.Tag?.Content.ToHtmlString());
+        Assert.Equal(legendHtml, phaseBannerContext.Tag?.Html);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class PhaseBannerTagTagHelperTests
     {
         // Arrange
         var phaseBannerContext = new PhaseBannerContext();
-        phaseBannerContext.SetTag(new AttributeDictionary(), content: new HtmlString("Existing tag"));
+        phaseBannerContext.SetTag(ImmutableDictionary<string, string?>.Empty, html: "Existing tag");
 
         var context = new TagHelperContext(
             tagName: "govuk-phase-banner-tag",
