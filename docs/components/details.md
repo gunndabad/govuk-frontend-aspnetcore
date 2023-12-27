@@ -40,7 +40,8 @@
 
 | Attribute | Type | Description |
 | --- | --- | --- |
-| `open` | `bool` | Whether the details element should be expanded. The default is `false`. |
+| `id` | `string` | The `id` attribute for the generated `details` element. |
+| `open` | `bool?` | Whether the details element should be expanded. |
 
 ### `<govuk-details-summary>`
 

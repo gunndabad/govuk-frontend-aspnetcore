@@ -1,18 +1,37 @@
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class DetailsContext
 {
-    public (AttributeDictionary Attributes, IHtmlContent Content)? Summary { get; private set; }
+    internal record SummaryInfo(ImmutableDictionary<string, string?> Attributes, string Html);
 
-    public (AttributeDictionary Attributes, IHtmlContent Content)? Text { get; private set; }
+    internal record TextInfo(ImmutableDictionary<string, string?> Attributes, string Html);
 
-    public void SetSummary(AttributeDictionary attributes, IHtmlContent content)
+    // internal for testing
+    internal SummaryInfo? Summary;
+    internal TextInfo? Text;
+
+    public (ImmutableDictionary<string, string?> Attributes, string Html) GetSummaryOptions()
     {
-        Guard.ArgumentNotNull(nameof(attributes), attributes);
-        Guard.ArgumentNotNull(nameof(content), content);
+        ThrowIfNotComplete();
+
+        return (Summary.Attributes, Summary.Html);
+    }
+
+    public (ImmutableDictionary<string, string?> Attributes, string Html) GetTextOptions()
+    {
+        ThrowIfNotComplete();
+
+        return (Text.Attributes, Text.Html);
+    }
+
+    public void SetSummary(ImmutableDictionary<string, string?> attributes, string html)
+    {
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Summary != null)
         {
@@ -24,23 +43,24 @@ internal class DetailsContext
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(DetailsSummaryTagHelper.TagName, DetailsTextTagHelper.TagName);
         }
 
-        Summary = (attributes, content);
+        Summary = new SummaryInfo(attributes, html);
     }
 
-    public void SetText(AttributeDictionary attributes, IHtmlContent content)
+    public void SetText(ImmutableDictionary<string, string?> attributes, string html)
     {
-        Guard.ArgumentNotNull(nameof(attributes), attributes);
-        Guard.ArgumentNotNull(nameof(content), content);
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Text != null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(DetailsTextTagHelper.TagName, DetailsTagHelper.TagName);
         }
 
-        Text = (attributes, content);
+        Text = new TextInfo(attributes, html);
     }
 
-    public void ThrowIfNotComplete()
+    [MemberNotNull(nameof(Summary), nameof(Text))]
+    private void ThrowIfNotComplete()
     {
         if (Summary == null)
         {
