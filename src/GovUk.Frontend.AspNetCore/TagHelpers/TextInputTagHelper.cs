@@ -199,7 +199,7 @@ public class TextInputTagHelper : TagHelper
         var name = ResolveName();
         var id = ResolveId(name);
         var value = ResolveValue();
-        var labelOptions = textInputContext.GetLabelOptions(AspFor, ViewContext!, _modelHelper, id, AspForAttributeName);
+        var labelOptions = textInputContext.GetLabelOptions(AspFor, _modelHelper, id, AspForAttributeName);
         var hintOptions = textInputContext.GetHintOptions(AspFor, _modelHelper);
         var errorMessageOptions = textInputContext.GetErrorMessageOptions(AspFor, ViewContext!, _modelHelper);
         var prefixOptions = textInputContext.GetPrefixOptions();

@@ -154,7 +154,6 @@ public class TextInputTagHelperTests
 
         modelHelperMock
             .Setup(mock => mock.GetDisplayName(
-                /*viewContext: */It.IsAny<ViewContext>(),
                 /*modelExplorer: */It.IsAny<ModelExplorer>(),
                 /*expression: */It.IsAny<string>()))
             .Returns(displayName);

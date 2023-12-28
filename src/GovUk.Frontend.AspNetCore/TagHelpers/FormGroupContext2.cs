@@ -30,7 +30,6 @@ internal abstract class FormGroupContext2
 
     public LabelOptions GetLabelOptions(
         ModelExpression? aspFor,
-        ViewContext viewContext,
         IModelHelper modelHelper,
         string inputId,
         string aspForAttributeName)
@@ -45,7 +44,7 @@ internal abstract class FormGroupContext2
                     $"Label content must be specified when the '{aspForAttributeName}' attribute is not specified.");
             }
 
-            var displayName = modelHelper.GetDisplayName(viewContext, aspFor!.ModelExplorer, aspFor.Name) ??
+            var displayName = modelHelper.GetDisplayName(aspFor!.ModelExplorer, aspFor.Name) ??
                 throw new InvalidOperationException($"Cannot deduce content for the <{LabelTagName}>.");
 
             html = HtmlEncoder.Default.Encode(displayName);

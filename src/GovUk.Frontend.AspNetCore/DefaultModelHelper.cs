@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,10 +24,12 @@ internal class DefaultModelHelper : IModelHelper
     public virtual string? GetDescription(ModelExplorer modelExplorer) => modelExplorer.Metadata.Description;
 
     public virtual string? GetDisplayName(
-        ViewContext viewContext,  // TODO Remove - not used
         ModelExplorer modelExplorer,
         string expression)
     {
+        ArgumentNullException.ThrowIfNull(modelExplorer);
+        ArgumentNullException.ThrowIfNull(expression);
+
         // See https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.ViewFeatures/src/DefaultHtmlGenerator.cs#L427
 
         var displayName = modelExplorer.Metadata.DisplayName ?? modelExplorer.Metadata.PropertyName;
@@ -44,9 +47,9 @@ internal class DefaultModelHelper : IModelHelper
 
     public virtual string? GetModelValue(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
     {
-        Guard.ArgumentNotNull(nameof(viewContext), viewContext);
-        Guard.ArgumentNotNull(nameof(modelExplorer), modelExplorer);
-        Guard.ArgumentNotNull(nameof(expression), expression);
+        ArgumentNullException.ThrowIfNull(viewContext);
+        ArgumentNullException.ThrowIfNull(modelExplorer);
+        ArgumentNullException.ThrowIfNull(expression);
 
         var fullName = GetFullHtmlFieldName(viewContext, expression);
 

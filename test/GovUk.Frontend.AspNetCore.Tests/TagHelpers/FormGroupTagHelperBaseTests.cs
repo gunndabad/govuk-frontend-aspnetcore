@@ -552,7 +552,7 @@ public class FormGroupTagHelperBaseTests
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata label");
+        modelHelper.Setup(mock => mock.GetDisplayName(modelExplorer, modelExpression)).Returns("ModelMetadata label");
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
@@ -582,7 +582,7 @@ public class FormGroupTagHelperBaseTests
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata label");
+        modelHelper.Setup(mock => mock.GetDisplayName(modelExplorer, modelExpression)).Returns("ModelMetadata label");
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
@@ -638,7 +638,7 @@ public class FormGroupTagHelperBaseTests
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata name");
+        modelHelper.Setup(mock => mock.GetDisplayName(modelExplorer, modelExpression)).Returns("ModelMetadata name");
 
         var aspFor = new ModelExpression(modelExpression, modelExplorer);
 
@@ -672,7 +672,7 @@ public class FormGroupTagHelperBaseTests
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetDisplayName(viewContext, modelExplorer, modelExpression)).Returns("ModelMetadata name");
+        modelHelper.Setup(mock => mock.GetDisplayName(modelExplorer, modelExpression)).Returns("ModelMetadata name");
 
         var aspFor = new ModelExpression(modelExpression, modelExplorer);
 
