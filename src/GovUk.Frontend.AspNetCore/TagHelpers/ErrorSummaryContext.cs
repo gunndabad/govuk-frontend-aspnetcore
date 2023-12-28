@@ -1,35 +1,71 @@
+using System;
 using System.Collections.Generic;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Immutable;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class ErrorSummaryContext
 {
-    private readonly List<ErrorSummaryItem> _items;
+    internal record DescriptionInfo(ImmutableDictionary<string, string?> Attributes, string Html);
+
+    internal record TitleInfo(ImmutableDictionary<string, string?> Attributes, string Html);
+
+    private readonly List<ErrorSummaryOptionsErrorItem> _items;
 
     public ErrorSummaryContext()
     {
-        _items = new List<ErrorSummaryItem>();
+        _items = new List<ErrorSummaryOptionsErrorItem>();
     }
 
-    public IReadOnlyCollection<ErrorSummaryItem> Items => _items;
+    // internal for testing
+    internal DescriptionInfo? Description;
+    internal TitleInfo? Title;
 
-    public (AttributeDictionary Attributes, IHtmlContent Content)? Description { get; private set; }
+    public IReadOnlyCollection<ErrorSummaryOptionsErrorItem> Items => _items;
 
-    public (AttributeDictionary Attributes, IHtmlContent Content)? Title { get; private set; }
+    public bool HasContent => Description is not null || Title is not null || Items.Count > 0;
 
-    public void AddItem(ErrorSummaryItem item)
+    public void AddItem(ErrorSummaryOptionsErrorItem item)
     {
-        Guard.ArgumentNotNull(nameof(item), item);
-
+        ArgumentNullException.ThrowIfNull(item);
         _items.Add(item);
     }
 
-    public void SetDescription(AttributeDictionary attributes, IHtmlContent content)
+    public void AddItem(
+        string? href,
+        string html,
+        ImmutableDictionary<string, string?> attributes,
+        ImmutableDictionary<string, string?> itemAttributes)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
+        ArgumentNullException.ThrowIfNull(html);
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(itemAttributes);
+
+        AddItem(new ErrorSummaryOptionsErrorItem()
+        {
+            Text = null,
+            Html = html,
+            Href = href,
+            Attributes = attributes,
+            ItemAttributes = itemAttributes
+        });
+    }
+
+    public (ImmutableDictionary<string, string?> Attributes, string Html)? GetTitle() =>
+        Title is not null ?
+        (Title.Attributes, Title.Html) :
+        null;
+
+    public (ImmutableDictionary<string, string?> Attributes, string Html)? GetDescription() =>
+        Description is not null ?
+        (Description.Attributes, Description.Html) :
+        null;
+
+    public void SetDescription(ImmutableDictionary<string, string?> attributes, string html)
+    {
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Description != null)
         {
@@ -38,12 +74,13 @@ internal class ErrorSummaryContext
                 ErrorSummaryTagHelper.TagName);
         }
 
-        Description = (attributes, content);
+        Description = new DescriptionInfo(attributes, html);
     }
 
-    public void SetTitle(AttributeDictionary attributes, IHtmlContent content)
+    public void SetTitle(ImmutableDictionary<string, string?> attributes, string html)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Title != null)
         {
@@ -52,6 +89,6 @@ internal class ErrorSummaryContext
                 ErrorSummaryTagHelper.TagName);
         }
 
-        Title = (attributes, content);
+        Title = new TitleInfo(attributes, html);
     }
 }

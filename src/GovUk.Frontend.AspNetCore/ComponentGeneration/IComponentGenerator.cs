@@ -32,6 +32,12 @@ public interface IComponentGenerator
     HtmlTag GenerateDetails(DetailsOptions options);
 
     /// <summary>
+    /// Generates an error summary component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateErrorSummary(ErrorSummaryOptions options);
+
+    /// <summary>
     /// Generates a fieldset component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>

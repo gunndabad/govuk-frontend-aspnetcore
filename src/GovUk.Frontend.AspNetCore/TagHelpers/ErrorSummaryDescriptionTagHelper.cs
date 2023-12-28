@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -7,6 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the description in a GDS error summary component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = ErrorSummaryTagHelper.TagName)]
+[OutputElementHint(DefaultComponentGenerator.ErrorSummaryDescriptionElement)]
 public class ErrorSummaryDescriptionTagHelper : TagHelper
 {
     internal const string TagName = "govuk-error-summary-description";
@@ -23,7 +25,7 @@ public class ErrorSummaryDescriptionTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        errorSummaryContext.SetDescription(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        errorSummaryContext.SetDescription(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString());
 
         output.SuppressOutput();
     }

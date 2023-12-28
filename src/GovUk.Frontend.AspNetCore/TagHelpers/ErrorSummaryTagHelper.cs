@@ -1,10 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -15,26 +12,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(ErrorSummaryTitleTagHelper.TagName, ErrorSummaryDescriptionTagHelper.TagName, "govuk-error-summary-item")]
-[OutputElementHint(ComponentGenerator.ErrorSummaryElement)]
+[OutputElementHint(DefaultComponentGenerator.ErrorSummaryElement)]
 public class ErrorSummaryTagHelper : TagHelper
 {
     internal const string TagName = "govuk-error-summary";
 
     private const string DisableAutoFocusAttributeName = "disable-auto-focus";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="ErrorSummaryTagHelper"/>.
     /// </summary>
-    public ErrorSummaryTagHelper()
-        : this(null)
+    public ErrorSummaryTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal ErrorSummaryTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
@@ -61,9 +53,7 @@ public class ErrorSummaryTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        if (errorSummaryContext.Title == null &&
-            errorSummaryContext.Description == null &&
-            errorSummaryContext.Items.Count == 0)
+        if (!errorSummaryContext.HasContent)
         {
             output.SuppressOutput();
             return;
@@ -71,20 +61,26 @@ public class ErrorSummaryTagHelper : TagHelper
 
         ViewContext!.ViewData.SetPageHasErrors(true);
 
-        var tagBuilder = _htmlGenerator.GenerateErrorSummary(
-            DisableAutoFocus,
-            errorSummaryContext.Title?.Content ?? new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.ErrorSummaryDefaultTitle)),
-            errorSummaryContext.Title?.Attributes,
-            errorSummaryContext.Description?.Content,
-            errorSummaryContext.Description?.Attributes,
-            output.Attributes.ToAttributeDictionary(),
-            errorSummaryContext.Items);
+        var title = errorSummaryContext.GetTitle();
+        var description = errorSummaryContext.GetDescription();
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var classes);
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        var component = _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions()
+        {
+            TitleText = null,
+            TitleHtml = title?.Html,
+            DescriptionText = null,
+            DescriptionHtml = description?.Html,
+            ErrorList = errorSummaryContext.Items,
+            Classes = classes,
+            Attributes = attributes,
+            DisableAutoFocus = DisableAutoFocus,
+            TitleAttributes = title?.Attributes,
+            DescriptionAttributes = description?.Attributes
+        });
+
+        output.WriteComponent(component);
     }
 }

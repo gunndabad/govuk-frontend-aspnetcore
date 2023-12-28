@@ -12,6 +12,8 @@ public class ErrorSummaryDescriptionTagHelperTests
     public async Task ProcessAsync_AddsDescriptionToContext()
     {
         // Arrange
+        var descriptionHtml = "Description content";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -29,7 +31,7 @@ public class ErrorSummaryDescriptionTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Description content");
+                tagHelperContent.SetContent(descriptionHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,6 +41,6 @@ public class ErrorSummaryDescriptionTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Description content", errorSummaryContext?.Description?.Content?.ToHtmlString());
+        Assert.Equal(descriptionHtml, errorSummaryContext?.Description?.Html);
     }
 }

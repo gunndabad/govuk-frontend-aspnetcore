@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,6 +19,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents an error item in a GDS error summary component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = ErrorSummaryTagHelper.TagName)]
+[OutputElementHint(DefaultComponentGenerator.ErrorSummaryItemElement)]
 public class ErrorSummaryItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-error-summary-item";
@@ -122,7 +124,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
                 _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
                 Constants.IdAttributeDotReplacement);
 
-            // Date inputs are special; they don't have an element with ID which exactly corresponds to the name derived above;
+            // Date inputs are special; they don't have an element with an ID which exactly corresponds to the ID derived above;
             // the IDs are suffixed with .Day .Month and .Year for each of the components.
             // We don't have a perfect way to know whether this error is for a date input.
             // The best we can do is look at the type for the ModelExpression and see if it looks like a date type.
@@ -159,13 +161,11 @@ public class ErrorSummaryItemTagHelper : TagHelper
             resolvedHref = $"#{errorFieldId}";
         }
 
-        errorSummaryContext.AddItem(new ErrorSummaryItem()
-        {
-            Content = itemContent,
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Href = resolvedHref,
-            LinkAttributes = LinkAttributes.ToAttributeDictionary()
-        });
+        errorSummaryContext.AddItem(
+            resolvedHref,
+            itemContent.ToHtmlString(),
+            attributes: LinkAttributes?.ToImmutableDictionary() ?? ImmutableDictionary<string, string?>.Empty,
+            itemAttributes: output.Attributes.ToEncodedAttributeDictionary());
 
         output.SuppressOutput();
 

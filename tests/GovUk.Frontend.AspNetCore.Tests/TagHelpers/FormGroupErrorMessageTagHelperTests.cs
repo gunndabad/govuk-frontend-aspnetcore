@@ -12,6 +12,8 @@ public class FormGroupErrorMessageTagHelperTests
     public async Task ProcessAsync_SetsErrorMessageOnContext()
     {
         // Arrange
+        var errorHtml = "Error message";
+
         var formGroupContext = new TestFormGroupContext();
 
         var context = new TagHelperContext(
@@ -29,7 +31,7 @@ public class FormGroupErrorMessageTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Error message");
+                tagHelperContent.SetContent(errorHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,7 +41,7 @@ public class FormGroupErrorMessageTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Error message", formGroupContext.ErrorMessage?.Html);
+        Assert.Equal(errorHtml, formGroupContext.ErrorMessage?.Html);
     }
 
     private class TestFormGroupContext : FormGroupContext2

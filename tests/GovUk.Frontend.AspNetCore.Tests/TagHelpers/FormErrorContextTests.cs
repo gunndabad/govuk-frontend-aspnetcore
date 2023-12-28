@@ -1,5 +1,4 @@
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -11,18 +10,18 @@ public class FormErrorContextTests
     {
         // Arrange
         var context = new FormErrorContext();
-        var content = new HtmlString("Content");
+        var html = "Content";
         var href = "/foo";
 
         // Act
-        context.AddError(content, href);
+        context.AddError(html, href);
 
         // Assert
         Assert.Collection(
             context.Errors,
             item =>
             {
-                Assert.Equal(content, item.Content);
+                Assert.Equal(html, item.Html);
                 Assert.Equal(href, item.Href);
             });
     }
