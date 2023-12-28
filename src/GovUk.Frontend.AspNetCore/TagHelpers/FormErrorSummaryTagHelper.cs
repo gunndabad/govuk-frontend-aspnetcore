@@ -1,9 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -17,26 +17,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement("form")]
 public class FormErrorSummaryTagHelper : TagHelper
 {
+    private const string DisableAutoFocusAttributeName = "disable-error-summary-auto-focus";
     private const string PrependErrorSummaryAttributeName = "gfa-prepend-error-summary";
 
     private readonly GovUkFrontendAspNetCoreOptions _options;
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a <see cref="FormErrorSummaryTagHelper"/>.
     /// </summary>
-    public FormErrorSummaryTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
-        : this(optionsAccessor, htmlGenerator: null)
+    public FormErrorSummaryTagHelper(
+        IComponentGenerator componentGenerator,
+        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(optionsAccessor);
+        _componentGenerator = componentGenerator;
+        _options = optionsAccessor.Value;
     }
 
-    internal FormErrorSummaryTagHelper(
-        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
-        IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
-    }
+    /// <summary>
+    /// Whether to disable the behavior that focuses the error summary when the page loads.
+    /// </summary>
+    [HtmlAttributeName(DisableAutoFocusAttributeName)]
+    public bool? DisableAutoFocus { get; set; }
 
     /// <summary>
     /// Whether to prepend an error summary component to this form.
@@ -59,7 +63,7 @@ public class FormErrorSummaryTagHelper : TagHelper
     public override void Init(TagHelperContext context)
     {
         // N.B. We deliberately do not use SetScopedContextItem here; nested forms are not supported
-        context.Items.Add(typeof(FormErrorContext), new FormErrorContext());
+        context.Items.TryAdd(typeof(FormErrorContext), new FormErrorContext());
     }
 
     /// <inheritdoc/>
@@ -81,21 +85,28 @@ public class FormErrorSummaryTagHelper : TagHelper
 
         ViewContext!.ViewData.SetPageHasErrors(true);
 
-        var errorItems = formErrorContext.Errors.Select(i => new ErrorSummaryItem()
+        var errorItems = formErrorContext.Errors
+            .Select(i => new ErrorSummaryOptionsErrorItem()
+            {
+                Html = i.Html,
+                Href = i.Href
+            })
+            .ToArray();
+
+        var component = _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions()
         {
-            Content = i.Content,
-            Href = i.Href
+            TitleText = null,
+            TitleHtml = null,
+            DescriptionText = null,
+            DescriptionHtml = null,
+            ErrorList = errorItems,
+            Classes = null,
+            Attributes = null,
+            DisableAutoFocus = DisableAutoFocus,
+            TitleAttributes = null,
+            DescriptionAttributes = null
         });
 
-        var errorSummary = _htmlGenerator.GenerateErrorSummary(
-            disableAutofocus: null,  // TODO Should we have an attribute to configure this?
-            titleContent: new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.ErrorSummaryDefaultTitle)),
-            titleAttributes: null,
-            descriptionContent: null,
-            descriptionAttributes: null,
-            attributes: null,
-            items: errorItems);
-
-        output.PreContent.AppendHtml(errorSummary);
+        output.PreContent.AppendHtml(component);
     }
 }

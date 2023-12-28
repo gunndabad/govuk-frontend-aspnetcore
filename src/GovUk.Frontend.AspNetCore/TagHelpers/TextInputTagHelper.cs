@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
@@ -260,7 +261,8 @@ public class TextInputTagHelper : TagHelper
 
         if (errorMessageOptions is not null && context.TryGetContextItem<FormErrorContext>(out var formErrorContext))
         {
-            formErrorContext.AddError(new HtmlString(errorMessageOptions.Html), href: "#" + id);
+            Debug.Assert(errorMessageOptions.Html is not null);
+            formErrorContext.AddError(errorMessageOptions.Html!, href: "#" + id);
         }
     }
 
