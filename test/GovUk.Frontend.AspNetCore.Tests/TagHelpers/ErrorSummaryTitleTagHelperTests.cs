@@ -12,6 +12,8 @@ public class ErrorSummaryTitleTagHelperTests
     public async Task ProcessAsync_AddsTitleToContext()
     {
         // Arrange
+        var titleHtml = "Title content";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -29,7 +31,7 @@ public class ErrorSummaryTitleTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Title content");
+                tagHelperContent.SetContent(titleHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,6 +41,6 @@ public class ErrorSummaryTitleTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Title content", errorSummaryContext?.Title?.Content?.ToHtmlString());
+        Assert.Equal(titleHtml, errorSummaryContext?.Title?.Html);
     }
 }
