@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -11,9 +11,12 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class InsetTextTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_WithContentGeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var html = "Inset text";
+        var id = "my-id";
+
         var context = new TagHelperContext(
             tagName: "govuk-inset-text",
             allAttributes: new TagHelperAttributeList(),
@@ -26,21 +29,26 @@ public class InsetTextTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Inset text");
+                tagHelperContent.SetContent(html);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new InsetTextTagHelper(new ComponentGenerator())
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InsetTextOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInsetText(It.IsAny<InsetTextOptions>())).Callback<InsetTextOptions>(o => actualOptions = o);
+
+        var tagHelper = new InsetTextTagHelper(componentGeneratorMock.Object)
         {
-            Id = "my-id"
+            Id = id
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"<div class=""govuk-inset-text"" id=""my-id"">Inset text</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(id, actualOptions!.Id);
+        Assert.Null(actualOptions.Text);
+        Assert.Equal(html, actualOptions.Html);
     }
 }

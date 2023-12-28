@@ -65,6 +65,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateHint(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("inset-text", typeof(InsetTextOptions))]
+    public void InsetText(ComponentTestCaseData<InsetTextOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateInsetText(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("label", typeof(LabelOptions), exclude: "empty")]
     public void Label(ComponentTestCaseData<LabelOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
