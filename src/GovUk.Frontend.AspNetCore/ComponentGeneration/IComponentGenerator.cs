@@ -50,6 +50,12 @@ public interface IComponentGenerator
     HtmlTag GenerateHint(HintOptions options);
 
     /// <summary>
+    /// Generates an inset text component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateInsetText(InsetTextOptions options);
+
+    /// <summary>
     /// Generates a label component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
