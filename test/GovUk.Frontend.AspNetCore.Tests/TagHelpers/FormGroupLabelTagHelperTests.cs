@@ -12,6 +12,8 @@ public class FormGroupLabelTagHelperTests
     public async Task ProcessAsync_SetsLabelOnContext()
     {
         // Arrange
+        var labelHtml = "Label";
+
         var formGroupContext = new TestFormGroupContext();
 
         var context = new TagHelperContext(
@@ -19,7 +21,7 @@ public class FormGroupLabelTagHelperTests
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormGroupContext), formGroupContext }
+                { typeof(FormGroupContext2), formGroupContext }
             },
             uniqueId: "test");
 
@@ -29,7 +31,7 @@ public class FormGroupLabelTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Label");
+                tagHelperContent.SetContent(labelHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,10 +41,10 @@ public class FormGroupLabelTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Label", formGroupContext.Label?.Content?.ToString());
+        Assert.Equal(labelHtml, formGroupContext.Label?.Html);
     }
 
-    private class TestFormGroupContext : FormGroupContext
+    private class TestFormGroupContext : FormGroupContext2
     {
         protected override string ErrorMessageTagName => "test-error-message";
 

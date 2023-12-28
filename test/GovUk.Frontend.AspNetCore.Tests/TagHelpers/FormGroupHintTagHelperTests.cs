@@ -12,6 +12,8 @@ public class FormGroupHintTagHelperTests
     public async Task ProcessAsync_SetsErrorMessageOnContext()
     {
         // Arrange
+        var hintHtml = "Hint";
+
         var formGroupContext = new TestFormGroupContext();
 
         var context = new TagHelperContext(
@@ -19,7 +21,7 @@ public class FormGroupHintTagHelperTests
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormGroupContext), formGroupContext }
+                { typeof(FormGroupContext2), formGroupContext }
             },
             uniqueId: "test");
 
@@ -29,7 +31,7 @@ public class FormGroupHintTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Hint");
+                tagHelperContent.SetContent(hintHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,10 +41,10 @@ public class FormGroupHintTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Hint", formGroupContext.Hint?.Content?.ToString());
+        Assert.Equal(hintHtml, formGroupContext.Hint?.Html);
     }
 
-    private class TestFormGroupContext : FormGroupContext
+    private class TestFormGroupContext : FormGroupContext2
     {
         protected override string ErrorMessageTagName => "test-error-message";
 
