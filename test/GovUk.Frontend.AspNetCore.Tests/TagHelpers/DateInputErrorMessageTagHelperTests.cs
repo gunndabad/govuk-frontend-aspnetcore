@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
@@ -13,6 +12,9 @@ public class DateInputErrorMessageTagHelperTests
     public async Task ProcessAsync_SetsErrorMessageAndErrorComponentsOnContext()
     {
         // Arrange
+        var errorHtml = "Error message";
+        var errorComponents = DateInputErrorComponents.Day | DateInputErrorComponents.Month;
+
         var dateInputContext = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         var context = new TagHelperContext(
@@ -30,20 +32,20 @@ public class DateInputErrorMessageTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Error message");
+                tagHelperContent.SetContent(errorHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
         var tagHelper = new DateInputErrorMessageTagHelper()
         {
-            ErrorItems = DateInputErrorComponents.Day | DateInputErrorComponents.Month
+            ErrorItems = errorComponents
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Error message", dateInputContext.ErrorMessage?.Content?.ToString());
-        Assert.Equal(DateInputErrorComponents.Day | DateInputErrorComponents.Month, dateInputContext.ErrorComponents);
+        Assert.Equal(errorHtml, dateInputContext.ErrorMessage?.Html);
+        Assert.Equal(errorComponents, dateInputContext.ErrorComponents);
     }
 }

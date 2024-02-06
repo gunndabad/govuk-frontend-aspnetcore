@@ -33,7 +33,6 @@ public class TextInputTagHelperTests
         var dataFooAttrValue = "bar";
         var labelHtml = "The label";
         var hintHtml = "The hint";
-        var errorHtml = "The error message";
 
         var context = new TagHelperContext(
             tagName: "govuk-input",
@@ -56,11 +55,6 @@ public class TextInputTagHelperTests
                 inputContext.SetHint(
                     attributes: ImmutableDictionary<string, string?>.Empty,
                     hintHtml);
-
-                inputContext.SetErrorMessage(
-                    visuallyHiddenText: null,
-                    attributes: ImmutableDictionary<string, string?>.Empty,
-                    errorHtml);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -107,7 +101,7 @@ public class TextInputTagHelperTests
         Assert.Equal(describedBy, actualOptions.DescribedBy);
         Assert.Equal(labelHtml, actualOptions.Label?.Html);
         Assert.Equal(hintHtml, actualOptions.Hint?.Html);
-        Assert.Equal(errorHtml, actualOptions.ErrorMessage?.Html);
+        Assert.Null(actualOptions.ErrorMessage);
         Assert.Equal(classes, actualOptions.Classes);
         Assert.Equal(autocomplete, actualOptions.Autocomplete);
         Assert.Equal(pattern, actualOptions.Pattern);
@@ -117,6 +111,73 @@ public class TextInputTagHelperTests
             Assert.Equal("data-foo", kvp.Key);
             Assert.Equal(dataFooAttrValue, kvp.Value);
         });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithErrorMessage_AppendsErrorOptionsAndClass()
+    {
+        // Arrange
+        var id = "my-id";
+        var name = "my-name";
+        var labelHtml = "The label";
+        var errorHtml = "The error message";
+        var errorVht = "visually hidden text";
+        var errorDataFooAttribute = "bar";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var inputContext = context.GetContextItem<TextInputContext>();
+
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    attributes: ImmutableDictionary<string, string?>.Empty,
+                    labelHtml);
+
+                inputContext.SetErrorMessage(
+                    visuallyHiddenText: errorVht,
+                    attributes: ImmutableDictionary<string, string?>.Empty.Add("data-foo", errorDataFooAttribute),
+                    errorHtml);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        TextInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            Id = id,
+            Name = name,
+            ViewContext = new ViewContext()
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions);
+        Assert.Equal(errorHtml, actualOptions!.ErrorMessage?.Html);
+        Assert.Equal(errorVht, actualOptions.ErrorMessage?.VisuallyHiddenText);
+        Assert.Collection(actualOptions.ErrorMessage?.Attributes, kvp =>
+        {
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(errorDataFooAttribute, kvp.Value);
+        });
+        Assert.Contains("govuk-input--error", actualOptions.Classes?.Split(' '));
+        Assert.Contains("govuk-formgroup--error", actualOptions.FormGroup?.Classes?.Split(' '));
     }
 
     [Fact]

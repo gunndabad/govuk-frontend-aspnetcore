@@ -29,14 +29,16 @@ public class DateInputItemLabelTagHelper : TagHelper
     {
         var dateInputItemContext = context.GetContextItem<DateInputItemContext>();
 
-        var childContent = await output.GetChildContentAsync();
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
+            (await output.GetChildContentAsync()).Snapshot() :
+            null;
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        dateInputItemContext.SetLabel(childContent.Snapshot(), output.Attributes.ToAttributeDictionary());
+        dateInputItemContext.SetLabel(output.Attributes.ToEncodedAttributeDictionary(), childContent?.ToHtmlString());
 
         output.SuppressOutput();
     }

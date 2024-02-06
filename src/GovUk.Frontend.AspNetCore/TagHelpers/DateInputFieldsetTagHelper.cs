@@ -41,7 +41,7 @@ public class DateInputFieldsetTagHelper : TagHelper
         var dateInputContext = context.GetContextItem<DateInputContext>();
         dateInputContext.OpenFieldset();
 
-        var fieldsetContext = new DateInputFieldsetContext(output.Attributes.ToAttributeDictionary(), dateInputContext.AspFor);
+        var fieldsetContext = new DateInputFieldsetContext(output.Attributes.ToEncodedAttributeDictionary(), dateInputContext._aspFor);
 
         using (context.SetScopedContextItem(fieldsetContext))
         {

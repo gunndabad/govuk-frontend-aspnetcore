@@ -12,6 +12,8 @@ public class DateInputItemLabelTagHelperTests
     public async Task ProcessAsync_SetsLabelOnContext()
     {
         // Arrange
+        var labelHtml = "Content";
+
         var itemContext = new DateInputItemContext("govuk-date-input-day", "govuk-date-input-day-label");
 
         var context = new TagHelperContext(
@@ -29,7 +31,7 @@ public class DateInputItemLabelTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Label");
+                tagHelperContent.SetContent(labelHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,6 +41,6 @@ public class DateInputItemLabelTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Label", itemContext.Label?.Content?.ToString());
+        Assert.Equal(labelHtml, itemContext.Label?.Html);
     }
 }

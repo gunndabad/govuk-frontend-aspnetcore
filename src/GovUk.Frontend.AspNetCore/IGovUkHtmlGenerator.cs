@@ -50,14 +50,6 @@ internal interface IGovUkHtmlGenerator
         IEnumerable<CheckboxesItemBase> items,
         AttributeDictionary attributes);
 
-    TagBuilder GenerateDateInput(
-        string id,
-        bool disabled,
-        DateInputItem day,
-        DateInputItem month,
-        DateInputItem year,
-        AttributeDictionary attributes);
-
     TagBuilder GenerateErrorMessage(
         string visuallyHiddenText,
         IHtmlContent content,
@@ -152,22 +144,4 @@ internal interface IGovUkHtmlGenerator
         bool disabled,
         IHtmlContent content,
         AttributeDictionary attributes);
-
-    TagBuilder GenerateTextInput(
-        bool haveError,
-        string id,
-        string name,
-        string type,
-        string value,
-        string describedBy,
-        string autocomplete,
-        string pattern,
-        string inputMode,
-        bool? spellcheck,
-        bool disabled,
-        AttributeDictionary attributes,
-        IHtmlContent prefixContent,
-        AttributeDictionary prefixAttributes,
-        IHtmlContent suffixContent,
-        AttributeDictionary suffixAttributes);
 }

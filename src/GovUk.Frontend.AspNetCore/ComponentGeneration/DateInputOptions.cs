@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -15,11 +16,35 @@ public class DateInputOptions
     public FieldsetOptions? Fieldset { get; set; }
     public string? Classes { get; set; }
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Id is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified.");
+        }
+
+        if (Items is not null)
+        {
+            int i = 0;
+            foreach (var item in Items)
+            {
+                item.Validate(i++);
+            }
+        }
+
+        FormGroup?.Validate();
+
+        Hint?.Validate();
+
+        ErrorMessage?.Validate();
+    }
 }
 
 public class DateInputOptionsItem
 {
     public string? Id { get; set; }
+    [DisallowNull]
     public string? Name { get; set; }
     public string? Label { get; set; }
     public string? Value { get; set; }
@@ -28,4 +53,17 @@ public class DateInputOptionsItem
     public string? Pattern { get; set; }
     public string? Classes { get; set; }
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+
+    [NonStandardParameter]
+    public string? LabelHtml { get; set; }
+    [NonStandardParameter]
+    public IReadOnlyDictionary<string, string?>? LabelAttributes { get; set; }
+
+    internal void Validate(int itemIndex)
+    {
+        if (Name is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified on item {itemIndex}.");
+        }
+    }
 }

@@ -1,5 +1,4 @@
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -29,7 +28,7 @@ public class DateInputErrorMessageTagHelper : FormGroupErrorMessageTagHelper
         dateInputContext.SetErrorMessage(
             ErrorItems,
             VisuallyHiddenText,
-            output.Attributes.ToAttributeDictionary(),
-            childContent?.Snapshot());
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent?.ToHtmlString());
     }
 }

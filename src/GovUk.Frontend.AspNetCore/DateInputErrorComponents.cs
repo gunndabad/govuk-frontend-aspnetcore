@@ -1,6 +1,6 @@
 using System;
 
-namespace GovUk.Frontend.AspNetCore.ModelBinding;
+namespace GovUk.Frontend.AspNetCore;
 
 /// <summary>
 /// Represents the components of a date input component that have errors.

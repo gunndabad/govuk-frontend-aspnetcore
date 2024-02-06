@@ -1,31 +1,38 @@
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
+using System.Collections.Immutable;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class DateInputItemContext
 {
+    internal record LabelInfo(ImmutableDictionary<string, string?> Attributes, string? Html);
+
     private readonly string _itemTagName;
     private readonly string _labelTagName;
 
+    // internal for testing
+    internal LabelInfo? Label;
+
     public DateInputItemContext(string itemTagName, string labelTagName)
     {
-        _itemTagName = Guard.ArgumentNotNull(nameof(itemTagName), itemTagName);
-        _labelTagName = Guard.ArgumentNotNull(nameof(labelTagName), labelTagName);
+        ArgumentNullException.ThrowIfNull(itemTagName);
+        ArgumentNullException.ThrowIfNull(labelTagName);
+        _itemTagName = itemTagName;
+        _labelTagName = labelTagName;
     }
 
-    public (IHtmlContent Content, AttributeDictionary Attributes)? Label { get; private set; }
+    public (ImmutableDictionary<string, string?> Attributes, string? Html)? GetLabelOptions() =>
+        Label is not null ? (Label.Attributes, Label.Html) : null;
 
-    public void SetLabel(IHtmlContent content, AttributeDictionary attributes)
+    public void SetLabel(ImmutableDictionary<string, string?> attributes, string? html)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
-        Guard.ArgumentNotNull(nameof(attributes), attributes);
+        ArgumentNullException.ThrowIfNull(attributes);
 
         if (Label != null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(_labelTagName, _itemTagName);
         }
 
-        Label = (content, attributes);
+        Label = new LabelInfo(attributes, html);
     }
 }

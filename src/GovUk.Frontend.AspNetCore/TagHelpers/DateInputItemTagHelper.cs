@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -63,7 +64,7 @@ public class DateInputItemTagHelper : TagHelper
     /// The default is <c>numeric</c>.
     /// </remarks>
     [HtmlAttributeName(InputModeAttributeName)]
-    public string? InputMode { get; set; } = ComponentGenerator.DateInputDefaultInputMode;
+    public string? InputMode { get; set; }
 
     /// <summary>
     /// The <c>name</c> attribute for the generated <c>input</c> element.
@@ -120,19 +121,22 @@ public class DateInputItemTagHelper : TagHelper
         }
 
         var itemType = DateInputContext.GetItemTypeFromTagName(output.TagName);
+        var defaultLabelHtml = HtmlEncoder.Default.Encode(DateInputContext.GetDefaultLabelTextFromTagName(output.TagName));
+
+        var labelOptions = dateInputItemContext.GetLabelOptions();
 
         var itemContext = new DateInputContextItem()
         {
-            Attributes = output.Attributes.ToAttributeDictionary(),
+            Attributes = output.Attributes.ToEncodedAttributeDictionary(),
             Autocomplete = Autocomplete,
             Id = Id,
             InputMode = InputMode,
-            LabelContent = dateInputItemContext.Label?.Content,
-            LabelAttributes = dateInputItemContext.Label?.Attributes,
+            LabelHtml = labelOptions?.Html ?? defaultLabelHtml,
+            LabelAttributes = labelOptions?.Attributes,
             Name = Name,
             Pattern = Pattern,
             Value = _value,
-            ValueSpecified = _valueSpecified
+            ValueSpecified = _valueSpecified,
         };
 
         dateInputContext.SetItem(itemType, itemContext);

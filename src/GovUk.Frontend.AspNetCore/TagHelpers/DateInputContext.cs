@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -14,22 +15,20 @@ internal enum DateInputItemType
     Year = 2
 }
 
-internal class DateInputContext : FormGroupContext
+internal class DateInputContext : FormGroupContext2
 {
-    private bool _fieldsetIsOpen;
     private readonly SortedDictionary<DateInputItemType, DateInputContextItem> _items;
     private readonly bool _haveValue;
+    public readonly ModelExpression? _aspFor;
+    public DateInputFieldsetContext? _fieldset;
+    private bool _fieldsetIsOpen;
 
     public DateInputContext(bool haveExplicitValue, ModelExpression? aspFor)
     {
         _items = new SortedDictionary<DateInputItemType, DateInputContextItem>();
         _haveValue = haveExplicitValue;
-        AspFor = aspFor;
+        _aspFor = aspFor;
     }
-
-    public ModelExpression? AspFor { get; }
-
-    public DateInputFieldsetContext? Fieldset { get; private set; }
 
     public IReadOnlyDictionary<DateInputItemType, DateInputContextItem> Items => _items;
 
@@ -45,6 +44,17 @@ internal class DateInputContext : FormGroupContext
 
     protected override string RootTagName => DateInputTagHelper.TagName;
 
+    public FieldsetOptions? GetFieldsetOptions(IModelHelper modelHelper) => _fieldset?.GetFieldsetOptions(_aspFor, modelHelper);
+
+    public override LabelOptions GetLabelOptions(
+        ModelExpression? aspFor,
+        IModelHelper modelHelper,
+        string inputId,
+        string aspForAttributeName)
+    {
+        throw new NotSupportedException();
+    }
+
     public void OpenFieldset()
     {
         if (_fieldsetIsOpen)
@@ -52,7 +62,7 @@ internal class DateInputContext : FormGroupContext
             throw new InvalidOperationException($"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>.");
         }
 
-        if (Fieldset != null)
+        if (_fieldset != null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(FieldsetTagName, RootTagName);
         }
@@ -73,7 +83,7 @@ internal class DateInputContext : FormGroupContext
         }
 
         _fieldsetIsOpen = false;
-        Fieldset = fieldsetContext;
+        _fieldset = fieldsetContext;
     }
 
     public void SetItem(DateInputItemType itemType, DateInputContextItem item)
@@ -87,7 +97,7 @@ internal class DateInputContext : FormGroupContext
 
         var tagName = GetTagNameForItemType(itemType);
 
-        if (Fieldset != null)
+        if (_fieldset != null)
         {
             throw new InvalidOperationException($"<{tagName}> must be inside <{FieldsetTagName}>.");
         }
@@ -115,10 +125,10 @@ internal class DateInputContext : FormGroupContext
     public void SetErrorMessage(
         DateInputErrorComponents? errorComponents,
         string? visuallyHiddenText,
-        AttributeDictionary? attributes,
-        IHtmlContent? content)
+        ImmutableDictionary<string, string?> attributes,
+        string? html)
     {
-        if (Fieldset != null)
+        if (_fieldset != null)
         {
             throw new InvalidOperationException($"<{ErrorMessageTagName}> must be inside <{FieldsetTagName}>.");
         }
@@ -131,17 +141,17 @@ internal class DateInputContext : FormGroupContext
 
         ErrorComponents = errorComponents;
 
-        base.SetErrorMessage(visuallyHiddenText, attributes, content);
+        base.SetErrorMessage(visuallyHiddenText, attributes, html);
     }
 
-    public override void SetErrorMessage(string? visuallyHiddenText, AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetErrorMessage(string? visuallyHiddenText, ImmutableDictionary<string, string?> attributes, string? html)
     {
         throw new NotSupportedException($"Use the overload that takes a {nameof(DateInputErrorComponents)} argument too.");
     }
 
-    public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetHint(ImmutableDictionary<string, string?> attributes, string? html)
     {
-        if (Fieldset != null)
+        if (_fieldset != null)
         {
             throw new InvalidOperationException($"<{HintTagName}> must be inside <{FieldsetTagName}>.");
         }
@@ -152,16 +162,24 @@ internal class DateInputContext : FormGroupContext
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(HintTagName, firstItemTagName);
         }
 
-        base.SetHint(attributes, content);
+        base.SetHint(attributes, html);
     }
 
     public override void SetLabel(
         bool isPageHeading,
-        AttributeDictionary? attributes,
-        IHtmlContent? content)
+        ImmutableDictionary<string, string?> attributes,
+        string? html)
     {
         throw new NotSupportedException();
     }
+
+    internal static string GetDefaultLabelTextFromTagName(string tagName) => tagName switch
+    {
+        DateInputItemTagHelper.DayTagName => "Day",
+        DateInputItemTagHelper.MonthTagName => "Month",
+        DateInputItemTagHelper.YearTagName => "Year",
+        _ => throw new ArgumentException($"Unknown tag name: '{tagName}'.", nameof(tagName))
+    };
 
     internal static DateInputItemType GetItemTypeFromTagName(string tagName) => tagName switch
     {

@@ -28,7 +28,7 @@ internal abstract class FormGroupContext2
 
     protected abstract string RootTagName { get; }
 
-    public LabelOptions GetLabelOptions(
+    public virtual LabelOptions GetLabelOptions(
         ModelExpression? aspFor,
         IModelHelper modelHelper,
         string inputId,

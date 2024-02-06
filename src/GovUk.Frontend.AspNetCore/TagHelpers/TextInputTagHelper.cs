@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -44,7 +42,6 @@ public class TextInputTagHelper : TagHelper
     private readonly IComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
 
-    private string? _type = ComponentGenerator.InputDefaultType;
     private string? _value;
     private bool _valueSpecified;
 
@@ -84,7 +81,7 @@ public class TextInputTagHelper : TagHelper
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.InputDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.
@@ -104,7 +101,7 @@ public class TextInputTagHelper : TagHelper
     /// <para>The default is <c>false</c>.</para>
     /// </remarks>
     [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
-    public bool IgnoreModelStateErrors { get; set; } = false;
+    public bool? IgnoreModelStateErrors { get; set; }
 
     /// <summary>
     /// Additional attributes to add to the generated <c>input</c> element.
@@ -152,12 +149,7 @@ public class TextInputTagHelper : TagHelper
     /// The default is <c>&quot;text&quot;</c>.
     /// </remarks>
     [HtmlAttributeName(TypeAttributeName)]
-    [DisallowNull]
-    public string? Type
-    {
-        get => _type;
-        set => _type = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? Type { get; set; }
 
     /// <summary>
     /// The <c>value</c> attribute for the generated <c>input</c> element.
@@ -220,6 +212,14 @@ public class TextInputTagHelper : TagHelper
 
         var attributes = InputAttributes!.ToImmutableDictionary()
             .Remove("class", out var classes);
+
+        if (errorMessageOptions is not null)
+        {
+            classes ??= "";
+            classes += " govuk-input--error";
+
+            formGroupOptions.Classes += " govuk-form-group--error";
+        }
 
         var component = _componentGenerator.GenerateTextInput(new TextInputOptions()
         {

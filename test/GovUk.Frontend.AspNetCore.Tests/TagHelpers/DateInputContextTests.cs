@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Immutable;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -30,7 +30,7 @@ public class DateInputContextTests
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         context.OpenFieldset();
-        context.CloseFieldset(new DateInputFieldsetContext(attributes: null, aspFor: null));
+        context.CloseFieldset(new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, aspFor: null));
 
         // Act
         var ex = Record.Exception(() => context.OpenFieldset());
@@ -48,7 +48,7 @@ public class DateInputContextTests
 
         var item = new DateInputContextItem()
         {
-            LabelContent = new HtmlString("Day")
+            LabelHtml = "Day"
         };
 
         context.SetItem(DateInputItemType.Day, item);
@@ -66,7 +66,7 @@ public class DateInputContextTests
     {
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
-        context.SetHint(attributes: null, content: new HtmlString("Hint"));
+        context.SetHint(attributes: ImmutableDictionary<string, string?>.Empty, html: "Hint");
 
         // Act
         var ex = Record.Exception(() => context.OpenFieldset());
@@ -81,7 +81,7 @@ public class DateInputContextTests
     {
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
-        context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
+        context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: ImmutableDictionary<string, string?>.Empty, html: "Error");
 
         // Act
         var ex = Record.Exception(() => context.OpenFieldset());
@@ -98,7 +98,8 @@ public class DateInputContextTests
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         // Act
-        var ex = Record.Exception(() => context.CloseFieldset(new DateInputFieldsetContext(attributes: null, aspFor: null)));
+        var ex = Record.Exception(() => context.CloseFieldset(
+            new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, aspFor: null)));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -113,14 +114,14 @@ public class DateInputContextTests
 
         var item = new DateInputContextItem()
         {
-            LabelContent = new HtmlString("Day")
+            LabelHtml = "Day"
         };
 
         context.SetItem(DateInputItemType.Day, item);
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () => context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -135,16 +136,16 @@ public class DateInputContextTests
 
         var item = new DateInputContextItem()
         {
-            LabelContent = new HtmlString("Day")
+            LabelHtml = "Day"
         };
 
         context.OpenFieldset();
-        var fieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
+        var fieldsetContext = new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, aspFor: null);
         context.CloseFieldset(fieldsetContext);
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () => context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: ImmutableDictionary<string, string?>.Empty, "Error"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -159,13 +160,13 @@ public class DateInputContextTests
 
         var item = new DateInputContextItem()
         {
-            LabelContent = new HtmlString("Day")
+            LabelHtml = "Day"
         };
 
         context.SetItem(DateInputItemType.Day, item);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(attributes: null, new HtmlString("Hint")));
+        var ex = Record.Exception(() => context.SetHint(attributes: ImmutableDictionary<string, string?>.Empty, "Hint"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -180,15 +181,15 @@ public class DateInputContextTests
 
         var item = new DateInputContextItem()
         {
-            LabelContent = new HtmlString("Day")
+            LabelHtml = "Day"
         };
 
         context.OpenFieldset();
-        var fieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
+        var fieldsetContext = new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, aspFor: null);
         context.CloseFieldset(fieldsetContext);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(attributes: null, new HtmlString("Hint")));
+        var ex = Record.Exception(() => context.SetHint(attributes: ImmutableDictionary<string, string?>.Empty, "Hint"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -199,18 +200,26 @@ public class DateInputContextTests
     public void SetItem_SetsItemOnContext()
     {
         // Arrange
+        var autocomplete = "off";
+        var id = "id";
+        var inputMode = "im";
+        var labelHtml = "Month";
+        var name = "name";
+        var pattern = "Pattern";
+        var value = 42;
+
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         // Act
         context.SetItem(DateInputItemType.Month, new DateInputContextItem()
         {
-            Autocomplete = "off",
-            Id = "id",
-            InputMode = "im",
-            LabelContent = new HtmlString("Month"),
-            Name = "name",
-            Pattern = "pattern",
-            Value = 42,
+            Autocomplete = autocomplete,
+            Id = id,
+            InputMode = inputMode,
+            LabelHtml = labelHtml,
+            Name = name,
+            Pattern = pattern,
+            Value = value,
             ValueSpecified = true
         });
 
@@ -220,15 +229,15 @@ public class DateInputContextTests
             kvp =>
             {
                 Assert.Equal(DateInputItemType.Month, kvp.Key);
-                var value = kvp.Value;
-                Assert.Equal("off", value.Autocomplete);
-                Assert.Equal("id", value.Id);
-                Assert.Equal("im", value.InputMode);
-                Assert.Equal("Month", value.LabelContent?.ToHtmlString());
-                Assert.Equal("name", value.Name);
-                Assert.Equal("pattern", value.Pattern);
-                Assert.Equal(42, value.Value);
-                Assert.True(value.ValueSpecified);
+                var item = kvp.Value;
+                Assert.Equal(autocomplete, item.Autocomplete);
+                Assert.Equal(id, item.Id);
+                Assert.Equal(inputMode, item.InputMode);
+                Assert.Equal(labelHtml, item.LabelHtml);
+                Assert.Equal(name, item.Name);
+                Assert.Equal(pattern, item.Pattern);
+                Assert.Equal(value, item.Value);
+                Assert.True(item.ValueSpecified);
             });
     }
 
@@ -269,7 +278,7 @@ public class DateInputContextTests
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         context.OpenFieldset();
-        var fieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
+        var fieldsetContext = new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, aspFor: null);
         context.CloseFieldset(fieldsetContext);
 
         // Act
@@ -287,7 +296,7 @@ public class DateInputContextTests
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(isPageHeading: false, attributes: null, content: null));
+        var ex = Record.Exception(() => context.SetLabel(isPageHeading: false, attributes: ImmutableDictionary<string, string?>.Empty, html: null));
 
         // Assert
         Assert.IsType<NotSupportedException>(ex);

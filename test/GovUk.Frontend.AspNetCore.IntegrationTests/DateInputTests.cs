@@ -160,7 +160,7 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
 
         if (expectedErrorMessage != null)
         {
-            var error = (await page.TextContentAsync(".govuk-error-message"))?.TrimStart("Error:".ToCharArray());
+            var error = (await page.TextContentAsync(".govuk-error-message"))?.TrimStart("Error: ".ToCharArray());
             Assert.Equal(expectedErrorMessage, error);
         }
 
@@ -201,6 +201,7 @@ public class DateInputTestsFixture : ServerFixture
             .AddRazorOptions(options =>
             {
                 options.ViewLocationFormats.Clear();
+                options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");  // For _GovUkPageTemplate
                 options.ViewLocationFormats.Add("/DateInputTestsViews/{0}.cshtml");
             });
     }

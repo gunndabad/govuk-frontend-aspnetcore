@@ -38,7 +38,7 @@ public class DateInputFieldsetLegendTagHelper : TagHelper
             content = output.Content;
         }
 
-        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content);
+        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToEncodedAttributeDictionary(), html: content?.ToHtmlString());
 
         output.SuppressOutput();
     }

@@ -37,6 +37,10 @@ A `disable-error-summary-auto-focus` attribute has been added.
 
 The `disabled` attribute has been removed since the underlying template does not support disabled `<a>` elements.
 
+#### `<govuk-date-input>`
+
+The `name` attribute has been removed.
+
 #### `<govuk-details>`
 
 An `id` attribute has been added.
@@ -60,6 +64,10 @@ It's trivial to write a tag helper initializer that accomplishes the same goal.
 
 This option was used to automatically add style and JavaScript imports to all Razor views.
 `PageTemplateHelper` and the `_GovUkPageTemplate.cshtml` layout view are better ways to generate a full page template now so this option, along with the backing tag helper component, have been removed.
+
+#### `DateInputErrorComponents`
+
+`DateInputErrorComponents` is now in the root namespace instead of the `ModelBinding` namespace.
 
 ### Fixes
 

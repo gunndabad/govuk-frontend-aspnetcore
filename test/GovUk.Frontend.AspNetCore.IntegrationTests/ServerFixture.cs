@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -50,11 +51,13 @@ public class ServerFixture : IAsyncLifetime
         await _host.StartAsync();
 
         _playright = await Playwright.CreateAsync();
-        Browser = await _playright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions() { /*Headless = false*/ });
+        Browser = await _playright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions() { Headless = !Debugger.IsAttached });
     }
 
     protected virtual void Configure(IApplicationBuilder app)
     {
+        app.UseDeveloperExceptionPage();
+
         app.UseRouting();
     }
 

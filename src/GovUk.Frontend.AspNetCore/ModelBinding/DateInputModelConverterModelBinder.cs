@@ -10,9 +10,9 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
 internal class DateInputModelConverterModelBinder : IModelBinder
 {
-    private const string DayComponentName = "Day";
-    private const string MonthComponentName = "Month";
-    private const string YearComponentName = "Year";
+    internal const string DayComponentName = "Day";
+    internal const string MonthComponentName = "Month";
+    internal const string YearComponentName = "Year";
 
     private readonly DateInputModelConverter _dateInputModelConverter;
     private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
