@@ -7,7 +7,7 @@
     <GovUkFrontendVersion>5.0.0</GovUkFrontendVersion>
 
     <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib'))</_NpmLibDirectory>
-    <_NpmLibPackageJson>$([System.IO.Path]::Combine('$(_NpmLibDirectory)', 'package.json'))</_NpmLibPackageJson>
+    <_NpmLibVersionFile>$([System.IO.Path]::Combine('$(_NpmLibDirectory)', 'version.txt'))</_NpmLibVersionFile>
     <GovUkFrontendLibrary>$([MSBuild]::NormalizeDirectory('$(_NpmLibDirectory)', 'node_modules', 'govuk-frontend', 'dist', 'govuk'))</GovUkFrontendLibrary>
   </PropertyGroup>
 </Project>
