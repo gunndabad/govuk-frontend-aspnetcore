@@ -10,7 +10,7 @@
     <PackageTags>aspnetcore, taghelpers, gds, gov.uk</PackageTags>
     <Description>ASP.NET Core integration for GOV.UK Design system</Description>
     <MinVerTagPrefix>v</MinVerTagPrefix>
-    <MinVerMinimumMajorMinor>1.2</MinVerMinimumMajorMinor>
+    <MinVerMinimumMajorMinor>2.0</MinVerMinimumMajorMinor>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
