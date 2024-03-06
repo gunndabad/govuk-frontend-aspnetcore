@@ -55,7 +55,7 @@ public class PaginationTagHelperTests
 
         // Assert
         var expectedHtml = @"
-<nav aria-label=""results"" class=""govuk-pagination--block govuk-pagination"" role=""navigation"">
+<nav aria-label=""Pagination"" class=""govuk-pagination--block govuk-pagination"" role=""navigation"">
     <div class=""govuk-pagination__prev"">
         <a class=""govuk-link govuk-pagination__link"" href=""/previous"" rel=""prev"">
             <svg aria-hidden=""true"" class=""govuk-pagination__icon govuk-pagination__icon--prev"" focusable=""false"" height=""13"" viewBox=""0 0 15 13"" width=""15"" xmlns=""http://www.w3.org/2000/svg"">

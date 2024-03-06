@@ -159,7 +159,6 @@ public class ButtonTagHelperTests
         // Assert
         var element = output.RenderToElement();
 
-        Assert.Contains("govuk-button--disabled", element.ClassList);
         Assert.Equal("disabled", element.Attributes["disabled"].Value);
         Assert.Equal("true", element.Attributes["aria-disabled"].Value);
     }

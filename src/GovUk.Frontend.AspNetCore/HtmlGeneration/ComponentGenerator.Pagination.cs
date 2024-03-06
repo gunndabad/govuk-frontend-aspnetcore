@@ -10,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
 
 internal partial class ComponentGenerator
 {
-    internal const string PaginationDefaultLandmarkLabel = "results";
+    internal const string PaginationDefaultLandmarkLabel = "Pagination";
     internal const string PaginationDefaultPreviousText = "Previous";
     internal const string PaginationDefaultNextText = "Next";
     internal const string PaginationElement = "nav";
@@ -68,7 +68,8 @@ internal partial class ComponentGenerator
                 title.AddCssClass("govuk-pagination__link-title--decorated");
             }
 
-            title.InnerHtml.AppendHtml(previous.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultPreviousText)));
+            title.InnerHtml.AppendHtml(
+                previous.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultPreviousText) + "<span class=\"govuk-visually-hidden\"> page</span>"));
 
             link.InnerHtml.AppendHtml(title);
 
@@ -188,7 +189,8 @@ internal partial class ComponentGenerator
                 title.AddCssClass("govuk-pagination__link-title--decorated");
             }
 
-            title.InnerHtml.AppendHtml(next.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultNextText)));
+            title.InnerHtml.AppendHtml(
+                next.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultNextText) + "<span class=\"govuk-visually-hidden\"> page</span>"));
 
             link.InnerHtml.AppendHtml(title);
 

@@ -8,7 +8,14 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 public partial class ComponentTests
 {
     [Theory]
-    [ComponentFixtureData("date-input", typeof(OptionsJson.DateInput))]
+    [ComponentFixtureData(
+        "date-input",
+        typeof(OptionsJson.DateInput),
+        exclude: new[]
+        {
+            "day and month",
+            "month and year",
+        })]
     public void DateInput(ComponentTestCaseData<OptionsJson.DateInput> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

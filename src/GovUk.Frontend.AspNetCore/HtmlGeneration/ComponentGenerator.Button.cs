@@ -29,7 +29,6 @@ internal partial class ComponentGenerator
 
         if (disabled)
         {
-            tagBuilder.MergeCssClass("govuk-button--disabled");
             tagBuilder.Attributes.Add("disabled", "disabled");
             tagBuilder.Attributes.Add("aria-disabled", "true");
         }

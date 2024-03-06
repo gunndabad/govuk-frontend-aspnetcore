@@ -49,7 +49,7 @@ internal partial class ComponentGenerator
 
             if (actions.Items!.Count == 1)
             {
-                actionsWrapper.InnerHtml.AppendHtml(GenerateLink(actions.Items![0], actionIndex: 0));
+                actionsWrapper.InnerHtml.AppendHtml(GenerateLink(actions.Items![0], actionIndex: 0, title));
             }
             else
             {
@@ -58,7 +58,7 @@ internal partial class ComponentGenerator
                 {
                     var li = new TagBuilder("li");
                     li.MergeCssClass("govuk-summary-card__action");
-                    li.InnerHtml.AppendHtml(GenerateLink(action, actionIndex++));
+                    li.InnerHtml.AppendHtml(GenerateLink(action, actionIndex++, title));
 
                     actionsWrapper.InnerHtml.AppendHtml(li);
                 }
@@ -75,7 +75,7 @@ internal partial class ComponentGenerator
         return tagBuilder;
     }
 
-    static TagBuilder GenerateLink(SummaryListAction action, int actionIndex)
+    static TagBuilder GenerateLink(SummaryListAction action, int actionIndex, SummaryCardTitle? title)
     {
         Guard.ArgumentValidNotNull(
             nameof(SummaryCard.Actions),
@@ -88,11 +88,23 @@ internal partial class ComponentGenerator
         anchor.MergeCssClass("govuk-link");
         anchor.InnerHtml.AppendHtml(action.Content);
 
-        if (action.VisuallyHiddenText != null)
+        if (action.VisuallyHiddenText != null || title?.Content != null)
         {
             var vht = new TagBuilder("span");
             vht.MergeCssClass("govuk-visually-hidden");
-            vht.InnerHtml.Append(action.VisuallyHiddenText);
+
+            if (action.VisuallyHiddenText != null)
+            {
+                vht.InnerHtml.Append(action.VisuallyHiddenText);
+            }
+
+            if (title?.Content != null)
+            {
+                vht.InnerHtml.Append(" (");
+                vht.InnerHtml.AppendHtml(title.Content);
+                vht.InnerHtml.Append(")");
+            }
+
             anchor.InnerHtml.AppendHtml(vht);
         }
 

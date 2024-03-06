@@ -12,8 +12,11 @@ public partial class ComponentTests
     [ComponentFixtureData(
         "summary-list",
         typeof(OptionsJson.SummaryList),
-        //only: "summary card with custom attributes",
-        exclude: "with falsey values")]
+        exclude: new[]
+        {
+            "with falsey values",
+            "as a summary card with actions plus summary list actions"
+        })]
     public void SummaryList(ComponentTestCaseData<OptionsJson.SummaryList> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

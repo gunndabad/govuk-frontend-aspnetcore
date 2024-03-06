@@ -32,7 +32,7 @@ internal partial class ComponentGenerator
         text.MergeCssClass("govuk-warning-text__text");
 
         var iconFallback = new TagBuilder("span");
-        iconFallback.MergeCssClass("govuk-warning-text__assistive");
+        iconFallback.MergeCssClass("govuk-visually-hidden");
         iconFallback.InnerHtml.Append(iconFallbackText);
 
         text.InnerHtml.AppendHtml(iconFallback);
