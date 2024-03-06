@@ -67,7 +67,7 @@ public class AccordionTagHelperTests
             </h1>
             <div class=""govuk-body govuk-accordion__section-summary"" id=""testaccordion-summary-1"">First summary</div>
         </div>
-        <div aria-labelledby=""testaccordion-heading-1"" class=""govuk-accordion__section-content"" id=""testaccordion-content-1"">
+        <div class=""govuk-accordion__section-content"" id=""testaccordion-content-1"">
             First content
         </div>
     </div>
@@ -77,7 +77,7 @@ public class AccordionTagHelperTests
                 <span class=""govuk-accordion__section-button"" id=""testaccordion-heading-2"">Second heading</span>
             </h1>
         </div>
-        <div aria-labelledby=""testaccordion-heading-2"" class=""govuk-accordion__section-content"" id=""testaccordion-content-2"">
+        <div class=""govuk-accordion__section-content"" id=""testaccordion-content-2"">
             First content
         </div>
     </div>
@@ -146,7 +146,7 @@ public class AccordionTagHelperTests
             </h2>
             <div class=""govuk-body govuk-accordion__section-summary"" id=""testaccordion-summary-1"">First summary</div>
         </div>
-        <div aria-labelledby=""testaccordion-heading-1"" class=""govuk-accordion__section-content"" id=""testaccordion-content-1"">
+        <div class=""govuk-accordion__section-content"" id=""testaccordion-content-1"">
             First content
         </div>
     </div>
@@ -156,7 +156,7 @@ public class AccordionTagHelperTests
                 <span class=""govuk-accordion__section-button"" id=""testaccordion-heading-2"">Second heading</span>
             </h2>
         </div>
-        <div aria-labelledby=""testaccordion-heading-2"" class=""govuk-accordion__section-content"" id=""testaccordion-content-2"">
+        <div class=""govuk-accordion__section-content"" id=""testaccordion-content-2"">
             First content
         </div>
     </div>

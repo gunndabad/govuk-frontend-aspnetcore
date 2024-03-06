@@ -140,7 +140,6 @@ internal partial class ComponentGenerator
             var contentDiv = new TagBuilder("div");
             contentDiv.MergeCssClass("govuk-accordion__section-content");
             contentDiv.Attributes.Add("id", contentId);
-            contentDiv.Attributes.Add("aria-labelledby", headingId);
             contentDiv.MergeOptionalAttributes(item.ContentAttributes);
             contentDiv.InnerHtml.AppendHtml(item.Content);
             section.InnerHtml.AppendHtml(contentDiv);
