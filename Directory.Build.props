@@ -4,7 +4,7 @@
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     <RepoRoot>$([MSBuild]::EnsureTrailingSlash('$(MSBuildThisFileDirectory)'))</RepoRoot>
     <Nullable>enable</Nullable>
-    <GovUkFrontendVersion>5.0.0</GovUkFrontendVersion>
+    <GovUkFrontendVersion>5.1.0</GovUkFrontendVersion>
 
     <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib'))</_NpmLibDirectory>
     <_NpmLibVersionFile>$([System.IO.Path]::Combine('$(_NpmLibDirectory)', 'version.txt'))</_NpmLibVersionFile>
