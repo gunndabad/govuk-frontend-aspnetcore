@@ -13,6 +13,7 @@ public partial class ComponentTests
         typeof(OptionsJson.Select),
         exclude: new[]
         {
+            "with falsey items",
             "with falsey values",
             "item selected overrides value"  // Fixture doesn't have an 'id' :-(
         })]
@@ -24,13 +25,18 @@ public partial class ComponentTests
                 var disabled = ComponentGenerator.SelectDefaultDisabled;
 
                 var items = options.Items.OrEmpty()
-                    .Select(i => new SelectItem()
+                    .Select(i =>
                     {
-                        Attributes = i.Attributes.ToAttributesDictionary(),
-                        Content = new HtmlString(i.Text),
-                        Disabled = i.Disabled ?? ComponentGenerator.SelectItemDefaultDisabled,
-                        Selected = i.Selected ?? (options.Value == i.Value ? (bool?)true : null) ?? ComponentGenerator.SelectItemDefaultSelected,
-                        Value = i.Value ?? string.Empty
+                        var effectiveValue = i.Value ?? i.Text;
+
+                        return new SelectItem()
+                        {
+                            Attributes = i.Attributes.ToAttributesDictionary(),
+                            Content = new HtmlString(i.Text),
+                            Disabled = i.Disabled ?? ComponentGenerator.SelectItemDefaultDisabled,
+                            Selected = i.Selected ?? (options.Value == effectiveValue ? (bool?)true : null) ?? ComponentGenerator.SelectItemDefaultSelected,
+                            Value = i.Value
+                        };
                     });
 
                 var attributes = options.Attributes.ToAttributesDictionary()

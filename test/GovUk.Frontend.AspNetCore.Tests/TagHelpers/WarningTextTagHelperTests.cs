@@ -44,7 +44,7 @@ public class WarningTextTagHelperTests
 <div class=""govuk-warning-text"">
     <span aria-hidden=""true"" class=""govuk-warning-text__icon"">!</span>
         <strong class=""govuk-warning-text__text"">
-        <span class=""govuk-warning-text__assistive"">Danger</span>
+        <span class=""govuk-visually-hidden"">Danger</span>
         Warning message
     </strong>
 </div>";

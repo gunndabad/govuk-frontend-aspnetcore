@@ -25,7 +25,6 @@ internal partial class ComponentGenerator
         var tagBuilder = new TagBuilder(DetailsElement);
         tagBuilder.MergeOptionalAttributes(attributes);
         tagBuilder.MergeCssClass("govuk-details");
-        tagBuilder.Attributes.Add("data-module", "govuk-details");
 
         if (open)
         {

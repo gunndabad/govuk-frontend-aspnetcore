@@ -40,7 +40,7 @@ public partial class ComponentTests
                 else
                 {
                     attributes.MergeAttribute("name", options.Name);
-                    attributes.MergeAttribute("type", options.Type);
+                    attributes.MergeAttribute("type", options.Type ?? "submit");
                     attributes.MergeAttribute("value", options.Value);
                 }
 

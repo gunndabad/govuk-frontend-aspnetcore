@@ -47,7 +47,7 @@ public class DetailsTagHelperTests
 
         // Assert
         var expectedHtml = @"
-<details class=""govuk-details"" data-module=""govuk-details"">
+<details class=""govuk-details"">
     <summary class=""govuk-details__summary"">
         <span class=""govuk-details__summary-text"">The summary</span>
     </summary>

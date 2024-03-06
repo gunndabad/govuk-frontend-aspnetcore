@@ -69,12 +69,12 @@ public class SummaryCardTagHelperTests
     <ul class=""govuk-summary-card__actions"">
       <li class=""govuk-summary-card__action"">
         <a class=""govuk-link"" href=""#"">
-          Action 1<span class=""govuk-visually-hidden""> vht</span>
+          Action 1<span class=""govuk-visually-hidden""> vht (My title)</span>
         </a>
       </li>
       <li class=""govuk-summary-card__action"">
         <a class=""govuk-link"" href=""#"">
-          Action 2
+          Action 2<span class=""govuk-visually-hidden""> (My title)
         </a>
       </li>
     </ul>
