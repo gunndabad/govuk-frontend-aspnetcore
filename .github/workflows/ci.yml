@@ -56,13 +56,13 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Install Playwright
-      run: pwsh ./test/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net6.0/playwright.ps1 install
+      run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net6.0/playwright.ps1 install
 
     - name: Test
       run: |
-        dotnet test test/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
-        dotnet test test/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
-        dotnet test test/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
+        dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
+        dotnet test tests/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
+        dotnet test tests/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
 
     - name: Package
       run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
