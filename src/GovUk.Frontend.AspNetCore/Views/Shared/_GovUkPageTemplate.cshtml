@@ -1,6 +1,5 @@
 ﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.Extensions.Options
-@inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
@@ -11,7 +10,7 @@
             $"Asset path is not set. Ensure either {nameof(GovUkFrontendAspNetCoreOptions.StaticAssetsContentPath)} on {nameof(GovUkFrontendAspNetCoreOptions)} or ViewBag.AssetPath is set.");
     }
 
-    var cspNonce = ViewBag.CspNonce ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
+    var cspNonce = ViewBag.CspNonce as string ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
     var themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
@@ -48,14 +47,14 @@
     }
     else
     {
-        @PageTemplateHelper.GenerateStyleImports()
+        @Html.GovUkFrontendStyleImports()
     }
 
     <meta property="og:image" content="@(ogImage)">
 </head>
 
 <body class="govuk-template__body @ViewBag.BodyClasses">
-    @PageTemplateHelper.GenerateJsEnabledScript(cspNonce)
+    @Html.GovUkFrontendJsEnabledScript(cspNonce)
     @RenderSection("BodyStart", required: false)
 
     @if (IsSectionDefined("SkipLink"))
@@ -84,7 +83,7 @@
     }
     else
     {
-        @PageTemplateHelper.GenerateScriptImports(cspNonce)
+        @Html.GovUkFrontendScriptImports(cspNonce)
     }
 </body>
 

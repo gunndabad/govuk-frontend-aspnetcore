@@ -96,25 +96,30 @@ The view can be customised by defining the following sections and `ViewData`/`Vi
 
 If the standard template above is not sufficient, you can create your own Razor view.
 
-By default references to the GDS frontend CSS and script assets will be added automatically to the `<head>` and `<body>` elements.
-
-If you want to control the asset references yourself you can disable the automatic import:
-```cs
-services.AddGovUkFrontend(options => options.AddImportsToHtml = false);
-```
-
-The `PageTemplateHelper` class defines several methods that can simplify the CSS and script imports.
-`GenerateStyleImports` imports CSS stylesheets and should be added to `<head>`.
-`GenerateJsEnabledScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
-`GenerateScriptImports` imports JavaScript files and should be added to the end of `<body>`.
+Extension methods are provided on `IHtmlHelper` that simplify the CSS and script imports.
+`GovUkFrontendStyleImports` imports CSS stylesheets and should be added to `<head>`.
+`GovUkFrontendJsEnabledScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
+`GovUkFrontendScriptImports` imports JavaScript files and should be added to the end of `<body>`.
 
 The latter two methods take an optional `cspNonce` parameter; when provided a `nonce` attribute will be added to the inline scripts.
 
-`PageTemplateHelper` can be injected into your view and used like so:
+Example `_Layout.cshtml` snippet:
 ```razor
-@inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
+@using GovUk.Frontend.AspNetCore
 
-@PageTemplateHelper.GenerateStyleImports()
+<!DOCTYPE html>
+<html>
+<head>
+    @Html.GovUkFrontendStyleImports()
+</head>
+<body>
+    @Html.GovUkFrontendJsEnabledScript()
+
+    @RenderBody()
+
+    @Html.GovUkFrontendScriptImports()
+</body>
+</html>
 ```
 
 #### Content security policy (CSP)

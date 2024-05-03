@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @Html.GovUkFrontendStyleImports()
     <style type="text/css">
         #container>* {
             margin: 0 !important;
@@ -10,10 +11,12 @@
     </style>
 </head>
 <body>
+    @Html.GovUkFrontendJsEnabledScript()
 
     <div class="@(ViewBag.InlineElement != true ? "govuk-width-container" : "govuk-!-display-inline-block") govuk-!-margin-top-5 govuk-!-padding-3" id="container">
         @RenderBody()
     </div>
 
+    @Html.GovUkFrontendScriptImports()
 </body>
 </html>
