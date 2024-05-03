@@ -110,4 +110,16 @@ public class PageTemplateHelperTests
         // Assert
         Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo='", result);
     }
+
+    [Fact]
+    public void GetGovUkFrontendVersion_ReturnsVersion()
+    {
+        // Arrange
+
+        // Act
+        var result = PageTemplateHelper.GovUkFrontendVersion;
+
+        // Assert
+        Assert.NotNull(result);
+    }
 }
