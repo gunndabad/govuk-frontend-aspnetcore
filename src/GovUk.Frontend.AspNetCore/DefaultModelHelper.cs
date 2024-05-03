@@ -23,7 +23,6 @@ internal class DefaultModelHelper : IModelHelper
     public virtual string? GetDescription(ModelExplorer modelExplorer) => modelExplorer.Metadata.Description;
 
     public virtual string? GetDisplayName(
-        ViewContext viewContext,  // TODO Remove - not used
         ModelExplorer modelExplorer,
         string expression)
     {

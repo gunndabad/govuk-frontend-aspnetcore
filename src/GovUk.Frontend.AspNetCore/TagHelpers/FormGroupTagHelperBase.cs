@@ -215,7 +215,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
         attributes.MergeCssClass(labelClass);
 
         var resolvedContent = content ??
-            new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
+            new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
 
         return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
     }
@@ -223,7 +223,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
     {
         var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
-            (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
+            (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
 
         if (resolvedFieldsetLegendContent is null)
         {

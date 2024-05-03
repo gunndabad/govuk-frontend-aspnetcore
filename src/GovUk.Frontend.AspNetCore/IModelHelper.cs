@@ -7,7 +7,7 @@ internal interface IModelHelper
 {
     string? GetDescription(ModelExplorer modelExplorer);
 
-    string? GetDisplayName(ViewContext viewContext, ModelExplorer modelExplorer, string expression);
+    string? GetDisplayName(ModelExplorer modelExplorer, string expression);
 
     string GetFullHtmlFieldName(ViewContext viewContext, string expression);
 
