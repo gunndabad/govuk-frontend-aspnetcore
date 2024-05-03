@@ -63,6 +63,9 @@ public class ButtonTagHelper : TagHelper
     /// <summary>
     /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
     /// </summary>
+    /// <remarks>
+    /// The default is set for the application in <see cref="GovUkFrontendAspNetCoreOptions.DefaultButtonPreventDoubleClick"/>.
+    /// </remarks>
     [HtmlAttributeName(PreventDoubleClickAttributeName)]
     public bool? PreventDoubleClick { get; set; }
 

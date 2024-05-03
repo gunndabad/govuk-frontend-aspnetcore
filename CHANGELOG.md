@@ -30,11 +30,6 @@ With this, other tag helpers or tag helper initializers can be created that assi
 
 ### Breaking changes
 
-#### `DefaultButtonPreventDoubleClick`
-
-The `DefaultButtonPreventDoubleClick` option has been removed from `GovUkFrontendOptions`.
-It's trivial to write a tag helper initializer that accomplishes the same goal.
-
 #### `AddImportsToHtml`
 
 This option was used to automatically add style and JavaScript imports to all Razor views.
