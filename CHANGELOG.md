@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+#### Page template
+
+New overloads of `GenerateScriptImports` and `GenerateStyleImports` have been added that accept an `appendVersion` parameter.
+This appends a query string with a hash of the file's contents so that content changes following upgrades are seen by end users.
+
 ## 2.0.0
 
 Targets GOV.UK Frontend v5.1.0.

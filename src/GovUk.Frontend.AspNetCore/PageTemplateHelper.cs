@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore;
@@ -15,6 +18,9 @@ namespace GovUk.Frontend.AspNetCore;
 public class PageTemplateHelper
 {
     internal const string JsEnabledScript = "document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');";
+    private const string VersionQueryParameterName = "v";
+
+    private static readonly ConcurrentDictionary<string, string> _embeddedResourceFileVersionCache = new();
 
     private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
@@ -63,19 +69,35 @@ public class PageTemplateHelper
     }
 
     /// <summary>
-    /// Generates the HTML that imports the GOV.UK Frontend library script and initializes it.
+    /// Generates the script that adds a <c>js-enabled</c> CSS class.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// The contents of this property should be inserted at the end of the <c>body</c> tag.
+    /// The contents of this property should be inserted at the beginning of the <c>body</c> tag.
     /// </para>
     /// <para>
-    /// Use the <see cref="GetInitScriptCspHash()"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
+    /// Use the <see cref="GetJsEnabledScriptCspHash"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
     /// </para>
     /// </remarks>
-    /// <param name="cspNonce">The CSP nonce attribute to be added to the generated initialization <c>script</c> tag.</param>
-    /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tags.</returns>
-    public IHtmlContent GenerateScriptImports(string? cspNonce = null)
+    /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
+    public IHtmlContent GenerateScriptImports(string? cspNonce = null) => GenerateScriptImports(cspNonce, appendVersion: false);
+
+    /// <summary>
+    /// Generates the script that adds a <c>js-enabled</c> CSS class.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The contents of this property should be inserted at the beginning of the <c>body</c> tag.
+    /// </para>
+    /// <para>
+    /// Use the <see cref="GetJsEnabledScriptCspHash"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
+    /// </para>
+    /// </remarks>
+    /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
+    /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
+    public IHtmlContent GenerateScriptImports(string? cspNonce = null, bool appendVersion = false)
     {
         var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
         if (compiledContentPath is null)
@@ -92,9 +114,16 @@ public class PageTemplateHelper
 
         TagBuilder GenerateImportScript()
         {
+            var src = $"{compiledContentPath}/all.min.js";
+            if (appendVersion)
+            {
+                var version = _embeddedResourceFileVersionCache.GetOrAdd("Content/Compiled/all.min.js", path => GetEmbeddedResourceVersion(path));
+                src = QueryHelpers.AddQueryString(src, VersionQueryParameterName, version);
+            }
+
             var tagBuilder = new TagBuilder("script");
             tagBuilder.MergeAttribute("type", "module");
-            tagBuilder.MergeAttribute("src", $"{compiledContentPath}/all.min.js");
+            tagBuilder.MergeAttribute("src", src);
             return tagBuilder;
         }
 
@@ -121,7 +150,17 @@ public class PageTemplateHelper
     /// The contents of this property should be inserted in the <c>head</c> tag.
     /// </remarks>
     /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
-    public IHtmlContent GenerateStyleImports()
+    public IHtmlContent GenerateStyleImports() => GenerateStyleImports(appendVersion: false);
+
+    /// <summary>
+    /// Generates the HTML that imports the GOV.UK Frontend library styles.
+    /// </summary>
+    /// <remarks>
+    /// The contents of this property should be inserted in the <c>head</c> tag.
+    /// </remarks>
+    /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
+    public IHtmlContent GenerateStyleImports(bool appendVersion)
     {
         var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
         if (compiledContentPath is null)
@@ -129,7 +168,14 @@ public class PageTemplateHelper
             throw new InvalidOperationException($"Cannot generate style imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
         }
 
-        return new HtmlString($"<link href=\"{compiledContentPath}/all.min.css\" rel=\"stylesheet\">");
+        var href = $"{compiledContentPath}/all.min.css";
+        if (appendVersion)
+        {
+            var version = _embeddedResourceFileVersionCache.GetOrAdd("Content/Compiled/all.min.css", path => GetEmbeddedResourceVersion(path));
+            href = QueryHelpers.AddQueryString(href, VersionQueryParameterName, version);
+        }
+
+        return new HtmlString($"<link href=\"{href}\" rel=\"stylesheet\">");
     }
 
     /// <summary>
@@ -173,5 +219,15 @@ public class PageTemplateHelper
         using var algo = SHA256.Create();
         var hash = algo.ComputeHash(Encoding.UTF8.GetBytes(value));
         return $"'sha256-{Convert.ToBase64String(hash)}'";
+    }
+
+    private static string GetEmbeddedResourceVersion(string path)
+    {
+        using var resourceStream = typeof(PageTemplateHelper).Assembly.GetManifestResourceStream($"{path}") ??
+            throw new ArgumentException($"Could not find resource: '{path}'.", nameof(path));
+        using var ms = new MemoryStream();
+        resourceStream.CopyTo(ms);
+        var hash = SHA256.HashData(ms.ToArray());
+        return WebEncoders.Base64UrlEncode(hash);
     }
 }

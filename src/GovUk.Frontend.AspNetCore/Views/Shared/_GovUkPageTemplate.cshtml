@@ -47,7 +47,7 @@
     }
     else
     {
-        @Html.GovUkFrontendStyleImports()
+        @Html.GovUkFrontendStyleImports(appendVersion: true)
     }
 
     <meta property="og:image" content="@(ogImage)">
@@ -83,7 +83,7 @@
     }
     else
     {
-        @Html.GovUkFrontendScriptImports(cspNonce)
+        @Html.GovUkFrontendScriptImports(cspNonce, appendVersion: true)
     }
 </body>
 
