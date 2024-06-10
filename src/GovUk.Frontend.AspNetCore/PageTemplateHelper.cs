@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
@@ -97,7 +98,25 @@ public class PageTemplateHelper
     /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
     /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
-    public IHtmlContent GenerateScriptImports(string? cspNonce = null, bool appendVersion = false)
+    public IHtmlContent GenerateScriptImports(string? cspNonce = null, bool appendVersion = false) =>
+        GenerateScriptImports(pathBase: "", cspNonce, appendVersion);
+
+    /// <summary>
+    /// Generates the script that adds a <c>js-enabled</c> CSS class.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The contents of this property should be inserted at the beginning of the <c>body</c> tag.
+    /// </para>
+    /// <para>
+    /// Use the <see cref="GetJsEnabledScriptCspHash"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
+    /// </para>
+    /// </remarks>
+    /// <param name="pathBase">The base path that the script is hosted under.</param>
+    /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
+    /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
+    public IHtmlContent GenerateScriptImports(PathString pathBase, string? cspNonce, bool appendVersion)
     {
         var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
         if (compiledContentPath is null)
@@ -114,7 +133,7 @@ public class PageTemplateHelper
 
         TagBuilder GenerateImportScript()
         {
-            var src = $"{compiledContentPath}/all.min.js";
+            var src = $"{pathBase}{compiledContentPath}/all.min.js";
             if (appendVersion)
             {
                 var version = _embeddedResourceFileVersionCache.GetOrAdd("Content/Compiled/all.min.js", path => GetEmbeddedResourceVersion(path));
@@ -137,7 +156,7 @@ public class PageTemplateHelper
                 tagBuilder.MergeAttribute("nonce", cspNonce);
             }
 
-            tagBuilder.InnerHtml.AppendHtml(new HtmlString(GetInitScriptContents()));
+            tagBuilder.InnerHtml.AppendHtml(new HtmlString(GetInitScriptContents(pathBase)));
 
             return tagBuilder;
         }
@@ -160,7 +179,18 @@ public class PageTemplateHelper
     /// </remarks>
     /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
-    public IHtmlContent GenerateStyleImports(bool appendVersion)
+    public IHtmlContent GenerateStyleImports(bool appendVersion) => GenerateStyleImports(pathBase: "", appendVersion: appendVersion);
+
+    /// <summary>
+    /// Generates the HTML that imports the GOV.UK Frontend library styles.
+    /// </summary>
+    /// <remarks>
+    /// The contents of this property should be inserted in the <c>head</c> tag.
+    /// </remarks>
+    /// <param name="pathBase">The base path that the stylesheet is hosted under.</param>
+    /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
+    public IHtmlContent GenerateStyleImports(PathString pathBase, bool appendVersion)
     {
         var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
         if (compiledContentPath is null)
@@ -168,7 +198,7 @@ public class PageTemplateHelper
             throw new InvalidOperationException($"Cannot generate style imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
         }
 
-        var href = $"{compiledContentPath}/all.min.css";
+        var href = $"{pathBase}{compiledContentPath}/all.min.css";
         if (appendVersion)
         {
             var version = _embeddedResourceFileVersionCache.GetOrAdd("Content/Compiled/all.min.css", path => GetEmbeddedResourceVersion(path));
@@ -182,7 +212,14 @@ public class PageTemplateHelper
     /// Gets all the CSP hashes for the inline scripts used in the page template.
     /// </summary>
     /// <returns>A list of hashes to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
-    public string GetCspScriptHashes() => $"{GetInitScriptCspHash()} {GetJsEnabledScriptCspHash()}";
+    public string GetCspScriptHashes() => GetCspScriptHashes(pathBase: "");
+
+    /// <summary>
+    /// Gets all the CSP hashes for the inline scripts used in the page template.
+    /// </summary>
+    /// <param name="pathBase">The base path that the script is hosted under.</param>
+    /// <returns>A list of hashes to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
+    public string GetCspScriptHashes(PathString pathBase) => $"{GetInitScriptCspHash(pathBase)} {GetJsEnabledScriptCspHash()}";
 
     /// <summary>
     /// Gets the CSP hash for the script that adds a <c>js-enabled</c> CSS class.
@@ -194,20 +231,26 @@ public class PageTemplateHelper
     /// Gets the CSP hash for the GOV.UK Frontend initialization script.
     /// </summary>
     /// <returns>A hash to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
-    public string GetInitScriptCspHash() => GetInitScriptCspHash(GetInitScriptContents());
+    public string GetInitScriptCspHash() => GetInitScriptCspHash(pathBase: "");
 
-    private string GetInitScriptContents()
+    /// <summary>
+    /// Gets the CSP hash for the GOV.UK Frontend initialization script.
+    /// </summary>
+    /// <param name="pathBase">The base path that the script is hosted under.</param>
+    /// <returns>A hash to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
+    public string GetInitScriptCspHash(PathString pathBase) => GenerateCspHash(GetInitScriptContents(pathBase));
+
+    private string GetInitScriptContents(PathString pathBase)
     {
-        var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
-        if (compiledContentPath is null)
+        if (_optionsAccessor.Value.CompiledContentPath is null)
         {
             throw new InvalidOperationException($"Cannot generate scripts when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
         }
 
+        var compiledContentPath = $"{pathBase}{_optionsAccessor.Value.CompiledContentPath}";
+
         return $"\nimport {{ initAll }} from '{compiledContentPath}/all.min.js'\ninitAll()\n";
     }
-
-    private string GetInitScriptCspHash(string initScript) => GenerateCspHash(initScript);
 
     private static string GetGovUkFrontendVersion() =>
         typeof(PageTemplateHelper).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()

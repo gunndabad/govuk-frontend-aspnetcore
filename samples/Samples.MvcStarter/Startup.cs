@@ -62,7 +62,7 @@ public class Startup
             csp.AllowScripts
                 .FromSelf()
                 //.AddNonce()
-                .From(pageTemplateHelper.GetCspScriptHashes());
+                .From(pageTemplateHelper.GetCspScriptHashes(pathBase: ""));
         });
 
         app.UseStaticFiles();

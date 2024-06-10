@@ -1,11 +1,26 @@
 # Changelog
 
+## Unreleased
+
+#### Page template
+
+The `StaticAssetsContentPath` and `CompiledContentPath` properties on `GovUkFrontendOptions` have been changed from `string` to `PathString?`.
+
+The `GenerateScriptImports`, `GenerateStyleImports` and `GetCspScriptHashes` methods on `PageTemplateHelper` and the corresponding extension methods over `IHtmlHelper`
+have had overloads added that take a `PathString pathBase` parameter.
+
+The `_GovUkPageTemplate.cshtml` view has been fixed to respect `HttpRequest.PathBase`.
+
+Middleware has been added to rewrite the URL references in `all.min.css` to respect `HttpRequest.PathBase` and the `StaticAssetsContentPath`.
+
 ## 2.0.1
 
 #### Page template
 
 New overloads of `GenerateScriptImports` and `GenerateStyleImports` have been added that accept an `appendVersion` parameter.
 This appends a query string with a hash of the file's contents so that content changes following upgrades are seen by end users.
+
+A `GetCspScriptHashes` extension method on `IHtmlHelper` has been added that forwards to the same method on `PageTemplateHelper`.
 
 ## 2.0.0
 

@@ -11,6 +11,19 @@ namespace GovUk.Frontend.AspNetCore;
 public static class HtmlHelperExtensions
 {
     /// <summary>
+    /// Gets all the CSP hashes for the inline scripts used in the page template.
+    /// </summary>
+    /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
+    /// <returns>A list of hashes to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
+    public static string GetCspScriptHashes(this IHtmlHelper htmlHelper)
+    {
+        ArgumentNullException.ThrowIfNull(htmlHelper);
+        var httpContext = htmlHelper.ViewContext.HttpContext;
+        var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
+        return pageTemplateHelper.GetCspScriptHashes();
+    }
+
+    /// <summary>
     /// Gets the CSP hash for the script that adds a <c>js-enabled</c> CSS class.
     /// </summary>
     /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
@@ -18,7 +31,8 @@ public static class HtmlHelperExtensions
     public static string GetJsEnabledScriptCspHash(this IHtmlHelper htmlHelper)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
-        var pageTemplateHelper = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
+        var httpContext = htmlHelper.ViewContext.HttpContext;
+        var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
         return pageTemplateHelper.GetJsEnabledScriptCspHash();
     }
 
@@ -39,7 +53,8 @@ public static class HtmlHelperExtensions
     public static IHtmlContent GovUkFrontendJsEnabledScript(this IHtmlHelper htmlHelper, string? cspNonce = null)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
-        var pageTemplateHelper = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
+        var httpContext = htmlHelper.ViewContext.HttpContext;
+        var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
         return pageTemplateHelper.GenerateJsEnabledScript(cspNonce);
     }
 
@@ -56,14 +71,43 @@ public static class HtmlHelperExtensions
     /// </remarks>
     /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
     /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
+    public static IHtmlContent GovUkFrontendScriptImports(this IHtmlHelper htmlHelper, string? cspNonce = null) =>
+        GovUkFrontendScriptImports(htmlHelper, cspNonce, appendVersion: true);
+
+    /// <summary>
+    /// Generates the script that adds a <c>js-enabled</c> CSS class.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The contents of this property should be inserted at the beginning of the <c>body</c> tag.
+    /// </para>
+    /// <para>
+    /// Use the <see cref="GetJsEnabledScriptCspHash"/> method to retrieve a CSP hash if you are not specifying <paramref name="cspNonce"/>.
+    /// </para>
+    /// </remarks>
+    /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
+    /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
     /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
-    public static IHtmlContent GovUkFrontendScriptImports(this IHtmlHelper htmlHelper, string? cspNonce = null, bool appendVersion = true)
+    public static IHtmlContent GovUkFrontendScriptImports(this IHtmlHelper htmlHelper, string? cspNonce, bool appendVersion)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
-        var pageTemplateHelper = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
-        return pageTemplateHelper.GenerateScriptImports(cspNonce, appendVersion);
+        var httpContext = htmlHelper.ViewContext.HttpContext;
+        var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
+        return pageTemplateHelper.GenerateScriptImports(httpContext.Request.PathBase, cspNonce, appendVersion);
     }
+
+    /// <summary>
+    /// Generates the HTML that imports the GOV.UK Frontend library styles.
+    /// </summary>
+    /// <remarks>
+    /// The contents of this property should be inserted in the <c>head</c> tag.
+    /// </remarks>
+    /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
+    /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
+    public static IHtmlContent GovUkFrontendStyleImports(this IHtmlHelper htmlHelper) =>
+        GovUkFrontendStyleImports(htmlHelper, appendVersion: true);
 
     /// <summary>
     /// Generates the HTML that imports the GOV.UK Frontend library styles.
@@ -74,10 +118,11 @@ public static class HtmlHelperExtensions
     /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
     /// <param name="appendVersion">Whether the file version should be appended to the <c>href</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
-    public static IHtmlContent GovUkFrontendStyleImports(this IHtmlHelper htmlHelper, bool appendVersion = true)
+    public static IHtmlContent GovUkFrontendStyleImports(this IHtmlHelper htmlHelper, bool appendVersion)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
-        var pageTemplateHelper = htmlHelper.ViewContext.HttpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
-        return pageTemplateHelper.GenerateStyleImports(appendVersion);
+        var httpContext = htmlHelper.ViewContext.HttpContext;
+        var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
+        return pageTemplateHelper.GenerateStyleImports(httpContext.Request.PathBase, appendVersion);
     }
 }

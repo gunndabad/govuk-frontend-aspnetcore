@@ -54,7 +54,7 @@ public class GovUkFrontendAspNetCoreOptions
     /// <para>If this is <c>null</c> the static assets will not be served.</para>
     /// <para>The default is <c>/assets</c>.</para>
     /// </remarks>
-    public string? StaticAssetsContentPath { get; set; }
+    public PathString? StaticAssetsContentPath { get; set; }
 
     /// <summary>
     /// The path to serve GOV.UK Frontend compiled JavaScript and CSS at.
@@ -63,7 +63,7 @@ public class GovUkFrontendAspNetCoreOptions
     /// <para>If this is <c>null</c> the compiled assets will not be served.</para>
     /// <para>The default is <c>/govuk</c>.</para>
     /// </remarks>
-    public string? CompiledContentPath { get; set; }
+    public PathString? CompiledContentPath { get; set; }
 
     /// <summary>
     /// The default value for <see cref="ButtonTagHelper.PreventDoubleClick"/>.

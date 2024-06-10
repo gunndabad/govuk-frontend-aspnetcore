@@ -126,7 +126,7 @@ Example `_Layout.cshtml` snippet:
 
 There are two built-in mechanisms to help in generating a `script-src` CSP directive that works correctly with the inline scripts used by the page template.
 
-The preferred option is to use the `GetCspScriptHashes` method on `PageTemplateHelper`. This will return a string that can be inserted directly into the `script-src` directive in your CSP.
+The preferred option is to use the `GetCspScriptHashes` extension method on `IHtmlHelper`. This will return a string that can be inserted directly into the `script-src` directive in your CSP.
 
 Alternatively, a CSP nonce can be appended to the generated `script` tags. A delegate must be configured on `GovUkFrontendOptions` that retrieves a nonce for a given `HttpContext`.
 ```cs

@@ -3,12 +3,13 @@
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
-    var assetPath = ViewBag.AssetPath ?? OptionsAccessor.Value.StaticAssetsContentPath;
-    if (assetPath is null)
+    if (ViewBag.AssetPath is null && OptionsAccessor.Value.StaticAssetsContentPath is null)
     {
         throw new InvalidOperationException(
             $"Asset path is not set. Ensure either {nameof(GovUkFrontendAspNetCoreOptions.StaticAssetsContentPath)} on {nameof(GovUkFrontendAspNetCoreOptions)} or ViewBag.AssetPath is set.");
     }
+
+    var assetPath = ViewBag.AssetPath ?? Context.Request.PathBase + OptionsAccessor.Value.StaticAssetsContentPath!.Value;
 
     var cspNonce = ViewBag.CspNonce as string ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 

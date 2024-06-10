@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 
@@ -22,24 +23,30 @@ internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
 
         return app =>
         {
-            if (_optionsAccessor.Value.CompiledContentPath is string compiledContentPath)
+            if (_optionsAccessor.Value.CompiledContentPath is PathString compiledContentPath)
             {
+                var fileProvider = new ManifestEmbeddedFileProvider(
+                    typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
+                    root: "Content/Compiled");
+
+                app.UseMiddleware<RewriteCssUrlsMiddleware>(fileProvider);
+
                 app.UseStaticFiles(new StaticFileOptions()
                 {
-                    FileProvider = new ManifestEmbeddedFileProvider(
-                      typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
-                      root: "Content/Compiled"),
+                    FileProvider = fileProvider,
                     RequestPath = compiledContentPath
                 });
             }
 
-            if (_optionsAccessor.Value.StaticAssetsContentPath is string assetsContentPath)
+            if (_optionsAccessor.Value.StaticAssetsContentPath is PathString assetsContentPath)
             {
+                var fileProvider = new ManifestEmbeddedFileProvider(
+                    typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
+                    root: "Content/Assets");
+
                 app.UseStaticFiles(new StaticFileOptions()
                 {
-                    FileProvider = new ManifestEmbeddedFileProvider(
-                      typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
-                      root: "Content/Assets"),
+                    FileProvider = fileProvider,
                     RequestPath = assetsContentPath
                 });
             }
