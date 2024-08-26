@@ -30,6 +30,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateButton(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("cookie-banner", typeof(CookieBannerOptions))]
+    public void CookieBanner(ComponentTestCaseData<CookieBannerOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateCookieBanner(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("details", typeof(DetailsOptions))]
     public void Details(ComponentTestCaseData<DetailsOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
