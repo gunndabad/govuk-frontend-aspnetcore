@@ -36,6 +36,11 @@ internal static class HtmlTagExtensions
         output.Content.AppendHtml(tag.ToHtmlString());
     }
 
+    public static HtmlTag AddBooleanAttributeIf(this HtmlTag tag, bool condition, string key)
+    {
+        return condition ? tag.BooleanAttr(key) : tag;
+    }
+
     public static HtmlTag AddEncodedAttributeIf(this HtmlTag tag, bool condition, string key, string? value)
     {
         return condition ? tag.UnencodedAttr(key, value) : tag;
@@ -49,6 +54,16 @@ internal static class HtmlTagExtensions
     public static HtmlTag AppendIf(this HtmlTag tag, bool condition, Func<HtmlTag> createChild)
     {
         return condition ? tag.Append(createChild()) : tag;
+    }
+
+    public static HtmlTag AppendHtmlIf(this HtmlTag tag, bool condition, Func<string> createHtml)
+    {
+        return condition ? tag.AppendHtml(createHtml()) : tag;
+    }
+
+    public static HtmlTag AppendHtmlIf(this HtmlTag tag, bool condition, string html)
+    {
+        return AppendHtmlIf(tag, condition, () => html);
     }
 
     public static HtmlTag AddClassIf(this HtmlTag tag, bool condition, string className)
