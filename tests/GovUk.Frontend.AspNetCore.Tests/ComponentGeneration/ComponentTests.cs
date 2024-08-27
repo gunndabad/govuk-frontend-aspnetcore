@@ -115,6 +115,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateTextInput(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("task-list", typeof(TaskListOptions))]
+    public void TaskList(ComponentTestCaseData<TaskListOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTaskList(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
     public void WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

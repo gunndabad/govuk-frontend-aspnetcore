@@ -86,6 +86,12 @@ public interface IComponentGenerator
     HtmlTag GenerateTag(TagOptions options);
 
     /// <summary>
+    /// Generates a task list component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateTaskList(TaskListOptions options);
+
+    /// <summary>
     /// Generates a text input component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
