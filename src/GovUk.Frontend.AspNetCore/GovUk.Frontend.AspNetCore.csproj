@@ -23,6 +23,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.Tests" />
+    <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.ConformanceTests" />
+    <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.IntegrationTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="HtmlTags" Version="9.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
