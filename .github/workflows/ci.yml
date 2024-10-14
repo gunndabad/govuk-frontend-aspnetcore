@@ -24,10 +24,8 @@ on:
 
 jobs:
   build:
-
     name: "Build & package"
     runs-on: ubuntu-latest
-
     env:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -37,6 +35,12 @@ jobs:
       with:
         fetch-depth: 0
         submodules: recursive
+
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          6.0.x
+          7.0.x
 
     - name: Install tools
       run: |
@@ -71,14 +75,13 @@ jobs:
         MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
 
     - name: Publish package artifact
-      uses: actions/upload-artifact@v2-preview
+      uses: actions/upload-artifact@v4
       with:
         name: GovUk.Frontend.AspNetCore.nupkg
         path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
 
 
   release:
-
     name: "Release"
     runs-on: ubuntu-latest
     needs: build
@@ -86,7 +89,7 @@ jobs:
 
     steps:
     - name: Download package artifact
-      uses: actions/download-artifact@v4.1.7
+      uses: actions/download-artifact@v4
       with:
         name: GovUk.Frontend.AspNetCore.nupkg
 
