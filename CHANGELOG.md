@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### `DateInputAttribute`
+This attribute can be added to properties that are model bound from date input components. It allows overriding the prefix used for error messages e.g.
+```cs
+[DateInput(ErrorMessagePrefix = "Your date of birth")]
+public DateOnly? DateOfBirth { get; set; }
+```
+
 ### `asp-for` attributes
 The `asp-for` attributes have been deprecated; the `for` attribute should be used instead.
 

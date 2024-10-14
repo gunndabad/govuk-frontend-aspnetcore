@@ -95,6 +95,7 @@ public static class GovUkFrontendAspNetCoreExtensions
         public void Configure(MvcOptions options)
         {
             options.ModelBinderProviders.Insert(2, new DateInputModelBinderProvider(_gfaOptionsAccessor));
+            options.ModelMetadataDetailsProviders.Add(new GovUkFrontendAspNetCoreMetadataDetailsProvider());
         }
     }
 }

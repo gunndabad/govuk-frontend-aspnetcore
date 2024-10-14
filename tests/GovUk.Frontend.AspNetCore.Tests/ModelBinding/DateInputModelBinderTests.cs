@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.Tests.Infrastructure;
@@ -241,6 +242,41 @@ public class DateInputModelBinderTests
     }
 
     [Theory]
+    [InlineData(DateInputParseErrors.MissingYear, "Your date of birth must include a year")]
+    [InlineData(DateInputParseErrors.InvalidYear, "Your date of birth must be a real date")]
+    [InlineData(DateInputParseErrors.MissingMonth, "Your date of birth must include a month")]
+    [InlineData(DateInputParseErrors.InvalidMonth, "Your date of birth must be a real date")]
+    [InlineData(DateInputParseErrors.InvalidDay, "Your date of birth must be a real date")]
+    [InlineData(DateInputParseErrors.MissingDay, "Your date of birth must include a day")]
+    [InlineData(DateInputParseErrors.MissingYear | DateInputParseErrors.MissingMonth, "Your date of birth must include a month and year")]
+    [InlineData(DateInputParseErrors.MissingYear | DateInputParseErrors.MissingDay, "Your date of birth must include a day and year")]
+    [InlineData(DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingDay, "Your date of birth must include a day and month")]
+    [InlineData(DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth, "Your date of birth must be a real date")]
+    [InlineData(DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay, "Your date of birth must be a real date")]
+    [InlineData(DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay, "Your date of birth must be a real date")]
+    public void GetModelStateErrorMessageWithDateInputMetadata(DateInputParseErrors parseErrors, string expectedMessage)
+    {
+        // Arrange
+        var dateInputModelMetadata = new DateInputModelMetadata()
+        {
+            ErrorMessagePrefix = "Your date of birth"
+        };
+
+        var modelMetadata = new DisplayNameModelMetadata(
+            "Date of birth",
+            additionalValues: new Dictionary<object, object>()
+            {
+                { typeof(DateInputModelMetadata), dateInputModelMetadata }
+            });
+
+        // Act
+        var result = DateInputModelConverterModelBinder.GetModelStateErrorMessage(parseErrors, modelMetadata);
+
+        // Assert
+        Assert.Equal(expectedMessage, result);
+    }
+
+    [Theory]
     [InlineData("", "4", "2020", DateInputParseErrors.MissingDay)]
     [InlineData("1", "", "2020", DateInputParseErrors.MissingMonth)]
     [InlineData("1", "4", "", DateInputParseErrors.MissingYear)]
@@ -345,13 +381,14 @@ public class DateInputModelBinderTests
 
     private class DisplayNameModelMetadata : ModelMetadata
     {
-        public DisplayNameModelMetadata(string displayName)
+        public DisplayNameModelMetadata(string displayName, IReadOnlyDictionary<object, object>? additionalValues = null)
             : base(ModelMetadataIdentity.ForType(typeof(DateOnly?)))
         {
             DisplayName = displayName;
+            AdditionalValues = additionalValues ?? new Dictionary<object, object>();
         }
 
-        public override IReadOnlyDictionary<object, object> AdditionalValues => throw new NotImplementedException();
+        public override IReadOnlyDictionary<object, object> AdditionalValues { get; }
 
         public override ModelPropertyCollection Properties => throw new NotImplementedException();
 
