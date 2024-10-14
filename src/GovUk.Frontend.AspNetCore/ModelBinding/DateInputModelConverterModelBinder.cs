@@ -10,9 +10,9 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
 internal class DateInputModelConverterModelBinder : IModelBinder
 {
-    private const string DayComponentName = "Day";
-    private const string MonthComponentName = "Month";
-    private const string YearComponentName = "Year";
+    private const string DayInputName = "Day";
+    private const string MonthInputName = "Month";
+    private const string YearInputName = "Year";
 
     private readonly DateInputModelConverter _dateInputModelConverter;
     private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
@@ -35,9 +35,9 @@ internal class DateInputModelConverterModelBinder : IModelBinder
             throw new InvalidOperationException($"Cannot bind {modelType.Name}.");
         }
 
-        var dayModelName = $"{bindingContext.ModelName}.{DayComponentName}";
-        var monthModelName = $"{bindingContext.ModelName}.{MonthComponentName}";
-        var yearModelName = $"{bindingContext.ModelName}.{YearComponentName}";
+        var dayModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, DayInputName);
+        var monthModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, MonthInputName);
+        var yearModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, YearInputName);
 
         var dayValueProviderResult = bindingContext.ValueProvider.GetValue(dayModelName);
         var monthValueProviderResult = bindingContext.ValueProvider.GetValue(monthModelName);
@@ -97,27 +97,31 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         Debug.Assert(parseErrors != DateInputParseErrors.None);
         Debug.Assert(parseErrors != (DateInputParseErrors.MissingDay | DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingYear));
 
-        var displayName = modelMetadata.DisplayName ?? modelMetadata.PropertyName;
+        var dateInputModelMetadata = modelMetadata.AdditionalValues.TryGetValue(typeof(DateInputModelMetadata), out var metadataObj) &&
+            metadataObj is DateInputModelMetadata dimm ? dimm :
+            null;
 
-        var missingComponents = new List<string>();
+        var displayName = dateInputModelMetadata?.ErrorMessagePrefix ?? modelMetadata.DisplayName ?? modelMetadata.PropertyName;
+
+        var missingFields = new List<string>();
 
         if ((parseErrors & DateInputParseErrors.MissingDay) != 0)
         {
-            missingComponents.Add("day");
+            missingFields.Add("day");
         }
         if ((parseErrors & DateInputParseErrors.MissingMonth) != 0)
         {
-            missingComponents.Add("month");
+            missingFields.Add("month");
         }
         if ((parseErrors & DateInputParseErrors.MissingYear) != 0)
         {
-            missingComponents.Add("year");
+            missingFields.Add("year");
         }
 
-        if (missingComponents.Count > 0)
+        if (missingFields.Count > 0)
         {
-            Debug.Assert(missingComponents.Count <= 2);
-            return $"{displayName} must include a {string.Join(" and ", missingComponents)}";
+            Debug.Assert(missingFields.Count <= 2);
+            return $"{displayName} must include a {string.Join(" and ", missingFields)}";
         }
 
         return $"{displayName} must be a real date";
@@ -176,7 +180,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
 
             if (!int.TryParse(value, out result) && acceptMonthNames)
             {
-                result = value.ToLower() switch
+                result = value.ToLowerInvariant() switch
                 {
                     "jan" => 1,
                     "january" => 1,

@@ -3,7 +3,7 @@ using System;
 namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
 /// <summary>
-/// The errors that occurred when parsing the components of a date input component.
+/// The errors that occurred when parsing the fields of a date input component.
 /// </summary>
 [Flags]
 public enum DateInputParseErrors
@@ -14,32 +14,32 @@ public enum DateInputParseErrors
     None = 0,
 
     /// <summary>
-    /// The year component is missing.
+    /// The year field is missing.
     /// </summary>
     MissingYear = 1,
 
     /// <summary>
-    /// The year component is invalid.
+    /// The year field is invalid.
     /// </summary>
     InvalidYear = 2,
 
     /// <summary>
-    /// The month component is missing.
+    /// The month field is missing.
     /// </summary>
     MissingMonth = 4,
 
     /// <summary>
-    /// The month component is invalid.
+    /// The month field is invalid.
     /// </summary>
     InvalidMonth = 8,
 
     /// <summary>
-    /// The day component is missing.
+    /// The day field is missing.
     /// </summary>
     MissingDay = 16,
 
     /// <summary>
-    /// The day component is invalid.
+    /// The day field is invalid.
     /// </summary>
     InvalidDay = 32
 }
