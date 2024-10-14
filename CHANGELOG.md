@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### `DateInputAttribute`
+This attribute can be added to properties that are model bound from date input components. It allows overriding the prefix used for error messages e.g.
+```cs
+[DateInput(ErrorMessagePrefix = "Your date of birth")]
+public DateOnly? DateOfBirth { get; set; }
+```
+
 Fix duplicate `PathBase` in OpengraphImageUrl in page template view.
 
 ## 2.2.0
