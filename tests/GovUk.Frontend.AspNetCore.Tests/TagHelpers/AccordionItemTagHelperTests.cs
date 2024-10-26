@@ -47,9 +47,7 @@ public class AccordionItemTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(1, accordionContext.Items.Count);
-
-        var firstItem = accordionContext.Items.First();
+        var firstItem = Assert.Single(accordionContext.Items);
         Assert.Equal("Heading", firstItem.HeadingContent?.ToHtmlString());
         Assert.Equal("Summary", firstItem.SummaryContent?.ToHtmlString());
         Assert.Equal("Content", firstItem.Content?.ToHtmlString());

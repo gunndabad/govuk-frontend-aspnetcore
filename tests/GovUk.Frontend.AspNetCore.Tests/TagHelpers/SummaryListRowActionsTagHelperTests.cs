@@ -47,6 +47,7 @@ public class SummaryListRowActionsTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
+        Assert.NotNull(rowContext.ActionsAttributes);
         Assert.Collection(
             rowContext.ActionsAttributes,
             kvp =>

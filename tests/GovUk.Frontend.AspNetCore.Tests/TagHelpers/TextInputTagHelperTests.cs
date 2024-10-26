@@ -106,6 +106,7 @@ public class TextInputTagHelperTests
         Assert.Equal(autocomplete, actualOptions.Autocomplete);
         Assert.Equal(pattern, actualOptions.Pattern);
         Assert.Equal(spellcheck, actualOptions.Spellcheck);
+        Assert.NotNull(actualOptions.Attributes);
         Assert.Collection(actualOptions.Attributes, kvp =>
         {
             Assert.Equal("data-foo", kvp.Key);
@@ -169,15 +170,19 @@ public class TextInputTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions);
-        Assert.Equal(errorHtml, actualOptions!.ErrorMessage?.Html);
-        Assert.Equal(errorVht, actualOptions.ErrorMessage?.VisuallyHiddenText);
-        Assert.Collection(actualOptions.ErrorMessage?.Attributes, kvp =>
+        Assert.NotNull(actualOptions.ErrorMessage);
+        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html);
+        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText);
+        Assert.NotNull(actualOptions.ErrorMessage.Attributes);
+        Assert.Collection(actualOptions.ErrorMessage.Attributes, kvp =>
         {
             Assert.Equal("data-foo", kvp.Key);
             Assert.Equal(errorDataFooAttribute, kvp.Value);
         });
-        Assert.Contains("govuk-input--error", actualOptions.Classes?.Split(' '));
-        Assert.Contains("govuk-form-group--error", actualOptions.FormGroup?.Classes?.Split(' '));
+        Assert.NotNull(actualOptions.Classes);
+        Assert.Contains("govuk-input--error", actualOptions.Classes.Split(' '));
+        Assert.NotNull(actualOptions.FormGroup?.Classes);
+        Assert.Contains("govuk-form-group--error", actualOptions.FormGroup.Classes.Split(' '));
     }
 
     [Fact]

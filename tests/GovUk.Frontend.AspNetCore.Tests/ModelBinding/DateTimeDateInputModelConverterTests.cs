@@ -40,7 +40,7 @@ public class DateTimeDateInputModelConverterTests
         Assert.Equal(expectedResult, result);
     }
 
-    public static TheoryData<Type, DateOnly?, object> CreateModelFromDateData { get; } = new()
+    public static TheoryData<Type, DateOnly, object> CreateModelFromDateData { get; } = new()
     {
         { typeof(DateTime), new DateOnly(2020, 4, 1), new DateTime(2020, 4, 1) },
         { typeof(DateTime?), new DateOnly(2020, 4, 1), (DateTime?)new DateTime(2020, 4, 1) }

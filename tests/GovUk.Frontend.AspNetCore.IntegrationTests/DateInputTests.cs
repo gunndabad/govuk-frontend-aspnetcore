@@ -152,7 +152,7 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
     {
         var inputs = await page.QuerySelectorAllAsync("input[type='text']");
 
-        await AssertEx.CollectionAsync(
+        await Assert.CollectionAsync(
             inputs,
             input => AssertInput(input, expectedDay, expectDayToHaveError),
             input => AssertInput(input, expectedMonth, expectMonthToHaveError),

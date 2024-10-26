@@ -51,7 +51,7 @@ public class SummaryCardActionTagHelperTests
             {
                 Assert.Equal("Change", action.Content?.ToHtmlString());
                 Assert.Equal("vht", action.VisuallyHiddenText);
-
+                Assert.NotNull(action.Attributes);
                 Assert.Collection(
                     action.Attributes,
                     kvp =>

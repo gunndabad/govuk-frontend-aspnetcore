@@ -65,26 +65,27 @@ public class SummaryListRowTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(1, summaryListContext.Rows.Count);
-
         Assert.Collection(
             summaryListContext.Rows,
             row =>
             {
                 Assert.Equal("Key", row.Key?.Content?.ToHtmlString());
                 Assert.Equal("Value", row.Value?.Content?.ToHtmlString());
-
+                Assert.NotNull(row.Actions);
+                Assert.NotNull(row.Actions.Items);
                 Assert.Collection(
-                    row.Actions?.Items,
+                    row.Actions.Items,
                     action =>
                     {
                         Assert.Equal("First action", action.Content?.ToHtmlString());
+                        Assert.NotNull(action.Attributes);
                         Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "first");
                         Assert.Equal("vht1", action.VisuallyHiddenText);
                     },
                     action =>
                     {
                         Assert.Equal("Second action", action.Content?.ToHtmlString());
+                        Assert.NotNull(action.Attributes);
                         Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
                         Assert.Equal("vht2", action.VisuallyHiddenText);
                     });
@@ -142,26 +143,27 @@ public class SummaryListRowTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(1, summaryListContext.Rows.Count);
-
         Assert.Collection(
             summaryListContext.Rows,
             row =>
             {
                 Assert.Equal("Key", row.Key?.Content?.ToHtmlString());
                 Assert.Null(row.Value);
-
+                Assert.NotNull(row.Actions);
+                Assert.NotNull(row.Actions.Items);
                 Assert.Collection(
-                    row.Actions?.Items,
+                    row.Actions.Items,
                     action =>
                     {
                         Assert.Equal("First action", action.Content?.ToHtmlString());
+                        Assert.NotNull(action.Attributes);
                         Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "first");
                         Assert.Equal("vht1", action.VisuallyHiddenText);
                     },
                     action =>
                     {
                         Assert.Equal("Second action", action.Content?.ToHtmlString());
+                        Assert.NotNull(action.Attributes);
                         Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
                         Assert.Equal("vht2", action.VisuallyHiddenText);
                     });

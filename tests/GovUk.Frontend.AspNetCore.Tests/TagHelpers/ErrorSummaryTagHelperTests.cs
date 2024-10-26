@@ -79,9 +79,12 @@ public class ErrorSummaryTagHelperTests
         Assert.Equal(descriptionHtml, actualOptions.DescriptionHtml);
         Assert.Equal(actualOptions.ErrorList, errorItems);
         Assert.Null(actualOptions.Classes);
+        Assert.NotNull(actualOptions.Attributes);
         Assert.Empty(actualOptions.Attributes);
         Assert.Equal(disableAutoFocus, actualOptions.DisableAutoFocus);
+        Assert.NotNull(actualOptions.TitleAttributes);
         Assert.Empty(actualOptions.TitleAttributes);
+        Assert.NotNull(actualOptions.DescriptionAttributes);
         Assert.Empty(actualOptions.DescriptionAttributes);
     }
 }

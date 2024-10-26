@@ -40,7 +40,7 @@ public class DateOnlyDateInputModelConverterTests
         Assert.Equal(expectedResult, result);
     }
 
-    public static TheoryData<Type, DateOnly?, object> CreateDateFromElementsData { get; } = new()
+    public static TheoryData<Type, DateOnly, object> CreateDateFromElementsData { get; } = new()
     {
         { typeof(DateOnly), new DateOnly(2020, 4, 1), new DateOnly(2020, 4, 1) },
         { typeof(DateOnly?), new DateOnly(2020, 4, 1), (DateOnly?)new DateOnly(2020, 4, 1) }

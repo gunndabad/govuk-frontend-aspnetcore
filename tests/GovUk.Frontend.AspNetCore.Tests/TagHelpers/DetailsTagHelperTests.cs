@@ -69,6 +69,7 @@ public class DetailsTagHelperTests
         Assert.Equal(content, actualOptions.Html);
         Assert.Null(actualOptions.Text);
         Assert.Equal(classes, actualOptions.Classes);
+        Assert.NotNull(actualOptions.Attributes);
         Assert.Collection(actualOptions.Attributes, kvp =>
         {
             Assert.Equal("data-foo", kvp.Key);

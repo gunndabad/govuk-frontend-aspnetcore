@@ -75,6 +75,7 @@ public class ButtonTagHelperTests
         Assert.Equal(disabled, actualOptions.Disabled);
         Assert.Null(actualOptions.Href);
         Assert.Equal(classes, actualOptions.Classes);
+        Assert.NotNull(actualOptions.Attributes);
         Assert.Collection(actualOptions.Attributes, kvp =>
         {
             Assert.Equal("data-foo", kvp.Key);

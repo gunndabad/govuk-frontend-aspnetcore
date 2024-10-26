@@ -73,6 +73,7 @@ public class FormErrorSummaryTagHelperTests
         Assert.Null(actualOptions.TitleHtml);
         Assert.Null(actualOptions.DescriptionText);
         Assert.Null(actualOptions.DescriptionHtml);
+        Assert.NotNull(actualOptions.ErrorList);
         Assert.Collection(
             actualOptions.ErrorList,
             item =>
