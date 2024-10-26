@@ -4,7 +4,6 @@ using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -12,21 +11,13 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class TitleTagHelperTests
 {
     [Theory]
-    [InlineData(false, false, false)]
-    [InlineData(true, false, false)]
-    [InlineData(false, true, false)]
-    [InlineData(true, true, true)]
+    [InlineData(false, false)]
+    [InlineData(true, true)]
     public async Task ProcessAsync_GeneratesExpectedOutput(
-        bool prependErrorToTitleOption,
         bool pageHasErrors,
         bool expectErrorInTitle)
     {
         // Arrange
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions()
-        {
-            PrependErrorToTitle = prependErrorToTitleOption
-        });
-
         var context = new TagHelperContext(
             tagName: "form",
             allAttributes: new TagHelperAttributeList(),
@@ -45,8 +36,9 @@ public class TitleTagHelperTests
         var viewContext = new ViewContext();
         viewContext.ViewData.SetPageHasErrors(pageHasErrors);
 
-        var tagHelper = new TitleTagHelper(options)
+        var tagHelper = new TitleTagHelper()
         {
+            ErrorPrefix = "Error:",
             ViewContext = viewContext
         };
 

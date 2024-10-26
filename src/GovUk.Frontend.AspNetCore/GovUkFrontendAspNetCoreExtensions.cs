@@ -51,6 +51,7 @@ public static class GovUkFrontendAspNetCoreExtensions
         services.AddScoped<DateInputParseErrorsProvider>();
         services.AddTransient<PageTemplateHelper>();
         services.AddSingleton<ITagHelperInitializer<ButtonTagHelper>, ButtonTagHelperInitializer>();
+        services.AddSingleton<ITagHelperInitializer<TitleTagHelper>, TitleTagHelperInitializer>();
 
         services.Configure(setupAction);
 
