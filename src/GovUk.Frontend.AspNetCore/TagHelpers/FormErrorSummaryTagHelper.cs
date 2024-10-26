@@ -18,7 +18,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 public class FormErrorSummaryTagHelper : TagHelper
 {
     private const string DisableAutoFocusAttributeName = "disable-error-summary-auto-focus";
-    private const string PrependErrorSummaryAttributeName = "gfa-prepend-error-summary";
+    private const string PrependErrorSummaryAttributeName = "prepend-error-summary";
 
     private readonly GovUkFrontendAspNetCoreOptions _options;
     private readonly IComponentGenerator _componentGenerator;
