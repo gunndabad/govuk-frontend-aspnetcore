@@ -52,6 +52,7 @@ public static class GovUkFrontendAspNetCoreExtensions
         services.AddTransient<PageTemplateHelper>();
         services.AddSingleton<ITagHelperInitializer<ButtonTagHelper>, ButtonTagHelperInitializer>();
         services.AddSingleton<ITagHelperInitializer<TitleTagHelper>, TitleTagHelperInitializer>();
+        services.AddSingleton<ITagHelperInitializer<ContainerErrorSummaryTagHelper>, ContainerErrorSummaryTagHelperInitializer>();
 
         services.Configure(setupAction);
 

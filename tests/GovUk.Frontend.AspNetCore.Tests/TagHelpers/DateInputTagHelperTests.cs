@@ -1041,14 +1041,14 @@ public class DateInputTagHelperTests
         string expectedErrorFieldId)
     {
         // Arrange
-        var formErrorContext = new FormErrorContext();
+        var containerErrorContext = new ContainerErrorContext();
 
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormErrorContext), formErrorContext }
+                { typeof(ContainerErrorContext), containerErrorContext }
             },
             uniqueId: "test");
 
@@ -1077,7 +1077,7 @@ public class DateInputTagHelperTests
 
         // Assert
         Assert.Collection(
-            formErrorContext.Errors,
+            containerErrorContext.Errors,
             error =>
             {
                 Assert.Equal("Error", error.Html);

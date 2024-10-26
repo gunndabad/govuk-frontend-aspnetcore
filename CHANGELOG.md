@@ -9,11 +9,16 @@ This attribute can be added to properties that are model bound from date input c
 public DateOnly? DateOfBirth { get; set; }
 ```
 
+### Error summaries
+
+`FormErrorSummaryTagHelper` has been renamed to `ContainerErrorSummaryTagHelper`.
+In additional, its `gfa-prepend-error-summary` attribute has been renamed to `prepend-error-summary`.
+
+The `prepend-error-summary` attribute can now be added to any element.
+If this attribute is `true` and there are any form components with errors within the element then an error summary will be prepended.
+
 ### `asp-for` attributes
 The `asp-for` attributes have been deprecated; the `for` attribute should be used instead.
-
-### `gfa-prepend-error-summary` attribute
-The `gfa-prepend-error-summary` attribute on `FormErrorSummaryTagHelper` is now called `prepend-error-summary`.
 
 ### `gfa-error-prefix` attribute
 The `gfa-error-prefix` attribute on `TitleTagHelper` is now called `error-prefix`.

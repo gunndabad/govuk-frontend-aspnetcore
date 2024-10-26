@@ -9,7 +9,7 @@ public class FormErrorContextTests
     public void AddError_AddsErrorToContext()
     {
         // Arrange
-        var context = new FormErrorContext();
+        var context = new ContainerErrorContext();
         var html = "Content";
         var href = "/foo";
 

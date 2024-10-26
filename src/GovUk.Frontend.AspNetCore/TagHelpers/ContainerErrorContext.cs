@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
-internal class FormErrorContext
+internal class ContainerErrorContext
 {
     private readonly List<(string Html, string? Href)> _errors;
 
-    public FormErrorContext()
+    public ContainerErrorContext()
     {
         _errors = new();
     }

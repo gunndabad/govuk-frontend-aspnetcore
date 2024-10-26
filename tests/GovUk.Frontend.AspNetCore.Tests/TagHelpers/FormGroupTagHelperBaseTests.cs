@@ -64,14 +64,14 @@ public class FormGroupTagHelperBaseTests
     public void GenerateErrorMessage_AddsErrorToFormErrorContext()
     {
         // Arrange
-        var formErrorContext = new FormErrorContext();
+        var containerErrorContext = new ContainerErrorContext();
 
         var tagHelperContext = new TagHelperContext(
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormErrorContext), formErrorContext }
+                { typeof(ContainerErrorContext), containerErrorContext }
             },
             uniqueId: "test");
 
@@ -90,7 +90,7 @@ public class FormGroupTagHelperBaseTests
 
         // Assert
         Assert.Collection(
-            formErrorContext.Errors,
+            containerErrorContext.Errors,
             error =>
             {
                 Assert.Equal("Error message", error.Html);

@@ -7,7 +7,6 @@ using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -15,25 +14,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// <see cref="ITagHelper"/> implementation targeting &lt;form&gt; elements that prepends a GDS error summary component to the form.
 /// </summary>
 [HtmlTargetElement("form")]
-public class FormErrorSummaryTagHelper : TagHelper
+[HtmlTargetElement("*", Attributes = "prepend-error-summary")]
+public class ContainerErrorSummaryTagHelper : TagHelper
 {
     private const string DisableAutoFocusAttributeName = "disable-error-summary-auto-focus";
     private const string PrependErrorSummaryAttributeName = "prepend-error-summary";
 
-    private readonly GovUkFrontendAspNetCoreOptions _options;
     private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
-    /// Creates a <see cref="FormErrorSummaryTagHelper"/>.
+    /// Creates a <see cref="ContainerErrorSummaryTagHelper"/>.
     /// </summary>
-    public FormErrorSummaryTagHelper(
-        IComponentGenerator componentGenerator,
-        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+    public ContainerErrorSummaryTagHelper(IComponentGenerator componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
-        ArgumentNullException.ThrowIfNull(optionsAccessor);
         _componentGenerator = componentGenerator;
-        _options = optionsAccessor.Value;
     }
 
     /// <summary>
@@ -62,8 +57,9 @@ public class FormErrorSummaryTagHelper : TagHelper
     /// <inheritdoc/>
     public override void Init(TagHelperContext context)
     {
-        // N.B. We deliberately do not use SetScopedContextItem here; nested forms are not supported
-        context.Items.TryAdd(typeof(FormErrorContext), new FormErrorContext());
+        // N.B. We deliberately do not use SetScopedContextItem here; nested forms are not supported.
+        // If we weren't able to add the FormErrorContext then there's a parent element that's already set it.
+        context.Items.TryAdd(typeof(ContainerErrorContext), new ContainerErrorContext());
     }
 
     /// <inheritdoc/>
@@ -71,21 +67,20 @@ public class FormErrorSummaryTagHelper : TagHelper
     {
         await output.GetChildContentAsync();
 
-        var prependErrorSummary = PrependErrorSummary ?? _options.PrependErrorSummaryToForms;
-        if (!prependErrorSummary)
+        if (PrependErrorSummary != true)
         {
             return;
         }
 
-        var formErrorContext = (FormErrorContext)context.Items[typeof(FormErrorContext)];
-        if (formErrorContext.Errors.Count == 0)
+        var containerErrorContext = (ContainerErrorContext)context.Items[typeof(ContainerErrorContext)];
+        if (containerErrorContext.Errors.Count == 0)
         {
             return;
         }
 
         ViewContext!.ViewData.SetPageHasErrors(true);
 
-        var errorItems = formErrorContext.Errors
+        var errorItems = containerErrorContext.Errors
             .Select(i => new ErrorSummaryOptionsErrorItem()
             {
                 Html = i.Html,
