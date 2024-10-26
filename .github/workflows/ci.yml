@@ -38,8 +38,7 @@ jobs:
     - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          6.0.x
-          7.0.x
+          8.0.x
 
     - name: Install tools
       run: |
@@ -60,7 +59,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Install Playwright
-      run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net6.0/playwright.ps1 install
+      run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install
 
     - name: Test
       run: |

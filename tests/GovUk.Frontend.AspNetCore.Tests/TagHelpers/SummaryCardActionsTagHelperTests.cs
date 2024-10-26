@@ -41,6 +41,8 @@ public class SummaryCardActionsTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
+        Assert.NotNull(summaryCardContext.ActionsAttributes);
+
         Assert.Collection(
             summaryCardContext.ActionsAttributes,
             kvp =>

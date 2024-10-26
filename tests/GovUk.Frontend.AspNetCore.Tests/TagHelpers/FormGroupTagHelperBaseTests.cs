@@ -22,7 +22,7 @@ public class FormGroupTagHelperBaseTests
     [InlineData("initial", null, "initial")]
     [InlineData("initial", "", "initial")]
     [InlineData("initial", "new", "initial new")]
-    public void AppendToDescribedBy(string initialValue, string newValue, string expectedResult)
+    public void AppendToDescribedBy(string? initialValue, string? newValue, string? expectedResult)
     {
         // Arrange
 
