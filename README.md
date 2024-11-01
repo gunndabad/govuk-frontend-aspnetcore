@@ -157,7 +157,6 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [Date input](docs/components/date-input.md)
 - [Details](docs/components/details.md)
 - [Error message](docs/components/error-message.md)
-- [Error summary](docs/components/error-summary.md)
 - [Fieldset](docs/components/fieldset.md)
 - [File upload](docs/components/file-upload.md)
 - [Inset text](docs/components/inset-text.md)
