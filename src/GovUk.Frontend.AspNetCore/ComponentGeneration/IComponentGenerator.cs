@@ -17,7 +17,7 @@ public interface IComponentGenerator
     /// Generates a button component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
-    HtmlTag GenerateButton(ButtonOptions options);
+    HtmlTagBuilder GenerateButton(ButtonOptions options);
 
     /// <summary>
     /// Generates a cookie banner component.

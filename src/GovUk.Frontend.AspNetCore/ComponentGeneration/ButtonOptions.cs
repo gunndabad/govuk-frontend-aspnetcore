@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -15,7 +13,7 @@ public class ButtonOptions
     public bool? Disabled { get; set; }
     public string? Href { get; set; }
     public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
     public bool? PreventDoubleClick { get; set; }
     public bool? IsStartButton { get; set; }
     public string? Id { get; set; }
