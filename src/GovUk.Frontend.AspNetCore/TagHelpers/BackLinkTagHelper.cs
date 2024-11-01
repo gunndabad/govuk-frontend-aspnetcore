@@ -41,9 +41,9 @@ public class BackLinkTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes)
-            .Remove("href", out var href);
+        var attributes = EncodedAttributesDictionary.FromTagHelperAttributes(output.Attributes);
+        attributes.Remove("class", out var classes);
+        attributes.Remove("href", out var href);
 
         var component = _componentGenerator.GenerateBackLink(new BackLinkOptions()
         {
@@ -53,6 +53,6 @@ public class BackLinkTagHelper : TagHelper
             Attributes = attributes
         });
 
-        output.WriteComponent(component);
+        component.WriteTo(output);
     }
 }

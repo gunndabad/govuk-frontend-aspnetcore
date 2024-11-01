@@ -11,7 +11,7 @@ public interface IComponentGenerator
     /// Generates a back link component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
-    HtmlTag GenerateBackLink(BackLinkOptions options);
+    HtmlTagBuilder GenerateBackLink(BackLinkOptions options);
 
     /// <summary>
     /// Generates a button component.
