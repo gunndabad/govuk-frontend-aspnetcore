@@ -23,8 +23,8 @@ The `asp-for` attributes have been deprecated; the `for` attribute should be use
 ### `gfa-error-prefix` attribute
 The `gfa-error-prefix` attribute on `TitleTagHelper` is now called `error-prefix`.
 
-### `<govuk-error-message>` tag helper
-This tag helper has been removed.
+### `<govuk-error-message>` and `<govuk-fieldset>` tag helpers
+The `<govuk-error-message>` and `<govuk-fieldset>` tag helpers have been removed.
 
 ## 2.2.0
 

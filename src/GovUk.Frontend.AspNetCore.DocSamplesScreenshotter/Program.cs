@@ -64,7 +64,6 @@ class Program
             ("ErrorSummary/ErrorSummary", "error-summary.png"),
             ("ErrorSummary/ErrorSummaryWithModelStateError", "error-summary-with-modelstate-error.png"),
             ("ErrorSummary/ErrorSummaryWithTitle", "error-summary-with-title.png"),
-            ("Fieldset/Fieldset", "fieldset.png"),
             ("FileUpload/FileUpload", "file-upload.png"),
             ("FileUpload/FileUploadWithErrors", "file-upload-with-errors.png"),
             ("InsetText/InsetText", "inset-text.png"),
