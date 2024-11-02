@@ -3,10 +3,18 @@
   "isRoot": true,
   "tools": {
     "dotnet-format": {
-      "version": "7.4.441804",
+      "version": "8.3.546805",
       "commands": [
         "dotnet-format"
-      ]
+      ],
+      "rollForward": false
+    },
+    "csharpier": {
+      "version": "0.29.2",
+      "commands": [
+        "dotnet-csharpier"
+      ],
+      "rollForward": false
     }
   }
 }

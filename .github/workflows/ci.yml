@@ -35,25 +35,18 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          8.0.x
-
     - name: Install tools
       run: |
-        dotnet tool restore --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet7/nuget/v3/index.json
-
-    - name: Clean
-      run: |
-        dotnet clean --configuration Release
-        dotnet nuget locals all --clear
+        dotnet tool restore --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8/nuget/v3/index.json
 
     - name: Restore
       run: dotnet restore
 
     - name: Format
-      run: dotnet format --verify-no-changes
+      run: |
+        dotnet tool run dotnet-format style --verify-no-changes
+        dotnet tool run dotnet-format analyzers --verify-no-changes
+        dotnet tool run dotnet-csharpier . --check
 
     - name: Build
       run: dotnet build --configuration Release --no-restore
