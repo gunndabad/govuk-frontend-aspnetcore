@@ -7,51 +7,51 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
-public class FormGroupErrorMessageTagHelperTests
+public class HintTagHelperTests
 {
     [Fact]
     public async Task ProcessAsync_SetsErrorMessageOnContext()
     {
         // Arrange
-        var errorMessage = "Error message";
+        var hint = "The hint";
 
         var formGroupContext = new TestFormGroupContext();
 
         var context = new TagHelperContext(
-            tagName: "test-error-message",
+            tagName: "test-hint",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormGroupContext), formGroupContext }
+                { typeof(FormGroupContext2), formGroupContext }
             },
             uniqueId: "test");
 
         var output = new TagHelperOutput(
-            "test-error-message",
+            "test-hint",
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent(errorMessage);
+                tagHelperContent.SetContent(hint);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new FormGroupErrorMessageTagHelper();
+        var tagHelper = new HintTagHelper();
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(HtmlEncoder.Default.Encode(errorMessage), formGroupContext.ErrorMessage?.Content?.ToHtmlString());
+        Assert.Equal(HtmlEncoder.Default.Encode(hint), formGroupContext.Hint?.Html);
     }
 
-    private class TestFormGroupContext : FormGroupContext
+    private class TestFormGroupContext : FormGroupContext2
     {
-        protected override string ErrorMessageTagName => "test-error-message";
+        protected override IReadOnlyCollection<string> ErrorMessageTagNames => [ShortTagNames.ErrorMessage];
 
-        protected override string HintTagName => "test-hint";
+        protected override IReadOnlyCollection<string> HintTagNames => [ShortTagNames.Hint];
 
-        protected override string LabelTagName => "test-label";
+        protected override IReadOnlyCollection<string> LabelTagNames => [ShortTagNames.Label];
 
         protected override string RootTagName => "test";
     }

@@ -1,25 +1,24 @@
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 /// <summary>
-/// Represents the label in a GDS form group component.
+/// Represents the label in a GDS form component.
 /// </summary>
-[HtmlTargetElement(CharacterCountTagHelper.LabelTagName, ParentTag = CharacterCountTagHelper.TagName)]
-[HtmlTargetElement(FileUploadTagHelper.LabelTagName, ParentTag = FileUploadTagHelper.TagName)]
-[HtmlTargetElement(SelectTagHelper.LabelTagName, ParentTag = SelectTagHelper.TagName)]
-[HtmlTargetElement(TextAreaTagHelper.LabelTagName, ParentTag = TextAreaTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.LabelElement)]
-public class FormGroupLabelTagHelper : TagHelper
+[HtmlTargetElement(TextInputTagHelper.LabelTagName, ParentTag = TextInputTagHelper.TagName)]
+[HtmlTargetElement(TextInputTagHelper.LabelShortTagName, ParentTag = TextInputTagHelper.TagName)]
+[OutputElementHint(DefaultComponentGenerator.LabelElement)]
+public class LabelTagHelper : TagHelper
 {
     private const string IsPageHeadingAttributeName = "is-page-heading";
 
     /// <summary>
     /// Creates a <see cref="FormGroupLabelTagHelper"/>.
     /// </summary>
-    public FormGroupLabelTagHelper()
+    public LabelTagHelper()
     {
     }
 
@@ -44,12 +43,13 @@ public class FormGroupLabelTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var formGroupContext = context.GetContextItem<FormGroupContext>();
+        var formGroupContext = context.GetContextItem<FormGroupContext2>();
 
         formGroupContext.SetLabel(
             IsPageHeading,
-            output.Attributes.ToAttributeDictionary(),
-            childContent?.Snapshot());
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent?.ToHtmlString(),
+            output.TagName);
 
         output.SuppressOutput();
     }

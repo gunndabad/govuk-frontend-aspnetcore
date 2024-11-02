@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -15,8 +15,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(RadiosTagHelper.ErrorMessageTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
 [HtmlTargetElement(SelectTagHelper.ErrorMessageTagName, ParentTag = SelectTagHelper.TagName)]
 [HtmlTargetElement(TextAreaTagHelper.ErrorMessageTagName, ParentTag = TextAreaTagHelper.TagName)]
-[HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(DefaultComponentGenerator.ErrorMessageElement)]
+[OutputElementHint(ComponentGenerator.ErrorMessageElement)]
 public class FormGroupErrorMessageTagHelper : TagHelper
 {
     private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
@@ -56,11 +55,11 @@ public class FormGroupErrorMessageTagHelper : TagHelper
 
     private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
     {
-        var formGroupContext = context.GetContextItem<FormGroupContext2>();
+        var formGroupContext = context.GetContextItem<FormGroupContext>();
 
         formGroupContext.SetErrorMessage(
             VisuallyHiddenText,
-            output.Attributes.ToEncodedAttributeDictionary(),
-            childContent?.ToHtmlString());
+            output.Attributes.ToAttributeDictionary(),
+            childContent?.Snapshot());
     }
 }

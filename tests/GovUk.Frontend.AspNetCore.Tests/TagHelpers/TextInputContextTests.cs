@@ -12,15 +12,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
+        var prefixTagName = ShortTagNames.Prefix;
+        var errorMessageTagName = ShortTagNames.ErrorMessage;
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error"));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error", errorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-error-message> must be specified before <govuk-input-prefix>.", ex.Message);
+        Assert.Equal($"<{errorMessageTagName}> must be specified before <{prefixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -28,15 +29,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
+        var suffixTagName = ShortTagNames.Suffix;
+        var errorMessageTagName = ShortTagNames.ErrorMessage;
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error"));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error", errorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-error-message> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{errorMessageTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -44,15 +46,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
+        var prefixTagName = ShortTagNames.Prefix;
+        var hintTagName = ShortTagNames.Hint;
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error"));
+        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error", hintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-hint> must be specified before <govuk-input-prefix>.", ex.Message);
+        Assert.Equal($"<{hintTagName}> must be specified before <{prefixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -60,15 +63,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
+        var suffixTagName = ShortTagNames.Suffix;
+        var hintTagName = ShortTagNames.ErrorMessage;
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error"));
+        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error", hintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-hint> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{hintTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -76,15 +80,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
+        var prefixTagName = ShortTagNames.Prefix;
+        var labelTagName = ShortTagNames.Label;
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error"));
+        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error", labelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-label> must be specified before <govuk-input-prefix>.", ex.Message);
+        Assert.Equal($"<{labelTagName}> must be specified before <{prefixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -92,15 +97,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix");
+        var suffixTagName = ShortTagNames.Suffix;
+        var labelTagName = ShortTagNames.Label;
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error"));
+        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error", labelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-label> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{labelTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -108,15 +114,15 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix");
+        var prefixTagName = ShortTagNames.Prefix;
+        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix"));
+        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix", prefixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-input-prefix> element is permitted within each <govuk-input>.", ex.Message);
+        Assert.Equal($"Only one <prefix> or <govuk-input-prefix> element is permitted within each <govuk-input>.", ex.Message);
     }
 
     [Fact]
@@ -124,15 +130,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Suffix");
+        var prefixTagName = ShortTagNames.Prefix;
+        var suffixTagName = ShortTagNames.Suffix;
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Suffix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix"));
+        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix", prefixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-prefix> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{prefixTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -140,14 +147,14 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix");
+        var suffixTagName = ShortTagNames.Suffix;
+        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetSuffix(ImmutableDictionary<string, string?>.Empty, "Prefix"));
+        var ex = Record.Exception(() => context.SetSuffix(ImmutableDictionary<string, string?>.Empty, "Prefix", suffixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-input-suffix> element is permitted within each <govuk-input>.", ex.Message);
+        Assert.Equal($"Only one <suffix> or <govuk-input-suffix> element is permitted within each <govuk-input>.", ex.Message);
     }
 }

@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -17,13 +16,26 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS input component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, TextInputPrefixTagHelper.TagName, TextInputSuffixTagHelper.TagName)]
+[RestrictChildren(
+    LabelTagName,
+    LabelShortTagName,
+    HintTagName,
+    HintShortTagName,
+    ErrorMessageTagName,
+    ErrorMessageShortTagName,
+    TextInputPrefixTagHelper.TagName,
+    TextInputPrefixTagHelper.ShortTagName,
+    TextInputSuffixTagHelper.TagName,
+    TextInputSuffixTagHelper.ShortTagName)]
 [OutputElementHint(DefaultComponentGenerator.FormGroupElement)]
 public class TextInputTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-input-error-message";
+    internal const string ErrorMessageShortTagName = ShortTagNames.ErrorMessage;
     internal const string HintTagName = "govuk-input-hint";
+    internal const string HintShortTagName = ShortTagNames.Hint;
     internal const string LabelTagName = "govuk-input-label";
+    internal const string LabelShortTagName = ShortTagNames.Label;
     internal const string TagName = "govuk-input";
 
     private const string AspForAttributeName = "asp-for";
@@ -112,7 +124,6 @@ public class TextInputTagHelper : TagHelper
     /// </summary>
     /// <remarks>
     /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
-    /// <para>The default is <c>false</c>.</para>
     /// </remarks>
     [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
     public bool? IgnoreModelStateErrors { get; set; }
@@ -207,7 +218,7 @@ public class TextInputTagHelper : TagHelper
         var value = ResolveValue();
         var labelOptions = textInputContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
         var hintOptions = textInputContext.GetHintOptions(For, _modelHelper);
-        var errorMessageOptions = textInputContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper);
+        var errorMessageOptions = textInputContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
         var prefixOptions = textInputContext.GetPrefixOptions();
         var suffixOptions = textInputContext.GetSuffixOptions();
 

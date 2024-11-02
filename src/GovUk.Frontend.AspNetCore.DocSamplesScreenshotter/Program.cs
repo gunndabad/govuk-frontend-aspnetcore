@@ -89,6 +89,7 @@ class Program
             ("TextInput/TextInput", "text-input.png"),
             ("TextInput/TextInputWithError", "text-input-with-error.png"),
             ("TextInput/TextInputWithPrefixAndSuffix", "text-input-with-prefix-and-suffix.png"),
+            ("TextInput/TextInputWithModelBinding", "text-input-with-modelbinding.png"),
             ("WarningText/WarningText", "warning-text.png")
         });
 

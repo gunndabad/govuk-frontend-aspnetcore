@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -12,6 +13,8 @@ public class FormGroupHintTagHelperTests
     public async Task ProcessAsync_SetsErrorMessageOnContext()
     {
         // Arrange
+        var hint = "The hint";
+
         var formGroupContext = new TestFormGroupContext();
 
         var context = new TagHelperContext(
@@ -19,7 +22,7 @@ public class FormGroupHintTagHelperTests
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormGroupContext2), formGroupContext }
+                { typeof(FormGroupContext), formGroupContext }
             },
             uniqueId: "test");
 
@@ -29,7 +32,7 @@ public class FormGroupHintTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Hint");
+                tagHelperContent.SetContent(hint);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,10 +42,10 @@ public class FormGroupHintTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Hint", formGroupContext.Hint?.Html);
+        Assert.Equal(HtmlEncoder.Default.Encode(hint), formGroupContext.Hint?.Content?.ToHtmlString());
     }
 
-    private class TestFormGroupContext : FormGroupContext2
+    private class TestFormGroupContext : FormGroupContext
     {
         protected override string ErrorMessageTagName => "test-error-message";
 

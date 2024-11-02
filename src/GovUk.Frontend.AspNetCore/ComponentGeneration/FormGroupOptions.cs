@@ -7,11 +7,9 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 public class FormGroupOptions
 {
     public string? Classes { get; set; }
-
-    [NonStandardParameter]
     public ImmutableDictionary<string, string?>? Attributes { get; set; }
 
-    internal void Validate()
+    internal virtual void Validate()
     {
     }
 }

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -12,13 +12,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(CharacterCountTagHelper.HintTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(DateInputTagHelper.HintTagName, ParentTag = DateInputTagHelper.TagName)]
 [HtmlTargetElement(DateInputTagHelper.HintTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(ShortTagNames.Hint, ParentTag = DateInputTagHelper.TagName)]
+[HtmlTargetElement(ShortTagNames.Hint, ParentTag = DateInputFieldsetTagHelper.TagName)]
 [HtmlTargetElement(FileUploadTagHelper.HintTagName, ParentTag = FileUploadTagHelper.TagName)]
 [HtmlTargetElement(RadiosTagHelper.HintTagName, ParentTag = RadiosTagHelper.TagName)]
 [HtmlTargetElement(RadiosTagHelper.HintTagName, ParentTag = RadiosFieldsetTagHelper.TagName)]
 [HtmlTargetElement(SelectTagHelper.HintTagName, ParentTag = SelectTagHelper.TagName)]
 [HtmlTargetElement(TextAreaTagHelper.HintTagName, ParentTag = TextAreaTagHelper.TagName)]
-[HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(DefaultComponentGenerator.HintElement)]
+[OutputElementHint(ComponentGenerator.HintElement)]
 public class FormGroupHintTagHelper : TagHelper
 {
     /// <summary>
@@ -40,9 +41,9 @@ public class FormGroupHintTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var formGroupContext = context.GetContextItem<FormGroupContext2>();
+        var formGroupContext = context.GetContextItem<FormGroupContext>();
 
-        formGroupContext.SetHint(output.Attributes.ToEncodedAttributeDictionary(), childContent?.ToHtmlString());
+        formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
 
         output.SuppressOutput();
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,17 +7,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class TextInputContext : FormGroupContext2
 {
-    internal record PrefixSuffixInfo(ImmutableDictionary<string, string?> Attributes, string Html);
+    internal record PrefixSuffixInfo(ImmutableDictionary<string, string?> Attributes, string Html, string TagName);
 
     // internal for testing
     internal PrefixSuffixInfo? Prefix;
     internal PrefixSuffixInfo? Suffix;
 
-    protected override string ErrorMessageTagName => TextInputTagHelper.ErrorMessageTagName;
+    protected override IReadOnlyCollection<string> ErrorMessageTagNames => [TextInputTagHelper.ErrorMessageShortTagName, TextInputTagHelper.ErrorMessageTagName];
 
-    protected override string HintTagName => TextInputTagHelper.HintTagName;
+    protected override IReadOnlyCollection<string> HintTagNames => [TextInputTagHelper.HintShortTagName, TextInputTagHelper.HintTagName];
 
-    protected override string LabelTagName => TextInputTagHelper.LabelTagName;
+    protected override IReadOnlyCollection<string> LabelTagNames => [TextInputTagHelper.LabelShortTagName, TextInputTagHelper.LabelTagName];
+
+    private IReadOnlyCollection<string> PrefixTagNames => [TextInputPrefixTagHelper.ShortTagName, TextInputPrefixTagHelper.TagName];
+
+    private IReadOnlyCollection<string> SuffixTagNames => [TextInputSuffixTagHelper.ShortTagName, TextInputSuffixTagHelper.TagName];
 
     protected override string RootTagName => TextInputTagHelper.TagName;
 
@@ -43,95 +48,109 @@ internal class TextInputContext : FormGroupContext2
     public override void SetErrorMessage(
         string? visuallyHiddenText,
         ImmutableDictionary<string, string?> attributes,
-        string? html)
+        string? html,
+        string tagName)
     {
         if (Prefix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                ErrorMessageTagName,
-                TextInputPrefixTagHelper.TagName);
+                tagName,
+                Prefix.TagName);
         }
 
         if (Suffix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                ErrorMessageTagName,
-                TextInputSuffixTagHelper.TagName);
+                tagName,
+                Suffix.TagName);
         }
 
-        base.SetErrorMessage(visuallyHiddenText, attributes, html);
+        base.SetErrorMessage(visuallyHiddenText, attributes, html, tagName);
     }
 
-    public override void SetHint(ImmutableDictionary<string, string?> attributes, string? html)
+    public override void SetHint(
+        ImmutableDictionary<string, string?> attributes,
+        string? html,
+        string tagName)
     {
         if (Prefix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                HintTagName,
-                TextInputPrefixTagHelper.TagName);
+                tagName,
+                Prefix.TagName);
         }
 
         if (Suffix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                HintTagName,
-                TextInputSuffixTagHelper.TagName);
+                tagName,
+                Suffix.TagName);
         }
 
-        base.SetHint(attributes, html);
+        base.SetHint(attributes, html, tagName);
     }
 
-    public override void SetLabel(bool isPageHeading, ImmutableDictionary<string, string?> attributes, string? html)
+    public override void SetLabel(
+        bool isPageHeading,
+        ImmutableDictionary<string, string?> attributes,
+        string? html,
+        string tagName)
     {
         if (Prefix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                LabelTagName,
-                TextInputPrefixTagHelper.TagName);
+                tagName,
+                Prefix.TagName);
         }
 
         if (Suffix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                LabelTagName,
-                TextInputSuffixTagHelper.TagName);
+                tagName,
+                Suffix.TagName);
         }
 
-        base.SetLabel(isPageHeading, attributes, html);
+        base.SetLabel(isPageHeading, attributes, html, tagName);
     }
 
-    public void SetPrefix(ImmutableDictionary<string, string?> attributes, string html)
+    public void SetPrefix(
+        ImmutableDictionary<string, string?> attributes,
+        string html,
+        string tagName)
     {
         ArgumentNullException.ThrowIfNull(html);
 
         if (Prefix is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                TextInputPrefixTagHelper.TagName,
-                TextInputTagHelper.TagName);
+                PrefixTagNames,
+                RootTagName);
         }
 
         if (Suffix is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                TextInputPrefixTagHelper.TagName,
-                TextInputSuffixTagHelper.TagName);
+                tagName,
+                Suffix.TagName);
         }
 
-        Prefix = new PrefixSuffixInfo(attributes, html);
+        Prefix = new PrefixSuffixInfo(attributes, html, tagName);
     }
 
-    public void SetSuffix(ImmutableDictionary<string, string?> attributes, string html)
+    public void SetSuffix(
+        ImmutableDictionary<string, string?> attributes,
+        string html,
+        string tagName)
     {
         ArgumentNullException.ThrowIfNull(html);
 
         if (Suffix is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                TextInputSuffixTagHelper.TagName,
-                TextInputTagHelper.TagName);
+                SuffixTagNames,
+                RootTagName);
         }
 
-        Suffix = new PrefixSuffixInfo(attributes, html);
+        Suffix = new PrefixSuffixInfo(attributes, html, tagName);
     }
 }
