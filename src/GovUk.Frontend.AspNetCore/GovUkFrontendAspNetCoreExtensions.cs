@@ -36,7 +36,8 @@ public static class GovUkFrontendAspNetCoreExtensions
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     public static IServiceCollection AddGovUkFrontend(
         this IServiceCollection services,
-        Action<GovUkFrontendAspNetCoreOptions> setupAction)
+        Action<GovUkFrontendAspNetCoreOptions> setupAction
+    )
     {
         Guard.ArgumentNotNull(nameof(services), services);
         Guard.ArgumentNotNull(nameof(setupAction), setupAction);
@@ -52,7 +53,10 @@ public static class GovUkFrontendAspNetCoreExtensions
         services.AddTransient<PageTemplateHelper>();
         services.AddSingleton<ITagHelperInitializer<ButtonTagHelper>, ButtonTagHelperInitializer>();
         services.AddSingleton<ITagHelperInitializer<TitleTagHelper>, TitleTagHelperInitializer>();
-        services.AddSingleton<ITagHelperInitializer<ContainerErrorSummaryTagHelper>, ContainerErrorSummaryTagHelperInitializer>();
+        services.AddSingleton<
+            ITagHelperInitializer<ContainerErrorSummaryTagHelper>,
+            ContainerErrorSummaryTagHelperInitializer
+        >();
 
         services.Configure(setupAction);
 
@@ -66,7 +70,10 @@ public static class GovUkFrontendAspNetCoreExtensions
     /// <param name="mvcOptions">The <see cref="MvcOptions"/>.</param>
     /// <param name="modelBinderProvider">The <see cref="IModelBinderProvider"/> to replace with.</param>
     /// <returns><see langword="true"/> if a <see cref="IModelBinderProvider"/> was replaced otherwise <see langword="false"/>.</returns>
-    public static bool ReplaceModelBinderProvider<T>(this MvcOptions mvcOptions, IModelBinderProvider modelBinderProvider)
+    public static bool ReplaceModelBinderProvider<T>(
+        this MvcOptions mvcOptions,
+        IModelBinderProvider modelBinderProvider
+    )
         where T : IModelBinderProvider
     {
         Guard.ArgumentNotNull(nameof(mvcOptions), mvcOptions);

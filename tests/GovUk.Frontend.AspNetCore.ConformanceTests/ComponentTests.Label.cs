@@ -19,20 +19,21 @@ public partial class ComponentTests
                 var labelOptions = options with { For = options.For };
 
                 return BuildLabel(generator, labelOptions).ToHtmlString();
-            });
+            }
+        );
     }
 
     private static IHtmlContent BuildLabel(ComponentGenerator generator, OptionsJson.Label options)
     {
         var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
-        var attributes = options.Attributes.ToAttributesDictionary()
-            .MergeAttribute("class", options.Classes);
+        var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
         return generator.GenerateLabel(
             options.For,
             options.IsPageHeading ?? ComponentGenerator.LabelDefaultIsPageHeading,
             content,
-            attributes);
+            attributes
+        );
     }
 }

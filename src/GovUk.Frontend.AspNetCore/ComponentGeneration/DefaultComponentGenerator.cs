@@ -17,9 +17,7 @@ public partial class DefaultComponentGenerator : IComponentGenerator
         describedBy = describedBy.Trim();
     }
 
-    private protected virtual HtmlTag GenerateFormGroup(
-        FormGroupOptions? options,
-        bool haveError)
+    private protected virtual HtmlTag GenerateFormGroup(FormGroupOptions? options, bool haveError)
     {
         return new HtmlTag(FormGroupElement)
             .AddClass("govuk-form-group")

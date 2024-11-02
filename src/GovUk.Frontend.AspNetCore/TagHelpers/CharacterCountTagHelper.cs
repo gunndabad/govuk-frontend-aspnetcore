@@ -43,16 +43,10 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
     /// Creates an <see cref="CharacterCountTagHelper"/>.
     /// </summary>
     public CharacterCountTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
-    {
-    }
+        : this(htmlGenerator: null, modelHelper: null) { }
 
     internal CharacterCountTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
-    {
-    }
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper()) { }
 
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
@@ -107,9 +101,7 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         {
             if (value <= 0)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    $"{nameof(MaxLength)} must be greater than 0.");
+                throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(MaxLength)} must be greater than 0.");
             }
 
             _maxLength = value;
@@ -130,9 +122,7 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         {
             if (value <= 0)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    $"{nameof(MaxWords)} must be greater than 0.");
+                throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(MaxWords)} must be greater than 0.");
             }
 
             _maxWords = value;
@@ -183,27 +173,28 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    $"{nameof(Threshold)} cannot be less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(value), $"{nameof(Threshold)} cannot be less than 0.");
             }
 
             _threshold = value;
         }
     }
 
-    private protected override TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput)
+    private protected override TagBuilder CreateTagBuilder(
+        bool haveError,
+        IHtmlContent content,
+        TagHelperOutput tagHelperOutput
+    )
     {
         if (MaxLength.HasValue && MaxWords.HasValue)
         {
-            throw new InvalidOperationException($"Only one of the '{MaxLengthAttributeName}' or '{MaxWordsLengthAttributeName}' attributes can be specified.");
+            throw new InvalidOperationException(
+                $"Only one of the '{MaxLengthAttributeName}' or '{MaxWordsLengthAttributeName}' attributes can be specified."
+            );
         }
 
         // N.B. We specifically pass FormGroupAttributes here and not tagHelperOutput.Attributes since GenerateCharacterCount() doesn't return a form group
-        var formGroup = Generator.GenerateFormGroup(
-            haveError,
-            content,
-            FormGroupAttributes.ToAttributeDictionary());
+        var formGroup = Generator.GenerateFormGroup(haveError, content, FormGroupAttributes.ToAttributeDictionary());
 
         var resolvedId = ResolveIdPrefix();
 
@@ -220,7 +211,8 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
             null,
             null,
             null,
-            null);
+            null
+        );
     }
 
     private protected override FormGroupContext CreateFormGroupContext() => new CharacterCountContext();
@@ -230,7 +222,8 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var contentBuilder = new HtmlContentBuilder();
 
@@ -263,9 +256,15 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
             var resolvedId = ResolveIdPrefix();
             var resolvedName = ResolveName();
 
-            var resolvedContent = characterCountContext.Value ??
-                new HtmlString(HtmlEncoder.Default.Encode(
-                    AspFor != null ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty : string.Empty));
+            var resolvedContent =
+                characterCountContext.Value
+                ?? new HtmlString(
+                    HtmlEncoder.Default.Encode(
+                        AspFor != null
+                            ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty
+                            : string.Empty
+                    )
+                );
 
             var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
             resolvedTextAreaAttributes.MergeCssClass("govuk-js-character-count");
@@ -280,7 +279,8 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
                 Spellcheck,
                 Disabled,
                 resolvedContent,
-                resolvedTextAreaAttributes);
+                resolvedTextAreaAttributes
+            );
         }
     }
 
@@ -296,7 +296,8 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                AspForAttributeName
+            );
         }
 
         var resolvedName = ResolveName();
@@ -308,9 +309,7 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
     {
         if (Name == null && AspFor == null)
         {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                NameAttributeName,
-                AspForAttributeName);
+            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(NameAttributeName, AspForAttributeName);
         }
 
         return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);

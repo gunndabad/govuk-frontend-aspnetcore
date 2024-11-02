@@ -20,11 +20,9 @@ public class DetailsSummaryTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-details-summary",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DetailsContext), detailsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DetailsContext), detailsContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-details-summary",
@@ -34,7 +32,8 @@ public class DetailsSummaryTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(summaryContent);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DetailsSummaryTagHelper();
 
@@ -55,11 +54,9 @@ public class DetailsSummaryTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-details-summary",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DetailsContext), detailsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DetailsContext), detailsContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-details-summary",
@@ -69,7 +66,8 @@ public class DetailsSummaryTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The summary");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DetailsSummaryTagHelper();
 
@@ -91,11 +89,9 @@ public class DetailsSummaryTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-details-summary",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DetailsContext), detailsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DetailsContext), detailsContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-details-summary",
@@ -105,7 +101,8 @@ public class DetailsSummaryTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The summary");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DetailsSummaryTagHelper();
 

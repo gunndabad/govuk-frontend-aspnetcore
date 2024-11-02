@@ -20,7 +20,10 @@ public class DateInputContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-date-input-fieldset> cannot be nested inside another <govuk-date-input-fieldset>.", ex.Message);
+        Assert.Equal(
+            "<govuk-date-input-fieldset> cannot be nested inside another <govuk-date-input-fieldset>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -37,7 +40,10 @@ public class DateInputContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-date-input-fieldset> element is permitted within each <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-date-input-fieldset> element is permitted within each <govuk-date-input>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -46,10 +52,7 @@ public class DateInputContextTests
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
-        var item = new DateInputContextItem()
-        {
-            LabelContent = new HtmlString("Day")
-        };
+        var item = new DateInputContextItem() { LabelContent = new HtmlString("Day") };
 
         context.SetItem(DateInputItemType.Day, item);
 
@@ -58,7 +61,10 @@ public class DateInputContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-date-input-fieldset> must be the only direct child of the <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "<govuk-date-input-fieldset> must be the only direct child of the <govuk-date-input>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -73,7 +79,10 @@ public class DateInputContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-date-input-fieldset> must be the only direct child of the <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "<govuk-date-input-fieldset> must be the only direct child of the <govuk-date-input>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -81,14 +90,22 @@ public class DateInputContextTests
     {
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
-        context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
+        context.SetErrorMessage(
+            errorComponents: null,
+            visuallyHiddenText: null,
+            attributes: null,
+            content: new HtmlString("Error")
+        );
 
         // Act
         var ex = Record.Exception(() => context.OpenFieldset());
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-date-input-fieldset> must be the only direct child of the <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "<govuk-date-input-fieldset> must be the only direct child of the <govuk-date-input>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -98,7 +115,9 @@ public class DateInputContextTests
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         // Act
-        var ex = Record.Exception(() => context.CloseFieldset(new DateInputFieldsetContext(attributes: null, aspFor: null)));
+        var ex = Record.Exception(
+            () => context.CloseFieldset(new DateInputFieldsetContext(attributes: null, aspFor: null))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -111,16 +130,20 @@ public class DateInputContextTests
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
-        var item = new DateInputContextItem()
-        {
-            LabelContent = new HtmlString("Day")
-        };
+        var item = new DateInputContextItem() { LabelContent = new HtmlString("Day") };
 
         context.SetItem(DateInputItemType.Day, item);
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () =>
+                context.SetErrorMessage(
+                    errorComponents: null,
+                    visuallyHiddenText: null,
+                    attributes: null,
+                    new HtmlString("Error")
+                )
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -133,10 +156,7 @@ public class DateInputContextTests
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
-        var item = new DateInputContextItem()
-        {
-            LabelContent = new HtmlString("Day")
-        };
+        var item = new DateInputContextItem() { LabelContent = new HtmlString("Day") };
 
         context.OpenFieldset();
         var fieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
@@ -144,7 +164,14 @@ public class DateInputContextTests
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () =>
+                context.SetErrorMessage(
+                    errorComponents: null,
+                    visuallyHiddenText: null,
+                    attributes: null,
+                    new HtmlString("Error")
+                )
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -157,10 +184,7 @@ public class DateInputContextTests
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
-        var item = new DateInputContextItem()
-        {
-            LabelContent = new HtmlString("Day")
-        };
+        var item = new DateInputContextItem() { LabelContent = new HtmlString("Day") };
 
         context.SetItem(DateInputItemType.Day, item);
 
@@ -178,10 +202,7 @@ public class DateInputContextTests
         // Arrange
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
-        var item = new DateInputContextItem()
-        {
-            LabelContent = new HtmlString("Day")
-        };
+        var item = new DateInputContextItem() { LabelContent = new HtmlString("Day") };
 
         context.OpenFieldset();
         var fieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
@@ -202,17 +223,20 @@ public class DateInputContextTests
         var context = new DateInputContext(haveExplicitValue: false, aspFor: null);
 
         // Act
-        context.SetItem(DateInputItemType.Month, new DateInputContextItem()
-        {
-            Autocomplete = "off",
-            Id = "id",
-            InputMode = "im",
-            LabelContent = new HtmlString("Month"),
-            Name = "name",
-            Pattern = "pattern",
-            Value = 42,
-            ValueSpecified = true
-        });
+        context.SetItem(
+            DateInputItemType.Month,
+            new DateInputContextItem()
+            {
+                Autocomplete = "off",
+                Id = "id",
+                InputMode = "im",
+                LabelContent = new HtmlString("Month"),
+                Name = "name",
+                Pattern = "pattern",
+                Value = 42,
+                ValueSpecified = true,
+            }
+        );
 
         // Assert
         Assert.Collection(
@@ -229,7 +253,8 @@ public class DateInputContextTests
                 Assert.Equal("pattern", value.Pattern);
                 Assert.Equal(42, value.Value);
                 Assert.True(value.ValueSpecified);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -240,11 +265,16 @@ public class DateInputContextTests
         context.SetItem(DateInputItemType.Month, new DateInputContextItem());
 
         // Act
-        var ex = Record.Exception(() => context.SetItem(DateInputItemType.Month, new DateInputContextItem() { ValueSpecified = true }));
+        var ex = Record.Exception(
+            () => context.SetItem(DateInputItemType.Month, new DateInputContextItem() { ValueSpecified = true })
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Value cannot be specified for both <govuk-date-input-month> and the parent <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "Value cannot be specified for both <govuk-date-input-month> and the parent <govuk-date-input>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -259,7 +289,10 @@ public class DateInputContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-date-input-month> element is permitted within each <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-date-input-month> element is permitted within each <govuk-date-input>.",
+            ex.Message
+        );
     }
 
     [Fact]

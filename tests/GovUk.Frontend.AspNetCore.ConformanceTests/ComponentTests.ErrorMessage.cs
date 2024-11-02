@@ -13,7 +13,8 @@ public partial class ComponentTests
     public void ErrorMessage(ComponentTestCaseData<OptionsJson.ErrorMessage> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => BuildErrorMessage(generator, options).ToHtmlString());
+            (generator, options) => BuildErrorMessage(generator, options).ToHtmlString()
+        );
 
     private static IHtmlContent BuildErrorMessage(ComponentGenerator generator, OptionsJson.ErrorMessage options)
     {
@@ -21,12 +22,13 @@ public partial class ComponentTests
         {
             bool flag when flag == false => string.Empty,
             string str => str,
-            _ => ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText
+            _ => ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText,
         };
 
         var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
-        var attributes = options.Attributes.ToAttributesDictionary()
+        var attributes = options
+            .Attributes.ToAttributesDictionary()
             .MergeAttribute("class", options.Classes)
             .MergeAttribute("id", options.Id);
 

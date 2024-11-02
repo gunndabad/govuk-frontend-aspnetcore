@@ -27,7 +27,8 @@ public static class TagBuilderExtensions
     internal static void AddPluralisedI18nAttributes(
         this TagBuilder tagBuilder,
         string translationKey,
-        params (string PluralType, string Message)[] pluralForms)
+        params (string PluralType, string Message)[] pluralForms
+    )
     {
         foreach (var (pluralType, message) in pluralForms)
         {
@@ -39,7 +40,8 @@ public static class TagBuilderExtensions
         this TagBuilder tagBuilder,
         string translationKey,
         string pluralType,
-        string message) => AddPluralisedI18nAttributes(tagBuilder, translationKey, new[] { (pluralType, message) });
+        string message
+    ) => AddPluralisedI18nAttributes(tagBuilder, translationKey, new[] { (pluralType, message) });
 
     internal static void MergeOptionalAttributes(this TagBuilder tagBuilder, AttributeDictionary? attributes)
     {

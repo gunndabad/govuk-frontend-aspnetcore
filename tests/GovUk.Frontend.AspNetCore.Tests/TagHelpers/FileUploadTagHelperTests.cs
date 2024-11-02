@@ -19,7 +19,8 @@ public class FileUploadTagHelperTests
             tagName: "govuk-file-upload",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-file-upload",
@@ -31,29 +32,30 @@ public class FileUploadTagHelperTests
                 fileUploadContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
-                fileUploadContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                fileUploadContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new FileUploadTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             Id = "my-id",
             DescribedBy = "describedby",
             Name = "my-id",
-            LabelClass = "additional-label-class"
+            LabelClass = "additional-label-class",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <label for=""my-id"" class=""govuk-label additional-label-class"">The label</label>
     <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
@@ -71,7 +73,8 @@ public class FileUploadTagHelperTests
             tagName: "govuk-file-upload",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-file-upload",
@@ -83,29 +86,33 @@ public class FileUploadTagHelperTests
                 fileUploadContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
                 fileUploadContext.SetErrorMessage(
                     visuallyHiddenText: null,
                     attributes: null,
-                    content: new HtmlString("The error"));
+                    content: new HtmlString("The error")
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new FileUploadTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             Id = "my-id",
             DescribedBy = "describedby",
-            Name = "my-id"
+            Name = "my-id",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <label for=""my-id"" class=""govuk-label"">The label</label>
     <p id=""my-id-error"" class=""govuk-error-message"">

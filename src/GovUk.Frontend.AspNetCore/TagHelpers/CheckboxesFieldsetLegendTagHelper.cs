@@ -29,9 +29,8 @@ public class CheckboxesFieldsetLegendTagHelper : TagHelper
     {
         var fieldsetContext = context.GetContextItem<CheckboxesFieldsetContext>();
 
-        var content = output.TagMode == TagMode.StartTagAndEndTag ?
-            (await output.GetChildContentAsync()).Snapshot() :
-            null;
+        var content =
+            output.TagMode == TagMode.StartTagAndEndTag ? (await output.GetChildContentAsync()).Snapshot() : null;
 
         if (output.Content.IsModified)
         {

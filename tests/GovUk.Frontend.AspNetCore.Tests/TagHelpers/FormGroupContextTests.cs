@@ -27,10 +27,7 @@ public class FormGroupContextTests
         // Arrange
         var context = new TestFormGroupContext();
 
-        context.SetErrorMessage(
-            visuallyHiddenText: null,
-            attributes: null,
-            content: new HtmlString("Existing error"));
+        context.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("Existing error"));
 
         // Act
         var ex = Record.Exception(() => context.SetErrorMessage(null, null, new HtmlString("Error")));
@@ -59,9 +56,7 @@ public class FormGroupContextTests
         // Arrange
         var context = new TestFormGroupContext();
 
-        context.SetHint(
-            attributes: null,
-            content: new HtmlString("Existing hint"));
+        context.SetHint(attributes: null, content: new HtmlString("Existing hint"));
 
         // Act
         var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Hint")));
@@ -77,10 +72,7 @@ public class FormGroupContextTests
         // Arrange
         var context = new TestFormGroupContext();
 
-        context.SetErrorMessage(
-            visuallyHiddenText: null,
-            attributes: null,
-            content: new HtmlString("Error message"));
+        context.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("Error message"));
 
         // Act
         var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Hint")));
@@ -110,10 +102,7 @@ public class FormGroupContextTests
         // Arrange
         var context = new TestFormGroupContext();
 
-        context.SetLabel(
-            isPageHeading: false,
-            attributes: null,
-            content: new HtmlString("Existing label"));
+        context.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Existing label"));
 
         // Act
         var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Label")));
@@ -129,10 +118,7 @@ public class FormGroupContextTests
         // Arrange
         var context = new TestFormGroupContext();
 
-        context.SetErrorMessage(
-            visuallyHiddenText: null,
-            attributes: null,
-            content: new HtmlString("Error message"));
+        context.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("Error message"));
 
         // Act
         var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Hint")));
@@ -148,9 +134,7 @@ public class FormGroupContextTests
         // Arrange
         var context = new TestFormGroupContext();
 
-        context.SetHint(
-            attributes: null,
-            content: new HtmlString("Hint"));
+        context.SetHint(attributes: null, content: new HtmlString("Hint"));
 
         // Act
         var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Hint")));

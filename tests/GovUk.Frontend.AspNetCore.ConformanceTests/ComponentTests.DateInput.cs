@@ -11,11 +11,8 @@ public partial class ComponentTests
     [ComponentFixtureData(
         "date-input",
         typeof(OptionsJson.DateInput),
-        exclude: new[]
-        {
-            "day and month",
-            "month and year",
-        })]
+        exclude: new[] { "day and month", "month and year" }
+    )]
     public void DateInput(ComponentTestCaseData<OptionsJson.DateInput> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
@@ -26,16 +23,12 @@ public partial class ComponentTests
                     options.Fieldset.Role = "group";
                 }
 
-                var attributes = options.Attributes.ToAttributesDictionary()
-                   .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                var hintOptions = options.Hint != null ?
-                    options.Hint with { Id = options.Id + "-hint" } :
-                    null;
+                var hintOptions = options.Hint != null ? options.Hint with { Id = options.Id + "-hint" } : null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
-                    options.ErrorMessage with { Id = options.Id + "-error" } :
-                    null;
+                var errorMessageOptions =
+                    options.ErrorMessage != null ? options.ErrorMessage with { Id = options.Id + "-error" } : null;
 
                 return GenerateFormGroup(
                     label: null,
@@ -55,7 +48,8 @@ public partial class ComponentTests
                             day,
                             month,
                             year,
-                            attributes);
+                            attributes
+                        );
 
                         DateInputItem CreateDateInputItem(int index, string defaultName, string defaultClass)
                         {
@@ -67,7 +61,8 @@ public partial class ComponentTests
 
                                 inputItem = new DateInputItem()
                                 {
-                                    Attributes = item.Attributes.ToAttributesDictionary()
+                                    Attributes = item
+                                        .Attributes.ToAttributesDictionary()
                                         .MergeAttribute("class", item.Classes),
                                     Autocomplete = item.Autocomplete,
                                     Id = item.Id,
@@ -75,7 +70,7 @@ public partial class ComponentTests
                                     LabelContent = item.Label != null ? new HtmlString(item.Label) : null,
                                     Name = item.Name,
                                     Pattern = item.Pattern,
-                                    Value = item.Value
+                                    Value = item.Value,
                                 };
                             }
                             else
@@ -84,9 +79,9 @@ public partial class ComponentTests
                                 {
                                     Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
                                     {
-                                        { "class", defaultClass }
+                                        { "class", defaultClass },
                                     },
-                                    Name = defaultName
+                                    Name = defaultName,
                                 };
                             }
 
@@ -101,7 +96,8 @@ public partial class ComponentTests
 
                             return inputItem;
                         }
-                    });
+                    }
+                );
 
                 static string Capitalize(string value) => value[0..1].ToUpper() + value[1..];
             },
@@ -110,12 +106,18 @@ public partial class ComponentTests
                 // Some tests have incomplete items specified (e.g. only Day) but we will always generate all 3 items.
                 // Exclude the errors from the mismatch
 
-                if (diff is UnexpectedNodeDiff unexpectedNodeDiff &&
-                    (unexpectedNodeDiff.Test.Path == "div(0) > div(0) > div(1)" || unexpectedNodeDiff.Test.Path == "div(0) > div(0) > div(2)"))
+                if (
+                    diff is UnexpectedNodeDiff unexpectedNodeDiff
+                    && (
+                        unexpectedNodeDiff.Test.Path == "div(0) > div(0) > div(1)"
+                        || unexpectedNodeDiff.Test.Path == "div(0) > div(0) > div(2)"
+                    )
+                )
                 {
                     return true;
                 }
 
                 return false;
-            });
+            }
+        );
 }

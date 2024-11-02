@@ -66,10 +66,7 @@ public class StartupFilterTestFixture : ServerFixture
     {
         _configureServices = configureServices;
 
-        HttpClient = new HttpClient()
-        {
-            BaseAddress = new Uri(BaseUrl)
-        };
+        HttpClient = new HttpClient() { BaseAddress = new Uri(BaseUrl) };
     }
 
     public HttpClient HttpClient { get; }

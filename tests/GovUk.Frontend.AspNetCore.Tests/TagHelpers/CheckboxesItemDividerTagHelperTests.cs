@@ -19,11 +19,9 @@ public class CheckboxesItemDividerTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-divider",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesContext), checkboxesContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesContext), checkboxesContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-divider",
@@ -33,7 +31,8 @@ public class CheckboxesItemDividerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString("Divider"));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesItemDividerTagHelper();
 
@@ -47,6 +46,7 @@ public class CheckboxesItemDividerTagHelperTests
             {
                 var divider = Assert.IsType<CheckboxesItemDivider>(item);
                 Assert.Equal("Divider", divider.Content?.ToString());
-            });
+            }
+        );
     }
 }

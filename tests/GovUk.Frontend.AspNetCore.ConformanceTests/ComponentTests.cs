@@ -42,7 +42,8 @@ public partial class ComponentTests
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<ComponentGenerator, TOptions, string> generateComponent,
-        Predicate<IDiff> excludeDiff = null)
+        Predicate<IDiff> excludeDiff = null
+    )
     {
         var html = generateComponent(_componentGenerator, testCaseData.Options);
 
@@ -55,14 +56,14 @@ public partial class ComponentTests
         ErrorMessage errorMessage,
         FormGroup formGroup,
         Fieldset fieldset,
-        GenerateFormGroupElement generateElement)
+        GenerateFormGroupElement generateElement
+    )
     {
         var haveError = errorMessage != null;
 
         string describedBy = null;
 
-        var attributes = new AttributeDictionary()
-            .MergeAttribute("class", formGroup?.Classes);
+        var attributes = new AttributeDictionary().MergeAttribute("class", formGroup?.Classes);
 
         var contentBuilder = new HtmlContentBuilder();
 
@@ -101,20 +102,13 @@ public partial class ComponentTests
                 describedBy,
                 role: fieldset.Role,
                 fieldset.Legend?.IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
-                legendContent: TextOrHtmlHelper.GetHtmlContent(
-                    fieldset.Legend?.Text,
-                    fieldset.Legend?.Html),
-                legendAttributes: new AttributeDictionary()
-                    .MergeAttribute("class", fieldset.Legend?.Classes),
+                legendContent: TextOrHtmlHelper.GetHtmlContent(fieldset.Legend?.Text, fieldset.Legend?.Html),
+                legendAttributes: new AttributeDictionary().MergeAttribute("class", fieldset.Legend?.Classes),
                 content: contentBuilder,
-                attributes: fieldset.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", fieldset.Classes));
+                attributes: fieldset.Attributes.ToAttributesDictionary().MergeAttribute("class", fieldset.Classes)
+            );
         }
 
-        return _componentGenerator.GenerateFormGroup(
-                haveError,
-                content,
-                attributes)
-            .ToHtmlString();
+        return _componentGenerator.GenerateFormGroup(haveError, content, attributes).ToHtmlString();
     }
 }

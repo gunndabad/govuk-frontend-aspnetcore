@@ -34,9 +34,7 @@ public class CheckboxesItemTagHelper : TagHelper
     /// <summary>
     /// Creates a new <see cref="CheckboxesItemTagHelper"/>.
     /// </summary>
-    public CheckboxesItemTagHelper()
-    {
-    }
+    public CheckboxesItemTagHelper() { }
 
     /// <summary>
     /// The behavior when the item is checked.
@@ -128,7 +126,9 @@ public class CheckboxesItemTagHelper : TagHelper
 
         if (Name == null && checkboxesContext.Name == null && checkboxesContext.AspFor == null)
         {
-            throw new InvalidOperationException($"The '{NameAttributeName}' attribute must be specified on each item when not specified on the parent <{CheckboxesTagHelper.TagName}>.");
+            throw new InvalidOperationException(
+                $"The '{NameAttributeName}' attribute must be specified on each item when not specified on the parent <{CheckboxesTagHelper.TagName}>."
+            );
         }
 
         var itemContext = new CheckboxesItemContext();
@@ -144,37 +144,42 @@ public class CheckboxesItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var resolvedChecked = Checked ??
-            (checkboxesContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null) ??
-            ComponentGenerator.CheckboxesItemDefaultChecked;
+        var resolvedChecked =
+            Checked
+            ?? (checkboxesContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null)
+            ?? ComponentGenerator.CheckboxesItemDefaultChecked;
 
-        checkboxesContext.AddItem(new CheckboxesItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Behavior = Behavior,
-            Checked = resolvedChecked,
-            Conditional = itemContext.Conditional != null ?
-                new CheckboxesItemConditional()
-                {
-                    Content = itemContext.Conditional.Value.Content,
-                    Attributes = itemContext.Conditional.Value.Attributes
-                } :
-                null,
-            Disabled = Disabled,
-            Hint = itemContext.Hint != null ?
-                new CheckboxesItemHint()
-                {
-                    Content = itemContext.Hint.Value.Content,
-                    Attributes = itemContext.Hint.Value.Attributes
-                } :
-                null,
-            Id = Id,
-            InputAttributes = InputAttributes.ToAttributeDictionary(),
-            LabelAttributes = LabelAttributes.ToAttributeDictionary(),
-            LabelContent = childContent.Snapshot(),
-            Name = Name,
-            Value = Value
-        });
+        checkboxesContext.AddItem(
+            new CheckboxesItem()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Behavior = Behavior,
+                Checked = resolvedChecked,
+                Conditional =
+                    itemContext.Conditional != null
+                        ? new CheckboxesItemConditional()
+                        {
+                            Content = itemContext.Conditional.Value.Content,
+                            Attributes = itemContext.Conditional.Value.Attributes,
+                        }
+                        : null,
+                Disabled = Disabled,
+                Hint =
+                    itemContext.Hint != null
+                        ? new CheckboxesItemHint()
+                        {
+                            Content = itemContext.Hint.Value.Content,
+                            Attributes = itemContext.Hint.Value.Attributes,
+                        }
+                        : null,
+                Id = Id,
+                InputAttributes = InputAttributes.ToAttributeDictionary(),
+                LabelAttributes = LabelAttributes.ToAttributeDictionary(),
+                LabelContent = childContent.Snapshot(),
+                Name = Name,
+                Value = Value,
+            }
+        );
 
         output.SuppressOutput();
 

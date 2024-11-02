@@ -21,7 +21,8 @@ public class InsetTextTagHelperTests
             tagName: "govuk-inset-text",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-inset-text",
@@ -31,16 +32,16 @@ public class InsetTextTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(html);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         InsetTextOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateInsetText(It.IsAny<InsetTextOptions>())).Callback<InsetTextOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateInsetText(It.IsAny<InsetTextOptions>()))
+            .Callback<InsetTextOptions>(o => actualOptions = o);
 
-        var tagHelper = new InsetTextTagHelper(componentGeneratorMock.Object)
-        {
-            Id = id
-        };
+        var tagHelper = new InsetTextTagHelper(componentGeneratorMock.Object) { Id = id };
 
         // Act
         await tagHelper.ProcessAsync(context, output);

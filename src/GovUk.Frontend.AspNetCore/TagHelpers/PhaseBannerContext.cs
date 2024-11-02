@@ -21,7 +21,7 @@ internal class PhaseBannerContext
             Text = null,
             Html = Tag.Html,
             Attributes = Tag.Attributes.Remove("class", out var classes),
-            Classes = classes
+            Classes = classes,
         };
     }
 
@@ -33,7 +33,9 @@ internal class PhaseBannerContext
         if (Tag != null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                PhaseBannerTagTagHelper.TagName, PhaseBannerTagHelper.TagName);
+                PhaseBannerTagTagHelper.TagName,
+                PhaseBannerTagHelper.TagName
+            );
         }
 
         Tag = new TagInfo(attributes, html);

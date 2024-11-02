@@ -25,11 +25,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -38,14 +36,15 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosItemTagHelper()
         {
             Checked = true,
             Disabled = true,
             Id = "id",
-            Value = "value"
+            Value = "value",
         };
 
         // Act
@@ -61,7 +60,8 @@ public class RadiosItemTagHelperTests
                 Assert.True(radiosItem.Disabled);
                 Assert.Equal("id", radiosItem.Id);
                 Assert.Equal("value", radiosItem.Value);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -73,11 +73,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -86,7 +84,8 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosItemTagHelper();
 
@@ -107,11 +106,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -120,12 +117,10 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Value = "value"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Value = "value" };
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
@@ -137,29 +132,31 @@ public class RadiosItemTagHelperTests
     [Theory]
     [InlineData("bar", true)]
     [InlineData("baz", false)]
-    public async Task ProcessAsync_WithModelExpression_DeducesCheckedFromModelExpression(string modelValue, bool expectedChecked)
+    public async Task ProcessAsync_WithModelExpression_DeducesCheckedFromModelExpression(
+        string modelValue,
+        bool expectedChecked
+    )
     {
         // Arrange
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
+        var model = new Model() { Foo = modelValue };
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), model)
             .GetExplorerForProperty(nameof(Model.Foo));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.Foo);
 
-        var radiosContext = new RadiosContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+        var radiosContext = new RadiosContext(
+            name: "test",
+            aspFor: new ModelExpression(modelExpression, modelExplorer)
+        );
 
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -168,13 +165,10 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Checked = null,
-            Value = "bar"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Checked = null, Value = "bar" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -186,33 +180,33 @@ public class RadiosItemTagHelperTests
             {
                 var radiosItem = Assert.IsType<RadiosItem>(item);
                 Assert.Equal(expectedChecked, radiosItem.Checked);
-            });
+            }
+        );
     }
 
     [Fact]
     public async Task ProcessAsync_WithNullCollectionModelExpression_ExecutesSuccessfully()
     {
         // Arrange
-        var model = new ModelWithCollectionProperty()
-        {
-            CollectionProperty = null
-        };
+        var model = new ModelWithCollectionProperty() { CollectionProperty = null };
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(ModelWithCollectionProperty), model)
             .GetExplorerForProperty(nameof(ModelWithCollectionProperty.CollectionProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(ModelWithCollectionProperty.CollectionProperty);
 
-        var radiosContext = new RadiosContext(name: "test", aspFor: new ModelExpression(modelExpression, modelExplorer));
+        var radiosContext = new RadiosContext(
+            name: "test",
+            aspFor: new ModelExpression(modelExpression, modelExplorer)
+        );
 
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -221,12 +215,10 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Value = "2"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Value = "2" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -238,7 +230,8 @@ public class RadiosItemTagHelperTests
             {
                 var radiosItem = Assert.IsType<RadiosItem>(item);
                 Assert.False(radiosItem.Checked);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -250,11 +243,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -266,12 +257,10 @@ public class RadiosItemTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Value = "value"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Value = "value" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -283,7 +272,8 @@ public class RadiosItemTagHelperTests
             {
                 var radiosItem = Assert.IsType<RadiosItem>(item);
                 Assert.Equal("Hint", radiosItem.Hint?.Content?.ToHtmlString());
-            });
+            }
+        );
     }
 
     [Fact]
@@ -295,11 +285,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -308,12 +296,10 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Value = "value"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Value = "value" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -325,7 +311,8 @@ public class RadiosItemTagHelperTests
             {
                 var radiosItem = Assert.IsType<RadiosItem>(item);
                 Assert.Null(radiosItem.Hint);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -337,11 +324,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -353,12 +338,10 @@ public class RadiosItemTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Value = "value"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Value = "value" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -370,7 +353,8 @@ public class RadiosItemTagHelperTests
             {
                 var radiosItem = Assert.IsType<RadiosItem>(item);
                 Assert.Equal("Conditional", radiosItem.Conditional?.Content?.ToHtmlString());
-            });
+            }
+        );
     }
 
     [Fact]
@@ -382,11 +366,9 @@ public class RadiosItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item",
@@ -395,12 +377,10 @@ public class RadiosItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosItemTagHelper()
-        {
-            Value = "value"
-        };
+        var tagHelper = new RadiosItemTagHelper() { Value = "value" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -412,7 +392,8 @@ public class RadiosItemTagHelperTests
             {
                 var radiosItem = Assert.IsType<RadiosItem>(item);
                 Assert.Null(radiosItem.Conditional);
-            });
+            }
+        );
     }
 
     private class Model

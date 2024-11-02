@@ -24,9 +24,7 @@ public class NotificationBannerTagHelper : TagHelper
     /// Creates a new <see cref="NotificationBannerTagHelper"/>.
     /// </summary>
     public NotificationBannerTagHelper()
-        : this(htmlGenerator: null)
-    {
-    }
+        : this(htmlGenerator: null) { }
 
     internal NotificationBannerTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
     {
@@ -83,7 +81,8 @@ public class NotificationBannerTagHelper : TagHelper
             notificationBannerContext.Title?.HeadingLevel,
             notificationBannerContext.Title?.Content,
             childContent.Snapshot(),
-            output.Attributes.ToAttributeDictionary());
+            output.Attributes.ToAttributeDictionary()
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

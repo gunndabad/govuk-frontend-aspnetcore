@@ -17,29 +17,22 @@ public class SummaryCardActionTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-summary-card-action",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SummaryCardContext), summaryCardContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SummaryCardContext), summaryCardContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-card-action",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "#" }
-            },
+            attributes: new TagHelperAttributeList() { { "href", "#" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Change");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new SummaryCardActionTagHelper()
-        {
-            VisuallyHiddenText = "vht"
-        };
+        var tagHelper = new SummaryCardActionTagHelper() { VisuallyHiddenText = "vht" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -58,7 +51,9 @@ public class SummaryCardActionTagHelperTests
                     {
                         Assert.Equal("href", kvp.Key);
                         Assert.Equal("#", kvp.Value);
-                    });
-            });
+                    }
+                );
+            }
+        );
     }
 }

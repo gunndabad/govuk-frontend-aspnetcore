@@ -21,10 +21,12 @@ public partial class DefaultComponentGenerator
             .MergeEncodedAttributes(options.Attributes)
             .AppendIf(
                 options.VisuallyHiddenText != string.Empty,
-                () => new HtmlTag("span")
-                    .AddClass("govuk-visually-hidden")
-                    .AppendText(options.VisuallyHiddenText ?? ErrorMessageDefaultVisuallyHiddenText)
-                    .AppendText(": "))
+                () =>
+                    new HtmlTag("span")
+                        .AddClass("govuk-visually-hidden")
+                        .AppendText(options.VisuallyHiddenText ?? ErrorMessageDefaultVisuallyHiddenText)
+                        .AppendText(": ")
+            )
             .AppendHtml(GetEncodedTextOrHtml(options.Text, options.Html));
     }
 }

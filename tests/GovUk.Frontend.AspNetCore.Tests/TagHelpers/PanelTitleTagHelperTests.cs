@@ -19,11 +19,9 @@ public class PanelTitleTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-panel-title",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PanelContext), panelContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PanelContext), panelContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel-title",
@@ -33,7 +31,8 @@ public class PanelTitleTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The title");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PanelTitleTagHelper();
 
@@ -54,11 +53,9 @@ public class PanelTitleTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-panel-title",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PanelContext), panelContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PanelContext), panelContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel-title",
@@ -68,7 +65,8 @@ public class PanelTitleTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The title");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PanelTitleTagHelper();
 
@@ -90,11 +88,9 @@ public class PanelTitleTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-panel-title",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PanelContext), panelContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PanelContext), panelContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel-title",
@@ -104,7 +100,8 @@ public class PanelTitleTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The title");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PanelTitleTagHelper();
 

@@ -15,7 +15,8 @@ internal partial class ComponentGenerator
         string? @for,
         bool isPageHeading,
         IHtmlContent? content,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         TagBuilder? tagBuilder = null;
 

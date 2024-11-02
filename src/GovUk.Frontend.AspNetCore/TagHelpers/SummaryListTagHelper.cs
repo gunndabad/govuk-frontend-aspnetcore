@@ -21,9 +21,7 @@ public class SummaryListTagHelper : TagHelper
     /// Creates a new <see cref="SummaryListTagHelper"/>.
     /// </summary>
     public SummaryListTagHelper()
-        : this(htmlGenerator: null)
-    {
-    }
+        : this(htmlGenerator: null) { }
 
     internal SummaryListTagHelper(IGovUkHtmlGenerator? htmlGenerator)
     {
@@ -42,7 +40,8 @@ public class SummaryListTagHelper : TagHelper
 
         var tagBuilder = _htmlGenerator.GenerateSummaryList(
             summaryListContext.Rows,
-            output.Attributes.ToAttributeDictionary());
+            output.Attributes.ToAttributeDictionary()
+        );
 
         if (context.TryGetContextItem<SummaryCardContext>(out var cardContext))
         {

@@ -41,7 +41,16 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
         await page.RunAndWaitForNavigationAsync(() => page.Keyboard.PressAsync("Enter"));
 
         // Verify POSTed values have been round-tripped, including the invalid values
-        await AssertFields(page, day, month, year, expectDayToHaveError: true, expectMonthToHaveError: true, expectYearToHaveError: false, expectedErrorMessage: "Date of birth must be a real date");
+        await AssertFields(
+            page,
+            day,
+            month,
+            year,
+            expectDayToHaveError: true,
+            expectMonthToHaveError: true,
+            expectYearToHaveError: false,
+            expectedErrorMessage: "Date of birth must be a real date"
+        );
     }
 
     [Fact]
@@ -65,7 +74,16 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
         await page.RunAndWaitForNavigationAsync(() => page.Keyboard.PressAsync("Enter"));
 
         // Verify POSTed values have been round-tripped, including the invalid values
-        await AssertFields(page, day, month, year, expectDayToHaveError: true, expectMonthToHaveError: true, expectYearToHaveError: false, expectedErrorMessage: "Date of birth must be a real date");
+        await AssertFields(
+            page,
+            day,
+            month,
+            year,
+            expectDayToHaveError: true,
+            expectMonthToHaveError: true,
+            expectYearToHaveError: false,
+            expectedErrorMessage: "Date of birth must be a real date"
+        );
     }
 
     [Fact]
@@ -148,7 +166,8 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
         string? expectedErrorMessage = null,
         bool? expectDayToHaveError = null,
         bool? expectMonthToHaveError = null,
-        bool? expectYearToHaveError = null)
+        bool? expectYearToHaveError = null
+    )
     {
         var inputs = await page.QuerySelectorAllAsync("input[type='text']");
 
@@ -156,7 +175,8 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
             inputs,
             input => AssertInput(input, expectedDay, expectDayToHaveError),
             input => AssertInput(input, expectedMonth, expectMonthToHaveError),
-            input => AssertInput(input, expectedYear, expectYearToHaveError));
+            input => AssertInput(input, expectedYear, expectYearToHaveError)
+        );
 
         if (expectedErrorMessage != null)
         {
@@ -222,17 +242,15 @@ public class DateInputsTestController : Controller
     public IActionResult PostValueDate(DateInputsTestsModel model) => View("ValueDate", model);
 
     [HttpGet("AspForCustomDate")]
-    public IActionResult GetAspForCustomDate() => View(
-        "AspForCustomDate",
-        new DateInputsTestsModel() { CustomDate = new CustomDateType(2020, 4, 1) });
+    public IActionResult GetAspForCustomDate() =>
+        View("AspForCustomDate", new DateInputsTestsModel() { CustomDate = new CustomDateType(2020, 4, 1) });
 
     [HttpPost("AspForCustomDate")]
     public IActionResult PostAspForCustomDate(DateInputsTestsModel model) => View("AspForCustomDate", model);
 
     [HttpGet("ValueCustomDate")]
-    public IActionResult GetValueCustomDate() => View(
-        "ValueCustomDate",
-        new DateInputsTestsModel() { CustomDate = new CustomDateType(2020, 4, 1) });
+    public IActionResult GetValueCustomDate() =>
+        View("ValueCustomDate", new DateInputsTestsModel() { CustomDate = new CustomDateType(2020, 4, 1) });
 
     [HttpPost("ValueCustomDate")]
     public IActionResult PostValueCustomDate(DateInputsTestsModel model) => View("ValueCustomDate", model);
@@ -273,7 +291,8 @@ public class CustomDateTypeConverter : DateInputModelConverter
 {
     public override bool CanConvertModelType(Type modelType) => modelType == typeof(CustomDateType);
 
-    public override object CreateModelFromDate(Type modelType, DateOnly date) => new CustomDateType(date.Year, date.Month, date.Day);
+    public override object CreateModelFromDate(Type modelType, DateOnly date) =>
+        new CustomDateType(date.Year, date.Month, date.Day);
 
     public override DateOnly? GetDateFromModel(Type modelType, object model)
     {

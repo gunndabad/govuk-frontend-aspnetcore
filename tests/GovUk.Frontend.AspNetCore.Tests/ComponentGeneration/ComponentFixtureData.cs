@@ -24,11 +24,7 @@ public class ComponentFixtureData : DataAttribute
     private readonly string? _only;
     private readonly HashSet<string> _exclude;
 
-    public ComponentFixtureData(
-        string componentName,
-        Type optionsType,
-        string? only = null,
-        params string[] exclude)
+    public ComponentFixtureData(string componentName, Type optionsType, string? only = null, params string[] exclude)
     {
         _componentName = componentName;
         _optionsType = optionsType;
@@ -42,9 +38,7 @@ public class ComponentFixtureData : DataAttribute
 
         if (!File.Exists(fixturesFile))
         {
-            throw new FileNotFoundException(
-                $"Could not find fixtures file at: '{fixturesFile}'.",
-                fixturesFile);
+            throw new FileNotFoundException($"Could not find fixtures file at: '{fixturesFile}'.", fixturesFile);
         }
 
         var fixturesJson = File.ReadAllText(fixturesFile);
@@ -76,10 +70,7 @@ public class ComponentFixtureData : DataAttribute
 
             var testCaseData = Activator.CreateInstance(testCaseDataType, name, options, html)!;
 
-            yield return new object[]
-            {
-                testCaseData
-            };
+            yield return new object[] { testCaseData };
         }
     }
 

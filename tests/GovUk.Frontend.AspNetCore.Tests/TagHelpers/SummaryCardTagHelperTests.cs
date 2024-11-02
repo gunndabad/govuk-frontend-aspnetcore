@@ -20,7 +20,8 @@ public class SummaryCardTagHelperTests
             tagName: "govuk-summary-card",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-card",
@@ -29,32 +30,41 @@ public class SummaryCardTagHelperTests
             {
                 var summaryCardContext = (SummaryCardContext)context.Items[typeof(SummaryCardContext)];
 
-                summaryCardContext.SetTitle(new HtmlString("My title"), headingLevel: 3, attributes: new AttributeDictionary());
+                summaryCardContext.SetTitle(
+                    new HtmlString("My title"),
+                    headingLevel: 3,
+                    attributes: new AttributeDictionary()
+                );
 
-                summaryCardContext.AddAction(new SummaryListAction()
-                {
-                    Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
+                summaryCardContext.AddAction(
+                    new SummaryListAction()
                     {
-                        { "href", "#" }
-                    },
-                    Content = new HtmlString("Action 1"),
-                    VisuallyHiddenText = "vht"
-                });
+                        Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
+                        {
+                            { "href", "#" },
+                        },
+                        Content = new HtmlString("Action 1"),
+                        VisuallyHiddenText = "vht",
+                    }
+                );
 
-                summaryCardContext.AddAction(new SummaryListAction()
-                {
-                    Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
+                summaryCardContext.AddAction(
+                    new SummaryListAction()
                     {
-                        { "href", "#" }
-                    },
-                    Content = new HtmlString("Action 2")
-                });
+                        Attributes = new Microsoft.AspNetCore.Mvc.ViewFeatures.AttributeDictionary()
+                        {
+                            { "href", "#" },
+                        },
+                        Content = new HtmlString("Action 2"),
+                    }
+                );
 
                 summaryCardContext.SetSummaryList(new HtmlString("<div></div>"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryCardTagHelper(new ComponentGenerator());
 
@@ -62,7 +72,8 @@ public class SummaryCardTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-summary-card"">
   <div class=""govuk-summary-card__title-wrapper"">
     <h3 class=""govuk-summary-card__title"">My title</h3>

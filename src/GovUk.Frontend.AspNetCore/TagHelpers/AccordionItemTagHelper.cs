@@ -9,7 +9,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = AccordionTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.AccordionItemElement)]
-[RestrictChildren(AccordionItemHeadingTagHelper.TagName, AccordionItemSummaryTagHelper.TagName, AccordionItemContentTagHelper.TagName)]
+[RestrictChildren(
+    AccordionItemHeadingTagHelper.TagName,
+    AccordionItemSummaryTagHelper.TagName,
+    AccordionItemContentTagHelper.TagName
+)]
 public class AccordionItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-accordion-item";
@@ -39,17 +43,19 @@ public class AccordionItemTagHelper : TagHelper
 
         itemContext.ThrowIfIncomplete();
 
-        accordionContext.AddItem(new AccordionItem()
-        {
-            Expanded = Expanded,
-            HeadingContent = itemContext.Heading!.Value.Content,
-            HeadingAttributes = itemContext.Heading.Value.Attributes,
-            SummaryContent = itemContext.Summary?.Content,
-            SummaryAttributes = itemContext.Summary?.Attributes,
-            Content = itemContext.Content?.Content,
-            ContentAttributes = itemContext.Content?.Attributes,
-            Attributes = output.Attributes.ToAttributeDictionary()
-        });
+        accordionContext.AddItem(
+            new AccordionItem()
+            {
+                Expanded = Expanded,
+                HeadingContent = itemContext.Heading!.Value.Content,
+                HeadingAttributes = itemContext.Heading.Value.Attributes,
+                SummaryContent = itemContext.Summary?.Content,
+                SummaryAttributes = itemContext.Summary?.Attributes,
+                Content = itemContext.Content?.Content,
+                ContentAttributes = itemContext.Content?.Attributes,
+                Attributes = output.Attributes.ToAttributeDictionary(),
+            }
+        );
 
         output.SuppressOutput();
     }

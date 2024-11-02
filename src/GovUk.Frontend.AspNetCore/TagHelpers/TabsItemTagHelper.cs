@@ -58,14 +58,16 @@ public class TabsItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        tabsContext.AddItem(new TabsItem()
-        {
-            Id = Id,
-            Label = Label,
-            LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
-            PanelAttributes = output.Attributes.ToAttributeDictionary(),
-            PanelContent = childContent.Snapshot()
-        });
+        tabsContext.AddItem(
+            new TabsItem()
+            {
+                Id = Id,
+                Label = Label,
+                LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
+                PanelAttributes = output.Attributes.ToAttributeDictionary(),
+                PanelContent = childContent.Snapshot(),
+            }
+        );
 
         output.SuppressOutput();
     }

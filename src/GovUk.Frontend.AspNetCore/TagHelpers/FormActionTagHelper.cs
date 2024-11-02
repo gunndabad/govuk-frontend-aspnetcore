@@ -19,7 +19,5 @@ public class FormActionTagHelper : Microsoft.AspNetCore.Mvc.TagHelpers.FormActio
 {
     /// <inheritdoc />
     public FormActionTagHelper(IUrlHelperFactory urlHelperFactory)
-        : base(urlHelperFactory)
-    {
-    }
+        : base(urlHelperFactory) { }
 }

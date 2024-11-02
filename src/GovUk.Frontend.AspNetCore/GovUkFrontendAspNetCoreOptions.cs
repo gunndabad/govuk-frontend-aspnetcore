@@ -22,7 +22,7 @@ public class GovUkFrontendAspNetCoreOptions
         DateInputModelConverters = new List<DateInputModelConverter>()
         {
             new DateTimeDateInputModelConverter(),
-            new DateOnlyDateInputModelConverter()
+            new DateOnlyDateInputModelConverter(),
         };
 
         PrependErrorSummaryToForms = true;

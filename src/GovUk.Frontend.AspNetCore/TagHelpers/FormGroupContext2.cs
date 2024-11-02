@@ -10,11 +10,21 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal abstract class FormGroupContext2
 {
-    internal record LabelInfo(bool IsPageHeading, ImmutableDictionary<string, string?> Attributes, string? Html, string TagName);
+    internal record LabelInfo(
+        bool IsPageHeading,
+        ImmutableDictionary<string, string?> Attributes,
+        string? Html,
+        string TagName
+    );
 
     internal record HintInfo(ImmutableDictionary<string, string?> Attributes, string? Html, string TagName);
 
-    internal record ErrorMessageInfo(string? VisuallyHiddenText, ImmutableDictionary<string, string?> Attributes, string? Html, string TagName);
+    internal record ErrorMessageInfo(
+        string? VisuallyHiddenText,
+        ImmutableDictionary<string, string?> Attributes,
+        string? Html,
+        string TagName
+    );
 
     // internal for testing
     internal LabelInfo? Label;
@@ -34,7 +44,8 @@ internal abstract class FormGroupContext2
         ViewContext viewContext,
         IModelHelper modelHelper,
         string inputId,
-        string forAttributeName)
+        string forAttributeName
+    )
     {
         string? html = Label?.Html;
 
@@ -43,17 +54,21 @@ internal abstract class FormGroupContext2
             if (@for is null)
             {
                 throw new InvalidOperationException(
-                    $"Label content must be specified when the '{forAttributeName}' attribute is not specified.");
+                    $"Label content must be specified when the '{forAttributeName}' attribute is not specified."
+                );
             }
 
-            var displayName = modelHelper.GetDisplayName(@for!.ModelExplorer, @for.Name) ??
-                throw new InvalidOperationException("Cannot deduce content for the label.");
+            var displayName =
+                modelHelper.GetDisplayName(@for!.ModelExplorer, @for.Name)
+                ?? throw new InvalidOperationException("Cannot deduce content for the label.");
 
             html = HtmlEncoder.Default.Encode(displayName);
         }
 
-        var attributes = (Label?.Attributes ?? ImmutableDictionary<string, string?>.Empty)
-            .Remove("class", out var classes);
+        var attributes = (Label?.Attributes ?? ImmutableDictionary<string, string?>.Empty).Remove(
+            "class",
+            out var classes
+        );
 
         return new LabelOptions()
         {
@@ -62,7 +77,7 @@ internal abstract class FormGroupContext2
             For = inputId,
             IsPageHeading = Label?.IsPageHeading,
             Classes = classes,
-            Attributes = attributes
+            Attributes = attributes,
         };
     }
 
@@ -90,8 +105,10 @@ internal abstract class FormGroupContext2
             return null;
         }
 
-        var attributes = (Hint?.Attributes ?? ImmutableDictionary<string, string?>.Empty)
-            .Remove("class", out var classes);
+        var attributes = (Hint?.Attributes ?? ImmutableDictionary<string, string?>.Empty).Remove(
+            "class",
+            out var classes
+        );
 
         return new HintOptions()
         {
@@ -99,11 +116,16 @@ internal abstract class FormGroupContext2
             Html = html,
             Id = null,
             Classes = classes,
-            Attributes = attributes
+            Attributes = attributes,
         };
     }
 
-    public ErrorMessageOptions? GetErrorMessageOptions(ModelExpression? @for, ViewContext viewContext, IModelHelper modelHelper, bool? ignoreModelStateErrors)
+    public ErrorMessageOptions? GetErrorMessageOptions(
+        ModelExpression? @for,
+        ViewContext viewContext,
+        IModelHelper modelHelper,
+        bool? ignoreModelStateErrors
+    )
     {
         string? html = ErrorMessage?.Html;
 
@@ -122,8 +144,10 @@ internal abstract class FormGroupContext2
             return null;
         }
 
-        var attributes = (ErrorMessage?.Attributes ?? ImmutableDictionary<string, string?>.Empty)
-            .Remove("class", out var classes);
+        var attributes = (ErrorMessage?.Attributes ?? ImmutableDictionary<string, string?>.Empty).Remove(
+            "class",
+            out var classes
+        );
 
         return new ErrorMessageOptions()
         {
@@ -132,7 +156,7 @@ internal abstract class FormGroupContext2
             Id = null,
             VisuallyHiddenText = ErrorMessage?.VisuallyHiddenText,
             Classes = classes,
-            Attributes = attributes
+            Attributes = attributes,
         };
     }
 
@@ -140,7 +164,8 @@ internal abstract class FormGroupContext2
         string? visuallyHiddenText,
         ImmutableDictionary<string, string?> attributes,
         string? html,
-        string tagName)
+        string tagName
+    )
     {
         if (ErrorMessage is not null)
         {
@@ -150,10 +175,7 @@ internal abstract class FormGroupContext2
         ErrorMessage = new ErrorMessageInfo(visuallyHiddenText, attributes, html, tagName);
     }
 
-    public virtual void SetHint(
-        ImmutableDictionary<string, string?> attributes,
-        string? html,
-        string tagName)
+    public virtual void SetHint(ImmutableDictionary<string, string?> attributes, string? html, string tagName)
     {
         if (Hint is not null)
         {
@@ -172,7 +194,8 @@ internal abstract class FormGroupContext2
         bool isPageHeading,
         ImmutableDictionary<string, string?> attributes,
         string? html,
-        string tagName)
+        string tagName
+    )
     {
         if (Label is not null)
         {

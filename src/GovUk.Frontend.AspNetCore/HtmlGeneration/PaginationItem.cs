@@ -20,6 +20,4 @@ internal class PaginationItem : PaginationItemBase
     public string? VisuallyHiddenText { get; set; }
 }
 
-internal class PaginationItemEllipsis : PaginationItemBase
-{
-}
+internal class PaginationItemEllipsis : PaginationItemBase { }

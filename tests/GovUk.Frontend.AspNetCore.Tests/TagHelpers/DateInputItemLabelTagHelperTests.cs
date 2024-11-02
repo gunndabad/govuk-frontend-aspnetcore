@@ -17,11 +17,9 @@ public class DateInputItemLabelTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-date-input-day-label",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DateInputItemContext), itemContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DateInputItemContext), itemContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-date-input-day-label",
@@ -31,7 +29,8 @@ public class DateInputItemLabelTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Label");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DateInputItemLabelTagHelper();
 

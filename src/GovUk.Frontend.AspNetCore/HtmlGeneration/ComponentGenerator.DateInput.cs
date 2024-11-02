@@ -18,7 +18,8 @@ internal partial class ComponentGenerator
         DateInputItem day,
         DateInputItem month,
         DateInputItem year,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(day), day);
@@ -42,19 +43,22 @@ internal partial class ComponentGenerator
                 argName,
                 $"{argName} is not valid; {nameof(DateInputItem.Id)} cannot be null or empty.",
                 item.Id,
-                !string.IsNullOrEmpty(item.Id));
+                !string.IsNullOrEmpty(item.Id)
+            );
 
             Guard.ArgumentValidNotNull(
                 argName,
                 $"{argName} is not valid; {nameof(DateInputItem.Name)} cannot be null or empty.",
                 item.Name,
-                !string.IsNullOrEmpty(item.Name));
+                !string.IsNullOrEmpty(item.Name)
+            );
 
             Guard.ArgumentValidNotNull(
                 argName,
                 $"{argName} is not valid; {nameof(DateInputItem.LabelContent)} cannot be null.",
                 item.LabelContent,
-                item.LabelContent != null);
+                item.LabelContent != null
+            );
 
             var div = new TagBuilder("div");
             div.AddCssClass("govuk-date-input__item");
@@ -75,24 +79,25 @@ internal partial class ComponentGenerator
                 prefixContent: null,
                 prefixAttributes: null,
                 suffixContent: null,
-                suffixAttributes: null);
+                suffixAttributes: null
+            );
             itemInput.MergeCssClass("govuk-date-input__input");
 
             var itemLabel = GenerateLabel(
                 @for: item.Id,
                 isPageHeading: false,
                 content: item.LabelContent,
-                attributes: null)!;
+                attributes: null
+            )!;
             itemLabel.AddCssClass("govuk-date-input__label");
 
-            var contentBuilder = new HtmlContentBuilder()
-                .AppendHtml(itemLabel)
-                .AppendHtml(itemInput);
+            var contentBuilder = new HtmlContentBuilder().AppendHtml(itemLabel).AppendHtml(itemInput);
 
             var itemFormGroup = GenerateFormGroup(
-                haveError: false,  // GDS component doesn't add error classes to these form groups
+                haveError: false, // GDS component doesn't add error classes to these form groups
                 content: contentBuilder,
-                attributes: null);
+                attributes: null
+            );
 
             div.InnerHtml.AppendHtml(itemFormGroup);
 

@@ -20,7 +20,8 @@ public class AccordionTagHelperTests
             tagName: "govuk-accordion",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion",
@@ -29,36 +30,38 @@ public class AccordionTagHelperTests
             {
                 var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = false,
-                    HeadingContent = new HtmlString("First heading"),
-                    SummaryContent = new HtmlString("First summary")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = false,
+                        HeadingContent = new HtmlString("First heading"),
+                        SummaryContent = new HtmlString("First summary"),
+                    }
+                );
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = true,
-                    HeadingContent = new HtmlString("Second heading")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = true,
+                        HeadingContent = new HtmlString("Second heading"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new AccordionTagHelper()
-        {
-            Id = "testaccordion",
-            HeadingLevel = 1,
-        };
+        var tagHelper = new AccordionTagHelper() { Id = "testaccordion", HeadingLevel = 1 };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-accordion"" data-module=""govuk-accordion"" id=""testaccordion"">
     <div class=""govuk-accordion__section"">
         <div class=""govuk-accordion__section-header"">
@@ -94,7 +97,8 @@ public class AccordionTagHelperTests
             tagName: "govuk-accordion",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion",
@@ -103,24 +107,29 @@ public class AccordionTagHelperTests
             {
                 var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = false,
-                    HeadingContent = new HtmlString("First heading"),
-                    SummaryContent = new HtmlString("First summary")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = false,
+                        HeadingContent = new HtmlString("First heading"),
+                        SummaryContent = new HtmlString("First summary"),
+                    }
+                );
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = true,
-                    HeadingContent = new HtmlString("Second heading")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = true,
+                        HeadingContent = new HtmlString("Second heading"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionTagHelper()
         {
@@ -130,14 +139,15 @@ public class AccordionTagHelperTests
             HideSectionAriaLabelText = "Collapse this section",
             ShowAllSectionsText = "Expand all sections",
             ShowSectionText = "Expand",
-            ShowSectionAriaLabelText = "Expand this section"
+            ShowSectionAriaLabelText = "Expand this section",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-accordion"" data-module=""govuk-accordion"" id=""testaccordion"" data-i18n.hide-all-sections=""Expand all sections"" data-i18n.hide-section=""Expand"" data-i18n.hide-section-aria-label=""Expand this section"" data-i18n.show-all-sections=""Collapse all sections"" data-i18n.show-section=""Collapse"" data-i18n.show-section-aria-label=""Collapse this section"">
     <div class=""govuk-accordion__section"">
         <div class=""govuk-accordion__section-header"">
@@ -173,7 +183,8 @@ public class AccordionTagHelperTests
             tagName: "govuk-accordion",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion",
@@ -182,24 +193,29 @@ public class AccordionTagHelperTests
             {
                 var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = false,
-                    HeadingContent = new HtmlString("First heading"),
-                    SummaryContent = new HtmlString("First summary")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = false,
+                        HeadingContent = new HtmlString("First heading"),
+                        SummaryContent = new HtmlString("First summary"),
+                    }
+                );
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = true,
-                    HeadingContent = new HtmlString("Second heading")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = true,
+                        HeadingContent = new HtmlString("Second heading"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionTagHelper(new ComponentGenerator());
 
@@ -222,7 +238,8 @@ public class AccordionTagHelperTests
             tagName: "govuk-accordion",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion",
@@ -231,31 +248,34 @@ public class AccordionTagHelperTests
             {
                 var accordionContext = (AccordionContext)context.Items[typeof(AccordionContext)];
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = false,
-                    HeadingContent = new HtmlString("First heading"),
-                    SummaryContent = new HtmlString("First summary")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = false,
+                        HeadingContent = new HtmlString("First heading"),
+                        SummaryContent = new HtmlString("First summary"),
+                    }
+                );
 
-                accordionContext.AddItem(new AccordionItem()
-                {
-                    Content = new HtmlString("First content"),
-                    Expanded = true,
-                    HeadingContent = new HtmlString("Second heading")
-                });
+                accordionContext.AddItem(
+                    new AccordionItem()
+                    {
+                        Content = new HtmlString("First content"),
+                        Expanded = true,
+                        HeadingContent = new HtmlString("Second heading"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         // Act
-        var ex = Record.Exception(() => new AccordionTagHelper(new ComponentGenerator())
-        {
-            Id = "testaccordion",
-            HeadingLevel = level
-        });
+        var ex = Record.Exception(
+            () => new AccordionTagHelper(new ComponentGenerator()) { Id = "testaccordion", HeadingLevel = level }
+        );
 
         // Assert
         var argumentEx = Assert.IsType<ArgumentOutOfRangeException>(ex);

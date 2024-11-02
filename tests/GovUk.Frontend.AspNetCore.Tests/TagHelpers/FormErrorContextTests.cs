@@ -23,6 +23,7 @@ public class FormErrorContextTests
             {
                 Assert.Equal(html, item.Html);
                 Assert.Equal(href, item.Href);
-            });
+            }
+        );
     }
 }

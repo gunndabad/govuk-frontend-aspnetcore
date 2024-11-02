@@ -38,7 +38,8 @@ public class MaxWordsAttributeTests
 
         Assert.Collection(
             validationResults,
-            result => Assert.Equal("TheString must be 3 words or fewer", result.ErrorMessage));
+            result => Assert.Equal("TheString must be 3 words or fewer", result.ErrorMessage)
+        );
     }
 
     public class Model

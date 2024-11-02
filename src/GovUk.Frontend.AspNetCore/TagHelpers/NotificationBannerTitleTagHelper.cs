@@ -22,9 +22,7 @@ public class NotificationBannerTitleTagHelper : TagHelper
     /// <summary>
     /// Creates a new <see cref="NotificationBannerTitleTagHelper"/>.
     /// </summary>
-    public NotificationBannerTitleTagHelper()
-    {
-    }
+    public NotificationBannerTitleTagHelper() { }
 
     /// <summary>
     /// The heading level for the notification banner title.
@@ -38,12 +36,15 @@ public class NotificationBannerTitleTagHelper : TagHelper
         get => _headingLevel;
         set
         {
-            if (value < ComponentGenerator.NotificationBannerMinHeadingLevel ||
-                value > ComponentGenerator.NotificationBannerMaxHeadingLevel)
+            if (
+                value < ComponentGenerator.NotificationBannerMinHeadingLevel
+                || value > ComponentGenerator.NotificationBannerMaxHeadingLevel
+            )
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(value),
-                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.NotificationBannerMinHeadingLevel} and {ComponentGenerator.NotificationBannerMaxHeadingLevel}.");
+                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.NotificationBannerMinHeadingLevel} and {ComponentGenerator.NotificationBannerMaxHeadingLevel}."
+                );
             }
 
             _headingLevel = value;
@@ -69,9 +70,7 @@ public class NotificationBannerTitleTagHelper : TagHelper
     {
         var notificationBannerContext = context.GetContextItem<NotificationBannerContext>();
 
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {

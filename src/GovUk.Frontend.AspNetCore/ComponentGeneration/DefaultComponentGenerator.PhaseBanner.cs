@@ -17,11 +17,15 @@ public partial class DefaultComponentGenerator
             .AddClass("govuk-phase-banner")
             .AddClasses(ExplodeClasses(options.Classes))
             .MergeEncodedAttributes(options.Attributes)
-            .Append(new HtmlTag("p")
-                .AddClass("govuk-phase-banner__content")
-                .Append(GenerateTag(options.Tag!).AddClass("govuk-phase-banner__content__tag"))
-                .Append(new HtmlTag("span")
-                    .AddClass("govuk-phase-banner__text")
-                    .AppendHtml(GetEncodedTextOrHtml(options.Text, options.Html))));
+            .Append(
+                new HtmlTag("p")
+                    .AddClass("govuk-phase-banner__content")
+                    .Append(GenerateTag(options.Tag!).AddClass("govuk-phase-banner__content__tag"))
+                    .Append(
+                        new HtmlTag("span")
+                            .AddClass("govuk-phase-banner__text")
+                            .AppendHtml(GetEncodedTextOrHtml(options.Text, options.Html))
+                    )
+            );
     }
 }

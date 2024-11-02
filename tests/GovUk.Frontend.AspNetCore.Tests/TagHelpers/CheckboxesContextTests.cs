@@ -14,11 +14,7 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         // Act
         context.AddItem(item);
@@ -34,11 +30,7 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.OpenFieldset();
         var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
@@ -65,7 +57,10 @@ public class CheckboxesContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-checkboxes-fieldset> cannot be nested inside another <govuk-checkboxes-fieldset>.", ex.Message);
+        Assert.Equal(
+            "<govuk-checkboxes-fieldset> cannot be nested inside another <govuk-checkboxes-fieldset>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -82,7 +77,10 @@ public class CheckboxesContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("Only one <govuk-checkboxes-fieldset> element is permitted within each <govuk-checkboxes>.", ex.Message);
+        Assert.Equal<object>(
+            "Only one <govuk-checkboxes-fieldset> element is permitted within each <govuk-checkboxes>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -91,11 +89,7 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.AddItem(item);
 
@@ -104,7 +98,10 @@ public class CheckboxesContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-checkboxes-fieldset> must be the only direct child of the <govuk-checkboxes>.", ex.Message);
+        Assert.Equal(
+            "<govuk-checkboxes-fieldset> must be the only direct child of the <govuk-checkboxes>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -119,7 +116,10 @@ public class CheckboxesContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-checkboxes-fieldset> must be the only direct child of the <govuk-checkboxes>.", ex.Message);
+        Assert.Equal(
+            "<govuk-checkboxes-fieldset> must be the only direct child of the <govuk-checkboxes>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -134,7 +134,10 @@ public class CheckboxesContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-checkboxes-fieldset> must be the only direct child of the <govuk-checkboxes>.", ex.Message);
+        Assert.Equal(
+            "<govuk-checkboxes-fieldset> must be the only direct child of the <govuk-checkboxes>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -144,7 +147,9 @@ public class CheckboxesContextTests
         var context = new CheckboxesContext(name: null, aspFor: null);
 
         // Act
-        var ex = Record.Exception(() => context.CloseFieldset(new CheckboxesFieldsetContext(attributes: null, aspFor: null)));
+        var ex = Record.Exception(
+            () => context.CloseFieldset(new CheckboxesFieldsetContext(attributes: null, aspFor: null))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -157,17 +162,14 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.AddItem(item);
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error"))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -180,11 +182,7 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.OpenFieldset();
         var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
@@ -192,7 +190,8 @@ public class CheckboxesContextTests
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error"))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -205,11 +204,7 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.AddItem(item);
 
@@ -227,11 +222,7 @@ public class CheckboxesContextTests
         // Arrange
         var context = new CheckboxesContext(name: null, aspFor: null);
 
-        var item = new CheckboxesItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new CheckboxesItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.OpenFieldset();
         var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);

@@ -8,7 +8,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the fieldset in a GDS radios component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = RadiosTagHelper.TagName)]
-[RestrictChildren(RadiosFieldsetLegendTagHelper.TagName, RadiosItemTagHelper.TagName, RadiosItemDividerTagHelper.TagName, RadiosTagHelper.HintTagName, RadiosTagHelper.ErrorMessageTagName)]
+[RestrictChildren(
+    RadiosFieldsetLegendTagHelper.TagName,
+    RadiosItemTagHelper.TagName,
+    RadiosItemDividerTagHelper.TagName,
+    RadiosTagHelper.HintTagName,
+    RadiosTagHelper.ErrorMessageTagName
+)]
 [OutputElementHint(ComponentGenerator.FieldsetElement)]
 public class RadiosFieldsetTagHelper : TagHelper
 {
@@ -20,7 +26,10 @@ public class RadiosFieldsetTagHelper : TagHelper
         var radiosContext = context.GetContextItem<RadiosContext>();
         radiosContext.OpenFieldset();
 
-        var fieldsetContext = new RadiosFieldsetContext(output.Attributes.ToAttributeDictionary(), radiosContext.AspFor);
+        var fieldsetContext = new RadiosFieldsetContext(
+            output.Attributes.ToAttributeDictionary(),
+            radiosContext.AspFor
+        );
 
         using (context.SetScopedContextItem(fieldsetContext))
         {

@@ -54,22 +54,23 @@ public class DetailsTagHelper : TagHelper
         var (summaryAttributes, summaryHtml) = detailsContext.GetSummaryOptions();
         var (textAttributes, textHtml) = detailsContext.GetTextOptions();
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateDetails(new DetailsOptions()
-        {
-            Id = Id,
-            Open = Open,
-            SummaryHtml = summaryHtml,
-            SummaryText = null,
-            Html = textHtml,
-            Text = null,
-            Classes = classes,
-            Attributes = attributes,
-            SummaryAttributes = summaryAttributes,
-            TextAttributes = textAttributes
-        });
+        var component = _componentGenerator.GenerateDetails(
+            new DetailsOptions()
+            {
+                Id = Id,
+                Open = Open,
+                SummaryHtml = summaryHtml,
+                SummaryText = null,
+                Html = textHtml,
+                Text = null,
+                Classes = classes,
+                Attributes = attributes,
+                SummaryAttributes = summaryAttributes,
+                TextAttributes = textAttributes,
+            }
+        );
 
         output.WriteComponent(component);
     }

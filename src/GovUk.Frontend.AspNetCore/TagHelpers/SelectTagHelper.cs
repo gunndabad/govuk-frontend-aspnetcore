@@ -30,16 +30,10 @@ public class SelectTagHelper : FormGroupTagHelperBase
     /// Creates a new <see cref="SelectTagHelper"/>.
     /// </summary>
     public SelectTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
-    {
-    }
+        : this(htmlGenerator: null, modelHelper: null) { }
 
     internal SelectTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
-    {
-    }
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper()) { }
 
     /// <summary>
     /// One or more element IDs to add to the <c>aria-describedby</c> attribute of the generated <c>select</c> element.
@@ -94,7 +88,8 @@ public class SelectTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var selectContext = tagHelperContext.GetContextItem<SelectContext>();
 
@@ -134,7 +129,8 @@ public class SelectTagHelper : FormGroupTagHelperBase
                 DescribedBy,
                 Disabled,
                 selectContext.Items,
-                SelectAttributes.ToAttributeDictionary());
+                SelectAttributes.ToAttributeDictionary()
+            );
         }
     }
 
@@ -150,7 +146,8 @@ public class SelectTagHelper : FormGroupTagHelperBase
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                AspForAttributeName
+            );
         }
 
         var resolvedName = ResolveName();
@@ -162,9 +159,7 @@ public class SelectTagHelper : FormGroupTagHelperBase
     {
         if (Name == null && AspFor == null)
         {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                NameAttributeName,
-                AspForAttributeName);
+            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(NameAttributeName, AspForAttributeName);
         }
 
         return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);

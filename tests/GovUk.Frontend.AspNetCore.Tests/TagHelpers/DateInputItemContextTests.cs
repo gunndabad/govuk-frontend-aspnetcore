@@ -29,10 +29,15 @@ public class DateInputItemContextTests
         context.SetLabel(content: new HtmlString("Existing label"), attributes: new AttributeDictionary());
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(content: new HtmlString("Label"), attributes: new AttributeDictionary()));
+        var ex = Record.Exception(
+            () => context.SetLabel(content: new HtmlString("Label"), attributes: new AttributeDictionary())
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-date-input-day-label> element is permitted within each <govuk-date-input-day>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-date-input-day-label> element is permitted within each <govuk-date-input-day>.",
+            ex.Message
+        );
     }
 }

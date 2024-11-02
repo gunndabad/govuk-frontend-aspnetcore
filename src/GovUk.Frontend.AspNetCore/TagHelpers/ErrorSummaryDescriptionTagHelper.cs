@@ -25,7 +25,10 @@ public class ErrorSummaryDescriptionTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        errorSummaryContext.SetDescription(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString());
+        errorSummaryContext.SetDescription(
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent.ToHtmlString()
+        );
 
         output.SuppressOutput();
     }

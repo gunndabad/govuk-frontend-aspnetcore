@@ -13,7 +13,7 @@ internal class GovUkFrontendAspNetCoreMetadataDetailsProvider : IMetadataDetails
         {
             var dateOnlyMetadata = new DateInputModelMetadata()
             {
-                ErrorMessagePrefix = dateOnlyMetadataAttribute.ErrorMessagePrefix
+                ErrorMessagePrefix = dateOnlyMetadataAttribute.ErrorMessagePrefix,
             };
 
             context.DisplayMetadata.AdditionalValues.Add(typeof(DateInputModelMetadata), dateOnlyMetadata);

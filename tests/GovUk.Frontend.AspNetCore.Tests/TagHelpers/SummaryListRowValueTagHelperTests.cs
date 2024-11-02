@@ -25,9 +25,10 @@ public class SummaryListRowValueTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-value",
@@ -37,7 +38,8 @@ public class SummaryListRowValueTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Value content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowValueTagHelper();
 
@@ -63,9 +65,10 @@ public class SummaryListRowValueTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-value",
@@ -75,7 +78,8 @@ public class SummaryListRowValueTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Value content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowValueTagHelper();
 
@@ -84,7 +88,10 @@ public class SummaryListRowValueTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-summary-list-row-value> element is permitted within each <govuk-summary-list-row>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-summary-list-row-value> element is permitted within each <govuk-summary-list-row>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -102,9 +109,10 @@ public class SummaryListRowValueTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-value",
@@ -114,7 +122,8 @@ public class SummaryListRowValueTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Value content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowValueTagHelper();
 
@@ -123,7 +132,10 @@ public class SummaryListRowValueTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-summary-list-row-value> must be specified before <govuk-summary-list-row-actions>.", ex.Message);
+        Assert.Equal(
+            "<govuk-summary-list-row-value> must be specified before <govuk-summary-list-row-actions>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -133,10 +145,7 @@ public class SummaryListRowValueTagHelperTests
         var summaryListContext = new SummaryListContext();
 
         var rowContext = new SummaryListRowContext();
-        rowContext.AddAction(new HtmlGeneration.SummaryListAction()
-        {
-            Content = new HtmlString("Action")
-        });
+        rowContext.AddAction(new HtmlGeneration.SummaryListAction() { Content = new HtmlString("Action") });
 
         var context = new TagHelperContext(
             tagName: "govuk-summary-list-row-value",
@@ -144,9 +153,10 @@ public class SummaryListRowValueTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-value",
@@ -156,7 +166,8 @@ public class SummaryListRowValueTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Value content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowValueTagHelper();
 
@@ -165,6 +176,9 @@ public class SummaryListRowValueTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-summary-list-row-value> must be specified before <govuk-summary-list-row-action>.", ex.Message);
+        Assert.Equal(
+            "<govuk-summary-list-row-value> must be specified before <govuk-summary-list-row-action>.",
+            ex.Message
+        );
     }
 }

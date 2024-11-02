@@ -17,11 +17,9 @@ public class CharacterCountValueTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-character-count-value",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CharacterCountContext), characterCountContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CharacterCountContext), characterCountContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count-value",
@@ -31,7 +29,8 @@ public class CharacterCountValueTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Value");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountValueTagHelper();
 

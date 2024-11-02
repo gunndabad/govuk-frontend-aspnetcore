@@ -16,7 +16,8 @@ internal class RewriteCssUrlsMiddleware
     public RewriteCssUrlsMiddleware(
         RequestDelegate next,
         IFileProvider fileProvider,
-        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor
+    )
     {
         ArgumentNullException.ThrowIfNull(next);
         ArgumentNullException.ThrowIfNull(fileProvider);
@@ -28,9 +29,11 @@ internal class RewriteCssUrlsMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (_optionsAccessor.Value.CompiledContentPath is PathString compiledContentPath &&
-            _optionsAccessor.Value.StaticAssetsContentPath is PathString staticAssetsPath &&
-            context.Request.Path == compiledContentPath + "/all.min.css")
+        if (
+            _optionsAccessor.Value.CompiledContentPath is PathString compiledContentPath
+            && _optionsAccessor.Value.StaticAssetsContentPath is PathString staticAssetsPath
+            && context.Request.Path == compiledContentPath + "/all.min.css"
+        )
         {
             var fileInfo = _fileProvider.GetFileInfo("all.min.css");
 

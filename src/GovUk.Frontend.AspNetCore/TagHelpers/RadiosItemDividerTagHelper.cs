@@ -26,11 +26,13 @@ public class RadiosItemDividerTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        radiosContext.AddItem(new RadiosItemDivider()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot()
-        });
+        radiosContext.AddItem(
+            new RadiosItemDivider()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Content = childContent.Snapshot(),
+            }
+        );
 
         output.SuppressOutput();
     }

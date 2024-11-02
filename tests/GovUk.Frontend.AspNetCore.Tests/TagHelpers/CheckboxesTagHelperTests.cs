@@ -19,7 +19,8 @@ public class CheckboxesTagHelperTests
             tagName: "govuk-checkboxes",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes",
@@ -30,39 +31,45 @@ public class CheckboxesTagHelperTests
 
                 checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = false,
-                    LabelContent = new HtmlString("First"),
-                    Disabled = true,
-                    Id = "first",
-                    Value = "first"
-                });
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
+                    {
+                        Checked = false,
+                        LabelContent = new HtmlString("First"),
+                        Disabled = true,
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("Second"),
-                    Disabled = false,
-                    Id = "second",
-                    Value = "second"
-                });
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
+                    {
+                        Checked = true,
+                        LabelContent = new HtmlString("Second"),
+                        Disabled = false,
+                        Id = "second",
+                        Value = "second",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testcheckboxes"
+            Name = "testcheckboxes",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
@@ -88,7 +95,8 @@ public class CheckboxesTagHelperTests
             tagName: "govuk-checkboxes",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes",
@@ -97,41 +105,51 @@ public class CheckboxesTagHelperTests
             {
                 var checkboxesContext = context.GetContextItem<CheckboxesContext>();
 
-                checkboxesContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("A error"));
+                checkboxesContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    attributes: null,
+                    content: new HtmlString("A error")
+                );
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = false,
-                    LabelContent = new HtmlString("First"),
-                    Disabled = true,
-                    Id = "first",
-                    Value = "first"
-                });
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
+                    {
+                        Checked = false,
+                        LabelContent = new HtmlString("First"),
+                        Disabled = true,
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("Second"),
-                    Disabled = false,
-                    Id = "second",
-                    Value = "second"
-                });
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
+                    {
+                        Checked = true,
+                        LabelContent = new HtmlString("Second"),
+                        Disabled = false,
+                        Id = "second",
+                        Value = "second",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testcheckboxes"
+            Name = "testcheckboxes",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>A error</p>
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
@@ -157,7 +175,8 @@ public class CheckboxesTagHelperTests
             tagName: "govuk-checkboxes",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes",
@@ -166,32 +185,33 @@ public class CheckboxesTagHelperTests
             {
                 var checkboxesContext = context.GetContextItem<CheckboxesContext>();
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    LabelContent = new HtmlString("First"),
-                    Hint = new CheckboxesItemHint()
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
                     {
-                        Content = new HtmlString("First item hint")
-                    },
-                    Id = "first",
-                    Value = "first"
-                });
+                        LabelContent = new HtmlString("First"),
+                        Hint = new CheckboxesItemHint() { Content = new HtmlString("First item hint") },
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testcheckboxes"
+            Name = "testcheckboxes",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
@@ -213,7 +233,8 @@ public class CheckboxesTagHelperTests
             tagName: "govuk-checkboxes",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes",
@@ -222,32 +243,36 @@ public class CheckboxesTagHelperTests
             {
                 var checkboxesContext = context.GetContextItem<CheckboxesContext>();
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    LabelContent = new HtmlString("First"),
-                    Conditional = new CheckboxesItemConditional()
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
                     {
-                        Content = new HtmlString("Item 1 conditional")
-                    },
-                    Id = "first",
-                    Value = "first"
-                });
+                        LabelContent = new HtmlString("First"),
+                        Conditional = new CheckboxesItemConditional()
+                        {
+                            Content = new HtmlString("Item 1 conditional"),
+                        },
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testcheckboxes"
+            Name = "testcheckboxes",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
@@ -269,7 +294,8 @@ public class CheckboxesTagHelperTests
             tagName: "govuk-checkboxes",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes",
@@ -278,33 +304,37 @@ public class CheckboxesTagHelperTests
             {
                 var checkboxesContext = context.GetContextItem<CheckboxesContext>();
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("First"),
-                    Conditional = new CheckboxesItemConditional()
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
                     {
-                        Content = new HtmlString("Item 1 conditional")
-                    },
-                    Id = "first",
-                    Value = "first"
-                });
+                        Checked = true,
+                        LabelContent = new HtmlString("First"),
+                        Conditional = new CheckboxesItemConditional()
+                        {
+                            Content = new HtmlString("Item 1 conditional"),
+                        },
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testcheckboxes"
+            Name = "testcheckboxes",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-checkboxes"" data-module=""govuk-checkboxes"">
         <div class=""govuk-checkboxes__item"">
@@ -326,7 +356,8 @@ public class CheckboxesTagHelperTests
             tagName: "govuk-checkboxes",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes",
@@ -337,46 +368,56 @@ public class CheckboxesTagHelperTests
 
                 checkboxesContext.OpenFieldset();
                 var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
-                checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
+                checkboxesFieldsetContext.SetLegend(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("Legend")
+                );
 
                 checkboxesContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = false,
-                    LabelContent = new HtmlString("First"),
-                    Disabled = true,
-                    Id = "first",
-                    Value = "first"
-                });
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
+                    {
+                        Checked = false,
+                        LabelContent = new HtmlString("First"),
+                        Disabled = true,
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
-                checkboxesContext.AddItem(new CheckboxesItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("Second"),
-                    Disabled = false,
-                    Id = "second",
-                    Value = "second"
-                });
+                checkboxesContext.AddItem(
+                    new CheckboxesItem()
+                    {
+                        Checked = true,
+                        LabelContent = new HtmlString("Second"),
+                        Disabled = false,
+                        Id = "second",
+                        Value = "second",
+                    }
+                );
 
                 checkboxesContext.CloseFieldset(checkboxesFieldsetContext);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             DescribedBy = "describedby",
             IdPrefix = "my-id",
-            Name = "testcheckboxes"
+            Name = "testcheckboxes",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <fieldset aria-describedby=""describedby my-id-hint"" class=""govuk-fieldset"">
         <legend class=""govuk-fieldset__legend"">Legend</legend>

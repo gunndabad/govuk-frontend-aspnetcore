@@ -8,7 +8,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents a row in a GDS summary list component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = SummaryListTagHelper.TagName)]
-[RestrictChildren(SummaryListRowKeyTagHelper.TagName, SummaryListRowValueTagHelper.TagName, SummaryListRowActionsTagHelper.TagName)]
+[RestrictChildren(
+    SummaryListRowKeyTagHelper.TagName,
+    SummaryListRowValueTagHelper.TagName,
+    SummaryListRowActionsTagHelper.TagName
+)]
 [OutputElementHint(ComponentGenerator.SummaryListRowElement)]
 public class SummaryListRowTagHelper : TagHelper
 {
@@ -28,27 +32,29 @@ public class SummaryListRowTagHelper : TagHelper
 
         rowContext.ThrowIfIncomplete();
 
-        summaryListContext.AddRow(new SummaryListRow()
-        {
-            Actions = new SummaryListActions()
+        summaryListContext.AddRow(
+            new SummaryListRow()
             {
-                Items = rowContext.Actions,
-                Attributes = rowContext.ActionsAttributes
-            },
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Key = new SummaryListRowKey()
-            {
-                Content = rowContext.Key!.Value.Content,
-                Attributes = rowContext.Key!.Value.Attributes
-            },
-            Value = rowContext.Value is not null ?
-                new SummaryListRowValue()
+                Actions = new SummaryListActions()
                 {
-                    Content = rowContext.Value.Value.Content,
-                    Attributes = rowContext.Value.Value.Attributes
-                } :
-                null
-        });
+                    Items = rowContext.Actions,
+                    Attributes = rowContext.ActionsAttributes,
+                },
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Key = new SummaryListRowKey()
+                {
+                    Content = rowContext.Key!.Value.Content,
+                    Attributes = rowContext.Key!.Value.Attributes,
+                },
+                Value = rowContext.Value is not null
+                    ? new SummaryListRowValue()
+                    {
+                        Content = rowContext.Value.Value.Content,
+                        Attributes = rowContext.Value.Value.Attributes,
+                    }
+                    : null,
+            }
+        );
 
         output.SuppressOutput();
     }

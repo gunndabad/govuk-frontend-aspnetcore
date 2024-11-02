@@ -20,11 +20,9 @@ public class PhaseBannerTagTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-phase-banner-tag",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PhaseBannerContext), phaseBannerContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PhaseBannerContext), phaseBannerContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-phase-banner-tag",
@@ -34,7 +32,8 @@ public class PhaseBannerTagTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(legendHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PhaseBannerTagTagHelper();
 
@@ -55,11 +54,9 @@ public class PhaseBannerTagTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-phase-banner-tag",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PhaseBannerContext), phaseBannerContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PhaseBannerContext), phaseBannerContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-phase-banner-tag",
@@ -69,7 +66,8 @@ public class PhaseBannerTagTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Legend message");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PhaseBannerTagTagHelper();
 
@@ -78,6 +76,9 @@ public class PhaseBannerTagTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-phase-banner-tag> element is permitted within each <govuk-phase-banner>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-phase-banner-tag> element is permitted within each <govuk-phase-banner>.",
+            ex.Message
+        );
     }
 }

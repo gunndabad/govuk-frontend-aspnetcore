@@ -26,10 +26,10 @@ public static class TagHelperAttributeListExtensions
             {
                 attributeDictionary.Add(
                     attribute.Name,
-                    attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
-                        string.Empty :
-                        attribute.Value is HtmlString htmlString ? HttpUtility.HtmlDecode(htmlString.Value) :
-                        (attribute.Value ?? string.Empty).ToString());
+                    attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ? string.Empty
+                        : attribute.Value is HtmlString htmlString ? HttpUtility.HtmlDecode(htmlString.Value)
+                        : (attribute.Value ?? string.Empty).ToString()
+                );
             }
         }
 
@@ -46,10 +46,10 @@ public static class TagHelperAttributeListExtensions
             {
                 attributeDictionary.Add(
                     attribute.Name,
-                    attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ?
-                        null :
-                        attribute.Value is HtmlString htmlString ? htmlString.ToString() :
-                        (attribute.Value ?? string.Empty).ToString());
+                    attribute.ValueStyle == HtmlAttributeValueStyle.Minimized ? null
+                        : attribute.Value is HtmlString htmlString ? htmlString.ToString()
+                        : (attribute.Value ?? string.Empty).ToString()
+                );
             }
         }
 

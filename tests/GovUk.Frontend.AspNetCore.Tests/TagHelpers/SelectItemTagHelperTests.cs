@@ -22,11 +22,9 @@ public class SelectItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-select-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SelectContext), selectContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SelectContext), selectContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-select-item",
@@ -36,13 +34,14 @@ public class SelectItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString("Item text"));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SelectItemTagHelper()
         {
             Disabled = true,
             Selected = true,
-            Value = "value"
+            Value = "value",
         };
 
         // Act
@@ -57,7 +56,8 @@ public class SelectItemTagHelperTests
                 Assert.True(item.Disabled);
                 Assert.True(item.Selected);
                 Assert.Equal("value", item.Value);
-            });
+            }
+        );
     }
 
     [Theory]
@@ -66,7 +66,8 @@ public class SelectItemTagHelperTests
     public async Task ProcessAsync_DeducesSelectedFromModelExpression(string modelValue, bool expectedSelected)
     {
         // Arrange
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -79,11 +80,9 @@ public class SelectItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-select-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SelectContext), selectContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SelectContext), selectContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-select-item",
@@ -93,13 +92,10 @@ public class SelectItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString("Item text"));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new SelectItemTagHelper(modelHelper.Object)
-        {
-            Value = "bar",
-            ViewContext = viewContext
-        };
+        var tagHelper = new SelectItemTagHelper(modelHelper.Object) { Value = "bar", ViewContext = viewContext };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -110,7 +106,8 @@ public class SelectItemTagHelperTests
             item =>
             {
                 Assert.Equal(expectedSelected, item.Selected);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -118,7 +115,8 @@ public class SelectItemTagHelperTests
     {
         // Arrange
         var modelValue = "bar";
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model() { SimpleProperty = modelValue })
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -131,11 +129,9 @@ public class SelectItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-select-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SelectContext), selectContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SelectContext), selectContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-select-item",
@@ -145,13 +141,14 @@ public class SelectItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString("Item text"));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SelectItemTagHelper(modelHelper.Object)
         {
             Selected = false,
             Value = modelValue,
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -163,7 +160,8 @@ public class SelectItemTagHelperTests
             item =>
             {
                 Assert.False(item.Selected);
-            });
+            }
+        );
     }
 
     private class Model

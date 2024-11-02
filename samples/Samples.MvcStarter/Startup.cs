@@ -56,11 +56,9 @@ public class Startup
         {
             var pageTemplateHelper = app.ApplicationServices.GetRequiredService<PageTemplateHelper>();
 
-            csp.ByDefaultAllow
-                .FromSelf();
+            csp.ByDefaultAllow.FromSelf();
 
-            csp.AllowScripts
-                .FromSelf()
+            csp.AllowScripts.FromSelf()
                 //.AddNonce()
                 .From(pageTemplateHelper.GetCspScriptHashes(pathBase: ""));
         });

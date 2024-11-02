@@ -14,10 +14,7 @@ public class SelectContextTests
         // Arrange
         var context = new SelectContext(aspFor: null);
 
-        context.AddItem(new SelectItem()
-        {
-            Content = new HtmlString("Option")
-        });
+        context.AddItem(new SelectItem() { Content = new HtmlString("Option") });
 
         // Act
         var ex = Record.Exception(() => context.SetErrorMessage(null, null, new HtmlString("Error")));
@@ -33,10 +30,7 @@ public class SelectContextTests
         // Arrange
         var context = new SelectContext(aspFor: null);
 
-        context.AddItem(new SelectItem()
-        {
-            Content = new HtmlString("Option")
-        });
+        context.AddItem(new SelectItem() { Content = new HtmlString("Option") });
 
         // Act
         var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Error")));
@@ -52,10 +46,7 @@ public class SelectContextTests
         // Arrange
         var context = new SelectContext(aspFor: null);
 
-        context.AddItem(new SelectItem()
-        {
-            Content = new HtmlString("Option")
-        });
+        context.AddItem(new SelectItem() { Content = new HtmlString("Option") });
 
         // Act
         var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Error")));

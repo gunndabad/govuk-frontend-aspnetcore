@@ -49,20 +49,23 @@ public class ButtonLinkTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
+        var attributes = output
+            .Attributes.ToEncodedAttributeDictionary()
             .Remove("class", out var classes)
             .Remove("href", out var href);
 
-        var component = _componentGenerator.GenerateButton(new ButtonOptions()
-        {
-            Element = Element,
-            Html = content?.ToHtmlString(),
-            Href = href,
-            Classes = classes,
-            Attributes = attributes,
-            IsStartButton = IsStartButton,
-            Id = Id
-        });
+        var component = _componentGenerator.GenerateButton(
+            new ButtonOptions()
+            {
+                Element = Element,
+                Html = content?.ToHtmlString(),
+                Href = href,
+                Classes = classes,
+                Attributes = attributes,
+                IsStartButton = IsStartButton,
+                Id = Id,
+            }
+        );
 
         output.WriteComponent(component);
     }

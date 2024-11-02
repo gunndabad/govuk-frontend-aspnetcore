@@ -35,12 +35,18 @@ internal class DetailsContext
 
         if (Summary != null)
         {
-            throw ExceptionHelper.OnlyOneElementIsPermittedIn(DetailsSummaryTagHelper.TagName, DetailsTagHelper.TagName);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                DetailsSummaryTagHelper.TagName,
+                DetailsTagHelper.TagName
+            );
         }
 
         if (Text != null)
         {
-            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(DetailsSummaryTagHelper.TagName, DetailsTextTagHelper.TagName);
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                DetailsSummaryTagHelper.TagName,
+                DetailsTextTagHelper.TagName
+            );
         }
 
         Summary = new SummaryInfo(attributes, html);

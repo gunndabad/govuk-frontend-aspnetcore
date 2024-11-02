@@ -18,7 +18,8 @@ public class NotificationBannerTagHelperTests
             tagName: "govuk-notification-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner",
@@ -28,7 +29,8 @@ public class NotificationBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The message.");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new NotificationBannerTagHelper();
 
@@ -36,7 +38,8 @@ public class NotificationBannerTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div
     class=""govuk-notification-banner""
     role=""region""
@@ -63,7 +66,8 @@ public class NotificationBannerTagHelperTests
             tagName: "govuk-notification-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner",
@@ -73,18 +77,17 @@ public class NotificationBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The message.");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new NotificationBannerTagHelper()
-        {
-            Type = NotificationBannerType.Success
-        };
+        var tagHelper = new NotificationBannerTagHelper() { Type = NotificationBannerType.Success };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div
     class=""govuk-notification-banner govuk-notification-banner--success""
     role=""alert""
@@ -111,7 +114,8 @@ public class NotificationBannerTagHelperTests
             tagName: "govuk-notification-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner",
@@ -121,19 +125,21 @@ public class NotificationBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The message.");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new NotificationBannerTagHelper()
         {
             DisableAutoFocus = true,
-            Type = NotificationBannerType.Success
+            Type = NotificationBannerType.Success,
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div
     class=""govuk-notification-banner govuk-notification-banner--success""
     role=""alert""
@@ -153,7 +159,7 @@ public class NotificationBannerTagHelperTests
         AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
     }
 
-    // 
+    //
     [Fact]
     public async Task ProcessAsync_WithRoleSpecified_GeneratesExpectedOutput()
     {
@@ -162,7 +168,8 @@ public class NotificationBannerTagHelperTests
             tagName: "govuk-notification-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner",
@@ -172,18 +179,17 @@ public class NotificationBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The message.");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new NotificationBannerTagHelper()
-        {
-            Role = "custom-role"
-        };
+        var tagHelper = new NotificationBannerTagHelper() { Role = "custom-role" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div
     class=""govuk-notification-banner""
     role=""custom-role""
@@ -210,7 +216,8 @@ public class NotificationBannerTagHelperTests
             tagName: "govuk-notification-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner",
@@ -223,7 +230,8 @@ public class NotificationBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The message.");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new NotificationBannerTagHelper();
 
@@ -231,7 +239,8 @@ public class NotificationBannerTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div
     class=""govuk-notification-banner""
     role=""region""

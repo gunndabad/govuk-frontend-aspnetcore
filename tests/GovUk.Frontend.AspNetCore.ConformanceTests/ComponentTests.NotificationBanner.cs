@@ -15,26 +15,25 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
-                var type = options.Type == "success" ?
-                    NotificationBannerType.Success :
-                    NotificationBannerType.Default;
+                var type = options.Type == "success" ? NotificationBannerType.Success : NotificationBannerType.Default;
 
                 var titleContent = TextOrHtmlHelper.GetHtmlContent(options.TitleText, options.TitleHtml);
 
                 // The 'text' option gets wrapped in a <p>
-                var content = options.Html != null ?
-                    new HtmlString(options.Html) :
-                    options.Text != null ?
-                    new HtmlString(
-                        "<p class=\"govuk-notification-banner__heading\">" +
-                        HtmlEncoder.Default.Encode(options.Text) +
-                        "</p>") :
-                    null;
+                var content =
+                    options.Html != null ? new HtmlString(options.Html)
+                    : options.Text != null
+                        ? new HtmlString(
+                            "<p class=\"govuk-notification-banner__heading\">"
+                                + HtmlEncoder.Default.Encode(options.Text)
+                                + "</p>"
+                        )
+                    : null;
 
-                var attributes = options.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                return generator.GenerateNotificationBanner(
+                return generator
+                    .GenerateNotificationBanner(
                         type,
                         options.Role,
                         options.DisableAutoFocus,
@@ -42,7 +41,9 @@ public partial class ComponentTests
                         options.TitleHeadingLevel ?? ComponentGenerator.NotificationBannerDefaultTitleHeadingLevel,
                         titleContent,
                         content,
-                        attributes)
+                        attributes
+                    )
                     .ToHtmlString();
-            });
+            }
+        );
 }

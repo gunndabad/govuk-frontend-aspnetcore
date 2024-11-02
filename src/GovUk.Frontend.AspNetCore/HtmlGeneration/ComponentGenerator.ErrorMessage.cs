@@ -12,7 +12,8 @@ internal partial class ComponentGenerator
     public TagBuilder GenerateErrorMessage(
         string visuallyHiddenText,
         IHtmlContent content,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(content), content);
 

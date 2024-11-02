@@ -21,11 +21,9 @@ public class AccordionItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-accordion-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(AccordionContext), accordionContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(AccordionContext), accordionContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion-item",
@@ -39,7 +37,8 @@ public class AccordionItemTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionItemTagHelper();
 
@@ -62,11 +61,9 @@ public class AccordionItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-accordion-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(AccordionContext), accordionContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(AccordionContext), accordionContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion-item",
@@ -79,7 +76,8 @@ public class AccordionItemTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionItemTagHelper();
 
@@ -100,11 +98,9 @@ public class AccordionItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-accordion-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(AccordionContext), accordionContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(AccordionContext), accordionContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion-item",
@@ -116,7 +112,8 @@ public class AccordionItemTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionItemTagHelper();
 

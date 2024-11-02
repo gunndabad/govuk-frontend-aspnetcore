@@ -17,8 +17,5 @@ public record ExitThisPageOptions
     public string? PressTwoMoreTimesText { get; set; }
     public string? PressOneMoreTimeText { get; set; }
 
-    internal void Validate()
-    {
-
-    }
+    internal void Validate() { }
 }

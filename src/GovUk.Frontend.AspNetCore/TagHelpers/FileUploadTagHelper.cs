@@ -28,16 +28,10 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
     public FileUploadTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
-    {
-    }
+        : this(htmlGenerator: null, modelHelper: null) { }
 
     internal FileUploadTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
-    {
-    }
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper()) { }
 
     /// <summary>
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
@@ -82,7 +76,8 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var contentBuilder = new HtmlContentBuilder();
 
@@ -119,7 +114,8 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
                 resolvedName,
                 DescribedBy,
                 Disabled,
-                InputAttributes.ToAttributeDictionary());
+                InputAttributes.ToAttributeDictionary()
+            );
         }
     }
 
@@ -135,7 +131,8 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                AspForAttributeName
+            );
         }
 
         var resolvedName = ResolveName();
@@ -147,9 +144,7 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
     {
         if (Name == null && AspFor == null)
         {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                NameAttributeName,
-                AspForAttributeName);
+            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(NameAttributeName, AspForAttributeName);
         }
 
         return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);

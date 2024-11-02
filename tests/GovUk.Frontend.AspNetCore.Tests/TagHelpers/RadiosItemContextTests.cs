@@ -29,11 +29,16 @@ public class RadiosItemContextTests
         context.SetConditional(new AttributeDictionary(), content: new HtmlString("Existing conditional"));
 
         // Act
-        var ex = Record.Exception(() => context.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional")));
+        var ex = Record.Exception(
+            () => context.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("Only one <govuk-radios-item-conditional> element is permitted within each <govuk-radios-item>.", ex.Message);
+        Assert.Equal<object>(
+            "Only one <govuk-radios-item-conditional> element is permitted within each <govuk-radios-item>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -61,7 +66,10 @@ public class RadiosItemContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("<govuk-radios-item-hint> must be specified before <govuk-radios-item-conditional>.", ex.Message);
+        Assert.Equal<object>(
+            "<govuk-radios-item-hint> must be specified before <govuk-radios-item-conditional>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -76,6 +84,9 @@ public class RadiosItemContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("Only one <govuk-radios-item-hint> element is permitted within each <govuk-radios-item>.", ex.Message);
+        Assert.Equal<object>(
+            "Only one <govuk-radios-item-hint> element is permitted within each <govuk-radios-item>.",
+            ex.Message
+        );
     }
 }

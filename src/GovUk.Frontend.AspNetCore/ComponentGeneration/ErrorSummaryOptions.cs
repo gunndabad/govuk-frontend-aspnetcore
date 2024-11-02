@@ -18,6 +18,7 @@ public class ErrorSummaryOptions
 
     [NonStandardParameter]
     public IReadOnlyDictionary<string, string?>? TitleAttributes { get; set; }
+
     [NonStandardParameter]
     public IReadOnlyDictionary<string, string?>? DescriptionAttributes { get; set; }
 
@@ -48,7 +49,10 @@ public class ErrorSummaryOptionsErrorItem
     {
         if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}."
+            );
         }
     }
 }

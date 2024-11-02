@@ -28,7 +28,8 @@ internal partial class ComponentGenerator
         IHtmlContent? prefixContent,
         AttributeDictionary? prefixAttributes,
         IHtmlContent? suffixContent,
-        AttributeDictionary? suffixAttributes)
+        AttributeDictionary? suffixAttributes
+    )
     {
         Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);

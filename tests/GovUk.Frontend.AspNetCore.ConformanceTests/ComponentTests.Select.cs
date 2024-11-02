@@ -15,8 +15,10 @@ public partial class ComponentTests
         {
             "with falsey items",
             "with falsey values",
-            "item selected overrides value"  // Fixture doesn't have an 'id' :-(
-        })]
+            "item selected overrides value" // Fixture doesn't have an 'id' :-(
+            ,
+        }
+    )]
     public void Select(ComponentTestCaseData<OptionsJson.Select> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
@@ -24,7 +26,8 @@ public partial class ComponentTests
             {
                 var disabled = ComponentGenerator.SelectDefaultDisabled;
 
-                var items = options.Items.OrEmpty()
+                var items = options
+                    .Items.OrEmpty()
                     .Select(i =>
                     {
                         var effectiveValue = i.Value ?? i.Text;
@@ -34,25 +37,22 @@ public partial class ComponentTests
                             Attributes = i.Attributes.ToAttributesDictionary(),
                             Content = new HtmlString(i.Text),
                             Disabled = i.Disabled ?? ComponentGenerator.SelectItemDefaultDisabled,
-                            Selected = i.Selected ?? (options.Value == effectiveValue ? (bool?)true : null) ?? ComponentGenerator.SelectItemDefaultSelected,
-                            Value = i.Value
+                            Selected =
+                                i.Selected
+                                ?? (options.Value == effectiveValue ? (bool?)true : null)
+                                ?? ComponentGenerator.SelectItemDefaultSelected,
+                            Value = i.Value,
                         };
                     });
 
-                var attributes = options.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                var labelOptions = options.Label != null ?
-                    options.Label with { For = options.Id } :
-                    null;
+                var labelOptions = options.Label != null ? options.Label with { For = options.Id } : null;
 
-                var hintOptions = options.Hint != null ?
-                    options.Hint with { Id = options.Id + "-hint" } :
-                    null;
+                var hintOptions = options.Hint != null ? options.Hint with { Id = options.Id + "-hint" } : null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
-                    options.ErrorMessage with { Id = options.Id + "-error" } :
-                    null;
+                var errorMessageOptions =
+                    options.ErrorMessage != null ? options.ErrorMessage with { Id = options.Id + "-error" } : null;
 
                 return GenerateFormGroup(
                     labelOptions,
@@ -71,7 +71,10 @@ public partial class ComponentTests
                             describedBy,
                             disabled,
                             items,
-                            attributes);
-                    });
-            });
+                            attributes
+                        );
+                    }
+                );
+            }
+        );
 }

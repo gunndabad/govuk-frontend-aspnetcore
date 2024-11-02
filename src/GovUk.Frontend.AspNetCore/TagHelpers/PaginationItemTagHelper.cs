@@ -69,14 +69,16 @@ public class PaginationItemTagHelper : TagHelper
 
         bool isCurrent = IsCurrent == true || ItemIsCurrentPage();
 
-        paginationContext.AddItem(new PaginationItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Href = href,
-            IsCurrent = isCurrent,
-            Number = childContent,
-            VisuallyHiddenText = VisuallyHiddenText
-        });
+        paginationContext.AddItem(
+            new PaginationItem()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Href = href,
+                IsCurrent = isCurrent,
+                Number = childContent,
+                VisuallyHiddenText = VisuallyHiddenText,
+            }
+        );
 
         output.SuppressOutput();
 

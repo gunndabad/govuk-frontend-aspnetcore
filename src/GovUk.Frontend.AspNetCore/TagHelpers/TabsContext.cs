@@ -24,7 +24,8 @@ internal class TabsContext
         if (item.Id == null && !_haveIdPrefix)
         {
             throw new InvalidOperationException(
-                $"Item must have the '{TabsItemTagHelper.IdAttributeName}' attribute specified.");
+                $"Item must have the '{TabsItemTagHelper.IdAttributeName}' attribute specified."
+            );
         }
 
         _items.Add(item);

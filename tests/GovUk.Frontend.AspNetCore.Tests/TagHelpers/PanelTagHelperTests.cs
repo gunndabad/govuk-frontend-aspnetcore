@@ -20,7 +20,8 @@ public class PanelTagHelperTests
             tagName: "govuk-panel",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel",
@@ -33,18 +34,17 @@ public class PanelTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new PanelTagHelper(new ComponentGenerator())
-        {
-            HeadingLevel = 3
-        };
+        var tagHelper = new PanelTagHelper(new ComponentGenerator()) { HeadingLevel = 3 };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-panel--confirmation govuk-panel"">
     <h3 class=""govuk-panel__title"">Title</h3>
     <div class=""govuk-panel__body"">Body</div>
@@ -61,7 +61,8 @@ public class PanelTagHelperTests
             tagName: "govuk-panel",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel",
@@ -73,12 +74,10 @@ public class PanelTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new PanelTagHelper(new ComponentGenerator())
-        {
-            HeadingLevel = 3
-        };
+        var tagHelper = new PanelTagHelper(new ComponentGenerator()) { HeadingLevel = 3 };
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));

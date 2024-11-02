@@ -16,7 +16,8 @@ internal class CheckboxesItemContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 CheckboxesItemConditionalTagHelper.TagName,
-                CheckboxesItemTagHelper.TagName);
+                CheckboxesItemTagHelper.TagName
+            );
         }
 
         Conditional = (attributes, content);
@@ -30,14 +31,16 @@ internal class CheckboxesItemContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 CheckboxesItemHintTagHelper.TagName,
-                CheckboxesItemTagHelper.TagName);
+                CheckboxesItemTagHelper.TagName
+            );
         }
 
         if (Conditional != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 CheckboxesItemHintTagHelper.TagName,
-                CheckboxesItemConditionalTagHelper.TagName);
+                CheckboxesItemConditionalTagHelper.TagName
+            );
         }
 
         Hint = (attributes, content);

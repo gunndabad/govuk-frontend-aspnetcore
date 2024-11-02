@@ -23,9 +23,7 @@ public class BreadcrumbsTagHelper : TagHelper
     /// Creates a new <see cref="BreadcrumbsTagHelper"/>.
     /// </summary>
     public BreadcrumbsTagHelper()
-        : this(null)
-    {
-    }
+        : this(null) { }
 
     internal BreadcrumbsTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
     {
@@ -54,7 +52,8 @@ public class BreadcrumbsTagHelper : TagHelper
         var tagBuilder = _htmlGenerator.GenerateBreadcrumbs(
             CollapseOnMobile,
             output.Attributes.ToAttributeDictionary(),
-            breadcrumbsContext.Items);
+            breadcrumbsContext.Items
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

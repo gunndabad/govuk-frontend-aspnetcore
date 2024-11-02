@@ -27,26 +27,34 @@ internal partial class ComponentGenerator
         int? titleHeadingLevel,
         IHtmlContent? titleContent,
         IHtmlContent content,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (titleHeadingLevel < NotificationBannerMinHeadingLevel ||
-            titleHeadingLevel > NotificationBannerMaxHeadingLevel)
+        if (
+            titleHeadingLevel < NotificationBannerMinHeadingLevel
+            || titleHeadingLevel > NotificationBannerMaxHeadingLevel
+        )
         {
             throw new ArgumentOutOfRangeException(
                 $"{nameof(titleHeadingLevel)} must be between {NotificationBannerMinHeadingLevel} and {NotificationBannerMaxHeadingLevel}.",
-                nameof(titleHeadingLevel));
+                nameof(titleHeadingLevel)
+            );
         }
 
-        role ??= type == NotificationBannerType.Success ?
-            NotificationBannerDefaultSuccessRole :
-            NotificationBannerDefaultRole;
+        role ??=
+            type == NotificationBannerType.Success
+                ? NotificationBannerDefaultSuccessRole
+                : NotificationBannerDefaultRole;
 
-        titleContent ??= new HtmlString(HtmlEncoder.Default.Encode(
-            type == NotificationBannerType.Success ?
-                NotificationBannerDefaultSuccessTitle :
-                NotificationBannerDefaultTitle));
+        titleContent ??= new HtmlString(
+            HtmlEncoder.Default.Encode(
+                type == NotificationBannerType.Success
+                    ? NotificationBannerDefaultSuccessTitle
+                    : NotificationBannerDefaultTitle
+            )
+        );
 
         titleId ??= NotificationBannerDefaultTitleId;
 

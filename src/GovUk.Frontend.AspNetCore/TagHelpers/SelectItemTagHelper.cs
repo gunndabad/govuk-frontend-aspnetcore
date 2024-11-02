@@ -28,9 +28,7 @@ public class SelectItemTagHelper : TagHelper
     /// Creates a new <see cref="SelectItemTagHelper"/>.
     /// </summary>
     public SelectItemTagHelper()
-        : this(modelHelper: null)
-    {
-    }
+        : this(modelHelper: null) { }
 
     internal SelectItemTagHelper(IModelHelper? modelHelper = null)
     {
@@ -93,21 +91,25 @@ public class SelectItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var resolvedSelected = !_selectedSpecified && selectContext.HaveModelExpression ?
-            _modelHelper.GetModelValue(
-                ViewContext!,
-                selectContext.AspFor!.ModelExplorer,
-                selectContext.AspFor.Name) == Value :
-            _selected;
+        var resolvedSelected =
+            !_selectedSpecified && selectContext.HaveModelExpression
+                ? _modelHelper.GetModelValue(
+                    ViewContext!,
+                    selectContext.AspFor!.ModelExplorer,
+                    selectContext.AspFor.Name
+                ) == Value
+                : _selected;
 
-        selectContext.AddItem(new SelectItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot(),
-            Disabled = Disabled,
-            Selected = resolvedSelected,
-            Value = Value
-        });
+        selectContext.AddItem(
+            new SelectItem()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Content = childContent.Snapshot(),
+                Disabled = Disabled,
+                Selected = resolvedSelected,
+                Value = Value,
+            }
+        );
 
         output.SuppressOutput();
     }

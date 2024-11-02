@@ -80,27 +80,25 @@ public class ContainerErrorSummaryTagHelper : TagHelper
 
         ViewContext!.ViewData.SetPageHasErrors(true);
 
-        var errorItems = containerErrorContext.Errors
-            .Select(i => new ErrorSummaryOptionsErrorItem()
-            {
-                Html = i.Html,
-                Href = i.Href
-            })
+        var errorItems = containerErrorContext
+            .Errors.Select(i => new ErrorSummaryOptionsErrorItem() { Html = i.Html, Href = i.Href })
             .ToArray();
 
-        var component = _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions()
-        {
-            TitleText = null,
-            TitleHtml = null,
-            DescriptionText = null,
-            DescriptionHtml = null,
-            ErrorList = errorItems,
-            Classes = null,
-            Attributes = null,
-            DisableAutoFocus = DisableAutoFocus,
-            TitleAttributes = null,
-            DescriptionAttributes = null
-        });
+        var component = _componentGenerator.GenerateErrorSummary(
+            new ErrorSummaryOptions()
+            {
+                TitleText = null,
+                TitleHtml = null,
+                DescriptionText = null,
+                DescriptionHtml = null,
+                ErrorList = errorItems,
+                Classes = null,
+                Attributes = null,
+                DisableAutoFocus = DisableAutoFocus,
+                TitleAttributes = null,
+                DescriptionAttributes = null,
+            }
+        );
 
         output.PreContent.AppendHtml(component);
     }

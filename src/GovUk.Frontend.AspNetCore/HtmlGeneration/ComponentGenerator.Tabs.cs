@@ -17,7 +17,8 @@ internal partial class ComponentGenerator
         string idPrefix,
         string title,
         AttributeDictionary? attributes,
-        IEnumerable<TabsItem> items)
+        IEnumerable<TabsItem> items
+    )
     {
         Guard.ArgumentNotNull(nameof(title), title);
         Guard.ArgumentNotNull(nameof(items), items);
@@ -49,7 +50,8 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(TabsItem.Label)} cannot be null.",
                 item.Label,
-                item.Label != null);
+                item.Label != null
+            );
 
             var itemId = itemIds[index];
 
@@ -82,7 +84,8 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(TabsItem.PanelContent)} cannot be null.",
                 item.PanelContent,
-                item.PanelContent != null);
+                item.PanelContent != null
+            );
 
             var itemId = itemIds[index];
 
@@ -105,23 +108,27 @@ internal partial class ComponentGenerator
 
         return tagBuilder;
 
-        string[] ResolveItemIds() => items
-            .Select((item, index) =>
-            {
-                if (item.Id != null)
-                {
-                    return item.Id;
-                }
+        string[] ResolveItemIds() =>
+            items
+                .Select(
+                    (item, index) =>
+                    {
+                        if (item.Id != null)
+                        {
+                            return item.Id;
+                        }
 
-                if (idPrefix == null)
-                {
-                    throw new ArgumentException(
-                        $"Item {index} is not valid; {nameof(TabsItem.Id)} must be specified when {nameof(idPrefix)} is null.",
-                        nameof(items));
-                }
+                        if (idPrefix == null)
+                        {
+                            throw new ArgumentException(
+                                $"Item {index} is not valid; {nameof(TabsItem.Id)} must be specified when {nameof(idPrefix)} is null.",
+                                nameof(items)
+                            );
+                        }
 
-                return $"{idPrefix}-{index + 1}";
-            })
-            .ToArray();
+                        return $"{idPrefix}-{index + 1}";
+                    }
+                )
+                .ToArray();
     }
 }

@@ -29,11 +29,16 @@ public class CheckboxesItemContextTests
         context.SetConditional(new AttributeDictionary(), content: new HtmlString("Existing conditional"));
 
         // Act
-        var ex = Record.Exception(() => context.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional")));
+        var ex = Record.Exception(
+            () => context.SetConditional(new AttributeDictionary(), content: new HtmlString("Conditional"))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("Only one <govuk-checkboxes-item-conditional> element is permitted within each <govuk-checkboxes-item>.", ex.Message);
+        Assert.Equal<object>(
+            "Only one <govuk-checkboxes-item-conditional> element is permitted within each <govuk-checkboxes-item>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -61,7 +66,10 @@ public class CheckboxesItemContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("<govuk-checkboxes-item-hint> must be specified before <govuk-checkboxes-item-conditional>.", ex.Message);
+        Assert.Equal<object>(
+            "<govuk-checkboxes-item-hint> must be specified before <govuk-checkboxes-item-conditional>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -76,6 +84,9 @@ public class CheckboxesItemContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("Only one <govuk-checkboxes-item-hint> element is permitted within each <govuk-checkboxes-item>.", ex.Message);
+        Assert.Equal<object>(
+            "Only one <govuk-checkboxes-item-hint> element is permitted within each <govuk-checkboxes-item>.",
+            ex.Message
+        );
     }
 }

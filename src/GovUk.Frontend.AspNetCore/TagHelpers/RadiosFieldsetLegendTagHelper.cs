@@ -29,9 +29,8 @@ public class RadiosFieldsetLegendTagHelper : TagHelper
     {
         var fieldsetContext = context.GetContextItem<RadiosFieldsetContext>();
 
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            (await output.GetChildContentAsync()).Snapshot() :
-            null;
+        var childContent =
+            output.TagMode == TagMode.StartTagAndEndTag ? (await output.GetChildContentAsync()).Snapshot() : null;
 
         if (output.Content.IsModified)
         {

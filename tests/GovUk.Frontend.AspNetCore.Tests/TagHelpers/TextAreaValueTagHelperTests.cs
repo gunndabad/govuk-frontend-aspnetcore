@@ -17,11 +17,9 @@ public class TextAreaValueTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-textarea-value",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(TextAreaContext), textAreaContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(TextAreaContext), textAreaContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea-value",
@@ -31,7 +29,8 @@ public class TextAreaValueTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Value");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new TextAreaValueTagHelper();
 

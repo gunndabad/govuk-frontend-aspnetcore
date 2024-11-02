@@ -1,4 +1,3 @@
-
 namespace GovUk.Frontend.AspNetCore;
 
 /// <summary>
@@ -14,5 +13,5 @@ public enum CheckboxesItemBehavior
     /// <summary>
     /// Indicates that when this item is checked then no other items should be checked.
     /// </summary>
-    Exclusive = 1
+    Exclusive = 1,
 }

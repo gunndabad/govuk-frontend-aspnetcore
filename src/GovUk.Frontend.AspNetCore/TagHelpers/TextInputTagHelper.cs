@@ -26,7 +26,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     TextInputPrefixTagHelper.TagName,
     TextInputPrefixTagHelper.ShortTagName,
     TextInputSuffixTagHelper.TagName,
-    TextInputSuffixTagHelper.ShortTagName)]
+    TextInputSuffixTagHelper.ShortTagName
+)]
 [OutputElementHint(DefaultComponentGenerator.FormGroupElement)]
 public class TextInputTagHelper : TagHelper
 {
@@ -64,9 +65,7 @@ public class TextInputTagHelper : TagHelper
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
     public TextInputTagHelper(IComponentGenerator componentGenerator)
-        : this(componentGenerator, modelHelper: new DefaultModelHelper())
-    {
-    }
+        : this(componentGenerator, modelHelper: new DefaultModelHelper()) { }
 
     internal TextInputTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
@@ -218,7 +217,12 @@ public class TextInputTagHelper : TagHelper
         var value = ResolveValue();
         var labelOptions = textInputContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
         var hintOptions = textInputContext.GetHintOptions(For, _modelHelper);
-        var errorMessageOptions = textInputContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
+        var errorMessageOptions = textInputContext.GetErrorMessageOptions(
+            For,
+            ViewContext!,
+            _modelHelper,
+            IgnoreModelStateErrors
+        );
         var prefixOptions = textInputContext.GetPrefixOptions();
         var suffixOptions = textInputContext.GetSuffixOptions();
 
@@ -227,16 +231,12 @@ public class TextInputTagHelper : TagHelper
             labelOptions.Classes += " " + LabelClass;
         }
 
-        var formGroupAttributes = output.Attributes.ToEncodedAttributeDictionary()
+        var formGroupAttributes = output
+            .Attributes.ToEncodedAttributeDictionary()
             .Remove("class", out var formGroupClasses);
-        var formGroupOptions = new FormGroupOptions()
-        {
-            Attributes = formGroupAttributes,
-            Classes = formGroupClasses
-        };
+        var formGroupOptions = new FormGroupOptions() { Attributes = formGroupAttributes, Classes = formGroupClasses };
 
-        var attributes = InputAttributes!.ToImmutableDictionary()
-            .Remove("class", out var classes);
+        var attributes = InputAttributes!.ToImmutableDictionary().Remove("class", out var classes);
 
         if (errorMessageOptions is not null)
         {
@@ -246,31 +246,36 @@ public class TextInputTagHelper : TagHelper
             formGroupOptions.Classes += " govuk-form-group--error";
         }
 
-        var component = _componentGenerator.GenerateTextInput(new TextInputOptions()
-        {
-            Id = id,
-            Name = name,
-            Type = Type,
-            Inputmode = InputMode,
-            Value = value,
-            Disabled = Disabled,
-            DescribedBy = DescribedBy,
-            Label = labelOptions,
-            Hint = hintOptions,
-            ErrorMessage = errorMessageOptions,
-            Prefix = prefixOptions,
-            Suffix = suffixOptions,
-            FormGroup = formGroupOptions,
-            Classes = classes,
-            Autocomplete = Autocomplete,
-            Pattern = Pattern,
-            Spellcheck = Spellcheck,
-            Attributes = attributes
-        });
+        var component = _componentGenerator.GenerateTextInput(
+            new TextInputOptions()
+            {
+                Id = id,
+                Name = name,
+                Type = Type,
+                Inputmode = InputMode,
+                Value = value,
+                Disabled = Disabled,
+                DescribedBy = DescribedBy,
+                Label = labelOptions,
+                Hint = hintOptions,
+                ErrorMessage = errorMessageOptions,
+                Prefix = prefixOptions,
+                Suffix = suffixOptions,
+                FormGroup = formGroupOptions,
+                Classes = classes,
+                Autocomplete = Autocomplete,
+                Pattern = Pattern,
+                Spellcheck = Spellcheck,
+                Attributes = attributes,
+            }
+        );
 
         output.WriteComponent(component);
 
-        if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
+        if (
+            errorMessageOptions is not null
+            && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext)
+        )
         {
             Debug.Assert(errorMessageOptions.Html is not null);
             containerErrorContext.AddError(errorMessageOptions.Html!, href: "#" + id);
@@ -291,9 +296,7 @@ public class TextInputTagHelper : TagHelper
     {
         if (Name is null && For is null)
         {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                NameAttributeName,
-                AspForAttributeName);
+            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(NameAttributeName, AspForAttributeName);
         }
 
         return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);

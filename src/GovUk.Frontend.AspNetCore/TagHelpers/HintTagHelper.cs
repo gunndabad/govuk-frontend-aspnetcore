@@ -15,16 +15,12 @@ public class HintTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="FormGroupHintTagHelper"/>.
     /// </summary>
-    public HintTagHelper()
-    {
-    }
+    public HintTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {
@@ -33,7 +29,11 @@ public class HintTagHelper : TagHelper
 
         var formGroupContext = context.GetContextItem<FormGroupContext2>();
 
-        formGroupContext.SetHint(output.Attributes.ToEncodedAttributeDictionary(), childContent?.ToHtmlString(), output.TagName);
+        formGroupContext.SetHint(
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent?.ToHtmlString(),
+            output.TagName
+        );
 
         output.SuppressOutput();
     }

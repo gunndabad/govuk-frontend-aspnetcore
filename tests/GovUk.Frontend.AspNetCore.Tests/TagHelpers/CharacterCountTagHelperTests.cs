@@ -23,7 +23,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -35,15 +36,15 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                characterCountContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountTagHelper()
         {
@@ -51,14 +52,15 @@ public class CharacterCountTagHelperTests
             Name = "my-name",
             MaxWords = 10,
             Threshold = 90,
-            LabelClass = "additional-label-class"
+            LabelClass = "additional-label-class",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"" data-threshold=""90"">
     <div class=""govuk-form-group"">
         <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
@@ -81,7 +83,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -93,29 +96,30 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                characterCountContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountTagHelper()
         {
             Id = "my-id",
             Name = "my-name",
             MaxLength = 200,
-            Threshold = 90
+            Threshold = 90,
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxlength=""200"" data-threshold=""90"">
     <div class=""govuk-form-group"">
         <label class=""govuk-label"" for=""my-id"">The label</label>
@@ -138,7 +142,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -150,33 +155,35 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                characterCountContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 characterCountContext.SetErrorMessage(
                     visuallyHiddenText: null,
                     attributes: null,
-                    content: new HtmlString("The error"));
+                    content: new HtmlString("The error")
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountTagHelper()
         {
             Id = "my-id",
             Name = "my-name",
-            MaxWords = 10
+            MaxWords = 10,
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"">
     <div class=""govuk-form-group govuk-form-group--error"">
         <label class=""govuk-label"" for=""my-id"">The label</label>
@@ -203,7 +210,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -215,22 +223,22 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                characterCountContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountTagHelper()
         {
             Id = "my-id",
             Name = "my-name",
             MaxLength = 100,
-            MaxWords = 10
+            MaxWords = 10,
         };
 
         // Act
@@ -249,7 +257,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -261,17 +270,15 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new CharacterCountTagHelper()
-        {
-            Name = "my-name",
-            MaxWords = 10,
-        };
+        var tagHelper = new CharacterCountTagHelper() { Name = "my-name", MaxWords = 10 };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -287,12 +294,10 @@ public class CharacterCountTagHelperTests
     {
         // Arrange
         var modelValue = "Foo value";
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
+        var model = new Model() { Foo = modelValue };
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), model)
             .GetExplorerForProperty(nameof(Model.Foo));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.Foo);
@@ -304,7 +309,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -316,18 +322,20 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountTagHelper(modelHelper: modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Name = "my-name",
             MaxWords = 10,
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -347,7 +355,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -359,19 +368,17 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
                 characterCountContext.SetValue(new HtmlString("Value"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new CharacterCountTagHelper()
-        {
-            Name = "my-name",
-            MaxWords = 10,
-        };
+        var tagHelper = new CharacterCountTagHelper() { Name = "my-name", MaxWords = 10 };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -387,12 +394,10 @@ public class CharacterCountTagHelperTests
     {
         // Arrange
         var modelValue = "Foo value";
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
+        var model = new Model() { Foo = modelValue };
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), model)
             .GetExplorerForProperty(nameof(Model.Foo));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.Foo);
@@ -404,7 +409,8 @@ public class CharacterCountTagHelperTests
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-character-count",
@@ -416,20 +422,22 @@ public class CharacterCountTagHelperTests
                 characterCountContext.SetLabel(
                     isPageHeading: false,
                     attributes: null,
-                    content: new HtmlString("The label"));
+                    content: new HtmlString("The label")
+                );
 
                 characterCountContext.SetValue(new HtmlString("Value"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CharacterCountTagHelper(modelHelper: modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Name = "my-name",
             MaxWords = 10,
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -448,12 +456,15 @@ public class CharacterCountTagHelperTests
         // Arrange
 
         // Act
-        var ex = Record.Exception(() => new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            Name = "my-name",
-            Threshold = threshold
-        });
+        var ex = Record.Exception(
+            () =>
+                new CharacterCountTagHelper()
+                {
+                    Id = "my-id",
+                    Name = "my-name",
+                    Threshold = threshold,
+                }
+        );
 
         // Assert
         Assert.IsType<ArgumentOutOfRangeException>(ex);
@@ -468,12 +479,15 @@ public class CharacterCountTagHelperTests
         // Arrange
 
         // Act
-        var ex = Record.Exception(() => new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            MaxLength = maxLength,
-            Name = "my-name"
-        });
+        var ex = Record.Exception(
+            () =>
+                new CharacterCountTagHelper()
+                {
+                    Id = "my-id",
+                    MaxLength = maxLength,
+                    Name = "my-name",
+                }
+        );
 
         // Assert
         Assert.IsType<ArgumentOutOfRangeException>(ex);
@@ -488,12 +502,15 @@ public class CharacterCountTagHelperTests
         // Arrange
 
         // Act
-        var ex = Record.Exception(() => new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            MaxWords = maxWords,
-            Name = "my-name"
-        });
+        var ex = Record.Exception(
+            () =>
+                new CharacterCountTagHelper()
+                {
+                    Id = "my-id",
+                    MaxWords = maxWords,
+                    Name = "my-name",
+                }
+        );
 
         // Assert
         Assert.IsType<ArgumentOutOfRangeException>(ex);

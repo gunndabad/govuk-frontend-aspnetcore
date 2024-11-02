@@ -22,7 +22,8 @@ internal partial class ComponentGenerator
         (string Other, string One)? charactersOverLimitText,
         (string Other, string One)? wordsUnderLimitText,
         string? wordsAtLimitText,
-        (string Other, string One)? wordsOverLimitText)
+        (string Other, string One)? wordsOverLimitText
+    )
     {
         Guard.ArgumentNotNull(nameof(textAreaId), textAreaId);
         Guard.ArgumentNotNull(nameof(formGroup), formGroup);
@@ -58,7 +59,8 @@ internal partial class ComponentGenerator
             tagBuilder.AddPluralisedI18nAttributes(
                 "characters-under-limit",
                 ("other", charactersUnderLimitText!.Value.Other),
-                ("one", charactersUnderLimitText.Value!.One));
+                ("one", charactersUnderLimitText.Value!.One)
+            );
         }
 
         if (charactersAtLimitText is not null)
@@ -71,7 +73,8 @@ internal partial class ComponentGenerator
             tagBuilder.AddPluralisedI18nAttributes(
                 "characters-over-limit",
                 ("other", charactersOverLimitText!.Value.Other),
-                ("one", charactersOverLimitText.Value!.One));
+                ("one", charactersOverLimitText.Value!.One)
+            );
         }
 
         if (wordsUnderLimitText is not null)
@@ -79,7 +82,8 @@ internal partial class ComponentGenerator
             tagBuilder.AddPluralisedI18nAttributes(
                 "words-under-limit",
                 ("other", wordsUnderLimitText!.Value.Other),
-                ("one", wordsUnderLimitText.Value!.One));
+                ("one", wordsUnderLimitText.Value!.One)
+            );
         }
 
         if (wordsAtLimitText is not null)
@@ -92,7 +96,8 @@ internal partial class ComponentGenerator
             tagBuilder.AddPluralisedI18nAttributes(
                 "words-over-limit",
                 ("other", wordsOverLimitText!.Value.Other),
-                ("one", wordsOverLimitText.Value!.One));
+                ("one", wordsOverLimitText.Value!.One)
+            );
         }
 
         tagBuilder.InnerHtml.AppendHtml(formGroup);
@@ -104,9 +109,12 @@ internal partial class ComponentGenerator
         {
             var hintId = $"{textAreaId}-info";
 
-            var content = hasNoLimit ? "" :
-                (textAreaDescriptionText ?? $"You can enter up to %{{count}} {(maxWords.HasValue ? "words" : "characters")}")
-                    .Replace("%{count}", (maxWords.HasValue ? maxWords : maxLength).ToString());
+            var content = hasNoLimit
+                ? ""
+                : (
+                    textAreaDescriptionText
+                    ?? $"You can enter up to %{{count}} {(maxWords.HasValue ? "words" : "characters")}"
+                ).Replace("%{count}", (maxWords.HasValue ? maxWords : maxLength).ToString());
 
             var hintContent = new HtmlString(HtmlEncoder.Default.Encode(content));
 

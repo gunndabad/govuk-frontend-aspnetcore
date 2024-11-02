@@ -17,7 +17,10 @@ public class TextInputContextTests
         context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error", errorMessageTagName));
+        var ex = Record.Exception(
+            () =>
+                context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error", errorMessageTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -34,7 +37,10 @@ public class TextInputContextTests
         context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error", errorMessageTagName));
+        var ex = Record.Exception(
+            () =>
+                context.SetErrorMessage(null, ImmutableDictionary<string, string?>.Empty, "Error", errorMessageTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -51,7 +57,9 @@ public class TextInputContextTests
         context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error", hintTagName));
+        var ex = Record.Exception(
+            () => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error", hintTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -68,7 +76,9 @@ public class TextInputContextTests
         context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error", hintTagName));
+        var ex = Record.Exception(
+            () => context.SetHint(ImmutableDictionary<string, string?>.Empty, "Error", hintTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -85,7 +95,9 @@ public class TextInputContextTests
         context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error", labelTagName));
+        var ex = Record.Exception(
+            () => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error", labelTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -102,7 +114,9 @@ public class TextInputContextTests
         context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Prefix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error", labelTagName));
+        var ex = Record.Exception(
+            () => context.SetLabel(false, ImmutableDictionary<string, string?>.Empty, "Error", labelTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -115,14 +129,23 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
         var prefixTagName = ShortTagNames.Prefix;
-        context.SetPrefix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix", prefixTagName);
+        context.SetPrefix(
+            attributes: ImmutableDictionary<string, string?>.Empty,
+            html: "Existing prefix",
+            prefixTagName
+        );
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix", prefixTagName));
+        var ex = Record.Exception(
+            () => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix", prefixTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal($"Only one <prefix> or <govuk-input-prefix> element is permitted within each <govuk-input>.", ex.Message);
+        Assert.Equal(
+            $"Only one <prefix> or <govuk-input-prefix> element is permitted within each <govuk-input>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -135,7 +158,9 @@ public class TextInputContextTests
         context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Suffix", suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix", prefixTagName));
+        var ex = Record.Exception(
+            () => context.SetPrefix(ImmutableDictionary<string, string?>.Empty, "Prefix", prefixTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -148,13 +173,22 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
         var suffixTagName = ShortTagNames.Suffix;
-        context.SetSuffix(attributes: ImmutableDictionary<string, string?>.Empty, html: "Existing prefix", suffixTagName);
+        context.SetSuffix(
+            attributes: ImmutableDictionary<string, string?>.Empty,
+            html: "Existing prefix",
+            suffixTagName
+        );
 
         // Act
-        var ex = Record.Exception(() => context.SetSuffix(ImmutableDictionary<string, string?>.Empty, "Prefix", suffixTagName));
+        var ex = Record.Exception(
+            () => context.SetSuffix(ImmutableDictionary<string, string?>.Empty, "Prefix", suffixTagName)
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal($"Only one <suffix> or <govuk-input-suffix> element is permitted within each <govuk-input>.", ex.Message);
+        Assert.Equal(
+            $"Only one <suffix> or <govuk-input-suffix> element is permitted within each <govuk-input>.",
+            ex.Message
+        );
     }
 }

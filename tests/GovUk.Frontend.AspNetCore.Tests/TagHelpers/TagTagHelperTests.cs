@@ -20,7 +20,8 @@ public class TagTagHelperTests
             tagName: "govuk-tag",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-tag",
@@ -30,11 +31,14 @@ public class TagTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(html);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         TagOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTag(It.IsAny<TagOptions>())).Callback<TagOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateTag(It.IsAny<TagOptions>()))
+            .Callback<TagOptions>(o => actualOptions = o);
 
         var tagHelper = new TagTagHelper(componentGeneratorMock.Object);
 

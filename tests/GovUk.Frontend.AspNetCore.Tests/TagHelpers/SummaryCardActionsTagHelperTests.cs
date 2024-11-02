@@ -17,23 +17,19 @@ public class SummaryCardActionsTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-summary-card-actions",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SummaryCardContext), summaryCardContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SummaryCardContext), summaryCardContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-card-actions",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", "additional-class" }
-            },
+            attributes: new TagHelperAttributeList() { { "class", "additional-class" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryCardActionsTagHelper();
 
@@ -48,6 +44,7 @@ public class SummaryCardActionsTagHelperTests
             {
                 Assert.Equal("class", kvp.Key);
                 Assert.Equal("additional-class", kvp.Value);
-            });
+            }
+        );
     }
 }

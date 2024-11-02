@@ -18,19 +18,22 @@ internal class AccordionItemContext
         if (Heading != null)
         {
             throw new InvalidOperationException(
-                $"Only one <{AccordionItemHeadingTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
+                $"Only one <{AccordionItemHeadingTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>."
+            );
         }
 
         if (Summary != null)
         {
             throw new InvalidOperationException(
-                $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemSummaryTagHelper.TagName}>.");
+                $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemSummaryTagHelper.TagName}>."
+            );
         }
 
         if (Content != null)
         {
             throw new InvalidOperationException(
-                $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>.");
+                $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>."
+            );
         }
 
         Heading = (attributes, content);
@@ -44,13 +47,15 @@ internal class AccordionItemContext
         if (Summary != null)
         {
             throw new InvalidOperationException(
-                $"Only one <{AccordionItemSummaryTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
+                $"Only one <{AccordionItemSummaryTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>."
+            );
         }
 
         if (Content != null)
         {
             throw new InvalidOperationException(
-                $"<{AccordionItemSummaryTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>.");
+                $"<{AccordionItemSummaryTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>."
+            );
         }
 
         Summary = (attributes, content);
@@ -64,7 +69,8 @@ internal class AccordionItemContext
         if (Content != null)
         {
             throw new InvalidOperationException(
-                $"Only one <{AccordionItemContentTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
+                $"Only one <{AccordionItemContentTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>."
+            );
         }
 
         Content = (attributes, content);

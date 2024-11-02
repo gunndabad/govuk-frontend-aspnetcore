@@ -18,11 +18,9 @@ public class PaginationEllipsisItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-pagination-ellipsis",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PaginationContext), paginationContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PaginationContext), paginationContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-pagination-ellipsis",
@@ -31,7 +29,8 @@ public class PaginationEllipsisItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PaginationEllipsisItemTagHelper();
 
@@ -39,8 +38,6 @@ public class PaginationEllipsisItemTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Collection(
-            paginationContext.Items,
-            item => Assert.IsType<PaginationItemEllipsis>(item));
+        Assert.Collection(paginationContext.Items, item => Assert.IsType<PaginationItemEllipsis>(item));
     }
 }

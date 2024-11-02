@@ -24,7 +24,8 @@ public class BackLinkTagHelperTests
             tagName: "govuk-back-link",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-back-link",
@@ -32,18 +33,21 @@ public class BackLinkTagHelperTests
             {
                 { "href", href },
                 { "class", classes },
-                { "data-foo", dataFooAttrValue }
+                { "data-foo", dataFooAttrValue },
             },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         BackLinkOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateBackLink(It.IsAny<BackLinkOptions>())).Callback<BackLinkOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateBackLink(It.IsAny<BackLinkOptions>()))
+            .Callback<BackLinkOptions>(o => actualOptions = o);
 
         var tagHelper = new BackLinkTagHelper(componentGeneratorMock.Object);
 
@@ -57,10 +61,13 @@ public class BackLinkTagHelperTests
         Assert.Equal(href, actualOptions.Href);
         Assert.Equal(classes, actualOptions.Classes);
         Assert.NotNull(actualOptions.Attributes);
-        Assert.Collection(actualOptions.Attributes, kvp =>
-        {
-            Assert.Equal("data-foo", kvp.Key);
-            Assert.Equal(dataFooAttrValue, kvp.Value);
-        });
+        Assert.Collection(
+            actualOptions.Attributes,
+            kvp =>
+            {
+                Assert.Equal("data-foo", kvp.Key);
+                Assert.Equal(dataFooAttrValue, kvp.Value);
+            }
+        );
     }
 }

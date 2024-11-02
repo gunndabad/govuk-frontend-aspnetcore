@@ -34,9 +34,7 @@ public class PaginationNextTagHelper : TagHelper
     {
         var paginationContext = context.GetContextItem<PaginationContext>();
 
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {
@@ -51,14 +49,16 @@ public class PaginationNextTagHelper : TagHelper
             output.Attributes.Remove(hrefAttribute);
         }
 
-        paginationContext.SetNext(new PaginationNext()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Href = href,
-            LabelText = LabelText,
-            LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
-            Text = childContent
-        });
+        paginationContext.SetNext(
+            new PaginationNext()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Href = href,
+                LabelText = LabelText,
+                LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
+                Text = childContent,
+            }
+        );
 
         output.SuppressOutput();
     }

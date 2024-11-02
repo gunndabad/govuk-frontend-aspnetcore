@@ -23,13 +23,21 @@ public partial class DefaultComponentGenerator
             .MergeEncodedAttributes(options.Attributes)
             .AppendIf(
                 options.Legend is not null,
-                () => new HtmlTag(FieldsetLegendElement)
-                    .AddClass("govuk-fieldset__legend")
-                    .AddClasses(ExplodeClasses(options.Legend?.Classes))
-                    .MergeEncodedAttributes(options.Legend?.Attributes)
-                    .Append((options.Legend!.IsPageHeading ?? FieldsetLegendDefaultIsPageHeading ? new HtmlTag("h1") : new HtmlTag("").NoTag())
-                        .AddClass("govuk-fieldset__heading")
-                        .AppendHtml(GetEncodedTextOrHtml(options.Legend.Text, options.Legend.Html))))
+                () =>
+                    new HtmlTag(FieldsetLegendElement)
+                        .AddClass("govuk-fieldset__legend")
+                        .AddClasses(ExplodeClasses(options.Legend?.Classes))
+                        .MergeEncodedAttributes(options.Legend?.Attributes)
+                        .Append(
+                            (
+                                options.Legend!.IsPageHeading ?? FieldsetLegendDefaultIsPageHeading
+                                    ? new HtmlTag("h1")
+                                    : new HtmlTag("").NoTag()
+                            )
+                                .AddClass("govuk-fieldset__heading")
+                                .AppendHtml(GetEncodedTextOrHtml(options.Legend.Text, options.Legend.Html))
+                        )
+            )
             .AppendHtml(GetEncodedTextOrHtml(options.Text, options.Html));
     }
 }

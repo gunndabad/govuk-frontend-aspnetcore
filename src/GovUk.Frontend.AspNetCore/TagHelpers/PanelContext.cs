@@ -30,7 +30,10 @@ internal class PanelContext
 
         if (Body != null)
         {
-            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(PanelTitleTagHelper.TagName, PanelBodyTagHelper.TagName);
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                PanelTitleTagHelper.TagName,
+                PanelBodyTagHelper.TagName
+            );
         }
 
         Title = content;

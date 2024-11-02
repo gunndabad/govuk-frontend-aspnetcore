@@ -11,7 +11,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS error summary component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[RestrictChildren(ErrorSummaryTitleTagHelper.TagName, ErrorSummaryDescriptionTagHelper.TagName, "govuk-error-summary-item")]
+[RestrictChildren(
+    ErrorSummaryTitleTagHelper.TagName,
+    ErrorSummaryDescriptionTagHelper.TagName,
+    "govuk-error-summary-item"
+)]
 [OutputElementHint(DefaultComponentGenerator.ErrorSummaryElement)]
 public class ErrorSummaryTagHelper : TagHelper
 {
@@ -64,22 +68,23 @@ public class ErrorSummaryTagHelper : TagHelper
         var title = errorSummaryContext.GetTitle();
         var description = errorSummaryContext.GetDescription();
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions()
-        {
-            TitleText = null,
-            TitleHtml = title?.Html,
-            DescriptionText = null,
-            DescriptionHtml = description?.Html,
-            ErrorList = errorSummaryContext.Items,
-            Classes = classes,
-            Attributes = attributes,
-            DisableAutoFocus = DisableAutoFocus,
-            TitleAttributes = title?.Attributes,
-            DescriptionAttributes = description?.Attributes
-        });
+        var component = _componentGenerator.GenerateErrorSummary(
+            new ErrorSummaryOptions()
+            {
+                TitleText = null,
+                TitleHtml = title?.Html,
+                DescriptionText = null,
+                DescriptionHtml = description?.Html,
+                ErrorList = errorSummaryContext.Items,
+                Classes = classes,
+                Attributes = attributes,
+                DisableAutoFocus = DisableAutoFocus,
+                TitleAttributes = title?.Attributes,
+                DescriptionAttributes = description?.Attributes,
+            }
+        );
 
         output.WriteComponent(component);
     }

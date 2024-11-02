@@ -19,11 +19,9 @@ public class CheckboxesFieldsetLegendTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-fieldset-legend",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesFieldsetContext), fieldsetContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesFieldsetContext), fieldsetContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-fieldset-legend",
@@ -33,12 +31,10 @@ public class CheckboxesFieldsetLegendTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Legend content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new CheckboxesFieldsetLegendTagHelper()
-        {
-            IsPageHeading = true
-        };
+        var tagHelper = new CheckboxesFieldsetLegendTagHelper() { IsPageHeading = true };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -54,19 +50,14 @@ public class CheckboxesFieldsetLegendTagHelperTests
         // Arrange
         var fieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
 
-        fieldsetContext.SetLegend(
-            isPageHeading: false,
-            attributes: null,
-            content: new HtmlString("Existing legend"));
+        fieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
 
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-fieldset-legend",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesFieldsetContext), fieldsetContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesFieldsetContext), fieldsetContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-fieldset-legend",
@@ -76,18 +67,19 @@ public class CheckboxesFieldsetLegendTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Legend content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new CheckboxesFieldsetLegendTagHelper()
-        {
-            IsPageHeading = true
-        };
+        var tagHelper = new CheckboxesFieldsetLegendTagHelper() { IsPageHeading = true };
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-checkboxes-fieldset-legend> element is permitted within each <govuk-checkboxes-fieldset>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-checkboxes-fieldset-legend> element is permitted within each <govuk-checkboxes-fieldset>.",
+            ex.Message
+        );
     }
 }

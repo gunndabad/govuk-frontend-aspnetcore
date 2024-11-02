@@ -15,7 +15,10 @@ public class TagOptions
     {
         if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified{(messageSuffix is not null ? " " + messageSuffix : "")}.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(Html)} or {nameof(Text)} must be specified{(messageSuffix is not null ? " " + messageSuffix : "")}."
+            );
         }
     }
 }

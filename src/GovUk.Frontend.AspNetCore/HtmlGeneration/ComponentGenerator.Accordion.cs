@@ -28,7 +28,8 @@ internal partial class ComponentGenerator
         string? showAllSectionsText,
         string? showSectionText,
         string? showSectionAriaLabelText,
-        IEnumerable<AccordionItem> items)
+        IEnumerable<AccordionItem> items
+    )
     {
         Guard.ArgumentNotNullOrEmpty(nameof(id), id);
 
@@ -36,7 +37,8 @@ internal partial class ComponentGenerator
         {
             throw new ArgumentOutOfRangeException(
                 $"{nameof(headingLevel)} must be between {AccordionMinHeadingLevel} and {AccordionMaxHeadingLevel}.",
-                nameof(headingLevel));
+                nameof(headingLevel)
+            );
         }
 
         Guard.ArgumentNotNullOrEmpty(nameof(items), items);
@@ -89,13 +91,15 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(AccordionItem.Content)} cannot be null.",
                 item.Content,
-                item.Content != null);
+                item.Content != null
+            );
 
             Guard.ArgumentValidNotNull(
                 nameof(items),
                 $"Item {index} is not valid; {nameof(AccordionItem.HeadingContent)} cannot be null.",
                 item.HeadingContent,
-                item.HeadingContent != null);
+                item.HeadingContent != null
+            );
 
             var idSuffix = index + 1;
 

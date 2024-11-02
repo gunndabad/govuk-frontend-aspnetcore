@@ -17,7 +17,8 @@ internal partial class ComponentGenerator
         string? idPrefix,
         string name,
         IEnumerable<RadiosItemBase> items,
-        AttributeDictionary attributes)
+        AttributeDictionary attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(name), name);
         Guard.ArgumentNotNull(nameof(items), items);
@@ -56,7 +57,8 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Value)} cannot be null.",
                 item.Value,
-                item.Value != null);
+                item.Value != null
+            );
 
             var itemId = item.Id ?? (itemIndex == 0 ? idPrefix : $"{idPrefix}-{itemIndex + 1}");
             var hintId = itemId + "-item-hint";
@@ -107,7 +109,8 @@ internal partial class ComponentGenerator
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(RadiosItem.Hint)}.{nameof(RadiosItemHint.Content)} cannot be null.",
                     item.Hint.Content,
-                    item.Hint.Content != null);
+                    item.Hint.Content != null
+                );
 
                 var hint = GenerateHint(hintId, item.Hint.Content, item.Hint.Attributes);
                 hint.MergeCssClass("govuk-radios__hint");
@@ -122,7 +125,8 @@ internal partial class ComponentGenerator
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Conditional.Content)} cannot be null.",
                     item.Conditional.Content,
-                    item.Conditional.Content != null);
+                    item.Conditional.Content != null
+                );
 
                 var conditional = new TagBuilder("div");
                 conditional.MergeOptionalAttributes(item.Conditional.Attributes);
@@ -147,7 +151,8 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItemDivider.Content)} cannot be null.",
                 divider.Content,
-                divider.Content != null);
+                divider.Content != null
+            );
 
             var dividerTagBuilder = new TagBuilder(RadiosDividerItemElement);
             dividerTagBuilder.MergeOptionalAttributes(divider.Attributes);

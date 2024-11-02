@@ -9,10 +9,7 @@ internal partial class ComponentGenerator
     internal const string SkipLinkDefaultHref = "#content";
     internal const string SkipLinkElement = "a";
 
-    public TagBuilder GenerateSkipLink(
-        string href,
-        IHtmlContent content,
-        AttributeDictionary? attributes)
+    public TagBuilder GenerateSkipLink(string href, IHtmlContent content, AttributeDictionary? attributes)
     {
         Guard.ArgumentNotNullOrEmpty(nameof(href), href);
         Guard.ArgumentNotNull(nameof(content), content);

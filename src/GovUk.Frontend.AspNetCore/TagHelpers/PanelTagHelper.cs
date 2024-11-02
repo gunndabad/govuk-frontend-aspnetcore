@@ -25,9 +25,7 @@ public class PanelTagHelper : TagHelper
     /// Creates a new <see cref="PanelTagHelper"/>.
     /// </summary>
     public PanelTagHelper()
-        : this(null)
-    {
-    }
+        : this(null) { }
 
     internal PanelTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
     {
@@ -46,12 +44,12 @@ public class PanelTagHelper : TagHelper
         get => _headingLevel;
         set
         {
-            if (value < ComponentGenerator.PanelMinHeadingLevel ||
-                value > ComponentGenerator.PanelMaxHeadingLevel)
+            if (value < ComponentGenerator.PanelMinHeadingLevel || value > ComponentGenerator.PanelMaxHeadingLevel)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(value),
-                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.PanelMinHeadingLevel} and {ComponentGenerator.PanelMaxHeadingLevel}.");
+                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.PanelMinHeadingLevel} and {ComponentGenerator.PanelMaxHeadingLevel}."
+                );
             }
 
             _headingLevel = value;
@@ -74,7 +72,8 @@ public class PanelTagHelper : TagHelper
             HeadingLevel,
             panelContext.Title,
             panelContext.Body,
-            output.Attributes.ToAttributeDictionary());
+            output.Attributes.ToAttributeDictionary()
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

@@ -19,44 +19,48 @@ public class TabsTagHelperTests
             tagName: "govuk-tabs",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-tabs",
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var tabsContext = context.GetContextItem<TabsContext>(); ;
+                var tabsContext = context.GetContextItem<TabsContext>();
+                ;
 
-                tabsContext.AddItem(new TabsItem()
-                {
-                    Id = "first",
-                    Label = "First",
-                    PanelContent = new HtmlString("First panel content")
-                });
+                tabsContext.AddItem(
+                    new TabsItem()
+                    {
+                        Id = "first",
+                        Label = "First",
+                        PanelContent = new HtmlString("First panel content"),
+                    }
+                );
 
-                tabsContext.AddItem(new TabsItem()
-                {
-                    Id = "second",
-                    Label = "Second",
-                    PanelContent = new HtmlString("Second panel content")
-                });
+                tabsContext.AddItem(
+                    new TabsItem()
+                    {
+                        Id = "second",
+                        Label = "Second",
+                        PanelContent = new HtmlString("Second panel content"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TabsTagHelper(new ComponentGenerator())
-        {
-            Id = "my-tabs",
-            Title = "Title"
-        };
+        var tagHelper = new TabsTagHelper(new ComponentGenerator()) { Id = "my-tabs", Title = "Title" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-tabs"" data-module=""govuk-tabs"" id=""my-tabs"">
     <h2 class=""govuk-tabs__title"">Title</h2>
     <ul class=""govuk-tabs__list"">
@@ -78,7 +82,8 @@ public class TabsTagHelperTests
             tagName: "govuk-tabs",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-tabs",
@@ -87,28 +92,30 @@ public class TabsTagHelperTests
             {
                 var tabsContext = context.GetContextItem<TabsContext>();
 
-                tabsContext.AddItem(new TabsItem()
-                {
-                    Id = "first",
-                    Label = "First",
-                    PanelContent = new HtmlString("First panel content")
-                });
+                tabsContext.AddItem(
+                    new TabsItem()
+                    {
+                        Id = "first",
+                        Label = "First",
+                        PanelContent = new HtmlString("First panel content"),
+                    }
+                );
 
-                tabsContext.AddItem(new TabsItem()
-                {
-                    Id = "second",
-                    Label = "Second",
-                    PanelContent = new HtmlString("Second panel content")
-                });
+                tabsContext.AddItem(
+                    new TabsItem()
+                    {
+                        Id = "second",
+                        Label = "Second",
+                        PanelContent = new HtmlString("Second panel content"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TabsTagHelper(new ComponentGenerator())
-        {
-            Id = "my-tabs"
-        };
+        var tagHelper = new TabsTagHelper(new ComponentGenerator()) { Id = "my-tabs" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);

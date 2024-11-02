@@ -19,11 +19,9 @@ public class RadiosItemDividerTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-divider",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-divider",
@@ -33,7 +31,8 @@ public class RadiosItemDividerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString("Divider"));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosItemDividerTagHelper();
 
@@ -47,6 +46,7 @@ public class RadiosItemDividerTagHelperTests
             {
                 var divider = Assert.IsType<RadiosItemDivider>(item);
                 Assert.Equal("Divider", divider.Content?.ToString());
-            });
+            }
+        );
     }
 }

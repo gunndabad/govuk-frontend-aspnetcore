@@ -26,11 +26,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -40,7 +38,8 @@ public class ErrorSummaryItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(errorHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
@@ -56,7 +55,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal(errorHtml, item.Html);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -68,11 +68,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -81,7 +79,8 @@ public class ErrorSummaryItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
         output.TagMode = TagMode.SelfClosing;
 
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
@@ -108,11 +107,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -121,10 +118,12 @@ public class ErrorSummaryItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
         output.TagMode = TagMode.SelfClosing;
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.Field));
 
         var viewContext = new ViewContext();
@@ -137,7 +136,7 @@ public class ErrorSummaryItemTagHelperTests
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
             AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -149,7 +148,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal(HtmlEncoder.Default.Encode(modelStateErrorMessage), item.Html);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -164,11 +164,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -178,9 +176,11 @@ public class ErrorSummaryItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(errorHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.Field));
 
         var viewContext = new ViewContext();
@@ -193,7 +193,7 @@ public class ErrorSummaryItemTagHelperTests
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
             AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -205,7 +205,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal(errorHtml, item.Html);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -217,24 +218,20 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "#TheField" }
-            },
+            attributes: new TagHelperAttributeList() { { "href", "#TheField" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Error message");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
@@ -250,7 +247,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal("#TheField", item.Href);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -262,11 +260,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -275,10 +271,12 @@ public class ErrorSummaryItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
         output.TagMode = TagMode.SelfClosing;
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.Field));
 
         var viewContext = new ViewContext();
@@ -291,7 +289,7 @@ public class ErrorSummaryItemTagHelperTests
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
             AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -303,7 +301,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal("#Field", item.Href);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -315,11 +314,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -328,10 +325,12 @@ public class ErrorSummaryItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
         output.TagMode = TagMode.SelfClosing;
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.Date));
 
         var viewContext = new ViewContext();
@@ -341,12 +340,15 @@ public class ErrorSummaryItemTagHelperTests
 
         var modelName = nameof(Model.Date);
         viewContext.ModelState.AddModelError(modelName, "ModelState error message");
-        dateInputParseErrorsProvider.SetErrorsForModel(modelName, DateInputParseErrors.InvalidMonth | DateInputParseErrors.MissingYear);
+        dateInputParseErrorsProvider.SetErrorsForModel(
+            modelName,
+            DateInputParseErrors.InvalidMonth | DateInputParseErrors.MissingYear
+        );
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
             AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -358,7 +360,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal("#Date.Month", item.Href);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -370,26 +373,23 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "#SomeHref" }
-            },
+            attributes: new TagHelperAttributeList() { { "href", "#SomeHref" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
         output.TagMode = TagMode.SelfClosing;
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.Field));
 
         var viewContext = new ViewContext();
@@ -402,7 +402,7 @@ public class ErrorSummaryItemTagHelperTests
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
             AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -414,7 +414,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Equal("#SomeHref", item.Href);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -426,11 +427,9 @@ public class ErrorSummaryItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-item",
@@ -440,7 +439,8 @@ public class ErrorSummaryItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Error message");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
@@ -456,7 +456,8 @@ public class ErrorSummaryItemTagHelperTests
             item =>
             {
                 Assert.Null(item.Href);
-            });
+            }
+        );
     }
 
     private class Model

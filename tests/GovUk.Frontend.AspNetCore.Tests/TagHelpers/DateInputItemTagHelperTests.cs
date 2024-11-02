@@ -19,11 +19,9 @@ public class DateInputItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-date-input-day",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DateInputContext), dateInputContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DateInputContext), dateInputContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-date-input-day",
@@ -35,7 +33,8 @@ public class DateInputItemTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DateInputItemTagHelper()
         {
@@ -44,7 +43,7 @@ public class DateInputItemTagHelperTests
             InputMode = "im",
             Name = "my_day",
             Pattern = "*",
-            Value = 2
+            Value = 2,
         };
 
         // Act
@@ -63,6 +62,7 @@ public class DateInputItemTagHelperTests
                 Assert.Equal("*", item.Pattern);
                 Assert.Equal(2, item.Value);
                 Assert.True(item.ValueSpecified);
-            });
+            }
+        );
     }
 }

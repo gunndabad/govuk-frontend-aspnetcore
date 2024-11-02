@@ -20,7 +20,10 @@ public class CharacterCountContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-character-count-error-message> must be specified before <govuk-character-count-value>.", ex.Message);
+        Assert.Equal(
+            "<govuk-character-count-error-message> must be specified before <govuk-character-count-value>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -36,7 +39,10 @@ public class CharacterCountContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-character-count-hint> must be specified before <govuk-character-count-value>.", ex.Message);
+        Assert.Equal(
+            "<govuk-character-count-hint> must be specified before <govuk-character-count-value>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -52,7 +58,10 @@ public class CharacterCountContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-character-count-label> must be specified before <govuk-character-count-value>.", ex.Message);
+        Assert.Equal(
+            "<govuk-character-count-label> must be specified before <govuk-character-count-value>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -68,6 +77,9 @@ public class CharacterCountContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-character-count-value> element is permitted within each <govuk-character-count>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-character-count-value> element is permitted within each <govuk-character-count>.",
+            ex.Message
+        );
     }
 }

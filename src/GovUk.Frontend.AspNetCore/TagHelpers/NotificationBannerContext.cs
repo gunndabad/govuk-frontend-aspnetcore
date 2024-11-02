@@ -14,7 +14,8 @@ internal class NotificationBannerContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 NotificationBannerTitleTagHelper.TagName,
-                NotificationBannerTagHelper.TagName);
+                NotificationBannerTagHelper.TagName
+            );
         }
 
         Title = (id, headingLevel, content);

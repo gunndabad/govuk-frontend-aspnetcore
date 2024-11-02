@@ -17,7 +17,8 @@ public class SkipLinkTagHelperTests
             tagName: "govuk-skip-link",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-skip-link",
@@ -27,18 +28,17 @@ public class SkipLinkTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Link content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new SkipLinkTagHelper()
-        {
-            Href = "#main"
-        };
+        var tagHelper = new SkipLinkTagHelper() { Href = "#main" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <a class=""govuk-skip-link"" href=""#main"" data-module=""govuk-skip-link"">Link content</a>";
 
         AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
@@ -52,7 +52,8 @@ public class SkipLinkTagHelperTests
             tagName: "govuk-skip-link",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-skip-link",
@@ -62,7 +63,8 @@ public class SkipLinkTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Link content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SkipLinkTagHelper();
 

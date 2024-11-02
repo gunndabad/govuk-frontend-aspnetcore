@@ -23,9 +23,7 @@ public partial class DefaultComponentGenerator
 
         if (options.IsPageHeading ?? LabelDefaultIsPageHeading)
         {
-            return new HtmlTag("h1")
-                .AddClass("govuk-label-wrapper")
-                .Append(label);
+            return new HtmlTag("h1").AddClass("govuk-label-wrapper").Append(label);
         }
         else
         {

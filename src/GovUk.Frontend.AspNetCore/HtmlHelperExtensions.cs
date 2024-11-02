@@ -90,7 +90,11 @@ public static class HtmlHelperExtensions
     /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
     /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
-    public static IHtmlContent GovUkFrontendScriptImports(this IHtmlHelper htmlHelper, string? cspNonce, bool appendVersion)
+    public static IHtmlContent GovUkFrontendScriptImports(
+        this IHtmlHelper htmlHelper,
+        string? cspNonce,
+        bool appendVersion
+    )
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
         var httpContext = htmlHelper.ViewContext.HttpContext;

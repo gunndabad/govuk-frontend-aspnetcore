@@ -19,11 +19,9 @@ public class CheckboxesFieldsetTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-fieldset",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesContext), checkboxesContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesContext), checkboxesContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-fieldset",
@@ -35,7 +33,8 @@ public class CheckboxesFieldsetTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesFieldsetTagHelper();
 
@@ -55,17 +54,19 @@ public class CheckboxesFieldsetTagHelperTests
 
         checkboxesContext.OpenFieldset();
         var checkboxesFieldsetContext = new CheckboxesFieldsetContext(attributes: null, aspFor: null);
-        checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
+        checkboxesFieldsetContext.SetLegend(
+            isPageHeading: false,
+            attributes: null,
+            content: new HtmlString("Existing legend")
+        );
         checkboxesContext.CloseFieldset(checkboxesFieldsetContext);
 
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-fieldset",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesContext), checkboxesContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesContext), checkboxesContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-fieldset",
@@ -77,7 +78,8 @@ public class CheckboxesFieldsetTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesFieldsetTagHelper();
 
@@ -86,6 +88,9 @@ public class CheckboxesFieldsetTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-checkboxes-fieldset> element is permitted within each <govuk-checkboxes>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-checkboxes-fieldset> element is permitted within each <govuk-checkboxes>.",
+            ex.Message
+        );
     }
 }

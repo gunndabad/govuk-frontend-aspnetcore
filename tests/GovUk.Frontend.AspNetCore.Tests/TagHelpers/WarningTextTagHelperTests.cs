@@ -24,30 +24,27 @@ public class WarningTextTagHelperTests
             tagName: "govuk-warning-text",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-warning-text",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", classes },
-                { "data-foo", dataFooAttrValue },
-            },
+            attributes: new TagHelperAttributeList() { { "class", classes }, { "data-foo", dataFooAttrValue } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         WarningTextOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateWarningText(It.IsAny<WarningTextOptions>())).Callback<WarningTextOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateWarningText(It.IsAny<WarningTextOptions>()))
+            .Callback<WarningTextOptions>(o => actualOptions = o);
 
-        var tagHelper = new WarningTextTagHelper(componentGeneratorMock.Object)
-        {
-            IconFallbackText = iconFallbackText
-        };
+        var tagHelper = new WarningTextTagHelper(componentGeneratorMock.Object) { IconFallbackText = iconFallbackText };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -58,10 +55,13 @@ public class WarningTextTagHelperTests
         Assert.Null(actualOptions.Text);
         Assert.Equal(iconFallbackText, actualOptions.IconFallbackText);
         Assert.NotNull(actualOptions.Attributes);
-        Assert.Collection(actualOptions.Attributes, kvp =>
-        {
-            Assert.Equal("data-foo", kvp.Key);
-            Assert.Equal(dataFooAttrValue, kvp.Value);
-        });
+        Assert.Collection(
+            actualOptions.Attributes,
+            kvp =>
+            {
+                Assert.Equal("data-foo", kvp.Key);
+                Assert.Equal(dataFooAttrValue, kvp.Value);
+            }
+        );
     }
 }

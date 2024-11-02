@@ -36,31 +36,30 @@ internal class ErrorSummaryContext
         string? href,
         string html,
         ImmutableDictionary<string, string?> attributes,
-        ImmutableDictionary<string, string?> itemAttributes)
+        ImmutableDictionary<string, string?> itemAttributes
+    )
     {
         ArgumentNullException.ThrowIfNull(html);
         ArgumentNullException.ThrowIfNull(attributes);
         ArgumentNullException.ThrowIfNull(itemAttributes);
 
-        AddItem(new ErrorSummaryOptionsErrorItem()
-        {
-            Text = null,
-            Html = html,
-            Href = href,
-            Attributes = attributes,
-            ItemAttributes = itemAttributes
-        });
+        AddItem(
+            new ErrorSummaryOptionsErrorItem()
+            {
+                Text = null,
+                Html = html,
+                Href = href,
+                Attributes = attributes,
+                ItemAttributes = itemAttributes,
+            }
+        );
     }
 
     public (ImmutableDictionary<string, string?> Attributes, string Html)? GetTitle() =>
-        Title is not null ?
-        (Title.Attributes, Title.Html) :
-        null;
+        Title is not null ? (Title.Attributes, Title.Html) : null;
 
     public (ImmutableDictionary<string, string?> Attributes, string Html)? GetDescription() =>
-        Description is not null ?
-        (Description.Attributes, Description.Html) :
-        null;
+        Description is not null ? (Description.Attributes, Description.Html) : null;
 
     public void SetDescription(ImmutableDictionary<string, string?> attributes, string html)
     {
@@ -71,7 +70,8 @@ internal class ErrorSummaryContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 ErrorSummaryDescriptionTagHelper.TagName,
-                ErrorSummaryTagHelper.TagName);
+                ErrorSummaryTagHelper.TagName
+            );
         }
 
         Description = new DescriptionInfo(attributes, html);
@@ -86,7 +86,8 @@ internal class ErrorSummaryContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 ErrorSummaryTitleTagHelper.TagName,
-                ErrorSummaryTagHelper.TagName);
+                ErrorSummaryTagHelper.TagName
+            );
         }
 
         Title = new TitleInfo(attributes, html);

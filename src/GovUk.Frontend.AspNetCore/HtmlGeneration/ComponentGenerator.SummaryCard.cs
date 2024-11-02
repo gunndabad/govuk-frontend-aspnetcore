@@ -15,13 +15,15 @@ internal partial class ComponentGenerator
         SummaryCardTitle? title,
         SummaryListActions? actions,
         IHtmlContent summaryList,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentValidNotNull(
             nameof(summaryList),
             $"Summary card is not valid; {nameof(summaryList)} cannot be null.",
             summaryList,
-            summaryList != null);
+            summaryList != null
+        );
 
         var tagBuilder = new TagBuilder(SummaryCardElement);
         tagBuilder.MergeOptionalAttributes(attributes);
@@ -81,7 +83,8 @@ internal partial class ComponentGenerator
             nameof(SummaryCard.Actions),
             $"Action {actionIndex} is not valid; {nameof(SummaryListAction.Content)} cannot be null.",
             action.Content,
-            action.Content != null);
+            action.Content != null
+        );
 
         var anchor = new TagBuilder(SummaryListRowActionElement);
         anchor.MergeOptionalAttributes(action.Attributes);

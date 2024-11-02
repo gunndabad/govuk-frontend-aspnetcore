@@ -18,7 +18,8 @@ internal partial class ComponentGenerator
         string? describedBy,
         bool disabled,
         IEnumerable<SelectItem> items,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);
@@ -53,7 +54,8 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(SelectItem.Content)} cannot be null.",
                 item.Content,
-                item.Content != null);
+                item.Content != null
+            );
 
             var option = new TagBuilder("option");
             option.MergeOptionalAttributes(item.Attributes);

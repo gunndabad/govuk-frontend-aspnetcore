@@ -21,11 +21,9 @@ public class ErrorMessageTagHelperTests
         var context = new TagHelperContext(
             tagName: "test-error-message",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(FormGroupContext2), formGroupContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(FormGroupContext2), formGroupContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "test-error-message",
@@ -35,12 +33,10 @@ public class ErrorMessageTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(errorMessage);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new ErrorMessageTagHelper()
-        {
-            VisuallyHiddenText = vht
-        };
+        var tagHelper = new ErrorMessageTagHelper() { VisuallyHiddenText = vht };
 
         // Act
         await tagHelper.ProcessAsync(context, output);

@@ -7,6 +7,7 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
 internal class SelectItem
 {
     public string? Value { get; set; }
+
     [DisallowNull]
     public IHtmlContent? Content { get; set; }
     public bool Selected { get; set; }

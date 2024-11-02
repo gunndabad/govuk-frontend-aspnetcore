@@ -14,7 +14,8 @@ internal partial class ComponentGenerator
         string name,
         string describedBy,
         bool disabled,
-        AttributeDictionary attributes)
+        AttributeDictionary attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);

@@ -17,7 +17,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(YearTagName, ParentTag = DateInputTagHelper.TagName)]
 [HtmlTargetElement(YearTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.FormGroupElement)]
-[RestrictChildren(DateInputItemLabelTagHelper.DayTagName, DateInputItemLabelTagHelper.MonthTagName, DateInputItemLabelTagHelper.YearTagName)]
+[RestrictChildren(
+    DateInputItemLabelTagHelper.DayTagName,
+    DateInputItemLabelTagHelper.MonthTagName,
+    DateInputItemLabelTagHelper.YearTagName
+)]
 public class DateInputItemTagHelper : TagHelper
 {
     internal const string DayTagName = "govuk-date-input-day";
@@ -37,9 +41,7 @@ public class DateInputItemTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="DateInputItemTagHelper"/>.
     /// </summary>
-    public DateInputItemTagHelper()
-    {
-    }
+    public DateInputItemTagHelper() { }
 
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>input</c> element.
@@ -132,7 +134,7 @@ public class DateInputItemTagHelper : TagHelper
             Name = Name,
             Pattern = Pattern,
             Value = _value,
-            ValueSpecified = _valueSpecified
+            ValueSpecified = _valueSpecified,
         };
 
         dateInputContext.SetItem(itemType, itemContext);

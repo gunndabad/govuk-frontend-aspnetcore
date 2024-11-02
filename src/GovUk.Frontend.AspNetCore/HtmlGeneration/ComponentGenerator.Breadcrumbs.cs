@@ -15,7 +15,8 @@ internal partial class ComponentGenerator
     public TagBuilder GenerateBreadcrumbs(
         bool collapseOnMobile,
         AttributeDictionary? attributes,
-        IEnumerable<BreadcrumbsItem> items)
+        IEnumerable<BreadcrumbsItem> items
+    )
     {
         Guard.ArgumentNotNull(nameof(items), items);
 
@@ -38,7 +39,8 @@ internal partial class ComponentGenerator
             {
                 throw new ArgumentException(
                     $"Item {index} is not valid; {nameof(BreadcrumbsItem.Content)} cannot be null.",
-                    nameof(items));
+                    nameof(items)
+                );
             }
 
             var li = new TagBuilder(BreadcrumbsItemElement);

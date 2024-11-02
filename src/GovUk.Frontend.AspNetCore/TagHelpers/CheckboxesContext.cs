@@ -53,7 +53,9 @@ internal class CheckboxesContext : FormGroupContext
     {
         if (_fieldsetIsOpen)
         {
-            throw new InvalidOperationException($"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>.");
+            throw new InvalidOperationException(
+                $"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>."
+            );
         }
 
         if (Fieldset != null)
@@ -63,7 +65,9 @@ internal class CheckboxesContext : FormGroupContext
 
         if (Items.Count > 0 || Hint != null || ErrorMessage != null)
         {
-            throw new InvalidOperationException($"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>.");
+            throw new InvalidOperationException(
+                $"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>."
+            );
         }
 
         _fieldsetIsOpen = true;
@@ -83,7 +87,8 @@ internal class CheckboxesContext : FormGroupContext
     public override void SetErrorMessage(
         string? visuallyHiddenText,
         AttributeDictionary? attributes,
-        IHtmlContent? content)
+        IHtmlContent? content
+    )
     {
         if (Fieldset != null)
         {
@@ -113,10 +118,7 @@ internal class CheckboxesContext : FormGroupContext
         base.SetHint(attributes, content);
     }
 
-    public override void SetLabel(
-        bool isPageHeading,
-        AttributeDictionary? attributes,
-        IHtmlContent? content)
+    public override void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
     {
         throw new NotSupportedException();
     }

@@ -17,6 +17,7 @@ public class DetailsOptions
 
     [NonStandardParameter]
     internal IReadOnlyDictionary<string, string?>? SummaryAttributes { get; set; }
+
     [NonStandardParameter]
     internal IReadOnlyDictionary<string, string?>? TextAttributes { get; set; }
 
@@ -24,7 +25,10 @@ public class DetailsOptions
     {
         if (SummaryHtml.NormalizeEmptyString() is null && SummaryText.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(SummaryHtml)} or {nameof(SummaryText)} must be specified.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(SummaryHtml)} or {nameof(SummaryText)} must be specified."
+            );
         }
 
         if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)

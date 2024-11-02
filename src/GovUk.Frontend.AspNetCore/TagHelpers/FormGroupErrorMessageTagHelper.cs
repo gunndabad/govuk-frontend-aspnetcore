@@ -23,9 +23,7 @@ public class FormGroupErrorMessageTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="FormGroupErrorMessageTagHelper"/>.
     /// </summary>
-    public FormGroupErrorMessageTagHelper()
-    {
-    }
+    public FormGroupErrorMessageTagHelper() { }
 
     /// <summary>
     /// A visually hidden prefix used before the error message.
@@ -39,9 +37,7 @@ public class FormGroupErrorMessageTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {
@@ -53,13 +49,18 @@ public class FormGroupErrorMessageTagHelper : TagHelper
         output.SuppressOutput();
     }
 
-    private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
+    private protected virtual void SetErrorMessage(
+        TagHelperContent? childContent,
+        TagHelperContext context,
+        TagHelperOutput output
+    )
     {
         var formGroupContext = context.GetContextItem<FormGroupContext>();
 
         formGroupContext.SetErrorMessage(
             VisuallyHiddenText,
             output.Attributes.ToAttributeDictionary(),
-            childContent?.Snapshot());
+            childContent?.Snapshot()
+        );
     }
 }

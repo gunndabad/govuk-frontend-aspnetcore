@@ -20,9 +20,7 @@ public class DateInputItemLabelTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="DateInputItemLabelTagHelper"/>.
     /// </summary>
-    public DateInputItemLabelTagHelper()
-    {
-    }
+    public DateInputItemLabelTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

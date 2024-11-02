@@ -41,17 +41,19 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
-        formGroupContext.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Error message"));
+        formGroupContext.SetErrorMessage(
+            visuallyHiddenText: "vht",
+            attributes: null,
+            content: new HtmlString("Error message")
+        );
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
@@ -69,21 +71,20 @@ public class FormGroupTagHelperBaseTests
         var tagHelperContext = new TagHelperContext(
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ContainerErrorContext), containerErrorContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ContainerErrorContext), containerErrorContext } },
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
-        formGroupContext.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Error message"));
+        formGroupContext.SetErrorMessage(
+            visuallyHiddenText: "vht",
+            attributes: null,
+            content: new HtmlString("Error message")
+        );
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
@@ -94,7 +95,8 @@ public class FormGroupTagHelperBaseTests
             error =>
             {
                 Assert.Equal("Error message", error.Html);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -105,23 +107,27 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns("ModelState error");
+        modelHelper
+            .Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression))
+            .Returns("ModelState error");
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -139,24 +145,32 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
-        formGroupContext.SetErrorMessage(visuallyHiddenText: "vht", attributes: null, content: new HtmlString("Context error"));
+        formGroupContext.SetErrorMessage(
+            visuallyHiddenText: "vht",
+            attributes: null,
+            content: new HtmlString("Context error")
+        );
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns("ModelState error");
+        modelHelper
+            .Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression))
+            .Returns("ModelState error");
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -175,24 +189,28 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns("ModelState error");
+        modelHelper
+            .Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression))
+            .Returns("ModelState error");
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
             IgnoreModelStateErrors = true,
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -210,23 +228,27 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = "Foo";
 
         var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression)).Returns((string?)null);
+        modelHelper
+            .Setup(mock => mock.GetValidationMessage(viewContext, modelExplorer, modelExpression))
+            .Returns((string?)null);
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -244,16 +266,14 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
@@ -270,17 +290,19 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
-        formGroupContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("Context error"));
+        formGroupContext.SetErrorMessage(
+            visuallyHiddenText: null,
+            attributes: null,
+            content: new HtmlString("Context error")
+        );
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var errorMessage = tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
@@ -300,16 +322,14 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         tagHelper.GenerateErrorMessage(tagHelperContext, formGroupContext);
@@ -326,17 +346,15 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
         formGroupContext.SetHint(attributes: null, content: new HtmlString("Hint"));
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
@@ -355,9 +373,11 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -369,7 +389,7 @@ public class FormGroupTagHelperBaseTests
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -390,9 +410,11 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -404,7 +426,7 @@ public class FormGroupTagHelperBaseTests
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -423,16 +445,14 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
@@ -449,17 +469,15 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
         formGroupContext.SetHint(attributes: null, content: new HtmlString("Hint"));
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var hint = tagHelper.GenerateHint(tagHelperContext, formGroupContext);
@@ -479,16 +497,14 @@ public class FormGroupTagHelperBaseTests
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var formGroupContext = new TestFormGroupContext();
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         tagHelper.GenerateHint(tagHelperContext, formGroupContext);
@@ -505,10 +521,7 @@ public class FormGroupTagHelperBaseTests
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var ex = Record.Exception(() => tagHelper.GenerateLabel(formGroupContext, labelClass: null));
@@ -527,10 +540,7 @@ public class FormGroupTagHelperBaseTests
 
         var modelHelper = new Mock<IModelHelper>();
 
-        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
-        {
-            Id = "test"
-        };
+        var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object) { Id = "test" };
 
         // Act
         var label = tagHelper.GenerateLabel(formGroupContext, labelClass: null);
@@ -546,7 +556,8 @@ public class FormGroupTagHelperBaseTests
         // Arrange
         var formGroupContext = new TestFormGroupContext();
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -558,7 +569,7 @@ public class FormGroupTagHelperBaseTests
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -576,7 +587,8 @@ public class FormGroupTagHelperBaseTests
         var formGroupContext = new TestFormGroupContext();
         formGroupContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("Context label"));
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -588,7 +600,7 @@ public class FormGroupTagHelperBaseTests
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -610,14 +622,15 @@ public class FormGroupTagHelperBaseTests
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
             Id = "test",
-            AspFor = aspFor
+            AspFor = aspFor,
         };
 
         var fieldsetContext = new TestFormGroupFieldsetContext(
             fieldsetTagName: "test-fieldset",
             legendTagName: "test-fieldset-legend",
             attributes: new AttributeDictionary(),
-            aspFor);
+            aspFor
+        );
 
         fieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Context name"));
 
@@ -632,7 +645,8 @@ public class FormGroupTagHelperBaseTests
     public void ResolveFieldsetLegendContent_ContextDoesNotHaveContentButAspForIsSpecified_ReturnsModelMetadataDisplayName()
     {
         // Arrange
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -646,14 +660,15 @@ public class FormGroupTagHelperBaseTests
         {
             AspFor = aspFor,
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         var fieldsetContext = new TestFormGroupFieldsetContext(
             fieldsetTagName: "test-fieldset",
             legendTagName: "test-fieldset-legend",
             attributes: new AttributeDictionary(),
-            aspFor);
+            aspFor
+        );
 
         // Act
         var result = tagHelper.ResolveFieldsetLegendContent(fieldsetContext);
@@ -666,7 +681,8 @@ public class FormGroupTagHelperBaseTests
     public void ResolveFieldsetLegendContent_ContextHasBothContentAndAspForIsSpecified_ReturnsContextContent()
     {
         // Arrange
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
@@ -680,14 +696,15 @@ public class FormGroupTagHelperBaseTests
         {
             AspFor = aspFor,
             Id = "test",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         var fieldsetContext = new TestFormGroupFieldsetContext(
             fieldsetTagName: "test-fieldset",
             legendTagName: "test-fieldset-legend",
             attributes: new AttributeDictionary(),
-            aspFor);
+            aspFor
+        );
 
         fieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Context name"));
 
@@ -709,14 +726,15 @@ public class FormGroupTagHelperBaseTests
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
             Id = "test",
-            AspFor = aspFor
+            AspFor = aspFor,
         };
 
         var fieldsetContext = new TestFormGroupFieldsetContext(
             fieldsetTagName: "test-fieldset",
             legendTagName: "test-fieldset-legend",
             attributes: new AttributeDictionary(),
-            aspFor);
+            aspFor
+        );
 
         // Act
         var ex = Record.Exception(() => tagHelper.ResolveFieldsetLegendContent(fieldsetContext));
@@ -733,10 +751,8 @@ public class FormGroupTagHelperBaseTests
 
     private class TestFormGroupTagHelper : FormGroupTagHelperBase
     {
-        public TestFormGroupTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper) :
-            base(htmlGenerator, modelHelper)
-        {
-        }
+        public TestFormGroupTagHelper(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
+            : base(htmlGenerator, modelHelper) { }
 
         public string? Id { get; set; }
 
@@ -747,7 +763,8 @@ public class FormGroupTagHelperBaseTests
             FormGroupContext formGroupContext,
             TagHelperOutput tagHelperOutput,
             IHtmlContent childContent,
-            out bool haveError)
+            out bool haveError
+        )
         {
             var contentBuilder = new HtmlContentBuilder();
 
@@ -773,7 +790,8 @@ public class FormGroupTagHelperBaseTests
             return contentBuilder;
         }
 
-        private protected override string ResolveIdPrefix() => Id ?? throw new InvalidOperationException("Id has not been set.");
+        private protected override string ResolveIdPrefix() =>
+            Id ?? throw new InvalidOperationException("Id has not been set.");
     }
 
     private class TestFormGroupContext : FormGroupContext
@@ -793,9 +811,8 @@ public class FormGroupTagHelperBaseTests
             string fieldsetTagName,
             string legendTagName,
             AttributeDictionary attributes,
-            ModelExpression? aspFor)
-            : base(fieldsetTagName, legendTagName, attributes, aspFor)
-        {
-        }
+            ModelExpression? aspFor
+        )
+            : base(fieldsetTagName, legendTagName, attributes, aspFor) { }
     }
 }

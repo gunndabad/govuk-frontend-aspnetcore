@@ -11,20 +11,14 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
-                var attributes = options.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                var labelOptions = options.Label != null ?
-                    options.Label with { For = options.Id } :
-                    null;
+                var labelOptions = options.Label != null ? options.Label with { For = options.Id } : null;
 
-                var hintOptions = options.Hint != null ?
-                    options.Hint with { Id = options.Id + "-hint" } :
-                    null;
+                var hintOptions = options.Hint != null ? options.Hint with { Id = options.Id + "-hint" } : null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
-                    options.ErrorMessage with { Id = options.Id + "-error" } :
-                    null;
+                var errorMessageOptions =
+                    options.ErrorMessage != null ? options.ErrorMessage with { Id = options.Id + "-error" } : null;
 
                 return GenerateFormGroup(
                     labelOptions,
@@ -42,7 +36,10 @@ public partial class ComponentTests
                             options.Name,
                             describedBy,
                             options.Disabled,
-                            attributes);
-                    });
-            });
+                            attributes
+                        );
+                    }
+                );
+            }
+        );
 }

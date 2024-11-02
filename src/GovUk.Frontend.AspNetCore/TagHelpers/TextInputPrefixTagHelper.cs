@@ -18,9 +18,7 @@ public class TextInputPrefixTagHelper : TagHelper
     /// <summary>
     /// Creates an <see cref="TextInputPrefixTagHelper"/>.
     /// </summary>
-    public TextInputPrefixTagHelper()
-    {
-    }
+    public TextInputPrefixTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -34,7 +32,11 @@ public class TextInputPrefixTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        inputContext.SetPrefix(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString(), output.TagName);
+        inputContext.SetPrefix(
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent.ToHtmlString(),
+            output.TagName
+        );
 
         output.SuppressOutput();
     }

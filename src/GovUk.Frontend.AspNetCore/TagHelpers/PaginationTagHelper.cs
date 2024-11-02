@@ -14,7 +14,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     PaginationPreviousTagHelper.TagName,
     PaginationItemTagHelper.TagName,
     PaginationEllipsisItemTagHelper.TagName,
-    PaginationNextTagHelper.TagName)]
+    PaginationNextTagHelper.TagName
+)]
 [OutputElementHint(ComponentGenerator.PaginationElement)]
 public class PaginationTagHelper : TagHelper
 {
@@ -29,9 +30,7 @@ public class PaginationTagHelper : TagHelper
     /// Creates a new <see cref="PaginationTagHelper"/>.
     /// </summary>
     public PaginationTagHelper()
-        : this(htmlGenerator: null)
-    {
-    }
+        : this(htmlGenerator: null) { }
 
     internal PaginationTagHelper(IGovUkHtmlGenerator? htmlGenerator)
     {
@@ -68,7 +67,8 @@ public class PaginationTagHelper : TagHelper
             paginationContext.Previous,
             paginationContext.Next,
             LandmarkLabel,
-            output.Attributes.ToAttributeDictionary());
+            output.Attributes.ToAttributeDictionary()
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

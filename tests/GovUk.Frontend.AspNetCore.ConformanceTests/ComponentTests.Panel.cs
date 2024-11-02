@@ -8,9 +8,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 public partial class ComponentTests
 {
     [Theory]
-    [ComponentFixtureData(
-        "panel",
-        typeof(OptionsJson.Panel))]
+    [ComponentFixtureData("panel", typeof(OptionsJson.Panel))]
     public void Panel(ComponentTestCaseData<OptionsJson.Panel> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
@@ -20,10 +18,9 @@ public partial class ComponentTests
                 var titleContent = TextOrHtmlHelper.GetHtmlContent(options.TitleText, options.TitleHtml);
                 var content = TextOrHtmlHelper.GetHtmlContent(options.Text, options.Html);
 
-                var attributes = options.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                return generator.GeneratePanel(headingLevel, titleContent, content, attributes)
-                    .ToHtmlString();
-            });
+                return generator.GeneratePanel(headingLevel, titleContent, content, attributes).ToHtmlString();
+            }
+        );
 }

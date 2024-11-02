@@ -16,7 +16,8 @@ internal class RadiosItemContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 RadiosItemConditionalTagHelper.TagName,
-                RadiosItemTagHelper.TagName);
+                RadiosItemTagHelper.TagName
+            );
         }
 
         Conditional = (attributes, content);
@@ -30,14 +31,16 @@ internal class RadiosItemContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 RadiosItemHintTagHelper.TagName,
-                RadiosItemTagHelper.TagName);
+                RadiosItemTagHelper.TagName
+            );
         }
 
         if (Conditional != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 RadiosItemHintTagHelper.TagName,
-                RadiosItemConditionalTagHelper.TagName);
+                RadiosItemConditionalTagHelper.TagName
+            );
         }
 
         Hint = (attributes, content);

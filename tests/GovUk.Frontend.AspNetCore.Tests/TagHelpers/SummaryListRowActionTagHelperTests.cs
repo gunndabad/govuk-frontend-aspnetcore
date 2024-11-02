@@ -22,27 +22,23 @@ public class SummaryListRowActionTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-actions",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "#" }
-            },
+            attributes: new TagHelperAttributeList() { { "href", "#" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Change");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new SummaryListRowActionTagHelper()
-        {
-            VisuallyHiddenText = "vht"
-        };
+        var tagHelper = new SummaryListRowActionTagHelper() { VisuallyHiddenText = "vht" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -61,7 +57,9 @@ public class SummaryListRowActionTagHelperTests
                     {
                         Assert.Equal("href", kvp.Key);
                         Assert.Equal("#", kvp.Value);
-                    });
-            });
+                    }
+                );
+            }
+        );
     }
 }

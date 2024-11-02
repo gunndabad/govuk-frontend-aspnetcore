@@ -25,21 +25,20 @@ public class SummaryListRowActionsTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-actions",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", "additional-class" }
-            },
+            attributes: new TagHelperAttributeList() { { "class", "additional-class" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowActionsTagHelper();
 
@@ -54,7 +53,8 @@ public class SummaryListRowActionsTagHelperTests
             {
                 Assert.Equal("class", kvp.Key);
                 Assert.Equal("additional-class", kvp.Value);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -72,21 +72,20 @@ public class SummaryListRowActionsTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-actions",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", "additional-class" }
-            },
+            attributes: new TagHelperAttributeList() { { "class", "additional-class" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowActionsTagHelper();
 
@@ -95,7 +94,10 @@ public class SummaryListRowActionsTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-summary-list-row-actions> element is permitted within each <govuk-summary-list-row>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-summary-list-row-actions> element is permitted within each <govuk-summary-list-row>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -105,10 +107,7 @@ public class SummaryListRowActionsTagHelperTests
         var summaryListContext = new SummaryListContext();
 
         var rowContext = new SummaryListRowContext();
-        rowContext.AddAction(new HtmlGeneration.SummaryListAction()
-        {
-            Content = new HtmlString("Action")
-        });
+        rowContext.AddAction(new HtmlGeneration.SummaryListAction() { Content = new HtmlString("Action") });
 
         var context = new TagHelperContext(
             tagName: "govuk-summary-list-row-actions",
@@ -116,21 +115,20 @@ public class SummaryListRowActionsTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(SummaryListContext), summaryListContext },
-                { typeof(SummaryListRowContext), rowContext }
+                { typeof(SummaryListRowContext), rowContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row-actions",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", "additional-class" }
-            },
+            attributes: new TagHelperAttributeList() { { "class", "additional-class" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowActionsTagHelper();
 
@@ -139,6 +137,9 @@ public class SummaryListRowActionsTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-summary-list-row-actions> must be specified before <govuk-summary-list-row-action>.", ex.Message);
+        Assert.Equal(
+            "<govuk-summary-list-row-actions> must be specified before <govuk-summary-list-row-action>.",
+            ex.Message
+        );
     }
 }

@@ -22,7 +22,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     ErrorMessageTagName,
     DateInputItemTagHelper.DayTagName,
     DateInputItemTagHelper.MonthTagName,
-    DateInputItemTagHelper.YearTagName)]
+    DateInputItemTagHelper.YearTagName
+)]
 [OutputElementHint(ComponentGenerator.FormGroupElement)]
 public class DateInputTagHelper : FormGroupTagHelperBase
 {
@@ -51,22 +52,23 @@ public class DateInputTagHelper : FormGroupTagHelperBase
     /// </summary>
     public DateInputTagHelper(
         IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
-        DateInputParseErrorsProvider dateInputParseErrorsProvider)
-        : this(optionsAccessor, dateInputParseErrorsProvider, htmlGenerator: null, modelHelper: null)
-    {
-    }
+        DateInputParseErrorsProvider dateInputParseErrorsProvider
+    )
+        : this(optionsAccessor, dateInputParseErrorsProvider, htmlGenerator: null, modelHelper: null) { }
 
     internal DateInputTagHelper(
         IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
         DateInputParseErrorsProvider dateInputParseErrorsProvider,
         IGovUkHtmlGenerator? htmlGenerator = null,
-        IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
+        IModelHelper? modelHelper = null
+    )
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper())
     {
         _options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
-        _dateInputParseErrorsProvider = Guard.ArgumentNotNull(nameof(dateInputParseErrorsProvider), dateInputParseErrorsProvider);
+        _dateInputParseErrorsProvider = Guard.ArgumentNotNull(
+            nameof(dateInputParseErrorsProvider),
+            dateInputParseErrorsProvider
+        );
     }
 
     /// <summary>
@@ -119,7 +121,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var dateInputContext = tagHelperContext.GetContextItem<DateInputContext>();
 
@@ -149,11 +152,13 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             return Generator.GenerateFieldset(
                 DescribedBy,
                 role: "group",
-                dateInputContext.Fieldset.Legend?.IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
+                dateInputContext.Fieldset.Legend?.IsPageHeading
+                    ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
                 legendContent: resolvedFieldsetLegendContent,
                 legendAttributes: dateInputContext.Fieldset.Legend?.Attributes,
                 content: contentBuilder,
-                attributes: dateInputContext.Fieldset.Attributes);
+                attributes: dateInputContext.Fieldset.Attributes
+            );
         }
         else
         {
@@ -167,9 +172,10 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         var errorItems = GetErrorComponents(dateInputContext);
         Debug.Assert(errorItems != DateInputErrorComponents.None);
 
-        var suffix = errorItems.HasFlag(DateInputErrorComponents.Day) ? DefaultDayItemName :
-            errorItems.HasFlag(DateInputErrorComponents.Month) ? DefaultMonthItemName :
-            DefaultYearItemName;
+        var suffix =
+            errorItems.HasFlag(DateInputErrorComponents.Day) ? DefaultDayItemName
+            : errorItems.HasFlag(DateInputErrorComponents.Month) ? DefaultMonthItemName
+            : DefaultYearItemName;
 
         return $"{ResolveIdPrefix()}.{suffix}";
     }
@@ -181,10 +187,11 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             ThrowHelper.AtLeastOneOfAttributesMustBeSpecified(AspForAttributeName, IdAttributeName);
         }
 
-        return Id ??
-            TagBuilder.CreateSanitizedId(
+        return Id
+            ?? TagBuilder.CreateSanitizedId(
                 ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
-                Constants.IdAttributeDotReplacement);
+                Constants.IdAttributeDotReplacement
+            );
     }
 
     private TagBuilder GenerateDateInput(DateInputContext dateInputContext, bool haveError)
@@ -193,9 +200,10 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         var resolvedName = AspFor != null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor.Name) : null;
 
         // This is a deliberate deviation from the GDS implementation so it works better with ASP.NET Core's model binding system
-        var resolvedNamePrefix = NamePrefix != null ? NamePrefix + "." :
-            resolvedName != null ? resolvedName + "." :
-            string.Empty;
+        var resolvedNamePrefix =
+            NamePrefix != null ? NamePrefix + "."
+            : resolvedName != null ? resolvedName + "."
+            : string.Empty;
 
         var dateInputModelConverters = _options.DateInputModelConverters;
 
@@ -208,7 +216,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             defaultName: DefaultDayItemName,
             defaultClass: "govuk-input--width-2",
             DateInputErrorComponents.Day,
-            contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Day));
+            contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Day)
+        );
 
         var month = CreateDateInputItem(
             getComponentFromValue: date => date?.Month.ToString(),
@@ -216,7 +225,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             defaultName: DefaultMonthItemName,
             defaultClass: "govuk-input--width-2",
             DateInputErrorComponents.Month,
-            contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Month));
+            contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Month)
+        );
 
         var year = CreateDateInputItem(
             getComponentFromValue: date => date?.Year.ToString(),
@@ -224,7 +234,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             defaultName: DefaultYearItemName,
             defaultClass: "govuk-input--width-4",
             DateInputErrorComponents.Year,
-            contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Year));
+            contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Year)
+        );
 
         return Generator.GenerateDateInput(
             resolvedId,
@@ -232,7 +243,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             day,
             month,
             year,
-            DateInputAttributes.ToAttributeDictionary());
+            DateInputAttributes.ToAttributeDictionary()
+        );
 
         DateInputItem CreateDateInputItem(
             Func<DateOnly?, string?> getComponentFromValue,
@@ -240,7 +252,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             string defaultName,
             string defaultClass,
             DateInputErrorComponents errorSource,
-            DateInputContextItem? contextItem)
+            DateInputContextItem? contextItem
+        )
         {
             // Value resolution hierarchy:
             //   if Value has been set on a child tag helper e.g. <date-input-day /> then use that;
@@ -250,15 +263,17 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
             var resolvedItemName = resolvedNamePrefix + (contextItem?.Name ?? defaultName);
 
-            var resolvedItemValue = contextItem?.ValueSpecified == true ? (contextItem.Value?.ToString() ?? string.Empty) :
-                _valueSpecified ? getComponentFromValue(valueAsDate) :
-                contextItem?.ValueSpecified == true ? contextItem.Value?.ToString() :
-                AspFor != null ? GetValueFromModelState() :
-                null;
+            var resolvedItemValue =
+                contextItem?.ValueSpecified == true ? (contextItem.Value?.ToString() ?? string.Empty)
+                : _valueSpecified ? getComponentFromValue(valueAsDate)
+                : contextItem?.ValueSpecified == true ? contextItem.Value?.ToString()
+                : AspFor != null ? GetValueFromModelState()
+                : null;
 
             var resolvedItemId = contextItem?.Id ?? $"{resolvedId}.{contextItem?.Name ?? defaultName}";
 
-            var resolvedItemLabel = contextItem?.LabelContent ?? new HtmlString(HtmlEncoder.Default.Encode(defaultLabel));
+            var resolvedItemLabel =
+                contextItem?.LabelContent ?? new HtmlString(HtmlEncoder.Default.Encode(defaultLabel));
 
             var resolvedItemHaveError = haveError && (errorItems & errorSource) != 0;
 
@@ -279,7 +294,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
                 LabelContent = resolvedItemLabel,
                 LabelAttributes = contextItem?.LabelAttributes?.ToAttributeDictionary(),
                 Pattern = contextItem?.Pattern,
-                Value = resolvedItemValue
+                Value = resolvedItemValue,
             };
 
             string? GetValueFromModelState()
@@ -297,8 +312,10 @@ public class DateInputTagHelper : FormGroupTagHelperBase
                 var expression = $"{AspFor.Name}.{defaultName}";
                 var modelStateKey = ModelHelper.GetFullHtmlFieldName(ViewContext!, expression);
 
-                if (ViewContext!.ModelState.TryGetValue(modelStateKey, out var modelStateEntry) &&
-                    modelStateEntry.AttemptedValue != null)
+                if (
+                    ViewContext!.ModelState.TryGetValue(modelStateKey, out var modelStateEntry)
+                    && modelStateEntry.AttemptedValue != null
+                )
                 {
                     return modelStateEntry.AttemptedValue;
                 }
@@ -333,7 +350,8 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             Debug.Assert(AspFor != null);
 
             var modelValue = AspFor!.Model;
-            var underlyingModelType = Nullable.GetUnderlyingType(AspFor.ModelExplorer.ModelType) ?? AspFor.ModelExplorer.ModelType;
+            var underlyingModelType =
+                Nullable.GetUnderlyingType(AspFor.ModelExplorer.ModelType) ?? AspFor.ModelExplorer.ModelType;
 
             if (modelValue is null)
             {

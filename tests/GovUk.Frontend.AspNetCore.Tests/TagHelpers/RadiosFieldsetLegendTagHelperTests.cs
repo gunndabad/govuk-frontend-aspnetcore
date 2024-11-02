@@ -19,11 +19,9 @@ public class RadiosFieldsetLegendTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-fieldset-legend",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosFieldsetContext), fieldsetContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosFieldsetContext), fieldsetContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-fieldset-legend",
@@ -33,12 +31,10 @@ public class RadiosFieldsetLegendTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Legend content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosFieldsetLegendTagHelper()
-        {
-            IsPageHeading = true
-        };
+        var tagHelper = new RadiosFieldsetLegendTagHelper() { IsPageHeading = true };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -54,19 +50,14 @@ public class RadiosFieldsetLegendTagHelperTests
         // Arrange
         var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
 
-        fieldsetContext.SetLegend(
-            isPageHeading: false,
-            attributes: null,
-            content: new HtmlString("Existing legend"));
+        fieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
 
         var context = new TagHelperContext(
             tagName: "govuk-radios-fieldset-legend",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosFieldsetContext), fieldsetContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosFieldsetContext), fieldsetContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-fieldset-legend",
@@ -76,18 +67,19 @@ public class RadiosFieldsetLegendTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Legend content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new RadiosFieldsetLegendTagHelper()
-        {
-            IsPageHeading = true
-        };
+        var tagHelper = new RadiosFieldsetLegendTagHelper() { IsPageHeading = true };
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-radios-fieldset-legend> element is permitted within each <govuk-radios-fieldset>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-radios-fieldset-legend> element is permitted within each <govuk-radios-fieldset>.",
+            ex.Message
+        );
     }
 }

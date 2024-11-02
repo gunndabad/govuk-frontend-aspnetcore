@@ -29,12 +29,18 @@ public class ButtonOptions
 
         if (Element == "input" && IsStartButton == true)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(IsStartButton)} cannot be specified for 'input' elements.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(IsStartButton)} cannot be specified for 'input' elements."
+            );
         }
 
         if (Element != "button" && PreventDoubleClick == true)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(PreventDoubleClick)} can only be specified for 'button' elements.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(PreventDoubleClick)} can only be specified for 'button' elements."
+            );
         }
 
         if (Element == "a" && Disabled is not null)

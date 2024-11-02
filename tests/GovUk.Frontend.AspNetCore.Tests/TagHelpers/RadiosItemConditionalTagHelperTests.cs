@@ -17,11 +17,9 @@ public class RadiosItemConditionalTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item-Conditional",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosItemContext), radiosItemContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosItemContext), radiosItemContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item-Conditional",
@@ -31,7 +29,8 @@ public class RadiosItemConditionalTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Conditional");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosItemConditionalTagHelper();
 

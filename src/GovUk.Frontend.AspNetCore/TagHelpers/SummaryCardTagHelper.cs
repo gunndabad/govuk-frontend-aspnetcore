@@ -21,9 +21,7 @@ public class SummaryCardTagHelper : TagHelper
     /// Creates a new <see cref="SummaryCardTagHelper"/>.
     /// </summary>
     public SummaryCardTagHelper()
-        : this(htmlGenerator: null)
-    {
-    }
+        : this(htmlGenerator: null) { }
 
     internal SummaryCardTagHelper(IGovUkHtmlGenerator? htmlGenerator)
     {
@@ -49,13 +47,10 @@ public class SummaryCardTagHelper : TagHelper
                 HeadingLevel = cardContext.Title?.HeadingLevel,
                 Attributes = cardContext.Title?.Attributes,
             },
-            new SummaryListActions()
-            {
-                Attributes = cardContext.ActionsAttributes,
-                Items = cardContext.Actions
-            },
+            new SummaryListActions() { Attributes = cardContext.ActionsAttributes, Items = cardContext.Actions },
             cardContext.SummaryList,
-            output.Attributes.ToAttributeDictionary());
+            output.Attributes.ToAttributeDictionary()
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

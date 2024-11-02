@@ -19,11 +19,9 @@ public class RadiosFieldsetTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-fieldset",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-fieldset",
@@ -35,7 +33,8 @@ public class RadiosFieldsetTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosFieldsetTagHelper();
 
@@ -55,17 +54,19 @@ public class RadiosFieldsetTagHelperTests
 
         radiosContext.OpenFieldset();
         var radiosFieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
-        radiosFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
+        radiosFieldsetContext.SetLegend(
+            isPageHeading: false,
+            attributes: null,
+            content: new HtmlString("Existing legend")
+        );
         radiosContext.CloseFieldset(radiosFieldsetContext);
 
         var context = new TagHelperContext(
             tagName: "govuk-radios-fieldset",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosContext), radiosContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosContext), radiosContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-fieldset",
@@ -77,7 +78,8 @@ public class RadiosFieldsetTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosFieldsetTagHelper();
 

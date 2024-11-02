@@ -21,7 +21,8 @@ internal partial class ComponentGenerator
         string? describedBy,
         bool hasFieldset,
         IEnumerable<CheckboxesItemBase> items,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(items), items);
 
@@ -59,7 +60,8 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItemDivider.Content)} cannot be null.",
                 divider.Content,
-                divider.Content != null);
+                divider.Content != null
+            );
 
             var dividerTagBuilder = new TagBuilder(CheckboxesDividerItemElement);
             dividerTagBuilder.MergeOptionalAttributes(divider.Attributes);
@@ -75,17 +77,20 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Value)} cannot be null.",
                 item.Value,
-                item.Value != null);
+                item.Value != null
+            );
 
             Guard.ArgumentValid(
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Name)} cannot be null when {nameof(name)} is null.",
-                item.Name != null || name != null);
+                item.Name != null || name != null
+            );
 
             Guard.ArgumentValid(
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Id)} cannot be null when {nameof(idPrefix)} is null.",
-                item.Id != null || idPrefix != null);
+                item.Id != null || idPrefix != null
+            );
 
             var itemId = item.Id ?? (itemIndex == 0 ? idPrefix : $"{idPrefix}-{itemIndex + 1}");
             var hintId = itemId + "-item-hint";
@@ -153,7 +158,8 @@ internal partial class ComponentGenerator
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Hint)}.{nameof(CheckboxesItemHint.Content)} cannot be null.",
                     item.Hint.Content,
-                    item.Hint.Content != null);
+                    item.Hint.Content != null
+                );
 
                 var hint = GenerateHint(hintId, item.Hint.Content, item.Hint.Attributes);
                 hint.MergeCssClass("govuk-checkboxes__hint");
@@ -168,7 +174,8 @@ internal partial class ComponentGenerator
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Conditional.Content)} cannot be null.",
                     item.Conditional.Content,
-                    item.Conditional.Content != null);
+                    item.Conditional.Content != null
+                );
 
                 var conditional = new TagBuilder("div");
                 conditional.MergeOptionalAttributes(item.Conditional.Attributes);

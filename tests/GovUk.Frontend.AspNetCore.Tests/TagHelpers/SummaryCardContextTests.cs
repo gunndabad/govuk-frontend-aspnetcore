@@ -16,11 +16,16 @@ public class SummaryCardContextTests
         context.SetTitle(new HtmlString("Existing title"), headingLevel: 3, attributes: new AttributeDictionary());
 
         // Act
-        var ex = Record.Exception(() => context.SetTitle(new HtmlString("New title"), headingLevel: 3, attributes: new AttributeDictionary()));
+        var ex = Record.Exception(
+            () => context.SetTitle(new HtmlString("New title"), headingLevel: 3, attributes: new AttributeDictionary())
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-summary-card-title> element is permitted within each <govuk-summary-card>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-summary-card-title> element is permitted within each <govuk-summary-card>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -31,7 +36,9 @@ public class SummaryCardContextTests
         context.SetActionsAttributes(new AttributeDictionary());
 
         // Act
-        var ex = Record.Exception(() => context.SetTitle(new HtmlString("New title"), headingLevel: 3, attributes: new AttributeDictionary()));
+        var ex = Record.Exception(
+            () => context.SetTitle(new HtmlString("New title"), headingLevel: 3, attributes: new AttributeDictionary())
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -46,7 +53,9 @@ public class SummaryCardContextTests
         context.SetSummaryList(new HtmlString("<div></div>"));
 
         // Act
-        var ex = Record.Exception(() => context.SetTitle(new HtmlString("New title"), headingLevel: 3, attributes: new AttributeDictionary()));
+        var ex = Record.Exception(
+            () => context.SetTitle(new HtmlString("New title"), headingLevel: 3, attributes: new AttributeDictionary())
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -61,12 +70,17 @@ public class SummaryCardContextTests
         context.SetSummaryList(new HtmlString("<div></div>"));
 
         // Act
-        var ex = Record.Exception(() => context.AddAction(new HtmlGeneration.SummaryListAction()
-        {
-            Attributes = new AttributeDictionary(),
-            Content = new HtmlString("Action"),
-            VisuallyHiddenText = "vht"
-        }));
+        var ex = Record.Exception(
+            () =>
+                context.AddAction(
+                    new HtmlGeneration.SummaryListAction()
+                    {
+                        Attributes = new AttributeDictionary(),
+                        Content = new HtmlString("Action"),
+                        VisuallyHiddenText = "vht",
+                    }
+                )
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -85,7 +99,10 @@ public class SummaryCardContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-summary-card-actions> element is permitted within each <govuk-summary-card>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-summary-card-actions> element is permitted within each <govuk-summary-card>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -93,12 +110,14 @@ public class SummaryCardContextTests
     {
         // Arrange
         var context = new SummaryCardContext();
-        context.AddAction(new HtmlGeneration.SummaryListAction()
-        {
-            Attributes = new AttributeDictionary(),
-            Content = new HtmlString("Action"),
-            VisuallyHiddenText = "vht"
-        });
+        context.AddAction(
+            new HtmlGeneration.SummaryListAction()
+            {
+                Attributes = new AttributeDictionary(),
+                Content = new HtmlString("Action"),
+                VisuallyHiddenText = "vht",
+            }
+        );
 
         // Act
         var ex = Record.Exception(() => context.SetActionsAttributes(new AttributeDictionary()));
@@ -135,6 +154,9 @@ public class SummaryCardContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-summary-list> element is permitted within each <govuk-summary-card>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-summary-list> element is permitted within each <govuk-summary-card>.",
+            ex.Message
+        );
     }
 }

@@ -19,7 +19,8 @@ internal class DateInputModelConverterModelBinder : IModelBinder
 
     public DateInputModelConverterModelBinder(
         DateInputModelConverter dateInputModelConverter,
-        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor
+    )
     {
         _dateInputModelConverter = Guard.ArgumentNotNull(nameof(dateInputModelConverter), dateInputModelConverter);
         _optionsAccessor = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor);
@@ -43,9 +44,17 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         var monthValueProviderResult = bindingContext.ValueProvider.GetValue(monthModelName);
         var yearValueProviderResult = bindingContext.ValueProvider.GetValue(yearModelName);
 
-        if ((dayValueProviderResult == ValueProviderResult.None || dayValueProviderResult.FirstValue == string.Empty) &&
-            (monthValueProviderResult == ValueProviderResult.None || monthValueProviderResult.FirstValue == string.Empty) &&
-            (yearValueProviderResult == ValueProviderResult.None || yearValueProviderResult.FirstValue == string.Empty))
+        if (
+            (dayValueProviderResult == ValueProviderResult.None || dayValueProviderResult.FirstValue == string.Empty)
+            && (
+                monthValueProviderResult == ValueProviderResult.None
+                || monthValueProviderResult.FirstValue == string.Empty
+            )
+            && (
+                yearValueProviderResult == ValueProviderResult.None
+                || yearValueProviderResult.FirstValue == string.Empty
+            )
+        )
         {
             return Task.CompletedTask;
         }
@@ -55,7 +64,8 @@ internal class DateInputModelConverterModelBinder : IModelBinder
             monthValueProviderResult.FirstValue,
             yearValueProviderResult.FirstValue,
             _optionsAccessor.Value.AcceptMonthNamesInDateInputs,
-            out var date);
+            out var date
+        );
 
         if (parseErrors == DateInputParseErrors.None)
         {
@@ -65,7 +75,8 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         }
         else
         {
-            var parseErrorsProvider = bindingContext.HttpContext.RequestServices.GetRequiredService<DateInputParseErrorsProvider>();
+            var parseErrorsProvider =
+                bindingContext.HttpContext.RequestServices.GetRequiredService<DateInputParseErrorsProvider>();
             parseErrorsProvider.SetErrorsForModel(bindingContext.ModelName, parseErrors);
 
             bindingContext.ModelState.SetModelValue(dayModelName, dayValueProviderResult);
@@ -95,13 +106,23 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         // (see Microsoft.AspNetCore.Mvc.ModelBinding.Metadata.ModelBindingMessageProvider)
 
         Debug.Assert(parseErrors != DateInputParseErrors.None);
-        Debug.Assert(parseErrors != (DateInputParseErrors.MissingDay | DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingYear));
+        Debug.Assert(
+            parseErrors
+                != (
+                    DateInputParseErrors.MissingDay
+                    | DateInputParseErrors.MissingMonth
+                    | DateInputParseErrors.MissingYear
+                )
+        );
 
-        var dateInputModelMetadata = modelMetadata.AdditionalValues.TryGetValue(typeof(DateInputModelMetadata), out var metadataObj) &&
-            metadataObj is DateInputModelMetadata dimm ? dimm :
-            null;
+        var dateInputModelMetadata =
+            modelMetadata.AdditionalValues.TryGetValue(typeof(DateInputModelMetadata), out var metadataObj)
+            && metadataObj is DateInputModelMetadata dimm
+                ? dimm
+                : null;
 
-        var displayName = dateInputModelMetadata?.ErrorMessagePrefix ?? modelMetadata.DisplayName ?? modelMetadata.PropertyName;
+        var displayName =
+            dateInputModelMetadata?.ErrorMessagePrefix ?? modelMetadata.DisplayName ?? modelMetadata.PropertyName;
 
         var missingFields = new List<string>();
 
@@ -128,14 +149,22 @@ internal class DateInputModelConverterModelBinder : IModelBinder
     }
 
     // internal for testing
-    internal static DateInputParseErrors Parse(string? day, string? month, string? year, bool acceptMonthNames, out DateOnly? date)
+    internal static DateInputParseErrors Parse(
+        string? day,
+        string? month,
+        string? year,
+        bool acceptMonthNames,
+        out DateOnly? date
+    )
     {
         day ??= string.Empty;
         month ??= string.Empty;
         year ??= string.Empty;
 
         var errors = DateInputParseErrors.None;
-        int parsedYear = 0, parsedMonth = 0, parsedDay = 0;
+        int parsedYear = 0,
+            parsedMonth = 0,
+            parsedDay = 0;
 
         if (string.IsNullOrEmpty(year))
         {
@@ -159,8 +188,12 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         {
             errors |= DateInputParseErrors.MissingDay;
         }
-        else if (!TryParseDay(day, out parsedDay) || parsedDay < 1 || parsedDay > 31 ||
-            (errors == DateInputParseErrors.None && parsedDay > DateTime.DaysInMonth(parsedYear, parsedMonth)))
+        else if (
+            !TryParseDay(day, out parsedDay)
+            || parsedDay < 1
+            || parsedDay > 31
+            || (errors == DateInputParseErrors.None && parsedDay > DateTime.DaysInMonth(parsedYear, parsedMonth))
+        )
         {
             errors |= DateInputParseErrors.InvalidDay;
         }
@@ -205,7 +238,7 @@ internal class DateInputModelConverterModelBinder : IModelBinder
                     "november" => 11,
                     "dec" => 12,
                     "december" => 12,
-                    _ => 0
+                    _ => 0,
                 };
             }
 

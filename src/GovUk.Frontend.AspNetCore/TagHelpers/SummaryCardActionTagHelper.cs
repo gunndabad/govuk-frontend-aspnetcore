@@ -32,12 +32,14 @@ public class SummaryCardActionTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        cardContext.AddAction(new SummaryListAction()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot(),
-            VisuallyHiddenText = VisuallyHiddenText
-        });
+        cardContext.AddAction(
+            new SummaryListAction()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Content = childContent.Snapshot(),
+                VisuallyHiddenText = VisuallyHiddenText,
+            }
+        );
 
         output.SuppressOutput();
     }

@@ -8,7 +8,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the fieldset in a GDS checkboxes component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = CheckboxesTagHelper.TagName)]
-[RestrictChildren(CheckboxesFieldsetLegendTagHelper.TagName, CheckboxesItemTagHelper.TagName, CheckboxesItemDividerTagHelper.TagName, CheckboxesTagHelper.HintTagName, CheckboxesTagHelper.ErrorMessageTagName)]
+[RestrictChildren(
+    CheckboxesFieldsetLegendTagHelper.TagName,
+    CheckboxesItemTagHelper.TagName,
+    CheckboxesItemDividerTagHelper.TagName,
+    CheckboxesTagHelper.HintTagName,
+    CheckboxesTagHelper.ErrorMessageTagName
+)]
 [OutputElementHint(ComponentGenerator.FieldsetElement)]
 public class CheckboxesFieldsetTagHelper : TagHelper
 {
@@ -20,7 +26,10 @@ public class CheckboxesFieldsetTagHelper : TagHelper
         var checkboxesContext = context.GetContextItem<CheckboxesContext>();
         checkboxesContext.OpenFieldset();
 
-        var fieldsetContext = new CheckboxesFieldsetContext(output.Attributes.ToAttributeDictionary(), checkboxesContext.AspFor);
+        var fieldsetContext = new CheckboxesFieldsetContext(
+            output.Attributes.ToAttributeDictionary(),
+            checkboxesContext.AspFor
+        );
 
         using (context.SetScopedContextItem(fieldsetContext))
         {

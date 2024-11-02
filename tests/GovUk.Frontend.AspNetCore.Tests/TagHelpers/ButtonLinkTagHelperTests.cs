@@ -26,7 +26,8 @@ public class ButtonLinkTagHelperTests
             tagName: "govuk-button-link",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-button-link",
@@ -41,11 +42,14 @@ public class ButtonLinkTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ButtonOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>()))
+            .Callback<ButtonOptions>(o => actualOptions = o);
 
         var tagHelper = new ButtonLinkTagHelper(componentGeneratorMock.Object)
         {
@@ -68,11 +72,14 @@ public class ButtonLinkTagHelperTests
         Assert.Equal(href, actualOptions.Href);
         Assert.Equal(classes, actualOptions.Classes);
         Assert.NotNull(actualOptions.Attributes);
-        Assert.Collection(actualOptions.Attributes, kvp =>
-        {
-            Assert.Equal("data-foo", kvp.Key);
-            Assert.Equal(dataFooAttrValue, kvp.Value);
-        });
+        Assert.Collection(
+            actualOptions.Attributes,
+            kvp =>
+            {
+                Assert.Equal("data-foo", kvp.Key);
+                Assert.Equal(dataFooAttrValue, kvp.Value);
+            }
+        );
         Assert.Null(actualOptions.PreventDoubleClick);
         Assert.Equal(isStartButton, actualOptions.IsStartButton);
         Assert.Equal(id, actualOptions.Id);

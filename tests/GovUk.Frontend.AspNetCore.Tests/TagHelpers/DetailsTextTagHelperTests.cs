@@ -21,11 +21,9 @@ public class DetailsTextTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-details-text",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DetailsContext), detailsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DetailsContext), detailsContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-details-text",
@@ -35,7 +33,8 @@ public class DetailsTextTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(textContent);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DetailsTextTagHelper();
 
@@ -57,11 +56,9 @@ public class DetailsTextTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-details-text",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DetailsContext), detailsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DetailsContext), detailsContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-details-text",
@@ -71,7 +68,8 @@ public class DetailsTextTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The text");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DetailsTextTagHelper();
 

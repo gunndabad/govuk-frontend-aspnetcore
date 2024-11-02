@@ -39,7 +39,8 @@ internal class SelectContext : FormGroupContext
     public override void SetErrorMessage(
         string? visuallyHiddenText,
         AttributeDictionary? attributes,
-        IHtmlContent? content)
+        IHtmlContent? content
+    )
     {
         if (_items.Count != 0)
         {

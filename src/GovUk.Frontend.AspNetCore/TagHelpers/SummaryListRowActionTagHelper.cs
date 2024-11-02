@@ -33,12 +33,14 @@ public class SummaryListRowActionTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        summaryListRowContext.AddAction(new SummaryListAction()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot(),
-            VisuallyHiddenText = VisuallyHiddenText
-        });
+        summaryListRowContext.AddAction(
+            new SummaryListAction()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Content = childContent.Snapshot(),
+                VisuallyHiddenText = VisuallyHiddenText,
+            }
+        );
 
         output.SuppressOutput();
     }

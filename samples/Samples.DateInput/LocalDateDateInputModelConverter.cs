@@ -17,8 +17,8 @@ public class LocalDateDateInputModelConverter : DateInputModelConverter
     {
         var localDate = (LocalDate?)model;
 
-        return localDate.HasValue ?
-            new DateOnly(localDate.Value.Year, localDate.Value.Month, localDate.Value.Day) :
-            null;
+        return localDate.HasValue
+            ? new DateOnly(localDate.Value.Year, localDate.Value.Month, localDate.Value.Day)
+            : null;
     }
 }

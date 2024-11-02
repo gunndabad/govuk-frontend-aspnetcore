@@ -19,11 +19,9 @@ public class TextInputSuffixTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-input-suffix",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(TextInputContext), inputContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(TextInputContext), inputContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-input-suffix",
@@ -33,7 +31,8 @@ public class TextInputSuffixTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString(suffix));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new TextInputSuffixTagHelper();
 

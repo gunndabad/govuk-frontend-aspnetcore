@@ -37,14 +37,16 @@ internal class SummaryListRowContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListRowActionsTagHelper.TagName,
-                SummaryListRowTagHelper.TagName);
+                SummaryListRowTagHelper.TagName
+            );
         }
 
         if (_actions.Count > 0)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowActionsTagHelper.TagName,
-                SummaryListRowActionTagHelper.TagName);
+                SummaryListRowActionTagHelper.TagName
+            );
         }
 
         ActionsAttributes = attributes;
@@ -59,28 +61,32 @@ internal class SummaryListRowContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListRowKeyTagHelper.TagName,
-                SummaryListRowTagHelper.TagName);
+                SummaryListRowTagHelper.TagName
+            );
         }
 
         if (Value != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowKeyTagHelper.TagName,
-                SummaryListRowValueTagHelper.TagName);
+                SummaryListRowValueTagHelper.TagName
+            );
         }
 
         if (ActionsAttributes != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowKeyTagHelper.TagName,
-                SummaryListRowActionsTagHelper.TagName);
+                SummaryListRowActionsTagHelper.TagName
+            );
         }
 
         if (_actions.Count > 0)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowKeyTagHelper.TagName,
-                SummaryListRowActionTagHelper.TagName);
+                SummaryListRowActionTagHelper.TagName
+            );
         }
 
         Key = (attributes, content);
@@ -95,21 +101,24 @@ internal class SummaryListRowContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListRowValueTagHelper.TagName,
-                SummaryListRowTagHelper.TagName);
+                SummaryListRowTagHelper.TagName
+            );
         }
 
         if (ActionsAttributes != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowValueTagHelper.TagName,
-                SummaryListRowActionsTagHelper.TagName);
+                SummaryListRowActionsTagHelper.TagName
+            );
         }
 
         if (_actions.Count > 0)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowValueTagHelper.TagName,
-                SummaryListRowActionTagHelper.TagName);
+                SummaryListRowActionTagHelper.TagName
+            );
         }
 
         Value = (attributes, content);

@@ -16,23 +16,17 @@ public class ContainerErrorSummaryTagHelperTests
     public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions()
-        {
-            PrependErrorSummaryToForms = true
-        });
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions() { PrependErrorSummaryToForms = true });
 
         var disableAutoFocus = true;
-        var errors = new (string Html, string? Href)[]
-        {
-            ("First error", "#Field1"),
-            ("Second error", "#Field2"),
-        };
+        var errors = new (string Html, string? Href)[] { ("First error", "#Field1"), ("Second error", "#Field2") };
 
         var context = new TagHelperContext(
             tagName: "form",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "form",
@@ -48,17 +42,20 @@ public class ContainerErrorSummaryTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>()))
+            .Callback<ErrorSummaryOptions>(o => actualOptions = o);
 
         var tagHelper = new ContainerErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
             DisableAutoFocus = disableAutoFocus,
             PrependErrorSummary = true,
-            ViewContext = new ViewContext()
+            ViewContext = new ViewContext(),
         };
 
         tagHelper.Init(context);
@@ -88,7 +85,8 @@ public class ContainerErrorSummaryTagHelperTests
                 Assert.Equal(errors[1].Html, item.Html);
                 Assert.Equal(errors[1].Href, item.Href);
                 Assert.Null(item.Attributes);
-            });
+            }
+        );
         Assert.Null(actualOptions.Classes);
         Assert.Null(actualOptions.Attributes);
         Assert.Equal(disableAutoFocus, actualOptions.DisableAutoFocus);

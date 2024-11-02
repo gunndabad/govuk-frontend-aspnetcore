@@ -28,18 +28,12 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.AddItem(new PaginationItem()
-        {
-            Number = new HtmlString("1"),
-            IsCurrent = true
-        });
+        context.AddItem(new PaginationItem() { Number = new HtmlString("1"), IsCurrent = true });
 
         // Act
-        var ex = Record.Exception(() => context.AddItem(new PaginationItem()
-        {
-            Number = new HtmlString("2"),
-            IsCurrent = true
-        }));
+        var ex = Record.Exception(
+            () => context.AddItem(new PaginationItem() { Number = new HtmlString("2"), IsCurrent = true })
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -72,7 +66,10 @@ public class PaginationContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-pagination-next> element is permitted within each <govuk-pagination>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-pagination-next> element is permitted within each <govuk-pagination>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -116,7 +113,10 @@ public class PaginationContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-pagination-previous> element is permitted within each <govuk-pagination>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-pagination-previous> element is permitted within each <govuk-pagination>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -124,11 +124,7 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.AddItem(new PaginationItem()
-        {
-            Number = new HtmlString("1"),
-            IsCurrent = true
-        });
+        context.AddItem(new PaginationItem() { Number = new HtmlString("1"), IsCurrent = true });
 
         // Act
         var ex = Record.Exception(() => context.SetPrevious(new PaginationPrevious()));

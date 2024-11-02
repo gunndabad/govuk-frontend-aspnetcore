@@ -13,18 +13,19 @@ internal class DefaultModelHelper : IModelHelper
 
     static DefaultModelHelper()
     {
-        s_getFullHtmlFieldNameDelegate =
-            (GetFullHtmlFieldNameDelegate)typeof(IHtmlGenerator).Assembly
-                .GetType("Microsoft.AspNetCore.Mvc.ViewFeatures.NameAndIdProvider", throwOnError: true)!
-                .GetMethod("GetFullHtmlFieldName", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)!
+        s_getFullHtmlFieldNameDelegate = (GetFullHtmlFieldNameDelegate)
+            typeof(IHtmlGenerator)
+                .Assembly.GetType("Microsoft.AspNetCore.Mvc.ViewFeatures.NameAndIdProvider", throwOnError: true)!
+                .GetMethod(
+                    "GetFullHtmlFieldName",
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static
+                )!
                 .CreateDelegate(typeof(GetFullHtmlFieldNameDelegate));
     }
 
     public virtual string? GetDescription(ModelExplorer modelExplorer) => modelExplorer.Metadata.Description;
 
-    public virtual string? GetDisplayName(
-        ModelExplorer modelExplorer,
-        string expression)
+    public virtual string? GetDisplayName(ModelExplorer modelExplorer, string expression)
     {
         // See https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.ViewFeatures/src/DefaultHtmlGenerator.cs#L427
 
@@ -66,10 +67,7 @@ internal class DefaultModelHelper : IModelHelper
         return value;
     }
 
-    public virtual string? GetValidationMessage(
-        ViewContext viewContext,
-        ModelExplorer modelExplorer,
-        string expression)
+    public virtual string? GetValidationMessage(ViewContext viewContext, ModelExplorer modelExplorer, string expression)
     {
         // See https://github.com/aspnet/AspNetCore/blob/master/src/Mvc/Mvc.ViewFeatures/src/DefaultHtmlGenerator.cs#L795
 

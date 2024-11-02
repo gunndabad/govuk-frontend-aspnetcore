@@ -21,28 +21,63 @@ public partial class DefaultComponentGenerator
         return new HtmlTag(ErrorSummaryElement)
             .AddClass("govuk-error-summary")
             .AddClasses(ExplodeClasses(options.Classes))
-            .AddEncodedAttributeIf(options.DisableAutoFocus.HasValue, "data-disable-auto-focus", options.DisableAutoFocus == true ? "true" : "false")
+            .AddEncodedAttributeIf(
+                options.DisableAutoFocus.HasValue,
+                "data-disable-auto-focus",
+                options.DisableAutoFocus == true ? "true" : "false"
+            )
             .MergeEncodedAttributes(options.Attributes)
             .UnencodedAttr("data-module", "govuk-error-summary")
-            .Append(new HtmlTag("div")
-                .UnencodedAttr("role", "alert")
-                .Append(new HtmlTag(ErrorSummaryTitleElement)
-                    .AddClass("govuk-error-summary__title")
-                    .MergeEncodedAttributes(options.TitleAttributes)
-                    .AppendHtml(GetEncodedTextOrHtml(options.TitleText, options.TitleHtml) ?? ErrorSummaryDefaultTitle))
-                .Append(new HtmlTag("div")
-                    .AddClass("govuk-error-summary__body")
-                    .AppendIf(
-                        options.DescriptionHtml.NormalizeEmptyString() is not null || options.DescriptionText.NormalizeEmptyString() is not null,
-                        () => new HtmlTag(ErrorSummaryDescriptionElement)
-                            .MergeEncodedAttributes(options.DescriptionAttributes)
-                            .AppendHtml(GetEncodedTextOrHtml(options.DescriptionText, options.DescriptionHtml)))
-                    .Append(new HtmlTag("ul")
-                        .AddClasses("govuk-list", "govuk-error-summary__list")
-                        .Append((options.ErrorList ?? Enumerable.Empty<ErrorSummaryOptionsErrorItem>()).Select(item => new HtmlTag(ErrorSummaryItemElement)
-                            .MergeEncodedAttributes(item.ItemAttributes)
-                            .Append((item.Href.NormalizeEmptyString() is not null ? new HtmlTag("a").MergeEncodedAttributes(item.Attributes) : new HtmlTag("").NoTag())
-                                .AddEncodedAttributeIfNotNull("href", item.Href.NormalizeEmptyString())
-                                .AppendHtml(GetEncodedTextOrHtml(item.Text, item.Html))))))));
+            .Append(
+                new HtmlTag("div")
+                    .UnencodedAttr("role", "alert")
+                    .Append(
+                        new HtmlTag(ErrorSummaryTitleElement)
+                            .AddClass("govuk-error-summary__title")
+                            .MergeEncodedAttributes(options.TitleAttributes)
+                            .AppendHtml(
+                                GetEncodedTextOrHtml(options.TitleText, options.TitleHtml) ?? ErrorSummaryDefaultTitle
+                            )
+                    )
+                    .Append(
+                        new HtmlTag("div")
+                            .AddClass("govuk-error-summary__body")
+                            .AppendIf(
+                                options.DescriptionHtml.NormalizeEmptyString() is not null
+                                    || options.DescriptionText.NormalizeEmptyString() is not null,
+                                () =>
+                                    new HtmlTag(ErrorSummaryDescriptionElement)
+                                        .MergeEncodedAttributes(options.DescriptionAttributes)
+                                        .AppendHtml(
+                                            GetEncodedTextOrHtml(options.DescriptionText, options.DescriptionHtml)
+                                        )
+                            )
+                            .Append(
+                                new HtmlTag("ul")
+                                    .AddClasses("govuk-list", "govuk-error-summary__list")
+                                    .Append(
+                                        (options.ErrorList ?? Enumerable.Empty<ErrorSummaryOptionsErrorItem>()).Select(
+                                            item =>
+                                                new HtmlTag(ErrorSummaryItemElement)
+                                                    .MergeEncodedAttributes(item.ItemAttributes)
+                                                    .Append(
+                                                        (
+                                                            item.Href.NormalizeEmptyString() is not null
+                                                                ? new HtmlTag("a").MergeEncodedAttributes(
+                                                                    item.Attributes
+                                                                )
+                                                                : new HtmlTag("").NoTag()
+                                                        )
+                                                            .AddEncodedAttributeIfNotNull(
+                                                                "href",
+                                                                item.Href.NormalizeEmptyString()
+                                                            )
+                                                            .AppendHtml(GetEncodedTextOrHtml(item.Text, item.Html))
+                                                    )
+                                        )
+                                    )
+                            )
+                    )
+            );
     }
 }

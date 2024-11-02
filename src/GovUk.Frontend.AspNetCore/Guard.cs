@@ -17,10 +17,7 @@ internal static class Guard
         return argValue;
     }
 
-    public static T ArgumentNotNull<T>(
-        string argName,
-        string message,
-        [NotNull] T? testValue)
+    public static T ArgumentNotNull<T>(string argName, string message, [NotNull] T? testValue)
         where T : struct
     {
         if (testValue == null)
@@ -59,10 +56,7 @@ internal static class Guard
         return argValue;
     }
 
-    public static void ArgumentValid(
-        string argName,
-        string message,
-        bool test)
+    public static void ArgumentValid(string argName, string message, bool test)
     {
         if (!test)
         {
@@ -70,11 +64,7 @@ internal static class Guard
         }
     }
 
-    public static T ArgumentValidNotNull<T>(
-        string argName,
-        string message,
-        [NotNull] T? testValue,
-        bool test)
+    public static T ArgumentValidNotNull<T>(string argName, string message, [NotNull] T? testValue, bool test)
         where T : class
     {
         if (testValue == null || !test)

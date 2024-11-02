@@ -17,11 +17,9 @@ public class CheckboxesItemHintTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-item-hint",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesItemContext), checkboxesItemContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesItemContext), checkboxesItemContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-item-hint",
@@ -31,7 +29,8 @@ public class CheckboxesItemHintTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Hint");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesItemHintTagHelper();
 

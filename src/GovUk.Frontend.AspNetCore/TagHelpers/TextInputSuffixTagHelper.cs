@@ -18,9 +18,7 @@ public class TextInputSuffixTagHelper : TagHelper
     /// <summary>
     /// Creates an <see cref="TextInputSuffixTagHelper"/>.
     /// </summary>
-    public TextInputSuffixTagHelper()
-    {
-    }
+    public TextInputSuffixTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -34,7 +32,11 @@ public class TextInputSuffixTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        inputContext.SetSuffix(output.Attributes.ToEncodedAttributeDictionary(), childContent.ToHtmlString(), output.TagName);
+        inputContext.SetSuffix(
+            output.Attributes.ToEncodedAttributeDictionary(),
+            childContent.ToHtmlString(),
+            output.TagName
+        );
 
         output.SuppressOutput();
     }

@@ -12,7 +12,5 @@ public class BackLinkOptions
     public string? Classes { get; set; }
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 
-    internal void Validate()
-    {
-    }
+    internal void Validate() { }
 }

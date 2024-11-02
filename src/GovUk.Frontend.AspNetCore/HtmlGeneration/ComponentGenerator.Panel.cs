@@ -16,13 +16,15 @@ internal partial class ComponentGenerator
         int headingLevel,
         IHtmlContent titleContent,
         IHtmlContent? bodyContent,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         if (headingLevel < PanelMinHeadingLevel || headingLevel > PanelMaxHeadingLevel)
         {
             throw new ArgumentOutOfRangeException(
                 $"{nameof(headingLevel)} must be between {PanelMinHeadingLevel} and {PanelMaxHeadingLevel}.",
-                nameof(headingLevel));
+                nameof(headingLevel)
+            );
         }
 
         Guard.ArgumentNotNull(nameof(titleContent), titleContent);

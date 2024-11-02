@@ -24,7 +24,8 @@ internal abstract class FormGroupFieldsetContext2
         string legendTagName,
         ImmutableDictionary<string, string?> attributes,
         ModelExpression? @for,
-        string? describedBy)
+        string? describedBy
+    )
     {
         ArgumentNullException.ThrowIfNull(fieldsetTagName);
         ArgumentNullException.ThrowIfNull(legendTagName);
@@ -40,8 +41,7 @@ internal abstract class FormGroupFieldsetContext2
     {
         ThrowIfNotComplete();
 
-        var legendHtml = Legend?.Html ??
-            modelHelper.GetDisplayName(_for!.ModelExplorer, _for.Name);
+        var legendHtml = Legend?.Html ?? modelHelper.GetDisplayName(_for!.ModelExplorer, _for.Name);
 
         return new FieldsetOptions()
         {
@@ -51,14 +51,17 @@ internal abstract class FormGroupFieldsetContext2
                 Text = null,
                 Html = legendHtml,
                 IsPageHeading = Legend?.IsPageHeading,
-                Attributes = (Legend?.Attributes ?? ImmutableDictionary<string, string?>.Empty).Remove("class", out var legendClasses),
-                Classes = legendClasses
+                Attributes = (Legend?.Attributes ?? ImmutableDictionary<string, string?>.Empty).Remove(
+                    "class",
+                    out var legendClasses
+                ),
+                Classes = legendClasses,
             },
             Role = null,
             Text = null,
             Html = null,
             Attributes = _attributes.Remove("class", out var classes),
-            Classes = classes
+            Classes = classes,
         };
     }
 

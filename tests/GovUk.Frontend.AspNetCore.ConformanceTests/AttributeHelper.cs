@@ -6,10 +6,7 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 
 public static class AttributeHelper
 {
-    public static AttributeDictionary MergeAttribute(
-        this AttributeDictionary attributes,
-        string key,
-        object value)
+    public static AttributeDictionary MergeAttribute(this AttributeDictionary attributes, string key, object value)
     {
         if (value == null)
         {
@@ -40,8 +37,7 @@ public static class AttributeHelper
         return attributes;
     }
 
-    public static AttributeDictionary ToAttributesDictionary(
-        this IDictionary<string, object> attributes)
+    public static AttributeDictionary ToAttributesDictionary(this IDictionary<string, object> attributes)
     {
         var attributeDictionary = new AttributeDictionary();
 
@@ -56,9 +52,10 @@ public static class AttributeHelper
         return attributeDictionary;
     }
 
-    private static string AttributeValueToString(object value) => value switch
-    {
-        bool b => b ? "true" : "false",
-        _ => value.ToString()
-    };
+    private static string AttributeValueToString(object value) =>
+        value switch
+        {
+            bool b => b ? "true" : "false",
+            _ => value.ToString(),
+        };
 }

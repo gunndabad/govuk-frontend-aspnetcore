@@ -13,7 +13,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS checkboxes component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[RestrictChildren(RadiosFieldsetTagHelper.TagName, RadiosItemTagHelper.TagName, RadiosItemDividerTagHelper.TagName, HintTagName, ErrorMessageTagName)]
+[RestrictChildren(
+    RadiosFieldsetTagHelper.TagName,
+    RadiosItemTagHelper.TagName,
+    RadiosItemDividerTagHelper.TagName,
+    HintTagName,
+    ErrorMessageTagName
+)]
 [OutputElementHint(ComponentGenerator.RadiosElement)]
 public class RadiosTagHelper : FormGroupTagHelperBase
 {
@@ -29,16 +35,10 @@ public class RadiosTagHelper : FormGroupTagHelperBase
     /// Creates a new <see cref="RadiosTagHelper"/>.
     /// </summary>
     public RadiosTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
-    {
-    }
+        : this(htmlGenerator: null, modelHelper: null) { }
 
     internal RadiosTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
-    {
-    }
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper()) { }
 
     /// <summary>
     /// The prefix to use when generating IDs for the hint, error message and items.
@@ -71,7 +71,8 @@ public class RadiosTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var radiosContext = tagHelperContext.GetContextItem<RadiosContext>();
 
@@ -106,7 +107,8 @@ public class RadiosTagHelper : FormGroupTagHelperBase
                 resolvedFieldsetLegendContent,
                 radiosContext.Fieldset.Legend?.Attributes,
                 content: contentBuilder,
-                radiosContext.Fieldset.Attributes);
+                radiosContext.Fieldset.Attributes
+            );
         }
 
         return contentBuilder;
@@ -120,7 +122,8 @@ public class RadiosTagHelper : FormGroupTagHelperBase
                 resolvedIdPrefix,
                 resolvedName,
                 items: radiosContext.Items,
-                attributes: RadiosAttributes.ToAttributeDictionary());
+                attributes: RadiosAttributes.ToAttributeDictionary()
+            );
         }
     }
 
@@ -136,7 +139,8 @@ public class RadiosTagHelper : FormGroupTagHelperBase
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdPrefixAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                AspForAttributeName
+            );
         }
 
         TryResolveName(out var resolvedName);

@@ -33,16 +33,10 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
     /// Creates an <see cref="TextAreaTagHelper"/>.
     /// </summary>
     public TextAreaTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
-    {
-    }
+        : this(htmlGenerator: null, modelHelper: null) { }
 
     internal TextAreaTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
-    {
-    }
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper()) { }
 
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
@@ -108,7 +102,8 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var contentBuilder = new HtmlContentBuilder();
 
@@ -141,8 +136,15 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
             var resolvedId = ResolveIdPrefix();
             var resolvedName = ResolveName();
 
-            var resolvedContent = textAreaContext.Value ??
-                new HtmlString(AspFor != null ? HtmlEncoder.Default.Encode(ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty) : string.Empty);
+            var resolvedContent =
+                textAreaContext.Value
+                ?? new HtmlString(
+                    AspFor != null
+                        ? HtmlEncoder.Default.Encode(
+                            ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty
+                        )
+                        : string.Empty
+                );
 
             var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
             resolvedTextAreaAttributes.MergeCssClass("govuk-js-textarea");
@@ -157,7 +159,8 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
                 Spellcheck,
                 Disabled,
                 resolvedContent,
-                resolvedTextAreaAttributes);
+                resolvedTextAreaAttributes
+            );
         }
     }
 
@@ -173,7 +176,8 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                AspForAttributeName
+            );
         }
 
         var resolvedName = ResolveName();
@@ -185,9 +189,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
     {
         if (Name == null && AspFor == null)
         {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                NameAttributeName,
-                AspForAttributeName);
+            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(NameAttributeName, AspForAttributeName);
         }
 
         return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);

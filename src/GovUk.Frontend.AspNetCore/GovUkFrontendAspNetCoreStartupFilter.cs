@@ -27,28 +27,26 @@ internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
             {
                 var fileProvider = new ManifestEmbeddedFileProvider(
                     typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
-                    root: "Content/Compiled");
+                    root: "Content/Compiled"
+                );
 
                 app.UseMiddleware<RewriteCssUrlsMiddleware>(fileProvider);
 
-                app.UseStaticFiles(new StaticFileOptions()
-                {
-                    FileProvider = fileProvider,
-                    RequestPath = compiledContentPath
-                });
+                app.UseStaticFiles(
+                    new StaticFileOptions() { FileProvider = fileProvider, RequestPath = compiledContentPath }
+                );
             }
 
             if (_optionsAccessor.Value.StaticAssetsContentPath is PathString assetsContentPath)
             {
                 var fileProvider = new ManifestEmbeddedFileProvider(
                     typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
-                    root: "Content/Assets");
+                    root: "Content/Assets"
+                );
 
-                app.UseStaticFiles(new StaticFileOptions()
-                {
-                    FileProvider = fileProvider,
-                    RequestPath = assetsContentPath
-                });
+                app.UseStaticFiles(
+                    new StaticFileOptions() { FileProvider = fileProvider, RequestPath = assetsContentPath }
+                );
             }
 
             next(app);

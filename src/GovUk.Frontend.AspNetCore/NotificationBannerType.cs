@@ -13,5 +13,5 @@ public enum NotificationBannerType
     /// <summary>
     /// A success notification type.
     /// </summary>
-    Success = 1
+    Success = 1,
 }

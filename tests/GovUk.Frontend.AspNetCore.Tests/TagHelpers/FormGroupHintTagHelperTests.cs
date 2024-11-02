@@ -20,11 +20,9 @@ public class FormGroupHintTagHelperTests
         var context = new TagHelperContext(
             tagName: "test-hint",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(FormGroupContext), formGroupContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(FormGroupContext), formGroupContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "test-hint",
@@ -34,7 +32,8 @@ public class FormGroupHintTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(hint);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new FormGroupHintTagHelper();
 

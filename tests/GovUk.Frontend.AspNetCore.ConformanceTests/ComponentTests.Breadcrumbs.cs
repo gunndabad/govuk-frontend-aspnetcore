@@ -14,20 +14,19 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
-                var collapseOnMobile = options.CollapseOnMobile ?? ComponentGenerator.BreadcrumbsDefaultCollapseOnMobile;
+                var collapseOnMobile =
+                    options.CollapseOnMobile ?? ComponentGenerator.BreadcrumbsDefaultCollapseOnMobile;
 
-                var attributes = options.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                var items = options.Items
-                    .Select(i => new BreadcrumbsItem()
-                    {
-                        Content = TextOrHtmlHelper.GetHtmlContent(i.Text, i.Html),
-                        Href = i.Href,
-                        LinkAttributes = i.Attributes.ToAttributesDictionary()
-                    });
+                var items = options.Items.Select(i => new BreadcrumbsItem()
+                {
+                    Content = TextOrHtmlHelper.GetHtmlContent(i.Text, i.Html),
+                    Href = i.Href,
+                    LinkAttributes = i.Attributes.ToAttributesDictionary(),
+                });
 
-                return generator.GenerateBreadcrumbs(collapseOnMobile, attributes, items)
-                    .ToHtmlString();
-            });
+                return generator.GenerateBreadcrumbs(collapseOnMobile, attributes, items).ToHtmlString();
+            }
+        );
 }

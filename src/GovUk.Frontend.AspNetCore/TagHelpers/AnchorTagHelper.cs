@@ -109,7 +109,5 @@ public class AnchorTagHelper : Microsoft.AspNetCore.Mvc.TagHelpers.AnchorTagHelp
 {
     /// <inheritdoc/>
     public AnchorTagHelper(IHtmlGenerator generator)
-        : base(generator)
-    {
-    }
+        : base(generator) { }
 }

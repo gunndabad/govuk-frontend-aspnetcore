@@ -22,7 +22,7 @@ public class ServerFixture : IAsyncLifetime
 
     public IServiceProvider Services => _host!.Services;
 
-    public async virtual Task DisposeAsync()
+    public virtual async Task DisposeAsync()
     {
         if (_disposed)
         {
@@ -45,13 +45,15 @@ public class ServerFixture : IAsyncLifetime
         }
     }
 
-    public async virtual Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
         _host = CreateHost();
         await _host.StartAsync();
 
         _playright = await Playwright.CreateAsync();
-        Browser = await _playright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions() { Headless = !Debugger.IsAttached });
+        Browser = await _playright.Chromium.LaunchAsync(
+            new BrowserTypeLaunchOptions() { Headless = !Debugger.IsAttached }
+        );
     }
 
     protected virtual void Configure(IApplicationBuilder app)
@@ -66,13 +68,14 @@ public class ServerFixture : IAsyncLifetime
         services.AddGovUkFrontend();
     }
 
-    private IHost CreateHost() => Host.CreateDefaultBuilder(args: Array.Empty<string>())
-        .ConfigureWebHostDefaults(webBuilder =>
-        {
-            webBuilder
-                .UseUrls(BaseUrl)
-                .ConfigureServices((context, services) => ConfigureServices(services))
-                .Configure(Configure);
-        })
-        .Build();
+    private IHost CreateHost() =>
+        Host.CreateDefaultBuilder(args: Array.Empty<string>())
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder
+                    .UseUrls(BaseUrl)
+                    .ConfigureServices((context, services) => ConfigureServices(services))
+                    .Configure(Configure);
+            })
+            .Build();
 }

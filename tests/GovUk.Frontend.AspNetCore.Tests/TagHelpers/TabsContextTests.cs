@@ -18,7 +18,7 @@ public class TabsContextTests
         {
             Id = null,
             Label = "Label",
-            PanelContent = new HtmlString("Panel")
+            PanelContent = new HtmlString("Panel"),
         };
 
         // Act
@@ -39,7 +39,7 @@ public class TabsContextTests
         {
             Id = "item1",
             Label = "Label",
-            PanelContent = new HtmlString("Panel")
+            PanelContent = new HtmlString("Panel"),
         };
 
         // Act
@@ -53,7 +53,8 @@ public class TabsContextTests
                 Assert.Equal("item1", item.Id);
                 Assert.Equal("Label", item.Label);
                 Assert.Equal("Panel", item.PanelContent?.ToHtmlString());
-            });
+            }
+        );
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public class TabsContextTests
         {
             Id = null,
             Label = "Label",
-            PanelContent = new HtmlString("Panel")
+            PanelContent = new HtmlString("Panel"),
         };
 
         // Act
@@ -79,6 +80,7 @@ public class TabsContextTests
             {
                 Assert.Equal("Label", item.Label);
                 Assert.Equal("Panel", item.PanelContent?.ToHtmlString());
-            });
+            }
+        );
     }
 }

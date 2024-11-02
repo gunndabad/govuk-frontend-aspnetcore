@@ -24,9 +24,7 @@ public class SkipLinkTagHelper : TagHelper
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
     public SkipLinkTagHelper()
-        : this(htmlGenerator: null)
-    {
-    }
+        : this(htmlGenerator: null) { }
 
     internal SkipLinkTagHelper(IGovUkHtmlGenerator? htmlGenerator)
     {

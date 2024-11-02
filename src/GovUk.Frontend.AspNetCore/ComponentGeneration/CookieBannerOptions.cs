@@ -12,9 +12,7 @@ public record CookieBannerOptions
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
     public IReadOnlyCollection<CookieBannerOptionsMessage>? Messages { get; set; }
 
-    internal void Validate()
-    {
-    }
+    internal void Validate() { }
 }
 
 public record CookieBannerOptionsMessage

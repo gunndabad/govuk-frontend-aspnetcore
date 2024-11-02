@@ -21,23 +21,16 @@ public class ErrorSummaryTagHelperTests
         var descriptionHtml = "Description";
         var errorItems = new[]
         {
-            new ErrorSummaryOptionsErrorItem()
-            {
-                Html = "First message",
-                Href = "#Field1"
-            },
-            new ErrorSummaryOptionsErrorItem()
-            {
-                Html = "Second message",
-                Href = "#Field2"
-            }
+            new ErrorSummaryOptionsErrorItem() { Html = "First message", Href = "#Field1" },
+            new ErrorSummaryOptionsErrorItem() { Html = "Second message", Href = "#Field2" },
         };
 
         var context = new TagHelperContext(
             tagName: "govuk-error-summary",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary",
@@ -56,16 +49,19 @@ public class ErrorSummaryTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>()))
+            .Callback<ErrorSummaryOptions>(o => actualOptions = o);
 
         var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
             DisableAutoFocus = disableAutoFocus,
-            ViewContext = new ViewContext()
+            ViewContext = new ViewContext(),
         };
 
         // Act

@@ -27,12 +27,15 @@ public class SummaryCardTitleTagHelper : TagHelper
         get => _headingLevel;
         set
         {
-            if (value < ComponentGenerator.SummaryCardMinHeadingLevel ||
-                value > ComponentGenerator.SummaryCardMaxHeadingLevel)
+            if (
+                value < ComponentGenerator.SummaryCardMinHeadingLevel
+                || value > ComponentGenerator.SummaryCardMaxHeadingLevel
+            )
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(value),
-                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.SummaryCardMinHeadingLevel} and {ComponentGenerator.SummaryCardMaxHeadingLevel}.");
+                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.SummaryCardMinHeadingLevel} and {ComponentGenerator.SummaryCardMaxHeadingLevel}."
+                );
             }
 
             _headingLevel = value;

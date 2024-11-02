@@ -19,7 +19,8 @@ public class PaginationTagHelperTests
             tagName: "govuk-pagination",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-pagination",
@@ -28,33 +29,37 @@ public class PaginationTagHelperTests
             {
                 var paginationContext = context.GetContextItem<PaginationContext>();
 
-                paginationContext.SetPrevious(new()
-                {
-                    Href = "/previous",
-                    LabelText = "1 of 3",
-                    Text = new HtmlString("Previous page")
-                });
+                paginationContext.SetPrevious(
+                    new()
+                    {
+                        Href = "/previous",
+                        LabelText = "1 of 3",
+                        Text = new HtmlString("Previous page"),
+                    }
+                );
 
-                paginationContext.SetNext(new()
-                {
-                    Href = "/next",
-                    LabelText = "3 of 3",
-                    Text = new HtmlString("Next page")
-                });
+                paginationContext.SetNext(
+                    new()
+                    {
+                        Href = "/next",
+                        LabelText = "3 of 3",
+                        Text = new HtmlString("Next page"),
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            })
-        {
-
-        };
+            }
+        )
+        { };
         var tagHelper = new PaginationTagHelper(new ComponentGenerator());
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <nav aria-label=""Pagination"" class=""govuk-pagination--block govuk-pagination"" role=""navigation"">
     <div class=""govuk-pagination__prev"">
         <a class=""govuk-link govuk-pagination__link"" href=""/previous"" rel=""prev"">
@@ -89,7 +94,8 @@ public class PaginationTagHelperTests
             tagName: "govuk-pagination",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-pagination",
@@ -98,44 +104,49 @@ public class PaginationTagHelperTests
             {
                 var paginationContext = context.GetContextItem<PaginationContext>();
 
-                paginationContext.AddItem(new PaginationItem()
-                {
-                    Href = "/page1",
-                    Number = new HtmlString("1"),
-                    VisuallyHiddenText = "1st page"
-                });
+                paginationContext.AddItem(
+                    new PaginationItem()
+                    {
+                        Href = "/page1",
+                        Number = new HtmlString("1"),
+                        VisuallyHiddenText = "1st page",
+                    }
+                );
 
-                paginationContext.AddItem(new PaginationItem()
-                {
-                    Href = "/page2",
-                    Number = new HtmlString("2"),
-                    IsCurrent = true
-                });
+                paginationContext.AddItem(
+                    new PaginationItem()
+                    {
+                        Href = "/page2",
+                        Number = new HtmlString("2"),
+                        IsCurrent = true,
+                    }
+                );
 
                 paginationContext.AddItem(new PaginationItemEllipsis());
 
-                paginationContext.AddItem(new PaginationItem()
-                {
-                    Href = "/page5",
-                    Number = new HtmlString("5"),
-                    VisuallyHiddenText = "5th page"
-                });
+                paginationContext.AddItem(
+                    new PaginationItem()
+                    {
+                        Href = "/page5",
+                        Number = new HtmlString("5"),
+                        VisuallyHiddenText = "5th page",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new PaginationTagHelper(new ComponentGenerator())
-        {
-            LandmarkLabel = "search"
-        };
+        var tagHelper = new PaginationTagHelper(new ComponentGenerator()) { LandmarkLabel = "search" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
         var actual = output.ToHtmlString();
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <nav aria-label=""search"" class=""govuk-pagination"" role=""navigation"">
     <ul class=""govuk-pagination__list"">
         <li class=""govuk-pagination__item"">

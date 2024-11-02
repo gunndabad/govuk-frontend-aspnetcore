@@ -14,7 +14,9 @@ public partial class DefaultComponentGenerator
         options.Validate();
 
         var classes = ($"govuk-button " + options.Classes).TrimEnd();
-        var element = options.Element.NormalizeEmptyString() ?? (options.Href.NormalizeEmptyString() is not null ? "a" : "button");
+        var element =
+            options.Element.NormalizeEmptyString()
+            ?? (options.Href.NormalizeEmptyString() is not null ? "a" : "button");
 
         HtmlTag? iconHtml = null;
         if (options.IsStartButton == true)
@@ -27,22 +29,24 @@ public partial class DefaultComponentGenerator
                 .UnencodedAttr("viewbox", "0 0 33 40")
                 .UnencodedAttr("aria-hidden", "true")
                 .UnencodedAttr("focusable", "false")
-                .Append(new HtmlTag("path")
-                    .NoClosingTag()
-                    .UnencodedAttr("fill", "currentColor")
-                    .UnencodedAttr("d", "M0 0h13l20 20-20 20H0l20-20z"));
+                .Append(
+                    new HtmlTag("path")
+                        .NoClosingTag()
+                        .UnencodedAttr("fill", "currentColor")
+                        .UnencodedAttr("d", "M0 0h13l20 20-20 20H0l20-20z")
+                );
 
             classes += " govuk-button--start";
         }
 
-        var commonAttributes = options.Attributes
-            .ToImmutableDictionary()
+        var commonAttributes = options
+            .Attributes.ToImmutableDictionary()
             .Add("class", classes)
             .Add("data-module", "govuk-button")
             .AddIfNotNull("id", options.Id.NormalizeEmptyString());
 
-        var buttonAttributes = ImmutableDictionary<string, string?>.Empty
-            .AddIfNotNull("name", options.Name.NormalizeEmptyString())
+        var buttonAttributes = ImmutableDictionary<string, string?>
+            .Empty.AddIfNotNull("name", options.Name.NormalizeEmptyString())
             .AddIf(options.Disabled == true, "disabled", null)
             .AddIf(options.Disabled == true, "aria-disabled", "true")
             .AddIfNotNull("data-prevent-double-click", options.PreventDoubleClick?.ToString().ToLower());

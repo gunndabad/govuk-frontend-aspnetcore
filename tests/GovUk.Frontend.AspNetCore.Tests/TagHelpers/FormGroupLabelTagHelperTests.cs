@@ -20,11 +20,9 @@ public class FormGroupLabelTagHelperTests
         var context = new TagHelperContext(
             tagName: "test-label",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(FormGroupContext), formGroupContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(FormGroupContext), formGroupContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "test-label",
@@ -34,7 +32,8 @@ public class FormGroupLabelTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(label);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new FormGroupLabelTagHelper();
 

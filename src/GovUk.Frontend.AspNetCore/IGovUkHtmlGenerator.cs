@@ -20,12 +20,14 @@ internal interface IGovUkHtmlGenerator
         string showAllSectionsText,
         string showSectionText,
         string showSectionAriaLabelText,
-        IEnumerable<AccordionItem> items);
+        IEnumerable<AccordionItem> items
+    );
 
     TagBuilder GenerateBreadcrumbs(
         bool collapseOnMobile,
         AttributeDictionary attributes,
-        IEnumerable<BreadcrumbsItem> items);
+        IEnumerable<BreadcrumbsItem> items
+    );
 
     TagBuilder GenerateCharacterCount(
         string textAreaId,
@@ -40,7 +42,8 @@ internal interface IGovUkHtmlGenerator
         (string Other, string One)? charactersOverLimitText,
         (string Other, string One)? wordsUnderLimitText,
         string wordsAtLimitText,
-        (string Other, string One)? wordsOverLimitText);
+        (string Other, string One)? wordsOverLimitText
+    );
 
     TagBuilder GenerateCheckboxes(
         string idPrefix,
@@ -48,7 +51,8 @@ internal interface IGovUkHtmlGenerator
         string describedBy,
         bool hasFieldset,
         IEnumerable<CheckboxesItemBase> items,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateDateInput(
         string id,
@@ -56,12 +60,10 @@ internal interface IGovUkHtmlGenerator
         DateInputItem day,
         DateInputItem month,
         DateInputItem year,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
-    TagBuilder GenerateErrorMessage(
-        string visuallyHiddenText,
-        IHtmlContent content,
-        AttributeDictionary attributes);
+    TagBuilder GenerateErrorMessage(string visuallyHiddenText, IHtmlContent content, AttributeDictionary attributes);
 
     TagBuilder GenerateFieldset(
         string describedBy,
@@ -70,7 +72,8 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent legendContent,
         AttributeDictionary legendAttributes,
         IHtmlContent content,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateFileUpload(
         bool haveError,
@@ -78,17 +81,14 @@ internal interface IGovUkHtmlGenerator
         string name,
         string describedBy,
         bool disabled,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, AttributeDictionary attributes);
 
     TagBuilder GenerateHint(string id, IHtmlContent content, AttributeDictionary attributes);
 
-    TagBuilder GenerateLabel(
-        string @for,
-        bool isPageHeading,
-        IHtmlContent content,
-        AttributeDictionary attributes);
+    TagBuilder GenerateLabel(string @for, bool isPageHeading, IHtmlContent content, AttributeDictionary attributes);
 
     TagBuilder GenerateNotificationBanner(
         NotificationBannerType type,
@@ -98,26 +98,30 @@ internal interface IGovUkHtmlGenerator
         int? titleHeadingLevel,
         IHtmlContent titleContent,
         IHtmlContent content,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GeneratePagination(
         IEnumerable<PaginationItemBase> items,
         PaginationPrevious previous,
         PaginationNext next,
         string landmarkLabel,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GeneratePanel(
         int headingLevel,
         IHtmlContent titleContent,
         IHtmlContent bodyContent,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateRadios(
         string idPrefix,
         string name,
         IEnumerable<RadiosItemBase> items,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateSelect(
         bool haveError,
@@ -126,11 +130,17 @@ internal interface IGovUkHtmlGenerator
         string describedBy,
         bool disabled,
         IEnumerable<SelectItem> items,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateSkipLink(string href, IHtmlContent content, AttributeDictionary attributes);
 
-    TagBuilder GenerateSummaryCard(SummaryCardTitle title, SummaryListActions actions, IHtmlContent summaryList, AttributeDictionary attributes);
+    TagBuilder GenerateSummaryCard(
+        SummaryCardTitle title,
+        SummaryListActions actions,
+        IHtmlContent summaryList,
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows, AttributeDictionary attributes);
 
@@ -139,7 +149,8 @@ internal interface IGovUkHtmlGenerator
         string idPrefix,
         string title,
         AttributeDictionary attributes,
-        IEnumerable<TabsItem> items);
+        IEnumerable<TabsItem> items
+    );
 
     TagBuilder GenerateTextArea(
         bool haveError,
@@ -151,7 +162,8 @@ internal interface IGovUkHtmlGenerator
         bool? spellcheck,
         bool disabled,
         IHtmlContent content,
-        AttributeDictionary attributes);
+        AttributeDictionary attributes
+    );
 
     TagBuilder GenerateTextInput(
         bool haveError,
@@ -169,5 +181,6 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent prefixContent,
         AttributeDictionary prefixAttributes,
         IHtmlContent suffixContent,
-        AttributeDictionary suffixAttributes);
+        AttributeDictionary suffixAttributes
+    );
 }

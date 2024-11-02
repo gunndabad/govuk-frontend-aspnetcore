@@ -21,11 +21,9 @@ public class BreadcrumbsItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-breadcrumbs-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(BreadcrumbsContext), breadcrumbsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(BreadcrumbsContext), breadcrumbsContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-breadcrumbs-item",
@@ -35,7 +33,8 @@ public class BreadcrumbsItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetHtmlContent("The item");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new BreadcrumbsItemTagHelper();
 
@@ -57,11 +56,9 @@ public class BreadcrumbsItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-breadcrumbs-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(BreadcrumbsContext), breadcrumbsContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(BreadcrumbsContext), breadcrumbsContext } },
+            uniqueId: "test"
+        );
 
         var attributes = new TagHelperAttributeList();
         var output = new TagHelperOutput(
@@ -74,7 +71,8 @@ public class BreadcrumbsItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetHtmlContent("The item");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new BreadcrumbsItemTagHelper();
 

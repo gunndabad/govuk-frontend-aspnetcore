@@ -33,16 +33,17 @@ public class TagTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateTag(new TagOptions()
-        {
-            Text = null,
-            Html = childContent.ToHtmlString(),
-            Attributes = attributes,
-            Classes = classes
-        });
+        var component = _componentGenerator.GenerateTag(
+            new TagOptions()
+            {
+                Text = null,
+                Html = childContent.ToHtmlString(),
+                Attributes = attributes,
+                Classes = classes,
+            }
+        );
 
         output.WriteComponent(component);
     }

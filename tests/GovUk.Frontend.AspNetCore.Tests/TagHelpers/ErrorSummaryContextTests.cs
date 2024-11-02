@@ -14,11 +14,7 @@ public class ErrorSummaryContextTests
         // Arrange
         var context = new ErrorSummaryContext();
 
-        var item = new ErrorSummaryOptionsErrorItem()
-        {
-            Html = "An error message",
-            Href = "#TheField"
-        };
+        var item = new ErrorSummaryOptionsErrorItem() { Html = "An error message", Href = "#TheField" };
 
         // Act
         context.AddItem(item);
@@ -30,7 +26,8 @@ public class ErrorSummaryContextTests
             {
                 Assert.Equal("An error message", item.Html);
                 Assert.Equal("#TheField", item.Href);
-            });
+            }
+        );
     }
 
     [Fact]
@@ -54,11 +51,16 @@ public class ErrorSummaryContextTests
         context.SetDescription(ImmutableDictionary<string, string?>.Empty, html: "Existing description");
 
         // Act
-        var ex = Record.Exception(() => context.SetDescription(ImmutableDictionary<string, string?>.Empty, html: "Description"));
+        var ex = Record.Exception(
+            () => context.SetDescription(ImmutableDictionary<string, string?>.Empty, html: "Description")
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-error-summary-description> element is permitted within each <govuk-error-summary>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-error-summary-description> element is permitted within each <govuk-error-summary>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -86,6 +88,9 @@ public class ErrorSummaryContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-error-summary-title> element is permitted within each <govuk-error-summary>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-error-summary-title> element is permitted within each <govuk-error-summary>.",
+            ex.Message
+        );
     }
 }

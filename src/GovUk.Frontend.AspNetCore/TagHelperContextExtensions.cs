@@ -28,10 +28,7 @@ internal static class TagHelperContextExtensions
         return SetScopedContextItem(context, typeof(TItem), item);
     }
 
-    public static IDisposable SetScopedContextItem(
-        this TagHelperContext context,
-        object key,
-        object value)
+    public static IDisposable SetScopedContextItem(this TagHelperContext context, object key, object value)
     {
         Guard.ArgumentNotNull(nameof(context), context);
         Guard.ArgumentNotNull(nameof(key), key);
@@ -63,10 +60,7 @@ internal static class TagHelperContextExtensions
         private readonly object _key;
         private readonly object? _previousValue;
 
-        public RestoreItemsOnDispose(
-            TagHelperContext context,
-            object key,
-            object? previousValue)
+        public RestoreItemsOnDispose(TagHelperContext context, object key, object? previousValue)
         {
             _context = Guard.ArgumentNotNull(nameof(context), context);
             _key = Guard.ArgumentNotNull(nameof(key), key);

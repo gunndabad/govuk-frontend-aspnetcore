@@ -42,13 +42,15 @@ public class BreadcrumbsItemTagHelper : TagHelper
             output.Attributes.Remove(hrefAttribute);
         }
 
-        breadcrumbsContext.AddItem(new BreadcrumbsItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Href = href,
-            LinkAttributes = LinkAttributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot()
-        });
+        breadcrumbsContext.AddItem(
+            new BreadcrumbsItem()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Href = href,
+                LinkAttributes = LinkAttributes.ToAttributeDictionary(),
+                Content = childContent.Snapshot(),
+            }
+        );
 
         output.SuppressOutput();
     }

@@ -22,12 +22,19 @@ internal class PaginationContext
         if (Next is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                item is PaginationItemEllipsis ? PaginationEllipsisItemTagHelper.TagName : PaginationItemTagHelper.TagName,
-                PaginationNextTagHelper.TagName);
+                item is PaginationItemEllipsis
+                    ? PaginationEllipsisItemTagHelper.TagName
+                    : PaginationItemTagHelper.TagName,
+                PaginationNextTagHelper.TagName
+            );
         }
 
         // Only one 'current' item is allowed.
-        if (item is PaginationItem paginationItem && paginationItem.IsCurrent && _items.OfType<PaginationItem>().Any(i => i.IsCurrent))
+        if (
+            item is PaginationItem paginationItem
+            && paginationItem.IsCurrent
+            && _items.OfType<PaginationItem>().Any(i => i.IsCurrent)
+        )
         {
             throw new InvalidOperationException($"Only one current {PaginationItemTagHelper.TagName} is permitted.");
         }
@@ -41,7 +48,10 @@ internal class PaginationContext
 
         if (Next is not null)
         {
-            throw ExceptionHelper.OnlyOneElementIsPermittedIn(PaginationNextTagHelper.TagName, PaginationTagHelper.TagName);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                PaginationNextTagHelper.TagName,
+                PaginationTagHelper.TagName
+            );
         }
 
         Next = next;
@@ -55,17 +65,26 @@ internal class PaginationContext
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 PaginationPreviousTagHelper.TagName,
-                _items[0] is PaginationItemEllipsis ? PaginationEllipsisItemTagHelper.TagName : PaginationItemTagHelper.TagName);
+                _items[0] is PaginationItemEllipsis
+                    ? PaginationEllipsisItemTagHelper.TagName
+                    : PaginationItemTagHelper.TagName
+            );
         }
 
         if (Next is not null)
         {
-            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(PaginationPreviousTagHelper.TagName, PaginationNextTagHelper.TagName);
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
+                PaginationPreviousTagHelper.TagName,
+                PaginationNextTagHelper.TagName
+            );
         }
 
         if (Previous is not null)
         {
-            throw ExceptionHelper.OnlyOneElementIsPermittedIn(PaginationPreviousTagHelper.TagName, PaginationTagHelper.TagName);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                PaginationPreviousTagHelper.TagName,
+                PaginationTagHelper.TagName
+            );
         }
 
         Previous = previous;

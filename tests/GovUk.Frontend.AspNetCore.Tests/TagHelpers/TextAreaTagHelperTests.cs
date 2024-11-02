@@ -22,7 +22,8 @@ public class TextAreaTagHelperTests
             tagName: "govuk-textarea",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea",
@@ -31,31 +32,28 @@ public class TextAreaTagHelperTests
             {
                 var textAreaContext = context.GetContextItem<TextAreaContext>();
 
-                textAreaContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                textAreaContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("The label"));
 
-                textAreaContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                textAreaContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new TextAreaTagHelper()
         {
             Id = "my-id",
             Name = "my-name",
-            LabelClass = "additional-label-class"
+            LabelClass = "additional-label-class",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
@@ -73,7 +71,8 @@ public class TextAreaTagHelperTests
             tagName: "govuk-textarea",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea",
@@ -82,35 +81,29 @@ public class TextAreaTagHelperTests
             {
                 var textAreaContext = context.GetContextItem<TextAreaContext>();
 
-                textAreaContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                textAreaContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("The label"));
 
-                textAreaContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                textAreaContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
                 textAreaContext.SetErrorMessage(
                     visuallyHiddenText: null,
                     attributes: null,
-                    content: new HtmlString("The error"));
+                    content: new HtmlString("The error")
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TextAreaTagHelper()
-        {
-            Id = "my-id",
-            Name = "my-name"
-        };
+        var tagHelper = new TextAreaTagHelper() { Id = "my-id", Name = "my-name" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <label class=""govuk-label"" for=""my-id"">The label</label>
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
@@ -132,7 +125,8 @@ public class TextAreaTagHelperTests
             tagName: "govuk-textarea",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea",
@@ -141,19 +135,14 @@ public class TextAreaTagHelperTests
             {
                 var textAreaContext = context.GetContextItem<TextAreaContext>();
 
-                textAreaContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                textAreaContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("The label"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TextAreaTagHelper()
-        {
-            Name = "my-name"
-        };
+        var tagHelper = new TextAreaTagHelper() { Name = "my-name" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -169,12 +158,10 @@ public class TextAreaTagHelperTests
     {
         // Arrange
         var modelValue = "Foo value";
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
+        var model = new Model() { Foo = modelValue };
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), model)
             .GetExplorerForProperty(nameof(Model.Foo));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.Foo);
@@ -186,7 +173,8 @@ public class TextAreaTagHelperTests
             tagName: "govuk-textarea",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea",
@@ -195,20 +183,18 @@ public class TextAreaTagHelperTests
             {
                 var textAreaContext = context.GetContextItem<TextAreaContext>();
 
-                textAreaContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                textAreaContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("The label"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new TextAreaTagHelper(modelHelper: modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Name = "my-name",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act
@@ -228,7 +214,8 @@ public class TextAreaTagHelperTests
             tagName: "govuk-textarea",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea",
@@ -237,21 +224,16 @@ public class TextAreaTagHelperTests
             {
                 var textAreaContext = context.GetContextItem<TextAreaContext>();
 
-                textAreaContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                textAreaContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("The label"));
 
                 textAreaContext.SetValue(new HtmlString("Value"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TextAreaTagHelper()
-        {
-            Name = "my-name"
-        };
+        var tagHelper = new TextAreaTagHelper() { Name = "my-name" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -267,12 +249,10 @@ public class TextAreaTagHelperTests
     {
         // Arrange
         var modelValue = "Foo value";
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
+        var model = new Model() { Foo = modelValue };
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
+        var modelExplorer = new EmptyModelMetadataProvider()
+            .GetModelExplorerForType(typeof(Model), model)
             .GetExplorerForProperty(nameof(Model.Foo));
         var viewContext = new ViewContext();
         var modelExpression = nameof(Model.Foo);
@@ -284,7 +264,8 @@ public class TextAreaTagHelperTests
             tagName: "govuk-textarea",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-textarea",
@@ -293,22 +274,20 @@ public class TextAreaTagHelperTests
             {
                 var textAreaContext = context.GetContextItem<TextAreaContext>();
 
-                textAreaContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                textAreaContext.SetLabel(isPageHeading: false, attributes: null, content: new HtmlString("The label"));
 
                 textAreaContext.SetValue(new HtmlString("Value"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new TextAreaTagHelper(modelHelper: modelHelper.Object)
         {
             AspFor = new ModelExpression(modelExpression, modelExplorer),
             Name = "my-name",
-            ViewContext = viewContext
+            ViewContext = viewContext,
         };
 
         // Act

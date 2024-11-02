@@ -17,7 +17,8 @@ internal partial class ComponentGenerator
         IHtmlContent? legendContent,
         AttributeDictionary? legendAttributes,
         IHtmlContent content,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(content), content);
 

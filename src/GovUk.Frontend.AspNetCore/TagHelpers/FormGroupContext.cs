@@ -5,7 +5,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal abstract class FormGroupContext
 {
-    public (string? VisuallyHiddenText, AttributeDictionary? Attributes, IHtmlContent? Content)? ErrorMessage { get; private set; }
+    public (string? VisuallyHiddenText, AttributeDictionary? Attributes, IHtmlContent? Content)? ErrorMessage
+    {
+        get;
+        private set;
+    }
 
     public (AttributeDictionary? Attributes, IHtmlContent? Content)? Hint { get; private set; }
 
@@ -22,7 +26,8 @@ internal abstract class FormGroupContext
     public virtual void SetErrorMessage(
         string? visuallyHiddenText,
         AttributeDictionary? attributes,
-        IHtmlContent? content)
+        IHtmlContent? content
+    )
     {
         if (ErrorMessage != null)
         {

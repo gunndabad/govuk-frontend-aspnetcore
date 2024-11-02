@@ -2,6 +2,7 @@ using System;
 using HtmlTags;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
+
 public partial class DefaultComponentGenerator
 {
     internal const string DetailsElement = "details";
@@ -20,15 +21,21 @@ public partial class DefaultComponentGenerator
             .AddClasses(ExplodeClasses(options.Classes))
             .AddEncodedAttributeIf(options.Open == true, "open", null)
             .MergeEncodedAttributes(options.Attributes)
-            .Append(new HtmlTag(DetailsSummaryElement)
-                .AddClass("govuk-details__summary")
-                .MergeEncodedAttributes(options.SummaryAttributes)
-                .Append(new HtmlTag("span")
-                    .AddClass("govuk-details__summary-text")
-                    .AppendHtml(GetEncodedTextOrHtml(options.SummaryText, options.SummaryHtml))))
-            .Append(new HtmlTag(DetailsTextElement)
-                .AddClass("govuk-details__text")
-                .MergeEncodedAttributes(options.TextAttributes)
-                .AppendHtml(GetEncodedTextOrHtml(options.Text, options.Html)));
+            .Append(
+                new HtmlTag(DetailsSummaryElement)
+                    .AddClass("govuk-details__summary")
+                    .MergeEncodedAttributes(options.SummaryAttributes)
+                    .Append(
+                        new HtmlTag("span")
+                            .AddClass("govuk-details__summary-text")
+                            .AppendHtml(GetEncodedTextOrHtml(options.SummaryText, options.SummaryHtml))
+                    )
+            )
+            .Append(
+                new HtmlTag(DetailsTextElement)
+                    .AddClass("govuk-details__text")
+                    .MergeEncodedAttributes(options.TextAttributes)
+                    .AppendHtml(GetEncodedTextOrHtml(options.Text, options.Html))
+            );
     }
 }

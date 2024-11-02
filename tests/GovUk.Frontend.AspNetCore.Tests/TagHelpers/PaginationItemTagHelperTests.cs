@@ -19,11 +19,9 @@ public class PaginationItemTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-pagination-item",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PaginationContext), paginationContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PaginationContext), paginationContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-pagination-item",
@@ -33,12 +31,10 @@ public class PaginationItemTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml("Page 42");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new PaginationItemTagHelper()
-        {
-            IsCurrent = true
-        };
+        var tagHelper = new PaginationItemTagHelper() { IsCurrent = true };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -51,6 +47,7 @@ public class PaginationItemTagHelperTests
                 var paginationItem = Assert.IsType<PaginationItem>(item);
                 Assert.True(paginationItem.IsCurrent);
                 Assert.Equal("Page 42", paginationItem.Number?.ToHtmlString());
-            });
+            }
+        );
     }
 }

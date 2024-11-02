@@ -19,7 +19,8 @@ public class RadiosTagHelperTests
             tagName: "govuk-radios",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios",
@@ -30,39 +31,45 @@ public class RadiosTagHelperTests
 
                 radiosContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = false,
-                    LabelContent = new HtmlString("First"),
-                    Disabled = true,
-                    Id = "first",
-                    Value = "first"
-                });
+                radiosContext.AddItem(
+                    new RadiosItem()
+                    {
+                        Checked = false,
+                        LabelContent = new HtmlString("First"),
+                        Disabled = true,
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("Second"),
-                    Disabled = false,
-                    Id = "second",
-                    Value = "second"
-                });
+                radiosContext.AddItem(
+                    new RadiosItem()
+                    {
+                        Checked = true,
+                        LabelContent = new HtmlString("Second"),
+                        Disabled = false,
+                        Id = "second",
+                        Value = "second",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
     <div class=""govuk-radios"" data-module=""govuk-radios"">
@@ -88,7 +95,8 @@ public class RadiosTagHelperTests
             tagName: "govuk-radios",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios",
@@ -97,41 +105,51 @@ public class RadiosTagHelperTests
             {
                 var radiosContext = context.GetContextItem<RadiosContext>();
 
-                radiosContext.SetErrorMessage(visuallyHiddenText: null, attributes: null, content: new HtmlString("A error"));
+                radiosContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    attributes: null,
+                    content: new HtmlString("A error")
+                );
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = false,
-                    LabelContent = new HtmlString("First"),
-                    Disabled = true,
-                    Id = "first",
-                    Value = "first"
-                });
+                radiosContext.AddItem(
+                    new RadiosItem()
+                    {
+                        Checked = false,
+                        LabelContent = new HtmlString("First"),
+                        Disabled = true,
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("Second"),
-                    Disabled = false,
-                    Id = "second",
-                    Value = "second"
-                });
+                radiosContext.AddItem(
+                    new RadiosItem()
+                    {
+                        Checked = true,
+                        LabelContent = new HtmlString("Second"),
+                        Disabled = false,
+                        Id = "second",
+                        Value = "second",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group govuk-form-group--error"">
     <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>A error</p>
     <div class=""govuk-radios"" data-module=""govuk-radios"">
@@ -157,7 +175,8 @@ public class RadiosTagHelperTests
             tagName: "govuk-radios",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios",
@@ -166,32 +185,33 @@ public class RadiosTagHelperTests
             {
                 var radiosContext = context.GetContextItem<RadiosContext>();
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    LabelContent = new HtmlString("First"),
-                    Hint = new RadiosItemHint()
+                radiosContext.AddItem(
+                    new RadiosItem()
                     {
-                        Content = new HtmlString("First item hint")
-                    },
-                    Id = "first",
-                    Value = "first"
-                });
+                        LabelContent = new HtmlString("First"),
+                        Hint = new RadiosItemHint() { Content = new HtmlString("First item hint") },
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-radios"" data-module=""govuk-radios"">
         <div class=""govuk-radios__item"">
@@ -213,7 +233,8 @@ public class RadiosTagHelperTests
             tagName: "govuk-radios",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios",
@@ -222,32 +243,33 @@ public class RadiosTagHelperTests
             {
                 var radiosContext = context.GetContextItem<RadiosContext>();
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    LabelContent = new HtmlString("First"),
-                    Conditional = new RadiosItemConditional()
+                radiosContext.AddItem(
+                    new RadiosItem()
                     {
-                        Content = new HtmlString("Item 1 conditional")
-                    },
-                    Id = "first",
-                    Value = "first"
-                });
+                        LabelContent = new HtmlString("First"),
+                        Conditional = new RadiosItemConditional() { Content = new HtmlString("Item 1 conditional") },
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-radios"" data-module=""govuk-radios"">
         <div class=""govuk-radios__item"">
@@ -269,7 +291,8 @@ public class RadiosTagHelperTests
             tagName: "govuk-radios",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios",
@@ -278,33 +301,34 @@ public class RadiosTagHelperTests
             {
                 var radiosContext = context.GetContextItem<RadiosContext>();
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("First"),
-                    Conditional = new RadiosItemConditional()
+                radiosContext.AddItem(
+                    new RadiosItem()
                     {
-                        Content = new HtmlString("Item 1 conditional")
-                    },
-                    Id = "first",
-                    Value = "first"
-                });
+                        Checked = true,
+                        LabelContent = new HtmlString("First"),
+                        Conditional = new RadiosItemConditional() { Content = new HtmlString("Item 1 conditional") },
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <div class=""govuk-radios"" data-module=""govuk-radios"">
         <div class=""govuk-radios__item"">
@@ -326,7 +350,8 @@ public class RadiosTagHelperTests
             tagName: "govuk-radios",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios",
@@ -337,46 +362,56 @@ public class RadiosTagHelperTests
 
                 radiosContext.OpenFieldset();
                 var radiosFieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
-                radiosFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
+                radiosFieldsetContext.SetLegend(
+                    isPageHeading: false,
+                    attributes: null,
+                    content: new HtmlString("Legend")
+                );
 
                 radiosContext.SetHint(attributes: null, content: new HtmlString("The hint"));
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = false,
-                    LabelContent = new HtmlString("First"),
-                    Disabled = true,
-                    Id = "first",
-                    Value = "first"
-                });
+                radiosContext.AddItem(
+                    new RadiosItem()
+                    {
+                        Checked = false,
+                        LabelContent = new HtmlString("First"),
+                        Disabled = true,
+                        Id = "first",
+                        Value = "first",
+                    }
+                );
 
-                radiosContext.AddItem(new RadiosItem()
-                {
-                    Checked = true,
-                    LabelContent = new HtmlString("Second"),
-                    Disabled = false,
-                    Id = "second",
-                    Value = "second"
-                });
+                radiosContext.AddItem(
+                    new RadiosItem()
+                    {
+                        Checked = true,
+                        LabelContent = new HtmlString("Second"),
+                        Disabled = false,
+                        Id = "second",
+                        Value = "second",
+                    }
+                );
 
                 radiosContext.CloseFieldset(radiosFieldsetContext);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             DescribedBy = "describedby",
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-form-group"">
     <fieldset aria-describedby=""describedby my-id-hint"" class=""govuk-fieldset"">
         <legend class=""govuk-fieldset__legend"">Legend</legend>

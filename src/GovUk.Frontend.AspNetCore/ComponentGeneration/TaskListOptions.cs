@@ -62,7 +62,10 @@ public record TaskListOptionsItemTitle
     {
         if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}'s {nameof(TaskListOptionsItem.Title)}.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}'s {nameof(TaskListOptionsItem.Title)}."
+            );
         }
     }
 }
@@ -84,7 +87,10 @@ public record TaskListOptionsItemStatus
     {
         if (Tag is null && Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Tag)}, {nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}'s {nameof(TaskListOptionsItem.Status)}.");
+            throw new InvalidOptionsException(
+                GetType(),
+                $"{nameof(Tag)}, {nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}'s {nameof(TaskListOptionsItem.Status)}."
+            );
         }
 
         Tag?.Validate(messageSuffix: $"on item {itemIndex}'s {nameof(TaskListOptionsItem.Status)}");

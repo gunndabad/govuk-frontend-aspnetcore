@@ -13,7 +13,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS checkboxes component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[RestrictChildren(CheckboxesFieldsetTagHelper.TagName, CheckboxesItemTagHelper.TagName, CheckboxesItemDividerTagHelper.TagName, HintTagName, ErrorMessageTagName)]
+[RestrictChildren(
+    CheckboxesFieldsetTagHelper.TagName,
+    CheckboxesItemTagHelper.TagName,
+    CheckboxesItemDividerTagHelper.TagName,
+    HintTagName,
+    ErrorMessageTagName
+)]
 [OutputElementHint(ComponentGenerator.FormGroupElement)]
 public class CheckboxesTagHelper : FormGroupTagHelperBase
 {
@@ -29,16 +35,10 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
     /// Creates a new <see cref="CheckboxesTagHelper"/>.
     /// </summary>
     public CheckboxesTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
-    {
-    }
+        : this(htmlGenerator: null, modelHelper: null) { }
 
     internal CheckboxesTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
-    {
-    }
+        : base(htmlGenerator ?? new ComponentGenerator(), modelHelper ?? new DefaultModelHelper()) { }
 
     /// <summary>
     /// Additional attributes for the container element that wraps the items.
@@ -71,7 +71,8 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError)
+        out bool haveError
+    )
     {
         var checkboxesContext = tagHelperContext.GetContextItem<CheckboxesContext>();
 
@@ -106,7 +107,8 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
                 resolvedFieldsetLegendContent,
                 checkboxesContext.Fieldset.Legend?.Attributes,
                 content: contentBuilder,
-                checkboxesContext.Fieldset.Attributes);
+                checkboxesContext.Fieldset.Attributes
+            );
         }
 
         return contentBuilder;
@@ -122,7 +124,8 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
                 DescribedBy,
                 haveFieldset,
                 items: checkboxesContext.Items,
-                attributes: CheckboxesAttributes.ToAttributeDictionary());
+                attributes: CheckboxesAttributes.ToAttributeDictionary()
+            );
         }
     }
 
@@ -138,7 +141,8 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdPrefixAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                AspForAttributeName
+            );
         }
 
         TryResolveName(out var resolvedName);

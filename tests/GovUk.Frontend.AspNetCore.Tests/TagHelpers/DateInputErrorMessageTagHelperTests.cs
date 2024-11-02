@@ -18,11 +18,9 @@ public class DateInputErrorMessageTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-date-input-error-message",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DateInputContext), dateInputContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DateInputContext), dateInputContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-date-input-error-message",
@@ -32,11 +30,12 @@ public class DateInputErrorMessageTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Error message");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DateInputErrorMessageTagHelper()
         {
-            ErrorItems = DateInputErrorComponents.Day | DateInputErrorComponents.Month
+            ErrorItems = DateInputErrorComponents.Day | DateInputErrorComponents.Month,
         };
 
         // Act

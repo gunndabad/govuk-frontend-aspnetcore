@@ -28,9 +28,7 @@ public class RadiosItemTagHelper : TagHelper
     /// <summary>
     /// Creates a new <see cref="CheckboxesItemTagHelper"/>.
     /// </summary>
-    public RadiosItemTagHelper()
-    {
-    }
+    public RadiosItemTagHelper() { }
 
     /// <summary>
     /// Whether the item should be checked.
@@ -107,35 +105,40 @@ public class RadiosItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var resolvedChecked = Checked ??
-            (radiosContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null) ??
-            ComponentGenerator.RadiosItemDefaultChecked;
+        var resolvedChecked =
+            Checked
+            ?? (radiosContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null)
+            ?? ComponentGenerator.RadiosItemDefaultChecked;
 
-        radiosContext.AddItem(new RadiosItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Checked = resolvedChecked,
-            Conditional = itemContext.Conditional != null ?
-                new RadiosItemConditional()
-                {
-                    Content = itemContext.Conditional.Value.Content,
-                    Attributes = itemContext.Conditional.Value.Attributes
-                } :
-                null,
-            Disabled = Disabled,
-            Hint = itemContext.Hint != null ?
-                new RadiosItemHint()
-                {
-                    Content = itemContext.Hint.Value.Content,
-                    Attributes = itemContext.Hint.Value.Attributes
-                } :
-                null,
-            Id = Id,
-            InputAttributes = InputAttributes.ToAttributeDictionary(),
-            LabelAttributes = LabelAttributes.ToAttributeDictionary(),
-            LabelContent = childContent.Snapshot(),
-            Value = Value
-        });
+        radiosContext.AddItem(
+            new RadiosItem()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Checked = resolvedChecked,
+                Conditional =
+                    itemContext.Conditional != null
+                        ? new RadiosItemConditional()
+                        {
+                            Content = itemContext.Conditional.Value.Content,
+                            Attributes = itemContext.Conditional.Value.Attributes,
+                        }
+                        : null,
+                Disabled = Disabled,
+                Hint =
+                    itemContext.Hint != null
+                        ? new RadiosItemHint()
+                        {
+                            Content = itemContext.Hint.Value.Content,
+                            Attributes = itemContext.Hint.Value.Attributes,
+                        }
+                        : null,
+                Id = Id,
+                InputAttributes = InputAttributes.ToAttributeDictionary(),
+                LabelAttributes = LabelAttributes.ToAttributeDictionary(),
+                LabelContent = childContent.Snapshot(),
+                Value = Value,
+            }
+        );
 
         output.SuppressOutput();
 

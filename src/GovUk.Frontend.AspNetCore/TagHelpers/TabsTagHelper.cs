@@ -27,9 +27,7 @@ public class TabsTagHelper : TagHelper
     /// Creates a new <see cref="TabsTagHelper"/>.
     /// </summary>
     public TabsTagHelper()
-        : this(htmlGenerator: null)
-    {
-    }
+        : this(htmlGenerator: null) { }
 
     internal TabsTagHelper(IGovUkHtmlGenerator? htmlGenerator)
     {
@@ -79,7 +77,8 @@ public class TabsTagHelper : TagHelper
             IdPrefix,
             Title,
             output.Attributes.ToAttributeDictionary(),
-            tabsContext.Items);
+            tabsContext.Items
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

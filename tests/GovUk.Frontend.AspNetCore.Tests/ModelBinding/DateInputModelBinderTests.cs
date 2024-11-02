@@ -29,7 +29,7 @@ public class DateInputModelBinderTests
             ModelMetadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType),
             ModelName = "TheModelName",
             ModelState = new ModelStateDictionary(),
-            ValueProvider = new SimpleValueProvider()
+            ValueProvider = new SimpleValueProvider(),
         };
 
         var converterMock = new Mock<DateInputModelConverter>();
@@ -62,8 +62,8 @@ public class DateInputModelBinderTests
             {
                 { "TheModelName.Day", "1" },
                 { "TheModelName.Month", "4" },
-                { "TheModelName.Year", "2020" }
-            }
+                { "TheModelName.Year", "2020" },
+            },
         };
 
         var converterMock = new Mock<DateInputModelConverter>();
@@ -139,7 +139,7 @@ public class DateInputModelBinderTests
             ModelMetadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType),
             ModelName = "TheModelName",
             ModelState = new ModelStateDictionary(),
-            ValueProvider = valueProvider
+            ValueProvider = valueProvider,
         };
 
         var converterMock = new Mock<DateInputModelConverter>();
@@ -180,8 +180,8 @@ public class DateInputModelBinderTests
             {
                 { "TheModelName.Day", day },
                 { "TheModelName.Month", month },
-                { "TheModelName.Year", year }
-            }
+                { "TheModelName.Year", year },
+            },
         };
 
         var parseErrors = DateInputParseErrors.InvalidYear;
@@ -223,12 +223,30 @@ public class DateInputModelBinderTests
     [InlineData(DateInputParseErrors.InvalidMonth, "Date of birth must be a real date")]
     [InlineData(DateInputParseErrors.InvalidDay, "Date of birth must be a real date")]
     [InlineData(DateInputParseErrors.MissingDay, "Date of birth must include a day")]
-    [InlineData(DateInputParseErrors.MissingYear | DateInputParseErrors.MissingMonth, "Date of birth must include a month and year")]
-    [InlineData(DateInputParseErrors.MissingYear | DateInputParseErrors.MissingDay, "Date of birth must include a day and year")]
-    [InlineData(DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingDay, "Date of birth must include a day and month")]
-    [InlineData(DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth, "Date of birth must be a real date")]
-    [InlineData(DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay, "Date of birth must be a real date")]
-    [InlineData(DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay, "Date of birth must be a real date")]
+    [InlineData(
+        DateInputParseErrors.MissingYear | DateInputParseErrors.MissingMonth,
+        "Date of birth must include a month and year"
+    )]
+    [InlineData(
+        DateInputParseErrors.MissingYear | DateInputParseErrors.MissingDay,
+        "Date of birth must include a day and year"
+    )]
+    [InlineData(
+        DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingDay,
+        "Date of birth must include a day and month"
+    )]
+    [InlineData(
+        DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth,
+        "Date of birth must be a real date"
+    )]
+    [InlineData(
+        DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay,
+        "Date of birth must be a real date"
+    )]
+    [InlineData(
+        DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay,
+        "Date of birth must be a real date"
+    )]
     public void GetModelStateErrorMessage(DateInputParseErrors parseErrors, string expectedMessage)
     {
         // Arrange
@@ -248,26 +266,42 @@ public class DateInputModelBinderTests
     [InlineData(DateInputParseErrors.InvalidMonth, "Your date of birth must be a real date")]
     [InlineData(DateInputParseErrors.InvalidDay, "Your date of birth must be a real date")]
     [InlineData(DateInputParseErrors.MissingDay, "Your date of birth must include a day")]
-    [InlineData(DateInputParseErrors.MissingYear | DateInputParseErrors.MissingMonth, "Your date of birth must include a month and year")]
-    [InlineData(DateInputParseErrors.MissingYear | DateInputParseErrors.MissingDay, "Your date of birth must include a day and year")]
-    [InlineData(DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingDay, "Your date of birth must include a day and month")]
-    [InlineData(DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth, "Your date of birth must be a real date")]
-    [InlineData(DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay, "Your date of birth must be a real date")]
-    [InlineData(DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay, "Your date of birth must be a real date")]
+    [InlineData(
+        DateInputParseErrors.MissingYear | DateInputParseErrors.MissingMonth,
+        "Your date of birth must include a month and year"
+    )]
+    [InlineData(
+        DateInputParseErrors.MissingYear | DateInputParseErrors.MissingDay,
+        "Your date of birth must include a day and year"
+    )]
+    [InlineData(
+        DateInputParseErrors.MissingMonth | DateInputParseErrors.MissingDay,
+        "Your date of birth must include a day and month"
+    )]
+    [InlineData(
+        DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth,
+        "Your date of birth must be a real date"
+    )]
+    [InlineData(
+        DateInputParseErrors.InvalidYear | DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay,
+        "Your date of birth must be a real date"
+    )]
+    [InlineData(
+        DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidDay,
+        "Your date of birth must be a real date"
+    )]
     public void GetModelStateErrorMessageWithDateInputMetadata(DateInputParseErrors parseErrors, string expectedMessage)
     {
         // Arrange
-        var dateInputModelMetadata = new DateInputModelMetadata()
-        {
-            ErrorMessagePrefix = "Your date of birth"
-        };
+        var dateInputModelMetadata = new DateInputModelMetadata() { ErrorMessagePrefix = "Your date of birth" };
 
         var modelMetadata = new DisplayNameModelMetadata(
             "Date of birth",
             additionalValues: new Dictionary<object, object>()
             {
-                { typeof(DateInputModelMetadata), dateInputModelMetadata }
-            });
+                { typeof(DateInputModelMetadata), dateInputModelMetadata },
+            }
+        );
 
         // Act
         var result = DateInputModelConverterModelBinder.GetModelStateErrorMessage(parseErrors, modelMetadata);
@@ -293,13 +327,23 @@ public class DateInputModelBinderTests
     [InlineData("1", "4", "10000", DateInputParseErrors.InvalidYear)]
     [InlineData("1", "4", "x", DateInputParseErrors.InvalidYear)]
     public void Parse_InvalidDate_ComputesExpectedParseErrors(
-        string day, string month, string year, DateInputParseErrors expectedParseErrors)
+        string day,
+        string month,
+        string year,
+        DateInputParseErrors expectedParseErrors
+    )
     {
         // Arrange
         var acceptMonthNames = false;
 
         // Act
-        var result = DateInputModelConverterModelBinder.Parse(day, month, year, acceptMonthNames, out var dateComponents);
+        var result = DateInputModelConverterModelBinder.Parse(
+            day,
+            month,
+            year,
+            acceptMonthNames,
+            out var dateComponents
+        );
 
         // Assert
         Assert.Equal(default, dateComponents);
@@ -316,7 +360,13 @@ public class DateInputModelBinderTests
         var acceptMonthNames = true;
 
         // Act
-        var result = DateInputModelConverterModelBinder.Parse(day, monthName, year, acceptMonthNames, out var dateComponents);
+        var result = DateInputModelConverterModelBinder.Parse(
+            day,
+            monthName,
+            year,
+            acceptMonthNames,
+            out var dateComponents
+        );
 
         // Assert
         Assert.NotEqual(default, dateComponents);
@@ -333,39 +383,46 @@ public class DateInputModelBinderTests
         var acceptMonthNames = false;
 
         // Act
-        var result = DateInputModelConverterModelBinder.Parse(day, monthName, year, acceptMonthNames, out var dateComponents);
+        var result = DateInputModelConverterModelBinder.Parse(
+            day,
+            monthName,
+            year,
+            acceptMonthNames,
+            out var dateComponents
+        );
 
         // Assert
         Assert.Equal(default, dateComponents);
         Assert.Equal(DateInputParseErrors.InvalidMonth, result);
     }
 
-    public static TheoryData<string> ValidMonthNamesData { get; } = new TheoryData<string>()
-    {
-        { "jan" },
-        { "january" },
-        { "feb" },
-        { "february" },
-        { "mar" },
-        { "march" },
-        { "apr" },
-        { "april" },
-        { "may" },
-        { "jun" },
-        { "june" },
-        { "jul" },
-        { "july" },
-        { "aug" },
-        { "august" },
-        { "sep" },
-        { "september" },
-        { "oct" },
-        { "october" },
-        { "nov" },
-        { "november" },
-        { "dec" },
-        { "december" }
-    };
+    public static TheoryData<string> ValidMonthNamesData { get; } =
+        new TheoryData<string>()
+        {
+            { "jan" },
+            { "january" },
+            { "feb" },
+            { "february" },
+            { "mar" },
+            { "march" },
+            { "apr" },
+            { "april" },
+            { "may" },
+            { "jun" },
+            { "june" },
+            { "jul" },
+            { "july" },
+            { "aug" },
+            { "august" },
+            { "sep" },
+            { "september" },
+            { "oct" },
+            { "october" },
+            { "nov" },
+            { "november" },
+            { "dec" },
+            { "december" },
+        };
 
     private static ActionContext CreateActionContextWithServices()
     {
@@ -376,12 +433,19 @@ public class DateInputModelBinderTests
         var httpContext = new DefaultHttpContext();
         httpContext.RequestServices = serviceProvider;
 
-        return new ActionContext(httpContext, new Microsoft.AspNetCore.Routing.RouteData(), new Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor());
+        return new ActionContext(
+            httpContext,
+            new Microsoft.AspNetCore.Routing.RouteData(),
+            new Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor()
+        );
     }
 
     private class DisplayNameModelMetadata : ModelMetadata
     {
-        public DisplayNameModelMetadata(string displayName, IReadOnlyDictionary<object, object>? additionalValues = null)
+        public DisplayNameModelMetadata(
+            string displayName,
+            IReadOnlyDictionary<object, object>? additionalValues = null
+        )
             : base(ModelMetadataIdentity.ForType(typeof(DateOnly?)))
         {
             DisplayName = displayName;
@@ -412,7 +476,8 @@ public class DateInputModelBinderTests
 
         public override ModelMetadata ElementMetadata => throw new NotImplementedException();
 
-        public override IEnumerable<KeyValuePair<EnumGroupAndName, string>> EnumGroupedDisplayNamesAndValues => throw new NotImplementedException();
+        public override IEnumerable<KeyValuePair<EnumGroupAndName, string>> EnumGroupedDisplayNamesAndValues =>
+            throw new NotImplementedException();
 
         public override IReadOnlyDictionary<string, string> EnumNamesAndValues => throw new NotImplementedException();
 

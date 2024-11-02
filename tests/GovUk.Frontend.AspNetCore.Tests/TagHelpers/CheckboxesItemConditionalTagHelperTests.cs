@@ -17,11 +17,9 @@ public class CheckboxesItemConditionalTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-checkboxes-item-Conditional",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(CheckboxesItemContext), checkboxesItemContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(CheckboxesItemContext), checkboxesItemContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-checkboxes-item-Conditional",
@@ -31,7 +29,8 @@ public class CheckboxesItemConditionalTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Conditional");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new CheckboxesItemConditionalTagHelper();
 

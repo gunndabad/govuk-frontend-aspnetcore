@@ -16,9 +16,7 @@ public class PhaseBannerTagTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="PhaseBannerTagTagHelper"/>.
     /// </summary>
-    public PhaseBannerTagTagHelper()
-    {
-    }
+    public PhaseBannerTagTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

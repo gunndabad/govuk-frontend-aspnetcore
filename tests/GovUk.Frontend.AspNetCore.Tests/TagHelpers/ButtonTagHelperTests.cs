@@ -30,25 +30,25 @@ public class ButtonTagHelperTests
             tagName: "govuk-button",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-button",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", classes },
-                { "data-foo", dataFooAttrValue },
-            },
+            attributes: new TagHelperAttributeList() { { "class", classes }, { "data-foo", dataFooAttrValue } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ButtonOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>()))
+            .Callback<ButtonOptions>(o => actualOptions = o);
 
         var tagHelper = new ButtonTagHelper(componentGeneratorMock.Object)
         {
@@ -58,7 +58,7 @@ public class ButtonTagHelperTests
             Name = name,
             PreventDoubleClick = preventDoubleClick,
             Type = type,
-            Value = value
+            Value = value,
         };
 
         // Act
@@ -76,11 +76,14 @@ public class ButtonTagHelperTests
         Assert.Null(actualOptions.Href);
         Assert.Equal(classes, actualOptions.Classes);
         Assert.NotNull(actualOptions.Attributes);
-        Assert.Collection(actualOptions.Attributes, kvp =>
-        {
-            Assert.Equal("data-foo", kvp.Key);
-            Assert.Equal(dataFooAttrValue, kvp.Value);
-        });
+        Assert.Collection(
+            actualOptions.Attributes,
+            kvp =>
+            {
+                Assert.Equal("data-foo", kvp.Key);
+                Assert.Equal(dataFooAttrValue, kvp.Value);
+            }
+        );
         Assert.Equal(preventDoubleClick, actualOptions.PreventDoubleClick);
         Assert.Equal(isStartButton, actualOptions.IsStartButton);
         Assert.Equal(id, actualOptions.Id);

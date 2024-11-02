@@ -17,9 +17,7 @@ public class ErrorMessageTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="ErrorMessageTagHelper"/>.
     /// </summary>
-    public ErrorMessageTagHelper()
-    {
-    }
+    public ErrorMessageTagHelper() { }
 
     /// <summary>
     /// A visually hidden prefix used before the error message.
@@ -33,9 +31,7 @@ public class ErrorMessageTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {
@@ -48,7 +44,8 @@ public class ErrorMessageTagHelper : TagHelper
             VisuallyHiddenText,
             output.Attributes.ToEncodedAttributeDictionary(),
             childContent?.ToHtmlString(),
-            output.TagName);
+            output.TagName
+        );
 
         output.SuppressOutput();
     }

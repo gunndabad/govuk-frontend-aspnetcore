@@ -19,11 +19,9 @@ public class PanelBodyTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-panel-body",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PanelContext), panelContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PanelContext), panelContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel-body",
@@ -33,7 +31,8 @@ public class PanelBodyTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The body");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PanelBodyTagHelper();
 
@@ -54,11 +53,9 @@ public class PanelBodyTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-panel-body",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PanelContext), panelContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PanelContext), panelContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-panel-body",
@@ -68,7 +65,8 @@ public class PanelBodyTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("The body");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new PanelBodyTagHelper();
 

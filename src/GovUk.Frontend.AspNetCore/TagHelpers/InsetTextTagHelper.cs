@@ -41,17 +41,18 @@ public class InsetTextTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateInsetText(new InsetTextOptions()
-        {
-            Id = Id,
-            Text = null,
-            Html = childContent.ToHtmlString(),
-            Classes = classes,
-            Attributes = attributes
-        });
+        var component = _componentGenerator.GenerateInsetText(
+            new InsetTextOptions()
+            {
+                Id = Id,
+                Text = null,
+                Html = childContent.ToHtmlString(),
+                Classes = classes,
+                Attributes = attributes,
+            }
+        );
 
         output.WriteComponent(component);
     }

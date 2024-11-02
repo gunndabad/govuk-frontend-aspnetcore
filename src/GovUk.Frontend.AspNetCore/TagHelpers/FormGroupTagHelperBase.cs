@@ -20,9 +20,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     private protected const string AspForAttributeName = "asp-for";
     private protected const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
 
-    private protected FormGroupTagHelperBase(
-        IGovUkHtmlGenerator htmlGenerator,
-        IModelHelper modelHelper)
+    private protected FormGroupTagHelperBase(IGovUkHtmlGenerator htmlGenerator, IModelHelper modelHelper)
     {
         Generator = Guard.ArgumentNotNull(nameof(htmlGenerator), htmlGenerator);
         ModelHelper = Guard.ArgumentNotNull(nameof(modelHelper), modelHelper);
@@ -110,28 +108,26 @@ public abstract class FormGroupTagHelperBase : TagHelper
         }
     }
 
-    private protected virtual TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput) =>
-        Generator.GenerateFormGroup(
-            haveError,
-            content,
-            tagHelperOutput.Attributes.ToAttributeDictionary());
+    private protected virtual TagBuilder CreateTagBuilder(
+        bool haveError,
+        IHtmlContent content,
+        TagHelperOutput tagHelperOutput
+    ) => Generator.GenerateFormGroup(haveError, content, tagHelperOutput.Attributes.ToAttributeDictionary());
 
     private protected virtual string GetErrorFieldId(TagHelperContext context) => ResolveIdPrefix();
 
     internal IHtmlContent? GenerateErrorMessage(TagHelperContext tagHelperContext, FormGroupContext formGroupContext)
     {
-        var visuallyHiddenText = formGroupContext.ErrorMessage?.VisuallyHiddenText ??
-            ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;
+        var visuallyHiddenText =
+            formGroupContext.ErrorMessage?.VisuallyHiddenText
+            ?? ComponentGenerator.ErrorMessageDefaultVisuallyHiddenText;
 
         var content = formGroupContext.ErrorMessage?.Content;
         var attributes = formGroupContext.ErrorMessage?.Attributes;
 
         if (content == null && AspFor != null && IgnoreModelStateErrors != true)
         {
-            var validationMessage = ModelHelper.GetValidationMessage(
-                ViewContext!,
-                AspFor!.ModelExplorer,
-                AspFor.Name);
+            var validationMessage = ModelHelper.GetValidationMessage(ViewContext!, AspFor!.ModelExplorer, AspFor.Name);
 
             if (validationMessage != null)
             {
@@ -203,7 +199,8 @@ public abstract class FormGroupTagHelperBase : TagHelper
         if (AspFor == null && formGroupContext.Label?.Content == null)
         {
             throw new InvalidOperationException(
-                $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");
+                $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified."
+            );
         }
 
         var resolvedIdPrefix = ResolveIdPrefix();
@@ -214,21 +211,36 @@ public abstract class FormGroupTagHelperBase : TagHelper
         var attributes = formGroupContext.Label?.Attributes?.ToAttributeDictionary() ?? new();
         attributes.MergeCssClass(labelClass);
 
-        var resolvedContent = content ??
-            new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
+        var resolvedContent =
+            content
+            ?? new HtmlString(
+                HtmlEncoder.Default.Encode(
+                    ModelHelper.GetDisplayName(AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty
+                )
+            );
 
         return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
     }
 
     internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
     {
-        var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
-            (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
+        var resolvedFieldsetLegendContent =
+            fieldsetContext.Legend?.Content
+            ?? (
+                AspFor is not null
+                    ? new HtmlString(
+                        HtmlEncoder.Default.Encode(
+                            ModelHelper.GetDisplayName(AspFor.ModelExplorer, AspFor.Name) ?? string.Empty
+                        )
+                    )
+                    : null
+            );
 
         if (resolvedFieldsetLegendContent is null)
         {
             throw new InvalidOperationException(
-                $"Fieldset legend content must be specified the '{AspForAttributeName}' attribute is not specified.");
+                $"Fieldset legend content must be specified the '{AspForAttributeName}' attribute is not specified."
+            );
         }
 
         return resolvedFieldsetLegendContent;
@@ -241,7 +253,8 @@ public abstract class FormGroupTagHelperBase : TagHelper
         FormGroupContext formGroupContext,
         TagHelperOutput tagHelperOutput,
         IHtmlContent childContent,
-        out bool haveError);
+        out bool haveError
+    );
 
     private protected abstract string ResolveIdPrefix();
 }

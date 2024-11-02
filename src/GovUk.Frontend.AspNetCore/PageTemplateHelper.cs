@@ -18,7 +18,8 @@ namespace GovUk.Frontend.AspNetCore;
 /// </summary>
 public class PageTemplateHelper
 {
-    internal const string JsEnabledScript = "document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');";
+    internal const string JsEnabledScript =
+        "document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');";
     private const string VersionQueryParameterName = "v";
 
     private static readonly ConcurrentDictionary<string, string> _embeddedResourceFileVersionCache = new();
@@ -82,7 +83,8 @@ public class PageTemplateHelper
     /// </remarks>
     /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
-    public IHtmlContent GenerateScriptImports(string? cspNonce = null) => GenerateScriptImports(cspNonce, appendVersion: false);
+    public IHtmlContent GenerateScriptImports(string? cspNonce = null) =>
+        GenerateScriptImports(cspNonce, appendVersion: false);
 
     /// <summary>
     /// Generates the script that adds a <c>js-enabled</c> CSS class.
@@ -121,7 +123,9 @@ public class PageTemplateHelper
         var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
         if (compiledContentPath is null)
         {
-            throw new InvalidOperationException($"Cannot generate script imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
+            throw new InvalidOperationException(
+                $"Cannot generate script imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null."
+            );
         }
 
         var htmlContentBuilder = new HtmlContentBuilder();
@@ -136,7 +140,10 @@ public class PageTemplateHelper
             var src = $"{pathBase}{compiledContentPath}/all.min.js";
             if (appendVersion)
             {
-                var version = _embeddedResourceFileVersionCache.GetOrAdd("Content/Compiled/all.min.js", path => GetEmbeddedResourceVersion(path));
+                var version = _embeddedResourceFileVersionCache.GetOrAdd(
+                    "Content/Compiled/all.min.js",
+                    path => GetEmbeddedResourceVersion(path)
+                );
                 src = QueryHelpers.AddQueryString(src, VersionQueryParameterName, version);
             }
 
@@ -179,7 +186,8 @@ public class PageTemplateHelper
     /// </remarks>
     /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
-    public IHtmlContent GenerateStyleImports(bool appendVersion) => GenerateStyleImports(pathBase: "", appendVersion: appendVersion);
+    public IHtmlContent GenerateStyleImports(bool appendVersion) =>
+        GenerateStyleImports(pathBase: "", appendVersion: appendVersion);
 
     /// <summary>
     /// Generates the HTML that imports the GOV.UK Frontend library styles.
@@ -195,13 +203,18 @@ public class PageTemplateHelper
         var compiledContentPath = _optionsAccessor.Value.CompiledContentPath;
         if (compiledContentPath is null)
         {
-            throw new InvalidOperationException($"Cannot generate style imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
+            throw new InvalidOperationException(
+                $"Cannot generate style imports when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null."
+            );
         }
 
         var href = $"{pathBase}{compiledContentPath}/all.min.css";
         if (appendVersion)
         {
-            var version = _embeddedResourceFileVersionCache.GetOrAdd("Content/Compiled/all.min.css", path => GetEmbeddedResourceVersion(path));
+            var version = _embeddedResourceFileVersionCache.GetOrAdd(
+                "Content/Compiled/all.min.css",
+                path => GetEmbeddedResourceVersion(path)
+            );
             href = QueryHelpers.AddQueryString(href, VersionQueryParameterName, version);
         }
 
@@ -219,7 +232,8 @@ public class PageTemplateHelper
     /// </summary>
     /// <param name="pathBase">The base path that the script is hosted under.</param>
     /// <returns>A list of hashes to be included in your site's <c>Content-Security-Policy</c> header within the <c>script-src</c> directive.</returns>
-    public string GetCspScriptHashes(PathString pathBase) => $"{GetInitScriptCspHash(pathBase)} {GetJsEnabledScriptCspHash()}";
+    public string GetCspScriptHashes(PathString pathBase) =>
+        $"{GetInitScriptCspHash(pathBase)} {GetJsEnabledScriptCspHash()}";
 
     /// <summary>
     /// Gets the CSP hash for the script that adds a <c>js-enabled</c> CSS class.
@@ -244,7 +258,9 @@ public class PageTemplateHelper
     {
         if (_optionsAccessor.Value.CompiledContentPath is null)
         {
-            throw new InvalidOperationException($"Cannot generate scripts when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null.");
+            throw new InvalidOperationException(
+                $"Cannot generate scripts when {nameof(GovUkFrontendAspNetCoreOptions.CompiledContentPath)} is null."
+            );
         }
 
         var compiledContentPath = $"{pathBase}{_optionsAccessor.Value.CompiledContentPath}";
@@ -253,7 +269,8 @@ public class PageTemplateHelper
     }
 
     private static string GetGovUkFrontendVersion() =>
-        typeof(PageTemplateHelper).Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
+        typeof(PageTemplateHelper)
+            .Assembly.GetCustomAttributes<AssemblyMetadataAttribute>()
             .Single(a => a.Key == "GovUkFrontendVersion")
             .Value!;
 
@@ -266,8 +283,9 @@ public class PageTemplateHelper
 
     private static string GetEmbeddedResourceVersion(string path)
     {
-        using var resourceStream = typeof(PageTemplateHelper).Assembly.GetManifestResourceStream($"{path}") ??
-            throw new ArgumentException($"Could not find resource: '{path}'.", nameof(path));
+        using var resourceStream =
+            typeof(PageTemplateHelper).Assembly.GetManifestResourceStream($"{path}")
+            ?? throw new ArgumentException($"Could not find resource: '{path}'.", nameof(path));
         using var ms = new MemoryStream();
         resourceStream.CopyTo(ms);
         var hash = SHA256.HashData(ms.ToArray());

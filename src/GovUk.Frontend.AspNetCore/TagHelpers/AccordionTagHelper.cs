@@ -35,9 +35,7 @@ public class AccordionTagHelper : TagHelper
     /// Creates a new <see cref="AccordionTagHelper"/>.
     /// </summary>
     public AccordionTagHelper()
-        : this(null)
-    {
-    }
+        : this(null) { }
 
     internal AccordionTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
     {
@@ -56,12 +54,15 @@ public class AccordionTagHelper : TagHelper
         get => _headingLevel;
         set
         {
-            if (value < ComponentGenerator.AccordionMinHeadingLevel ||
-                value > ComponentGenerator.AccordionMaxHeadingLevel)
+            if (
+                value < ComponentGenerator.AccordionMinHeadingLevel
+                || value > ComponentGenerator.AccordionMaxHeadingLevel
+            )
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(value),
-                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.AccordionMinHeadingLevel} and {ComponentGenerator.AccordionMaxHeadingLevel}.");
+                    $"{nameof(HeadingLevel)} must be between {ComponentGenerator.AccordionMinHeadingLevel} and {ComponentGenerator.AccordionMaxHeadingLevel}."
+                );
             }
 
             _headingLevel = value;
@@ -104,10 +105,7 @@ public class AccordionTagHelper : TagHelper
     public string? Id
     {
         get => _id;
-        set
-        {
-            _id = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-        }
+        set { _id = Guard.ArgumentNotNullOrEmpty(nameof(value), value); }
     }
 
     /// <summary>
@@ -169,7 +167,8 @@ public class AccordionTagHelper : TagHelper
             HideAllSectionsText,
             HideSectionText,
             HideSectionAriaLabelText,
-            items: accordionContext.Items);
+            items: accordionContext.Items
+        );
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

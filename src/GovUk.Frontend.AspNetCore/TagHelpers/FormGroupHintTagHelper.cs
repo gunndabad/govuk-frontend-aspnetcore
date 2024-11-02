@@ -25,16 +25,12 @@ public class FormGroupHintTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="FormGroupHintTagHelper"/>.
     /// </summary>
-    public FormGroupHintTagHelper()
-    {
-    }
+    public FormGroupHintTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {

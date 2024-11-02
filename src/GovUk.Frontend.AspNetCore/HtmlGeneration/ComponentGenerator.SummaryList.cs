@@ -14,9 +14,7 @@ internal partial class ComponentGenerator
     internal const string SummaryListRowKeyElement = "dt";
     internal const string SummaryListRowValueElement = "dd";
 
-    public TagBuilder GenerateSummaryList(
-        IEnumerable<SummaryListRow> rows,
-        AttributeDictionary? attributes)
+    public TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows, AttributeDictionary? attributes)
     {
         Guard.ArgumentNotNull(nameof(rows), rows);
 
@@ -33,25 +31,29 @@ internal partial class ComponentGenerator
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Key)} cannot be null.",
                 row.Key,
-                row.Key != null);
+                row.Key != null
+            );
 
             Guard.ArgumentValidNotNull(
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Key)}.{nameof(SummaryListRow.Key.Content)} cannot be null.",
                 row.Key.Content,
-                row.Key.Content != null);
+                row.Key.Content != null
+            );
 
             Guard.ArgumentValidNotNull(
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Value)} cannot be null.",
                 row.Value,
-                row.Value != null);
+                row.Value != null
+            );
 
             Guard.ArgumentValidNotNull(
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Value)}.{nameof(SummaryListRow.Value.Content)} cannot be null.",
                 row.Value.Content,
-                row.Value.Content != null);
+                row.Value.Content != null
+            );
 
             var thisRowHasActions = row.Actions?.Items?.Any() == true;
 
@@ -122,7 +124,8 @@ internal partial class ComponentGenerator
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListAction.Content)} cannot be null.",
                 action.Content,
-                action.Content != null);
+                action.Content != null
+            );
 
             var anchor = new TagBuilder(SummaryListRowActionElement);
             anchor.MergeOptionalAttributes(action.Attributes);

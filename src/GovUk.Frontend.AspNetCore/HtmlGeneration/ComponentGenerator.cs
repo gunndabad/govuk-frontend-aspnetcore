@@ -8,10 +8,7 @@ internal partial class ComponentGenerator : IGovUkHtmlGenerator
 {
     internal const string FormGroupElement = "div";
 
-    public virtual TagBuilder GenerateFormGroup(
-        bool haveError,
-        IHtmlContent content,
-        AttributeDictionary? attributes)
+    public virtual TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, AttributeDictionary? attributes)
     {
         Guard.ArgumentNotNull(nameof(content), content);
 

@@ -40,16 +40,17 @@ public class WarningTextTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateWarningText(new WarningTextOptions()
-        {
-            Html = content?.ToHtmlString(),
-            IconFallbackText = IconFallbackText,
-            Classes = classes,
-            Attributes = attributes
-        });
+        var component = _componentGenerator.GenerateWarningText(
+            new WarningTextOptions()
+            {
+                Html = content?.ToHtmlString(),
+                IconFallbackText = IconFallbackText,
+                Classes = classes,
+                Attributes = attributes,
+            }
+        );
 
         output.WriteComponent(component);
     }

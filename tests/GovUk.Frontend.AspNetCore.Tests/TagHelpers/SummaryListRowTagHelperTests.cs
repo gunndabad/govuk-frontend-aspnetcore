@@ -22,11 +22,9 @@ public class SummaryListRowTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-summary-list-row",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SummaryListContext), summaryListContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SummaryListContext), summaryListContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row",
@@ -36,28 +34,27 @@ public class SummaryListRowTagHelperTests
                 var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
                 rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
                 rowContext.SetValue(new AttributeDictionary(), new HtmlString("Value"));
-                rowContext.AddAction(new SummaryListAction()
-                {
-                    Attributes = new AttributeDictionary()
+                rowContext.AddAction(
+                    new SummaryListAction()
                     {
-                        { "href", "first" }
-                    },
-                    Content = new HtmlString("First action"),
-                    VisuallyHiddenText = "vht1"
-                });
-                rowContext.AddAction(new SummaryListAction()
-                {
-                    Attributes = new AttributeDictionary()
+                        Attributes = new AttributeDictionary() { { "href", "first" } },
+                        Content = new HtmlString("First action"),
+                        VisuallyHiddenText = "vht1",
+                    }
+                );
+                rowContext.AddAction(
+                    new SummaryListAction()
                     {
-                        { "href", "second" }
-                    },
-                    Content = new HtmlString("Second action"),
-                    VisuallyHiddenText = "vht2"
-                });
+                        Attributes = new AttributeDictionary() { { "href", "second" } },
+                        Content = new HtmlString("Second action"),
+                        VisuallyHiddenText = "vht2",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowTagHelper();
 
@@ -88,8 +85,10 @@ public class SummaryListRowTagHelperTests
                         Assert.NotNull(action.Attributes);
                         Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
                         Assert.Equal("vht2", action.VisuallyHiddenText);
-                    });
-            });
+                    }
+                );
+            }
+        );
     }
 
     [Fact]
@@ -101,11 +100,9 @@ public class SummaryListRowTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-summary-list-row",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SummaryListContext), summaryListContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SummaryListContext), summaryListContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row",
@@ -114,28 +111,27 @@ public class SummaryListRowTagHelperTests
             {
                 var rowContext = (SummaryListRowContext)context.Items[typeof(SummaryListRowContext)];
                 rowContext.SetKey(new AttributeDictionary(), new HtmlString("Key"));
-                rowContext.AddAction(new SummaryListAction()
-                {
-                    Attributes = new AttributeDictionary()
+                rowContext.AddAction(
+                    new SummaryListAction()
                     {
-                        { "href", "first" }
-                    },
-                    Content = new HtmlString("First action"),
-                    VisuallyHiddenText = "vht1"
-                });
-                rowContext.AddAction(new SummaryListAction()
-                {
-                    Attributes = new AttributeDictionary()
+                        Attributes = new AttributeDictionary() { { "href", "first" } },
+                        Content = new HtmlString("First action"),
+                        VisuallyHiddenText = "vht1",
+                    }
+                );
+                rowContext.AddAction(
+                    new SummaryListAction()
                     {
-                        { "href", "second" }
-                    },
-                    Content = new HtmlString("Second action"),
-                    VisuallyHiddenText = "vht2"
-                });
+                        Attributes = new AttributeDictionary() { { "href", "second" } },
+                        Content = new HtmlString("Second action"),
+                        VisuallyHiddenText = "vht2",
+                    }
+                );
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowTagHelper();
 
@@ -166,8 +162,10 @@ public class SummaryListRowTagHelperTests
                         Assert.NotNull(action.Attributes);
                         Assert.Contains(action.Attributes, kvp => kvp.Key == "href" && kvp.Value == "second");
                         Assert.Equal("vht2", action.VisuallyHiddenText);
-                    });
-            });
+                    }
+                );
+            }
+        );
     }
 
     [Fact]
@@ -179,11 +177,9 @@ public class SummaryListRowTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-summary-list-row",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SummaryListContext), summaryListContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SummaryListContext), summaryListContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-list-row",
@@ -192,7 +188,8 @@ public class SummaryListRowTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new SummaryListRowTagHelper();
 

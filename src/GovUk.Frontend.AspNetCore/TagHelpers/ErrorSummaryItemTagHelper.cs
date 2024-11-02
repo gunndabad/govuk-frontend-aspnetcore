@@ -36,18 +36,21 @@ public class ErrorSummaryItemTagHelper : TagHelper
     /// </summary>
     public ErrorSummaryItemTagHelper(
         IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
-        DateInputParseErrorsProvider dateInputParseErrorsProvider)
-        : this(optionsAccessor, dateInputParseErrorsProvider, modelHelper: null)
-    {
-    }
+        DateInputParseErrorsProvider dateInputParseErrorsProvider
+    )
+        : this(optionsAccessor, dateInputParseErrorsProvider, modelHelper: null) { }
 
     internal ErrorSummaryItemTagHelper(
         IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
         DateInputParseErrorsProvider dateInputParseErrorsProvider,
-        IModelHelper? modelHelper = null)
+        IModelHelper? modelHelper = null
+    )
     {
         _options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
-        _dateInputParseErrorsProvider = Guard.ArgumentNotNull(nameof(dateInputParseErrorsProvider), dateInputParseErrorsProvider);
+        _dateInputParseErrorsProvider = Guard.ArgumentNotNull(
+            nameof(dateInputParseErrorsProvider),
+            dateInputParseErrorsProvider
+        );
         _modelHelper = modelHelper ?? new DefaultModelHelper();
     }
 
@@ -76,7 +79,8 @@ public class ErrorSummaryItemTagHelper : TagHelper
         if (output.TagMode == TagMode.SelfClosing && AspFor == null)
         {
             throw new InvalidOperationException(
-                $"Content is required when the '{AspForAttributeName}' attribute is not specified.");
+                $"Content is required when the '{AspForAttributeName}' attribute is not specified."
+            );
         }
 
         var errorSummaryContext = context.GetContextItem<ErrorSummaryContext>();
@@ -98,10 +102,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
         {
             Debug.Assert(AspFor != null);
 
-            var validationMessage = _modelHelper.GetValidationMessage(
-                ViewContext!,
-                AspFor!.ModelExplorer,
-                AspFor.Name);
+            var validationMessage = _modelHelper.GetValidationMessage(ViewContext!, AspFor!.ModelExplorer, AspFor.Name);
 
             if (validationMessage == null)
             {
@@ -122,7 +123,8 @@ public class ErrorSummaryItemTagHelper : TagHelper
         {
             var errorFieldId = TagBuilder.CreateSanitizedId(
                 _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
-                Constants.IdAttributeDotReplacement);
+                Constants.IdAttributeDotReplacement
+            );
 
             // Date inputs are special; they don't have an element with an ID which exactly corresponds to the ID derived above;
             // the IDs are suffixed with .Day .Month and .Year for each of the components.
@@ -165,7 +167,8 @@ public class ErrorSummaryItemTagHelper : TagHelper
             resolvedHref,
             itemContent.ToHtmlString(),
             attributes: LinkAttributes?.ToImmutableDictionary() ?? ImmutableDictionary<string, string?>.Empty,
-            itemAttributes: output.Attributes.ToEncodedAttributeDictionary());
+            itemAttributes: output.Attributes.ToEncodedAttributeDictionary()
+        );
 
         output.SuppressOutput();
 

@@ -15,13 +15,18 @@ internal class CharacterCountContext : FormGroupContext
 
     public IHtmlContent? Value { get; private set; }
 
-    public override void SetErrorMessage(string? visuallyHiddenText, AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetErrorMessage(
+        string? visuallyHiddenText,
+        AttributeDictionary? attributes,
+        IHtmlContent? content
+    )
     {
         if (Value != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 ErrorMessageTagName,
-                CharacterCountValueTagHelper.TagName);
+                CharacterCountValueTagHelper.TagName
+            );
         }
 
         base.SetErrorMessage(visuallyHiddenText, attributes, content);
@@ -31,9 +36,7 @@ internal class CharacterCountContext : FormGroupContext
     {
         if (Value != null)
         {
-            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                HintTagName,
-                CharacterCountValueTagHelper.TagName);
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(HintTagName, CharacterCountValueTagHelper.TagName);
         }
 
         base.SetHint(attributes, content);
@@ -43,9 +46,7 @@ internal class CharacterCountContext : FormGroupContext
     {
         if (Value != null)
         {
-            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                LabelTagName,
-                CharacterCountValueTagHelper.TagName);
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(LabelTagName, CharacterCountValueTagHelper.TagName);
         }
 
         base.SetLabel(isPageHeading, attributes, content);

@@ -29,9 +29,8 @@ public class DateInputFieldsetLegendTagHelper : TagHelper
     {
         var fieldsetContext = context.GetContextItem<DateInputFieldsetContext>();
 
-        var content = output.TagMode == TagMode.StartTagAndEndTag ?
-            (await output.GetChildContentAsync()).Snapshot() :
-            null;
+        var content =
+            output.TagMode == TagMode.StartTagAndEndTag ? (await output.GetChildContentAsync()).Snapshot() : null;
 
         if (output.Content.IsModified)
         {

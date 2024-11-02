@@ -23,7 +23,8 @@ public class PhaseBannerTagHelperTests
             tagName: "govuk-phase-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-phase-banner",
@@ -36,11 +37,14 @@ public class PhaseBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(message);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         PhaseBannerOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GeneratePhaseBanner(It.IsAny<PhaseBannerOptions>())).Callback<PhaseBannerOptions>(o => actualOptions = o);
+        componentGeneratorMock
+            .Setup(mock => mock.GeneratePhaseBanner(It.IsAny<PhaseBannerOptions>()))
+            .Callback<PhaseBannerOptions>(o => actualOptions = o);
 
         var tagHelper = new PhaseBannerTagHelper(componentGeneratorMock.Object);
 
@@ -61,7 +65,8 @@ public class PhaseBannerTagHelperTests
             tagName: "govuk-phase-banner",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-phase-banner",
@@ -71,7 +76,8 @@ public class PhaseBannerTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Phase message");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var componentGeneratorMock = new Mock<IComponentGenerator>();
 

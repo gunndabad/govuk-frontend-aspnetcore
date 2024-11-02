@@ -17,7 +17,8 @@ public class TabsItemTagHelperTests
             tagName: "govuk-tabs-item",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var tabsContext = new TabsContext(haveIdPrefix: false);
         context.Items.Add(typeof(TabsContext), tabsContext);
@@ -31,13 +32,10 @@ public class TabsItemTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 return Task.FromResult<TagHelperContent>(panelContent);
-            });
+            }
+        );
 
-        var tagHelper = new TabsItemTagHelper()
-        {
-            Id = "item1",
-            Label = "First"
-        };
+        var tagHelper = new TabsItemTagHelper() { Id = "item1", Label = "First" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -50,7 +48,8 @@ public class TabsItemTagHelperTests
                 Assert.Equal("item1", item.Id);
                 Assert.Equal("First", item.Label);
                 Assert.Equal(panelContent.ToHtmlString(), item.PanelContent?.ToHtmlString());
-            });
+            }
+        );
     }
 
     [Fact]
@@ -61,7 +60,8 @@ public class TabsItemTagHelperTests
             tagName: "govuk-tabs-item",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var tabsContext = new TabsContext(haveIdPrefix: true);
         context.Items.Add(typeof(TabsContext), tabsContext);
@@ -75,12 +75,10 @@ public class TabsItemTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 return Task.FromResult<TagHelperContent>(panelContent);
-            });
+            }
+        );
 
-        var tagHelper = new TabsItemTagHelper()
-        {
-            Label = "First"
-        };
+        var tagHelper = new TabsItemTagHelper() { Label = "First" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -93,7 +91,8 @@ public class TabsItemTagHelperTests
                 Assert.Null(item.Id);
                 Assert.Equal("First", item.Label);
                 Assert.Equal(panelContent.ToHtmlString(), item.PanelContent?.ToHtmlString());
-            });
+            }
+        );
     }
 
     [Fact]
@@ -104,7 +103,8 @@ public class TabsItemTagHelperTests
             tagName: "govuk-tabs-item",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var tabsContext = new TabsContext(haveIdPrefix: false);
         context.Items.Add(typeof(TabsContext), tabsContext);
@@ -116,12 +116,10 @@ public class TabsItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TabsItemTagHelper()
-        {
-            Label = "Third"
-        };
+        var tagHelper = new TabsItemTagHelper() { Label = "Third" };
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
@@ -139,7 +137,8 @@ public class TabsItemTagHelperTests
             tagName: "govuk-tabs-item",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var tabsContext = new TabsContext(haveIdPrefix: false);
         context.Items.Add(typeof(TabsContext), tabsContext);
@@ -151,11 +150,10 @@ public class TabsItemTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new TabsItemTagHelper()
-        {
-        };
+        var tagHelper = new TabsItemTagHelper() { };
 
         // Act
         var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));

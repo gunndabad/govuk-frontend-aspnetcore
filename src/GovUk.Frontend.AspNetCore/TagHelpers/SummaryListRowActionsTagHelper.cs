@@ -17,9 +17,7 @@ public class SummaryListRowActionsTagHelper : TagHelper
     /// <summary>
     /// Creates a new <see cref="SummaryListRowActionsTagHelper"/>.
     /// </summary>
-    public SummaryListRowActionsTagHelper()
-    {
-    }
+    public SummaryListRowActionsTagHelper() { }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

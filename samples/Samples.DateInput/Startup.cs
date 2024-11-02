@@ -23,8 +23,7 @@ public class Startup
             options.DateInputModelConverters.Add(new LocalDateDateInputModelConverter());
         });
 
-        services.AddRazorPages()
-            .AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled = false);
+        services.AddRazorPages().AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled = false);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

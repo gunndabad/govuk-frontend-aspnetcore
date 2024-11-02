@@ -9,7 +9,5 @@ public class FormGroupOptions
     public string? Classes { get; set; }
     public ImmutableDictionary<string, string?>? Attributes { get; set; }
 
-    internal virtual void Validate()
-    {
-    }
+    internal virtual void Validate() { }
 }

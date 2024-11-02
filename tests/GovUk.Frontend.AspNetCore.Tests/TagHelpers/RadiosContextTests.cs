@@ -14,11 +14,7 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         // Act
         context.AddItem(item);
@@ -34,11 +30,7 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.OpenFieldset();
         var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
@@ -82,7 +74,10 @@ public class RadiosContextTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal<object>("Only one <govuk-radios-fieldset> element is permitted within each <govuk-radios>.", ex.Message);
+        Assert.Equal<object>(
+            "Only one <govuk-radios-fieldset> element is permitted within each <govuk-radios>.",
+            ex.Message
+        );
     }
 
     [Fact]
@@ -91,11 +86,7 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.AddItem(item);
 
@@ -144,7 +135,9 @@ public class RadiosContextTests
         var context = new RadiosContext(name: null, aspFor: null);
 
         // Act
-        var ex = Record.Exception(() => context.CloseFieldset(new RadiosFieldsetContext(attributes: null, aspFor: null)));
+        var ex = Record.Exception(
+            () => context.CloseFieldset(new RadiosFieldsetContext(attributes: null, aspFor: null))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -157,17 +150,14 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.AddItem(item);
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error"))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -180,11 +170,7 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.OpenFieldset();
         var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);
@@ -192,7 +178,8 @@ public class RadiosContextTests
 
         // Act
         var ex = Record.Exception(
-            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error")));
+            () => context.SetErrorMessage(visuallyHiddenText: null, attributes: null, new HtmlString("Error"))
+        );
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -205,11 +192,7 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.AddItem(item);
 
@@ -227,11 +210,7 @@ public class RadiosContextTests
         // Arrange
         var context = new RadiosContext(name: null, aspFor: null);
 
-        var item = new RadiosItem()
-        {
-            LabelContent = new HtmlString("Item 1"),
-            Value = "item1"
-        };
+        var item = new RadiosItem() { LabelContent = new HtmlString("Item 1"), Value = "item1" };
 
         context.OpenFieldset();
         var fieldsetContext = new RadiosFieldsetContext(attributes: null, aspFor: null);

@@ -19,11 +19,9 @@ public class TextInputPrefixTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-input-prefix",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(TextInputContext), inputContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(TextInputContext), inputContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-input-prefix",
@@ -33,7 +31,8 @@ public class TextInputPrefixTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.AppendHtml(new HtmlString(prefix));
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new TextInputPrefixTagHelper();
 

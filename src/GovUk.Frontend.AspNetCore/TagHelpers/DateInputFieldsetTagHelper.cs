@@ -14,7 +14,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     DateInputTagHelper.ErrorMessageTagName,
     DateInputItemTagHelper.DayTagName,
     DateInputItemTagHelper.MonthTagName,
-    DateInputItemTagHelper.YearTagName)]
+    DateInputItemTagHelper.YearTagName
+)]
 [OutputElementHint(ComponentGenerator.FieldsetElement)]
 public class DateInputFieldsetTagHelper : TagHelper
 {
@@ -25,9 +26,7 @@ public class DateInputFieldsetTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="DateInputFieldsetTagHelper"/>.
     /// </summary>
-    public DateInputFieldsetTagHelper()
-    {
-    }
+    public DateInputFieldsetTagHelper() { }
 
     /// <summary>
     /// One or more element IDs to add to the <c>aria-describedby</c> attribute.
@@ -41,7 +40,10 @@ public class DateInputFieldsetTagHelper : TagHelper
         var dateInputContext = context.GetContextItem<DateInputContext>();
         dateInputContext.OpenFieldset();
 
-        var fieldsetContext = new DateInputFieldsetContext(output.Attributes.ToAttributeDictionary(), dateInputContext.AspFor);
+        var fieldsetContext = new DateInputFieldsetContext(
+            output.Attributes.ToAttributeDictionary(),
+            dateInputContext.AspFor
+        );
 
         using (context.SetScopedContextItem(fieldsetContext))
         {

@@ -17,11 +17,9 @@ public class PaginationPreviousTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-pagination-previous",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(PaginationContext), paginationContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(PaginationContext), paginationContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-pagination-previous",
@@ -30,12 +28,10 @@ public class PaginationPreviousTagHelperTests
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new PaginationPreviousTagHelper()
-        {
-            LabelText = "Previous page"
-        };
+        var tagHelper = new PaginationPreviousTagHelper() { LabelText = "Previous page" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);

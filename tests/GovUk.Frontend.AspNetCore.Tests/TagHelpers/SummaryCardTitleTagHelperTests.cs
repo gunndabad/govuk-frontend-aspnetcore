@@ -17,29 +17,22 @@ public class SummaryCardTitleTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-summary-card-title",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(SummaryCardContext), summaryCardContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(SummaryCardContext), summaryCardContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-summary-card-title",
-            attributes: new TagHelperAttributeList()
-            {
-                { "class", "additional-class" }
-            },
+            attributes: new TagHelperAttributeList() { { "class", "additional-class" } },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Title");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new SummaryCardTitleTagHelper()
-        {
-            HeadingLevel = 3
-        };
+        var tagHelper = new SummaryCardTitleTagHelper() { HeadingLevel = 3 };
 
         // Act
         await tagHelper.ProcessAsync(context, output);

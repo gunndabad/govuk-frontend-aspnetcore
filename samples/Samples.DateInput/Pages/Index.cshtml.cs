@@ -14,11 +14,7 @@ public class IndexModel : PageModel
     [Required(ErrorMessage = "Enter your date of birth")]
     public LocalDate? DateOfBirth { get; set; }
 
-    public void OnGet()
-    {
-    }
+    public void OnGet() { }
 
-    public void OnPost()
-    {
-    }
+    public void OnPost() { }
 }

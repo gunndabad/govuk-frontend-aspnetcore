@@ -80,7 +80,10 @@ public class PageTemplateHelperTests
         var result = pageTemplateHelper.GetCspScriptHashes();
 
         // Assert
-        Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", result);
+        Assert.Equal(
+            "'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
+            result
+        );
     }
 
     [Fact]

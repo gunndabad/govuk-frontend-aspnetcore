@@ -11,7 +11,5 @@ public class TextInputWithModelBindingModel : PageModel
     [Required(ErrorMessage = "Enter the name of the event")]
     public string? EventName { get; set; }
 
-    public void OnGet()
-    {
-    }
+    public void OnGet() { }
 }

@@ -20,11 +20,9 @@ public class FormGroupErrorMessageTagHelperTests
         var context = new TagHelperContext(
             tagName: "test-error-message",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(FormGroupContext), formGroupContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(FormGroupContext), formGroupContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "test-error-message",
@@ -34,7 +32,8 @@ public class FormGroupErrorMessageTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(errorMessage);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new FormGroupErrorMessageTagHelper();
 

@@ -8,12 +8,14 @@ internal class DateInputItem
 {
     [DisallowNull]
     public string? Id { get; set; }
+
     [DisallowNull]
     public string? Name { get; set; }
     public string? Value { get; set; }
     public string? Autocomplete { get; set; }
     public string? InputMode { get; set; }
     public string? Pattern { get; set; }
+
     [DisallowNull]
     public IHtmlContent? LabelContent { get; set; }
     public AttributeDictionary? LabelAttributes { get; set; }

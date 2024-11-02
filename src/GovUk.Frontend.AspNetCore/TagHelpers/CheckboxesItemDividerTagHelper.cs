@@ -26,11 +26,13 @@ public class CheckboxesItemDividerTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        checkboxesContext.AddItem(new CheckboxesItemDivider()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot()
-        });
+        checkboxesContext.AddItem(
+            new CheckboxesItemDivider()
+            {
+                Attributes = output.Attributes.ToAttributeDictionary(),
+                Content = childContent.Snapshot(),
+            }
+        );
 
         output.SuppressOutput();
     }

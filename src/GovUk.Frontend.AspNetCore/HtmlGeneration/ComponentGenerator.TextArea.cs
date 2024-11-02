@@ -20,7 +20,8 @@ internal partial class ComponentGenerator
         bool? spellcheck,
         bool disabled,
         IHtmlContent content,
-        AttributeDictionary? attributes)
+        AttributeDictionary? attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);

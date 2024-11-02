@@ -89,23 +89,24 @@ public class ButtonTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateButton(new ButtonOptions()
-        {
-            Element = Element,
-            Html = content?.ToHtmlString(),
-            Name = Name,
-            Type = Type,
-            Value = Value,
-            Disabled = Disabled,
-            Classes = classes,
-            Attributes = attributes,
-            PreventDoubleClick = PreventDoubleClick,
-            IsStartButton = IsStartButton,
-            Id = Id
-        });
+        var component = _componentGenerator.GenerateButton(
+            new ButtonOptions()
+            {
+                Element = Element,
+                Html = content?.ToHtmlString(),
+                Name = Name,
+                Type = Type,
+                Value = Value,
+                Disabled = Disabled,
+                Classes = classes,
+                Attributes = attributes,
+                PreventDoubleClick = PreventDoubleClick,
+                IsStartButton = IsStartButton,
+                Id = Id,
+            }
+        );
 
         output.WriteComponent(component);
     }

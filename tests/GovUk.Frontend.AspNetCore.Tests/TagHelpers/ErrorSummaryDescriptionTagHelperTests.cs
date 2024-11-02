@@ -19,11 +19,9 @@ public class ErrorSummaryDescriptionTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-error-summary-description",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ErrorSummaryContext), errorSummaryContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(ErrorSummaryContext), errorSummaryContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-error-summary-description",
@@ -33,7 +31,8 @@ public class ErrorSummaryDescriptionTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent(descriptionHtml);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new ErrorSummaryDescriptionTagHelper();
 

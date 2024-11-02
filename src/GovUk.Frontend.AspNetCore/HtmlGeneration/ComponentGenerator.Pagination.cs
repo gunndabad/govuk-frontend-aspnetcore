@@ -24,7 +24,8 @@ internal partial class ComponentGenerator
         PaginationPrevious? previous,
         PaginationNext? next,
         string? landmarkLabel,
-        AttributeDictionary attributes)
+        AttributeDictionary attributes
+    )
     {
         Guard.ArgumentNotNull(nameof(items), items);
 
@@ -69,7 +70,12 @@ internal partial class ComponentGenerator
             }
 
             title.InnerHtml.AppendHtml(
-                previous.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultPreviousText) + "<span class=\"govuk-visually-hidden\"> page</span>"));
+                previous.Text
+                    ?? new HtmlString(
+                        HtmlEncoder.Default.Encode(PaginationDefaultPreviousText)
+                            + "<span class=\"govuk-visually-hidden\"> page</span>"
+                    )
+            );
 
             link.InnerHtml.AppendHtml(title);
 
@@ -106,7 +112,8 @@ internal partial class ComponentGenerator
                         nameof(items),
                         $"Item {itemIndex} is not valid; {nameof(PaginationItem.Number)} cannot be null.",
                         paginationItem.Number,
-                        paginationItem.Number != null);
+                        paginationItem.Number != null
+                    );
 
                     var li = new TagBuilder(PaginationItemElement);
                     li.MergeOptionalAttributes(paginationItem.Attributes);
@@ -121,7 +128,10 @@ internal partial class ComponentGenerator
                     li.MergeOptionalAttributes(paginationItem.Attributes);
                     itemLink.AddCssClass("govuk-link");
                     itemLink.AddCssClass("govuk-pagination__link");
-                    itemLink.Attributes.Add("aria-label", paginationItem.VisuallyHiddenText ?? $"Page {paginationItem.Number.ToHtmlString()}");
+                    itemLink.Attributes.Add(
+                        "aria-label",
+                        paginationItem.VisuallyHiddenText ?? $"Page {paginationItem.Number.ToHtmlString()}"
+                    );
 
                     if (paginationItem.Href is not null)
                     {
@@ -190,7 +200,12 @@ internal partial class ComponentGenerator
             }
 
             title.InnerHtml.AppendHtml(
-                next.Text ?? new HtmlString(HtmlEncoder.Default.Encode(PaginationDefaultNextText) + "<span class=\"govuk-visually-hidden\"> page</span>"));
+                next.Text
+                    ?? new HtmlString(
+                        HtmlEncoder.Default.Encode(PaginationDefaultNextText)
+                            + "<span class=\"govuk-visually-hidden\"> page</span>"
+                    )
+            );
 
             link.InnerHtml.AppendHtml(title);
 
@@ -232,7 +247,10 @@ internal partial class ComponentGenerator
             svg.Attributes.Add("viewBox", "0 0 15 13");
 
             var path = new TagBuilder("path");
-            path.Attributes.Add("d", "m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z");
+            path.Attributes.Add(
+                "d",
+                "m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"
+            );
 
             svg.InnerHtml.AppendHtml(path);
 
@@ -256,7 +274,10 @@ internal partial class ComponentGenerator
             svg.Attributes.Add("viewBox", "0 0 15 13");
 
             var path = new TagBuilder("path");
-            path.Attributes.Add("d", "m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z");
+            path.Attributes.Add(
+                "d",
+                "m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"
+            );
 
             svg.InnerHtml.AppendHtml(path);
 

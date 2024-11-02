@@ -20,9 +20,10 @@ public class NotificationBannerTitleTagHelperTests
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(NotificationBannerContext), notificationBannerContext }
+                { typeof(NotificationBannerContext), notificationBannerContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner-title",
@@ -32,13 +33,10 @@ public class NotificationBannerTitleTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Title");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
-        var tagHelper = new NotificationBannerTitleTagHelper()
-        {
-            HeadingLevel = 3,
-            Id = "my-title"
-        };
+        var tagHelper = new NotificationBannerTitleTagHelper() { HeadingLevel = 3, Id = "my-title" };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -64,9 +62,10 @@ public class NotificationBannerTitleTagHelperTests
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(NotificationBannerContext), notificationBannerContext }
+                { typeof(NotificationBannerContext), notificationBannerContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-notification-banner-title",
@@ -76,13 +75,11 @@ public class NotificationBannerTitleTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Title");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         // Act
-        var ex = Record.Exception(() => new NotificationBannerTitleTagHelper()
-        {
-            HeadingLevel = level
-        });
+        var ex = Record.Exception(() => new NotificationBannerTitleTagHelper() { HeadingLevel = level });
 
         // Assert
         var argumentEx = Assert.IsType<ArgumentOutOfRangeException>(ex);

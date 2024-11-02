@@ -18,9 +18,7 @@ public class LabelTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="FormGroupLabelTagHelper"/>.
     /// </summary>
-    public LabelTagHelper()
-    {
-    }
+    public LabelTagHelper() { }
 
     /// <summary>
     /// Whether the label also acts as the heading for the page.
@@ -34,9 +32,7 @@ public class LabelTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ? await output.GetChildContentAsync() : null;
 
         if (output.Content.IsModified)
         {
@@ -49,7 +45,8 @@ public class LabelTagHelper : TagHelper
             IsPageHeading,
             output.Attributes.ToEncodedAttributeDictionary(),
             childContent?.ToHtmlString(),
-            output.TagName);
+            output.TagName
+        );
 
         output.SuppressOutput();
     }

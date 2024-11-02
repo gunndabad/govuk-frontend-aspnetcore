@@ -10,6 +10,8 @@ internal static class TagHelperAttributeExtensions
         attribute.ValueStyle switch
         {
             HtmlAttributeValueStyle.Minimized => null,
-            _ => attribute.Value is IHtmlContent htmlContent ? htmlContent.ToHtmlString() : HtmlEncoder.Default.Encode(attribute.Value.ToString()!)
+            _ => attribute.Value is IHtmlContent htmlContent
+                ? htmlContent.ToHtmlString()
+                : HtmlEncoder.Default.Encode(attribute.Value.ToString()!),
         };
 }

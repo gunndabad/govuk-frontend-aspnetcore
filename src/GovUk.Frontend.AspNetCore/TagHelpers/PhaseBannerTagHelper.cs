@@ -41,19 +41,20 @@ public class PhaseBannerTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var attributes = output.Attributes.ToEncodedAttributeDictionary()
-            .Remove("class", out var classes);
+        var attributes = output.Attributes.ToEncodedAttributeDictionary().Remove("class", out var classes);
 
         var tagOptions = phaseBannerContext.GetTagOptions();
 
-        var component = _componentGenerator.GeneratePhaseBanner(new PhaseBannerOptions()
-        {
-            Text = null,
-            Html = childContent.ToHtmlString(),
-            Tag = tagOptions,
-            Classes = classes,
-            Attributes = attributes
-        });
+        var component = _componentGenerator.GeneratePhaseBanner(
+            new PhaseBannerOptions()
+            {
+                Text = null,
+                Html = childContent.ToHtmlString(),
+                Tag = tagOptions,
+                Classes = classes,
+                Attributes = attributes,
+            }
+        );
 
         output.WriteComponent(component);
     }

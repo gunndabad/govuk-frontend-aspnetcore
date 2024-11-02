@@ -24,9 +24,10 @@ public class AccordionItemContentTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(AccordionContext), accordionContext },
-                { typeof(AccordionItemContext), itemContext }
+                { typeof(AccordionItemContext), itemContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion-item-content",
@@ -36,7 +37,8 @@ public class AccordionItemContentTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionItemContentTagHelper();
 
@@ -62,9 +64,10 @@ public class AccordionItemContentTagHelperTests
             items: new Dictionary<object, object>()
             {
                 { typeof(AccordionContext), accordionContext },
-                { typeof(AccordionItemContext), itemContext }
+                { typeof(AccordionItemContext), itemContext },
             },
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-accordion-item-content",
@@ -74,7 +77,8 @@ public class AccordionItemContentTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Content");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new AccordionItemContentTagHelper();
 
@@ -83,6 +87,9 @@ public class AccordionItemContentTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-accordion-item-content> is permitted for each <govuk-accordion-item>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-accordion-item-content> is permitted for each <govuk-accordion-item>.",
+            ex.Message
+        );
     }
 }

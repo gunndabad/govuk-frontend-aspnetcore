@@ -20,11 +20,9 @@ public class DateInputFieldsetTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-date-input-fieldset",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DateInputContext), dateInputContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DateInputContext), dateInputContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-date-input-fieldset",
@@ -36,7 +34,8 @@ public class DateInputFieldsetTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DateInputFieldsetTagHelper();
 
@@ -56,17 +55,19 @@ public class DateInputFieldsetTagHelperTests
 
         dateInputContext.OpenFieldset();
         var checkboxesFieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
-        checkboxesFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Existing legend"));
+        checkboxesFieldsetContext.SetLegend(
+            isPageHeading: false,
+            attributes: null,
+            content: new HtmlString("Existing legend")
+        );
         dateInputContext.CloseFieldset(checkboxesFieldsetContext);
 
         var context = new TagHelperContext(
             tagName: "govuk-date-input-fieldset",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(DateInputContext), dateInputContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(DateInputContext), dateInputContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-date-input-fieldset",
@@ -78,7 +79,8 @@ public class DateInputFieldsetTagHelperTests
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new DateInputFieldsetTagHelper();
 
@@ -87,6 +89,9 @@ public class DateInputFieldsetTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-date-input-fieldset> element is permitted within each <govuk-date-input>.", ex.Message);
+        Assert.Equal(
+            "Only one <govuk-date-input-fieldset> element is permitted within each <govuk-date-input>.",
+            ex.Message
+        );
     }
 }

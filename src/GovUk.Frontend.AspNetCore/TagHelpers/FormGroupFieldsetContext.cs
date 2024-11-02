@@ -13,7 +13,8 @@ internal abstract class FormGroupFieldsetContext
         string fieldsetTagName,
         string legendTagName,
         AttributeDictionary? attributes,
-        ModelExpression? aspFor)
+        ModelExpression? aspFor
+    )
     {
         _fieldsetTagName = Guard.ArgumentNotNull(nameof(fieldsetTagName), fieldsetTagName);
         _legendTagName = Guard.ArgumentNotNull(nameof(legendTagName), legendTagName);

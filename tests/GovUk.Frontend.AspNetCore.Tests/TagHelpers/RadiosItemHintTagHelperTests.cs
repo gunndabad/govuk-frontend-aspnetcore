@@ -17,11 +17,9 @@ public class RadiosItemHintTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-radios-item-hint",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(RadiosItemContext), radiosItemContext }
-            },
-            uniqueId: "test");
+            items: new Dictionary<object, object>() { { typeof(RadiosItemContext), radiosItemContext } },
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-radios-item-hint",
@@ -31,7 +29,8 @@ public class RadiosItemHintTagHelperTests
                 var tagHelperContent = new DefaultTagHelperContent();
                 tagHelperContent.SetContent("Hint");
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new RadiosItemHintTagHelper();
 

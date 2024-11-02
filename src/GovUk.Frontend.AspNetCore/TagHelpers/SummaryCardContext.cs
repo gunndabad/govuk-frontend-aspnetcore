@@ -26,21 +26,24 @@ internal class SummaryCardContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryCardTitleTagHelper.TagName,
-                SummaryCardTagHelper.TagName);
+                SummaryCardTagHelper.TagName
+            );
         }
 
         if (ActionsAttributes is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryCardTitleTagHelper.TagName,
-                SummaryCardActionsTagHelper.TagName);
+                SummaryCardActionsTagHelper.TagName
+            );
         }
 
         if (SummaryList is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryCardTitleTagHelper.TagName,
-                SummaryListTagHelper.TagName);
+                SummaryListTagHelper.TagName
+            );
         }
 
         Title = (content, headingLevel, attributes);
@@ -54,7 +57,8 @@ internal class SummaryCardContext
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryCardActionTagHelper.TagName,
-                SummaryListTagHelper.TagName);
+                SummaryListTagHelper.TagName
+            );
         }
 
         _actions.Add(action);
@@ -68,21 +72,24 @@ internal class SummaryCardContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryCardActionsTagHelper.TagName,
-                SummaryCardTagHelper.TagName);
+                SummaryCardTagHelper.TagName
+            );
         }
 
         if (_actions.Count > 0)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryCardActionsTagHelper.TagName,
-                SummaryCardActionTagHelper.TagName);
+                SummaryCardActionTagHelper.TagName
+            );
         }
 
         if (SummaryList is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryCardActionsTagHelper.TagName,
-                SummaryListTagHelper.TagName);
+                SummaryListTagHelper.TagName
+            );
         }
 
         ActionsAttributes = attributes;
@@ -96,7 +103,8 @@ internal class SummaryCardContext
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListTagHelper.TagName,
-                SummaryCardTagHelper.TagName);
+                SummaryCardTagHelper.TagName
+            );
         }
 
         SummaryList = content;

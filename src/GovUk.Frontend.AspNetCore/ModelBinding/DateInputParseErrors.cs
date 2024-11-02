@@ -41,7 +41,7 @@ public enum DateInputParseErrors
     /// <summary>
     /// The day field is invalid.
     /// </summary>
-    InvalidDay = 32
+    InvalidDay = 32,
 }
 
 /// <summary>
@@ -53,8 +53,20 @@ public static class DateInputParseErrorsExtensions
     /// Groups the specified <see cref="DateInputParseErrors"/> by the affected date input components.
     /// </summary>
     public static DateInputErrorComponents GetErrorComponents(this DateInputParseErrors parseErrors) =>
-        DateInputErrorComponents.None |
-        ((parseErrors & (DateInputParseErrors.MissingDay | DateInputParseErrors.InvalidDay)) != 0 ? DateInputErrorComponents.Day : 0) |
-        ((parseErrors & (DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidMonth)) != 0 ? DateInputErrorComponents.Month : 0) |
-        ((parseErrors & (DateInputParseErrors.MissingYear | DateInputParseErrors.InvalidYear)) != 0 ? DateInputErrorComponents.Year : 0);
+        DateInputErrorComponents.None
+        | (
+            (parseErrors & (DateInputParseErrors.MissingDay | DateInputParseErrors.InvalidDay)) != 0
+                ? DateInputErrorComponents.Day
+                : 0
+        )
+        | (
+            (parseErrors & (DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidMonth)) != 0
+                ? DateInputErrorComponents.Month
+                : 0
+        )
+        | (
+            (parseErrors & (DateInputParseErrors.MissingYear | DateInputParseErrors.InvalidYear)) != 0
+                ? DateInputErrorComponents.Year
+                : 0
+        );
 }

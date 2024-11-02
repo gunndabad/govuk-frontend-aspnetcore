@@ -19,7 +19,8 @@ public class BreadcrumbsTagHelperTests
             tagName: "govuk-breadcrumbs",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
-            uniqueId: "test");
+            uniqueId: "test"
+        );
 
         var output = new TagHelperOutput(
             "govuk-breadcrumbs",
@@ -28,26 +29,18 @@ public class BreadcrumbsTagHelperTests
             {
                 var breadcrumbsContext = context.GetContextItem<BreadcrumbsContext>();
 
-                breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                {
-                    Href = "first",
-                    Content = new HtmlString("First")
-                });
+                breadcrumbsContext.AddItem(new BreadcrumbsItem() { Href = "first", Content = new HtmlString("First") });
 
-                breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                {
-                    Href = "second",
-                    Content = new HtmlString("Second")
-                });
+                breadcrumbsContext.AddItem(
+                    new BreadcrumbsItem() { Href = "second", Content = new HtmlString("Second") }
+                );
 
-                breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                {
-                    Content = new HtmlString("Last")
-                });
+                breadcrumbsContext.AddItem(new BreadcrumbsItem() { Content = new HtmlString("Last") });
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
+            }
+        );
 
         var tagHelper = new BreadcrumbsTagHelper();
 
@@ -55,7 +48,8 @@ public class BreadcrumbsTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
+        var expectedHtml =
+            @"
 <div class=""govuk-breadcrumbs"">
     <ol class=""govuk-breadcrumbs__list"">
         <li class=""govuk-breadcrumbs__list-item""><a class=""govuk-breadcrumbs__link"" href=""first"">First</a></li>

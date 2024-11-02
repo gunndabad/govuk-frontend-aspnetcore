@@ -11,7 +11,7 @@ internal enum DateInputItemType
 {
     Day = 0,
     Month = 1,
-    Year = 2
+    Year = 2,
 }
 
 internal class DateInputContext : FormGroupContext
@@ -49,7 +49,9 @@ internal class DateInputContext : FormGroupContext
     {
         if (_fieldsetIsOpen)
         {
-            throw new InvalidOperationException($"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>.");
+            throw new InvalidOperationException(
+                $"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>."
+            );
         }
 
         if (Fieldset != null)
@@ -59,7 +61,9 @@ internal class DateInputContext : FormGroupContext
 
         if (Items.Count > 0 || Hint != null || ErrorMessage != null)
         {
-            throw new InvalidOperationException($"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>.");
+            throw new InvalidOperationException(
+                $"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>."
+            );
         }
 
         _fieldsetIsOpen = true;
@@ -82,7 +86,9 @@ internal class DateInputContext : FormGroupContext
 
         if (_haveValue && item.ValueSpecified)
         {
-            throw new InvalidOperationException($"Value cannot be specified for both <{GetTagNameForItemType(itemType)}> and the parent <{RootTagName}>.");
+            throw new InvalidOperationException(
+                $"Value cannot be specified for both <{GetTagNameForItemType(itemType)}> and the parent <{RootTagName}>."
+            );
         }
 
         var tagName = GetTagNameForItemType(itemType);
@@ -105,7 +111,8 @@ internal class DateInputContext : FormGroupContext
             {
                 throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                     tagName,
-                    GetTagNameForItemType(subsequentItems[0].Key));
+                    GetTagNameForItemType(subsequentItems[0].Key)
+                );
             }
         }
 
@@ -116,7 +123,8 @@ internal class DateInputContext : FormGroupContext
         DateInputErrorComponents? errorComponents,
         string? visuallyHiddenText,
         AttributeDictionary? attributes,
-        IHtmlContent? content)
+        IHtmlContent? content
+    )
     {
         if (Fieldset != null)
         {
@@ -134,9 +142,15 @@ internal class DateInputContext : FormGroupContext
         base.SetErrorMessage(visuallyHiddenText, attributes, content);
     }
 
-    public override void SetErrorMessage(string? visuallyHiddenText, AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetErrorMessage(
+        string? visuallyHiddenText,
+        AttributeDictionary? attributes,
+        IHtmlContent? content
+    )
     {
-        throw new NotSupportedException($"Use the overload that takes a {nameof(DateInputErrorComponents)} argument too.");
+        throw new NotSupportedException(
+            $"Use the overload that takes a {nameof(DateInputErrorComponents)} argument too."
+        );
     }
 
     public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
@@ -155,27 +169,26 @@ internal class DateInputContext : FormGroupContext
         base.SetHint(attributes, content);
     }
 
-    public override void SetLabel(
-        bool isPageHeading,
-        AttributeDictionary? attributes,
-        IHtmlContent? content)
+    public override void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
     {
         throw new NotSupportedException();
     }
 
-    internal static DateInputItemType GetItemTypeFromTagName(string tagName) => tagName switch
-    {
-        DateInputItemTagHelper.DayTagName => DateInputItemType.Day,
-        DateInputItemTagHelper.MonthTagName => DateInputItemType.Month,
-        DateInputItemTagHelper.YearTagName => DateInputItemType.Year,
-        _ => throw new ArgumentException($"Unknown tag name: '{tagName}'.", nameof(tagName))
-    };
+    internal static DateInputItemType GetItemTypeFromTagName(string tagName) =>
+        tagName switch
+        {
+            DateInputItemTagHelper.DayTagName => DateInputItemType.Day,
+            DateInputItemTagHelper.MonthTagName => DateInputItemType.Month,
+            DateInputItemTagHelper.YearTagName => DateInputItemType.Year,
+            _ => throw new ArgumentException($"Unknown tag name: '{tagName}'.", nameof(tagName)),
+        };
 
-    internal static string GetTagNameForItemType(DateInputItemType itemType) => itemType switch
-    {
-        DateInputItemType.Day => DateInputItemTagHelper.DayTagName,
-        DateInputItemType.Month => DateInputItemTagHelper.MonthTagName,
-        DateInputItemType.Year => DateInputItemTagHelper.YearTagName,
-        _ => throw new ArgumentException($"Unknown item type: '{itemType}'.", nameof(itemType))
-    };
+    internal static string GetTagNameForItemType(DateInputItemType itemType) =>
+        itemType switch
+        {
+            DateInputItemType.Day => DateInputItemTagHelper.DayTagName,
+            DateInputItemType.Month => DateInputItemTagHelper.MonthTagName,
+            DateInputItemType.Year => DateInputItemTagHelper.YearTagName,
+            _ => throw new ArgumentException($"Unknown item type: '{itemType}'.", nameof(itemType)),
+        };
 }

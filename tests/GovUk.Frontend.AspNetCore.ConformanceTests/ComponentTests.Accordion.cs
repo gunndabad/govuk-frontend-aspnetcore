@@ -9,33 +9,38 @@ namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 public partial class ComponentTests
 {
     [Theory]
-    [ComponentFixtureData(
-        "accordion",
-        typeof(OptionsJson.Accordion),
-        exclude: "with falsey values")]
+    [ComponentFixtureData("accordion", typeof(OptionsJson.Accordion), exclude: "with falsey values")]
     public void Accordion(ComponentTestCaseData<OptionsJson.Accordion> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) =>
             {
-                var headingLevel = options.HeadingLevel.GetValueOrDefault(ComponentGenerator.AccordionDefaultHeadingLevel);
+                var headingLevel = options.HeadingLevel.GetValueOrDefault(
+                    ComponentGenerator.AccordionDefaultHeadingLevel
+                );
 
-                var attributes = options.Attributes.ToAttributesDictionary()
-                    .MergeAttribute("class", options.Classes);
+                var attributes = options.Attributes.ToAttributesDictionary().MergeAttribute("class", options.Classes);
 
-                var items = options.Items
-                    .Select(i => new AccordionItem()
+                var items = options
+                    .Items.Select(i => new AccordionItem()
                     {
-                        Content = i.Content.Text != null ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Content.Text) + "</p>") :
-                            i.Content.Html != null ? new HtmlString(i.Content.Html) :
-                            null,
+                        Content =
+                            i.Content.Text != null
+                                ? new HtmlString(
+                                    "<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Content.Text) + "</p>"
+                                )
+                            : i.Content.Html != null ? new HtmlString(i.Content.Html)
+                            : null,
                         Expanded = i.Expanded ?? ComponentGenerator.AccordionItemDefaultExpanded,
-                        HeadingContent = i.Heading != null ? TextOrHtmlHelper.GetHtmlContent(i.Heading.Text, i.Heading.Html) : null,
-                        SummaryContent = i.Summary != null ? TextOrHtmlHelper.GetHtmlContent(i.Summary.Text, i.Summary.Html) : null
+                        HeadingContent =
+                            i.Heading != null ? TextOrHtmlHelper.GetHtmlContent(i.Heading.Text, i.Heading.Html) : null,
+                        SummaryContent =
+                            i.Summary != null ? TextOrHtmlHelper.GetHtmlContent(i.Summary.Text, i.Summary.Html) : null,
                     })
                     .OrEmpty();
 
-                return generator.GenerateAccordion(
+                return generator
+                    .GenerateAccordion(
                         options.Id,
                         headingLevel,
                         attributes,
@@ -46,7 +51,9 @@ public partial class ComponentTests
                         options.ShowAllSectionsText,
                         options.ShowSectionText,
                         options.ShowSectionAriaLabelText,
-                        items)
+                        items
+                    )
                     .ToHtmlString();
-            });
+            }
+        );
 }

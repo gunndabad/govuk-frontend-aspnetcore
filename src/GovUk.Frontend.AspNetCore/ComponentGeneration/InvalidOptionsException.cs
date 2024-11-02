@@ -9,9 +9,7 @@ public class InvalidOptionsException : Exception
 {
     /// Initializes a new instance of the <see cref="InvalidOptionsException"/> class with the specified message.
     public InvalidOptionsException(Type optionsType, string message)
-        : base(GetMessage(optionsType, message))
-    {
-    }
+        : base(GetMessage(optionsType, message)) { }
 
     private static string GetMessage(Type optionsType, string message)
     {
