@@ -32,11 +32,18 @@
     <FixtureFiles Include="$(GovUkFrontendLibrary)components\*\fixtures.json">
       <ComponentName>$([MSBuild]::ValueOrDefault('%(RecursiveDir)', '').TrimEnd('/\'))</ComponentName>
     </FixtureFiles>
+    <Compile Remove="TagHelpers\DateInputContextTests.cs" />
+    <Compile Remove="TagHelpers\DateInputErrorMessageTagHelperTests.cs" />
+    <Compile Remove="TagHelpers\DateInputFieldsetLegendTagHelperTests.cs" />
+    <Compile Remove="TagHelpers\DateInputFieldsetTagHelperTests.cs" />
+    <Compile Remove="TagHelpers\DateInputItemContextTests.cs" />
+    <Compile Remove="TagHelpers\DateInputItemLabelTagHelperTests.cs" />
+    <Compile Remove="TagHelpers\DateInputItemTagHelperTests.cs" />
+    <Compile Remove="TagHelpers\DateInputTagHelperTests.cs" />
     <Content Include="@(FixtureFiles)">
       <Link>\ComponentGeneration\Fixtures\%(ComponentName).json</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
 
 </Project>

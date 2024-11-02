@@ -35,6 +35,13 @@ public class ComponentTests
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateCookieBanner(options).ToHtmlString());
+            
+    [Theory]
+    [ComponentFixtureData("date-input", typeof(DateInputOptions))]
+    public void DateInput(ComponentTestCaseData<DateInputOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateDateInput(options).ToHtmlString());
 
     [Theory]
     [ComponentFixtureData("details", typeof(DetailsOptions))]

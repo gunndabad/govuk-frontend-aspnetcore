@@ -8,10 +8,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the legend in a GDS date input component's fieldset.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(TagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+[HtmlTargetElement(ShortTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(ShortTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
 [OutputElementHint(ComponentGenerator.FieldsetLegendElement)]
 public class DateInputFieldsetLegendTagHelper : TagHelper
 {
     internal const string TagName = "govuk-date-input-fieldset-legend";
+    internal const string ShortTagName = ShortTagNames.Legend;
 
     private const string IsPageHeadingAttributeName = "is-page-heading";
 
@@ -38,7 +42,7 @@ public class DateInputFieldsetLegendTagHelper : TagHelper
             content = output.Content;
         }
 
-        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: content);
+        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToEncodedAttributeDictionary(), html: content?.ToHtmlString());
 
         output.SuppressOutput();
     }

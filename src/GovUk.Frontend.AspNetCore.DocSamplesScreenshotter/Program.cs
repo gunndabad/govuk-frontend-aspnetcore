@@ -59,6 +59,7 @@ class Program
             ("DateInput/DateInputWithCustomItemValues", "date-input-with-custom-values.png"),
             ("DateInput/DateInputWithError", "date-input-with-error.png"),
             ("DateInput/DateInputWithFieldset", "date-input-with-fieldset.png"),
+            ("DateInput/DateInputWithModelBinding", "date-input-with-modelbinding.png"),
             ("Details/Details", "details.png"),
             ("Details/DetailsExpanded", "details-expanded.png"),
             ("ErrorSummary/ErrorSummary", "error-summary.png"),

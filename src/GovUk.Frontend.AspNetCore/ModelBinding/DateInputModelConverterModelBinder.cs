@@ -10,9 +10,9 @@ namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
 internal class DateInputModelConverterModelBinder : IModelBinder
 {
-    private const string DayInputName = "Day";
-    private const string MonthInputName = "Month";
-    private const string YearInputName = "Year";
+    internal const string DayFieldName = "Day";
+    internal const string MonthFieldName = "Month";
+    internal const string YearFieldName = "Year";
 
     private readonly DateInputModelConverter _dateInputModelConverter;
     private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
@@ -35,9 +35,9 @@ internal class DateInputModelConverterModelBinder : IModelBinder
             throw new InvalidOperationException($"Cannot bind {modelType.Name}.");
         }
 
-        var dayModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, DayInputName);
-        var monthModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, MonthInputName);
-        var yearModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, YearInputName);
+        var dayModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, DayFieldName);
+        var monthModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, MonthFieldName);
+        var yearModelName = ModelNames.CreatePropertyModelName(bindingContext.ModelName, YearFieldName);
 
         var dayValueProviderResult = bindingContext.ValueProvider.GetValue(dayModelName);
         var monthValueProviderResult = bindingContext.ValueProvider.GetValue(monthModelName);

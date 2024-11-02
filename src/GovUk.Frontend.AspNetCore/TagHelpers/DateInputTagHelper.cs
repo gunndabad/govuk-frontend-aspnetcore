@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text.Encodings.Web;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 
@@ -18,55 +22,79 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement(TagName)]
 [RestrictChildren(
     DateInputFieldsetTagHelper.TagName,
+    DateInputFieldsetTagHelper.ShortTagName,
     HintTagName,
+    HintShortTagName,
     ErrorMessageTagName,
+    ErrorMessageShortTagName,
     DateInputItemTagHelper.DayTagName,
+    DateInputItemTagHelper.DayShortTagName,
     DateInputItemTagHelper.MonthTagName,
-    DateInputItemTagHelper.YearTagName)]
-[OutputElementHint(ComponentGenerator.FormGroupElement)]
-public class DateInputTagHelper : FormGroupTagHelperBase
+    DateInputItemTagHelper.MonthShortTagName,
+    DateInputItemTagHelper.YearTagName,
+    DateInputItemTagHelper.YearShortTagName)]
+[OutputElementHint(DefaultComponentGenerator.FormGroupElement)]
+public class DateInputTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-date-input-error-message";
+    internal const string ErrorMessageShortTagName = ShortTagNames.ErrorMessage;
     internal const string HintTagName = "govuk-date-input-hint";
+    internal const string HintShortTagName = ShortTagNames.Hint;
     internal const string TagName = "govuk-date-input";
 
+    private const string AspForAttributeName = "asp-for";
     private const string DateInputAttributesPrefix = "date-input-";
     private const string DisabledAttributeName = "disabled";
+    private const string ForAttributeName = "for";
     private const string IdAttributeName = "id";
+    private const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
     private const string NamePrefixAttributeName = "name-prefix";
     private const string ValueAttributeName = "value";
 
-    // Model binding relies on these specific values
-    private const string DefaultDayItemName = "Day";
-    private const string DefaultMonthItemName = "Month";
-    private const string DefaultYearItemName = "Year";
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly GovUkFrontendAspNetCoreOptions _options;
+    private readonly DateInputParseErrorsProvider _dateInputParseErrorsProvider;
+    private readonly IModelHelper _modelHelper;
 
     private object? _value;
     private bool _valueSpecified = false;
-    private readonly GovUkFrontendAspNetCoreOptions _options;
-    private readonly DateInputParseErrorsProvider _dateInputParseErrorsProvider;
 
     /// <summary>
     /// Creates a <see cref="DateInputTagHelper"/>.
     /// </summary>
     public DateInputTagHelper(
+        IComponentGenerator componentGenerator,
         IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
         DateInputParseErrorsProvider dateInputParseErrorsProvider)
-        : this(optionsAccessor, dateInputParseErrorsProvider, htmlGenerator: null, modelHelper: null)
+        : this(componentGenerator, optionsAccessor, dateInputParseErrorsProvider, modelHelper: new DefaultModelHelper())
     {
     }
 
     internal DateInputTagHelper(
+        IComponentGenerator componentGenerator,
         IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
         DateInputParseErrorsProvider dateInputParseErrorsProvider,
-        IGovUkHtmlGenerator? htmlGenerator = null,
-        IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
+        IModelHelper modelHelper)
     {
-        _options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
-        _dateInputParseErrorsProvider = Guard.ArgumentNotNull(nameof(dateInputParseErrorsProvider), dateInputParseErrorsProvider);
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(optionsAccessor);
+        ArgumentNullException.ThrowIfNull(dateInputParseErrorsProvider);
+        ArgumentNullException.ThrowIfNull(modelHelper);
+        _options = optionsAccessor.Value;
+        _dateInputParseErrorsProvider = dateInputParseErrorsProvider;
+        _componentGenerator = componentGenerator;
+        _modelHelper = modelHelper;
+    }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(AspForAttributeName)]
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
+        get => For;
+        set => For = value;
     }
 
     /// <summary>
@@ -79,7 +107,13 @@ public class DateInputTagHelper : FormGroupTagHelperBase
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> elements.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.DateInputDefaultDisabled;
+    public bool? Disabled { get; set; }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the main component.
@@ -90,6 +124,16 @@ public class DateInputTagHelper : FormGroupTagHelperBase
     /// </remarks>
     [HtmlAttributeName(IdAttributeName)]
     public string? Id { get; set; }
+
+    /// <summary>
+    /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="For"/> expression should be used
+    /// to deduce an error message.
+    /// </summary>
+    /// <remarks>
+    /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
+    /// </remarks>
+    [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
+    public bool? IgnoreModelStateErrors { get; set; }
 
     /// <summary>
     /// Optional prefix for the <c>name</c> attribute on each item's <c>input</c>.
@@ -111,191 +155,204 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         }
     }
 
-    private protected override FormGroupContext CreateFormGroupContext() =>
-        new DateInputContext(haveExplicitValue: _valueSpecified, AspFor);
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
 
-    private protected override IHtmlContent GenerateFormGroupContent(
-        TagHelperContext tagHelperContext,
-        FormGroupContext formGroupContext,
-        TagHelperOutput tagHelperOutput,
-        IHtmlContent childContent,
-        out bool haveError)
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var dateInputContext = tagHelperContext.GetContextItem<DateInputContext>();
+        var dateInputContext = new DateInputContext(haveExplicitValue: _valueSpecified, @for: For);
 
-        var contentBuilder = new HtmlContentBuilder();
-
-        var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        using (context.SetScopedContextItem(dateInputContext))
+        using (context.SetScopedContextItem(typeof(FormGroupContext2), dateInputContext))
         {
-            contentBuilder.AppendHtml(hint);
+            await output.GetChildContentAsync();
         }
 
-        var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        var namePrefix = ResolveNamePrefix();
+        var idPrefix = ResolveIdPrefix();
+        var fieldsetOptions = dateInputContext.GetFieldsetOptions(_modelHelper);
+        var hintOptions = dateInputContext.GetHintOptions(For, _modelHelper);
+        var errorMessageOptions = dateInputContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
+        var items = ResolveItems(dateInputContext, namePrefix, idPrefix, errorMessageOptions).ToArray();
+
+        var formGroupAttributes = output.Attributes.ToEncodedAttributeDictionary()
+            .Remove("class", out var formGroupClasses);
+        var formGroupOptions = new DateInputOptionsFormGroup()
         {
-            contentBuilder.AppendHtml(errorMessage);
+            Attributes = formGroupAttributes,
+            Classes = formGroupClasses,
+            //BeforeInputs
+        };
+
+        var attributes = DateInputAttributes!.ToImmutableDictionary()
+            .Remove("class", out var classes);
+
+        if (errorMessageOptions is not null)
+        {
+            classes ??= "";
+
+            formGroupOptions.Classes += " govuk-form-group--error";
         }
 
-        haveError = errorMessage != null;
-
-        var dateInputTagBuilder = GenerateDateInput(dateInputContext, haveError);
-        contentBuilder.AppendHtml(dateInputTagBuilder);
-
-        if (dateInputContext.Fieldset != null)
+        // Don't populate namePrefix here since the template uses a '-' separator and we need to use '.' to make model binding work.
+        var component = _componentGenerator.GenerateDateInput(new DateInputOptions()
         {
-            var resolvedFieldsetLegendContent = ResolveFieldsetLegendContent(dateInputContext.Fieldset!);
+            Id = idPrefix,
+            // A null NamePrefix is important; we've generated custom names for each item that work with our model binder and we don't want the generator to modify them
+            NamePrefix = null,
+            Items = items,
+            Hint = hintOptions,
+            ErrorMessage = errorMessageOptions,
+            FormGroup = formGroupOptions,
+            Fieldset = fieldsetOptions,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-            return Generator.GenerateFieldset(
-                DescribedBy,
-                role: "group",
-                dateInputContext.Fieldset.Legend?.IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
-                legendContent: resolvedFieldsetLegendContent,
-                legendAttributes: dateInputContext.Fieldset.Legend?.Attributes,
-                content: contentBuilder,
-                attributes: dateInputContext.Fieldset.Attributes);
-        }
-        else
+        output.TagName = null;
+        output.Attributes.Clear();
+        output.Content.AppendHtml(component.ToHtmlString());
+
+        if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var formErrorContext))
         {
-            return contentBuilder;
+            Debug.Assert(errorMessageOptions.Html is not null);
+
+            var errorItems = GetErrorComponents(dateInputContext, errorMessageOptions);
+            Debug.Assert(errorItems != DateInputErrorFields.None);
+
+            string firstErrorFieldId = errorItems.HasFlag(DateInputErrorFields.Day) ? items[0].Id! :
+                errorItems.HasFlag(DateInputErrorFields.Month) ? items[1].Id! :
+                items[2].Id!;
+
+            formErrorContext.AddError(errorMessageOptions.Html!, "#" + firstErrorFieldId);
         }
     }
 
-    private protected override string GetErrorFieldId(TagHelperContext context)
+    private string ResolveIdPrefix()
     {
-        var dateInputContext = context.GetContextItem<DateInputContext>();
-        var errorItems = GetErrorComponents(dateInputContext);
-        Debug.Assert(errorItems != DateInputErrorComponents.None);
-
-        var suffix = errorItems.HasFlag(DateInputErrorComponents.Day) ? DefaultDayItemName :
-            errorItems.HasFlag(DateInputErrorComponents.Month) ? DefaultMonthItemName :
-            DefaultYearItemName;
-
-        return $"{ResolveIdPrefix()}.{suffix}";
-    }
-
-    private protected override string ResolveIdPrefix()
-    {
-        if (AspFor == null && Id == null)
+        if (For == null && Id == null)
         {
             ThrowHelper.AtLeastOneOfAttributesMustBeSpecified(AspForAttributeName, IdAttributeName);
         }
 
         return Id ??
             TagBuilder.CreateSanitizedId(
-                ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
+                _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name),
                 Constants.IdAttributeDotReplacement);
     }
 
-    private TagBuilder GenerateDateInput(DateInputContext dateInputContext, bool haveError)
+    private string? ResolveNamePrefix()
     {
-        var resolvedId = ResolveIdPrefix();
-        var resolvedName = AspFor != null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor.Name) : null;
+        return NamePrefix is not null ? NamePrefix :
+            For is not null ? _modelHelper.GetFullHtmlFieldName(ViewContext!, For.Name) :
+            null;
+    }
 
-        // This is a deliberate deviation from the GDS implementation so it works better with ASP.NET Core's model binding system
-        var resolvedNamePrefix = NamePrefix != null ? NamePrefix + "." :
-            resolvedName != null ? resolvedName + "." :
-            string.Empty;
+    private IEnumerable<DateInputOptionsItem> ResolveItems(DateInputContext dateInputContext, string? namePrefix, string idPrefix, ErrorMessageOptions? errorMessageOptions)
+    {
+        var resolvedNamePrefix = namePrefix is not null ? namePrefix + "." : "";
 
         var dateInputModelConverters = _options.DateInputModelConverters;
 
-        var valueAsDate = GetValueAsDate() ?? (AspFor != null ? GetValueFromModel() : null);
-        var errorItems = GetErrorComponents(dateInputContext);
+        var valueAsDate = GetValueAsDate() ?? (For != null ? GetValueFromModel() : null);
+        var errorItems = GetErrorComponents(dateInputContext, errorMessageOptions);
 
-        var day = CreateDateInputItem(
+        yield return CreateDateInputItem(
             getComponentFromValue: date => date?.Day.ToString(),
-            defaultLabel: ComponentGenerator.DateInputDefaultDayLabel,
-            defaultName: DefaultDayItemName,
-            defaultClass: "govuk-input--width-2",
-            DateInputErrorComponents.Day,
+            defaultName: DateInputModelConverterModelBinder.DayFieldName,
+            defaultLabelText: "Day",
+            DateInputErrorFields.Day,
             contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Day));
 
-        var month = CreateDateInputItem(
+        yield return CreateDateInputItem(
             getComponentFromValue: date => date?.Month.ToString(),
-            defaultLabel: ComponentGenerator.DateInputDefaultMonthLabel,
-            defaultName: DefaultMonthItemName,
-            defaultClass: "govuk-input--width-2",
-            DateInputErrorComponents.Month,
+            defaultName: DateInputModelConverterModelBinder.MonthFieldName,
+            defaultLabelText: "Month",
+            DateInputErrorFields.Month,
             contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Month));
 
-        var year = CreateDateInputItem(
+        yield return CreateDateInputItem(
             getComponentFromValue: date => date?.Year.ToString(),
-            defaultLabel: ComponentGenerator.DateInputDefaultYearLabel,
-            defaultName: DefaultYearItemName,
-            defaultClass: "govuk-input--width-4",
-            DateInputErrorComponents.Year,
+            defaultName: DateInputModelConverterModelBinder.YearFieldName,
+            defaultLabelText: "Year",
+            DateInputErrorFields.Year,
             contextItem: dateInputContext.Items.GetValueOrDefault(DateInputItemType.Year));
 
-        return Generator.GenerateDateInput(
-            resolvedId,
-            Disabled,
-            day,
-            month,
-            year,
-            DateInputAttributes.ToAttributeDictionary());
-
-        DateInputItem CreateDateInputItem(
+        DateInputOptionsItem CreateDateInputItem(
             Func<DateOnly?, string?> getComponentFromValue,
-            string defaultLabel,
             string defaultName,
-            string defaultClass,
-            DateInputErrorComponents errorSource,
+            string defaultLabelText,
+            DateInputErrorFields errorSource,
             DateInputContextItem? contextItem)
         {
+            var itemName = resolvedNamePrefix + (contextItem?.Name ?? defaultName);
+
+            // Resolve the ID here rather than relying on the component generator to do it
+            // to simplify generating fragment links to the error field(s)
+            var itemId = contextItem?.Id ?? (idPrefix + "-" + (contextItem?.Name ?? defaultName.ToLower()));
+
+            var itemLabelHtml = contextItem?.LabelHtml ??
+                HtmlEncoder.Default.Encode(defaultLabelText);
+
             // Value resolution hierarchy:
-            //   if Value has been set on a child tag helper e.g. <date-input-day /> then use that;
-            //   if Value property is specified, use that;
+            //   if Value has been set on a child tag helper e.g. <govuk-date-input-day /> then use that;
+            //   if Value property is specified here i.e. <govuk-date-input /> then use that;
             //   if AspFor is specified use value from ModelState;
             //   otherwise empty.
-
-            var resolvedItemName = resolvedNamePrefix + (contextItem?.Name ?? defaultName);
-
-            var resolvedItemValue = contextItem?.ValueSpecified == true ? (contextItem.Value?.ToString() ?? string.Empty) :
+            var itemValue = contextItem?.ValueSpecified == true ? (contextItem.Value?.ToString() ?? string.Empty) :
                 _valueSpecified ? getComponentFromValue(valueAsDate) :
-                contextItem?.ValueSpecified == true ? contextItem.Value?.ToString() :
-                AspFor != null ? GetValueFromModelState() :
+                For != null ? GetValueFromModelState() :
                 null;
 
-            var resolvedItemId = contextItem?.Id ?? $"{resolvedId}.{contextItem?.Name ?? defaultName}";
+            var attributes = (contextItem?.Attributes ?? ImmutableDictionary<string, string?>.Empty)
+                .Remove("classes", out var classes);
 
-            var resolvedItemLabel = contextItem?.LabelContent ?? new HtmlString(HtmlEncoder.Default.Encode(defaultLabel));
-
-            var resolvedItemHaveError = haveError && (errorItems & errorSource) != 0;
-
-            var resolvedAttributes = contextItem?.Attributes ?? new Dictionary<string, string?>();
-            if (!resolvedAttributes.ContainsKey("class"))
+            if (Disabled == true)
             {
-                resolvedAttributes.Add("class", defaultClass);
+                attributes = attributes.Add("disabled", string.Empty);
             }
 
-            return new DateInputItem()
+            if (errorItems.HasFlag(errorSource))
             {
-                Attributes = resolvedAttributes.ToAttributeDictionary(),
+                classes ??= "";
+                classes += " govuk-input--error";
+            }
+
+            return new DateInputOptionsItem()
+            {
+                Id = itemId,
+                Name = itemName,
+                Label = null,
+                LabelHtml = itemLabelHtml,
+                LabelAttributes = contextItem?.LabelAttributes,
+                Value = itemValue,
                 Autocomplete = contextItem?.Autocomplete,
-                HaveError = resolvedItemHaveError,
-                Id = resolvedItemId,
-                InputMode = contextItem?.InputMode ?? ComponentGenerator.DateInputDefaultInputMode,
-                Name = resolvedItemName,
-                LabelContent = resolvedItemLabel,
-                LabelAttributes = contextItem?.LabelAttributes?.ToAttributeDictionary(),
+                InputMode = contextItem?.InputMode,
                 Pattern = contextItem?.Pattern,
-                Value = resolvedItemValue
+                Attributes = attributes,
+                Classes = classes
             };
 
             string? GetValueFromModelState()
             {
-                Debug.Assert(AspFor != null);
+                Debug.Assert(For != null);
 
                 // Can't use ModelHelper.GetModelValue here;
                 // custom Date types may not expose components via Day/Month/Year properties.
                 // Resolution works as follows:
-                //   Look for a ModelStateEntry for $"{AspFor.Name}-{defaultName}" and, if found, use its AttemptedValue.
+                //   Look for a ModelStateEntry for $"{AspFor.Name}.{defaultName}" and, if found, use its AttemptedValue.
                 //   (Using defaultName is always correct here; that lines up with what the ModelBinder uses).
                 //   If that fails, get the model and convert it to a Date using options.DateInputModelConverters.
                 //   From that extract the Day/Month/Year.
 
-                var expression = $"{AspFor.Name}.{defaultName}";
-                var modelStateKey = ModelHelper.GetFullHtmlFieldName(ViewContext!, expression);
+                var expression = $"{For.Name}.{defaultName}";
+                var modelStateKey = _modelHelper.GetFullHtmlFieldName(ViewContext!, expression);
 
                 if (ViewContext!.ModelState.TryGetValue(modelStateKey, out var modelStateEntry) &&
                     modelStateEntry.AttemptedValue != null)
@@ -330,10 +387,10 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
         DateOnly? GetValueFromModel()
         {
-            Debug.Assert(AspFor != null);
+            Debug.Assert(For != null);
 
-            var modelValue = AspFor!.Model;
-            var underlyingModelType = Nullable.GetUnderlyingType(AspFor.ModelExplorer.ModelType) ?? AspFor.ModelExplorer.ModelType;
+            var modelValue = For!.Model;
+            var underlyingModelType = Nullable.GetUnderlyingType(For.ModelExplorer.ModelType) ?? For.ModelExplorer.ModelType;
 
             if (modelValue is null)
             {
@@ -354,22 +411,27 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         }
     }
 
-    private DateInputErrorComponents GetErrorComponents(DateInputContext dateInputContext)
+    private DateInputErrorFields GetErrorComponents(DateInputContext dateInputContext, ErrorMessageOptions? errorMessageOptions)
     {
-        if (dateInputContext.ErrorComponents != null)
+        if (errorMessageOptions is null)
         {
-            return dateInputContext.ErrorComponents.Value;
+            return DateInputErrorFields.None;
         }
 
-        if (AspFor == null)
+        if (dateInputContext.ErrorFields != null)
         {
-            return DateInputErrorComponents.All;
+            return dateInputContext.ErrorFields.Value;
         }
 
-        Debug.Assert(AspFor != null);
+        if (For == null)
+        {
+            return DateInputErrorFields.All;
+        }
+
+        Debug.Assert(For != null);
         Debug.Assert(ViewContext != null);
 
-        var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+        var fullName = _modelHelper.GetFullHtmlFieldName(ViewContext, For.Name);
 
         if (_dateInputParseErrorsProvider.TryGetErrorsForModel(fullName, out var parseErrors))
         {
@@ -377,7 +439,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         }
         else
         {
-            return DateInputErrorComponents.All;
+            return DateInputErrorFields.All;
         }
     }
 }

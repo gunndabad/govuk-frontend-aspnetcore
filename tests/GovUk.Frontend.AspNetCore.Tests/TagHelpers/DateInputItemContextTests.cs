@@ -1,7 +1,6 @@
 using System;
+using System.Collections.Immutable;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -12,13 +11,14 @@ public class DateInputItemContextTests
     public void SetLabel_SetsLabelOnContext()
     {
         // Arrange
+        var labelHtml = "Label";
         var context = new DateInputItemContext("govuk-date-input-day", "govuk-date-input-day-label");
 
         // Act
-        context.SetLabel(content: new HtmlString("Label"), attributes: new AttributeDictionary());
+        context.SetLabel(attributes: ImmutableDictionary<string, string?>.Empty, html: labelHtml);
 
         // Assert
-        Assert.Equal("Label", context.Label?.Content?.ToHtmlString());
+        Assert.Equal(labelHtml, context.Label?.Html);
     }
 
     [Fact]
@@ -26,10 +26,10 @@ public class DateInputItemContextTests
     {
         // Arrange
         var context = new DateInputItemContext("govuk-date-input-day", "govuk-date-input-day-label");
-        context.SetLabel(content: new HtmlString("Existing label"), attributes: new AttributeDictionary());
+        context.SetLabel(attributes: ImmutableDictionary<string, string?>.Empty, html: null);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(content: new HtmlString("Label"), attributes: new AttributeDictionary()));
+        var ex = Record.Exception(() => context.SetLabel(attributes: ImmutableDictionary<string, string?>.Empty, html: null));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);

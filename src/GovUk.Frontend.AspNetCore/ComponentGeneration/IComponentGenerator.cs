@@ -26,6 +26,12 @@ public interface IComponentGenerator
     HtmlTag GenerateCookieBanner(CookieBannerOptions options);
 
     /// <summary>
+    /// Generates a date input component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>
+    HtmlTag GenerateDateInput(DateInputOptions options);
+
+    /// <summary>
     /// Generates a details component.
     /// </summary>
     /// <returns>An <see cref="HtmlTag"/> with the component's HTML.</returns>

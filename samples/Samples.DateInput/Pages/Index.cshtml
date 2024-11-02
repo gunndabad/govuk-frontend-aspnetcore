@@ -5,10 +5,10 @@
 }
 
 <form asp-page="Index">
-    <govuk-date-input asp-for="DateOfBirth">
-        <govuk-date-input-fieldset>
-            <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l" />
-        </govuk-date-input-fieldset>
+    <govuk-date-input for="DateOfBirth">
+        <fieldset>
+            <legend is-page-heading="true" class="govuk-fieldset__legend--l" />
+        </fieldset>
     </govuk-date-input>
 
     <govuk-button type="submit">Save</govuk-button>

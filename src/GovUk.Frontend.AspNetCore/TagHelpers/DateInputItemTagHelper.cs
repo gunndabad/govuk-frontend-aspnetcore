@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,17 +13,32 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(DayTagName, ParentTag = DateInputTagHelper.TagName)]
 [HtmlTargetElement(DayTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(DayTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+[HtmlTargetElement(DayShortTagName, ParentTag = DateInputTagHelper.TagName)]
+[HtmlTargetElement(DayShortTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(DayShortTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
 [HtmlTargetElement(MonthTagName, ParentTag = DateInputTagHelper.TagName)]
 [HtmlTargetElement(MonthTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(MonthTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+[HtmlTargetElement(MonthShortTagName, ParentTag = DateInputTagHelper.TagName)]
+[HtmlTargetElement(MonthShortTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(MonthShortTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
 [HtmlTargetElement(YearTagName, ParentTag = DateInputTagHelper.TagName)]
 [HtmlTargetElement(YearTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(YearTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
+[HtmlTargetElement(YearShortTagName, ParentTag = DateInputTagHelper.TagName)]
+[HtmlTargetElement(YearShortTagName, ParentTag = DateInputFieldsetTagHelper.TagName)]
+[HtmlTargetElement(YearShortTagName, ParentTag = DateInputFieldsetTagHelper.ShortTagName)]
 [OutputElementHint(ComponentGenerator.FormGroupElement)]
-[RestrictChildren(DateInputItemLabelTagHelper.DayTagName, DateInputItemLabelTagHelper.MonthTagName, DateInputItemLabelTagHelper.YearTagName)]
+[RestrictChildren(DateInputItemLabelTagHelper.DayTagName, DateInputItemLabelTagHelper.MonthTagName, DateInputItemLabelTagHelper.YearTagName, ShortTagNames.Label)]
 public class DateInputItemTagHelper : TagHelper
 {
     internal const string DayTagName = "govuk-date-input-day";
+    internal const string DayShortTagName = "day";
     internal const string MonthTagName = "govuk-date-input-month";
+    internal const string MonthShortTagName = "month";
     internal const string YearTagName = "govuk-date-input-year";
+    internal const string YearShortTagName = "year";
 
     private const string AutocompleteAttributeName = "autocomplete";
     private const string IdAttributeName = "id";
@@ -63,7 +79,7 @@ public class DateInputItemTagHelper : TagHelper
     /// The default is <c>numeric</c>.
     /// </remarks>
     [HtmlAttributeName(InputModeAttributeName)]
-    public string? InputMode { get; set; } = ComponentGenerator.DateInputDefaultInputMode;
+    public string? InputMode { get; set; }
 
     /// <summary>
     /// The <c>name</c> attribute for the generated <c>input</c> element.
@@ -120,22 +136,25 @@ public class DateInputItemTagHelper : TagHelper
         }
 
         var itemType = DateInputContext.GetItemTypeFromTagName(output.TagName);
+        var defaultLabelHtml = HtmlEncoder.Default.Encode(DateInputContext.GetDefaultLabelText(itemType));
+
+        var labelOptions = dateInputItemContext.GetLabelOptions();
 
         var itemContext = new DateInputContextItem()
         {
-            Attributes = output.Attributes.ToAttributeDictionary(),
+            Attributes = output.Attributes.ToEncodedAttributeDictionary(),
             Autocomplete = Autocomplete,
             Id = Id,
             InputMode = InputMode,
-            LabelContent = dateInputItemContext.Label?.Content,
-            LabelAttributes = dateInputItemContext.Label?.Attributes,
+            LabelHtml = labelOptions?.Html ?? defaultLabelHtml,
+            LabelAttributes = labelOptions?.Attributes,
             Name = Name,
             Pattern = Pattern,
             Value = _value,
-            ValueSpecified = _valueSpecified
+            ValueSpecified = _valueSpecified,
         };
 
-        dateInputContext.SetItem(itemType, itemContext);
+        dateInputContext.SetItem(itemType, itemContext, output.TagName);
 
         output.SuppressOutput();
     }

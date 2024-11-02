@@ -8,8 +8,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the label in a GDS date input component item.
 /// </summary>
 [HtmlTargetElement(DayTagName, ParentTag = DateInputItemTagHelper.DayTagName)]
+[HtmlTargetElement(DayTagName, ParentTag = DateInputItemTagHelper.DayShortTagName)]
 [HtmlTargetElement(MonthTagName, ParentTag = DateInputItemTagHelper.MonthTagName)]
+[HtmlTargetElement(MonthTagName, ParentTag = DateInputItemTagHelper.MonthShortTagName)]
 [HtmlTargetElement(YearTagName, ParentTag = DateInputItemTagHelper.YearTagName)]
+[HtmlTargetElement(YearTagName, ParentTag = DateInputItemTagHelper.YearShortTagName)]
+[HtmlTargetElement(ShortTagNames.Label, ParentTag = DateInputItemTagHelper.DayTagName)]
+[HtmlTargetElement(ShortTagNames.Label, ParentTag = DateInputItemTagHelper.DayShortTagName)]
+[HtmlTargetElement(ShortTagNames.Label, ParentTag = DateInputItemTagHelper.MonthTagName)]
+[HtmlTargetElement(ShortTagNames.Label, ParentTag = DateInputItemTagHelper.MonthShortTagName)]
+[HtmlTargetElement(ShortTagNames.Label, ParentTag = DateInputItemTagHelper.YearTagName)]
+[HtmlTargetElement(ShortTagNames.Label, ParentTag = DateInputItemTagHelper.YearShortTagName)]
 [OutputElementHint(ComponentGenerator.LabelElement)]
 public class DateInputItemLabelTagHelper : TagHelper
 {
@@ -29,14 +38,16 @@ public class DateInputItemLabelTagHelper : TagHelper
     {
         var dateInputItemContext = context.GetContextItem<DateInputItemContext>();
 
-        var childContent = await output.GetChildContentAsync();
+        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
+            (await output.GetChildContentAsync()).Snapshot() :
+            null;
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        dateInputItemContext.SetLabel(childContent.Snapshot(), output.Attributes.ToAttributeDictionary());
+        dateInputItemContext.SetLabel(output.Attributes.ToEncodedAttributeDictionary(), childContent?.ToHtmlString());
 
         output.SuppressOutput();
     }

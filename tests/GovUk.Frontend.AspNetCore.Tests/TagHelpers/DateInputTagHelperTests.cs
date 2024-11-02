@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using AngleSharp.Common;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -12,7 +17,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Microsoft.Extensions.Options;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -20,9 +27,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class DateInputTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_WithValue_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "my-id";
+        var namePrefix = "my-name";
+        var value = new DateOnly(2020, 4, 1);
+        var classes = "custom-class";
+        var dataFooAttrValue = "bar";
+        var hintHtml = "The hint";
+
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
@@ -34,52 +48,83 @@ public class DateInputTagHelperTests
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
+                var dateInputContext = context.GetContextItem<DateInputContext>();
+
+                dateInputContext.SetHint(
+                    attributes: ImmutableDictionary<string, string?>.Empty,
+                    hintHtml);
+
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Id = id,
+            NamePrefix = namePrefix,
+            Value = value,
+            DateInputAttributes = new Dictionary<string, string?>()
+            {
+                { "class", classes },
+                { "data-foo", dataFooAttrValue },
+            }
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(id, actualOptions!.Id);
+        Assert.Null(actualOptions.NamePrefix);
+        Assert.NotNull(actualOptions.Items);
+        Assert.Collection(
+            actualOptions.Items,
+            item =>
+            {
+                Assert.Equal(namePrefix + ".Day", item.Name);
+                Assert.Equal(id + "-day", item.Id);
+                Assert.Equal(value.Day.ToString(), item.Value);
+            },
+            item =>
+            {
+                Assert.Equal(namePrefix + ".Month", item.Name);
+                Assert.Equal(id + "-month", item.Id);
+                Assert.Equal(value.Month.ToString(), item.Value);
+            },
+            item =>
+            {
+                Assert.Equal(namePrefix + ".Year", item.Name);
+                Assert.Equal(id + "-year", item.Id);
+                Assert.Equal(value.Year.ToString(), item.Value);
+            });
+        Assert.Equal(hintHtml, actualOptions.Hint?.Html);
+        Assert.Null(actualOptions.ErrorMessage);
+        Assert.Null(actualOptions.Fieldset);
+        Assert.Equal(classes, actualOptions.Classes);
+        Assert.NotNull(actualOptions.Attributes);
+        Assert.Collection(actualOptions.Attributes, kvp =>
+        {
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(dataFooAttrValue, kvp.Value);
+        });
     }
 
     [Fact]
-    public async Task ProcessAsync_WithAspFor_GeneratesExpectedOutput()
+    public async Task ProcessAsync_WithErrorMessage_GeneratesOptionsWithErrorMessageAndAddsErrorClasses()
     {
         // Arrange
+        var id = "my-id";
+        var namePrefix = "my-name";
+        var value = new DateOnly(2020, 4, 1);
+        var errorHtml = "The error message";
+        var errorVht = "visually hidden text";
+        var errorDataFooAttribute = "bar";
+
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
@@ -91,122 +136,69 @@ public class DateInputTagHelperTests
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
+                var dateInputContext = context.GetContextItem<DateInputContext>();
+
+                dateInputContext.SetErrorMessage(
+                    DateInputErrorFields.All,
+                    visuallyHiddenText: errorVht,
+                    attributes: ImmutableDictionary<string, string?>.Empty.Add("data-foo", errorDataFooAttribute),
+                    errorHtml);
+
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
-            .GetExplorerForProperty(nameof(Model.Date));
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
 
-        var viewContext = new ViewContext();
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
-            Id = "my-id",
-            NamePrefix = "my-name",
-            ViewContext = viewContext
+            Id = id,
+            NamePrefix = namePrefix,
+            Value = value
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithAspForAndValue_UsesValueAttribute()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
-            .GetExplorerForProperty(nameof(Model.Date));
-
-        var viewContext = new ViewContext();
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        Assert.NotNull(actualOptions?.ErrorMessage);
+        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html);
+        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText);
+        Assert.NotNull(actualOptions.ErrorMessage.Attributes);
+        Assert.Collection(actualOptions.ErrorMessage.Attributes, kvp =>
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
-            Id = "my-id",
-            NamePrefix = "my-name",
-            ViewContext = viewContext,
-            Value = new DateOnly(2022, 5, 3)
-        };
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(errorDataFooAttribute, kvp.Value);
+        });
+        Assert.NotNull(actualOptions.Items);
+        Assert.Collection(
+            actualOptions.Items,
+            AssertItemHasErrorClass,
+            AssertItemHasErrorClass,
+            AssertItemHasErrorClass
+        );
+        Assert.NotNull(actualOptions.FormGroup?.Classes);
+        Assert.Contains("govuk-form-group--error", actualOptions.FormGroup.Classes.Split(' '));
 
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""3"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""5"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2022"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        static void AssertItemHasErrorClass(DateInputOptionsItem item)
+        {
+            Assert.NotNull(item.Classes);
+            Assert.Contains("govuk-input--error", item.Classes.Split(' '));
+        }
     }
 
     [Fact]
-    public async Task ProcessAsync_WithFieldset_GeneratesExpectedOutput()
+    public async Task ProcessAsync_WithFieldset_GeneratesOptionsWithFieldset()
     {
         // Arrange
+        var id = "my-id";
+        var namePrefix = "my-name";
+        var value = new DateOnly(2020, 4, 1);
+        var legendIsPageHeading = true;
+        var legendHtml = "The legend";
+
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
@@ -221,64 +213,366 @@ public class DateInputTagHelperTests
                 var dateInputContext = context.GetContextItem<DateInputContext>();
 
                 dateInputContext.OpenFieldset();
-                var dateInputFieldsetContext = new DateInputFieldsetContext(attributes: null, aspFor: null);
-                dateInputFieldsetContext.SetLegend(isPageHeading: false, attributes: null, content: new HtmlString("Legend"));
+                var fieldsetContext = new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, @for: null, describedBy: null);
+                fieldsetContext.SetLegend(legendIsPageHeading, attributes: ImmutableDictionary<string, string?>.Empty, legendHtml);
+                dateInputContext.CloseFieldset(fieldsetContext);
 
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        {
+            Id = id,
+            NamePrefix = namePrefix,
+            Value = value
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions?.Fieldset?.Legend);
+        Assert.Equal(legendIsPageHeading, actualOptions.Fieldset.Legend.IsPageHeading);
+        Assert.Equal(legendHtml, actualOptions.Fieldset.Legend.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithFor_GeneratesOptionsFromModelMetadata()
+    {
+        // Arrange
+        var modelStateValue = new DateOnly(2020, 4, 1);
+        var displayName = "Label";
+        var description = "Description";
+        var modelStateError = "An error";
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = modelStateValue })
+            .GetExplorerForProperty(nameof(Model.Date));
+
+        var @for = new ModelExpression(nameof(Model.Date), modelExplorer);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-date-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-date-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var dateInputContext = context.GetContextItem<DateInputContext>();
+
+                dateInputContext.OpenFieldset();
+                dateInputContext.CloseFieldset(new(attributes: ImmutableDictionary<string, string?>.Empty, @for, describedBy: null));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.Date));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(description);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */ "Date"))
+            .Returns(modelStateValue.ToString());
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider(), modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions?.Fieldset?.Legend);
+        Assert.Equal(HtmlEncoder.Default.Encode(displayName), actualOptions.Fieldset.Legend.Html);
+        Assert.NotNull(actualOptions.Hint);
+        Assert.Equal(HtmlEncoder.Default.Encode(description), actualOptions.Hint.Html);
+        Assert.NotNull(actualOptions.ErrorMessage);
+        Assert.Equal(HtmlEncoder.Default.Encode(modelStateError), actualOptions.ErrorMessage.Html);
+        var items = actualOptions.Items?.ToArray();
+        Assert.NotNull(items);
+        Assert.Equal(modelStateValue.Day.ToString(), items[0].Value);
+        Assert.Equal(modelStateValue.Month.ToString(), items[1].Value);
+        Assert.Equal(modelStateValue.Year.ToString(), items[2].Value);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitHint_UsesSpecifiedHint()
+    {
+        // Arrange
+        var modelStateValue = new DateOnly(2020, 4, 1);
+        var displayName = "Label";
+        var modelStateDescription = "ModelState description";
+        var hintHtml = "Explicit hint";
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = modelStateValue })
+            .GetExplorerForProperty(nameof(Model.Date));
+
+        var @for = new ModelExpression(nameof(Model.Date), modelExplorer);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-date-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-date-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var dateInputContext = context.GetContextItem<DateInputContext>();
+
+                dateInputContext.SetHint(attributes: ImmutableDictionary<string, string?>.Empty, html: hintHtml);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.Date));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(modelStateDescription);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */ "Date"))
+            .Returns(modelStateValue.ToString());
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider(), modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(hintHtml, actualOptions?.Hint?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitErrorMessage_UsesSpecifiedErrorMessage()
+    {
+        // Arrange
+        var modelStateValue = new DateOnly(2020, 4, 1);
+        var displayName = "Label";
+        var modelStateError = "ModelState error";
+        var errorHtml = "Explicit error";
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = modelStateValue })
+            .GetExplorerForProperty(nameof(Model.Date));
+
+        var @for = new ModelExpression(nameof(Model.Date), modelExplorer);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-date-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-date-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var dateInputContext = context.GetContextItem<DateInputContext>();
+
+                dateInputContext.SetErrorMessage(errorFields: null, visuallyHiddenText: null, attributes: ImmutableDictionary<string, string?>.Empty, html: errorHtml);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.Date));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */ "Date"))
+            .Returns(modelStateValue.ToString());
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider(), modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitFieldsetLegend_UsesSpecifiedLegend()
+    {
+        // Arrange
+        var modelStateValue = new DateOnly(2020, 4, 1);
+        var displayName = "Label";
+        var modelStateDescription = "ModelState description";
+        var fieldsetLegendHtml = "Explicit legend";
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = modelStateValue })
+            .GetExplorerForProperty(nameof(Model.Date));
+
+        var @for = new ModelExpression(nameof(Model.Date), modelExplorer);
+
+        var context = new TagHelperContext(
+            tagName: "govuk-date-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-date-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var dateInputContext = context.GetContextItem<DateInputContext>();
+
+                dateInputContext.OpenFieldset();
+                var dateInputFieldsetContext = new DateInputFieldsetContext(attributes: ImmutableDictionary<string, string?>.Empty, @for, describedBy: null);
+                dateInputFieldsetContext.SetLegend(isPageHeading: false, attributes: ImmutableDictionary<string, string?>.Empty, html: fieldsetLegendHtml);
                 dateInputContext.CloseFieldset(dateInputFieldsetContext);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.Date));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(modelStateDescription);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */ "Date"))
+            .Returns(modelStateValue.ToString());
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider(), modelHelperMock.Object)
         {
-            DescribedBy = "describedby",
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
+            ViewContext = new ViewContext(),
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <fieldset class=""govuk-fieldset"" role=""group"" aria-describedby=""describedby"">
-        <legend class=""govuk-fieldset__legend"">
-            Legend
-        </legend>
-
-        <div class=""govuk-date-input"" id=""my-id"">
-            <div class=""govuk-date-input__item"">
-                <div class=""govuk-form-group"">
-                    <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                    <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-                </div>
-            </div>
-            <div class=""govuk-date-input__item"">
-                <div class=""govuk-form-group"">
-                    <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                    <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-                </div>
-            </div>
-            <div class=""govuk-date-input__item"">
-                <div class=""govuk-form-group"">
-                    <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                    <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-                </div>
-            </div>
-        </div>
-    </fieldset>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.Equal(fieldsetLegendHtml, actualOptions?.Fieldset?.Legend?.Html);
     }
 
     [Fact]
-    public async Task ProcessAsync_WithCustomDateTypeInModel_GeneratesExpectedOutput()
+    public async Task ProcessAsync_WithDisabledSetToTrue_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "my-id";
+        var namePrefix = "my-name";
+        var value = new DateOnly(2020, 4, 1);
+
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
@@ -294,542 +588,64 @@ public class DateInputTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { CustomDate = new(2020, 4, 1) })
-            .GetExplorerForProperty(nameof(Model.CustomDate));
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
 
-        var viewContext = new ViewContext();
-
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions()
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            DateInputModelConverters =
-            {
-                new CustomDateTypeConverter()
-            }
-        });
-
-        var tagHelper = new DateInputTagHelper(options, new DateInputParseErrorsProvider())
-        {
-            AspFor = new ModelExpression(nameof(Model.CustomDate), modelExplorer),
-            Id = "my-id",
-            NamePrefix = "my-name",
-            ViewContext = viewContext
+            Id = id,
+            NamePrefix = namePrefix,
+            Value = value,
+            Disabled = true
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithHint_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetHint(attributes: null, content: new HtmlString("The hint"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithErrorMessage_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group govuk-form-group--error"">
-    <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>Error</p>
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithHintAndErrorMessage_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetHint(attributes: null, content: new HtmlString("The hint"));
-                dateInputContext.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group govuk-form-group--error"">
-    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-    <p class=""govuk-error-message"" id=""my-id-error""><span class=""govuk-visually-hidden"">Error:</span>Error</p>
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input govuk-input--error"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithOverridenItemId_GeneratesExpectedItem()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetItem(DateInputItemType.Day, new DateInputContextItem()
-                {
-                    Id = "custom-id"
-                });
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var item = element.QuerySelectorAll(".govuk-date-input__item")[0];
-
-        var expectedId = "custom-id";
-        Assert.Equal(expectedId, item.QuerySelector("label").GetAttribute("for"));
-        Assert.Equal(expectedId, item.QuerySelector("input").GetAttribute("id"));
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithOverridenItemName_GeneratesExpectedItem()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetItem(DateInputItemType.Day, new DateInputContextItem()
-                {
-                    Name = "custom-name"
-                });
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var item = element.QuerySelectorAll(".govuk-date-input__item")[0];
-
-        Assert.Equal("my-name.custom-name", item.QuerySelector("input").GetAttribute("name"));
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithOverridenItemLabel_GeneratesExpectedItem()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetItem(DateInputItemType.Day, new DateInputContextItem()
-                {
-                    LabelContent = new HtmlString("Dydd")
-                });
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var item = element.QuerySelectorAll(".govuk-date-input__item")[0];
-
-        Assert.Equal("Dydd", item.QuerySelector("label").InnerHtml.Trim());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithOverridenItemValue_GeneratesExpectedItem()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetItem(DateInputItemType.Day, new DateInputContextItem()
-                {
-                    Value = 28,
-                    ValueSpecified = true
-                });
-                dateInputContext.SetItem(DateInputItemType.Month, new DateInputContextItem()
-                {
-                    Value = 5,
-                    ValueSpecified = true
-                });
-                dateInputContext.SetItem(DateInputItemType.Year, new DateInputContextItem()
-                {
-                    Value = 2022,
-                    ValueSpecified = true
-                });
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name"
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var item = element.QuerySelectorAll(".govuk-date-input__item")[0];
-
-        Assert.Equal("28", item.QuerySelector("input").GetAttribute("value"));
-    }
-
-    [Fact]
-    public async Task ProcessAsync_NullValue_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            Value = null
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var html = output.RenderToElement();
-
+        Assert.NotNull(actualOptions);
+        Assert.NotNull(actualOptions.Items);
         Assert.Collection(
-            html.QuerySelectorAll("input").Cast<IHtmlInputElement>(),
-            day => Assert.Equal("", day.Value),
-            month => Assert.Equal("", month.Value),
-            year => Assert.Equal("", year.Value));
+            actualOptions.Items,
+            AssetItemOptionHasDisabled,
+            AssetItemOptionHasDisabled,
+            AssetItemOptionHasDisabled);
+
+        static void AssetItemOptionHasDisabled(DateInputOptionsItem item)
+        {
+            Assert.NotNull(item.Attributes);
+            Assert.Contains(item.Attributes, kvp => kvp.Key == "disabled");
+        }
     }
 
-    [Fact]
-    public async Task ProcessAsync_WithCustomDateTypeInValue_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var options = Options.Create(new GovUkFrontendAspNetCoreOptions()
-        {
-            DateInputModelConverters =
-            {
-                new CustomDateTypeConverter()
-            }
-        });
-
-        var tagHelper = new DateInputTagHelper(options, new DateInputParseErrorsProvider())
-        {
-            Id = "my-id",
-            NamePrefix = "my-name",
-            Value = new CustomDateType(2020, 4, 1)
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <div class=""govuk-date-input"" id=""my-id"">
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Day"">Day</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Day"" inputmode=""numeric"" name=""my-name.Day"" type=""text"" value=""1"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Month"">Month</label>
-                <input class=""govuk-input--width-2 govuk-date-input__input govuk-input"" id=""my-id.Month"" inputmode=""numeric"" name=""my-name.Month"" type=""text"" value=""4"">
-            </div>
-        </div>
-        <div class=""govuk-date-input__item"">
-            <div class=""govuk-form-group"">
-                <label class=""govuk-date-input__label govuk-label"" for=""my-id.Year"">Year</label>
-                <input class=""govuk-input--width-4 govuk-date-input__input govuk-input"" id=""my-id.Year"" inputmode=""numeric"" name=""my-name.Year"" type=""text"" value=""2020"">
-            </div>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
+    //ProcessAsync_WithExplicitItems_GeneratesExpectedItems
+    //ProcessAsync_WithPartialExplicitItems_GeneratesExpectedItems
+    //ProcessAsync_WithForAndExplicitValue_UsesValueAttribute
+    //ProcessAsync_WithExplicitItemId_GeneratesOptionsWithSpecifiedItemId
+    //ProcessAsync_WithExplicitItemName_GeneratesOptionsWithSpecifiedItemName
+    //ProcessAsync_WithExplicitItemValue_GeneratesOptionsWithSpecifiedItemValue
 
     [Theory]
     [InlineData(null, true, true, true)]
-    [InlineData(DateInputErrorComponents.All, true, true, true)]
-    [InlineData(DateInputErrorComponents.Day, true, false, false)]
-    [InlineData(DateInputErrorComponents.Month, false, true, false)]
-    [InlineData(DateInputErrorComponents.Year, false, false, true)]
-    [InlineData(DateInputErrorComponents.Day | DateInputErrorComponents.Month, true, true, false)]
-    [InlineData(DateInputErrorComponents.Day | DateInputErrorComponents.Year, true, false, true)]
-    [InlineData(DateInputErrorComponents.Month | DateInputErrorComponents.Year, false, true, true)]
-    public async Task ProcessAsync_HaveErrorClassesWhenErrorSpecified(
-        DateInputErrorComponents? specifiedErrorItems,
+    [InlineData(DateInputErrorFields.All, true, true, true)]
+    [InlineData(DateInputErrorFields.Day, true, false, false)]
+    [InlineData(DateInputErrorFields.Month, false, true, false)]
+    [InlineData(DateInputErrorFields.Year, false, false, true)]
+    [InlineData(DateInputErrorFields.Day | DateInputErrorFields.Month, true, true, false)]
+    [InlineData(DateInputErrorFields.Day | DateInputErrorFields.Year, true, false, true)]
+    [InlineData(DateInputErrorFields.Month | DateInputErrorFields.Year, false, true, true)]
+    public async Task ProcessAsync_WithExplicitErrorFields_GeneratesExpectedItemClasses(
+        DateInputErrorFields? specifiedErrorItems,
         bool expectDayError,
         bool expectMonthError,
         bool expectYearError)
     {
         // Arrange
+        var id = "my-id";
+        var namePrefix = "my-name";
+        var value = new DateOnly(2020, 4, 1);
+
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
@@ -842,41 +658,50 @@ public class DateInputTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetErrorMessage(specifiedErrorItems, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
+
+                dateInputContext.SetErrorMessage(
+                    specifiedErrorItems,
+                    visuallyHiddenText: null,
+                    attributes: ImmutableDictionary<string, string?>.Empty,
+                    html: HtmlEncoder.Default.Encode("Error message"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            Id = "my-id",
-            DescribedBy = "describedby",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Id = id,
+            NamePrefix = namePrefix,
+            Value = value
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var element = output.RenderToElement();
-
+        Assert.NotNull(actualOptions?.Items);
         Assert.Collection(
-            element.QuerySelectorAll("input"),
-            day => AssertHaveErrorClass(day, expectDayError),
-            month => AssertHaveErrorClass(month, expectMonthError),
-            year => AssertHaveErrorClass(year, expectYearError));
+            actualOptions.Items,
+            item => AssertHaveErrorClass(item, expectDayError),
+            item => AssertHaveErrorClass(item, expectMonthError),
+            item => AssertHaveErrorClass(item, expectYearError));
 
-        static void AssertHaveErrorClass(IElement element, bool expectError)
+        static void AssertHaveErrorClass(DateInputOptionsItem item, bool expectError)
         {
+            var classes = item.Classes?.Split(' ') ?? [];
+
             if (expectError)
             {
-                Assert.Contains("govuk-input--error", element.ClassList);
+                Assert.Contains("govuk-input--error", classes);
             }
             else
             {
-                Assert.DoesNotContain("govuk-input--error", element.ClassList);
+                Assert.DoesNotContain("govuk-input--error", classes);
             }
         }
     }
@@ -896,13 +721,15 @@ public class DateInputTagHelperTests
     [InlineData(DateInputParseErrors.InvalidDay | DateInputParseErrors.InvalidYear, true, false, true)]
     [InlineData(DateInputParseErrors.InvalidMonth | DateInputParseErrors.InvalidYear, false, true, true)]
     [InlineData(DateInputParseErrors.InvalidDay | DateInputParseErrors.MissingMonth | DateInputParseErrors.InvalidYear, true, true, true)]
-    public async Task ProcessAsync_ErrorItemsNotSpecifiedAndErrorsFromModelBinder_InfersErrorItems(
+    public async Task ProcessAsync_WithForButErrorFieldsNotSpecified_GetsErrorItemsFromModelBinder(
         DateInputParseErrors parseErrors,
         bool expectDayError,
         bool expectMonthError,
         bool expectYearError)
     {
         // Arrange
+        var modelStateValue = new DateOnly(2020, 4, 1);
+
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
@@ -914,25 +741,27 @@ public class DateInputTagHelperTests
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetErrorMessage(errorComponents: null, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
-
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = modelStateValue })
             .GetExplorerForProperty(nameof(Model.Date));
+
+        var @for = new ModelExpression(nameof(Model.Date), modelExplorer);
 
         var viewContext = new ViewContext();
 
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
         SetModelErrors(nameof(Model.Date), parseErrors, dateInputParseErrorsProvider, viewContext);
 
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), dateInputParseErrorsProvider)
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            For = @for,
             ViewContext = viewContext
         };
 
@@ -940,108 +769,46 @@ public class DateInputTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var element = output.RenderToElement();
-
+        Assert.NotNull(actualOptions?.Items);
         Assert.Collection(
-            element.QuerySelectorAll("input"),
-            day => AssertHaveErrorClass(day, expectDayError),
-            month => AssertHaveErrorClass(month, expectMonthError),
-            year => AssertHaveErrorClass(year, expectYearError));
+            actualOptions.Items,
+            item => AssertHaveErrorClass(item, expectDayError),
+            item => AssertHaveErrorClass(item, expectMonthError),
+            item => AssertHaveErrorClass(item, expectYearError));
 
-        static void AssertHaveErrorClass(IElement element, bool expectError)
+        static void AssertHaveErrorClass(DateInputOptionsItem item, bool expectError)
         {
+            var classes = item.Classes?.Split(' ') ?? [];
+
             if (expectError)
             {
-                Assert.Contains("govuk-input--error", element.ClassList);
+                Assert.Contains("govuk-input--error", classes);
             }
             else
             {
-                Assert.DoesNotContain("govuk-input--error", element.ClassList);
-            }
-        }
-    }
-
-    [Fact]
-    public async Task ProcessAsync_ErrorItemsSpecifiedAndErrorsFromModelBinder_UsesSpecifiedErrorItems()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-date-input",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-date-input",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var dateInputContext = context.GetContextItem<DateInputContext>();
-
-                // Explictly set a different set of DateInputErrorComponents than we have in DateInputParseErrorsProvider
-                dateInputContext.SetErrorMessage(
-                    errorComponents: DateInputErrorComponents.Month | DateInputErrorComponents.Year,
-                    visuallyHiddenText: null,
-                    attributes: null,
-                    content: new HtmlString("Error"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
-            .GetExplorerForProperty(nameof(Model.Date));
-
-        var viewContext = new ViewContext();
-
-        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
-
-        SetModelErrors(nameof(Model.Date), DateInputParseErrors.InvalidDay, dateInputParseErrorsProvider, viewContext);
-
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), dateInputParseErrorsProvider)
-        {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
-            ViewContext = viewContext
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-
-        Assert.Collection(
-            element.QuerySelectorAll("input"),
-            day => AssertHaveErrorClass(day, false),
-            month => AssertHaveErrorClass(month, true),
-            year => AssertHaveErrorClass(year, true));
-
-        static void AssertHaveErrorClass(IElement element, bool expectError)
-        {
-            if (expectError)
-            {
-                Assert.Contains("govuk-input--error", element.ClassList);
-            }
-            else
-            {
-                Assert.DoesNotContain("govuk-input--error", element.ClassList);
+                Assert.DoesNotContain("govuk-input--error", classes);
             }
         }
     }
 
     [Theory]
-    [InlineData(DateInputErrorComponents.Day, "my-id.Day")]
-    [InlineData(DateInputErrorComponents.Day | DateInputErrorComponents.Month, "my-id.Day")]
-    [InlineData(DateInputErrorComponents.Day | DateInputErrorComponents.Month | DateInputErrorComponents.Year, "my-id.Day")]
-    [InlineData(DateInputErrorComponents.Month, "my-id.Month")]
-    [InlineData(DateInputErrorComponents.Month | DateInputErrorComponents.Year, "my-id.Month")]
-    [InlineData(null, "my-id.Day")]
+    [InlineData(DateInputErrorFields.Day, "-day")]
+    [InlineData(DateInputErrorFields.Day | DateInputErrorFields.Month, "-day")]
+    [InlineData(DateInputErrorFields.Day | DateInputErrorFields.Month | DateInputErrorFields.Year, "-day")]
+    [InlineData(DateInputErrorFields.Month, "-month")]
+    [InlineData(DateInputErrorFields.Month | DateInputErrorFields.Year, "-month")]
+    [InlineData(DateInputErrorFields.Year, "-year")]
     public async Task ProcessAsync_WithError_AddsErrorWithCorrectFieldIdToFormErrorContext(
-        DateInputErrorComponents? errorComponents,
-        string expectedErrorFieldId)
+        DateInputErrorFields errorFields,
+        string expectedErrorHrefSuffix)
     {
         // Arrange
         var containerErrorContext = new ContainerErrorContext();
+
+        var id = "my-id";
+        var namePrefix = "my-name";
+        var value = new DateOnly(2020, 4, 1);
+        var errorHtml = "Error message";
 
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
@@ -1058,18 +825,26 @@ public class DateInputTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var dateInputContext = context.GetContextItem<DateInputContext>();
-                dateInputContext.SetErrorMessage(errorComponents, visuallyHiddenText: null, attributes: null, content: new HtmlString("Error"));
+
+                dateInputContext.SetErrorMessage(
+                    errorFields,
+                    visuallyHiddenText: null,
+                    attributes: ImmutableDictionary<string, string?>.Empty,
+                    html: errorHtml);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        DateInputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateDateInput(It.IsAny<DateInputOptions>())).Callback<DateInputOptions>(o => actualOptions = o);
+
+        var tagHelper = new DateInputTagHelper(componentGeneratorMock.Object, Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            Id = "my-id",
-            DescribedBy = "describedby",
-            NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Id = id,
+            NamePrefix = namePrefix,
+            Value = value
         };
 
         // Act
@@ -1080,8 +855,8 @@ public class DateInputTagHelperTests
             containerErrorContext.Errors,
             error =>
             {
-                Assert.Equal("Error", error.Html);
-                Assert.Equal("#" + expectedErrorFieldId, error.Href);
+                Assert.Equal(errorHtml, error.Html);
+                Assert.Equal($"#{id}{expectedErrorHrefSuffix}", error.Href);
             });
     }
 
@@ -1099,38 +874,5 @@ public class DateInputTagHelperTests
     private class Model
     {
         public DateOnly? Date { get; set; }
-        public CustomDateType? CustomDate { get; set; }
-    }
-
-    private class CustomDateType
-    {
-        public CustomDateType(int year, int month, int day)
-        {
-            Y = year;
-            M = month;
-            D = day;
-        }
-
-        public int D { get; }
-        public int M { get; }
-        public int Y { get; }
-    }
-
-    private class CustomDateTypeConverter : DateInputModelConverter
-    {
-        public override bool CanConvertModelType(Type modelType) => modelType == typeof(CustomDateType);
-
-        public override object CreateModelFromDate(Type modelType, DateOnly date) => new CustomDateType(date.Year, date.Month, date.Day);
-
-        public override DateOnly? GetDateFromModel(Type modelType, object model)
-        {
-            if (model is null)
-            {
-                return null;
-            }
-
-            var cdt = (CustomDateType)model;
-            return new DateOnly(cdt.Y, cdt.M, cdt.D);
-        }
     }
 }

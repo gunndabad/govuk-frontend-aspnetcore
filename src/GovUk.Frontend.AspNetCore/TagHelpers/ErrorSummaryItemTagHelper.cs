@@ -135,20 +135,20 @@ public class ErrorSummaryItemTagHelper : TagHelper
 
             if (IsModelExpressionForDate())
             {
-                var dateInputErrorComponents = DateInputErrorComponents.All;
+                var dateInputErrorFields = DateInputErrorFields.All;
 
                 if (_dateInputParseErrorsProvider.TryGetErrorsForModel(AspFor.Name, out var dateInputParseErrors))
                 {
-                    dateInputErrorComponents = dateInputParseErrors.GetErrorComponents();
+                    dateInputErrorFields = dateInputParseErrors.GetErrorComponents();
                 }
 
-                Debug.Assert(dateInputErrorComponents != DateInputErrorComponents.None);
+                Debug.Assert(dateInputErrorFields != DateInputErrorFields.None);
 
-                if (dateInputErrorComponents.HasFlag(DateInputErrorComponents.Day))
+                if (dateInputErrorFields.HasFlag(DateInputErrorFields.Day))
                 {
                     errorFieldId += ".Day";
                 }
-                else if (dateInputErrorComponents.HasFlag(DateInputErrorComponents.Month))
+                else if (dateInputErrorFields.HasFlag(DateInputErrorFields.Month))
                 {
                     errorFieldId += ".Month";
                 }

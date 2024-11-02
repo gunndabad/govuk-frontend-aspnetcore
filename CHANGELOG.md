@@ -9,6 +9,18 @@ This attribute can be added to properties that are model bound from date input c
 public DateOnly? DateOfBirth { get; set; }
 ```
 
+### Date input
+
+#### `<govuk-date-input>`
+
+The `name` attribute has been removed.
+
+The `error-items` attribute on `<govuk-date-input-error-message>` has been renamed to `error-fields`.
+
+#### `DateInputErrorComponents`
+
+`DateInputErrorComponents` is now in the root namespace instead of the `ModelBinding` namespace and is called `DateInputErrorFields`.
+
 ### Error summaries
 
 `FormErrorSummaryTagHelper` has been renamed to `ContainerErrorSummaryTagHelper`.

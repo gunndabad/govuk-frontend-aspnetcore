@@ -1,8 +1,7 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -14,7 +13,15 @@ public class DateInputItemTagHelperTests
     public async Task ProcessAsync_AddItemToContext()
     {
         // Arrange
-        var dateInputContext = new DateInputContext(haveExplicitValue: false, aspFor: null);
+        var autocomplete = "off";
+        var id = "my-day";
+        var inputMode = "im";
+        var labelHtml = "Label";
+        var name = "my_day";
+        var pattern = "*";
+        var value = 2;
+
+        var dateInputContext = new DateInputContext(haveExplicitValue: false, @for: null);
 
         var context = new TagHelperContext(
             tagName: "govuk-date-input-day",
@@ -31,7 +38,7 @@ public class DateInputItemTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var itemContext = context.GetContextItem<DateInputItemContext>();
-                itemContext.SetLabel(new HtmlString("Label"), attributes: new AttributeDictionary());
+                itemContext.SetLabel(attributes: ImmutableDictionary<string, string?>.Empty, html: labelHtml);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -39,12 +46,12 @@ public class DateInputItemTagHelperTests
 
         var tagHelper = new DateInputItemTagHelper()
         {
-            Autocomplete = "off",
-            Id = "my-day",
-            InputMode = "im",
-            Name = "my_day",
-            Pattern = "*",
-            Value = 2
+            Autocomplete = autocomplete,
+            Id = id,
+            InputMode = inputMode,
+            Name = name,
+            Pattern = pattern,
+            Value = value
         };
 
         // Act
@@ -55,13 +62,13 @@ public class DateInputItemTagHelperTests
             dateInputContext.Items.Values,
             item =>
             {
-                Assert.Equal("off", item.Autocomplete);
-                Assert.Equal("my-day", item.Id);
-                Assert.Equal("im", item.InputMode);
-                Assert.Equal("Label", item.LabelContent?.ToHtmlString());
-                Assert.Equal("my_day", item.Name);
-                Assert.Equal("*", item.Pattern);
-                Assert.Equal(2, item.Value);
+                Assert.Equal(autocomplete, item.Autocomplete);
+                Assert.Equal(id, item.Id);
+                Assert.Equal(inputMode, item.InputMode);
+                Assert.Equal(labelHtml, item.LabelHtml);
+                Assert.Equal(name, item.Name);
+                Assert.Equal(pattern, item.Pattern);
+                Assert.Equal(value, item.Value);
                 Assert.True(item.ValueSpecified);
             });
     }
