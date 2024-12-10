@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Fix duplicate `PathBase` in OpengraphImageUrl in page template view.
+
 ## 2.2.0
 
 Targets GOV.UK Frontend v5.2.0.

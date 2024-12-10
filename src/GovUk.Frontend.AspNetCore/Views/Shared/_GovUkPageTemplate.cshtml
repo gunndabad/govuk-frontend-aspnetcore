@@ -15,7 +15,7 @@
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
     var themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
-    var ogImage = ViewBag.OpengraphImageUrl ?? $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}{assetPath}/images/govuk-opengraph-image.png";
+    var ogImage = ViewBag.OpengraphImageUrl ?? $"{Context.Request.Scheme}://{Context.Request.Host}{assetPath}/images/govuk-opengraph-image.png";
 }
 <!DOCTYPE html>
 <html lang="@htmlLang" class="govuk-template @ViewBag.HtmlClasses">
