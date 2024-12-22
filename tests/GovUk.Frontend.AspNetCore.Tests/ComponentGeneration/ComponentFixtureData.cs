@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using Microsoft.AspNetCore.Html;
 using Xunit.Sdk;
 
 namespace GovUk.Frontend.AspNetCore.Tests.ComponentGeneration;
@@ -17,6 +19,8 @@ public class ComponentFixtureData : DataAttribute
     {
         _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
         _serializerOptions.Converters.Insert(0, new PermissiveStringJsonConverter());
+        _serializerOptions.Converters.Add(new EncodedAttributesDictionaryJsonConverter());
+        _serializerOptions.Converters.Add(new StringHtmlContentJsonConverter());
     }
 
     private readonly string _componentName;
@@ -98,6 +102,34 @@ public class ComponentFixtureData : DataAttribute
         }
 
         public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    private class EncodedAttributesDictionaryJsonConverter : JsonConverter<EncodedAttributesDictionary>
+    {
+        public override EncodedAttributesDictionary? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options) ?? [];
+            return EncodedAttributesDictionary.FromDictionaryWithEncodedValues(dictionary);
+        }
+
+        public override void Write(Utf8JsonWriter writer, EncodedAttributesDictionary value, JsonSerializerOptions options)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    private class StringHtmlContentJsonConverter : JsonConverter<IHtmlContent>
+    {
+        public override IHtmlContent? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var str = JsonSerializer.Deserialize<string>(ref reader, options);
+            return new HtmlString(str);
+        }
+
+        public override void Write(Utf8JsonWriter writer, IHtmlContent value, JsonSerializerOptions options)
         {
             throw new NotSupportedException();
         }
