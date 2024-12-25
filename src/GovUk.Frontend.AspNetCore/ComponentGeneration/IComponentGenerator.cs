@@ -18,6 +18,12 @@ public interface IComponentGenerator
     HtmlTagBuilder GenerateBackLink(BackLinkOptions options);
 
     /// <summary>
+    /// Generates a breadcrumbs component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
+    HtmlTagBuilder GenerateBreadcrumbs(BreadcrumbsOptions options);
+
+    /// <summary>
     /// Generates a button component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>

@@ -30,6 +30,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateBackLink(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("breadcrumbs", typeof(BreadcrumbsOptions))]
+    public void Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateBreadcrumbs(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("button", typeof(ButtonOptions))]
     public void Button(ComponentTestCaseData<ButtonOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

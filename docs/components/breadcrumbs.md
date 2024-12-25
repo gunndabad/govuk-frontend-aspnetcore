@@ -6,9 +6,9 @@
 
 ```razor
 <govuk-breadcrumbs collapse-on-mobile="true">
-    <govuk-breadcrumbs-item asp-controller="Home" asp-action="Index">Home</govuk-breadcrumbs-item>
-    <govuk-breadcrumbs-item href="#" link-target="_blank">Passports, travel and living abroad</govuk-breadcrumbs-item>
-    <govuk-breadcrumbs-item>Travel abroad</govuk-breadcrumbs-item>
+    <item asp-controller="Home" asp-action="Index">Home</item>
+    <item href="#" link-target="_blank">Passports, travel and living abroad</item>
+    <item>Travel abroad</item>
 </govuk-breadcrumbs>
 ```
 
@@ -18,11 +18,11 @@
 
 ### `<govuk-breadcrumbs>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `collapse-on-mobile` | `bool` | When true, the breadcrumbs will collapse to the first and last item only on tablet breakpoint and below. Default is `false`. |
+| Attribute | Type    | Description                                                                                                                                      |
+| --- |---------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `collapse-on-mobile` | `bool?` | When true, the breadcrumbs will collapse to the first and last item only on tablet breakpoint and below. If not specified, `false` will be used. |
 
-### `<govuk-breadcrumbs-item>`
+### `<item>`
 
 Content is the HTML to use within the breadcrumbs item.\
 Must be inside a `<govuk-breadcrumbs>` element.

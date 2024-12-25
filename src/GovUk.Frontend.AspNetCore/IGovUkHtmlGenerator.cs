@@ -22,11 +22,6 @@ internal interface IGovUkHtmlGenerator
         string showSectionAriaLabelText,
         IEnumerable<AccordionItem> items);
 
-    TagBuilder GenerateBreadcrumbs(
-        bool collapseOnMobile,
-        AttributeDictionary attributes,
-        IEnumerable<BreadcrumbsItem> items);
-
     TagBuilder GenerateCharacterCount(
         string textAreaId,
         int? maxLength,
