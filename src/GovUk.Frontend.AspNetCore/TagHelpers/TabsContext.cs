@@ -1,25 +1,26 @@
 using System;
 using System.Collections.Generic;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class TabsContext
 {
-    private readonly List<TabsItem> _items;
+    private readonly List<TabsOptionsItem> _items;
     private readonly bool _haveIdPrefix;
 
     public TabsContext(bool haveIdPrefix)
     {
-        _items = new List<TabsItem>();
+        _items = new List<TabsOptionsItem>();
         _haveIdPrefix = haveIdPrefix;
     }
 
-    public IReadOnlyList<TabsItem> Items => _items;
+    public IReadOnlyList<TabsOptionsItem> Items => _items;
 
-    public void AddItem(TabsItem item)
+    public void AddItem(TabsOptionsItem item)
     {
-        Guard.ArgumentNotNull(nameof(item), item);
+        ArgumentNullException.ThrowIfNull(item);
 
         if (item.Id == null && !_haveIdPrefix)
         {

@@ -1,4 +1,5 @@
 using System;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
@@ -14,11 +15,14 @@ public class TabsContextTests
         // Arrange
         var context = new TabsContext(haveIdPrefix: false);
 
-        var item = new TabsItem()
+        var item = new TabsOptionsItem()
         {
             Id = null,
-            Label = "Label",
-            PanelContent = new HtmlString("Panel")
+            Label = new HtmlString("Label"),
+            Panel = new()
+            {
+                Html = new HtmlString("Panel")
+            }
         };
 
         // Act
@@ -33,13 +37,20 @@ public class TabsContextTests
     public void AddItem_ValidItemWithId_AddsToItems()
     {
         // Arrange
+        var id = "item1";
+        var label = "Label";
+        var panelHtml = "Panel";
+
         var context = new TabsContext(haveIdPrefix: false);
 
-        var item = new TabsItem()
+        var item = new TabsOptionsItem()
         {
-            Id = "item1",
-            Label = "Label",
-            PanelContent = new HtmlString("Panel")
+            Id = new HtmlString(id),
+            Label = new HtmlString(label),
+            Panel = new()
+            {
+                Html = new HtmlString(panelHtml)
+            }
         };
 
         // Act
@@ -50,9 +61,9 @@ public class TabsContextTests
             context.Items,
             item =>
             {
-                Assert.Equal("item1", item.Id);
-                Assert.Equal("Label", item.Label);
-                Assert.Equal("Panel", item.PanelContent?.ToHtmlString());
+                Assert.Equal(id, item.Id?.ToHtmlString());
+                Assert.Equal(label, item.Label?.ToHtmlString());
+                Assert.Equal(panelHtml, item.Panel?.Html?.ToHtmlString());
             });
     }
 
@@ -60,13 +71,19 @@ public class TabsContextTests
     public void AddItem_ValidItemWithoutId_AddsToItems()
     {
         // Arrange
+        var label = "Label";
+        var panelHtml = "Panel";
+
         var context = new TabsContext(haveIdPrefix: true);
 
-        var item = new TabsItem()
+        var item = new TabsOptionsItem()
         {
             Id = null,
-            Label = "Label",
-            PanelContent = new HtmlString("Panel")
+            Label = new HtmlString(label),
+            Panel = new()
+            {
+                Html = new HtmlString(panelHtml)
+            }
         };
 
         // Act
@@ -77,8 +94,8 @@ public class TabsContextTests
             context.Items,
             item =>
             {
-                Assert.Equal("Label", item.Label);
-                Assert.Equal("Panel", item.PanelContent?.ToHtmlString());
+                Assert.Equal(label, item.Label?.ToHtmlString());
+                Assert.Equal(panelHtml, item.Panel?.Html?.ToHtmlString());
             });
     }
 }

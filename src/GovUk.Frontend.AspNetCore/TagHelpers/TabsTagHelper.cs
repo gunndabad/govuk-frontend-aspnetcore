@@ -1,6 +1,6 @@
+using System;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,8 +9,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS tabs component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[RestrictChildren(TabsItemTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.TabsElement)]
+[RestrictChildren(TabsItemTagHelper.TagName, TabsItemTagHelper.ShortTagName)]
+[OutputElementHint(DefaultComponentGenerator.TabsElement)]
 public class TabsTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tabs";
@@ -19,21 +19,15 @@ public class TabsTagHelper : TagHelper
     private const string IdPrefixAttributeName = "id-prefix";
     private const string TitleAttributeName = "title";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
-
-    private string _title = ComponentGenerator.TabsDefaultTitle;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
-    /// Creates a new <see cref="TabsTagHelper"/>.
+    /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    public TabsTagHelper()
-        : this(htmlGenerator: null)
+    public TabsTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal TabsTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
@@ -55,14 +49,10 @@ public class TabsTagHelper : TagHelper
     /// The title for the tabs table of contents.
     /// </summary>
     /// <remarks>
-    /// The default is 'Contents'.
+    /// If not specified, <c>Contents</c> will be used.
     /// </remarks>
     [HtmlAttributeName(TitleAttributeName)]
-    public string Title
-    {
-        get => _title;
-        set => _title = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? Title { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -74,18 +64,19 @@ public class TabsTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var tagBuilder = _htmlGenerator.GenerateTabs(
-            Id,
-            IdPrefix,
-            Title,
-            output.Attributes.ToAttributeDictionary(),
-            tabsContext.Items);
+        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateTabs(new TabsOptions
+        {
+            Id = Id.ToHtmlContent(),
+            IdPrefix = IdPrefix.ToHtmlContent(),
+            Title = Title.ToHtmlContent(),
+            Items = tabsContext.Items,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        component.WriteTo(output);
     }
 }

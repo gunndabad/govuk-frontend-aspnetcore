@@ -6,18 +6,18 @@
 
 ```razor
 <govuk-tabs>
-    <govuk-tabs-item id="past-day" label="Past day">
+    <item id="past-day" label="Past day">
         <h2 class="govuk-heading-l">Past day</h2>
-    </govuk-tabs-item>
-    <govuk-tabs-item id="past-week" label="Past week">
+    </item>
+    <item id="past-week" label="Past week">
         <h2 class="govuk-heading-l">Past week</h2>
-    </govuk-tabs-item>
-    <govuk-tabs-item id="past-month" label="Past month">
+    </item>
+    <item id="past-month" label="Past month">
         <h2 class="govuk-heading-l">Past month</h2>
-    </govuk-tabs-item>
-    <govuk-tabs-item id="past-year" label="Past year">
+    </item>
+    <item id="past-year" label="Past year">
         <h2 class="govuk-heading-l">Past year</h2>
-    </govuk-tabs-item>
+    </item>
 </govuk-tabs>
 ```
 
@@ -34,7 +34,7 @@
 | `id-prefix` | `string` | The prefix to use when generating IDs for the items. Required unless every item specifies the `id` attribute. |
 | `title` | `string` | The title for the tabs table of contents. The default is `Contents`. |
 
-### `<govuk-tabs-item>`
+### `<item>`
 
 The content is the HTML of the panel.\
 Must be inside a `<govuk-tabs>` element.

@@ -13,6 +13,20 @@ public class TabsOptions
     public IReadOnlyCollection<TabsOptionsItem>? Items { get; set; }
     public IHtmlContent? Classes { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        var gotIdPrefix = IdPrefix.NormalizeEmptyString() is not null;
+
+        if (Items is not null)
+        {
+            int itemIndex = 0;
+            foreach (var item in Items)
+            {
+                item.Validate(itemIndex++, gotIdPrefix);
+            }
+        }
+    }
 }
 
 public class TabsOptionsItem
@@ -21,6 +35,19 @@ public class TabsOptionsItem
     public IHtmlContent? Label { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
     public TabsOptionsItemPanel? Panel { get; set; }
+
+    internal void Validate(int itemIndex, bool gotIdPrefix)
+    {
+        if (Label is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Label)} must be specified on item {itemIndex}.");
+        }
+
+        if (!gotIdPrefix && Id.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified on item {itemIndex} when the parent {nameof(TabsOptions.IdPrefix)} is null.");
+        }
+    }
 }
 
 public class TabsOptionsItemPanel

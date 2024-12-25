@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -10,12 +11,14 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents an item in a GDS tabs component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TabsTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.TabsItemPanelElement)]
+[HtmlTargetElement(ShortTagName, ParentTag = TabsTagHelper.TagName)]
+[OutputElementHint(DefaultComponentGenerator.TabsItemPanelElement)]
 public class TabsItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tabs-item";
-    internal const string IdAttributeName = "id";
+    internal const string ShortTagName = ShortTagNames.Item;
 
+    internal const string IdAttributeName = "id";
     private const string LabelAttributeName = "label";
     private const string LinkAttributesPrefix = "link-";
 
@@ -51,22 +54,25 @@ public class TabsItemTagHelper : TagHelper
 
         var tabsContext = context.GetContextItem<TabsContext>();
 
-        var childContent = await output.GetChildContentAsync();
+        var childContent = (await output.GetChildContentAsync()).Snapshot();
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        tabsContext.AddItem(new TabsItem()
-        {
-            Id = Id,
-            Label = Label,
-            LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
-            PanelAttributes = output.Attributes.ToAttributeDictionary(),
-            PanelContent = childContent.Snapshot()
-        });
+        var attributes = new EncodedAttributesDictionary(output.Attributes);
 
-        output.SuppressOutput();
+        tabsContext.AddItem(new TabsOptionsItem
+        {
+            Id = Id.ToHtmlContent(),
+            Label = Label.ToHtmlContent(),
+            Attributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(LinkAttributes),
+            Panel = new TabsOptionsItemPanel
+            {
+                Html = childContent,
+                Attributes = attributes
+            }
+        });
     }
 }

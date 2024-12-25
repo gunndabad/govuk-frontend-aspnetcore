@@ -102,6 +102,12 @@ public interface IComponentGenerator
     HtmlTagBuilder GenerateSkipLink(SkipLinkOptions options);
 
     /// <summary>
+    /// Generates a tabs component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
+    HtmlTagBuilder GenerateTabs(TabsOptions options);
+
+    /// <summary>
     /// Generates a tag component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>

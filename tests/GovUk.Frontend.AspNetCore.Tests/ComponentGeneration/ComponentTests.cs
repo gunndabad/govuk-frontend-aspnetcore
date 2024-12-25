@@ -143,6 +143,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateSkipLink(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("tabs", typeof(TabsOptions), exclude: ["with falsey values", "empty item list", "no item list"])]
+    public void Tabs(ComponentTestCaseData<TabsOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTabs(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("task-list", typeof(TaskListOptions))]
     public void TaskList(ComponentTestCaseData<TaskListOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
