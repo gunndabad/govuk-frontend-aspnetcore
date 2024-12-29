@@ -18,6 +18,7 @@ public class TextInput
     public FormGroup FormGroup { get; set; }
     public string Classes { get; set; }
     public string Autocomplete { get; set; }
+    public string Autocapitalize { get; set; }
     public string Pattern { get; set; }
     public bool? Spellcheck { get; set; }
     public IDictionary<string, object> Attributes { get; set; }

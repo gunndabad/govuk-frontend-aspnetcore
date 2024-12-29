@@ -67,6 +67,7 @@ public partial class ComponentTests
                             options.Value,
                             describedBy,
                             options.Autocomplete,
+                            options.Autocapitalize,
                             options.Pattern,
                             options.Inputmode,
                             options.Spellcheck,

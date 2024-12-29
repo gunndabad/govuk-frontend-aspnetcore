@@ -22,6 +22,7 @@ public class TextInputTagHelper : FormGroupTagHelperBase
 
     private const string AttributesPrefix = "input-";
     private const string AutocompleteAttributeName = "autocomplete";
+    private const string AutocapitalizeAttributeName = "autocapitalize";
     private const string DescribedByAttributeName = "described-by";
     private const string DisabledAttributeName = "disabled";
     private const string IdAttributeName = "id";
@@ -57,6 +58,12 @@ public class TextInputTagHelper : FormGroupTagHelperBase
     /// </summary>
     [HtmlAttributeName(AutocompleteAttributeName)]
     public string? Autocomplete { get; set; }
+
+    /// <summary>
+    /// The <c>autocapitalize</c> attribute for the generated <c>input</c> element.
+    /// </summary>
+    [HtmlAttributeName(AutocapitalizeAttributeName)]
+    public string? Autocapitalize { get; set; }
 
     /// <summary>
     /// One or more element IDs to add to the <c>aria-describedby</c> attribute of the generated <c>input</c> element.
@@ -208,6 +215,7 @@ public class TextInputTagHelper : FormGroupTagHelperBase
                 resolvedValue,
                 DescribedBy,
                 Autocomplete,
+                Autocapitalize,
                 Pattern,
                 InputMode,
                 Spellcheck,

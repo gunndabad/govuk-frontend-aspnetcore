@@ -20,6 +20,7 @@ internal partial class ComponentGenerator
         string? value,
         string? describedBy,
         string? autocomplete,
+        string? autocapitalize,
         string? pattern,
         string? inputMode,
         bool? spellcheck,
@@ -60,6 +61,11 @@ internal partial class ComponentGenerator
         if (!string.IsNullOrEmpty(autocomplete))
         {
             tagBuilder.Attributes.Add("autocomplete", autocomplete);
+        }
+
+        if (!string.IsNullOrEmpty(autocapitalize))
+        {
+            tagBuilder.Attributes.Add("autocapitalize", autocapitalize);
         }
 
         if (pattern != null)

@@ -205,6 +205,7 @@ internal interface IGovUkHtmlGenerator
         string value,
         string describedBy,
         string autocomplete,
+        string autocapitalize,
         string pattern,
         string inputMode,
         bool? spellcheck,
