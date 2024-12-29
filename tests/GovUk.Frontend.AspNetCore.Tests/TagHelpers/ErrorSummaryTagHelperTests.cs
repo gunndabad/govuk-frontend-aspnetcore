@@ -78,6 +78,52 @@ public class ErrorSummaryTagHelperTests
     }
 
     [Fact]
+    public async Task ProcessAsync_Empty_GeneratesExpectedOutput()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
+                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var tagHelper = new ErrorSummaryTagHelper()
+        {
+            ViewContext = new ViewContext()
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        var expectedHtml = @"
+<div class=""govuk-error-summary"" data-module=""govuk-error-summary"">
+    <div role=""alert"">
+        <h2 class=""govuk-error-summary__title"">Title</h2>
+        <div class=""govuk-error-summary__body"">
+            <p>Description</p>
+        </div>
+    </div>
+</div>";
+
+        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    }
+
+    [Fact]
     public async Task ProcessAsync_WithDisableAutoFocus_RendersDataAttribute()
     {
         // Arrange
