@@ -59,12 +59,10 @@ public class CharacterCountTagHelperTests
 
         // Assert
         var expectedHtml = @"
-<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"" data-threshold=""90"">
-    <div class=""govuk-form-group"">
-        <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
-        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-        <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
-    </div>
+<div class=""govuk-form-group govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"" data-threshold=""90"">
+    <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
+    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
+    <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
     <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
         You can enter up to 10 words
     </div>
@@ -116,12 +114,10 @@ public class CharacterCountTagHelperTests
 
         // Assert
         var expectedHtml = @"
-<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxlength=""200"" data-threshold=""90"">
-    <div class=""govuk-form-group"">
-        <label class=""govuk-label"" for=""my-id"">The label</label>
-        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-        <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
-    </div>
+<div class=""govuk-form-group govuk-character-count"" data-module=""govuk-character-count"" data-maxlength=""200"" data-threshold=""90"">
+    <label class=""govuk-label"" for=""my-id"">The label</label>
+    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
+    <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
     <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
         You can enter up to 200 characters
     </div>
@@ -177,16 +173,14 @@ public class CharacterCountTagHelperTests
 
         // Assert
         var expectedHtml = @"
-<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"">
-    <div class=""govuk-form-group govuk-form-group--error"">
-        <label class=""govuk-label"" for=""my-id"">The label</label>
-        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-        <p id=""my-id-error"" class=""govuk-error-message"">
-            <span class=""govuk-visually-hidden"">Error:</span>
-            The error
-        </p>
-        <textarea class=""govuk-textarea govuk-js-character-count govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
-    </div>
+<div class=""govuk-form-group govuk-form-group--error govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"">
+    <label class=""govuk-label"" for=""my-id"">The label</label>
+    <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
+    <p id=""my-id-error"" class=""govuk-error-message"">
+        <span class=""govuk-visually-hidden"">Error:</span>
+        The error
+    </p>
+    <textarea class=""govuk-textarea govuk-js-character-count govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
     <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
         You can enter up to 10 words
     </div>
