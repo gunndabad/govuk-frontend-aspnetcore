@@ -78,7 +78,10 @@ public static class AssertEx
                 DiffConverter.Append(diff, sb);
             }
 
-            throw new XunitException(sb.ToString());
+            throw new XunitException("---\nActual: \n---\n" + actual.Replace(">", ">\n").Replace("<", "\n<").Replace(">\n\n<", ">\n<").Trim() + "\n\n" +
+                                     "---\nExected: \n---\n" + expected + "\n\n" +
+                                     "---\n" +
+                                     "" + sb.ToString());
         }
 
         static bool ExcludeDiff(IDiff diff)

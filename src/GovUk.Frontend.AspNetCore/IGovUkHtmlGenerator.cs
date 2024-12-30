@@ -44,12 +44,12 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent content,
         AttributeDictionary attributes);
 
-    TagBuilder GenerateCharacterCount(
+    TagBuilder GenerateCharacterCount(bool? haveError,
         string textAreaId,
         int? maxLength,
         int? maxWords,
         decimal? threshold,
-        IHtmlContent formGroup,
+        IHtmlContent content,
         AttributeDictionary countMessageAttributes,
         string textAreaDescriptionText,
         (string Other, string One)? charactersUnderLimitText,

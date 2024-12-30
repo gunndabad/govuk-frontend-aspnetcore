@@ -49,8 +49,8 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
 
     internal CharacterCountTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
         : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
+            htmlGenerator ?? new ComponentGenerator(),
+            modelHelper ?? new DefaultModelHelper())
     {
     }
 
@@ -194,33 +194,22 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
 
     private protected override TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput)
     {
-        if (MaxLength.HasValue && MaxWords.HasValue)
-        {
-            throw new InvalidOperationException($"Only one of the '{MaxLengthAttributeName}' or '{MaxWordsLengthAttributeName}' attributes can be specified.");
-        }
-
-        // N.B. We specifically pass FormGroupAttributes here and not tagHelperOutput.Attributes since GenerateCharacterCount() doesn't return a form group
-        var formGroup = Generator.GenerateFormGroup(
-            haveError,
-            content,
-            FormGroupAttributes.ToAttributeDictionary());
-
         var resolvedId = ResolveIdPrefix();
-
         return Generator.GenerateCharacterCount(
+            haveError,
             resolvedId,
             MaxLength,
             MaxWords,
             Threshold,
-            formGroup,
+            content,
             CountMessageAttributes.ToAttributeDictionary(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null);
+            textAreaDescriptionText: null,
+            charactersUnderLimitText: null,
+            charactersAtLimitText: null,
+            charactersOverLimitText: null,
+            wordsUnderLimitText: null,
+            wordsAtLimitText: null,
+            wordsOverLimitText: null);
     }
 
     private protected override FormGroupContext CreateFormGroupContext() => new CharacterCountContext();
@@ -232,6 +221,15 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         IHtmlContent childContent,
         out bool haveError)
     {
+        /*
+         * Structure:
+         * - Label
+         * - Label hint
+         * - Error message
+         * - Textarea
+         * - Count-remaining hint
+         */
+
         var contentBuilder = new HtmlContentBuilder();
 
         var label = GenerateLabel(formGroupContext, LabelClass);
@@ -254,7 +252,31 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         var textAreaTagBuilder = GenerateTextArea(haveError);
         contentBuilder.AppendHtml(textAreaTagBuilder);
 
+        var countRemainingMessage = GenerateCountRemainingMessage();
+        contentBuilder.AppendHtml(countRemainingMessage);
+
         return contentBuilder;
+
+
+        IHtmlContent GenerateCountRemainingMessage()
+        {
+            // TODO / FIXME: temporary hardcoded, need to pass through from somewhere? Unable to access context from here?
+            string textAreaDescriptionText = null;
+            var hasNoLimit = MaxLength is null && MaxWords is null; // TODO: This logic is reused in many places -- centralise it?
+
+            var hintId = $"{ResolveIdPrefix()}-info";
+
+            var content = hasNoLimit ? "" :
+                (textAreaDescriptionText ?? $"You can enter up to %{{count}} {(MaxWords.HasValue ? "words" : "characters")}")
+                .Replace("%{count}", (MaxWords.HasValue ? MaxWords : MaxLength).ToString());
+
+            var hintContent = new HtmlString(HtmlEncoder.Default.Encode(content));
+
+            var attributes = CountMessageAttributes.ToAttributeDictionary();
+            attributes.MergeCssClass("govuk-character-count__message");
+
+            return Generator.GenerateHint(hintId, hintContent, attributes);
+        }
 
         TagBuilder GenerateTextArea(bool haveError)
         {
