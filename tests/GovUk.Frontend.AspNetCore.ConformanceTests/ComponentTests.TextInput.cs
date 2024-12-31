@@ -11,7 +11,9 @@ public partial class ComponentTests
         typeof(OptionsJson.TextInput),
         exclude: new[]
         {
-            "with extra letter spacing"  // missing name attribute
+            "with extra letter spacing",  // missing name attribute
+            "with autocapitalize turned off",
+            "with customised input wrapper"
         })]
     public void TextInput(ComponentTestCaseData<OptionsJson.TextInput> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
