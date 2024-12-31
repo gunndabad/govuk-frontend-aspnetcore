@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace GovUk.Frontend.AspNetCore.DocSamples.Pages.ErrorSummary;
+namespace GovUk.Frontend.AspNetCore.DocSamples.Pages.GovUkFrontendComponent.ErrorMessage;
 
-public class ErrorSummaryWithModelStateErrorModel : PageModel
+public class ErrorMessageWithModelStateErrorModel : PageModel
 {
     public string? FullName { get; set; }
 
