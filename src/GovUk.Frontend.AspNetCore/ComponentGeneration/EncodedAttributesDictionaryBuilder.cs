@@ -27,9 +27,12 @@ internal class EncodedAttributesDictionaryBuilder
         return this;
     }
 
-    public EncodedAttributesDictionaryBuilder WithOther(EncodedAttributesDictionary other)
+    public EncodedAttributesDictionaryBuilder WithOther(EncodedAttributesDictionary? other)
     {
-        _dictionary.Add(other);
+        if (other is not null)
+        {
+            _dictionary.Add(other);
+        }
 
         return this;
     }

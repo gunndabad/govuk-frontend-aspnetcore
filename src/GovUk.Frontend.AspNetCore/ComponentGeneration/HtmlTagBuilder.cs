@@ -73,11 +73,12 @@ public class HtmlTagBuilder : IHtmlContent
 
     /// <inheritdoc cref="EncodedAttributesDictionary.Add(EncodedAttributesDictionary)"/>
     /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
-    public HtmlTagBuilder WithAttributes(EncodedAttributesDictionary other)
+    public HtmlTagBuilder WithAttributes(EncodedAttributesDictionary? other)
     {
-        ArgumentNullException.ThrowIfNull(other);
-
-        _attributes.Add(other);
+        if (other is not null)
+        {
+            _attributes.Add(other);
+        }
 
         return this;
     }
