@@ -112,9 +112,27 @@ public class HtmlTagBuilder : IHtmlContent
     /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
     public HtmlTagBuilder WithAppendedHtml(IHtmlContent content)
     {
+        ArgumentNullException.ThrowIfNull(content);
+
         ThrowOnAppendIfVoidElement();
 
         _innerContent.AppendHtml(content);
+
+        return this;
+    }
+
+    /// <summary>
+    /// Appends content to this tag's inner content.
+    /// </summary>
+    /// <param name="getContent">A delegate that gets the content to append.</param>
+    /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
+    public HtmlTagBuilder WithAppendedHtml(Func<IHtmlContent> getContent)
+    {
+        ArgumentNullException.ThrowIfNull(getContent);
+
+        ThrowOnAppendIfVoidElement();
+
+        _innerContent.AppendHtml(getContent());
 
         return this;
     }
@@ -230,11 +248,11 @@ public class HtmlTagBuilder : IHtmlContent
     internal HtmlTagBuilder WhenNotNull<T>(T? value, Action<T, HtmlTagBuilder> action) =>
         WhenNotNull(() => value, action);
 
-    internal HtmlTagBuilder WithAttributeWhenNotNull(Func<string?> getValue, string name, bool encodedValue) =>
-        WhenNotNull(getValue(), (value, b) => b.WithAttribute(name, value, encodedValue));
+    internal HtmlTagBuilder WithAttributeWhenNotNull(Func<string?> getValue, string name, bool encodeValue) =>
+        WhenNotNull(getValue(), (value, b) => b.WithAttribute(name, value, encodeValue));
 
-    internal HtmlTagBuilder WithAttributeWhenNotNull(string? value, string name, bool encodedValue) =>
-        WhenNotNull(value, (_, b) => b.WithAttribute(name, value!, encodedValue));
+    internal HtmlTagBuilder WithAttributeWhenNotNull(string? value, string name, bool encodeValue) =>
+        WhenNotNull(value, (_, b) => b.WithAttribute(name, value!, encodeValue));
 
     internal HtmlTagBuilder WithAttributeWhenNotNull(Func<IHtmlContent?> getValue, string name) =>
         WhenNotNull(getValue(), (value, b) => b.WithAttribute(name, value));
