@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class FormGroupOptions
+public record FormGroupOptions
 {
     public IHtmlContent? Classes { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }

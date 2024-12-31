@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class TextInputOptions
+public record TextInputOptions
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? Name { get; set; }
@@ -56,7 +56,7 @@ public class TextInputOptions
     }
 }
 
-public class TextInputOptionsPrefix
+public record TextInputOptionsPrefix
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
@@ -72,7 +72,7 @@ public class TextInputOptionsPrefix
     }
 }
 
-public class TextInputOptionsSuffix
+public record TextInputOptionsSuffix
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }

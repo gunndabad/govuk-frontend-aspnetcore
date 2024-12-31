@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class PanelOptions
+public record PanelOptions
 {
     public string? TitleText { get; set; }
     public IHtmlContent? TitleHtml { get; set; }

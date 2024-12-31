@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class RadiosOptions
+public record RadiosOptions
 {
     public FieldsetOptions? Fieldset { get; set; }
     public HintOptions? Hint { get; set; }
@@ -19,7 +19,7 @@ public class RadiosOptions
     public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
-public class RadiosOptionsItem
+public record RadiosOptionsItem
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
@@ -36,7 +36,7 @@ public class RadiosOptionsItem
     public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
-public class RadiosOptionsItemConditional
+public record RadiosOptionsItemConditional
 {
     public IHtmlContent? Html { get; set; }
 }

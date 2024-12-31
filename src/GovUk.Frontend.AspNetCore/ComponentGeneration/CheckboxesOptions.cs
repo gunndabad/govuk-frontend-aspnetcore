@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class CheckboxesOptions
+public record CheckboxesOptions
 {
     public string? DescribedBy { get; set; }
     public FieldsetOptions? Fieldset { get; set; }
@@ -19,7 +19,7 @@ public class CheckboxesOptions
     public IReadOnlyDictionary<string, string>? Attributes { get; set; }
 }
 
-public class CheckboxesOptionsItem
+public record CheckboxesOptionsItem
 {
     public string? Text { get; set; }
     public string? Html { get; set; }
@@ -36,7 +36,7 @@ public class CheckboxesOptionsItem
     public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
 }
 
-public class CheckboxesOptionsItemConditional
+public record CheckboxesOptionsItemConditional
 {
     public string? Html { get; set; }
 }

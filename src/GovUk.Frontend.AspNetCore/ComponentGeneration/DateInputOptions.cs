@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class DateInputOptions
+public record DateInputOptions
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? NamePrefix { get; set; }
@@ -18,7 +18,7 @@ public class DateInputOptions
     public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
-public class DateInputOptionsItem
+public record DateInputOptionsItem
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? Name { get; set; }

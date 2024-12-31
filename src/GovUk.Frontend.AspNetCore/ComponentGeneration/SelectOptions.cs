@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class SelectOptions
+public record SelectOptions
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? Name { get; set; }
@@ -20,7 +20,7 @@ public class SelectOptions
     public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
-public class SelectOptionsItem
+public record SelectOptionsItem
 {
     public IHtmlContent? Value { get; set; }
     public string? Text { get; set; }

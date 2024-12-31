@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class ErrorSummaryOptions
+public record ErrorSummaryOptions
 {
     public string? TitleText { get; set; }
     public IHtmlContent? TitleHtml { get; set; }
@@ -34,7 +34,7 @@ public class ErrorSummaryOptions
     }
 }
 
-public class ErrorSummaryOptionsErrorItem
+public record ErrorSummaryOptionsErrorItem
 {
     public IHtmlContent? Href { get; set; }
     public string? Text { get; set; }

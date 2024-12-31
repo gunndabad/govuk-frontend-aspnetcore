@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class SummaryListOptions
+public record SummaryListOptions
 {
     public IReadOnlyCollection<SummaryListOptionsRow>? Rows { get; set; }
     public SummaryListOptionsCard? Card { get; set; }
@@ -13,7 +13,7 @@ public class SummaryListOptions
     public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
-public class SummaryListOptionsCard
+public record SummaryListOptionsCard
 {
     public SummaryListOptionsCardTitle? Title { get; set; }
     public SummaryListOptionsRowActions? Actions { get; set; }
@@ -21,7 +21,7 @@ public class SummaryListOptionsCard
     public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
-public class SummaryListOptionsCardTitle
+public record SummaryListOptionsCardTitle
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
@@ -29,7 +29,7 @@ public class SummaryListOptionsCardTitle
     public IHtmlContent? Classes { get; set; }
 }
 
-public class SummaryListOptionsRow
+public record SummaryListOptionsRow
 {
     public IHtmlContent? Classes { get; set; }
     public SummaryListOptionsRowKey? Key { get; set; }
@@ -37,27 +37,27 @@ public class SummaryListOptionsRow
     public SummaryListOptionsRowActions? Actions { get; set; }
 }
 
-public class SummaryListOptionsRowKey
+public record SummaryListOptionsRowKey
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
     public IHtmlContent? Classes { get; set; }
 }
 
-public class SummaryListOptionsRowValue
+public record SummaryListOptionsRowValue
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
     public IHtmlContent? Classes { get; set; }
 }
 
-public class SummaryListOptionsRowActions
+public record SummaryListOptionsRowActions
 {
     public IHtmlContent? Classes { get; set; }
     public IReadOnlyCollection<SummaryListOptionsRowActionsItem>? Items { get; set; }
 }
 
-public class SummaryListOptionsRowActionsItem
+public record SummaryListOptionsRowActionsItem
 {
     public IHtmlContent? Href { get; set; }
     public string? Text { get; set; }

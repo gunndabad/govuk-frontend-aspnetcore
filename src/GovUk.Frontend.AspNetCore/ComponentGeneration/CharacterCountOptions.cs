@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class CharacterCountOptions
+public record CharacterCountOptions
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? Name { get; set; }
@@ -30,12 +30,12 @@ public class CharacterCountOptions
     public CharacterCountOptionsLocalizedText? WordsOverLimitText { get; set; }
 }
 
-public class CharacterCountCountOptionsMessage
+public record CharacterCountCountOptionsMessage
 {
     public IHtmlContent? Classes { get; set; }
 }
 
-public class CharacterCountOptionsLocalizedText
+public record CharacterCountOptionsLocalizedText
 {
     public IHtmlContent? One { get; set; }
     public IHtmlContent? Other { get; set; }

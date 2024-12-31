@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class AccordionOptions
+public record AccordionOptions
 {
     public IHtmlContent? Id { get; set; }
     public int? HeadingLevel { get; set; }
@@ -40,7 +40,7 @@ public class AccordionOptions
     }
 }
 
-public class AccordionOptionsItem
+public record AccordionOptionsItem
 {
     public AccordionOptionsItemHeading? Heading { get; set; }
     public AccordionOptionsItemSummary? Summary { get; set; }
@@ -61,19 +61,19 @@ public class AccordionOptionsItem
     }
 }
 
-public class AccordionOptionsItemHeading
+public record AccordionOptionsItemHeading
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
 }
 
-public class AccordionOptionsItemSummary
+public record AccordionOptionsItemSummary
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
 }
 
-public class AccordionOptionsItemContent
+public record AccordionOptionsItemContent
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }

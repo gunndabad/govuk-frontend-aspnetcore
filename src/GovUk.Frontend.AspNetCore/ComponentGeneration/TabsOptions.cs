@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class TabsOptions
+public record TabsOptions
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? IdPrefix { get; set; }
@@ -29,7 +29,7 @@ public class TabsOptions
     }
 }
 
-public class TabsOptionsItem
+public record TabsOptionsItem
 {
     public IHtmlContent? Id { get; set; }
     public IHtmlContent? Label { get; set; }
@@ -50,7 +50,7 @@ public class TabsOptionsItem
     }
 }
 
-public class TabsOptionsItemPanel
+public record TabsOptionsItemPanel
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }

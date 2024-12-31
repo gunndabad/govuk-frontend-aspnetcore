@@ -6,7 +6,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class BreadcrumbsOptions
+public record BreadcrumbsOptions
 {
     public bool? CollapseOnMobile { get; set; }
     public IHtmlContent? Classes { get; set; }
@@ -28,7 +28,7 @@ public class BreadcrumbsOptions
     }
 }
 
-public class BreadcrumbsOptionsItem
+public record BreadcrumbsOptionsItem
 {
     public IHtmlContent? Html { get; set; }
     public string? Text { get; set; }

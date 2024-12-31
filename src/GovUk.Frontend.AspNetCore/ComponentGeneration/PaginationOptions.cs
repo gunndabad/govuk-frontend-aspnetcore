@@ -5,7 +5,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class PaginationOptions
+public record PaginationOptions
 {
     public IReadOnlyCollection<PaginationOptionsItem>? Items { get; set; }
     public PaginationOptionsPrevious? Previous { get; set; }
@@ -31,7 +31,7 @@ public class PaginationOptions
     }
 }
 
-public class PaginationOptionsItem
+public record PaginationOptionsItem
 {
     public IHtmlContent? Number { get; set; }
     public IHtmlContent? VisuallyHiddenText { get; set; }
@@ -54,7 +54,7 @@ public class PaginationOptionsItem
     }
 }
 
-public class PaginationOptionsPrevious : IPaginationOptionsLink
+public record PaginationOptionsPrevious : IPaginationOptionsLink
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
@@ -74,7 +74,7 @@ public class PaginationOptionsPrevious : IPaginationOptionsLink
     }
 }
 
-public class PaginationOptionsNext : IPaginationOptionsLink
+public record PaginationOptionsNext : IPaginationOptionsLink
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
