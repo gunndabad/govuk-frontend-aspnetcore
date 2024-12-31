@@ -89,6 +89,18 @@ internal class EncodedAttributesDictionaryBuilder
         return this;
     }
 
+    internal EncodedAttributesDictionaryBuilder WithWhenNotNull(Func<string?> getValue, string name, bool encodedValue) =>
+        WhenNotNull(getValue(), (value, b) => b.With(name, value, encodedValue));
+
+    internal EncodedAttributesDictionaryBuilder WithWhenNotNull(string? value, string name, bool encodedValue) =>
+        WhenNotNull(value, (_, b) => b.With(name, value!, encodedValue));
+
+    internal EncodedAttributesDictionaryBuilder WithWhenNotNull(Func<IHtmlContent?> getValue, string name) =>
+        WhenNotNull(getValue(), (value, b) => b.With(name, value));
+
+    internal EncodedAttributesDictionaryBuilder WithWhenNotNull(IHtmlContent? value, string name) =>
+        WhenNotNull(value, (_, b) => b.With(name, value!));
+
     internal EncodedAttributesDictionaryBuilder WhenNotNull<T>(T? value, Action<T, EncodedAttributesDictionaryBuilder> action) =>
         WhenNotNull(() => value, action);
 

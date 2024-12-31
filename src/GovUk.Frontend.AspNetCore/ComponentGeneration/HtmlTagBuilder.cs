@@ -230,6 +230,18 @@ public class HtmlTagBuilder : IHtmlContent
     internal HtmlTagBuilder WhenNotNull<T>(T? value, Action<T, HtmlTagBuilder> action) =>
         WhenNotNull(() => value, action);
 
+    internal HtmlTagBuilder WithAttributeWhenNotNull(Func<string?> getValue, string name, bool encodedValue) =>
+        WhenNotNull(getValue(), (value, b) => b.WithAttribute(name, value, encodedValue));
+
+    internal HtmlTagBuilder WithAttributeWhenNotNull(string? value, string name, bool encodedValue) =>
+        WhenNotNull(value, (_, b) => b.WithAttribute(name, value!, encodedValue));
+
+    internal HtmlTagBuilder WithAttributeWhenNotNull(Func<IHtmlContent?> getValue, string name) =>
+        WhenNotNull(getValue(), (value, b) => b.WithAttribute(name, value));
+
+    internal HtmlTagBuilder WithAttributeWhenNotNull(IHtmlContent? value, string name) =>
+        WhenNotNull(value, (_, b) => b.WithAttribute(name, value!));
+
     void IHtmlContent.WriteTo(TextWriter writer, HtmlEncoder encoder)
     {
         ArgumentNullException.ThrowIfNull(writer);
