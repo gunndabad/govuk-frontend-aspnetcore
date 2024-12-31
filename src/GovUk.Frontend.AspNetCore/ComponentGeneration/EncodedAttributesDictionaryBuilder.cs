@@ -9,15 +9,13 @@ internal class EncodedAttributesDictionaryBuilder
     private readonly EncodedAttributesDictionary _dictionary;
 
     public EncodedAttributesDictionaryBuilder()
-        : this(new())
+        : this(null)
     {
     }
 
-    public EncodedAttributesDictionaryBuilder(EncodedAttributesDictionary dictionary)
+    public EncodedAttributesDictionaryBuilder(EncodedAttributesDictionary? dictionary)
     {
-        ArgumentNullException.ThrowIfNull(dictionary);
-
-        _dictionary = dictionary;
+        _dictionary = dictionary ?? new EncodedAttributesDictionary();
     }
 
     public EncodedAttributesDictionaryBuilder WithBoolean(string name)

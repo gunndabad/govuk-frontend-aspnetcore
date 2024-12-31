@@ -31,7 +31,6 @@ internal partial class ComponentGenerator
         var tagBuilder = new TagBuilder(PaginationElement);
         tagBuilder.MergeAttributes(attributes);
         tagBuilder.MergeCssClass("govuk-pagination");
-        tagBuilder.Attributes.Add("role", "navigation");
         tagBuilder.Attributes.Add("aria-label", landmarkLabel ?? PaginationDefaultLandmarkLabel);
 
         var blockLevel = !items.Any() && (next is not null || previous is not null);

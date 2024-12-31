@@ -15,66 +15,70 @@ public partial class DefaultComponentGenerator
 
         var hasNoLimit = options.MaxLength is null && options.MaxWords is null;
 
-        return new HtmlTagBuilder(CharacterCountElement)
-            .WithCssClass("govuk-character-count")
-            .WithAttribute("data-module", "govuk-character-count", encodeValue: false)
-            .WhenNotNull(options.MaxLength,
-                (maxLength, b) => b.WithAttribute("data-maxlength", maxLength.ToString()!, encodeValue: false))
-            .WhenNotNull(options.Threshold,
-                (threshold, b) => b.WithAttribute("data-threshold", threshold.ToString()!, encodeValue: false))
-            .WhenNotNull(options.MaxWords,
-                (maxWords, b) => b.WithAttribute("data-maxwords", maxWords.ToString()!, encodeValue: false))
-            .When(
-                hasNoLimit && options.TextareaDescriptionText.NormalizeEmptyString() is not null,
-                b => b.WithAttribute("data-i18n.textarea-description.other", options.TextareaDescriptionText!))
-            .WithAttributeWhenNotNull(options.CharactersUnderLimitText?.One, "data-i18n.characters-under-limit.one")
-            .WithAttributeWhenNotNull(options.CharactersUnderLimitText?.Other, "data-i18n.characters-under-limit.other")
-            .WithAttributeWhenNotNull(options.CharactersAtLimitText, "data-i18n.characters-at-limit")
-            .WithAttributeWhenNotNull(options.CharactersOverLimitText?.One, "data-i18n.characters-over-limit.one")
-            .WithAttributeWhenNotNull(options.CharactersOverLimitText?.Other, "data-i18n.characters-over-limit.other")
-            .WithAttributeWhenNotNull(options.WordsUnderLimitText?.One, "data-i18n.words-under-limit.one")
-            .WithAttributeWhenNotNull(options.WordsUnderLimitText?.Other, "data-i18n.words-under-limit.other")
-            .WithAttributeWhenNotNull(options.WordsAtLimitText, "data-i18n.words-at-limit")
-            .WithAttributeWhenNotNull(options.WordsOverLimitText?.One, "data-i18n.words-over-limit.one")
-            .WithAttributeWhenNotNull(options.WordsOverLimitText?.Other, "data-i18n.words-over-limit.other")
-            .WithAppendedHtml(GenerateTextarea(new TextareaOptions
-            {
-                Id = options.Id,
-                Name = options.Name,
-                DescribedBy = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
-                Rows = options.Rows,
-                Spellcheck = options.Spellcheck,
-                Value = options.Value,
-                FormGroup = options.FormGroup,
-                Classes = new HtmlString($"govuk-js-character-count {options.Classes?.ToHtmlString()}".TrimEnd()),
-                Label = (options.Label ?? new LabelOptions()) with { For = options.Id },
-                Hint = options.Hint,
-                ErrorMessage = options.ErrorMessage,
-                Attributes = options.Attributes
-            }))
-            .WithAppendedHtml(() =>
-            {
-                IHtmlContent? content = null;
+        IHtmlContent? textareaDescriptionText = null;
+        if (!hasNoLimit)
+        {
+            var textareaDescriptionLength = options.MaxWords ?? options.MaxLength;
 
-                if (!hasNoLimit)
+            textareaDescriptionText = new HtmlString(
+                (options.TextareaDescriptionText.NormalizeEmptyString()?.ToHtmlString() ??
+                    $"You can enter up to %{{count}} {(options.MaxWords is not null ? "words" : "characters")}")
+                .Replace("%{count}", textareaDescriptionLength.ToString()));
+        }
+
+        return GenerateTextarea(new TextareaOptions
+        {
+            Id = options.Id,
+            Name = options.Name,
+            DescribedBy = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
+            Rows = options.Rows,
+            Spellcheck = options.Spellcheck,
+            Value = options.Value,
+            FormGroup = new FormGroupOptions()
+            {
+                Classes = new HtmlString($"govuk-character-count {options.FormGroup?.Classes?.ToHtmlString()}".TrimEnd()),
+                Attributes = new EncodedAttributesDictionaryBuilder(options.FormGroup?.Attributes)
+                    .With("data-module", "govuk-character-count", encodeValue: false)
+                    .WhenNotNull(options.MaxLength,
+                        (maxLength, b) => b.With("data-maxlength", maxLength.ToString()!, encodeValue: false))
+                    .WhenNotNull(options.Threshold,
+                        (threshold, b) => b.With("data-threshold", threshold.ToString()!, encodeValue: false))
+                    .WhenNotNull(options.MaxWords,
+                        (maxWords, b) => b.With("data-maxwords", maxWords.ToString()!, encodeValue: false))
+                    .When(
+                        hasNoLimit && options.TextareaDescriptionText.NormalizeEmptyString() is not null,
+                        b => b.With("data-i18n.textarea-description.other", options.TextareaDescriptionText!))
+                    .WithWhenNotNull(options.CharactersUnderLimitText?.One, "data-i18n.characters-under-limit.one")
+                    .WithWhenNotNull(options.CharactersUnderLimitText?.Other, "data-i18n.characters-under-limit.other")
+                    .WithWhenNotNull(options.CharactersAtLimitText, "data-i18n.characters-at-limit")
+                    .WithWhenNotNull(options.CharactersOverLimitText?.One, "data-i18n.characters-over-limit.one")
+                    .WithWhenNotNull(options.CharactersOverLimitText?.Other, "data-i18n.characters-over-limit.other")
+                    .WithWhenNotNull(options.WordsUnderLimitText?.One, "data-i18n.words-under-limit.one")
+                    .WithWhenNotNull(options.WordsUnderLimitText?.Other, "data-i18n.words-under-limit.other")
+                    .WithWhenNotNull(options.WordsAtLimitText, "data-i18n.words-at-limit")
+                    .WithWhenNotNull(options.WordsOverLimitText?.One, "data-i18n.words-over-limit.one")
+                    .WithWhenNotNull(options.WordsOverLimitText?.Other, "data-i18n.words-over-limit.other"),
+                BeforeInput = options.FormGroup?.BeforeInput,
+                AfterInput = new FormGroupOptionsAfterInput()
                 {
-                    var textareaDescriptionLength = options.MaxWords ?? options.MaxLength;
-
-                    content = new HtmlString(
-                        (options.TextareaDescriptionText.NormalizeEmptyString()?.ToHtmlString() ??
-                            $"You can enter up to %{{count}} {(options.MaxWords is not null ? "words" : "characters")}")
-                        .Replace("%{count}", textareaDescriptionLength.ToString()));
+                    Html = new HtmlString(
+                        GenerateHint(
+                            new HintOptions()
+                            {
+                                Html = textareaDescriptionText,
+                                Id = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
+                                Classes = new HtmlString(
+                                    $"govuk-character-count__message {options.CountMessage?.Classes?.ToHtmlString()}".TrimEnd())
+                            },
+                            allowMissingContent: true).ToHtmlString() +
+                        GetEncodedTextOrHtml(options.FormGroup?.AfterInput?.Text, options.FormGroup?.AfterInput?.Html)?.ToHtmlString())
                 }
-
-                return GenerateHint(
-                    new HintOptions()
-                    {
-                        Html = content,
-                        Id = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
-                        Classes = new HtmlString(
-                            $"govuk-character-count__message {options.CountMessage?.Classes?.ToHtmlString()}".TrimEnd())
-                    },
-                    allowMissingContent: true);
-            });
+            },
+            Classes = new HtmlString($"govuk-js-character-count {options.Classes?.ToHtmlString()}".TrimEnd()),
+            Label = (options.Label ?? new LabelOptions()) with { For = options.Id },
+            Hint = options.Hint,
+            ErrorMessage = options.ErrorMessage,
+            Attributes = options.Attributes
+        });
     }
 }
