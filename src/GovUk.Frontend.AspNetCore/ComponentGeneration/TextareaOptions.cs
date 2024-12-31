@@ -12,6 +12,7 @@ public record TextareaOptions
     public bool? Spellcheck { get; set; }
     public int? Rows { get; set; }
     public IHtmlContent? Value { get; set; }
+    public bool? Disabled { get; set; }
     public IHtmlContent? DescribedBy { get; set; }
     public LabelOptions? Label { get; set; }
     public HintOptions? Hint { get; set; }
@@ -20,4 +21,22 @@ public record TextareaOptions
     public IHtmlContent? Classes { get; set; }
     public IHtmlContent? Autocomplete { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Label is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Label)} must be specified.");
+        }
+
+        if (Id is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified.");
+        }
+
+        if (Name is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified.");
+        }
+    }
 }
