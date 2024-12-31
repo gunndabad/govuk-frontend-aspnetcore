@@ -16,6 +16,13 @@ public class ComponentTests
     }
 
     [Theory]
+    [ComponentFixtureData("character-count", typeof(CharacterCountOptions))]
+    public void CharacterCount(ComponentTestCaseData<CharacterCountOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateCharacterCount(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("textarea", typeof(TextareaOptions))]
     public void Textarea(ComponentTestCaseData<TextareaOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

@@ -12,9 +12,9 @@ public record HintOptions
     public IHtmlContent? Classes { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
 
-    internal void Validate()
+    internal void Validate(bool allowMissingContent = false)
     {
-        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
+        if (!allowMissingContent && Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
         }
