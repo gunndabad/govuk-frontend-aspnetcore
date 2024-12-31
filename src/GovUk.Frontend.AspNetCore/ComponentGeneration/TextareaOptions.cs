@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,17 +6,17 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class TextareaOptions
 {
-    public string? Id { get; set; }
-    public string? Name { get; set; }
+    public IHtmlContent? Id { get; set; }
+    public IHtmlContent? Name { get; set; }
     public bool? Spellcheck { get; set; }
     public int? Rows { get; set; }
-    public string? Value { get; set; }
-    public string? DescribedBy { get; set; }
+    public IHtmlContent? Value { get; set; }
+    public IHtmlContent? DescribedBy { get; set; }
     public LabelOptions? Label { get; set; }
     public HintOptions? Hint { get; set; }
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
-    public string? Classes { get; set; }
-    public string? Autocomplete { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public IHtmlContent? Autocomplete { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
 }

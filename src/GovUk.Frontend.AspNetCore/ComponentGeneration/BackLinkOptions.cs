@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,9 +6,13 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class BackLinkOptions
 {
-    public string? Html { get; set; }
+    public IHtmlContent? Html { get; set; }
     public string? Text { get; set; }
-    public string? Href { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Href { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
+
+    internal void Validate()
+    {
+    }
 }

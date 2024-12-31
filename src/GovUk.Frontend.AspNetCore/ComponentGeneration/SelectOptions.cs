@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,24 +7,24 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class SelectOptions
 {
-    public string? Id { get; set; }
-    public string? Name { get; set; }
+    public IHtmlContent? Id { get; set; }
+    public IHtmlContent? Name { get; set; }
     public IReadOnlyCollection<SelectOptionsItem>? Items { get; set; }
-    public string? Value { get; set; }
-    public string? DescribedBy { get; set; }
+    public IHtmlContent? Value { get; set; }
+    public IHtmlContent? DescribedBy { get; set; }
     public LabelOptions? Label { get; set; }
     public HintOptions? Hint { get; set; }
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
 public class SelectOptionsItem
 {
-    public string? Value { get; set; }
+    public IHtmlContent? Value { get; set; }
     public string? Text { get; set; }
     public bool? Selected { get; set; }
     public bool? Disabled { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
 }

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,10 +6,10 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class CharacterCountOptions
 {
-    public string? Id { get; set; }
-    public string? Name { get; set; }
+    public IHtmlContent? Id { get; set; }
+    public IHtmlContent? Name { get; set; }
     public int? Rows { get; set; }
-    public string? Value { get; set; }
+    public IHtmlContent? Value { get; set; }
     public int? MaxLength { get; set; }
     public int? MaxWords { get; set; }
     public int? Threshold { get; set; }
@@ -17,26 +17,26 @@ public class CharacterCountOptions
     public HintOptions? Hint { get; set; }
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
-    public string? Classes { get; set; }
+    public IHtmlContent? Classes { get; set; }
     public bool? Spellcheck { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
     public CharacterCountCountOptionsMessage? CountMessage { get; set; }
-    public string? TextareaDescriptionText { get; set; }
+    public IHtmlContent? TextareaDescriptionText { get; set; }
     public CharacterCountOptionsLocalizedText? CharactersUnderLimitText { get; set; }
-    public string? CharactersAtLimitText { get; set; }
+    public IHtmlContent? CharactersAtLimitText { get; set; }
     public CharacterCountOptionsLocalizedText? CharactersOverLimitText { get; set; }
     public CharacterCountOptionsLocalizedText? WordsUnderLimitText { get; set; }
-    public string? WordsAtLimitText { get; set; }
+    public IHtmlContent? WordsAtLimitText { get; set; }
     public CharacterCountOptionsLocalizedText? WordsOverLimitText { get; set; }
 }
 
 public class CharacterCountCountOptionsMessage
 {
-    public string? Classes { get; set; }
+    public IHtmlContent? Classes { get; set; }
 }
 
 public class CharacterCountOptionsLocalizedText
 {
-    public string? One { get; set; }
-    public string? Other { get; set; }
+    public IHtmlContent? One { get; set; }
+    public IHtmlContent? Other { get; set; }
 }

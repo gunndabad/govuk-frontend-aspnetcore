@@ -8,8 +8,13 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 public class InvalidOptionsException : Exception
 {
     /// Initializes a new instance of the <see cref="InvalidOptionsException"/> class with the specified message.
-    public InvalidOptionsException(string message)
-        : base(message)
+    public InvalidOptionsException(Type optionsType, string message)
+        : base(GetMessage(optionsType, message))
     {
+    }
+
+    private static string GetMessage(Type optionsType, string message)
+    {
+        return message + "\n" + "Options type: " + optionsType.FullName;
     }
 }

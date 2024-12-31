@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,37 +6,84 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class TextInputOptions
 {
-    public string? Id { get; set; }
-    public string? Name { get; set; }
-    public string? Type { get; set; }
-    public string? Inputmode { get; set; }
-    public string? Value { get; set; }
-    public string? DescribedBy { get; set; }
+    public IHtmlContent? Id { get; set; }
+    public IHtmlContent? Name { get; set; }
+    public IHtmlContent? Type { get; set; }
+    public IHtmlContent? Inputmode { get; set; }
+    public IHtmlContent? Value { get; set; }
+    public bool? Disabled { get; set; }
+    public IHtmlContent? DescribedBy { get; set; }
     public LabelOptions? Label { get; set; }
     public HintOptions? Hint { get; set; }
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public TextInputOptionsPrefix? Prefix { get; set; }
     public TextInputOptionsSuffix? Suffix { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
-    public string? Classes { get; set; }
-    public string? Autocomplete { get; set; }
-    public string? Pattern { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public IHtmlContent? Autocomplete { get; set; }
+    public IHtmlContent? Pattern { get; set; }
     public bool? Spellcheck { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Id is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified.");
+        }
+
+        if (Name is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified.");
+        }
+
+        FormGroup?.Validate();
+
+        if (Label is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Label)} must be specified.");
+        }
+
+        Label.Validate();
+
+        Hint?.Validate();
+
+        ErrorMessage?.Validate();
+
+        Prefix?.Validate();
+
+        Suffix?.Validate();
+    }
 }
 
 public class TextInputOptionsPrefix
 {
     public string? Text { get; set; }
-    public string? Html { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Html { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
+        }
+    }
 }
 
 public class TextInputOptionsSuffix
 {
     public string? Text { get; set; }
-    public string? Html { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Html { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
+
+    internal void Validate()
+    {
+        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
+        }
+    }
 }

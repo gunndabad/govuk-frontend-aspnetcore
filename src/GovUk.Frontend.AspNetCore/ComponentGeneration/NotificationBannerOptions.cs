@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -7,14 +7,14 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 public class NotificationBannerOptions
 {
     public string? Text { get; set; }
-    public string? Html { get; set; }
+    public IHtmlContent? Html { get; set; }
     public string? TitleText { get; set; }
-    public string? TitleHtml { get; set; }
+    public IHtmlContent? TitleHtml { get; set; }
     public int? TitleHeadingLevel { get; set; }
-    public string? Type { get; set; }
-    public string? Role { get; set; }
-    public string? TitleId { get; set; }
+    public IHtmlContent? Type { get; set; }
+    public IHtmlContent? Role { get; set; }
+    public IHtmlContent? TitleId { get; set; }
     public bool? DisableAutoFocus { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
 }

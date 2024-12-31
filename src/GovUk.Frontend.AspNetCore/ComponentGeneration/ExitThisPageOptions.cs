@@ -4,18 +4,21 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public class TagOptions
+public record ExitThisPageOptions
 {
     public string? Text { get; set; }
     public IHtmlContent? Html { get; set; }
+    public IHtmlContent? RedirectUrl { get; set; }
+    public IHtmlContent? Id { get; set; }
     public IHtmlContent? Classes { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
+    public IHtmlContent? ActivatedText { get; set; }
+    public IHtmlContent? TimedOutText { get; set; }
+    public IHtmlContent? PressTwoMoreTimesText { get; set; }
+    public IHtmlContent? PressOneMoreTimeText { get; set; }
 
-    internal void Validate(string? messageSuffix = null)
+    internal void Validate()
     {
-        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified{(messageSuffix is not null ? " " + messageSuffix : "")}.");
-        }
+
     }
 }

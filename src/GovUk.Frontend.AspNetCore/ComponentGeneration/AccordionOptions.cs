@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -6,18 +7,37 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public class AccordionOptions
 {
-    public string? Id { get; set; }
+    public IHtmlContent? Id { get; set; }
     public int? HeadingLevel { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
     public bool? RememberExpanded { get; set; }
-    public string? HideAllSectionsText { get; set; }
-    public string? HideSectionText { get; set; }
-    public string? HideSectionAriaLabelText { get; set; }
-    public string? ShowAllSectionsText { get; set; }
-    public string? ShowSectionText { get; set; }
-    public string? ShowSectionAriaLabelText { get; set; }
+    public IHtmlContent? HideAllSectionsText { get; set; }
+    public IHtmlContent? HideSectionText { get; set; }
+    public IHtmlContent? HideSectionAriaLabelText { get; set; }
+    public IHtmlContent? ShowAllSectionsText { get; set; }
+    public IHtmlContent? ShowSectionText { get; set; }
+    public IHtmlContent? ShowSectionAriaLabelText { get; set; }
     public IReadOnlyCollection<AccordionOptionsItem>? Items { get; set; }
+
+    internal void Validate()
+    {
+        if (Id is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified.");
+        }
+
+        if (Items is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Items)} must be specified.");
+        }
+
+        int i = 0;
+        foreach (var item in Items)
+        {
+            item.Validate(i++);
+        }
+    }
 }
 
 public class AccordionOptionsItem
@@ -26,22 +46,35 @@ public class AccordionOptionsItem
     public AccordionOptionsItemSummary? Summary { get; set; }
     public AccordionOptionsItemContent? Content { get; set; }
     public bool? Expanded { get; set; }
+
+    internal void Validate(int itemIndex)
+    {
+        if (Heading is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Heading)} must be specified on item {itemIndex}.");
+        }
+
+        if (Heading.Html.NormalizeEmptyString() is null && Heading.Text.NormalizeEmptyString() is null)
+        {
+            throw new InvalidOptionsException(GetType(), $"{nameof(Heading)}.{nameof(Summary.Html)} or {nameof(Heading)}.{nameof(Summary.Text)} must be specified on item {itemIndex}.");
+        }
+    }
 }
 
 public class AccordionOptionsItemHeading
 {
     public string? Text { get; set; }
-    public string? Html { get; set; }
+    public IHtmlContent? Html { get; set; }
 }
 
 public class AccordionOptionsItemSummary
 {
     public string? Text { get; set; }
-    public string? Html { get; set; }
+    public IHtmlContent? Html { get; set; }
 }
 
 public class AccordionOptionsItemContent
 {
     public string? Text { get; set; }
-    public string? Html { get; set; }
+    public IHtmlContent? Html { get; set; }
 }
