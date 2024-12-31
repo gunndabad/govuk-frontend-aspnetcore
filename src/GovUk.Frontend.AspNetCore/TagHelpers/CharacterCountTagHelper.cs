@@ -261,7 +261,7 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         IHtmlContent GenerateCountRemainingMessage()
         {
             // TODO / FIXME: temporary hardcoded, need to pass through from somewhere? Unable to access context from here?
-            string textAreaDescriptionText = null;
+            string? textAreaDescriptionText = null;
             var hasNoLimit = MaxLength is null && MaxWords is null; // TODO: This logic is reused in many places -- centralise it?
 
             var hintId = $"{ResolveIdPrefix()}-info";
