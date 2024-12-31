@@ -3,11 +3,10 @@
     <AssemblyMetadata Include="GovUkFrontendVersion" Value="$(GovUkFrontendVersion)" />
   </ItemGroup>
 
-  <Target Name="InstallGovUkFrontendPackage" Condition="!Exists('$(_NpmLibVersionFile)') or $([System.IO.File]::ReadAllText($(_NpmLibVersionFile)).Trim()) != $(GovUkFrontendVersion)">
+  <Target Name="InstallGovUkFrontendPackage" Condition="!Exists('$(GovUkFrontendLibrary)')">
     <Message Text="Restoring govuk-frontend@$(GovUkFrontendVersion)" />
     <MakeDir Directories="$(_NpmLibDirectory)" />
     <RemoveDir Directories="$([System.IO.Path]::Combine('$(_NpmLibDirectory)', 'node_modules'))" />
     <Exec Command="npm install --no-save govuk-frontend@$(GovUkFrontendVersion)" WorkingDirectory="$(_NpmLibDirectory)" />
-    <WriteLinesToFile File="$(_NpmLibVersionFile)" Lines="$(GovUkFrontendVersion)" Overwrite="true" />
   </Target>
 </Project>

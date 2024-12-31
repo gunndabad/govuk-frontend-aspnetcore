@@ -6,8 +6,7 @@
     <Nullable>enable</Nullable>
     <GovUkFrontendVersion>5.2.0</GovUkFrontendVersion>
 
-    <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib'))</_NpmLibDirectory>
-    <_NpmLibVersionFile>$([System.IO.Path]::Combine('$(_NpmLibDirectory)', 'version.txt'))</_NpmLibVersionFile>
+    <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib', 'govuk-frontend-$(GovUkFrontendVersion)'))</_NpmLibDirectory>
     <GovUkFrontendLibrary>$([MSBuild]::NormalizeDirectory('$(_NpmLibDirectory)', 'node_modules', 'govuk-frontend', 'dist', 'govuk'))</GovUkFrontendLibrary>
   </PropertyGroup>
 </Project>
