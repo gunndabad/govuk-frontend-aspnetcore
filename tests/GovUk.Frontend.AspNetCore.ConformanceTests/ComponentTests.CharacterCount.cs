@@ -41,7 +41,7 @@ public partial class ComponentTests
                 IHtmlContent? label = null;
                 if (options.Label != null)
                 {
-                    label = BuildLabel(_componentGenerator, options.Label with {For = options.Id});
+                    label = BuildLabel(_componentGenerator, options.Label with { For = options.Id });
                 }
 
                 IHtmlContent? hint = null;
@@ -50,7 +50,7 @@ public partial class ComponentTests
                     var hintId = $"{options.Id}-hint";
                     describedBy.Add(hintId);
 
-                    hint = BuildHint(_componentGenerator, options.Hint with {Id = hintId});
+                    hint = BuildHint(_componentGenerator, options.Hint with { Id = hintId });
                 }
 
                 IHtmlContent? errorMessage = null;
@@ -61,7 +61,7 @@ public partial class ComponentTests
 
                     errorMessage = BuildErrorMessage(
                         _componentGenerator,
-                        options.ErrorMessage with {Id = errorId});
+                        options.ErrorMessage with { Id = errorId });
                 }
 
                 // Character count message and textarea description
@@ -100,7 +100,7 @@ public partial class ComponentTests
                 }
 
                 // TODO/FIXME: Unclear if issue/inconsistency with code, tests, or the fixture data supplied from govuk-frontend
-                if(!hasNoLimit && options.TextareaDescriptionText != null)
+                if (!hasNoLimit && options.TextareaDescriptionText != null)
                 {
                     attributes.Add("data-i18n.textarea-description.other", options.TextareaDescriptionText);
                 }
