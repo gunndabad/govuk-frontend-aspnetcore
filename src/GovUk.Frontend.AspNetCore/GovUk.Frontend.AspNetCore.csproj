@@ -11,7 +11,7 @@
     <Description>ASP.NET Core integration for GOV.UK Design system</Description>
     <Authors>James Gunn</Authors>
     <MinVerTagPrefix>v</MinVerTagPrefix>
-    <MinVerMinimumMajorMinor>2.0</MinVerMinimumMajorMinor>
+    <MinVerMinimumMajorMinor>2.3</MinVerMinimumMajorMinor>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -50,7 +50,7 @@
     <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.js">
       <LinkedName>all.min.js</LinkedName>
     </_CompiledAssets>
-    
+
     <EmbeddedResource Include="$(GovUkFrontendLibrary)assets\**\*">
       <Link>Content/Assets/%(RecursiveDir)%(Filename)%(Extension)</Link>
       <LogicalName>Content/Assets/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
