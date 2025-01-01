@@ -41,8 +41,8 @@ public class FormErrorSummaryTagHelperTests
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var formErrorContext = (FormErrorContext)context.Items[typeof(FormErrorContext)];
-                formErrorContext.AddError(new HtmlString("Content"), "href");
+                var formErrorContext = (ContainerErrorContext)context.Items[typeof(ContainerErrorContext)];
+                formErrorContext.AddError(new HtmlString("Content"), new HtmlString("href"));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);

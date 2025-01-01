@@ -10,9 +10,9 @@ public class FormErrorContextTests
     public void AddError_AddsErrorToContext()
     {
         // Arrange
-        var context = new FormErrorContext();
+        var context = new ContainerErrorContext();
         var content = new HtmlString("Content");
-        var href = "/foo";
+        var href = new HtmlString("/foo");
 
         // Act
         context.AddError(content, href);

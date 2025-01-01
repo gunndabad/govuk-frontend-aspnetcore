@@ -1041,14 +1041,14 @@ public class DateInputTagHelperTests
         string expectedErrorFieldId)
     {
         // Arrange
-        var formErrorContext = new FormErrorContext();
+        var formErrorContext = new ContainerErrorContext();
 
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormErrorContext), formErrorContext }
+                { typeof(ContainerErrorContext), formErrorContext }
             },
             uniqueId: "test");
 
@@ -1080,8 +1080,8 @@ public class DateInputTagHelperTests
             formErrorContext.Errors,
             error =>
             {
-                Assert.Equal("Error", error.Content?.ToHtmlString());
-                Assert.Equal("#" + expectedErrorFieldId, error.Href);
+                Assert.Equal("Error", error.Content.ToHtmlString());
+                Assert.Equal("#" + expectedErrorFieldId, error.Href?.ToHtmlString());
             });
     }
 
