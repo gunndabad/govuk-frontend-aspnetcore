@@ -64,14 +64,14 @@ public class FormGroupTagHelperBaseTests
     public void GenerateErrorMessage_AddsErrorToFormErrorContext()
     {
         // Arrange
-        var formErrorContext = new FormErrorContext();
+        var formErrorContext = new ContainerErrorContext();
 
         var tagHelperContext = new TagHelperContext(
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>()
             {
-                { typeof(FormErrorContext), formErrorContext }
+                { typeof(ContainerErrorContext), formErrorContext }
             },
             uniqueId: "test");
 
