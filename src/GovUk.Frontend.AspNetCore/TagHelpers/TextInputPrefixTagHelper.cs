@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,10 +8,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the prefix element in a GDS input component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.InputPrefixElement)]
+//[HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
+[OutputElementHint(DefaultComponentGenerator.InputPrefixElement)]
 public class TextInputPrefixTagHelper : TagHelper
 {
     internal const string TagName = "govuk-input-prefix";
+    //internal const string ShortTagName = ShortTagNames.Prefix;
 
     /// <summary>
     /// Creates an <see cref="TextInputPrefixTagHelper"/>.
@@ -25,14 +27,14 @@ public class TextInputPrefixTagHelper : TagHelper
     {
         var inputContext = (TextInputContext)context.Items[typeof(TextInputContext)];
 
-        var childContent = await output.GetChildContentAsync();
+        var childContent = (await output.GetChildContentAsync()).Snapshot();
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        inputContext.SetPrefix(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        inputContext.SetPrefix(new EncodedAttributesDictionary(output.Attributes), childContent, output.TagName);
 
         output.SuppressOutput();
     }

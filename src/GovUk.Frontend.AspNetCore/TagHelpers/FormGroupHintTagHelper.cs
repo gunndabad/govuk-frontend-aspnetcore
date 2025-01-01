@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -40,9 +41,17 @@ public class FormGroupHintTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var formGroupContext = context.GetContextItem<FormGroupContext>();
-
-        formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
+        if (context.TryGetContextItem<FormGroupContext>(out var formGroupContext))
+        {
+            formGroupContext.SetHint(output.Attributes.ToAttributeDictionary(), childContent?.Snapshot());
+        }
+        else if (context.TryGetContextItem<FormGroupContext2>(out var formGroupContext2))
+        {
+            formGroupContext2.SetHint(
+                new EncodedAttributesDictionary(output.Attributes),
+                childContent?.Snapshot(),
+                output.TagName);
+        }
 
         output.SuppressOutput();
     }

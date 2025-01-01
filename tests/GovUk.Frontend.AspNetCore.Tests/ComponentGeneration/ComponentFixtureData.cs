@@ -111,7 +111,7 @@ public class ComponentFixtureData : DataAttribute
     {
         public override EncodedAttributesDictionary? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var dictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options) ?? [];
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, string?>>(ref reader, options) ?? [];
             return EncodedAttributesDictionary.FromDictionaryWithEncodedValues(dictionary);
         }
 

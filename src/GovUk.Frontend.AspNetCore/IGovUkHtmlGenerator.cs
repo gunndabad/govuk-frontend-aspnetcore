@@ -197,24 +197,6 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent content,
         AttributeDictionary attributes);
 
-    TagBuilder GenerateTextInput(
-        bool haveError,
-        string id,
-        string name,
-        string type,
-        string value,
-        string describedBy,
-        string autocomplete,
-        string pattern,
-        string inputMode,
-        bool? spellcheck,
-        bool disabled,
-        AttributeDictionary attributes,
-        IHtmlContent prefixContent,
-        AttributeDictionary prefixAttributes,
-        IHtmlContent suffixContent,
-        AttributeDictionary suffixAttributes);
-
     TagBuilder GenerateWarningText(
         string iconFallbackText,
         IHtmlContent content,

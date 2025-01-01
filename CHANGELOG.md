@@ -9,6 +9,10 @@ This attribute can be added to properties that are model bound from date input c
 public DateOnly? DateOfBirth { get; set; }
 ```
 
+### `<govuk-input>` tag helper
+An `autocapitalize` attribute has been added.
+Attributes can be set on the input wrapper element by specifying `input-wrapper-*` attributes.
+
 Fix duplicate `PathBase` in OpengraphImageUrl in page template view.
 
 ## 2.2.0
