@@ -29,6 +29,13 @@ public class ComponentTests
             data,
             (generator, options) => generator.GenerateTextarea(options).ToHtmlString());
 
+    [Theory]
+    [ComponentFixtureData("input", typeof(TextInputOptions), exclude: ["with extra letter spacing"])]
+    public void TextInput(ComponentTestCaseData<TextInputOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTextInput(options).ToHtmlString());
+
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<IComponentGenerator, TOptions, string> generateComponent,

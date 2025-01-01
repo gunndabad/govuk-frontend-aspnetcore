@@ -55,16 +55,17 @@ public class EncodedAttributesDictionary : IReadOnlyDictionary<string, string>
     string IReadOnlyDictionary<string, string>.this[string key] => throw new NotImplementedException();
 
     /// <summary>
-    /// Creates an <see cref="EncodedAttributesDictionary"/> from a <see cref="IReadOnlyDictionary{TKey, TValue}"/>.
+    /// Creates an <see cref="EncodedAttributesDictionary"/> from a <see cref="IDictionary{TKey, TValue}"/>.
     /// </summary>
     /// <remarks>
     /// Values must be HTML encoded.
     /// </remarks>
-    /// <param name="dictionary">The <see cref="IReadOnlyDictionary{TKey, TValue}"/> to copy attributes from.</param>
+    /// <param name="dictionary">The <see cref="IDictionary{TKey, TValue}"/> to copy attributes from.</param>
     /// <returns>A new <see cref="EncodedAttributesDictionary"/>.</returns>
-    public static EncodedAttributesDictionary FromDictionaryWithEncodedValues(IReadOnlyDictionary<string, string> dictionary) =>
+    public static EncodedAttributesDictionary FromDictionaryWithEncodedValues(IDictionary<string, string?> dictionary) =>
         new EncodedAttributesDictionary(
-            new TagHelperAttributeList(dictionary.Select(kvp => new TagHelperAttribute(kvp.Key, new HtmlString(kvp.Value)))));
+            new TagHelperAttributeList(dictionary.Select(
+                kvp => kvp.Value is not null ? new TagHelperAttribute(kvp.Key, new HtmlString(kvp.Value)) : new TagHelperAttribute(kvp.Key))));
 
     /// <summary>
     /// Creates a copy of this <see cref="EncodedAttributesDictionary"/>.

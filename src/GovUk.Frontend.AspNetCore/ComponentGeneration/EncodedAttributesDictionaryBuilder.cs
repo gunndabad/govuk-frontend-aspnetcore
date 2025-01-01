@@ -102,5 +102,11 @@ internal class EncodedAttributesDictionaryBuilder
     internal EncodedAttributesDictionaryBuilder WhenNotNull<T>(T? value, Action<T, EncodedAttributesDictionaryBuilder> action) =>
         WhenNotNull(() => value, action);
 
+    internal EncodedAttributesDictionaryBuilder Without(string name, out IHtmlContent? value)
+    {
+        _dictionary.Remove(name, out value);
+        return this;
+    }
+
     public static implicit operator EncodedAttributesDictionary(EncodedAttributesDictionaryBuilder builder) => builder._dictionary;
 }
