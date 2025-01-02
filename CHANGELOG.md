@@ -2,17 +2,26 @@
 
 ## Unreleased
 
-### `DateInputAttribute`
+Targets GOV.UK Frontend v5.3.0 and .NET 8.
+
+### New features
+
+#### `DateInputAttribute`
 This attribute can be added to properties that are model bound from date input components. It allows overriding the prefix used for error messages e.g.
 ```cs
 [DateInput(ErrorMessagePrefix = "Your date of birth")]
 public DateOnly? DateOfBirth { get; set; }
 ```
 
-### `<govuk-input>` tag helper
+### Tag helper changes
+
+#### `<govuk-input>` tag helper
 An `autocapitalize` attribute has been added.
 Attributes can be set on the input wrapper element by specifying `input-wrapper-*` attributes.
 
+### Fixes
+
+#### Page template
 Fix duplicate `PathBase` in OpengraphImageUrl in page template view.
 
 ## 2.2.0
