@@ -12,7 +12,7 @@ public record CharacterCountOptions
     public IHtmlContent? Value { get; set; }
     public int? MaxLength { get; set; }
     public int? MaxWords { get; set; }
-    public int? Threshold { get; set; }
+    public decimal? Threshold { get; set; }
     public LabelOptions? Label { get; set; }
     public HintOptions? Hint { get; set; }
     public ErrorMessageOptions? ErrorMessage { get; set; }
@@ -51,6 +51,8 @@ public record CharacterCountOptions
 public record CharacterCountCountOptionsMessage
 {
     public IHtmlContent? Classes { get; set; }
+    [NonStandardParameter]
+    public EncodedAttributesDictionary? Attributes { get; set; }
 }
 
 public record CharacterCountOptionsLocalizedText

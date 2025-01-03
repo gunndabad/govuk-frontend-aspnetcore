@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,9 +15,28 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class CharacterCountTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_WithMaxWords_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "my-id";
+        var name = "my-name";
+        var autocomplete = "none";
+        var rows = 6;
+        var spellcheck = false;
+        var value = "42";
+        var disabled = true;
+        var threshold = 89m;
+        var maxLength = 42;
+        var labelClass = "additional-label-class";
+        var classes = "custom-class";
+        var dataFooAttrValue = "bar";
+        var formGroupClasses = "formgroup-class";
+        var formGroupDataBarAttribute = "baz";
+        var countMessageClasses = "countmessage-class";
+        var countMessageDataBazAttribute = "baz";
+        var labelHtml = "The label";
+        var hintHtml = "The hint";
+
         var context = new TagHelperContext(
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
@@ -34,49 +52,97 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                    attributes: new EncodedAttributesDictionary(),
+                    new HtmlString(labelHtml),
+                    CharacterCountTagHelper.LabelTagName);
 
                 characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                    attributes: new EncodedAttributesDictionary(),
+                    new HtmlString(hintHtml),
+                    CharacterCountTagHelper.HintTagName);
+
+                characterCountContext.SetValue(new HtmlString(value), CharacterCountValueTagHelper.TagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new CharacterCountTagHelper()
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            Id = "my-id",
-            Name = "my-name",
-            MaxWords = 10,
-            Threshold = 90,
-            LabelClass = "additional-label-class"
+            Id = id,
+            Name = name,
+            Rows = rows,
+            Autocomplete = autocomplete,
+            CountMessageAttributes = new Dictionary<string, string?>()
+            {
+                { "class", countMessageClasses },
+                { "data-baz", countMessageDataBazAttribute }
+            },
+            Spellcheck = spellcheck,
+            Disabled = disabled,
+            FormGroupAttributes = new Dictionary<string, string?>()
+            {
+                { "class", formGroupClasses },
+                { "data-bar", formGroupDataBarAttribute }
+            },
+            LabelClass = labelClass,
+            MaxLength = maxLength,
+            TextAreaAttributes = new Dictionary<string, string?>()
+            {
+                { "class", classes },
+                { "data-foo", dataFooAttrValue }
+            },
+            Threshold = threshold
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"" data-threshold=""90"">
-    <div class=""govuk-form-group"">
-        <label class=""govuk-label additional-label-class"" for=""my-id"">The label</label>
-        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-        <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
-    </div>
-    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
-        You can enter up to 10 words
-    </div>
-</div>";
+        Assert.NotNull(actualOptions);
+        Assert.Equal(id, actualOptions.Id?.ToHtmlString());
+        Assert.Equal(name, actualOptions.Name?.ToHtmlString());
+        Assert.Equal(rows, actualOptions.Rows);
+        Assert.Equal(value, actualOptions.Value?.ToHtmlString());
+        Assert.Equal(maxLength, actualOptions.MaxLength);
+        Assert.Equal(threshold, actualOptions.Threshold);
+        Assert.Equal(labelHtml, actualOptions.Label?.Html?.ToHtmlString());
+        Assert.Equal(hintHtml, actualOptions.Hint?.Html?.ToHtmlString());
+        Assert.Null(actualOptions.ErrorMessage);
+        Assert.Equal(classes, actualOptions.Classes?.ToHtmlString());
+        Assert.Equal(spellcheck, actualOptions.Spellcheck);
 
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions.Attributes);
+        Assert.Contains(actualOptions.Attributes, kvp => kvp.Key == "autocomplete" && kvp.Value == autocomplete);
+        Assert.Contains(actualOptions.Attributes, kvp => kvp.Key == "data-foo" && kvp.Value == dataFooAttrValue);
+        Assert.Contains(actualOptions.Attributes, kvp => kvp.Key == "disabled");
+
+        Assert.NotNull(actualOptions.CountMessage);
+        Assert.Equal(countMessageClasses, actualOptions.CountMessage.Classes?.ToHtmlString());
+        Assert.NotNull(actualOptions.CountMessage.Attributes);
+        Assert.Contains(actualOptions.CountMessage.Attributes, kvp => kvp.Key == "data-baz" && kvp.Value == countMessageDataBazAttribute);
+
+        Assert.NotNull(actualOptions.FormGroup);
+        Assert.Equal(formGroupClasses, actualOptions.FormGroup.Classes?.ToHtmlString());
+        Assert.NotNull(actualOptions.FormGroup.Attributes);
+        Assert.Contains(actualOptions.FormGroup.Attributes, kvp => kvp.Key == "data-bar" && kvp.Value == formGroupDataBarAttribute);
     }
 
     [Fact]
-    public async Task ProcessAsync_WithMaxLength_GeneratesExpectedOutput()
+    public async Task ProcessAsync_WithMaxWords_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "my-id";
+        var name = "my-name";
+        var maxWords = 42;
+        var labelHtml = "The label";
+
         var context = new TagHelperContext(
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
@@ -92,48 +158,46 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
-
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                    attributes: new EncodedAttributesDictionary(),
+                    new HtmlString(labelHtml),
+                    CharacterCountTagHelper.LabelTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new CharacterCountTagHelper()
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            Id = "my-id",
-            Name = "my-name",
-            MaxLength = 200,
-            Threshold = 90
+            Id = id,
+            Name = name,
+            MaxWords = maxWords
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxlength=""200"" data-threshold=""90"">
-    <div class=""govuk-form-group"">
-        <label class=""govuk-label"" for=""my-id"">The label</label>
-        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-        <textarea class=""govuk-textarea govuk-js-character-count"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint""></textarea>
-    </div>
-    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
-        You can enter up to 200 characters
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(maxWords, actualOptions.MaxWords);
     }
 
     [Fact]
-    public async Task ProcessAsync_WithError_GeneratesExpectedOutput()
+    public async Task ProcessAsync_WithErrorMessage_GeneratesOptionsWithErrorMessageAndAddsErrorClasses()
     {
         // Arrange
+        var id = "my-id";
+        var name = "my-name";
+        var labelHtml = "The label";
+        var errorHtml = "The error message";
+        var errorVht = "visually hidden text";
+        var errorDataFooAttribute = "bar";
+
         var context = new TagHelperContext(
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
@@ -149,156 +213,430 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                    new EncodedAttributesDictionary(),
+                    new HtmlString(labelHtml),
+                    CharacterCountTagHelper.LabelTagName);
 
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                characterCountContext.SetErrorMessage(
+                    visuallyHiddenText: new HtmlString(errorVht),
+                    attributes: new EncodedAttributesDictionaryBuilder().With("data-foo", errorDataFooAttribute, encodeValue: false),
+                    new HtmlString(errorHtml),
+                    CharacterCountTagHelper.ErrorMessageTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            Id = id,
+            Name = name,
+            ViewContext = new ViewContext()
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions?.ErrorMessage);
+        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html?.ToHtmlString());
+        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText?.ToHtmlString());
+        Assert.NotNull(actualOptions.ErrorMessage.Attributes);
+        Assert.Collection(actualOptions.ErrorMessage.Attributes, kvp =>
+        {
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(errorDataFooAttribute, kvp.Value);
+        });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithFor_GeneratesOptionsFromModelMetadata()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var description = "The hint";
+        var modelStateError = "The error message";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-character-count",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-character-count",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(description);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions);
+        Assert.NotNull(actualOptions.Id);
+        Assert.NotNull(actualOptions.Name);
+        Assert.Equal(modelStateValue, actualOptions.Value?.ToHtmlString());
+        Assert.Equal(displayName, actualOptions.Label?.Html?.ToHtmlString());
+        Assert.Equal(description, actualOptions.Hint?.Html?.ToHtmlString());
+        Assert.Equal(modelStateError, actualOptions.ErrorMessage?.Html?.ToHtmlString());
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitValue_UsesSpecifiedValue()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var modelStateDisplayName = "ModelState label";
+        var value = "Explicit value";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-character-count",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-character-count",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var characterCountContext = context.GetContextItem<CharacterCountContext>();
+
+                characterCountContext.SetValue(new HtmlString(value), CharacterCountValueTagHelper.TagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateDisplayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(value, actualOptions?.Value?.ToHtmlString());
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitLabel_UsesSpecifiedLabel()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var modelStateDisplayName = "ModelState label";
+        var labelHtml = "Explicit label";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-character-count",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-character-count",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var characterCountContext = context.GetContextItem<CharacterCountContext>();
+
+                characterCountContext.SetLabel(
+                    isPageHeading: false,
+                    new EncodedAttributesDictionary(),
+                    new HtmlString(labelHtml),
+                    CharacterCountTagHelper.LabelTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateDisplayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(labelHtml, actualOptions?.Label?.Html?.ToHtmlString());
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitHint_UsesSpecifiedHint()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateDescription = "The hint";
+        var hintHtml = "Explicit hint";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-character-count",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-character-count",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var characterCountContext = context.GetContextItem<CharacterCountContext>();
+
+                characterCountContext.SetHint(new EncodedAttributesDictionary(), new HtmlString(hintHtml), CharacterCountTagHelper.HintTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(modelStateDescription);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(hintHtml, actualOptions?.Hint?.Html?.ToHtmlString());
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitErrorMessage_UsesSpecifiedErrorMessage()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateError = "ModelState error";
+        var errorHtml = "Explicit error";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-character-count",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-character-count",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var characterCountContext = context.GetContextItem<CharacterCountContext>();
 
                 characterCountContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    attributes: null,
-                    content: new HtmlString("The error"));
+                    new EncodedAttributesDictionary(),
+                    new HtmlString(errorHtml),
+                    CharacterCountTagHelper.ErrorMessageTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new CharacterCountTagHelper()
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            Id = "my-id",
-            Name = "my-name",
-            MaxWords = 10
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-character-count"" data-module=""govuk-character-count"" data-maxwords=""10"">
-    <div class=""govuk-form-group govuk-form-group--error"">
-        <label class=""govuk-label"" for=""my-id"">The label</label>
-        <div class=""govuk-hint"" id=""my-id-hint"">The hint</div>
-        <p id=""my-id-error"" class=""govuk-error-message"">
-            <span class=""govuk-visually-hidden"">Error:</span>
-            The error
-        </p>
-        <textarea class=""govuk-textarea govuk-js-character-count govuk-textarea--error"" id=""my-id"" name=""my-name"" rows=""5"" aria-describedby=""my-id-hint my-id-error""></textarea>
-    </div>
-    <div id=""my-id-info"" class=""govuk-hint govuk-character-count__message"">
-        You can enter up to 10 words
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html?.ToHtmlString());
     }
 
     [Fact]
-    public async Task ProcessAsync_BothMaxLengthAndMaxWords_ThrowsInvalidOperationException()
+    public async Task ProcessAsync_WithForAndNoExplicitErrorMessageAndIgnoreModelStateErrorTrue_DoesNotRenderErrorMessage()
     {
         // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-character-count",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-character-count",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var characterCountContext = context.GetContextItem<CharacterCountContext>();
-
-                characterCountContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
-
-                characterCountContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            Name = "my-name",
-            MaxLength = 100,
-            MaxWords = 10
-        };
-
-        // Act
-        var ex = await Record.ExceptionAsync(() => tagHelper.ProcessAsync(context, output));
-
-        // Assert
-        Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one of the 'max-length' or 'max-words' attributes can be specified.", ex.Message);
-    }
-
-    [Fact]
-    public async Task ProcessAsync_NoValueOrAspFor_RendersEmptyTextArea()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-character-count",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-character-count",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var characterCountContext = context.GetContextItem<CharacterCountContext>();
-
-                characterCountContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new CharacterCountTagHelper()
-        {
-            Name = "my-name",
-            MaxWords = 10,
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var textarea = element.GetElementsByTagName("textarea")[0];
-        Assert.Empty(textarea.InnerHtml);
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithAspFor_RendersTextAreaWithModelValue()
-    {
-        // Arrange
-        var modelValue = "Foo value";
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
-
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
-            .GetExplorerForProperty(nameof(Model.Foo));
-        var viewContext = new ViewContext();
-        var modelExpression = nameof(Model.Foo);
-
-        var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateError = "ModelState error";
 
         var context = new TagHelperContext(
             tagName: "govuk-character-count",
@@ -311,94 +649,67 @@ public class CharacterCountTagHelperTests
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var characterCountContext = context.GetContextItem<CharacterCountContext>();
-
-                characterCountContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
-
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new CharacterCountTagHelper(modelHelper: modelHelper.Object)
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(modelExpression, modelExplorer),
-            Name = "my-name",
-            MaxWords = 10,
-            ViewContext = viewContext
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+            IgnoreModelStateErrors = true
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var element = output.RenderToElement();
-        var textarea = element.GetElementsByTagName("textarea")[0];
-        Assert.Equal("Foo value", textarea.InnerHtml);
+        Assert.Null(actualOptions?.ErrorMessage);
     }
 
     [Fact]
-    public async Task ProcessAsync_WithValue_RendersTextAreaWithValue()
+    public async Task ProcessAsync_WithForAndAndExplicitErrorMessageAndIgnoreModelStateErrorTrue_DoesRenderErrorMessage()
     {
         // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-character-count",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-character-count",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var characterCountContext = context.GetContextItem<CharacterCountContext>();
-
-                characterCountContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
-
-                characterCountContext.SetValue(new HtmlString("Value"));
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new CharacterCountTagHelper()
-        {
-            Name = "my-name",
-            MaxWords = 10,
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var textarea = element.GetElementsByTagName("textarea")[0];
-        Assert.Equal("Value", textarea.InnerHtml);
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithValueAndAspFor_RendersTextAreaWithValue()
-    {
-        // Arrange
-        var modelValue = "Foo value";
-        var model = new Model()
-        {
-            Foo = modelValue
-        };
-
-        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), model)
-            .GetExplorerForProperty(nameof(Model.Foo));
-        var viewContext = new ViewContext();
-        var modelExpression = nameof(Model.Foo);
-
-        var modelHelper = new Mock<IModelHelper>();
-        modelHelper.Setup(mock => mock.GetModelValue(viewContext, modelExplorer, modelExpression)).Returns(modelValue);
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateError = "ModelState error";
+        var errorHtml = "Explicit error";
 
         var context = new TagHelperContext(
             tagName: "govuk-character-count",
@@ -413,95 +724,136 @@ public class CharacterCountTagHelperTests
             {
                 var characterCountContext = context.GetContextItem<CharacterCountContext>();
 
-                characterCountContext.SetLabel(
-                    isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
-
-                characterCountContext.SetValue(new HtmlString("Value"));
+                characterCountContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    new EncodedAttributesDictionary(),
+                    new HtmlString(errorHtml),
+                    CharacterCountTagHelper.ErrorMessageTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new CharacterCountTagHelper(modelHelper: modelHelper.Object)
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(modelExpression, modelExplorer),
-            Name = "my-name",
-            MaxWords = 10,
-            ViewContext = viewContext
+            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+            IgnoreModelStateErrors = true
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var element = output.RenderToElement();
-        var textarea = element.GetElementsByTagName("textarea")[0];
-        Assert.Equal("Value", textarea.InnerHtml);
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html?.ToHtmlString());
     }
 
-    [Theory]
-    [InlineData(-1)]
-    public void SetThreshold_InvalidValue_ThrowsArgumentException(decimal threshold)
+    [Fact]
+    public async Task ProcessAsync_WithError_AddsErrorWithCorrectFieldIdToContainerErrorContext()
     {
         // Arrange
+        var containerErrorContext = new ContainerErrorContext();
+
+        var id = "my-id";
+        var name = "my-name";
+        var labelHtml = "The label";
+        var errorHtml = "The error message";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-character-count",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ContainerErrorContext), containerErrorContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-character-count",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var characterCountContext = context.GetContextItem<CharacterCountContext>();
+
+                characterCountContext.SetLabel(
+                    isPageHeading: false,
+                    new EncodedAttributesDictionary(),
+                    new HtmlString(labelHtml),
+                    CharacterCountTagHelper.LabelTagName);
+
+                characterCountContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    new EncodedAttributesDictionary(),
+                    new HtmlString(errorHtml),
+                    CharacterCountTagHelper.ErrorMessageTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        CharacterCountOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            Id = id,
+            Name = name,
+            ViewContext = new ViewContext()
+        };
 
         // Act
-        var ex = Record.Exception(() => new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            Name = "my-name",
-            Threshold = threshold
-        });
+        await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.IsType<ArgumentOutOfRangeException>(ex);
-        Assert.StartsWith("Threshold cannot be less than 0.", ex.Message);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public void SetMaxLength_InvalidValue_ThrowsArgumentException(int maxLength)
-    {
-        // Arrange
-
-        // Act
-        var ex = Record.Exception(() => new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            MaxLength = maxLength,
-            Name = "my-name"
-        });
-
-        // Assert
-        Assert.IsType<ArgumentOutOfRangeException>(ex);
-        Assert.StartsWith("MaxLength must be greater than 0.", ex.Message);
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public void SetMaxWords_InvalidValue_ThrowsArgumentException(int maxWords)
-    {
-        // Arrange
-
-        // Act
-        var ex = Record.Exception(() => new CharacterCountTagHelper()
-        {
-            Id = "my-id",
-            MaxWords = maxWords,
-            Name = "my-name"
-        });
-
-        // Assert
-        Assert.IsType<ArgumentOutOfRangeException>(ex);
-        Assert.StartsWith("MaxWords must be greater than 0.", ex.Message);
+        Assert.Collection(
+            containerErrorContext.Errors,
+            error =>
+            {
+                Assert.Equal(errorHtml, error.Content.ToHtmlString());
+                Assert.Equal($"#{id}", error.Href?.ToHtmlString());
+            });
     }
 
     private class Model
     {
-        public string? Foo { get; set; }
+        public string? SimpleProperty { get; set; }
     }
 }

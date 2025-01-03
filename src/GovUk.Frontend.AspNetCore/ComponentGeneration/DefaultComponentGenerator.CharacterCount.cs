@@ -65,6 +65,7 @@ public partial class DefaultComponentGenerator
                         GenerateHint(
                             new HintOptions()
                             {
+                                Attributes = options.CountMessage?.Attributes,
                                 Html = textareaDescriptionText,
                                 Id = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
                                 Classes = new HtmlString(
