@@ -1,0 +1,131 @@
+﻿@page
+@using System.Text.RegularExpressions
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Gov.UK Frontend ASP.NET Core Samples";
+}
+
+@{
+    static string PascalCaseToSpacedLowercase(string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? string.Empty
+            : Regex.Replace(input, "(\\B[A-Z])", " $1")
+                .ToLower()
+                .Trim()
+    ;
+
+    static string CapitaliseFirstLetter(string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? string.Empty
+            : input.Substring(0, 1).ToUpper() + string.Join("", input.Skip(1))
+    ;
+}
+
+<h1 id="top" class="govuk-heading-xl">
+    GOV.UK Frontend
+</h1>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column">
+        <h2 class="govuk-heading-l">Components</h2>
+        <h3 class="govuk-heading-m govuk-!-margin-bottom-2">All components</h3>
+
+        <div class="govuk-grid-row govuk-!-margin-bottom-8">
+            <div class="govuk-grid-column-full">
+                <ul class="govuk-list govuk-list--number govuk-list--spaced govuk-!-margin-bottom-0">
+                    @foreach (var componentName in Model.ComponentNames())
+                    {
+                        <li>
+                            @* // Component title *@
+                            <a href="#@componentName" class="govuk-link">
+                                @CapitaliseFirstLetter(PascalCaseToSpacedLowercase(componentName))
+                            </a>
+                            @* // Print all samples for this component name *@
+                            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+                                @foreach (var sample in Model.SampleDetails.Where(x => x.ComponentName == componentName))
+                                {
+                                    <li>
+                                        <a href="#@sample.SampleName">
+                                            @CapitaliseFirstLetter(PascalCaseToSpacedLowercase(sample.SampleName))
+                                        </a>
+                                        &ndash;
+                                        <a href="@Url.Page(sample.RoutePattern)" class="govuk-link govuk-body-s" target="_blank">
+                                            Open this example in new tab
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column">
+        <h2 class="govuk-heading-l">Samples</h2>
+
+        @foreach (var componentName in Model.ComponentNames())
+        {
+            // Component title
+            <h3 id="@componentName"
+                class="govuk-heading-m govuk-!-margin-bottom-2">@CapitaliseFirstLetter(PascalCaseToSpacedLowercase(componentName))
+            </h3>
+            <p>
+                <a class="govuk-link govuk-link--no-visited-state app-back-to-top__link" href="#top">
+                    <svg role="presentation" focusable="false" class="app-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
+                        <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
+                    </svg>
+                    Back to top
+                </a>
+            </p>
+
+            @* // Print all samples for this component name *@
+            @foreach (var sample in Model.SampleDetails.Where(x => x.ComponentName == componentName))
+            {
+                <div class="govuk-!-margin-bottom-3">
+                    <div class="govuk-!-margin-left-5 govuk-!-margin-bottom-3 govuk-!-padding-4"
+                         style="border: 1px solid gray; background-color: #FAFAFE;">
+                        <h4 id="@sample.SampleName"
+                            class="govuk-heading-s">@CapitaliseFirstLetter(PascalCaseToSpacedLowercase(sample.SampleName))</h4>
+                        <div>
+                            <a class="govuk-link govuk-link--no-visited-state app-back-to-top__link" href="#top">
+                                <svg role="presentation" focusable="false" class="app-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
+                                    <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
+                                </svg>
+                                Back to top
+                            </a>
+                        </div>
+                        <p>
+                            <a href="@Url.Page(sample.RoutePattern)" class="govuk-link" target="_blank">
+                                Open this example in new tab
+                            </a>
+                        </p>
+                        <iframe src="@Url.Page(sample.RoutePattern)"
+                                class="govuk-iframe"
+                                style="width: 100%; height: 400px; background-color: white;"></iframe>
+
+
+                        <h4 class="govuk-heading-s">Code:</h4>
+                        @if (!string.IsNullOrWhiteSpace(sample.CodeSnippet))
+                        {
+                            <pre style="overflow: auto; background-color: white; padding: 1em; border: 1px solid lightgray;"><code>@sample.CodeSnippet</code></pre>
+                        }
+                        else
+                        {
+                            <div class="govuk-warning-text">
+                                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                                <strong class="govuk-warning-text__text">
+                                    There was an error loading the code for this sample.
+                                </strong>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
