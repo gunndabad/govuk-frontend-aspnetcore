@@ -221,18 +221,22 @@ public class HtmlTagBuilder : IHtmlContent
         return writer.ToString();
     }
 
-    internal HtmlTagBuilder When(Func<bool> condition, Action<HtmlTagBuilder> action)
+    internal HtmlTagBuilder When(Func<bool> condition, Action<HtmlTagBuilder> actionWhenTrue, Action<HtmlTagBuilder>? actionWhenFalse = null)
     {
         if (condition())
         {
-            action(this);
+            actionWhenTrue(this);
+        }
+        else
+        {
+            actionWhenFalse?.Invoke(this);
         }
 
         return this;
     }
 
-    internal HtmlTagBuilder When(bool condition, Action<HtmlTagBuilder> action) =>
-        When(() => condition, action);
+    internal HtmlTagBuilder When(bool condition, Action<HtmlTagBuilder> actionWhenTrue, Action<HtmlTagBuilder>? actionWhenFalse = null) =>
+        When(() => condition, actionWhenTrue, actionWhenFalse);
 
     internal HtmlTagBuilder WhenNotNull<T>(Func<T?> getValue, Action<T, HtmlTagBuilder> action)
     {

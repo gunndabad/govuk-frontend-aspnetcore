@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Encodings.Web;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -13,19 +18,22 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, CharacterCountValueTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.CharacterCountElement)]
-public class CharacterCountTagHelper : FormGroupTagHelperBase
+[OutputElementHint(DefaultComponentGenerator.CharacterCountElement)]
+public class CharacterCountTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-character-count-error-message";
     internal const string HintTagName = "govuk-character-count-hint";
     internal const string LabelTagName = "govuk-character-count-label";
     internal const string TagName = "govuk-character-count";
 
+    private const string AspForAttributeName = "asp-for";
     private const string AutocompleteAttributeName = "autocomplete";
     private const string CountMessageAttributesPrefix = "count-message-";
     private const string DisabledAttributeName = "disabled";
+    private const string ForAttributeName = "for";
     private const string FormGroupAttributesPrefix = "form-group-";
     private const string IdAttributeName = "id";
+    private const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
     private const string LabelClassAttributeName = "label-class";
     private const string MaxLengthAttributeName = "max-length";
     private const string MaxWordsLengthAttributeName = "max-words";
@@ -35,24 +43,43 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
     private const string TextareaAttributesPrefix = "textarea-";
     private const string ThresholdAttributeName = "threshold";
 
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly IModelHelper _modelHelper;
+
     private decimal? _threshold;
     private int? _maxLength;
     private int? _maxWords;
 
     /// <summary>
-    /// Creates an <see cref="CharacterCountTagHelper"/>.
+    /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public CharacterCountTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
+    public CharacterCountTagHelper(IComponentGenerator componentGenerator)
+        : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
 
-    internal CharacterCountTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
+    internal CharacterCountTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
+        _componentGenerator = componentGenerator;
+        _modelHelper = modelHelper;
     }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(AspForAttributeName)]
+    //[Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor { get; set; }
+    /*{
+        get => For;
+        set => For = value;
+    }*/
+
+    ///// <summary>
+    ///// An expression to be evaluated against the current model.
+    ///// </summary>
+    //[HtmlAttributeName(ForAttributeName)]
+    //public ModelExpression? For { get; set; }
 
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
@@ -86,6 +113,16 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
     /// </remarks>
     [HtmlAttributeName(IdAttributeName)]
     public string? Id { get; set; }
+
+    /// <summary>
+    /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="AspFor"/> expression should be used
+    /// to deduce an error message.
+    /// </summary>
+    /// <remarks>
+    /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
+    /// </remarks>
+    [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
+    public bool? IgnoreModelStateErrors { get; set; }
 
     /// <summary>
     /// Additional classes for the generated <c>label</c> element.
@@ -192,127 +229,135 @@ public class CharacterCountTagHelper : FormGroupTagHelperBase
         }
     }
 
-    private protected override TagBuilder CreateTagBuilder(bool haveError, IHtmlContent content, TagHelperOutput tagHelperOutput)
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
+
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (MaxLength.HasValue && MaxWords.HasValue)
         {
             throw new InvalidOperationException($"Only one of the '{MaxLengthAttributeName}' or '{MaxWordsLengthAttributeName}' attributes can be specified.");
         }
 
-        // N.B. We specifically pass FormGroupAttributes here and not tagHelperOutput.Attributes since GenerateCharacterCount() doesn't return a form group
-        var formGroup = Generator.GenerateFormGroup(
-            haveError,
-            content,
-            FormGroupAttributes.ToAttributeDictionary());
+        var characterCountContext = new CharacterCountContext();
 
-        var resolvedId = ResolveIdPrefix();
+        using (context.SetScopedContextItem(characterCountContext))
+        using (context.SetScopedContextItem(typeof(FormGroupContext2), characterCountContext))
+        {
+            await output.GetChildContentAsync();
+        }
 
-        return Generator.GenerateCharacterCount(
-            resolvedId,
-            MaxLength,
-            MaxWords,
-            Threshold,
-            formGroup,
-            CountMessageAttributes.ToAttributeDictionary(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null);
+        var name = ResolveName();
+        var id = ResolveId(name);
+        var value = ResolveValue(characterCountContext);
+        var labelOptions = characterCountContext.GetLabelOptions(AspFor, ViewContext!, _modelHelper, id, AspForAttributeName);
+        var hintOptions = characterCountContext.GetHintOptions(AspFor, _modelHelper);
+        var errorMessageOptions = characterCountContext.GetErrorMessageOptions(AspFor, ViewContext!, _modelHelper, IgnoreModelStateErrors);
+
+        if (LabelClass is not null)
+        {
+            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass);
+        }
+
+        var formGroupAttributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(FormGroupAttributes);
+        formGroupAttributes.Remove("class", out var formGroupClasses);
+        var formGroupOptions = new FormGroupOptions()
+        {
+            Attributes = formGroupAttributes,
+            Classes = formGroupClasses
+        };
+
+        var attributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(TextAreaAttributes);
+        attributes.Remove("class", out var classes);
+
+        if (Autocomplete is not null)
+        {
+            attributes.Add("autocomplete", Autocomplete!.ToHtmlContent()!);
+        }
+
+        if (Disabled)
+        {
+            attributes.AddBoolean("disabled");
+        }
+
+        var countMessageAttributes =
+            EncodedAttributesDictionary.FromDictionaryWithEncodedValues(CountMessageAttributes);
+        countMessageAttributes.Remove("class", out var countMessageClasses);
+
+        var component = _componentGenerator.GenerateCharacterCount(new CharacterCountOptions
+        {
+            Id = id,
+            Name = name,
+            Rows = Rows,
+            Value = value,
+            MaxLength = MaxLength,
+            MaxWords = MaxWords,
+            Threshold = Threshold,
+            Label = labelOptions,
+            Hint = hintOptions,
+            ErrorMessage = errorMessageOptions,
+            FormGroup = formGroupOptions,
+            Classes = classes,
+            Spellcheck = Spellcheck,
+            Attributes = attributes,
+            CountMessage = new()
+            {
+                Attributes = countMessageAttributes,
+                Classes = countMessageClasses
+            },
+            TextareaDescriptionText = null,
+            CharactersUnderLimitText = null,
+            CharactersAtLimitText = null,
+            CharactersOverLimitText = null,
+            WordsUnderLimitText = null,
+            WordsAtLimitText = null,
+            WordsOverLimitText = null
+        });
+
+        component.WriteTo(output);
+
+        if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
+        {
+            Debug.Assert(errorMessageOptions.Html is not null);
+            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id));
+        }
     }
 
-    private protected override FormGroupContext CreateFormGroupContext() => new CharacterCountContext();
-
-    private protected override IHtmlContent GenerateFormGroupContent(
-        TagHelperContext tagHelperContext,
-        FormGroupContext formGroupContext,
-        TagHelperOutput tagHelperOutput,
-        IHtmlContent childContent,
-        out bool haveError)
+    private IHtmlContent ResolveId(IHtmlContent name)
     {
-        var contentBuilder = new HtmlContentBuilder();
-
-        var label = GenerateLabel(formGroupContext, LabelClass);
-        contentBuilder.AppendHtml(label);
-
-        var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        if (Id is not null)
         {
-            contentBuilder.AppendHtml(hint);
+            return new HtmlString(Id);
         }
 
-        var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
-        {
-            contentBuilder.AppendHtml(errorMessage);
-        }
-
-        haveError = errorMessage != null;
-
-        var textAreaTagBuilder = GenerateTextArea(haveError);
-        contentBuilder.AppendHtml(textAreaTagBuilder);
-
-        return contentBuilder;
-
-        TagBuilder GenerateTextArea(bool haveError)
-        {
-            var characterCountContext = tagHelperContext.GetContextItem<CharacterCountContext>();
-
-            var resolvedId = ResolveIdPrefix();
-            var resolvedName = ResolveName();
-
-            var resolvedContent = characterCountContext.Value ??
-                new HtmlString(HtmlEncoder.Default.Encode(
-                    AspFor != null ? ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty : string.Empty));
-
-            var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
-            resolvedTextAreaAttributes.MergeCssClass("govuk-js-character-count");
-
-            return Generator.GenerateTextArea(
-                haveError,
-                resolvedId,
-                resolvedName,
-                Rows,
-                DescribedBy,
-                Autocomplete,
-                Spellcheck,
-                Disabled,
-                resolvedContent,
-                resolvedTextAreaAttributes);
-        }
+        return new HtmlString(TagBuilder.CreateSanitizedId(name.ToHtmlString(), Constants.IdAttributeDotReplacement));
     }
 
-    private protected override string ResolveIdPrefix()
+    private IHtmlContent ResolveName()
     {
-        if (Id != null)
-        {
-            return Id;
-        }
-
-        if (Name == null && AspFor == null)
-        {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                IdAttributeName,
-                NameAttributeName,
-                AspForAttributeName);
-        }
-
-        var resolvedName = ResolveName();
-
-        return TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
-    }
-
-    private string ResolveName()
-    {
-        if (Name == null && AspFor == null)
+        if (Name is null && AspFor is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name));
+    }
+
+    private IHtmlContent? ResolveValue(CharacterCountContext characterCountContext)
+    {
+        if (characterCountContext.Value is not null)
+        {
+            return characterCountContext.Value;
+        }
+
+        return AspFor != null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null;
     }
 }

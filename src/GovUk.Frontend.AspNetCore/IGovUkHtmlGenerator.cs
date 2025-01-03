@@ -44,21 +44,6 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent content,
         AttributeDictionary attributes);
 
-    TagBuilder GenerateCharacterCount(
-        string textAreaId,
-        int? maxLength,
-        int? maxWords,
-        decimal? threshold,
-        IHtmlContent formGroup,
-        AttributeDictionary countMessageAttributes,
-        string textAreaDescriptionText,
-        (string Other, string One)? charactersUnderLimitText,
-        string charactersAtLimitText,
-        (string Other, string One)? charactersOverLimitText,
-        (string Other, string One)? wordsUnderLimitText,
-        string wordsAtLimitText,
-        (string Other, string One)? wordsOverLimitText);
-
     TagBuilder GenerateCheckboxes(
         string idPrefix,
         string name,
@@ -196,24 +181,6 @@ internal interface IGovUkHtmlGenerator
         bool disabled,
         IHtmlContent content,
         AttributeDictionary attributes);
-
-    TagBuilder GenerateTextInput(
-        bool haveError,
-        string id,
-        string name,
-        string type,
-        string value,
-        string describedBy,
-        string autocomplete,
-        string pattern,
-        string inputMode,
-        bool? spellcheck,
-        bool disabled,
-        AttributeDictionary attributes,
-        IHtmlContent prefixContent,
-        AttributeDictionary prefixAttributes,
-        IHtmlContent suffixContent,
-        AttributeDictionary suffixAttributes);
 
     TagBuilder GenerateWarningText(
         string iconFallbackText,

@@ -23,6 +23,8 @@ public record TextInputOptions
     public IHtmlContent? Autocomplete { get; set; }
     public IHtmlContent? Pattern { get; set; }
     public bool? Spellcheck { get; set; }
+    public IHtmlContent? Autocapitalize { get; set; }
+    public TextInputOptionsInputWrapper? InputWrapper { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
 
     internal void Validate()
@@ -86,4 +88,10 @@ public record TextInputOptionsSuffix
             throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified.");
         }
     }
+}
+
+public record TextInputOptionsInputWrapper
+{
+    public IHtmlContent? Classes { get; set; }
+    public EncodedAttributesDictionary? Attributes { get; set; }
 }

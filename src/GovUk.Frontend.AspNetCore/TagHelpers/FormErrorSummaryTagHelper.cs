@@ -59,7 +59,7 @@ public class FormErrorSummaryTagHelper : TagHelper
     public override void Init(TagHelperContext context)
     {
         // N.B. We deliberately do not use SetScopedContextItem here; nested forms are not supported
-        context.Items.Add(typeof(FormErrorContext), new FormErrorContext());
+        context.Items.Add(typeof(ContainerErrorContext), new ContainerErrorContext());
     }
 
     /// <inheritdoc/>
@@ -73,7 +73,7 @@ public class FormErrorSummaryTagHelper : TagHelper
             return;
         }
 
-        var formErrorContext = (FormErrorContext)context.Items[typeof(FormErrorContext)];
+        var formErrorContext = (ContainerErrorContext)context.Items[typeof(ContainerErrorContext)];
         if (formErrorContext.Errors.Count == 0)
         {
             return;
@@ -84,7 +84,7 @@ public class FormErrorSummaryTagHelper : TagHelper
         var errorItems = formErrorContext.Errors.Select(i => new ErrorSummaryItem()
         {
             Content = i.Content,
-            Href = i.Href
+            Href = i.Href?.ToHtmlString()
         });
 
         var errorSummary = _htmlGenerator.GenerateErrorSummary(

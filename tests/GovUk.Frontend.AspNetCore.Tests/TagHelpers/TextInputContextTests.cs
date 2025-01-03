@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Immutable;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Xunit;
@@ -12,15 +14,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+        var prefixTagName = TextInputPrefixTagHelper.TagName;
+        var errorMessageTagName = TextInputTagHelper.ErrorMessageTagName;
+        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, new EncodedAttributesDictionary(), new HtmlString("Error"), errorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-error-message> must be specified before <govuk-input-prefix>.", ex.Message);
+        Assert.Equal($"<{errorMessageTagName}> must be specified before <{prefixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -28,15 +31,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
+        var suffixTagName = TextInputSuffixTagHelper.TagName;
+        var errorMessageTagName = TextInputTagHelper.ErrorMessageTagName;
+        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, new EncodedAttributesDictionary(), new HtmlString("Error"), errorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-error-message> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{errorMessageTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -44,15 +48,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+        var prefixTagName = TextInputPrefixTagHelper.TagName;
+        var hintTagName = TextInputTagHelper.HintTagName;
+        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetHint(new EncodedAttributesDictionary(), new HtmlString("Error"), hintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-hint> must be specified before <govuk-input-prefix>.", ex.Message);
+        Assert.Equal($"<{hintTagName}> must be specified before <{prefixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -60,15 +65,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
+        var suffixTagName = TextInputSuffixTagHelper.TagName;
+        var hintTagName = TextInputTagHelper.ErrorMessageTagName;
+        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetHint(new EncodedAttributesDictionary(), new HtmlString("Error"), hintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-hint> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{hintTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -76,15 +82,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: null, content: new HtmlString("Prefix"));
+        var prefixTagName = TextInputPrefixTagHelper.TagName;
+        var labelTagName = TextInputTagHelper.LabelTagName;
+        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetLabel(false, new EncodedAttributesDictionary(), new HtmlString("Error"), labelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-label> must be specified before <govuk-input-prefix>.", ex.Message);
+        Assert.Equal($"<{labelTagName}> must be specified before <{prefixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -92,15 +99,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: null, content: new HtmlString("Prefix"));
+        var suffixTagName = TextInputSuffixTagHelper.TagName;
+        var labelTagName = TextInputTagHelper.LabelTagName;
+        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, null, new HtmlString("Error")));
+        var ex = Record.Exception(() => context.SetLabel(false, new EncodedAttributesDictionary(), new HtmlString("Error"), labelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-label> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{labelTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -108,15 +116,15 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetPrefix(attributes: null, content: new HtmlString("Existing prefix"));
+        var prefixTagName = TextInputPrefixTagHelper.TagName;
+        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Existing prefix"), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(null, new HtmlString("Prefix")));
+        var ex = Record.Exception(() => context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-input-prefix> element is permitted within each <govuk-input>.", ex.Message);
+        Assert.Equal($"Only one <govuk-input-prefix> element is permitted within each <govuk-input>.", ex.Message);
     }
 
     [Fact]
@@ -124,15 +132,16 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: null, content: new HtmlString("Suffix"));
+        var prefixTagName = TextInputPrefixTagHelper.TagName;
+        var suffixTagName = TextInputSuffixTagHelper.TagName;
+        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Suffix"), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(null, new HtmlString("Prefix")));
+        var ex = Record.Exception(() => context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("<govuk-input-prefix> must be specified before <govuk-input-suffix>.", ex.Message);
+        Assert.Equal($"<{prefixTagName}> must be specified before <{suffixTagName}>.", ex.Message);
     }
 
     [Fact]
@@ -140,14 +149,14 @@ public class TextInputContextTests
     {
         // Arrange
         var context = new TextInputContext();
-
-        context.SetSuffix(attributes: null, content: new HtmlString("Existing prefix"));
+        var suffixTagName = TextInputSuffixTagHelper.TagName;
+        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Existing prefix"), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetSuffix(null, new HtmlString("Prefix")));
+        var ex = Record.Exception(() => context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Only one <govuk-input-suffix> element is permitted within each <govuk-input>.", ex.Message);
+        Assert.Equal($"Only one <govuk-input-suffix> element is permitted within each <govuk-input>.", ex.Message);
     }
 }

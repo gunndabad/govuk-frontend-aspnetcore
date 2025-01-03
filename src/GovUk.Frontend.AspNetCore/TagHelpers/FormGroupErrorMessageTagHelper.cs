@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -56,11 +57,20 @@ public class FormGroupErrorMessageTagHelper : TagHelper
 
     private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
     {
-        var formGroupContext = context.GetContextItem<FormGroupContext>();
-
-        formGroupContext.SetErrorMessage(
-            VisuallyHiddenText,
-            output.Attributes.ToAttributeDictionary(),
-            childContent?.Snapshot());
+        if (context.TryGetContextItem<FormGroupContext>(out var formGroupContext))
+        {
+            formGroupContext.SetErrorMessage(
+                VisuallyHiddenText,
+                output.Attributes.ToAttributeDictionary(),
+                childContent?.Snapshot());
+        }
+        else if (context.TryGetContextItem<FormGroupContext2>(out var formGroupContext2))
+        {
+            formGroupContext2.SetErrorMessage(
+                VisuallyHiddenText.ToHtmlContent(),
+                new EncodedAttributesDictionary(output.Attributes),
+                childContent?.Snapshot(),
+                output.TagName);
+        }
     }
 }

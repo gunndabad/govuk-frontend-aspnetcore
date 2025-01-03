@@ -159,10 +159,10 @@ public abstract class FormGroupTagHelperBase : TagHelper
 
         void AddErrorToFormErrorContext()
         {
-            if (tagHelperContext.TryGetContextItem<FormErrorContext>(out var formErrorContext))
+            if (tagHelperContext.TryGetContextItem<ContainerErrorContext>(out var formErrorContext))
             {
                 var errorFieldId = GetErrorFieldId(tagHelperContext);
-                var href = "#" + errorFieldId;
+                var href = new HtmlString("#" + errorFieldId);
 
                 formErrorContext.AddError(content, href);
             }

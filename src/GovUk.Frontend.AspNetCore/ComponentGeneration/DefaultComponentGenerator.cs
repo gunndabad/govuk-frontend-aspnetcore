@@ -20,17 +20,6 @@ public partial class DefaultComponentGenerator : IComponentGenerator
         describedBy = new HtmlString(str);
     }
 
-    private HtmlTagBuilder GenerateFormGroup(
-        FormGroupOptions? options,
-        bool haveError)
-    {
-        return new HtmlTagBuilder(FormGroupElement)
-            .WithCssClass("govuk-form-group")
-            .When(haveError, b => b.WithCssClass("govuk-form-group--error"))
-            .WithCssClasses(ExplodeClasses(options?.Classes?.ToHtmlString()))
-            .WithAttributes(options?.Attributes);
-    }
-
     private static string[] ExplodeClasses(string? classes) =>
         classes is null ? [] : classes.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
