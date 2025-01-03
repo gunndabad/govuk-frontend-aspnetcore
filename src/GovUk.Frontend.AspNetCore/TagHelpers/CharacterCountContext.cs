@@ -1,65 +1,72 @@
+using System.Collections.Generic;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
-internal class CharacterCountContext : FormGroupContext
+internal class CharacterCountContext : FormGroupContext2
 {
-    protected override string ErrorMessageTagName => CharacterCountTagHelper.ErrorMessageTagName;
+    protected override IReadOnlyCollection<string> ErrorMessageTagNames => [CharacterCountTagHelper.ErrorMessageTagName];
 
-    protected override string HintTagName => CharacterCountTagHelper.HintTagName;
+    protected override IReadOnlyCollection<string> HintTagNames => [CharacterCountTagHelper.HintTagName];
 
-    protected override string LabelTagName => CharacterCountTagHelper.LabelTagName;
+    protected override IReadOnlyCollection<string> LabelTagNames => [CharacterCountTagHelper.LabelTagName];
 
     protected override string RootTagName => CharacterCountTagHelper.TagName;
 
     public IHtmlContent? Value { get; private set; }
 
-    public override void SetErrorMessage(string? visuallyHiddenText, AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetErrorMessage(
+        IHtmlContent? visuallyHiddenText,
+        EncodedAttributesDictionary attributes,
+        IHtmlContent? html,
+        string tagName)
     {
         if (Value != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                ErrorMessageTagName,
+                tagName,
                 CharacterCountValueTagHelper.TagName);
         }
 
-        base.SetErrorMessage(visuallyHiddenText, attributes, content);
+        base.SetErrorMessage(visuallyHiddenText, attributes, html, tagName);
     }
 
-    public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetHint(EncodedAttributesDictionary attributes, IHtmlContent? html, string tagName)
     {
         if (Value != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                HintTagName,
+                tagName,
                 CharacterCountValueTagHelper.TagName);
         }
 
-        base.SetHint(attributes, content);
+        base.SetHint(attributes, html, tagName);
     }
 
-    public override void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
+    public override void SetLabel(
+        bool isPageHeading,
+        EncodedAttributesDictionary attributes,
+        IHtmlContent? html,
+        string tagName)
     {
         if (Value != null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                LabelTagName,
+                tagName,
                 CharacterCountValueTagHelper.TagName);
         }
 
-        base.SetLabel(isPageHeading, attributes, content);
+        base.SetLabel(isPageHeading, attributes, html, tagName);
     }
 
-    public void SetValue(IHtmlContent content)
+    public void SetValue(IHtmlContent html, string tagName)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
-
         if (Value != null)
         {
-            throw ExceptionHelper.OnlyOneElementIsPermittedIn(CharacterCountValueTagHelper.TagName, RootTagName);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(tagName, RootTagName);
         }
 
-        Value = content;
+        Value = html;
     }
 }

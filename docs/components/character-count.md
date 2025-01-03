@@ -24,23 +24,23 @@ Check out the [max words validator](../validation/maxwords.md) for adding server
 
 ### `<govuk-character-count>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `asp-for` | `ModelExpression` | The model expression used to generate the `name` and `id` attributes, the content as well as the error message content. See [documentation on forms](forms.md) for more information. |
-| `autocomplete` | `string` | The `autocomplete` attribute for the generated `textarea` element. |
-| `count-message-*` | | Additional attributes to add to the generated count message hint element. |
-| `disabled` | `bool` | Whether the textarea should be disabled. The default is `false`. |
-| `form-group-*` | | Additional attributes to add to the generated form-group wrapper element. |
-| `id` | `string` | The `id` attribute for the generated `textarea` element. If not specified then a value is generated from the `name` attribute. |
-| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| `label-class` | `string` | Additional classes for the generated `label` element. |
-| `max-length` | `int?` | The maximum number of characters the generated `textarea` may contain. Required unless the `max-words` attribute is specified. |
-| `max-words` | `int?` | The maximum number of words the generated `textarea` may contain. Required unless the `max-length` attribute is specified. |
-| `name` | `string` | The `name` attribute for the generated `textarea` element. Required unless the `asp-for` attribute is specified. |
-| `rows` | `int` | The `rows` attribute for the generated `textarea` element. The default is `5`. |
-| `spellcheck` | `bool?` | The `spellcheck` attribute for the generated `textarea` element. The default is `null`. |
-| `textarea-*` | | Additional attributes to add to the generated `textarea` element. |
-| `threshold` | `int?` | The percentage value of the limit at which point the count message is displayed. If this is specified the count message will be hidden by default. |
+| Attribute                  | Type              | Description                                                                                                                                                                          |
+|----------------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `asp-for`                  | `ModelExpression` | The model expression used to generate the `name` and `id` attributes, the content as well as the error message content. See [documentation on forms](forms.md) for more information. |
+| `autocomplete`             | `string`          | The `autocomplete` attribute for the generated `textarea` element.                                                                                                                   |
+| `count-message-*`          |                   | Additional attributes to add to the generated count message hint element.                                                                                                            |
+| `disabled`                 | `bool`            | Whether the textarea should be disabled. The default is `false`.                                                                                                                     |
+| `form-group-*`             |                   | Additional attributes to add to the generated form-group wrapper element.                                                                                                            |
+| `id`                       | `string`          | The `id` attribute for the generated `textarea` element. If not specified then a value is generated from the `name` attribute.                                                       |
+| `ignore-modelstate-errors` | `bool`            | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`.                    |
+| `label-class`              | `string`          | Additional classes for the generated `label` element.                                                                                                                                |
+| `max-length`               | `int?`            | The maximum number of characters the generated `textarea` may contain. Required unless the `max-words` attribute is specified.                                                       |
+| `max-words`                | `int?`            | The maximum number of words the generated `textarea` may contain. Required unless the `max-length` attribute is specified.                                                           |
+| `name`                     | `string`          | The `name` attribute for the generated `textarea` element. Required unless the `asp-for` attribute is specified.                                                                     |
+| `rows`                     | `int`             | The `rows` attribute for the generated `textarea` element. The default is `5`.                                                                                                       |
+| `spellcheck`               | `bool?`           | The `spellcheck` attribute for the generated `textarea` element. The default is `null`.                                                                                              |
+| `textarea-*`               |                   | Additional attributes to add to the generated `textarea` element.                                                                                                                    |
+| `threshold`                | `decimal?`        | The percentage value of the limit at which point the count message is displayed. If this is specified the count message will be hidden by default.                                   |
 
 ### `<govuk-character-count-label>`
 

@@ -44,21 +44,6 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent content,
         AttributeDictionary attributes);
 
-    TagBuilder GenerateCharacterCount(
-        string textAreaId,
-        int? maxLength,
-        int? maxWords,
-        decimal? threshold,
-        IHtmlContent formGroup,
-        AttributeDictionary countMessageAttributes,
-        string textAreaDescriptionText,
-        (string Other, string One)? charactersUnderLimitText,
-        string charactersAtLimitText,
-        (string Other, string One)? charactersOverLimitText,
-        (string Other, string One)? wordsUnderLimitText,
-        string wordsAtLimitText,
-        (string Other, string One)? wordsOverLimitText);
-
     TagBuilder GenerateCheckboxes(
         string idPrefix,
         string name,
