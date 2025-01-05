@@ -17,11 +17,10 @@ public class FormGroupErrorMessageTagHelperTests
         var context = new TagHelperContext(
             tagName: "test-error-message",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(FormGroupContext), formGroupContext }
-            },
+            items: new Dictionary<object, object>(),
             uniqueId: "test");
+
+        context.SetScopedContextItem(typeof(FormGroupContext), formGroupContext);
 
         var output = new TagHelperOutput(
             "test-error-message",
@@ -39,7 +38,7 @@ public class FormGroupErrorMessageTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Error message", formGroupContext.ErrorMessage?.Content?.ToString());
+        Assert.Equal("Error message", formGroupContext.ErrorMessage?.Content?.ToHtmlString());
     }
 
     private class TestFormGroupContext : FormGroupContext

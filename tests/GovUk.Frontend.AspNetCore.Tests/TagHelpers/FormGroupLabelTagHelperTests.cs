@@ -17,11 +17,10 @@ public class FormGroupLabelTagHelperTests
         var context = new TagHelperContext(
             tagName: "test-label",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(FormGroupContext), formGroupContext }
-            },
+            items: new Dictionary<object, object>(),
             uniqueId: "test");
+
+        context.SetScopedContextItem(typeof(FormGroupContext), formGroupContext);
 
         var output = new TagHelperOutput(
             "test-label",
@@ -39,7 +38,7 @@ public class FormGroupLabelTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Label", formGroupContext.Label?.Content?.ToString());
+        Assert.Equal("Label", formGroupContext.Label?.Content?.ToHtmlString());
     }
 
     private class TestFormGroupContext : FormGroupContext

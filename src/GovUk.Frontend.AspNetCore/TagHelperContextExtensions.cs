@@ -7,24 +7,26 @@ namespace GovUk.Frontend.AspNetCore;
 
 internal static class TagHelperContextExtensions
 {
+    private sealed record FormGroupContextKey;
+
     public static TItem GetContextItem<TItem>(this TagHelperContext context)
         where TItem : class
     {
-        Guard.ArgumentNotNull(nameof(context), context);
+        ArgumentNullException.ThrowIfNull(context);
 
-        if (!context.Items.TryGetValue(typeof(TItem), out var item))
+        if (!TryGetContextItem<TItem>(context, out var item))
         {
             throw new InvalidOperationException($"No context item found for type: '{typeof(TItem).FullName}'.");
         }
 
-        return (TItem)item;
+        return item;
     }
 
     public static IDisposable SetScopedContextItem<TItem>(this TagHelperContext context, TItem item)
         where TItem : class
     {
-        Guard.ArgumentNotNull(nameof(context), context);
-        Guard.ArgumentNotNull(nameof(item), item);
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(item);
 
         return SetScopedContextItem(context, typeof(TItem), item);
     }
@@ -34,9 +36,15 @@ internal static class TagHelperContextExtensions
         object key,
         object value)
     {
-        Guard.ArgumentNotNull(nameof(context), context);
-        Guard.ArgumentNotNull(nameof(key), key);
-        Guard.ArgumentNotNull(nameof(value), value);
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(key);
+        ArgumentNullException.ThrowIfNull(value);
+
+        // FormGroupContext and FormGroupContext2 are mutually exclusive
+        if (key is Type keyType && (keyType == typeof(FormGroupContext) || keyType == typeof(FormGroupContext2)))
+        {
+            key = typeof(FormGroupContextKey);
+        }
 
         context.Items.TryGetValue(key, out var previousValue);
         context.Items[key] = value;
@@ -46,9 +54,19 @@ internal static class TagHelperContextExtensions
 
     public static bool TryGetContextItem<TItem>(this TagHelperContext context, [NotNullWhen(true)] out TItem? item)
     {
-        if (context.Items.TryGetValue(typeof(TItem), out var itemObj))
+        ArgumentNullException.ThrowIfNull(context);
+
+        var key = typeof(TItem);
+
+        // FormGroupContext and FormGroupContext2 are mutually exclusive
+        if (key == typeof(FormGroupContext) || key == typeof(FormGroupContext2))
         {
-            item = (TItem)itemObj;
+            key = typeof(FormGroupContextKey);
+        }
+
+        if (context.Items.TryGetValue(key, out var itemObj) && itemObj is TItem typedItem)
+        {
+            item = typedItem;
             return true;
         }
         else
