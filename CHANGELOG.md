@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-Targets GOV.UK Frontend v5.3.0 and .NET 8.
+Targets GOV.UK Frontend v5.3.1 and .NET 8.
 
 ### New features
 
