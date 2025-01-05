@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -10,9 +13,14 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class BackLinkTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_WithContent_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var href = "http://foo.com";
+        var classes = "custom-class";
+        var dataFooAttrValue = "bar";
+        var content = "My custom link content";
+
         var context = new TagHelperContext(
             tagName: "govuk-back-link",
             allAttributes: new TagHelperAttributeList(),
@@ -23,59 +31,37 @@ public class BackLinkTagHelperTests
             "govuk-back-link",
             attributes: new TagHelperAttributeList()
             {
-                { "href", "http://foo.com" }
+                { "href", href },
+                { "class", classes },
+                { "data-foo", dataFooAttrValue }
             },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("My custom link content");
+                tagHelperContent.SetHtmlContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new BackLinkTagHelper();
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        BackLinkOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateBackLink(It.IsAny<BackLinkOptions>())).Callback<BackLinkOptions>(o => actualOptions = o);
+
+        var tagHelper = new BackLinkTagHelper(componentGeneratorMock.Object);
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<a class=""govuk-back-link"" href=""http://foo.com"">My custom link content</a>";
-
-        AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithNoContent_GeneratesExpectedOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-back-link",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-back-link",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "http://foo.com" }
-            },
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-        output.TagMode = TagMode.SelfClosing;
-
-        var tagHelper = new BackLinkTagHelper();
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<a class=""govuk-back-link"" href=""http://foo.com"">Back</a>";
-
-        AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(content, actualOptions!.Html?.ToHtmlString());
+        Assert.Null(actualOptions.Text);
+        Assert.Equal(href, actualOptions.Href?.ToHtmlString());
+        Assert.Equal(classes, actualOptions.Classes?.ToHtmlString());
+        Assert.NotNull(actualOptions.Attributes);
+        Assert.Collection(actualOptions.Attributes, kvp =>
+        {
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(dataFooAttrValue, kvp.Value);
+        });
     }
 }
