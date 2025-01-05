@@ -12,7 +12,7 @@ public partial class ComponentTests
     [ComponentFixtureData(
         "tabs",
         typeof(OptionsJson.Tabs),
-        exclude: new[] { "with falsey values", "empty item list", "no item list" })]
+        exclude: new[] { "with falsy values", "empty item list", "no item list" })]
     public void Tabs(ComponentTestCaseData<OptionsJson.Tabs> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

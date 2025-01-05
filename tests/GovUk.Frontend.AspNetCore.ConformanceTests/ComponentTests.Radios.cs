@@ -11,7 +11,7 @@ public partial class ComponentTests
     [ComponentFixtureData(
         "radios",
         typeof(OptionsJson.Radios),
-        exclude: "with falsey items")]
+        exclude: "with falsy items")]
     public void Radios(ComponentTestCaseData<OptionsJson.Radios> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

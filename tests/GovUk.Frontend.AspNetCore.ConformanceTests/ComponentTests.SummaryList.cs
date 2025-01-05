@@ -14,7 +14,7 @@ public partial class ComponentTests
         typeof(OptionsJson.SummaryList),
         exclude: new[]
         {
-            "with falsey values",
+            "with falsy values",
             "as a summary card with actions plus summary list actions"
         })]
     public void SummaryList(ComponentTestCaseData<OptionsJson.SummaryList> data) =>

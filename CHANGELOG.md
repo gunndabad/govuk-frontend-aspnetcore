@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-Targets GOV.UK Frontend v5.4.0.
+Targets GOV.UK Frontend v5.4.1.
 
 ## 2.3.0
 
