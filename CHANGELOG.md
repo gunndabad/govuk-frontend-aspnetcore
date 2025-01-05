@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Targets GOV.UK Frontend v5.4.0.
+
 ## 2.3.0
 
 Targets GOV.UK Frontend v5.3.1 and .NET 8.

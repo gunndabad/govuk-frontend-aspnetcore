@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -51,42 +52,47 @@ internal partial class ComponentGenerator
             body.InnerHtml.AppendHtml(p);
         }
 
-        var ul = new TagBuilder("ul");
-        ul.MergeCssClass("govuk-list");
-        ul.MergeCssClass("govuk-error-summary__list");
-
-        var itemIndex = 0;
-        foreach (var item in items)
+        var itemsArray = items.ToArray();
+        if (itemsArray.Length > 0)
         {
-            Guard.ArgumentValidNotNull(
-                nameof(items),
-                $"Item {itemIndex} is not valid; {nameof(ErrorSummaryItem.Content)} cannot be null.",
-                item.Content,
-                item.Content != null);
 
-            var li = new TagBuilder("li");
-            li.MergeOptionalAttributes(item.Attributes);
+            var ul = new TagBuilder("ul");
+            ul.MergeCssClass("govuk-list");
+            ul.MergeCssClass("govuk-error-summary__list");
 
-            if (item.Href != null)
+            var itemIndex = 0;
+            foreach (var item in itemsArray)
             {
-                var a = new TagBuilder("a");
-                a.MergeOptionalAttributes(item.LinkAttributes);
-                a.MergeAttribute("href", item.Href);
-                a.InnerHtml.AppendHtml(item.Content);
+                Guard.ArgumentValidNotNull(
+                    nameof(items),
+                    $"Item {itemIndex} is not valid; {nameof(ErrorSummaryItem.Content)} cannot be null.",
+                    item.Content,
+                    item.Content != null);
 
-                li.InnerHtml.AppendHtml(a);
+                var li = new TagBuilder("li");
+                li.MergeOptionalAttributes(item.Attributes);
+
+                if (item.Href != null)
+                {
+                    var a = new TagBuilder("a");
+                    a.MergeOptionalAttributes(item.LinkAttributes);
+                    a.MergeAttribute("href", item.Href);
+                    a.InnerHtml.AppendHtml(item.Content);
+
+                    li.InnerHtml.AppendHtml(a);
+                }
+                else
+                {
+                    li.InnerHtml.AppendHtml(item.Content);
+                }
+
+                ul.InnerHtml.AppendHtml(li);
+
+                itemIndex++;
             }
-            else
-            {
-                li.InnerHtml.AppendHtml(item.Content);
-            }
 
-            ul.InnerHtml.AppendHtml(li);
-
-            itemIndex++;
+            body.InnerHtml.AppendHtml(ul);
         }
-
-        body.InnerHtml.AppendHtml(ul);
 
         alert.InnerHtml.AppendHtml(body);
 
