@@ -13,8 +13,8 @@ public partial class ComponentTests
         typeof(OptionsJson.Select),
         exclude: new[]
         {
-            "with falsey items",
-            "with falsey values",
+            "with falsy items",
+            "with falsy values",
             "item selected overrides value"  // Fixture doesn't have an 'id' :-(
         })]
     public void Select(ComponentTestCaseData<OptionsJson.Select> data) =>

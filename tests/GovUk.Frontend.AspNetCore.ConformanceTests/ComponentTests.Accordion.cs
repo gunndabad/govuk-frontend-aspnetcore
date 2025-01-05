@@ -12,7 +12,7 @@ public partial class ComponentTests
     [ComponentFixtureData(
         "accordion",
         typeof(OptionsJson.Accordion),
-        exclude: "with falsey values")]
+        exclude: "with falsy values")]
     public void Accordion(ComponentTestCaseData<OptionsJson.Accordion> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

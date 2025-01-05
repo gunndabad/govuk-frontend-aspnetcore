@@ -11,7 +11,7 @@ public partial class ComponentTests
     [ComponentFixtureData(
         "checkboxes",
         typeof(OptionsJson.Checkboxes),
-        exclude: "with falsey values")]
+        exclude: "with falsy values")]
     public void Checkboxes(ComponentTestCaseData<OptionsJson.Checkboxes> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,

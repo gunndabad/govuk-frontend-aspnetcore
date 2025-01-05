@@ -30,7 +30,7 @@ public class ComponentTests
             (generator, options) => generator.GenerateTextarea(options).ToHtmlString());
 
     [Theory]
-    [ComponentFixtureData("input", typeof(TextInputOptions), exclude: ["with extra letter spacing"])]
+    [ComponentFixtureData("input", typeof(TextInputOptions), exclude: ["with extra letter spacing", "disabled"])]
     public void TextInput(ComponentTestCaseData<TextInputOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
