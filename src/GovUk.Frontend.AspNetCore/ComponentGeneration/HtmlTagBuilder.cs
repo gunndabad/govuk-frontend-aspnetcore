@@ -124,6 +124,25 @@ public class HtmlTagBuilder : IHtmlContent
     /// <summary>
     /// Appends content to this tag's inner content.
     /// </summary>
+    /// <param name="content">The collection of content to append.</param>
+    /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
+    public HtmlTagBuilder WithAppendedHtml(IEnumerable<IHtmlContent> content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+
+        ThrowOnAppendIfVoidElement();
+
+        foreach (var item in content)
+        {
+            _innerContent.AppendHtml(item);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Appends content to this tag's inner content.
+    /// </summary>
     /// <param name="getContent">A delegate that gets the content to append.</param>
     /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
     public HtmlTagBuilder WithAppendedHtml(Func<IHtmlContent> getContent)

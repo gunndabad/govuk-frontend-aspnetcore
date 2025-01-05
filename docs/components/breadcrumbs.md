@@ -21,6 +21,7 @@
 | Attribute | Type | Description |
 | --- | --- | --- |
 | `collapse-on-mobile` | `bool` | When true, the breadcrumbs will collapse to the first and last item only on tablet breakpoint and below. Default is `false`. |
+| `label-text` | `string` | The plain text label identifying the landmark to screen readers. Defaults to 'Breadcrumb'. |
 
 ### `<govuk-breadcrumbs-item>`
 
