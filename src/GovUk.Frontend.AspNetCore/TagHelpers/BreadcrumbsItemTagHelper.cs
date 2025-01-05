@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -9,10 +10,12 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents an item in a GDS breadcrumbs component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = BreadcrumbsTagHelper.TagName)]
+//[HtmlTargetElement(ShortTagName, ParentTag = BreadcrumbsTagHelper.TagName)]
 //[OutputElementHint(ComponentGenerator.BreadcrumbsItemElement)]  // Omitted since it produces intellisense warnings
 public class BreadcrumbsItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-breadcrumbs-item";
+    //internal const string ShortTagName = ShortTagNames.Item;
 
     private const string LinkAttributesPrefix = "link-";
 
@@ -27,27 +30,22 @@ public class BreadcrumbsItemTagHelper : TagHelper
     {
         var breadcrumbsContext = context.GetContextItem<BreadcrumbsContext>();
 
-        var childContent = await output.GetChildContentAsync();
+        var childContent = (await output.GetChildContentAsync()).Snapshot();
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        string? href = null;
+        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        attributes.Remove("href", out var href);
 
-        if (output.Attributes.TryGetAttribute("href", out var hrefAttribute))
+        breadcrumbsContext.AddItem(new BreadcrumbsOptionsItem()
         {
-            href = hrefAttribute.Value.ToString();
-            output.Attributes.Remove(hrefAttribute);
-        }
-
-        breadcrumbsContext.AddItem(new BreadcrumbsItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
+            ItemAttributes = attributes,
             Href = href,
-            LinkAttributes = LinkAttributes.ToAttributeDictionary(),
-            Content = childContent.Snapshot()
+            Attributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(LinkAttributes),
+            Html = childContent
         });
 
         output.SuppressOutput();

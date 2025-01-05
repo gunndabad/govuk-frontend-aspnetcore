@@ -24,11 +24,6 @@ internal interface IGovUkHtmlGenerator
 
     TagBuilder GenerateBackLink(IHtmlContent content, AttributeDictionary attributes);
 
-    TagBuilder GenerateBreadcrumbs(
-        bool collapseOnMobile,
-        AttributeDictionary attributes,
-        IEnumerable<BreadcrumbsItem> items);
-
     TagBuilder GenerateButton(
         bool isStartButton,
         bool disabled,

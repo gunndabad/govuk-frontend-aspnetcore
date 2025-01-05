@@ -16,6 +16,8 @@ public class BreadcrumbsItemTagHelperTests
     public async Task ProcessAsync_NoLink_AddsItemToContext()
     {
         // Arrange
+        var content = "The item";
+
         var breadcrumbsContext = new BreadcrumbsContext();
 
         var context = new TagHelperContext(
@@ -33,7 +35,7 @@ public class BreadcrumbsItemTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetHtmlContent("The item");
+                tagHelperContent.SetHtmlContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -45,13 +47,16 @@ public class BreadcrumbsItemTagHelperTests
         // Assert
         var lastItem = breadcrumbsContext.Items.Last();
         Assert.Null(lastItem.Href);
-        Assert.Equal("The item", lastItem.Content?.ToHtmlString());
+        Assert.Equal(content, lastItem.Html?.ToHtmlString());
     }
 
     [Fact]
     public async Task ProcessAsync_WithLink_AddsItemToContext()
     {
         // Arrange
+        var content = "The item";
+        var href = "http://place.com";
+
         var breadcrumbsContext = new BreadcrumbsContext();
 
         var context = new TagHelperContext(
@@ -69,10 +74,10 @@ public class BreadcrumbsItemTagHelperTests
             attributes,
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                attributes.Add("href", "place.com");
+                attributes.Add("href", href);
 
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetHtmlContent("The item");
+                tagHelperContent.SetHtmlContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -83,7 +88,7 @@ public class BreadcrumbsItemTagHelperTests
 
         // Assert
         var lastItem = breadcrumbsContext.Items.Last();
-        Assert.Equal("place.com", lastItem.Href);
-        Assert.Equal("The item", lastItem.Content?.ToHtmlString());
+        Assert.Equal(href, lastItem.Href?.ToHtmlString());
+        Assert.Equal(content, lastItem.Html?.ToHtmlString());
     }
 }

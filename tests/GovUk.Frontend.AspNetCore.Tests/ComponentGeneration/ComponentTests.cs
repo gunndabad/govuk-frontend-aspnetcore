@@ -16,6 +16,13 @@ public class ComponentTests
     }
 
     [Theory]
+    [ComponentFixtureData("breadcrumbs", typeof(BreadcrumbsOptions))]
+    public void Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateBreadcrumbs(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("character-count", typeof(CharacterCountOptions))]
     public void CharacterCount(ComponentTestCaseData<CharacterCountOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

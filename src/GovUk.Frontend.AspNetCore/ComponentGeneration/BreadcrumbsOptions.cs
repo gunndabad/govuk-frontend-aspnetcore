@@ -12,6 +12,7 @@ public record BreadcrumbsOptions
     public IHtmlContent? Classes { get; set; }
     public EncodedAttributesDictionary? Attributes { get; set; }
     public IReadOnlyCollection<BreadcrumbsOptionsItem>? Items { get; set; }
+    public IHtmlContent? LabelText { get; set; }
 
     internal void Validate()
     {

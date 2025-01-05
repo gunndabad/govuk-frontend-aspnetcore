@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -12,9 +14,30 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class BreadcrumbsTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        BreadcrumbsOptionsItem[] items =
+        [
+            new BreadcrumbsOptionsItem()
+            {
+                Href = new HtmlString("first"),
+                Html = new HtmlString("First")
+            },
+            new BreadcrumbsOptionsItem()
+            {
+                Href = new HtmlString("second"),
+                Html = new HtmlString("Second")
+            },
+            new BreadcrumbsOptionsItem()
+            {
+                Html = new HtmlString("Last")
+            }
+        ];
+
+        var collapseOnMobile = true;
+        var labelText = "Label text";
+
         var context = new TagHelperContext(
             tagName: "govuk-breadcrumbs",
             allAttributes: new TagHelperAttributeList(),
@@ -28,42 +51,37 @@ public class BreadcrumbsTagHelperTests
             {
                 var breadcrumbsContext = context.GetContextItem<BreadcrumbsContext>();
 
-                breadcrumbsContext.AddItem(new BreadcrumbsItem()
+                foreach (var item in items)
                 {
-                    Href = "first",
-                    Content = new HtmlString("First")
-                });
-
-                breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                {
-                    Href = "second",
-                    Content = new HtmlString("Second")
-                });
-
-                breadcrumbsContext.AddItem(new BreadcrumbsItem()
-                {
-                    Content = new HtmlString("Last")
-                });
+                    breadcrumbsContext.AddItem(item);
+                }
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new BreadcrumbsTagHelper();
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        BreadcrumbsOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateBreadcrumbs(It.IsAny<BreadcrumbsOptions>())).Callback<BreadcrumbsOptions>(o => actualOptions = o);
+
+        var tagHelper = new BreadcrumbsTagHelper(componentGeneratorMock.Object)
+        {
+            CollapseOnMobile = collapseOnMobile,
+            LabelText = labelText,
+        };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-breadcrumbs"">
-    <ol class=""govuk-breadcrumbs__list"">
-        <li class=""govuk-breadcrumbs__list-item""><a class=""govuk-breadcrumbs__link"" href=""first"">First</a></li>
-        <li class=""govuk-breadcrumbs__list-item""><a class=""govuk-breadcrumbs__link"" href=""second"">Second</a></li>
-        <li aria-current=""page"" class=""govuk-breadcrumbs__list-item"">Last</li>
-    </ol>
-</div>";
-
-        AssertEx.HtmlEqual(@expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(collapseOnMobile, actualOptions.CollapseOnMobile);
+        Assert.NotNull(actualOptions.Items);
+        Assert.Collection(
+            actualOptions.Items,
+            item => Assert.Same(items[0], item),
+            item => Assert.Same(items[1], item),
+            item => Assert.Same(items[2], item));
+        Assert.Equal(labelText, actualOptions.LabelText?.ToHtmlString());
     }
 }

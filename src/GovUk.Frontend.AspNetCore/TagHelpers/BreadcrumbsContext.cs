@@ -1,23 +1,23 @@
 using System;
 using System.Collections.Generic;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class BreadcrumbsContext
 {
-    private readonly List<BreadcrumbsItem> _items;
+    private readonly List<BreadcrumbsOptionsItem> _items;
 
     public BreadcrumbsContext()
     {
-        _items = new List<BreadcrumbsItem>();
+        _items = new List<BreadcrumbsOptionsItem>();
     }
 
-    public IReadOnlyCollection<BreadcrumbsItem> Items => _items;
+    public IReadOnlyCollection<BreadcrumbsOptionsItem> Items => _items;
 
-    public void AddItem(BreadcrumbsItem item)
+    public void AddItem(BreadcrumbsOptionsItem item)
     {
-        Guard.ArgumentNotNull(nameof(item), item);
+        ArgumentNullException.ThrowIfNull(item);
 
         _items.Add(item);
     }
