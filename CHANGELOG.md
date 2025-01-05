@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.4.0
 
 Targets GOV.UK Frontend v5.4.1.### Tag helper changes
 
