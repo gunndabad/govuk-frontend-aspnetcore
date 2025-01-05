@@ -16,6 +16,13 @@ public class ComponentTests
     }
 
     [Theory]
+    [ComponentFixtureData("back-link", typeof(BackLinkOptions))]
+    public void BackLink(ComponentTestCaseData<BackLinkOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateBackLink(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("breadcrumbs", typeof(BreadcrumbsOptions))]
     public void Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

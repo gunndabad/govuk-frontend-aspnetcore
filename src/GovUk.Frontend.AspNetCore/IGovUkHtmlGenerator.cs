@@ -22,8 +22,6 @@ internal interface IGovUkHtmlGenerator
         string showSectionAriaLabelText,
         IEnumerable<AccordionItem> items);
 
-    TagBuilder GenerateBackLink(IHtmlContent content, AttributeDictionary attributes);
-
     TagBuilder GenerateButton(
         bool isStartButton,
         bool disabled,

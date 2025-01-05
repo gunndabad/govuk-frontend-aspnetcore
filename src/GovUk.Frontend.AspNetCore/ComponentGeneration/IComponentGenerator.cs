@@ -6,6 +6,12 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 public interface IComponentGenerator
 {
     /// <summary>
+    /// Generates a back link component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
+    HtmlTagBuilder GenerateBackLink(BackLinkOptions options);
+
+    /// <summary>
     /// Generates a breadcrumbs component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
