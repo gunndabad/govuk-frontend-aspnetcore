@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Targets GOV.UK Frontend v5.5.0.
+
 ## 2.4.0
 
 Targets GOV.UK Frontend v5.4.1.
