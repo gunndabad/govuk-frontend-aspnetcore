@@ -35,7 +35,7 @@ public class StartupFilterTests
 
     [Theory]
     [InlineData("images/favicon.ico")]
-    [InlineData("images/govuk-crest.png")]
+    [InlineData("images/govuk-crest.svg")]
     [InlineData("fonts/bold-affa96571d-v2.woff")]
     public async Task HostsStaticAssets(string fileName)
     {
