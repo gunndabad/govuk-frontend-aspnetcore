@@ -2,7 +2,9 @@
 
 ## 2.4.0
 
-Targets GOV.UK Frontend v5.4.1.### Tag helper changes
+Targets GOV.UK Frontend v5.4.1.
+
+### Tag helper changes
 
 #### `<govuk-breadcrumbs>` tag helper
 A `label-text` attribute has been added.
