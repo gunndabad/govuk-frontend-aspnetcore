@@ -68,18 +68,18 @@ public class CharacterCountTagHelper : TagHelper
     /// An expression to be evaluated against the current model.
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
-    //[Obsolete("Use the 'for' attribute instead.")]
-    public ModelExpression? AspFor { get; set; }
-    /*{
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
         get => For;
         set => For = value;
-    }*/
+    }
 
-    ///// <summary>
-    ///// An expression to be evaluated against the current model.
-    ///// </summary>
-    //[HtmlAttributeName(ForAttributeName)]
-    //public ModelExpression? For { get; set; }
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
@@ -256,9 +256,9 @@ public class CharacterCountTagHelper : TagHelper
         var name = ResolveName();
         var id = ResolveId(name);
         var value = ResolveValue(characterCountContext);
-        var labelOptions = characterCountContext.GetLabelOptions(AspFor, ViewContext!, _modelHelper, id, AspForAttributeName);
-        var hintOptions = characterCountContext.GetHintOptions(AspFor, _modelHelper);
-        var errorMessageOptions = characterCountContext.GetErrorMessageOptions(AspFor, ViewContext!, _modelHelper, IgnoreModelStateErrors);
+        var labelOptions = characterCountContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
+        var hintOptions = characterCountContext.GetHintOptions(For, _modelHelper);
+        var errorMessageOptions = characterCountContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
 
         if (LabelClass is not null)
         {
@@ -341,14 +341,14 @@ public class CharacterCountTagHelper : TagHelper
 
     private IHtmlContent ResolveName()
     {
-        if (Name is null && AspFor is null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name));
+        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name));
     }
 
     private IHtmlContent? ResolveValue(CharacterCountContext characterCountContext)
@@ -358,6 +358,6 @@ public class CharacterCountTagHelper : TagHelper
             return characterCountContext.Value;
         }
 
-        return AspFor != null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null;
+        return For is not null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name)) : null;
     }
 }

@@ -125,7 +125,7 @@ public class TextAreaTagHelperTests
     }
 
     [Fact]
-    public async Task ProcessAsync_NoValueOrAspFor_RendersEmptyTextArea()
+    public async Task ProcessAsync_NoValueOrFor_RendersEmptyTextArea()
     {
         // Arrange
         var context = new TagHelperContext(
@@ -165,7 +165,7 @@ public class TextAreaTagHelperTests
     }
 
     [Fact]
-    public async Task ProcessAsync_WithAspFor_RendersTextAreaWithModelValue()
+    public async Task ProcessAsync_WithFor_RendersTextAreaWithModelValue()
     {
         // Arrange
         var modelValue = "Foo value";
@@ -206,7 +206,7 @@ public class TextAreaTagHelperTests
 
         var tagHelper = new TextAreaTagHelper(modelHelper: modelHelper.Object)
         {
-            AspFor = new ModelExpression(modelExpression, modelExplorer),
+            For = new ModelExpression(modelExpression, modelExplorer),
             Name = "my-name",
             ViewContext = viewContext
         };
@@ -263,7 +263,7 @@ public class TextAreaTagHelperTests
     }
 
     [Fact]
-    public async Task ProcessAsync_WithValueAndAspFor_RendersTextAreaWithValue()
+    public async Task ProcessAsync_WithValueAndFor_RendersTextAreaWithValue()
     {
         // Arrange
         var modelValue = "Foo value";
@@ -306,7 +306,7 @@ public class TextAreaTagHelperTests
 
         var tagHelper = new TextAreaTagHelper(modelHelper: modelHelper.Object)
         {
-            AspFor = new ModelExpression(modelExpression, modelExplorer),
+            For = new ModelExpression(modelExpression, modelExplorer),
             Name = "my-name",
             ViewContext = viewContext
         };

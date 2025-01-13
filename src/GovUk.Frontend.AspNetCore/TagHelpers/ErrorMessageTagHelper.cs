@@ -22,6 +22,7 @@ public class ErrorMessageTagHelper : TagHelper
     internal const string TagName = "govuk-error-message";
 
     private const string AspForAttributeName = "asp-for";
+    private const string ForAttributeName = "for";
     private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
@@ -46,12 +47,19 @@ public class ErrorMessageTagHelper : TagHelper
     /// <summary>
     /// An expression to be evaluated against the current model.
     /// </summary>
-    /// <remarks>
-    /// If specified and this element has no child content the error message will be resolved from
-    /// the errors on this expression's <see cref="ModelStateEntry"/>.
-    /// </remarks>
     [HtmlAttributeName(AspForAttributeName)]
-    public ModelExpression? AspFor { get; set; }
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
+        get => For;
+        set => For = value;
+    }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// The visually hidden prefix used before the error message.
@@ -82,19 +90,19 @@ public class ErrorMessageTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        if (childContent == null && AspFor == null)
+        if (childContent == null && For == null)
         {
             throw new InvalidOperationException(
                 $"Cannot determine content. Element must contain content if the '{AspForAttributeName}' attribute is not specified.");
         }
 
         IHtmlContent? resolvedContent = childContent;
-        if (resolvedContent == null && AspFor != null)
+        if (resolvedContent == null && For != null)
         {
             var validationMessage = _modelHelper.GetValidationMessage(
                 ViewContext!,
-                AspFor.ModelExplorer,
-                AspFor.Name);
+                For.ModelExplorer,
+                For.Name);
 
             if (validationMessage != null)
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -79,18 +80,18 @@ public class TextInputTagHelper : TagHelper
     /// An expression to be evaluated against the current model.
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
-    //[Obsolete("Use the 'for' attribute instead.")]
-    public ModelExpression? AspFor { get; set; }
-    /*{
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
         get => For;
         set => For = value;
-    }*/
+    }
 
-    ///// <summary>
-    ///// An expression to be evaluated against the current model.
-    ///// </summary>
-    //[HtmlAttributeName(ForAttributeName)]
-    //public ModelExpression? For { get; set; }
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// The <c>autocapitalize</c> attribute for the generated <c>input</c> element.
@@ -229,9 +230,9 @@ public class TextInputTagHelper : TagHelper
         var name = ResolveName();
         var id = ResolveId(name);
         var value = ResolveValue();
-        var labelOptions = textInputContext.GetLabelOptions(AspFor, ViewContext!, _modelHelper, id, AspForAttributeName);
-        var hintOptions = textInputContext.GetHintOptions(AspFor, _modelHelper);
-        var errorMessageOptions = textInputContext.GetErrorMessageOptions(AspFor, ViewContext!, _modelHelper, IgnoreModelStateErrors);
+        var labelOptions = textInputContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
+        var hintOptions = textInputContext.GetHintOptions(For, _modelHelper);
+        var errorMessageOptions = textInputContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
         var prefixOptions = textInputContext.GetPrefixOptions();
         var suffixOptions = textInputContext.GetSuffixOptions();
 
@@ -304,14 +305,14 @@ public class TextInputTagHelper : TagHelper
 
     private IHtmlContent ResolveName()
     {
-        if (Name is null && AspFor is null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name));
+        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name));
     }
 
     private IHtmlContent? ResolveValue()
@@ -321,6 +322,6 @@ public class TextInputTagHelper : TagHelper
             return new HtmlString(_value);
         }
 
-        return AspFor != null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null;
+        return For is not null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name)) : null;
     }
 }

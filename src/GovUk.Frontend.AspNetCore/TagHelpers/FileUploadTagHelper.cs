@@ -130,7 +130,7 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
             return Id;
         }
 
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
@@ -145,13 +145,13 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
 
     private string ResolveName()
     {
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 }

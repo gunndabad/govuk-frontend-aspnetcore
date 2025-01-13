@@ -64,7 +64,7 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
     [HtmlAttributeName(NameAttributeName)]
     public string? Name { get; set; }
 
-    private protected override FormGroupContext CreateFormGroupContext() => new CheckboxesContext(Name, AspFor);
+    private protected override FormGroupContext CreateFormGroupContext() => new CheckboxesContext(Name, For);
 
     private protected override IHtmlContent GenerateFormGroupContent(
         TagHelperContext tagHelperContext,
@@ -133,12 +133,12 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
             return IdPrefix;
         }
 
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdPrefixAttributeName,
                 NameAttributeName,
-                AspForAttributeName);
+                ForAttributeName);
         }
 
         TryResolveName(out var resolvedName);
@@ -149,13 +149,13 @@ public class CheckboxesTagHelper : FormGroupTagHelperBase
 
     private bool TryResolveName([NotNullWhen(true)] out string? name)
     {
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             name = default;
             return false;
         }
 
-        name = Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        name = Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
         return true;
     }
 }

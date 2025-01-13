@@ -142,7 +142,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
             var resolvedName = ResolveName();
 
             var resolvedContent = textAreaContext.Value ??
-                new HtmlString(AspFor != null ? HtmlEncoder.Default.Encode(ModelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name) ?? string.Empty) : string.Empty);
+                new HtmlString(For != null ? HtmlEncoder.Default.Encode(ModelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name) ?? string.Empty) : string.Empty);
 
             var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
             resolvedTextAreaAttributes.MergeCssClass("govuk-js-textarea");
@@ -168,7 +168,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
             return Id;
         }
 
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
@@ -183,13 +183,13 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
 
     private string ResolveName()
     {
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 }

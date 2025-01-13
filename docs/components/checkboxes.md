@@ -141,13 +141,13 @@
 
 ### `<govuk-checkboxes>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `asp-for` | `ModelExpression` | The model expression used to generate the `name` and `id` attributes as well as the `selected` attribute for items and error message content. See [documentation on forms](forms.md) for more information. |
-| `checkboxes-*` | | Additional attributes to add to the generated container element that wraps the items. |
-| `id-prefix` | `string` | The prefix to use when generating IDs for the hint, error message and items. If not specified then a value is generated from the `name` attribute. Required unless the `asp-for` attribute or `name` atribute is specified. |
-| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| `name` | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute or `id-prefix` attribute is specified. |
+| Attribute                  | Type              | Description                                                                                                                                                                                                             |
+|----------------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `checkboxes-*`             |                   | Additional attributes to add to the generated container element that wraps the items.                                                                                                                                   |
+| `for`                      | `ModelExpression` | The model expression used to generate the `name` and `id` attributes as well as the `selected` attribute for items and error message content. See [documentation on forms](forms.md) for more information.              |
+| `id-prefix`                | `string`          | The prefix to use when generating IDs for the hint, error message and items. If not specified then a value is generated from the `name` attribute. Required unless the `for` attribute or `name` atribute is specified. |
+| `ignore-modelstate-errors` | `bool`            | Whether ModelState errors on the ModelExpression specified by the `for` attribute should be ignored when generating an error message. The default is `false`.                                                           |
+| `name`                     | `string`          | The `name` attribute for the generated `input` element. Required unless the `for` attribute or `id-prefix` attribute is specified.                                                                                      |
 
 ### `<govuk-checkboxes-fieldset>`
 
@@ -161,8 +161,8 @@ Must be inside a `<govuk-checkboxes>` element.
 The content is the HTML to use within the legend.\
 Must be inside a `<govuk-checkboxes-fieldset>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute         | Type      | Description                                                                       |
+|-------------------|-----------|-----------------------------------------------------------------------------------|
 | `is-page-heading` | `boolean` | Whether the legend also acts as the heading for the page. The default is `false`. |
 
 ### `<govuk-checkboxes-hint>`
@@ -170,7 +170,7 @@ Must be inside a `<govuk-checkboxes-fieldset>` element.
 The content is the HTML to use within the component's hint.\
 Must be inside a `<govuk-checkboxes>` or `<govuk-checkboxes-fieldset>` element.
 
-If the `asp-for` attribute is specified on the parent `<govuk-checkboxes>` then content for the hint will be generated from the model expression.\
+If the `for` attribute is specified on the parent `<govuk-checkboxes>` then content for the hint will be generated from the model expression.\
 If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
 `<govuk-checkboxes-hint class="some-additional-class" />`.
 
@@ -179,13 +179,13 @@ If you want to retain the generated content and specify additional attributes th
 The content is the HTML to use within the component's error message.\
 Must be inside a `<govuk-checkboxes>` or `<govuk-checkboxes-fieldset>` element.
 
-If the `asp-for` attribute is specified on the parent `<govuk-checkboxes>` then content for the error message will be generated from the model expression.
+If the `for` attribute is specified on the parent `<govuk-checkboxes>` then content for the error message will be generated from the model expression.
 (To prevent this set `ignore-modelstate-errors` on the parent `<govuk-checkboxes>` to `false`.) Specifying any content here will override any generated error message.\
 If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
 `<govuk-checkboxes-error-message visually-hidden-text="Error" />`.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute              | Type     | Description                                                                       |
+|------------------------|----------|-----------------------------------------------------------------------------------|
 | `visually-hidden-text` | `string` | The visually hidden prefix used before the error message. The default is `Error`. |
 
 ### `<govuk-checkboxes-item>`
@@ -193,15 +193,15 @@ If you want to retain the generated content and specify additional attributes th
 The content is the HTML to use within the label for the generated `input` element.\
 Must be inside a `<govuk-checkboxes>` or `<govuk-checkboxes-fieldset>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `checked` | `bool` | Whether the item should be checked. If this attribute is not specified but the `asp-for` attribute is specified on the parent `<govuk-checkboxes>` then this value will be computed by comparing the `value` attribute with the model value; if the `value` attribute matches the string representation of the model or the model is a collection and the collection contains an entry whose string representation matches the `value` attribute then `checked` will be inferred to `true`. |
-| `disabled` | `bool` | Whether the item should be disabled. The default is `false`. |
-| `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
-| `input-*` | | Additional attributes to add to the generated `input` element. |
-| `label-*` | | Additional attributes to add to the generated `label` element. |
-| `name` | string | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute or `name` attribute is specified on the parent `<govuk-checkboxes>`. |
-| `value` | `string` | *Required* The `value` attribute for the generated `input` element. |
+| Attribute  | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `checked`  | `bool`   | Whether the item should be checked. If this attribute is not specified but the `for` attribute is specified on the parent `<govuk-checkboxes>` then this value will be computed by comparing the `value` attribute with the model value; if the `value` attribute matches the string representation of the model or the model is a collection and the collection contains an entry whose string representation matches the `value` attribute then `checked` will be inferred to `true`. |
+| `disabled` | `bool`   | Whether the item should be disabled. The default is `false`.                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `id`       | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute.                                                                                                                                                                                                                                                                                                                                                             |
+| `input-*`  |          | Additional attributes to add to the generated `input` element.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `label-*`  |          | Additional attributes to add to the generated `label` element.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `name`     | string   | The `name` attribute for the generated `input` element. Required unless the `for` attribute or `name` attribute is specified on the parent `<govuk-checkboxes>`.                                                                                                                                                                                                                                                                                                                        |
+| `value`    | `string` | *Required* The `value` attribute for the generated `input` element.                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ### `<govuk-checkboxes-item-conditional>`
 
