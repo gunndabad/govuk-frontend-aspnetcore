@@ -320,7 +320,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -394,7 +394,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -466,7 +466,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -539,7 +539,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -619,7 +619,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -690,7 +690,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
             IgnoreModelStateErrors = true
         };
@@ -771,7 +771,7 @@ public class CharacterCountTagHelperTests
 
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
             IgnoreModelStateErrors = true
         };

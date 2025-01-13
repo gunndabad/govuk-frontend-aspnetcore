@@ -102,7 +102,7 @@ public class DateInputTagHelperTests
 
         var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
             Id = "my-id",
             NamePrefix = "my-name",
             ViewContext = viewContext
@@ -165,7 +165,7 @@ public class DateInputTagHelperTests
 
         var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), new DateInputParseErrorsProvider())
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
             Id = "my-id",
             NamePrefix = "my-name",
             ViewContext = viewContext,
@@ -309,7 +309,7 @@ public class DateInputTagHelperTests
 
         var tagHelper = new DateInputTagHelper(options, new DateInputParseErrorsProvider())
         {
-            AspFor = new ModelExpression(nameof(Model.CustomDate), modelExplorer),
+            For = new ModelExpression(nameof(Model.CustomDate), modelExplorer),
             Id = "my-id",
             NamePrefix = "my-name",
             ViewContext = viewContext
@@ -932,7 +932,7 @@ public class DateInputTagHelperTests
 
         var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
             ViewContext = viewContext
         };
 
@@ -1000,7 +1000,7 @@ public class DateInputTagHelperTests
 
         var tagHelper = new DateInputTagHelper(Options.Create(new GovUkFrontendAspNetCoreOptions()), dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
             ViewContext = viewContext
         };
 

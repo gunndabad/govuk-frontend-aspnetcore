@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Breaking changes
+
+#### `asp-for` attributes
+The `asp-for` attribute is now obsolete; the `for` attribute should be used in its place.
+
 ## 2.8.0
 
 Targets GOV.UK Frontend v5.8.0.

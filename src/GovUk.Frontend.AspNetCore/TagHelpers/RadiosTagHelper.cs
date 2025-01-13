@@ -64,7 +64,7 @@ public class RadiosTagHelper : FormGroupTagHelperBase
     [HtmlAttributeName(DictionaryAttributePrefix = RadiosAttributesPrefix)]
     public IDictionary<string, string?>? RadiosAttributes { get; set; } = new Dictionary<string, string?>();
 
-    private protected override FormGroupContext CreateFormGroupContext() => new RadiosContext(Name, AspFor);
+    private protected override FormGroupContext CreateFormGroupContext() => new RadiosContext(Name, For);
 
     private protected override IHtmlContent GenerateFormGroupContent(
         TagHelperContext tagHelperContext,
@@ -131,7 +131,7 @@ public class RadiosTagHelper : FormGroupTagHelperBase
             return IdPrefix;
         }
 
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdPrefixAttributeName,
@@ -147,13 +147,13 @@ public class RadiosTagHelper : FormGroupTagHelperBase
 
     private bool TryResolveName([NotNullWhen(true)] out string? name)
     {
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             name = default;
             return false;
         }
 
-        name = Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        name = Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
         return true;
     }
 }

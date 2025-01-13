@@ -57,7 +57,7 @@ public class ErrorSummaryItemTagHelperTests
     }
 
     [Fact]
-    public async Task ProcessAsync_NoContentOrAspNetFor_ThrowsInvalidOperationException()
+    public async Task ProcessAsync_NoContentOrFor_ThrowsInvalidOperationException()
     {
         // Arrange
         var errorSummaryContext = new ErrorSummaryContext();
@@ -91,11 +91,11 @@ public class ErrorSummaryItemTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Content is required when the 'asp-for' attribute is not specified.", ex.Message);
+        Assert.Equal("Content is required when the 'for' attribute is not specified.", ex.Message);
     }
 
     [Fact]
-    public async Task ProcessAsync_AspForSpecified_UsesModelStateErrorMessageForContent()
+    public async Task ProcessAsync_ForSpecified_UsesModelStateErrorMessageForContent()
     {
         // Arrange
         var errorSummaryContext = new ErrorSummaryContext();
@@ -131,7 +131,7 @@ public class ErrorSummaryItemTagHelperTests
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            For = new ModelExpression(nameof(Model.Field), modelExplorer),
             ViewContext = viewContext
         };
 
@@ -184,7 +184,7 @@ public class ErrorSummaryItemTagHelperTests
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            For = new ModelExpression(nameof(Model.Field), modelExplorer),
             ViewContext = viewContext
         };
 
@@ -282,7 +282,7 @@ public class ErrorSummaryItemTagHelperTests
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            For = new ModelExpression(nameof(Model.Field), modelExplorer),
             ViewContext = viewContext
         };
 
@@ -337,7 +337,7 @@ public class ErrorSummaryItemTagHelperTests
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Date), modelExplorer),
+            For = new ModelExpression(nameof(Model.Date), modelExplorer),
             ViewContext = viewContext
         };
 
@@ -393,7 +393,7 @@ public class ErrorSummaryItemTagHelperTests
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
-            AspFor = new ModelExpression(nameof(Model.Field), modelExplorer),
+            For = new ModelExpression(nameof(Model.Field), modelExplorer),
             ViewContext = viewContext
         };
 

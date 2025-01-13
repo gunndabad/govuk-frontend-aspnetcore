@@ -23,6 +23,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
     internal const string TagName = "govuk-error-summary-item";
 
     private const string AspForAttributeName = "asp-for";
+    private const string ForAttributeName = "for";
     private const string LinkAttributesPrefix = "link-";
 
     private readonly GovUkFrontendAspNetCoreOptions _options;
@@ -53,7 +54,18 @@ public class ErrorSummaryItemTagHelper : TagHelper
     /// An expression to be evaluated against the current model.
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
-    public ModelExpression? AspFor { get; set; }
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
+        get => For;
+        set => For = value;
+    }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// Additional attributes to add to the generated <c>a</c> element.
@@ -71,10 +83,10 @@ public class ErrorSummaryItemTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (output.TagMode == TagMode.SelfClosing && AspFor == null)
+        if (output.TagMode == TagMode.SelfClosing && For == null)
         {
             throw new InvalidOperationException(
-                $"Content is required when the '{AspForAttributeName}' attribute is not specified.");
+                $"Content is required when the '{ForAttributeName}' attribute is not specified.");
         }
 
         var errorSummaryContext = context.GetContextItem<ErrorSummaryContext>();
@@ -94,12 +106,12 @@ public class ErrorSummaryItemTagHelper : TagHelper
         }
         else
         {
-            Debug.Assert(AspFor != null);
+            Debug.Assert(For != null);
 
             var validationMessage = _modelHelper.GetValidationMessage(
                 ViewContext!,
-                AspFor!.ModelExplorer,
-                AspFor.Name);
+                For!.ModelExplorer,
+                For.Name);
 
             if (validationMessage == null)
             {
@@ -116,10 +128,10 @@ public class ErrorSummaryItemTagHelper : TagHelper
             resolvedHref = hrefAttribute.Value.ToString();
             output.Attributes.Remove(hrefAttribute);
         }
-        else if (AspFor != null)
+        else if (For != null)
         {
             var errorFieldId = TagBuilder.CreateSanitizedId(
-                _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
+                _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name),
                 Constants.IdAttributeDotReplacement);
 
             // Date inputs are special; they don't have an element with ID which exactly corresponds to the name derived above;
@@ -135,7 +147,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
             {
                 var dateInputErrorComponents = DateInputErrorComponents.All;
 
-                if (_dateInputParseErrorsProvider.TryGetErrorsForModel(AspFor.Name, out var dateInputParseErrors))
+                if (_dateInputParseErrorsProvider.TryGetErrorsForModel(For.Name, out var dateInputParseErrors))
                 {
                     dateInputErrorComponents = dateInputParseErrors.GetErrorComponents();
                 }
@@ -171,9 +183,9 @@ public class ErrorSummaryItemTagHelper : TagHelper
 
         bool IsModelExpressionForDate()
         {
-            Debug.Assert(AspFor != null);
+            Debug.Assert(For != null);
 
-            var modelType = Nullable.GetUnderlyingType(AspFor!.Metadata.ModelType) ?? AspFor!.Metadata.ModelType;
+            var modelType = Nullable.GetUnderlyingType(For!.Metadata.ModelType) ?? For!.Metadata.ModelType;
             return _options.DateInputModelConverters.Any(c => c.CanConvertModelType(modelType));
         }
     }

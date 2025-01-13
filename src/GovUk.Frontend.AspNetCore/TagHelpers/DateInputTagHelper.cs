@@ -112,7 +112,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
     }
 
     private protected override FormGroupContext CreateFormGroupContext() =>
-        new DateInputContext(haveExplicitValue: _valueSpecified, AspFor);
+        new DateInputContext(haveExplicitValue: _valueSpecified, For);
 
     private protected override IHtmlContent GenerateFormGroupContent(
         TagHelperContext tagHelperContext,
@@ -176,21 +176,21 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
     private protected override string ResolveIdPrefix()
     {
-        if (AspFor == null && Id == null)
+        if (For == null && Id == null)
         {
             ThrowHelper.AtLeastOneOfAttributesMustBeSpecified(AspForAttributeName, IdAttributeName);
         }
 
         return Id ??
             TagBuilder.CreateSanitizedId(
-                ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name),
+                ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name),
                 Constants.IdAttributeDotReplacement);
     }
 
     private TagBuilder GenerateDateInput(DateInputContext dateInputContext, bool haveError)
     {
         var resolvedId = ResolveIdPrefix();
-        var resolvedName = AspFor != null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor.Name) : null;
+        var resolvedName = For != null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, For.Name) : null;
 
         // This is a deliberate deviation from the GDS implementation so it works better with ASP.NET Core's model binding system
         var resolvedNamePrefix = NamePrefix != null ? NamePrefix + "." :
@@ -199,7 +199,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
         var dateInputModelConverters = _options.DateInputModelConverters;
 
-        var valueAsDate = GetValueAsDate() ?? (AspFor != null ? GetValueFromModel() : null);
+        var valueAsDate = GetValueAsDate() ?? (For != null ? GetValueFromModel() : null);
         var errorItems = GetErrorComponents(dateInputContext);
 
         var day = CreateDateInputItem(
@@ -253,7 +253,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             var resolvedItemValue = contextItem?.ValueSpecified == true ? (contextItem.Value?.ToString() ?? string.Empty) :
                 _valueSpecified ? getComponentFromValue(valueAsDate) :
                 contextItem?.ValueSpecified == true ? contextItem.Value?.ToString() :
-                AspFor != null ? GetValueFromModelState() :
+                For != null ? GetValueFromModelState() :
                 null;
 
             var resolvedItemId = contextItem?.Id ?? $"{resolvedId}.{contextItem?.Name ?? defaultName}";
@@ -284,7 +284,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
             string? GetValueFromModelState()
             {
-                Debug.Assert(AspFor != null);
+                Debug.Assert(For != null);
 
                 // Can't use ModelHelper.GetModelValue here;
                 // custom Date types may not expose components via Day/Month/Year properties.
@@ -294,7 +294,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
                 //   If that fails, get the model and convert it to a Date using options.DateInputModelConverters.
                 //   From that extract the Day/Month/Year.
 
-                var expression = $"{AspFor.Name}.{defaultName}";
+                var expression = $"{For.Name}.{defaultName}";
                 var modelStateKey = ModelHelper.GetFullHtmlFieldName(ViewContext!, expression);
 
                 if (ViewContext!.ModelState.TryGetValue(modelStateKey, out var modelStateEntry) &&
@@ -330,10 +330,10 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
         DateOnly? GetValueFromModel()
         {
-            Debug.Assert(AspFor != null);
+            Debug.Assert(For != null);
 
-            var modelValue = AspFor!.Model;
-            var underlyingModelType = Nullable.GetUnderlyingType(AspFor.ModelExplorer.ModelType) ?? AspFor.ModelExplorer.ModelType;
+            var modelValue = For!.Model;
+            var underlyingModelType = Nullable.GetUnderlyingType(For.ModelExplorer.ModelType) ?? For.ModelExplorer.ModelType;
 
             if (modelValue is null)
             {
@@ -361,15 +361,15 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             return dateInputContext.ErrorComponents.Value;
         }
 
-        if (AspFor == null)
+        if (For == null)
         {
             return DateInputErrorComponents.All;
         }
 
-        Debug.Assert(AspFor != null);
+        Debug.Assert(For != null);
         Debug.Assert(ViewContext != null);
 
-        var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, AspFor.Name);
+        var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, For.Name);
 
         if (_dateInputParseErrorsProvider.TryGetErrorsForModel(fullName, out var parseErrors))
         {

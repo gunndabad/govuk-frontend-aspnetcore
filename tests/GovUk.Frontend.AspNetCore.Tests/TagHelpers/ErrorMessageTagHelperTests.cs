@@ -122,7 +122,7 @@ public class ErrorMessageTagHelperTests
 
         var tagHelper = new ErrorMessageTagHelper(htmlGenerator: null, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext()
         };
 
@@ -173,7 +173,7 @@ public class ErrorMessageTagHelperTests
 
         var tagHelper = new ErrorMessageTagHelper(new ComponentGenerator(), modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext()
         };
 

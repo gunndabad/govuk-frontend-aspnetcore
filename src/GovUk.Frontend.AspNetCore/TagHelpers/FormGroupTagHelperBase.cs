@@ -18,6 +18,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 public abstract class FormGroupTagHelperBase : TagHelper
 {
     private protected const string AspForAttributeName = "asp-for";
+    private protected const string ForAttributeName = "for";
     private protected const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
 
     private protected FormGroupTagHelperBase(
@@ -32,7 +33,18 @@ public abstract class FormGroupTagHelperBase : TagHelper
     /// An expression to be evaluated against the current model.
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
-    public ModelExpression? AspFor { get; set; }
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
+        get => For;
+        set => For = value;
+    }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="AspFor"/> expression should be used
@@ -126,12 +138,12 @@ public abstract class FormGroupTagHelperBase : TagHelper
         var content = formGroupContext.ErrorMessage?.Content;
         var attributes = formGroupContext.ErrorMessage?.Attributes;
 
-        if (content == null && AspFor != null && IgnoreModelStateErrors != true)
+        if (content == null && For != null && IgnoreModelStateErrors != true)
         {
             var validationMessage = ModelHelper.GetValidationMessage(
                 ViewContext!,
-                AspFor!.ModelExplorer,
-                AspFor.Name);
+                For!.ModelExplorer,
+                For.Name);
 
             if (validationMessage != null)
             {
@@ -174,9 +186,9 @@ public abstract class FormGroupTagHelperBase : TagHelper
         var content = formGroupContext.Hint?.Content;
         var attributes = formGroupContext.Hint?.Attributes;
 
-        if (content == null && AspFor != null)
+        if (content == null && For != null)
         {
-            var description = ModelHelper.GetDescription(AspFor.ModelExplorer);
+            var description = ModelHelper.GetDescription(For.ModelExplorer);
 
             if (description != null)
             {
@@ -200,7 +212,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     internal IHtmlContent GenerateLabel(FormGroupContext formGroupContext, string? labelClass)
     {
         // We need some content for the label; if AspFor is null then label content must have been specified
-        if (AspFor == null && formGroupContext.Label?.Content == null)
+        if (For == null && formGroupContext.Label?.Content == null)
         {
             throw new InvalidOperationException(
                 $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");
@@ -215,7 +227,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
         attributes.MergeCssClass(labelClass);
 
         var resolvedContent = content ??
-            new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(AspFor!.ModelExplorer, AspFor.Name) ?? string.Empty));
+            new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(For!.ModelExplorer, For.Name) ?? string.Empty));
 
         return Generator.GenerateLabel(resolvedIdPrefix, isPageHeading, resolvedContent, attributes);
     }
@@ -223,7 +235,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     internal IHtmlContent ResolveFieldsetLegendContent(FormGroupFieldsetContext fieldsetContext)
     {
         var resolvedFieldsetLegendContent = fieldsetContext.Legend?.Content ??
-            (AspFor is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(AspFor.ModelExplorer, AspFor.Name) ?? string.Empty)) : null);
+            (For is not null ? new HtmlString(HtmlEncoder.Default.Encode(ModelHelper.GetDisplayName(For.ModelExplorer, For.Name) ?? string.Empty)) : null);
 
         if (resolvedFieldsetLegendContent is null)
         {

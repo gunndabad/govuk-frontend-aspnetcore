@@ -87,7 +87,7 @@ public class SelectTagHelper : FormGroupTagHelperBase
     [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
     public IDictionary<string, string?>? SelectAttributes { get; set; } = new Dictionary<string, string?>();
 
-    private protected override FormGroupContext CreateFormGroupContext() => new SelectContext(AspFor);
+    private protected override FormGroupContext CreateFormGroupContext() => new SelectContext(For);
 
     private protected override IHtmlContent GenerateFormGroupContent(
         TagHelperContext tagHelperContext,
@@ -145,7 +145,7 @@ public class SelectTagHelper : FormGroupTagHelperBase
             return Id;
         }
 
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
@@ -160,13 +160,13 @@ public class SelectTagHelper : FormGroupTagHelperBase
 
     private string ResolveName()
     {
-        if (Name == null && AspFor == null)
+        if (Name == null && For == null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
+        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 }

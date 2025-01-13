@@ -250,7 +250,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -320,7 +320,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
             Value = value
         };
@@ -393,7 +393,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -466,7 +466,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -546,7 +546,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
         };
 
@@ -617,7 +617,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
             IgnoreModelStateErrors = true
         };
@@ -698,7 +698,7 @@ public class TextInputTagHelperTests
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            AspFor = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
             IgnoreModelStateErrors = true
         };

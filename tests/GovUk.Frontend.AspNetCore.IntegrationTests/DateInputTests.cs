@@ -21,12 +21,12 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
     public IBrowser Browser { get; }
 
     [Fact]
-    public async Task AspForDateProperty()
+    public async Task ForDateProperty()
     {
         var page = await Browser.NewPageAsync(new BrowserNewPageOptions() { BaseURL = ServerFixture.BaseUrl });
 
-        // Initial values should come from AspFor property
-        await page.GotoAsync("/DateInputTests/AspForDate");
+        // Initial values should come from For property
+        await page.GotoAsync("/DateInputTests/ForDate");
         await AssertFields(page, "1", "4", "2020");
 
         // Change the values and POST them, including some invalid values
@@ -45,12 +45,12 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
     }
 
     [Fact]
-    public async Task AspForCustomDateProperty()
+    public async Task ForCustomDateProperty()
     {
         var page = await Browser.NewPageAsync(new BrowserNewPageOptions() { BaseURL = ServerFixture.BaseUrl });
 
-        // Initial values should come from AspFor property
-        await page.GotoAsync("/DateInputTests/AspForCustomDate");
+        // Initial values should come from For property
+        await page.GotoAsync("/DateInputTests/ForCustomDate");
         await AssertFields(page, "1", "4", "2020");
 
         // Change the values and POST them, including some invalid values
@@ -73,7 +73,7 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
     {
         var page = await Browser.NewPageAsync(new BrowserNewPageOptions() { BaseURL = ServerFixture.BaseUrl });
 
-        // Initial values should come from AspFor property
+        // Initial values should come from For property
         await page.GotoAsync("/DateInputTests/ValueDate");
         await AssertFields(page, "1", "4", "2020");
 
@@ -97,7 +97,7 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
     {
         var page = await Browser.NewPageAsync(new BrowserNewPageOptions() { BaseURL = ServerFixture.BaseUrl });
 
-        // Initial values should come from AspFor property
+        // Initial values should come from For property
         await page.GotoAsync("/DateInputTests/ValueCustomDate");
         await AssertFields(page, "1", "4", "2020");
 
@@ -209,11 +209,11 @@ public class DateInputTestsFixture : ServerFixture
 [Route("DateInputTests")]
 public class DateInputsTestController : Controller
 {
-    [HttpGet("AspForDate")]
-    public IActionResult GetAspForDate() => View("AspForDate", new DateInputsTestsModel() { Date = new(2020, 4, 1) });
+    [HttpGet("ForDate")]
+    public IActionResult GetForDate() => View("ForDate", new DateInputsTestsModel() { Date = new(2020, 4, 1) });
 
-    [HttpPost("AspForDate")]
-    public IActionResult PostAspForDate(DateInputsTestsModel model) => View("AspForDate", model);
+    [HttpPost("ForDate")]
+    public IActionResult PostForDate(DateInputsTestsModel model) => View("ForDate", model);
 
     [HttpGet("ValueDate")]
     public IActionResult GetValueDate() => View("ValueDate", new DateInputsTestsModel() { Date = new(2020, 4, 1) });
@@ -221,13 +221,13 @@ public class DateInputsTestController : Controller
     [HttpPost("ValueDate")]
     public IActionResult PostValueDate(DateInputsTestsModel model) => View("ValueDate", model);
 
-    [HttpGet("AspForCustomDate")]
-    public IActionResult GetAspForCustomDate() => View(
-        "AspForCustomDate",
+    [HttpGet("ForCustomDate")]
+    public IActionResult GetForCustomDate() => View(
+        "ForCustomDate",
         new DateInputsTestsModel() { CustomDate = new CustomDateType(2020, 4, 1) });
 
-    [HttpPost("AspForCustomDate")]
-    public IActionResult PostAspForCustomDate(DateInputsTestsModel model) => View("AspForCustomDate", model);
+    [HttpPost("ForCustomDate")]
+    public IActionResult PostForCustomDate(DateInputsTestsModel model) => View("ForCustomDate", model);
 
     [HttpGet("ValueCustomDate")]
     public IActionResult GetValueCustomDate() => View(

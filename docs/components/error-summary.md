@@ -33,7 +33,7 @@ To disable globally set the `PrependErrorSummaryToForms` property on `GovUkFront
 
 ```razor
 <govuk-error-summary>
-    <govuk-error-summary-item asp-for="FullName" />
+    <govuk-error-summary-item for="FullName" />
 </govuk-error-summary>
 ```
 
@@ -43,8 +43,8 @@ To disable globally set the `PrependErrorSummaryToForms` property on `GovUkFront
 
 ### `<govuk-error-summary>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute            | Type   | Description                                                                                                 |
+|----------------------|--------|-------------------------------------------------------------------------------------------------------------|
 | `disable-auto-focus` | `bool` | Whether to disable the behavior that focuses the error summary when the page loads. The default is `false`. |
 
 ### `<govuk-error-summary-title>`
@@ -59,14 +59,14 @@ Must be inside a `<govuk-error-summary>` element.
 
 ### `<govuk-error-summary-item>`
 
-The content is the HTML to use within the error link item. Content is required if the `asp-for` attribute is not specified.\
+The content is the HTML to use within the error link item. Content is required if the `for` attribute is not specified.\
 
-If `asp-for` is specified and there are no errors in `ModelState` then the item will not be rendered.
+If `for` is specified and there are no errors in `ModelState` then the item will not be rendered.
 
 Must be inside a `<govuk-error-summary>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `asp-for` | `ModelExpression` | The model expression used to generate the error message. If content is specified this attribute is ignored. See [documentation on forms](../forms.md) for more information. |
-| `link-*` | | Additional attributes to add to the generated `a` element. |
-| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| Attribute         | Type              | Description                                                                                                                                                                 |
+|-------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `for`             | `ModelExpression` | The model expression used to generate the error message. If content is specified this attribute is ignored. See [documentation on forms](../forms.md) for more information. |
+| `link-*`          |                   | Additional attributes to add to the generated `a` element.                                                                                                                  |
+| (link attributes) |                   | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information.                                      |
