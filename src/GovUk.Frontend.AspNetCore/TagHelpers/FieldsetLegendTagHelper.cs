@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -9,6 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = FieldsetTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.FieldsetLegendElement)]
+[Obsolete("This tag helper will be removed in a future release.")]
 public class FieldsetLegendTagHelper : TagHelper
 {
     internal const string TagName = "govuk-fieldset-legend";
