@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Net.Http.Headers;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -177,7 +178,10 @@ public class EncodedAttributesDictionary : IReadOnlyDictionary<string, string>
             newValue = GetEncodedAttributeValue(currentValue) + " " + newValue;
         }
 
-        _attributes.SetAttribute(new TagHelperAttribute("class", newValue));
+        if (newValue.Length > 0)
+        {
+            _attributes.SetAttribute(new TagHelperAttribute("class", newValue));
+        }
     }
 
     /// <summary>
