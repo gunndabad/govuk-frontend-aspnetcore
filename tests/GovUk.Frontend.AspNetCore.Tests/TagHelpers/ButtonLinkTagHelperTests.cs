@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -10,9 +12,16 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class ButtonLinkTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "my-button";
+        var isStartButton = true;
+        var href = "http://foo.com";
+        var classes = "custom-class";
+        var dataFooAttrValue = "bar";
+        var content = "Button text";
+
         var context = new TagHelperContext(
             tagName: "govuk-button-link",
             allAttributes: new TagHelperAttributeList(),
@@ -23,104 +32,45 @@ public class ButtonLinkTagHelperTests
             "govuk-button-link",
             attributes: new TagHelperAttributeList()
             {
-                { "href", "http://foo.com" }
+                { "href", href },
+                { "class", classes },
+                { "data-foo", dataFooAttrValue },
             },
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
+                tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ButtonLinkTagHelper();
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ButtonOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
 
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var expectedHtml = @"
-<a class=""govuk-button"" data-module=""govuk-button"" draggable=""false"" href=""http://foo.com"" role=""button"">
-    Button text
-</a>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_IsStartButton_AddsIconToOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-button-link",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-button-link",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "http://foo.com" }
-            },
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new ButtonLinkTagHelper()
+        var tagHelper = new ButtonLinkTagHelper(componentGeneratorMock.Object)
         {
-            IsStartButton = true
+            Id = id,
+            IsStartButton = isStartButton,
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var element = output.RenderToElement();
-
-        Assert.Contains("govuk-button--start", element.ClassList);
-
-        Assert.Collection(
-            element.QuerySelectorAll("svg"),
-            svg => Assert.Contains("govuk-button__start-icon", svg.ClassList));
-    }
-
-    [Fact]
-    public async Task ProcessAsync_Disabled_AddsDisabledAttributesToOutput()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-button-link",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-button-link",
-            attributes: new TagHelperAttributeList()
-            {
-                { "href", "http://foo.com" }
-            },
-            getChildContentAsync: (useCachedResult, encoder) =>
-            {
-                var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Button text");
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new ButtonLinkTagHelper()
-        {
-            Disabled = true
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-
-        Assert.Contains("govuk-button--disabled", element.ClassList);
+        Assert.NotNull(actualOptions);
+        Assert.Equal("a", actualOptions!.Element?.ToHtmlString());
+        Assert.Equal(content, actualOptions.Html?.ToHtmlString());
+        Assert.Null(actualOptions.Text);
+        Assert.Null(actualOptions.Name);
+        Assert.Null(actualOptions.Type);
+        Assert.Null(actualOptions.Value);
+        Assert.Null(actualOptions.Disabled);
+        Assert.Equal(href, actualOptions.Href?.ToHtmlString());
+        Assert.Equal(classes, actualOptions.Classes?.ToHtmlString());
+        Assert.NotNull(actualOptions.Attributes);
+        Assert.Contains(actualOptions.Attributes, kvp => kvp.Key == "data-foo" && kvp.Value == dataFooAttrValue);
+        Assert.Null(actualOptions.PreventDoubleClick);
+        Assert.Equal(isStartButton, actualOptions.IsStartButton);
+        Assert.Equal(id, actualOptions.Id?.ToHtmlString());
     }
 }

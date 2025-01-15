@@ -30,6 +30,13 @@ public class ComponentTests
             (generator, options) => generator.GenerateBreadcrumbs(options).ToHtmlString());
 
     [Theory]
+    [ComponentFixtureData("button", typeof(ButtonOptions))]
+    public void Button(ComponentTestCaseData<ButtonOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateButton(options).ToHtmlString());
+
+    [Theory]
     [ComponentFixtureData("character-count", typeof(CharacterCountOptions))]
     public void CharacterCount(ComponentTestCaseData<CharacterCountOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
