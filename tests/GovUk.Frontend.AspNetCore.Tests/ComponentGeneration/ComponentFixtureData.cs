@@ -70,7 +70,16 @@ public class ComponentFixtureData : DataAttribute
                 continue;
             }
 
-            var options = fixture["options"]!.Deserialize(_optionsType, _serializerOptions);
+            object options;
+            try
+            {
+                options = fixture["options"]!.Deserialize(_optionsType, _serializerOptions)!;
+            }
+            catch (JsonException e)
+            {
+                throw new Exception($"Failed deserializing fixture options for '{name}'.", e);
+            }
+
             var html = fixture["html"]!.ToString();
 
             var testCaseData = Activator.CreateInstance(testCaseDataType, name, options, html)!;

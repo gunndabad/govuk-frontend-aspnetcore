@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -199,6 +200,11 @@ public class HtmlTagBuilder : IHtmlContent
 
         return this;
     }
+
+    /// <inheritdoc cref="EncodedAttributesDictionary.AddCssClasses(IEnumerable{string})"/>
+    /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
+    public HtmlTagBuilder WithCssClasses(params string[] classNames) =>
+        WithCssClasses(classNames.AsEnumerable());
 
     /// <inheritdoc cref="EncodedAttributesDictionary.AddCssClasses(IEnumerable{string})"/>
     /// <returns>This <see cref="HtmlTagBuilder"/> to allow calls to be chained.</returns>
