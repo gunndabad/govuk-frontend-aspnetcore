@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,43 +8,42 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS tag component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.TagElement)]
+[OutputElementHint(DefaultComponentGenerator.TagElement)]
 public class TagTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tag";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="TagTagHelper"/>.
     /// </summary>
-    public TagTagHelper()
-        : this(htmlGenerator: null)
+    public TagTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal TagTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        _componentGenerator = componentGenerator;
     }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var childContent = (await output.GetChildContentAsync()).Snapshot();
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateTag(childContent, output.Attributes.ToAttributeDictionary());
+        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateTag(new TagOptions()
+        {
+            Text = null,
+            Html = childContent,
+            Attributes = attributes,
+            Classes = classes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        component.WriteTo(output);
     }
 }
