@@ -4,7 +4,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-public record ButtonOptions
+public class ButtonOptions
 {
     public string? Element { get; set; }
     public IHtmlContent? Html { get; set; }
