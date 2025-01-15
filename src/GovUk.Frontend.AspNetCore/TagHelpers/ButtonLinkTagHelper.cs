@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,41 +8,27 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS button component that renders an &lt;a&gt; element.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.ButtonLinkElement)]
+[OutputElementHint(Element)]
 public class ButtonLinkTagHelper : TagHelper
 {
     internal const string TagName = "govuk-button-link";
+    internal const string Element = "a";
 
-    private const string DisabledAttributeName = "disabled";
     private const string IdAttributeName = "id";
     private const string IsStartButtonAttributeName = "is-start-button";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a <see cref="ButtonLinkTagHelper"/>.
     /// </summary>
-    public ButtonLinkTagHelper()
-        : this(htmlGenerator: null)
+    public ButtonLinkTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal ButtonLinkTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
-    /// Whether the button should be disabled.
-    /// </summary>
-    /// <remarks>
-    /// The default is <c>false</c>.
-    /// </remarks>
-    [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
-
-    /// <summary>
-    /// The <c>id</c> attribute.
+    /// The <c>id</c> attribute for the generated <c>button</c> element..
     /// </summary>
     [HtmlAttributeName(IdAttributeName)]
     public string? Id { get; set; }
@@ -51,34 +36,34 @@ public class ButtonLinkTagHelper : TagHelper
     /// <summary>
     /// Whether this button is the main call to action on your service's start page.
     /// </summary>
-    /// <remarks>
-    /// The default is <c>false</c>.
-    /// </remarks>
     [HtmlAttributeName(IsStartButtonAttributeName)]
-    public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;
+    public bool IsStartButton { get; set; } = false;
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateButtonLink(
-            IsStartButton,
-            Disabled,
-            Id,
-            childContent.Snapshot(),
-            output.Attributes.ToAttributeDictionary());
+        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        attributes.Remove("class", out var classes);
+        attributes.Remove("href", out var href);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = _componentGenerator.GenerateButton(new ButtonOptions()
+        {
+            Element = Element.ToHtmlContent(),
+            Html = content,
+            Href = href,
+            Classes = classes,
+            Attributes = attributes,
+            IsStartButton = IsStartButton,
+            Id = Id.ToHtmlContent()
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        component.WriteTo(output);
     }
 }

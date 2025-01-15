@@ -1,8 +1,7 @@
+using System;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -10,55 +9,54 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS button component that renders a &lt;button&gt; element.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.ButtonElement)]
+[OutputElementHint(Element)]
 public class ButtonTagHelper : TagHelper
 {
     internal const string TagName = "govuk-button";
+    internal const string Element = "button";
 
     private const string DisabledAttributeName = "disabled";
     private const string IdAttributeName = "id";
     private const string IsStartButtonAttributeName = "is-start-button";
+    private const string NameAttributeName = "name";
     private const string PreventDoubleClickAttributeName = "prevent-double-click";
     private const string TypeAttributeName = "type";
+    private const string ValueAttributeName = "value";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="ButtonTagHelper"/>.
     /// </summary>
-    public ButtonTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
-        : this(htmlGenerator: null)
+    public ButtonTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal ButtonTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
     /// Whether the button should be disabled.
     /// </summary>
-    /// <remarks>
-    /// The default is <c>false</c>.
-    /// </remarks>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.ButtonDefaultDisabled;
+    public bool Disabled { get; set; } = false;
 
     /// <summary>
-    /// The <c>id</c> attribute.
+    /// The <c>id</c> attribute for the generated <c>button</c> element.
     /// </summary>
     [HtmlAttributeName(IdAttributeName)]
     public string? Id { get; set; }
 
     /// <summary>
+    /// The <c>name</c> attribute for the generated <c>button</c> element.
+    /// </summary>
+    [HtmlAttributeName(NameAttributeName)]
+    public string? Name { get; set; }
+
+    /// <summary>
     /// Whether this button is the main call to action on your service's start page.
     /// </summary>
-    /// <remarks>
-    /// The default is <c>false</c>.
-    /// </remarks>
     [HtmlAttributeName(IsStartButtonAttributeName)]
-    public bool IsStartButton { get; set; } = ComponentGenerator.ButtonDefaultIsStartButton;
+    public bool IsStartButton { get; set; } = false;
 
     /// <summary>
     /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.
@@ -75,36 +73,40 @@ public class ButtonTagHelper : TagHelper
     [HtmlAttributeName(TypeAttributeName)]
     public string? Type { get; set; }
 
+    /// <summary>
+    /// The <c>value</c> attribute for the generated <c>button</c> element.
+    /// </summary>
+    [HtmlAttributeName(ValueAttributeName)]
+    public string? Value { get; set; }
+
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var content = (await output.GetChildContentAsync()).Snapshot();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var attributes = output.Attributes.ToAttributeDictionary();
+        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        if (Type is not null)
+        var component = _componentGenerator.GenerateButton(new ButtonOptions()
         {
-            attributes.Add("type", Type);
-        }
+            Element = Element.ToHtmlContent(),
+            Html = content,
+            Name = Name.ToHtmlContent(),
+            Type = Type.ToHtmlContent(),
+            Value = Value.ToHtmlContent(),
+            Disabled = Disabled,
+            Classes = classes,
+            Attributes = attributes,
+            PreventDoubleClick = PreventDoubleClick,
+            IsStartButton = IsStartButton,
+            Id = Id.ToHtmlContent()
+        });
 
-        var tagBuilder = _htmlGenerator.GenerateButton(
-            IsStartButton,
-            Disabled,
-            PreventDoubleClick,
-            Id,
-            childContent,
-            attributes);
-
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
-
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        component.WriteTo(output);
     }
 }

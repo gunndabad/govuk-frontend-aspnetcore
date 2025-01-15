@@ -18,6 +18,12 @@ public interface IComponentGenerator
     HtmlTagBuilder GenerateBreadcrumbs(BreadcrumbsOptions options);
 
     /// <summary>
+    /// Generates a button component.
+    /// </summary>
+    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
+    HtmlTagBuilder GenerateButton(ButtonOptions options);
+
+    /// <summary>
     /// Generates a character count component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
