@@ -29,7 +29,7 @@ internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
                     typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
                     root: "Content/Compiled");
 
-                app.UseMiddleware<RewriteCssUrlsMiddleware>(fileProvider);
+                app.UseMiddleware<RewriteCompiledAssetsMiddleware>(fileProvider);
 
                 app.UseStaticFiles(new StaticFileOptions()
                 {

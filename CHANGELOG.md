@@ -10,6 +10,12 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 #### `<govuk-error-message>` and `<govuk-fieldset>` tag helpers
 The `<govuk-error-message>` and `<govuk-fieldset>` tag helpers are deprecated and will be removed in a future release.
 
+### Fixes
+
+#### Source map errors
+The hosted CSS and JavaScript files no longer have source maps.
+Any console errors from browsers failing to download the referenced files should be eliminated.
+
 ## 2.8.0
 
 Targets GOV.UK Frontend v5.8.0.
