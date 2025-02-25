@@ -17,7 +17,6 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [OutputElementHint(ComponentGenerator.ErrorMessageElement)]
-[Obsolete("This tag helper will be removed in a future release.")]
 public class ErrorMessageTagHelper : TagHelper
 {
     internal const string TagName = "govuk-error-message";
