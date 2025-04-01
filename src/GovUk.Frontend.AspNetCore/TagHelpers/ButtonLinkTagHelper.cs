@@ -55,13 +55,13 @@ public class ButtonLinkTagHelper : TagHelper
 
         var component = _componentGenerator.GenerateButton(new ButtonOptions()
         {
-            Element = Element.ToHtmlContent(),
+            Element = Element,
             Html = content,
             Href = href,
             Classes = classes,
             Attributes = attributes,
             IsStartButton = IsStartButton,
-            Id = Id.ToHtmlContent()
+            Id = Id.EncodeHtml()
         });
 
         component.WriteTo(output);

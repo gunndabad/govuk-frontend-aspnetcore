@@ -227,7 +227,7 @@ public class TextInputTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var name = ResolveName();
+        var name = ResolveNameUnencoded();
         var id = ResolveId(name);
         var value = ResolveValue();
         var labelOptions = textInputContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
@@ -238,7 +238,7 @@ public class TextInputTagHelper : TagHelper
 
         if (LabelClass is not null)
         {
-            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass);
+            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass.EncodeHtml());
         }
 
         var formGroupAttributes = new EncodedAttributesDictionary(output.Attributes);
@@ -259,12 +259,12 @@ public class TextInputTagHelper : TagHelper
         var component = _componentGenerator.GenerateTextInput(new TextInputOptions()
         {
             Id = id,
-            Name = name,
-            Type = Type.ToHtmlContent(),
-            Inputmode = InputMode.ToHtmlContent(),
+            Name = name.EncodeHtml(),
+            Type = Type.EncodeHtml(),
+            Inputmode = InputMode.EncodeHtml(),
             Value = value,
             Disabled = Disabled,
-            DescribedBy = DescribedBy.ToHtmlContent(),
+            DescribedBy = DescribedBy.EncodeHtml(),
             Label = labelOptions,
             Hint = hintOptions,
             ErrorMessage = errorMessageOptions,
@@ -272,10 +272,10 @@ public class TextInputTagHelper : TagHelper
             Suffix = suffixOptions,
             FormGroup = formGroupOptions,
             Classes = classes,
-            Autocomplete = Autocomplete.ToHtmlContent(),
-            Pattern = Pattern.ToHtmlContent(),
+            Autocomplete = Autocomplete.EncodeHtml(),
+            Pattern = Pattern.EncodeHtml(),
             Spellcheck = Spellcheck,
-            Autocapitalize = Autocapitalize.ToHtmlContent(),
+            Autocapitalize = Autocapitalize.EncodeHtml(),
             InputWrapper = new TextInputOptionsInputWrapper()
             {
                 Classes = inputWrapperClasses,
@@ -289,21 +289,21 @@ public class TextInputTagHelper : TagHelper
         if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
         {
             Debug.Assert(errorMessageOptions.Html is not null);
-            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id));
+            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id.ToHtmlString()));
         }
     }
 
-    private IHtmlContent ResolveId(IHtmlContent name)
+    private IHtmlContent ResolveId(string nameUnencoded)
     {
         if (Id is not null)
         {
-            return new HtmlString(Id);
+            return Id.EncodeHtml();
         }
 
-        return new HtmlString(TagBuilder.CreateSanitizedId(name.ToHtmlString(), Constants.IdAttributeDotReplacement));
+        return TagBuilder.CreateSanitizedId(nameUnencoded, Constants.IdAttributeDotReplacement).EncodeHtml();
     }
 
-    private IHtmlContent ResolveName()
+    private string ResolveNameUnencoded()
     {
         if (Name is null && For is null)
         {
@@ -312,16 +312,16 @@ public class TextInputTagHelper : TagHelper
                 AspForAttributeName);
         }
 
-        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name));
+        return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 
     private IHtmlContent? ResolveValue()
     {
         if (_valueSpecified)
         {
-            return new HtmlString(_value);
+            return _value.EncodeHtml();
         }
 
-        return For is not null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name)) : null;
+        return For is not null ? _modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name).EncodeHtml() : null;
     }
 }

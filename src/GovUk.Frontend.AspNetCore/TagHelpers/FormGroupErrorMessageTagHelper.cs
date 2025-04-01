@@ -67,7 +67,7 @@ public class FormGroupErrorMessageTagHelper : TagHelper
         else if (context.TryGetContextItem<FormGroupContext2>(out var formGroupContext2))
         {
             formGroupContext2.SetErrorMessage(
-                VisuallyHiddenText.ToHtmlContent(),
+                VisuallyHiddenText.EncodeHtml(),
                 new EncodedAttributesDictionary(output.Attributes),
                 childContent?.Snapshot(),
                 output.TagName);
