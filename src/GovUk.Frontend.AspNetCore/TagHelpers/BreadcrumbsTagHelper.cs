@@ -66,7 +66,7 @@ public class BreadcrumbsTagHelper : TagHelper
             Classes = classes,
             Attributes = attributes,
             Items = breadcrumbsContext.Items,
-            LabelText = LabelText.ToHtmlContent()
+            LabelText = LabelText.EncodeHtml()
         });
 
         component.WriteTo(output);
