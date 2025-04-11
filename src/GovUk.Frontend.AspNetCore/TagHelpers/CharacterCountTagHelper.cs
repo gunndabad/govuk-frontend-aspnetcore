@@ -253,7 +253,7 @@ public class CharacterCountTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var name = ResolveName();
+        var name = ResolveNameUnencoded();
         var id = ResolveId(name);
         var value = ResolveValue(characterCountContext);
         var labelOptions = characterCountContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
@@ -278,7 +278,7 @@ public class CharacterCountTagHelper : TagHelper
 
         if (Autocomplete is not null)
         {
-            attributes.Add("autocomplete", Autocomplete!.ToHtmlContent()!);
+            attributes.Add("autocomplete", Autocomplete!.EncodeHtml()!);
         }
 
         if (Disabled)
@@ -293,7 +293,7 @@ public class CharacterCountTagHelper : TagHelper
         var component = _componentGenerator.GenerateCharacterCount(new CharacterCountOptions
         {
             Id = id,
-            Name = name,
+            Name = name.EncodeHtml(),
             Rows = Rows,
             Value = value,
             MaxLength = MaxLength,
@@ -325,21 +325,21 @@ public class CharacterCountTagHelper : TagHelper
         if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
         {
             Debug.Assert(errorMessageOptions.Html is not null);
-            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id));
+            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id.ToHtmlString()));
         }
     }
 
-    private IHtmlContent ResolveId(IHtmlContent name)
+    private IHtmlContent ResolveId(string nameUnencoded)
     {
         if (Id is not null)
         {
-            return new HtmlString(Id);
+            return Id.EncodeHtml();
         }
 
-        return new HtmlString(TagBuilder.CreateSanitizedId(name.ToHtmlString(), Constants.IdAttributeDotReplacement));
+        return TagBuilder.CreateSanitizedId(nameUnencoded, Constants.IdAttributeDotReplacement).EncodeHtml();
     }
 
-    private IHtmlContent ResolveName()
+    private string ResolveNameUnencoded()
     {
         if (Name is null && For is null)
         {
@@ -348,7 +348,7 @@ public class CharacterCountTagHelper : TagHelper
                 AspForAttributeName);
         }
 
-        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name));
+        return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 
     private IHtmlContent? ResolveValue(CharacterCountContext characterCountContext)
@@ -358,6 +358,6 @@ public class CharacterCountTagHelper : TagHelper
             return characterCountContext.Value;
         }
 
-        return For is not null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name)) : null;
+        return For is not null ? _modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name).EncodeHtml() : null;
     }
 }
