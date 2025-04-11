@@ -98,7 +98,7 @@ public class ErrorMessageTagHelper : TagHelper
 
             if (validationMessage != null)
             {
-                resolvedContent = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
+                resolvedContent = validationMessage.EncodeHtml();
             }
         }
 
