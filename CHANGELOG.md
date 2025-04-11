@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.3.2
+
+### Fixes
+
+#### Attribute encoding
+Newly-refactored tag helpers now correctly encode their attributes.
+
 ## 2.3.0
 
 Targets GOV.UK Frontend v5.3.1 and .NET 8.

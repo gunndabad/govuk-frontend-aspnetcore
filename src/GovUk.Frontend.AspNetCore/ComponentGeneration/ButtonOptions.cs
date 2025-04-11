@@ -6,7 +6,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public record ButtonOptions
 {
-    public IHtmlContent? Element { get; set; }
+    public string? Element { get; set; }
     public IHtmlContent? Html { get; set; }
     public string? Text { get; set; }
     public IHtmlContent? Name { get; set; }
@@ -22,14 +22,12 @@ public record ButtonOptions
 
     internal void Validate()
     {
-        var elementStr = Element?.ToHtmlString();
-
-        if (elementStr is not null && elementStr != "a" && elementStr != "button" && elementStr != "input")
+        if (Element is not null && Element != "a" && Element != "button" && Element != "input")
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Element)} must be 'a', 'button', or 'input'.");
         }
 
-        if (elementStr == "input" && IsStartButton == true)
+        if (Element == "input" && IsStartButton == true)
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(IsStartButton)} cannot be specified for 'input' elements.");
         }
@@ -39,12 +37,12 @@ public record ButtonOptions
             throw new InvalidOptionsException(GetType(), $"{nameof(PreventDoubleClick)} can only be specified for 'button' or 'input' elements.");
         }
 
-        if (elementStr == "a" && Disabled is not null)
+        if (Element == "a" && Disabled is not null)
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Disabled)} cannot be specified for 'a' elements.");
         }
 
-        if (Html.NormalizeEmptyString() is not null && elementStr == "input")
+        if (Html.NormalizeEmptyString() is not null && Element == "input")
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Html)} cannot be specified for 'input' elements.");
         }
@@ -56,5 +54,5 @@ public record ButtonOptions
     }
 
     internal string GetElement() =>
-        Element?.ToHtmlString().NormalizeEmptyString() ?? (Href.NormalizeEmptyString() is not null ? "a" : "button");
+        Element?.NormalizeEmptyString() ?? (Href.NormalizeEmptyString() is not null ? "a" : "button");
 }
