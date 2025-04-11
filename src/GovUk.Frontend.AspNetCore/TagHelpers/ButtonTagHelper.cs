@@ -94,17 +94,17 @@ public class ButtonTagHelper : TagHelper
 
         var component = _componentGenerator.GenerateButton(new ButtonOptions()
         {
-            Element = Element.ToHtmlContent(),
+            Element = Element,
             Html = content,
-            Name = Name.ToHtmlContent(),
-            Type = Type.ToHtmlContent(),
-            Value = Value.ToHtmlContent(),
+            Name = Name.EncodeHtml(),
+            Type = Type.EncodeHtml(),
+            Value = Value.EncodeHtml(),
             Disabled = Disabled,
             Classes = classes,
             Attributes = attributes,
             PreventDoubleClick = PreventDoubleClick,
             IsStartButton = IsStartButton,
-            Id = Id.ToHtmlContent()
+            Id = Id.EncodeHtml()
         });
 
         component.WriteTo(output);

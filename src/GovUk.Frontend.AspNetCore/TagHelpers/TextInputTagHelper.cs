@@ -237,7 +237,7 @@ public class TextInputTagHelper : TagHelper
 
         if (LabelClass is not null)
         {
-            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass);
+            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass.EncodeHtml());
         }
 
         var formGroupAttributes = new EncodedAttributesDictionary(output.Attributes);
@@ -296,7 +296,7 @@ public class TextInputTagHelper : TagHelper
     {
         if (Id is not null)
         {
-            return new HtmlString(Id);
+            return Id.EncodeHtml();
         }
 
         return TagBuilder.CreateSanitizedId(nameUnencoded, Constants.IdAttributeDotReplacement).EncodeHtml();
@@ -321,6 +321,6 @@ public class TextInputTagHelper : TagHelper
             return _value.EncodeHtml();
         }
 
-        return AspFor != null ? _modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name).EncodeHtml() : null;
+        return AspFor is not null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null;
     }
 }

@@ -278,7 +278,7 @@ public class CharacterCountTagHelper : TagHelper
 
         if (Autocomplete is not null)
         {
-            attributes.Add("autocomplete", Autocomplete!.EncodeHtml());
+            attributes.Add("autocomplete", Autocomplete!.EncodeHtml()!);
         }
 
         if (Disabled)
@@ -358,6 +358,6 @@ public class CharacterCountTagHelper : TagHelper
             return characterCountContext.Value;
         }
 
-        return AspFor != null ? _modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name).EncodeHtml() : null;
+        return AspFor is not null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null;
     }
 }

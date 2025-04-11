@@ -58,7 +58,7 @@ public class ButtonLinkTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions);
-        Assert.Equal("a", actualOptions!.Element?.ToHtmlString());
+        Assert.Equal("a", actualOptions!.Element);
         Assert.Equal(content, actualOptions.Html?.ToHtmlString());
         Assert.Null(actualOptions.Text);
         Assert.Null(actualOptions.Name);
