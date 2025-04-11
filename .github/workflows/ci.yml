@@ -5,6 +5,7 @@ on:
     branches:
     - dev
     - main
+    - v*
     tags:
     - v*
     paths-ignore:

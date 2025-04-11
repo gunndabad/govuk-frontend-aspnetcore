@@ -226,7 +226,7 @@ public class TextInputTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var name = ResolveName();
+        var name = ResolveNameUnencoded();
         var id = ResolveId(name);
         var value = ResolveValue();
         var labelOptions = textInputContext.GetLabelOptions(AspFor, ViewContext!, _modelHelper, id, AspForAttributeName);
@@ -258,12 +258,12 @@ public class TextInputTagHelper : TagHelper
         var component = _componentGenerator.GenerateTextInput(new TextInputOptions()
         {
             Id = id,
-            Name = name,
-            Type = Type.ToHtmlContent(),
-            Inputmode = InputMode.ToHtmlContent(),
+            Name = name.EncodeHtml(),
+            Type = Type.EncodeHtml(),
+            Inputmode = InputMode.EncodeHtml(),
             Value = value,
             Disabled = Disabled,
-            DescribedBy = DescribedBy.ToHtmlContent(),
+            DescribedBy = DescribedBy.EncodeHtml(),
             Label = labelOptions,
             Hint = hintOptions,
             ErrorMessage = errorMessageOptions,
@@ -271,10 +271,10 @@ public class TextInputTagHelper : TagHelper
             Suffix = suffixOptions,
             FormGroup = formGroupOptions,
             Classes = classes,
-            Autocomplete = Autocomplete.ToHtmlContent(),
-            Pattern = Pattern.ToHtmlContent(),
+            Autocomplete = Autocomplete.EncodeHtml(),
+            Pattern = Pattern.EncodeHtml(),
             Spellcheck = Spellcheck,
-            Autocapitalize = Autocapitalize.ToHtmlContent(),
+            Autocapitalize = Autocapitalize.EncodeHtml(),
             InputWrapper = new TextInputOptionsInputWrapper()
             {
                 Classes = inputWrapperClasses,
@@ -288,21 +288,21 @@ public class TextInputTagHelper : TagHelper
         if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
         {
             Debug.Assert(errorMessageOptions.Html is not null);
-            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id));
+            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id.ToHtmlString()));
         }
     }
 
-    private IHtmlContent ResolveId(IHtmlContent name)
+    private IHtmlContent ResolveId(string nameUnencoded)
     {
         if (Id is not null)
         {
             return new HtmlString(Id);
         }
 
-        return new HtmlString(TagBuilder.CreateSanitizedId(name.ToHtmlString(), Constants.IdAttributeDotReplacement));
+        return TagBuilder.CreateSanitizedId(nameUnencoded, Constants.IdAttributeDotReplacement).EncodeHtml();
     }
 
-    private IHtmlContent ResolveName()
+    private string ResolveNameUnencoded()
     {
         if (Name is null && AspFor is null)
         {
@@ -311,16 +311,16 @@ public class TextInputTagHelper : TagHelper
                 AspForAttributeName);
         }
 
-        return new HtmlString(Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name));
+        return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, AspFor!.Name);
     }
 
     private IHtmlContent? ResolveValue()
     {
         if (_valueSpecified)
         {
-            return new HtmlString(_value);
+            return _value.EncodeHtml();
         }
 
-        return AspFor != null ? new HtmlString(_modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name)) : null;
+        return AspFor != null ? _modelHelper.GetModelValue(ViewContext!, AspFor.ModelExplorer, AspFor.Name).EncodeHtml() : null;
     }
 }
