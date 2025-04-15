@@ -48,7 +48,7 @@ public class ErrorMessageTagHelper : TagHelper
     /// An expression to be evaluated against the current model.
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
-    [Obsolete("Use the 'for' attribute instead.")]
+    [Obsolete("Use the 'for' attribute instead.", DiagnosticId = DiagnosticIds.UseForAttributeInstead)]
     public ModelExpression? AspFor
     {
         get => For;
