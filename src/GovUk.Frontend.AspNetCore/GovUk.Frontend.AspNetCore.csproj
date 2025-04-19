@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Fluid.Core" Version="2.21.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageReference Include="MinVer" Version="2.3.1">
       <PrivateAssets>all</PrivateAssets>
@@ -43,6 +44,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ComponentGeneration\Templates\breadcrumbs.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\button.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\checkboxes.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\details.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\error-message.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\fieldset.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\hint.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\label.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\warning-text.liquid" />
     <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.css">
       <LinkedName>all.min.css</LinkedName>
     </_CompiledAssets>
@@ -58,6 +68,8 @@
       <Link>Content/Compiled/%(LinkedName)</Link>
       <LogicalName>Content/Compiled/%(LinkedName)</LogicalName>
     </EmbeddedResource>
+    <None Remove="ComponentGeneration\Templates\button.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\back-link.liquid" />
   </ItemGroup>
 
 </Project>

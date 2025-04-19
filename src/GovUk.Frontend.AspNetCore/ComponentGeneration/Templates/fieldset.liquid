@@ -1,0 +1,22 @@
+<fieldset class="govuk-fieldset
+  {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {%- if params.role %} role="{{ params.role }}"{% endif %}
+  {%- if params.describedBy %} aria-describedby="{{ params.describedBy }}"{% endif %}
+  {{- params.attributes }}>
+  {%- if params.legend.html or params.legend.text %}
+  <legend class="govuk-fieldset__legend {%- if params.legend.classes %} {{ params.legend.classes }}{% endif %}">
+  {%- if params.legend.isPageHeading %}
+    <h1 class="govuk-fieldset__heading">
+      {% if params.legend.html %}{{ params.legend.html | strip | indent: 6 | raw }}{% else %}{{ params.legend.text }}{% endif %}
+    </h1>
+  {% else %}
+    {% if params.legend.html %}{{ params.legend.html | strip | indent: 6 | raw }}{% else %}{{ params.legend.text }}{% endif %}
+  {% endif -%}
+  </legend>
+  {%- endif %}
+{%- if caller %} {% comment %} if statement allows usage of `call` to be optional {% endcomment %}
+  {{ caller }}
+{% elsif params.html %}
+  {{ params.html -}}
+{% endif %}
+</fieldset>
