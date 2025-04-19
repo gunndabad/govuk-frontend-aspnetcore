@@ -1,0 +1,4 @@
+<a href="{{ params.href | nj_default: "#" }}" class="govuk-back-link{%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- params.attributes }}>
+  {%- if params.html %}{{ params.html }}{% else %}{{ params.text | nj_default: "Back" }}{% endif -%}
+</a>

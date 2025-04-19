@@ -1,0 +1,8 @@
+<div class="govuk-warning-text {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- params.attributes }}>
+  <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+  <strong class="govuk-warning-text__text">
+    <span class="govuk-visually-hidden">{{ params.iconFallbackText | nj_default: "Warning" }}</span>
+    {% if params.html %}{{ params.html }}{% else %}{{ params.text }}{% endif %}
+  </strong>
+</div>
