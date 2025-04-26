@@ -61,5 +61,9 @@
       <LogicalName>Content/Compiled/%(LinkedName)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <None Remove="ComponentGeneration\Templates\*.liquid" />
+    <EmbeddedResource Include="ComponentGeneration\Templates\*.liquid" />
+  </ItemGroup>
 </Project>

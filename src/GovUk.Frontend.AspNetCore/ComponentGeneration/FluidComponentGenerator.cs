@@ -70,6 +70,12 @@ internal class FluidComponentGenerator
         });
     }
 
+    public string GenerateLabel(LabelOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("label", options);
+    }
+
     private IFluidTemplate GetTemplate(string templateName) =>
         _templates.GetOrAdd(templateName, _ =>
         {
