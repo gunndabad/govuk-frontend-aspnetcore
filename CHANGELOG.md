@@ -9,12 +9,16 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 
 ### Fixes
 
-#### Attribute encoding
-Newly-refactored tag helpers now correctly encode their attributes.
-
 #### Source map errors
 The hosted CSS and JavaScript files no longer have source maps.
 Any console errors from browsers failing to download the referenced files should be eliminated.
+
+## 2.8.1
+
+### Fixes
+
+#### Attribute encoding
+Newly-refactored tag helpers now correctly encode their attributes.
 
 ## 2.8.0
 
