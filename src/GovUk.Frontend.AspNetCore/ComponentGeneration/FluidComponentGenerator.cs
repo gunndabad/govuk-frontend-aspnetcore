@@ -70,6 +70,12 @@ internal class FluidComponentGenerator
         });
     }
 
+    public string GenerateHint(HintOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("hint", options);
+    }
+
     public string GenerateLabel(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
