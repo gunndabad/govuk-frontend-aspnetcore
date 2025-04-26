@@ -1,0 +1,11 @@
+{% assign visuallyHiddenText = params.visuallyHiddenText | nj_default: "Error" -%}
+{% assign errorMessageText = params.html | raw | strip | indent: 2 | default: params.text -%}
+
+<p {%- if params.id %} id="{{ params.id }}"{% endif %} class="govuk-error-message {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- govukAttributes(params.attributes) }}>
+  {%- if visuallyHiddenText != blank %}
+  <span class="govuk-visually-hidden">{{ visuallyHiddenText }}:</span> {{ errorMessageText }}
+  {%- else %}
+  {{ errorMessageText }}
+  {%- endif %}
+</p>

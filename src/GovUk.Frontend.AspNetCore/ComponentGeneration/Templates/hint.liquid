@@ -1,4 +1,4 @@
 <div {%- if params.id %} id="{{ params.id }}"{% endif %} class="govuk-hint {%- if params.classes %} {{ params.classes }}{% endif %}"
   {{- govukAttributes(params.attributes) }}>
-  {% if params.html %}{{ params.html | raw | strip | indent: 2 }}{% else %}{{ params.text }}{% endif %}
+  {{ params.html | raw | strip | indent: 2 | default: params.text }}
 </div>
