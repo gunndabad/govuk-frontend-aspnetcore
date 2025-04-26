@@ -14,6 +14,13 @@ public class FluidComponentGeneratorTests
     private readonly FluidComponentGenerator _componentGenerator = new();
 
     [Theory]
+    [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
+    public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateErrorMessage(options));
+
+    [Theory]
     [ComponentFixtureData("hint", typeof(HintOptions2))]
     public void Hint(ComponentTestCaseData<HintOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
