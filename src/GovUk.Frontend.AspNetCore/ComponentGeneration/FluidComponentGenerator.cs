@@ -76,6 +76,12 @@ internal class FluidComponentGenerator
         return RenderTemplate("error-message", options);
     }
 
+    public string GenerateFileUpload(FileUploadOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("file-upload", options);
+    }
+
     public string GenerateHint(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -102,8 +108,6 @@ internal class FluidComponentGenerator
             var source = reader.ReadToEnd();
 
             var template = _parser.Parse(source);
-            var visitor = new RewriteIncludeArgumentsToParamsDictionaryAstRewriter();
-            template = visitor.VisitTemplate(template);
 
             return template;
         });
@@ -111,6 +115,7 @@ internal class FluidComponentGenerator
     private string RenderTemplate(string templateName, object componentOptions)
     {
         var context = new TemplateContext(_templateOptions);
+        context.SetValue("dict", new FunctionValue(Functions.Dict));
         context.SetValue("govukAttributes", new FunctionValue(Functions.GovukAttributes));
         var componentParams = JsonSerializer.SerializeToElement(componentOptions, _optionsJsonSerializerOptions);
         context.SetValue("params", componentParams);  // To match the nunjucks templates
@@ -136,6 +141,8 @@ internal class FluidComponentGenerator
 
         public static ValueTask<FluidValue> Indent(FluidValue input, FilterArguments arguments, TemplateContext context)
         {
+            var indentFirstLine = arguments["indent_first"]?.ToBooleanValue() ?? false;
+
             var encode = input is not StringValue stringValue || stringValue.Encode;
 
             var value = input.ToStringValue();
@@ -144,12 +151,17 @@ internal class FluidComponentGenerator
 
             var lines = value.Split(["\r\n", "\n"], StringSplitOptions.None);
 
-            if (lines.Length == 1)
+            if (lines.Length == 1 && !indentFirstLine)
             {
                 return new StringValue(value, encode);
             }
 
             var sb = new StringBuilder();
+
+            if (indentFirstLine)
+            {
+                sb.Append(padding);
+            }
             sb.Append(lines[0]);
 
             foreach (var line in lines.Skip(1))
@@ -169,58 +181,21 @@ internal class FluidComponentGenerator
         }
     }
 
-    /// <summary>
-    /// There's no way to create a 'params' object to pass to included templates.
-    /// If an 'include's first argument is to_params: true, rewrite the include to take a single
-    /// dictionary argument named 'params' that contains the rest of the arguments.
-    /// </summary>
-    private class RewriteIncludeArgumentsToParamsDictionaryAstRewriter : AstRewriter
-    {
-        protected override Statement VisitIncludeStatement(IncludeStatement includeStatement)
-        {
-            if (!(includeStatement.AssignStatements.FirstOrDefault() is AssignStatement firstAssign &&
-                firstAssign is { Identifier: "to_params", Value: LiteralExpression { Value: BooleanValue booleanValue } } && booleanValue.ToBooleanValue()))
-            {
-                return includeStatement;
-            }
-
-            var paramsDictionary = includeStatement.AssignStatements
-                .Skip(1)
-                .ToDictionary(a => a.Identifier, a => a.Value);
-
-            var paramsAssignStatement = new AssignStatement(
-                "params",
-                new ExpressionDictionaryExpression(paramsDictionary));
-
-            return new IncludeStatement(
-                includeStatement.Parser,
-                includeStatement.Path,
-                includeStatement.With,
-                includeStatement.For,
-                includeStatement.Alias,
-                [paramsAssignStatement]);
-        }
-
-        private sealed class ExpressionDictionaryExpression(IReadOnlyDictionary<string, Expression> dictionary) : Expression
-        {
-            public IReadOnlyDictionary<string, Expression> Dictionary { get; } = dictionary;
-
-            public override async ValueTask<FluidValue> EvaluateAsync(TemplateContext context)
-            {
-                var output = new Dictionary<string, FluidValue>(Dictionary.Count);
-
-                foreach (var (key, value) in Dictionary)
-                {
-                    output[key] = await value.EvaluateAsync(context);
-                }
-
-                return FluidValue.Create(output, context.Options);
-            }
-        }
-    }
-
     private static class Functions
     {
+        public static FluidValue Dict(FunctionArguments args, TemplateContext context)
+        {
+            var result = new Dictionary<string, FluidValue>();
+
+            foreach (var name in args.Names)
+            {
+                var value = args[name]!;
+                result.Add(name, value);
+            }
+
+            return DictionaryValue.Create(result, context.Options);
+        }
+
         public static FluidValue GovukAttributes(FunctionArguments args, TemplateContext context)
         {
             // https://github.com/alphagov/govuk-frontend/blob/v5.8.0/packages/govuk-frontend/src/govuk/macros/attributes.njk
