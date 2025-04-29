@@ -66,4 +66,5 @@
     <None Remove="ComponentGeneration\Templates\*.liquid" />
     <EmbeddedResource Include="ComponentGeneration\Templates\*.liquid" />
   </ItemGroup>
+  
 </Project>

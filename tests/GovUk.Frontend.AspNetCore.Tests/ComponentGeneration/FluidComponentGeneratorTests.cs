@@ -21,6 +21,13 @@ public class FluidComponentGeneratorTests
             (generator, options) => generator.GenerateErrorMessage(options));
 
     [Theory]
+    [ComponentFixtureData("file-upload", typeof(FileUploadOptions2), exclude: ["with value"])]
+    public void FileUpload(ComponentTestCaseData<FileUploadOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateFileUpload(options));
+
+    [Theory]
     [ComponentFixtureData("hint", typeof(HintOptions2))]
     public void Hint(ComponentTestCaseData<HintOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
