@@ -100,6 +100,12 @@ internal class FluidComponentGenerator
         return RenderTemplate("checkboxes", options);
     }
 
+    public string GenerateCookieBanner(CookieBannerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("cookie-banner", options);
+    }
+
     public string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);

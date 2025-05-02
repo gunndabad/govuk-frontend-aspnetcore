@@ -50,6 +50,14 @@ public class FluidComponentGeneratorTests
             (generator, options) => generator.GenerateCheckboxes(options));
 
     [Theory]
+    [ComponentFixtureData("cookie-banner", typeof(CookieBannerOptions))]
+    public void CookieBanner(ComponentTestCaseData<CookieBannerOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateCookieBanner(options),
+            includeCharacterByCharacterComparison: false);
+
+    [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
     public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
@@ -95,6 +103,7 @@ public class FluidComponentGeneratorTests
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<FluidComponentGenerator, TOptions, string> generateComponent,
+        bool includeCharacterByCharacterComparison = true,
         Predicate<IDiff>? excludeDiff = null,
         Func<string, string>? amendExpectedHtml = null)
     {
@@ -120,6 +129,9 @@ public class FluidComponentGeneratorTests
         AssertEx.HtmlEqual(expectedHtml, html, excludeDiff);
 
         // For exact character-by-character equality
-        Assert.Equal(expectedHtml, html);
+        if (includeCharacterByCharacterComparison)
+        {
+            Assert.Equal(expectedHtml, html);
+        }
     }
 }

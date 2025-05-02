@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -7,38 +6,33 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 public record CookieBannerOptions
 {
-    public IHtmlContent? AriaLabel { get; set; }
+    public string? AriaLabel { get; set; }
     public bool? Hidden { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public string? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
     public IReadOnlyCollection<CookieBannerOptionsMessage>? Messages { get; set; }
-
-    internal void Validate()
-    {
-        // TODO Each action should have non-null Text
-    }
 }
 
 public record CookieBannerOptionsMessage
 {
     public string? HeadingText { get; set; }
-    public IHtmlContent? HeadingHtml { get; set; }
+    public string? HeadingHtml { get; set; }
     public string? Text { get; set; }
-    public IHtmlContent? Html { get; set; }
+    public string? Html { get; set; }
     public IReadOnlyCollection<CookieBannerOptionsMessageAction>? Actions { get; set; }
     public bool? Hidden { get; set; }
-    public IHtmlContent? Role { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public string? Role { get; set; }
+    public string? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
 
 public record CookieBannerOptionsMessageAction
 {
     public string? Text { get; set; }
-    public IHtmlContent? Type { get; set; }
-    public IHtmlContent? Href { get; set; }
-    public IHtmlContent? Name { get; set; }
-    public IHtmlContent? Value { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public string? Type { get; set; }
+    public string? Href { get; set; }
+    public string? Name { get; set; }
+    public string? Value { get; set; }
+    public string? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
