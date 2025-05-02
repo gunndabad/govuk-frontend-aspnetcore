@@ -94,10 +94,22 @@ internal class FluidComponentGenerator
         return RenderTemplate("button", options);
     }
 
+    public string GenerateCheckboxes(CheckboxesOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("checkboxes", options);
+    }
+
     public string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("error-message", options);
+    }
+
+    public string GenerateFieldset(FieldsetOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("fieldset", options);
     }
 
     public string GenerateFileUpload(FileUploadOptions2 options)
@@ -142,6 +154,8 @@ internal class FluidComponentGenerator
         context.SetValue("dict", new FunctionValue(Functions.Dict));
         context.SetValue("govukAttributes", new FunctionValue(Functions.GovukAttributes));
         context.SetValue("govukI18nAttributes", new FunctionValue(Functions.GovukI18nAttributes));
+        context.SetValue("ifelse", new FunctionValue(Functions.IfElse));
+        context.SetValue("istruthy", new FunctionValue(Functions.IsTruthy));
         var componentParams = JsonSerializer.SerializeToElement(componentOptions, _optionsJsonSerializerOptions);
         context.SetValue("params", componentParams);  // To match the nunjucks templates
 
@@ -295,6 +309,16 @@ internal class FluidComponentGenerator
             }
 
             return NilValue.Instance;
+        }
+
+        public static FluidValue IfElse(FunctionArguments args, TemplateContext context)
+        {
+            return args.At(0).ToBooleanValue() ? args.At(1) : args.At(2);
+        }
+
+        public static FluidValue IsTruthy(FunctionArguments args, TemplateContext context)
+        {
+            return FluidValue.Create(args.At(0).ToBooleanValue(), context.Options);
         }
     }
 }

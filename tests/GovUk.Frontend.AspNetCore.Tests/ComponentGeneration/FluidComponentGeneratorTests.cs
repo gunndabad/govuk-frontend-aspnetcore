@@ -43,11 +43,25 @@ public class FluidComponentGeneratorTests
             (generator, options) => generator.GenerateButton(options));
 
     [Theory]
+    [ComponentFixtureData("checkboxes", typeof(CheckboxesOptions2), exclude: ["with falsy values"])]
+    public void Checkboxes(ComponentTestCaseData<CheckboxesOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateCheckboxes(options));
+
+    [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
     public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateErrorMessage(options));
+
+    [Theory]
+    [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]
+    public void Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateFieldset(options));
 
     [Theory]
     [ComponentFixtureData("file-upload", typeof(FileUploadOptions2), exclude: ["with value"])]
