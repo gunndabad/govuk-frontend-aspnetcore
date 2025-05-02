@@ -14,6 +14,14 @@ public class FluidComponentGeneratorTests
     private readonly FluidComponentGenerator _componentGenerator = new();
 
     [Theory]
+    [ComponentFixtureData("accordion", typeof(AccordionOptions2), exclude: ["with falsy values"])]
+    public void Accordion(ComponentTestCaseData<AccordionOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateAccordion(options),
+            amendExpectedHtml: data.Name is "default" or "with translations" ? html => html.Replace("’", "&#x2019;") : null);
+
+    [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
     public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
@@ -59,13 +67,14 @@ public class FluidComponentGeneratorTests
 
         // Some of the fixtures have characters with different encodings to what we produce;
         // normalize those before comparing:
-        var expectedHtml = _decimalEncodedHtmlPattern.Replace(
-            testCaseData.ExpectedHtml,
-            (Match match) =>
-            {
-                var encodedDecimal = int.Parse(match.Groups[1].Value);
-                return $"&#x{encodedDecimal:X};";
-            });
+        var expectedHtml = _decimalEncodedHtmlPattern
+            .Replace(
+                testCaseData.ExpectedHtml,
+                (Match match) =>
+                {
+                    var encodedDecimal = int.Parse(match.Groups[1].Value);
+                    return $"&#x{encodedDecimal:X};";
+                });
 
         if (amendExpectedHtml is not null)
         {
