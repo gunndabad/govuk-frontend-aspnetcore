@@ -82,6 +82,12 @@ internal class FluidComponentGenerator
         return RenderTemplate("back-link", options);
     }
 
+    public string GenerateBreadcrumbs(BreadcrumbsOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("breadcrumbs", options);
+    }
+
     public string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
