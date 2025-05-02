@@ -76,6 +76,12 @@ internal class FluidComponentGenerator
         return RenderTemplate("accordion", options);
     }
 
+    public string GenerateBackLink(BackLinkOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("back-link", options);
+    }
+
     public string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
