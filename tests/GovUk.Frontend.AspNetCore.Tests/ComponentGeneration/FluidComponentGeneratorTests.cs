@@ -29,6 +29,13 @@ public class FluidComponentGeneratorTests
             (generator, options) => generator.GenerateBackLink(options));
 
     [Theory]
+    [ComponentFixtureData("breadcrumbs", typeof(BreadcrumbsOptions2))]
+    public void Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateBreadcrumbs(options));
+
+    [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
     public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
