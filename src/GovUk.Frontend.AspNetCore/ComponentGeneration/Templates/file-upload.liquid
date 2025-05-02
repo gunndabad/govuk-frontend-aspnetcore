@@ -13,8 +13,7 @@ aria-describedby – for example hints or error messages {% endcomment %}
     classes = params.label.classes,
     isPageHeading = params.label.isPageHeading,
     attributes = params.label.attributes,
-    for = params.id)) | strip | indent: 2
-  }}
+    for = params.id)) | strip | indent: 2 }}
 {%- if params.hint %}
   {%- assign hintId = params.id | append: '-hint' %}
   {%- assign describedBy = (describedBy | append: ' ' | lstrip) | append: hintId %}
@@ -23,8 +22,7 @@ aria-describedby – for example hints or error messages {% endcomment %}
     classes = params.hint.classes,
     attributes = params.hint.attributes,
     html = params.hint.html,
-    text = params.hint.text)) | strip | indent: 2
-  }}
+    text = params.hint.text)) | strip | indent: 2 }}
 {%- endif %}
 {%- if params.errorMessage %}
   {%- assign errorId = params.id | append: '-error' %}
@@ -35,8 +33,7 @@ aria-describedby – for example hints or error messages {% endcomment %}
     attributes = params.errorMessage.attributes,
     html = params.errorMessage.html,
     text = params.errorMessage.text,
-    visuallyHiddenText = params.errorMessage.visuallyHiddenText)) | strip | indent: 2
-  }}
+    visuallyHiddenText = params.errorMessage.visuallyHiddenText)) | strip | indent: 2 }}
 {%- endif %}
 {%- if params.formGroup.beforeInput %}
   {{ params.formGroup.beforeInput.html | raw | strip | indent: 2 | default: params.formGroup.beforeInput.text }}
