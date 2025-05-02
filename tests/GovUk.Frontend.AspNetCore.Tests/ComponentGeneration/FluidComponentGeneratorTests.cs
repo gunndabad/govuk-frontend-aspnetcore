@@ -36,6 +36,13 @@ public class FluidComponentGeneratorTests
             (generator, options) => generator.GenerateBreadcrumbs(options));
 
     [Theory]
+    [ComponentFixtureData("button", typeof(ButtonOptions2))]
+    public void Button(ComponentTestCaseData<ButtonOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateButton(options));
+
+    [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
     public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

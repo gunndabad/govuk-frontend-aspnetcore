@@ -88,6 +88,12 @@ internal class FluidComponentGenerator
         return RenderTemplate("breadcrumbs", options);
     }
 
+    public string GenerateButton(ButtonOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("button", options);
+    }
+
     public string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
