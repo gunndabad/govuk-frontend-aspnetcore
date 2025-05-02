@@ -70,6 +70,12 @@ internal class FluidComponentGenerator
         });
     }
 
+    public string GenerateAccordion(AccordionOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("accordion", options);
+    }
+
     public string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -117,6 +123,7 @@ internal class FluidComponentGenerator
         var context = new TemplateContext(_templateOptions);
         context.SetValue("dict", new FunctionValue(Functions.Dict));
         context.SetValue("govukAttributes", new FunctionValue(Functions.GovukAttributes));
+        context.SetValue("govukI18nAttributes", new FunctionValue(Functions.GovukI18nAttributes));
         var componentParams = JsonSerializer.SerializeToElement(componentOptions, _optionsJsonSerializerOptions);
         context.SetValue("params", componentParams);  // To match the nunjucks templates
 
@@ -257,6 +264,19 @@ internal class FluidComponentGenerator
             }
 
             return new StringValue(attributesHtml, encode: false);
+        }
+
+        public static FluidValue GovukI18nAttributes(FunctionArguments args, TemplateContext context)
+        {
+            var message = args["message"];
+
+            if (!message.IsNil())
+            {
+                var attr = $" data-i18n.{args["key"].ToStringValue()}=\"{_encoder.Encode(args["message"].ToStringValue())}\"";
+                return new StringValue(attr, encode: false);
+            }
+
+            return NilValue.Instance;
         }
     }
 }
