@@ -19,18 +19,14 @@ Or via the .NET Core command line interface:
 
 ### 2. Configure your ASP.NET Core application
 
-Add services to your application's `Startup` class:
+Add services to your application:
 
 ```cs
 using GovUk.Frontend.AspNetCore;
 
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddGovUkFrontend();
-    }
-}
+var builder = WebApplication.CreateBuilder(args);
+//...
+builder.Services.AddGovUkFrontend();
 ```
 
 ### 3. Register tag helpers
