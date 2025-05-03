@@ -8,13 +8,12 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Fluid;
-using Fluid.Ast;
 using Fluid.Values;
 using Microsoft.Extensions.FileProviders;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
-internal class FluidComponentGenerator
+internal partial class FluidComponentGenerator : IComponentGenerator2
 {
     private static readonly HtmlEncoder _encoder = HtmlEncoder.Default;
 
@@ -70,73 +69,73 @@ internal class FluidComponentGenerator
         });
     }
 
-    public string GenerateAccordion(AccordionOptions2 options)
+    public virtual string GenerateAccordion(AccordionOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("accordion", options);
     }
 
-    public string GenerateBackLink(BackLinkOptions2 options)
+    public virtual string GenerateBackLink(BackLinkOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("back-link", options);
     }
 
-    public string GenerateBreadcrumbs(BreadcrumbsOptions2 options)
+    public virtual string GenerateBreadcrumbs(BreadcrumbsOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("breadcrumbs", options);
     }
 
-    public string GenerateButton(ButtonOptions2 options)
+    public virtual string GenerateButton(ButtonOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("button", options);
     }
 
-    public string GenerateCheckboxes(CheckboxesOptions2 options)
+    public virtual string GenerateCheckboxes(CheckboxesOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("checkboxes", options);
     }
 
-    public string GenerateCookieBanner(CookieBannerOptions options)
+    public virtual string GenerateCookieBanner(CookieBannerOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("cookie-banner", options);
     }
 
-    public string GenerateErrorMessage(ErrorMessageOptions2 options)
+    public virtual string GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("error-message", options);
     }
 
-    public string GenerateFieldset(FieldsetOptions2 options)
+    public virtual string GenerateFieldset(FieldsetOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("fieldset", options);
     }
 
-    public string GenerateFileUpload(FileUploadOptions2 options)
+    public virtual string GenerateFileUpload(FileUploadOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("file-upload", options);
     }
 
-    public string GenerateHint(HintOptions2 options)
+    public virtual string GenerateHint(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("hint", options);
     }
 
-    public string GenerateLabel(LabelOptions2 options)
+    public virtual string GenerateLabel(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("label", options);
     }
 
-    public string GenerateWarningText(WarningTextOptions options)
+    public virtual string GenerateWarningText(WarningTextOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("warning-text", options);

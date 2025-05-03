@@ -22,8 +22,8 @@ public class FluidComponentGeneratorTests
             amendExpectedHtml: data.Name is "default" or "with translations" ? html => html.Replace("’", "&#x2019;") : null);
 
     [Theory]
-    [ComponentFixtureData("back-link", typeof(BackLinkOptions2))]
-    public void BackLink(ComponentTestCaseData<BackLinkOptions2> data) =>
+    [ComponentFixtureData("back-link", typeof(BackLinkOptions))]
+    public void BackLink(ComponentTestCaseData<BackLinkOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateBackLink(options));
