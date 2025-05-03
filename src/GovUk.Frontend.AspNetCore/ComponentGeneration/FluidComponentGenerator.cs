@@ -136,6 +136,12 @@ internal class FluidComponentGenerator
         return RenderTemplate("label", options);
     }
 
+    public string GenerateWarningText(WarningTextOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("warning-text", options);
+    }
+
     private IFluidTemplate GetTemplate(string templateName) =>
         _templates.GetOrAdd(templateName, _ =>
         {

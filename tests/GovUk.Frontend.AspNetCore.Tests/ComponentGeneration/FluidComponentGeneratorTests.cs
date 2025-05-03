@@ -100,6 +100,14 @@ public class FluidComponentGeneratorTests
             data,
             (generator, options) => generator.GenerateLabel(options));
 
+    [Theory]
+    [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
+    public void WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateWarningText(options),
+            amendExpectedHtml: html => html.Replace("£", "&#xA3;").Replace("’", "&#x2019;"));
+
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<FluidComponentGenerator, TOptions, string> generateComponent,
