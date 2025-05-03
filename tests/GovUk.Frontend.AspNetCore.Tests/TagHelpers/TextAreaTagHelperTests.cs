@@ -103,7 +103,8 @@ public class TextAreaTagHelperTests
         var tagHelper = new TextAreaTagHelper()
         {
             Id = "my-id",
-            Name = "my-name"
+            Name = "my-name",
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act

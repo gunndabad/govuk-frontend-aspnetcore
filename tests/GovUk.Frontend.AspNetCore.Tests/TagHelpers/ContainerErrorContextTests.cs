@@ -4,25 +4,25 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
-public class FormErrorContextTests
+public class ContainerErrorContextTests
 {
     [Fact]
     public void AddError_AddsErrorToContext()
     {
         // Arrange
         var context = new ContainerErrorContext();
-        var content = new HtmlString("Content");
-        var href = new HtmlString("/foo");
+        var html = "Content";
+        var href = "/foo";
 
         // Act
-        context.AddError(content, href);
+        context.AddError(html, href);
 
         // Assert
         Assert.Collection(
             context.Errors,
             item =>
             {
-                Assert.Equal(content, item.Content);
+                Assert.Equal(html, item.Html);
                 Assert.Equal(href, item.Href);
             });
     }

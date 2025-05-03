@@ -13,6 +13,9 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 
 ### Fixes
 
+#### Error summary
+Any errors from partial views or view components will now be included in the generated error summary.
+
 #### Source map errors
 The hosted CSS and JavaScript files no longer have source maps.
 Any console errors from browsers failing to download the referenced files should be eliminated.

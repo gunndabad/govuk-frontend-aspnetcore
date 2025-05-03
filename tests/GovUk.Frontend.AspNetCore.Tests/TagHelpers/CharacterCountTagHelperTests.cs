@@ -237,7 +237,7 @@ public class CharacterCountTagHelperTests
         {
             Id = id,
             Name = name,
-            ViewContext = new ViewContext()
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -321,7 +321,7 @@ public class CharacterCountTagHelperTests
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
-            ViewContext = new ViewContext(),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -620,7 +620,7 @@ public class CharacterCountTagHelperTests
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
-            ViewContext = new ViewContext(),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -772,8 +772,8 @@ public class CharacterCountTagHelperTests
         var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
-            ViewContext = new ViewContext(),
-            IgnoreModelStateErrors = true
+            IgnoreModelStateErrors = true,
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -787,8 +787,6 @@ public class CharacterCountTagHelperTests
     public async Task ProcessAsync_WithError_AddsErrorWithCorrectFieldIdToContainerErrorContext()
     {
         // Arrange
-        var containerErrorContext = new ContainerErrorContext();
-
         var id = "my-id";
         var name = "my-name";
         var labelHtml = "The label";
@@ -797,10 +795,7 @@ public class CharacterCountTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-character-count",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ContainerErrorContext), containerErrorContext }
-            },
+            items: new Dictionary<object, object>(),
             uniqueId: "test");
 
         var output = new TagHelperOutput(
@@ -836,7 +831,7 @@ public class CharacterCountTagHelperTests
         {
             Id = id,
             Name = name,
-            ViewContext = new ViewContext()
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -844,11 +839,11 @@ public class CharacterCountTagHelperTests
 
         // Assert
         Assert.Collection(
-            containerErrorContext.Errors,
+            tagHelper.ViewContext.HttpContext.GetContainerErrorContext().Errors,
             error =>
             {
-                Assert.Equal(errorHtml, error.Content.ToHtmlString());
-                Assert.Equal($"#{id}", error.Href?.ToHtmlString());
+                Assert.Equal(errorHtml, error.Html);
+                Assert.Equal($"#{id}", error.Href);
             });
     }
 

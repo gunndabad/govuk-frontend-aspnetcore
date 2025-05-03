@@ -56,13 +56,6 @@ public class FormErrorSummaryTagHelper : TagHelper
     public ViewContext? ViewContext { get; set; }
 
     /// <inheritdoc/>
-    public override void Init(TagHelperContext context)
-    {
-        // N.B. We deliberately do not use SetScopedContextItem here; nested forms are not supported
-        context.Items.Add(typeof(ContainerErrorContext), new ContainerErrorContext());
-    }
-
-    /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         await output.GetChildContentAsync();
@@ -73,18 +66,18 @@ public class FormErrorSummaryTagHelper : TagHelper
             return;
         }
 
-        var formErrorContext = (ContainerErrorContext)context.Items[typeof(ContainerErrorContext)];
-        if (formErrorContext.Errors.Count == 0)
+        var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+        if (containerErrorContext.Errors.Count == 0)
         {
             return;
         }
 
         ViewContext!.ViewData.SetPageHasErrors(true);
 
-        var errorItems = formErrorContext.Errors.Select(i => new ErrorSummaryItem()
+        var errorItems = containerErrorContext.Errors.Select(i => new ErrorSummaryItem()
         {
-            Content = i.Content,
-            Href = i.Href?.ToHtmlString()
+            Content = new HtmlString(i.Html),
+            Href = i.Href
         });
 
         var errorSummary = _htmlGenerator.GenerateErrorSummary(

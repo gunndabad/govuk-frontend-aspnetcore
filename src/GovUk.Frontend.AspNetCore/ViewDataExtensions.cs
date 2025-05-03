@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore;
@@ -7,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore;
 /// </summary>
 public static class ViewDataExtensions
 {
-    private const string PageHasErrorsKey = $"GovUk.Frontend.AspNetCore.{nameof(PageHasErrorsKey)}";
+    private const string PageHasErrorsKey = $"GovUk.Frontend.AspNetCore.PageHasErrors";
 
     /// <summary>
     /// Gets whether the page has errors.
@@ -16,9 +17,9 @@ public static class ViewDataExtensions
     /// <returns><c>true</c> if the page has errors otherwise <c>false</c>.</returns>
     public static bool GetPageHasErrors(this ViewDataDictionary viewData)
     {
-        Guard.ArgumentNotNull(nameof(viewData), viewData);
+        ArgumentNullException.ThrowIfNull(viewData);
 
-        return viewData.TryGetValue(PageHasErrorsKey, out var hasErrorsObj) && (bool)hasErrorsObj!;
+        return viewData.TryGetValue(PageHasErrorsKey, out var hasErrorsObj) && hasErrorsObj is true;
     }
 
     /// <summary>
@@ -28,7 +29,7 @@ public static class ViewDataExtensions
     /// <param name="pageHasErrors">Whether the page has errors.</param>
     public static void SetPageHasErrors(this ViewDataDictionary viewData, bool pageHasErrors)
     {
-        Guard.ArgumentNotNull(nameof(viewData), viewData);
+        ArgumentNullException.ThrowIfNull(viewData);
 
         viewData[PageHasErrorsKey] = pageHasErrors;
     }
