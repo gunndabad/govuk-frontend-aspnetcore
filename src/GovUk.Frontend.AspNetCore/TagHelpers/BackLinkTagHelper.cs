@@ -10,17 +10,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS back link component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(DefaultComponentGenerator.BackLinkElement)]
+[OutputElementHint(FluidComponentGenerator.ComponentElementTypes.BackLink)]
 public class BackLinkTagHelper : TagHelper
 {
     internal const string TagName = "govuk-back-link";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator2 _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    public BackLinkTagHelper(IComponentGenerator componentGenerator)
+    public BackLinkTagHelper(IComponentGenerator2 componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;
@@ -33,7 +33,7 @@ public class BackLinkTagHelper : TagHelper
 
         if (output.TagMode == TagMode.StartTagAndEndTag)
         {
-            content = (await output.GetChildContentAsync()).Snapshot();
+            content = await output.GetChildContentAsync();
         }
 
         if (output.Content.IsModified)
@@ -41,18 +41,18 @@ public class BackLinkTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
         attributes.Remove("href", out var href);
 
         var component = _componentGenerator.GenerateBackLink(new BackLinkOptions()
         {
-            Html = content,
+            Html = content?.ToHtmlString(),
             Href = href,
             Classes = classes,
             Attributes = attributes
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
     }
 }

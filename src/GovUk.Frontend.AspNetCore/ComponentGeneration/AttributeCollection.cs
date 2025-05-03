@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -10,7 +13,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 /// Represents a collection of HTML attributes.
 /// </summary>
 [JsonConverter(typeof(AttributeCollectionJsonConverter))]
-public sealed class AttributeCollection
+public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, string?>>
 {
     private readonly Dictionary<string, EncodedAttribute> _attributes;
 
@@ -22,6 +25,29 @@ public sealed class AttributeCollection
         _attributes = new();
     }
 
+    internal AttributeCollection(IEnumerable<TagHelperAttribute> tagHelperAttributes)
+    {
+        ArgumentNullException.ThrowIfNull(tagHelperAttributes);
+
+        _attributes = new();
+
+        foreach (var attribute in tagHelperAttributes)
+        {
+            var encodedAttribute = new EncodedAttribute(
+                attribute.Name,
+                attribute.Value switch
+                {
+                    _ when attribute.ValueStyle is HtmlAttributeValueStyle.Minimized => true,
+                    IHtmlContent htmlContent => htmlContent.ToHtmlString(),
+                    string str => str,
+                    var obj => obj?.ToString()
+                },
+                Optional: attribute.ValueStyle is HtmlAttributeValueStyle.Minimized);
+
+            _attributes.Add(encodedAttribute.Name, encodedAttribute);
+        }
+    }
+
     internal AttributeCollection(IEnumerable<EncodedAttribute> attributes)
     {
         ArgumentNullException.ThrowIfNull(attributes);
@@ -30,7 +56,40 @@ public sealed class AttributeCollection
 
     internal IReadOnlyCollection<EncodedAttribute> GetAttributes() => _attributes.Values;
 
+    internal bool Remove(string name, out string? value)
+    {
+        if (_attributes.Remove(name, out var attribute))
+        {
+            value = attribute.Value as string;
+            return true;
+        }
+
+        value = null;
+        return false;
+    }
+
     internal sealed record EncodedAttribute(string Name, object? Value, bool Optional);
+
+    /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
+    public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
+    {
+        foreach (var attribute in _attributes.Values)
+        {
+            if (attribute.Optional)
+            {
+                if (attribute.Value is true)
+                {
+                    yield return KeyValuePair.Create(attribute.Name, (string?)null);
+                }
+
+                continue;
+            }
+
+            yield return KeyValuePair.Create(attribute.Name, attribute.Value?.ToString());
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
 internal class AttributeCollectionJsonConverter : JsonConverter<AttributeCollection>
