@@ -15,12 +15,12 @@ public class BackLinkTagHelper : TagHelper
 {
     internal const string TagName = "govuk-back-link";
 
-    private readonly IComponentGenerator2 _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    public BackLinkTagHelper(IComponentGenerator2 componentGenerator)
+    public BackLinkTagHelper(IComponentGenerator componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;

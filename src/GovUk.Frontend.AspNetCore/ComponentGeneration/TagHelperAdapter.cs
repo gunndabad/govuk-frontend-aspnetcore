@@ -8,11 +8,11 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 internal static class TagHelperAdapter
 {
-    public static void ApplyComponentHtml(this TagHelperOutput output, string? html)
+    public static void ApplyComponentHtml(this TagHelperOutput output, IHtmlContent? content)
     {
         ArgumentNullException.ThrowIfNull(output);
 
-        var unwrapped = UnwrapComponent(html);
+        var unwrapped = UnwrapComponent(content);
 
         output.TagName = unwrapped.TagName;
         output.TagMode = unwrapped.TagMode;
@@ -27,9 +27,14 @@ internal static class TagHelperAdapter
         output.Content.AppendHtml(unwrapped.InnerHtml);
     }
 
-    internal static ComponentTagHelperOutput UnwrapComponent(string? html)
+    internal static ComponentTagHelperOutput UnwrapComponent(string? html) =>
+        UnwrapComponent(new HtmlString(html));
+
+    internal static ComponentTagHelperOutput UnwrapComponent(IHtmlContent? content)
     {
-        ArgumentNullException.ThrowIfNull(html);
+        ArgumentNullException.ThrowIfNull(content);
+
+        var html = content.ToHtmlString();
 
         if (string.IsNullOrWhiteSpace(html))
         {

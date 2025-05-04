@@ -39,18 +39,18 @@ public class FileUploadTagHelper : TagHelper
     private const string MultipleAttributeName = "multiple";
     private const string NameAttributeName = "name";
 
-    private readonly IComponentGenerator2 _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
 
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public FileUploadTagHelper(IComponentGenerator2 componentGenerator)
+    public FileUploadTagHelper(IComponentGenerator componentGenerator)
         : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
 
-    internal FileUploadTagHelper(IComponentGenerator2 componentGenerator, IModelHelper modelHelper)
+    internal FileUploadTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
         _componentGenerator = componentGenerator;
         _modelHelper = modelHelper;

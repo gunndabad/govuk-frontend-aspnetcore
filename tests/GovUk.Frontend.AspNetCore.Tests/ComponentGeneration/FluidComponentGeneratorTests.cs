@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
+using Microsoft.AspNetCore.Html;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.ComponentGeneration;
@@ -111,12 +112,12 @@ public class FluidComponentGeneratorTests
 
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
-        Func<FluidComponentGenerator, TOptions, string> generateComponent,
+        Func<FluidComponentGenerator, TOptions, IHtmlContent> generateComponent,
         bool includeCharacterByCharacterComparison = true,
         Predicate<IDiff>? excludeDiff = null,
         Func<string, string>? amendExpectedHtml = null)
     {
-        var html = generateComponent(_componentGenerator, testCaseData.Options);
+        var html = generateComponent(_componentGenerator, testCaseData.Options).ToHtmlString();
 
         // Some of the fixtures have characters with different encodings to what we produce;
         // normalize those before comparing:

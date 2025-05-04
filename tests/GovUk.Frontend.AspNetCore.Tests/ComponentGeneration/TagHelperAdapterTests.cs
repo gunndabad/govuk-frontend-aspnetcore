@@ -1,4 +1,5 @@
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Xunit;
 
@@ -30,7 +31,7 @@ public class TagHelperAdapterTests
         // Arrange
 
         // Act
-        var result = TagHelperAdapter.UnwrapComponent(html);
+        var result = TagHelperAdapter.UnwrapComponent(new HtmlString(html));
 
         // Assert
         Assert.Equal("br", result.TagName);
