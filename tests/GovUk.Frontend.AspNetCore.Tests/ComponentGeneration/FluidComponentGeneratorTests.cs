@@ -76,7 +76,8 @@ public class FluidComponentGeneratorTests
     public void FileUpload(ComponentTestCaseData<FileUploadOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateFileUpload(options));
+            (generator, options) => generator.GenerateFileUpload(options),
+            amendExpectedHtml: html => html.Replace("C:&#x5C;fakepath&#x5C;myphoto.jpg", "C:\\fakepath\\myphoto.jpg"));
 
     [Theory]
     [ComponentFixtureData("hint", typeof(HintOptions2))]
