@@ -2,16 +2,6 @@
 
 ## Unreleased
 
-Targets GOV.UK Frontend v5.9.0.
-
-### Tag helper changes
-
-#### `<govuk-file-upload>` tag helper
-JavaScript enhancements can be enabled by setting the `javascript-enhancements` attribute to `true`.
-This can be configured globally by setting the `DefaultFileUploadJavaScriptEnhancements` property on `GovUkFrontendAspNetCoreOptions`.
-
-A `multiple` attribute has also been added.
-
 ### Breaking changes
 
 #### `asp-for` attributes
@@ -22,6 +12,18 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 #### Source map errors
 The hosted CSS and JavaScript files no longer have source maps.
 Any console errors from browsers failing to download the referenced files should be eliminated.
+
+## 2.9.0
+
+Targets GOV.UK Frontend v5.9.0.
+
+### Tag helper changes
+
+#### `<govuk-file-upload>` tag helper
+JavaScript enhancements can be enabled by setting the `javascript-enhancements` attribute to `true`.
+This can be configured globally by setting the `DefaultFileUploadJavaScriptEnhancements` property on `GovUkFrontendAspNetCoreOptions`.
+
+A `multiple` attribute has also been added.
 
 ## 2.8.1
 
