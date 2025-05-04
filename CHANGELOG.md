@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+Targets GOV.UK Frontend v5.9.0.
+
 ### Breaking changes
 
 #### `asp-for` attributes

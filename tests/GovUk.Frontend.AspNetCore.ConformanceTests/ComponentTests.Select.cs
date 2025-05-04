@@ -43,7 +43,7 @@ public partial class ComponentTests
                     .MergeAttribute("class", options.Classes);
 
                 var labelOptions = options.Label != null ?
-                    options.Label with { For = options.Id } :
+                    options.Label with { For = options.Id ?? options.Name } :
                     null;
 
                 var hintOptions = options.Hint != null ?

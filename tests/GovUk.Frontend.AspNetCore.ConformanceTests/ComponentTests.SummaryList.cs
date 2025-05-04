@@ -15,7 +15,8 @@ public partial class ComponentTests
         exclude: new[]
         {
             "with falsy values",
-            "as a summary card with actions plus summary list actions"
+            "as a summary card with actions plus summary list actions",
+            "as a summary card extreme"
         })]
     public void SummaryList(ComponentTestCaseData<OptionsJson.SummaryList> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

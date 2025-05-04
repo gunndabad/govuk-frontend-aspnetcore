@@ -3,7 +3,7 @@
 ![ci](https://github.com/gunndabad/govuk-frontend-aspnetcore/workflows/ci/badge.svg)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/GovUk.Frontend.AspNetCore)
 
-Targets [GDS Frontend v5.8.0](https://github.com/alphagov/govuk-frontend/releases/tag/v5.8.0)
+Targets [GDS Frontend v5.9.0](https://github.com/alphagov/govuk-frontend/releases/tag/v5.8.0)
 
 ## Installation
 

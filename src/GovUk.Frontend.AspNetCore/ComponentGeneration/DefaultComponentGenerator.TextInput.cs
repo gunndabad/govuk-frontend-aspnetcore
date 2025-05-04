@@ -18,6 +18,7 @@ public partial class DefaultComponentGenerator
         options.Validate();
 
         var describedBy = options.DescribedBy ?? new HtmlString("");
+        var id = options.Id ?? options.Name;
 
         var hasPrefix = GetEncodedTextOrHtml(options.Prefix?.Text, options.Prefix?.Html) is not null;
         var hasSuffix = GetEncodedTextOrHtml(options.Suffix?.Text, options.Suffix?.Html) is not null;
@@ -28,7 +29,7 @@ public partial class DefaultComponentGenerator
             .WithCssClass("govuk-input")
             .WithCssClasses(ExplodeClasses(options.Classes?.ToHtmlString()))
             .WhenNotNull(options.ErrorMessage, (_, b) => b.WithCssClass("govuk-input--error"))
-            .WithAttribute("id", options.Id!)
+            .WithAttribute("id", id!)
             .WithAttribute("name", options.Name!)
             .WithAttribute("type", options.Type ?? new HtmlString(InputDefaultType))
             .WhenNotNull(options.Spellcheck, (s, b) => b.WithAttribute("spellcheck", s == true ? "true" : "false", encodeValue: false))
@@ -46,12 +47,12 @@ public partial class DefaultComponentGenerator
             .WhenNotNull(options.ErrorMessage, (_, b) => b.WithCssClass("govuk-form-group--error"))
             .WithCssClasses(ExplodeClasses(options.FormGroup?.Classes?.ToHtmlString()))
             .WithAttributes(options.FormGroup?.Attributes)
-            .WithAppendedHtml(GenerateLabel(options.Label! with { For = options.Id }))
+            .WithAppendedHtml(GenerateLabel(options.Label! with { For = id }))
             .WhenNotNull(
                 options.Hint,
                 (hint, b) =>
                 {
-                    var hintId = new HtmlString($"{options.Id}-hint");
+                    var hintId = new HtmlString($"{id}-hint");
                     AppendToDescribedBy(ref describedBy, hintId);
 
                     b.WithAppendedHtml(GenerateHint(hint with { Id = hintId }));
@@ -60,7 +61,7 @@ public partial class DefaultComponentGenerator
                 options.ErrorMessage,
                 (errorMessage, b) =>
                 {
-                    var errorId = new HtmlString($"{options.Id}-error");
+                    var errorId = new HtmlString($"{id}-error");
                     AppendToDescribedBy(ref describedBy, errorId);
 
                     b.WithAppendedHtml(GenerateErrorMessage(errorMessage with { Id = errorId }));

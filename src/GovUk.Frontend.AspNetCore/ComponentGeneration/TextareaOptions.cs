@@ -29,11 +29,6 @@ public record TextareaOptions
             throw new InvalidOptionsException(GetType(), $"{nameof(Label)} must be specified.");
         }
 
-        if (Id is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified.");
-        }
-
         if (Name is null)
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified.");
