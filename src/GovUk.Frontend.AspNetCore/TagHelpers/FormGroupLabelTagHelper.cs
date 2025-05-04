@@ -61,6 +61,14 @@ public class FormGroupLabelTagHelper : TagHelper
                 childContent?.Snapshot(),
                 output.TagName);
         }
+        else if (context.TryGetContextItem<FormGroupContext3>(out var formGroupContext3))
+        {
+            formGroupContext3.SetLabel(
+                IsPageHeading,
+                new AttributeCollection(output.Attributes),
+                childContent?.ToHtmlString(),
+                output.TagName);
+        }
 
         output.SuppressOutput();
     }

@@ -4,6 +4,12 @@
 
 Targets GOV.UK Frontend v5.9.0.
 
+### Tag helper changes
+
+#### `<govuk-file-upload>` tag helper
+JavaScript enhancements can be enabled by setting the `javascript` attribute to `true.
+A `multiple` attribute has also been added.
+
 ## 2.8.1
 
 ### Fixes

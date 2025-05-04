@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -16,33 +17,6 @@ internal partial class ComponentGenerator
         bool disabled,
         AttributeDictionary attributes)
     {
-        Guard.ArgumentNotNull(nameof(name), name);
-
-        id ??= name;
-
-        var tagBuilder = new TagBuilder(FileUploadElement);
-        tagBuilder.MergeAttributes(attributes);
-        tagBuilder.MergeCssClass("govuk-file-upload");
-
-        if (haveError)
-        {
-            tagBuilder.MergeCssClass("govuk-file-upload--error");
-        }
-
-        tagBuilder.Attributes.Add("id", id);
-        tagBuilder.Attributes.Add("name", name);
-        tagBuilder.Attributes.Add("type", "file");
-
-        if (!string.IsNullOrEmpty(describedBy))
-        {
-            tagBuilder.Attributes.Add("aria-describedby", describedBy);
-        }
-
-        if (disabled)
-        {
-            tagBuilder.Attributes.Add("disabled", "disabled");
-        }
-
-        return tagBuilder;
+        throw new NotImplementedException();
     }
 }

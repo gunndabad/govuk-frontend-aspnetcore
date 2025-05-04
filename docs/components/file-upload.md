@@ -23,21 +23,33 @@
 
 ![File upload](../images/file-upload-with-errors.png)
 
+## Example - with JavaScript enhancements
+
+```razor
+<govuk-file-upload name="FileUpload1" javascript="true">
+     <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
+ </govuk-file-upload>
+```
+
+![File upload](../images/file-upload-with-javascript.png)
+
 
 ## API
 
 ### `<govuk-file-upload>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute | Type | Description                                                                                                                                                            |
+| --- | --- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `asp-for` | `ModelExpression` | The model expression used to generate the `name` and `id` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
-| `described-by` | `string` | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element. |
-| `disabled` | `bool` | Whether the input should be disabled. The default is `false`. |
-| `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute. |
-| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`. |
-| `input-*` | | Additional attributes to add to the generated `input` element. |
-| `label-class` | `string` | Additional classes for the generated `label` element. |
-| `name` | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified. |
+| `described-by` | `string` | One or more element IDs to add to the `aria-describedby` attribute of the generated `input` element.                                                                   |
+| `disabled` | `bool` | Whether the input should be disabled. The default is `false`.                                                                                                          |
+| `id` | `string` | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute.                                            |
+| `ignore-modelstate-errors` | `bool` | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`.      |
+| `input-*` | | Additional attributes to add to the generated `input` element.                                                                                                         |
+| `javascript` | bool? | Whether to enable JavaScript enhancements for the component.                                                                                                           |                                                                                                           |
+| `label-class` | `string` | Additional classes for the generated `label` element.                                                                                                                  |
+| `multiple` | `bool?` | The `multiple` attribute for the generated `input` element. |                                                                                                           |
+| `name` | `string` | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified.                                                          |
 
 ### `<govuk-file-upload-label>`
 

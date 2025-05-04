@@ -74,6 +74,10 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         _attributes = attributes.ToDictionary(a => a.Name, a => a);
     }
 
+    internal AttributeCollection(params Attribute[] attributes) : this(attributes.AsEnumerable())
+    {
+    }
+
     /// <summary>
     /// Creates a new <see cref="AttributeCollection"/> with a copy of the attributes from this instance.
     /// </summary>

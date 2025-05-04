@@ -5,7 +5,7 @@
 {% comment %} a record of other elements that we need to associate with the input using
 aria-describedby – for example hints or error messages {% endcomment %}
 {%- assign describedBy = params.describedBy | default: "" -%}
-{%- assign id = params.id | default: params.name -%}
+{%- assign id = params.id | default: params.name  %}
 
 <div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %} {%- if params.formGroup.classes %} {{ params.formGroup.classes }}{% endif %}"
   {{- govukAttributes(params.formGroup.attributes) }}>
@@ -15,13 +15,9 @@ aria-describedby – for example hints or error messages {% endcomment %}
     classes = params.label.classes,
     isPageHeading = params.label.isPageHeading,
     attributes = params.label.attributes,
-    for = id)) | strip | indent: 2
-  }}
+    for = id)) | strip | indent: 2 }}
 {%- if params.hint %}
   {%- assign hintId = id | append: '-hint' %}
-    for = params.id)) | strip | indent: 2 }}
-{%- if params.hint %}
-  {%- assign hintId = params.id | append: '-hint' %}
   {%- assign describedBy = (describedBy | append: ' ' | lstrip) | append: hintId %}
   {{ govukHint(dict(
     id = hintId,
@@ -48,32 +44,32 @@ aria-describedby – for example hints or error messages {% endcomment %}
   <div
     class="govuk-drop-zone"
     data-module="govuk-file-upload"
-    {{- govukI18nAttributes({
-      key: 'choose-files-button',
-      message: params.chooseFilesButtonText
-    }) -}}
-    {{- govukI18nAttributes({
-      key: 'no-file-chosen',
-      message: params.noFileChosenText
-    }) -}}
-    {{- govukI18nAttributes({
-      key: 'multiple-files-chosen',
-      messages: params.multipleFilesChosenText
-    }) -}}
-    {{- govukI18nAttributes({
-      key: 'drop-instruction',
-      message: params.dropInstructionText
-    }) -}}
-    {{- govukI18nAttributes({
-      key: 'entered-drop-zone',
-      message: params.enteredDropZoneText
-    }) -}}
-    {{- govukI18nAttributes({
-      key: 'left-drop-zone',
-      message: params.leftDropZoneText
-    }) -}}
+    {{- govukI18nAttributes(
+      key = 'choose-files-button',
+      message = params.chooseFilesButtonText
+    ) -}}
+    {{- govukI18nAttributes(
+      key = 'no-file-chosen',
+      message = params.noFileChosenText
+    ) -}}
+    {{- govukI18nAttributes(
+      key = 'multiple-files-chosen',
+      messages = params.multipleFilesChosenText
+    ) -}}
+    {{- govukI18nAttributes(
+      key = 'drop-instruction',
+      message = params.dropInstructionText
+    ) -}}
+    {{- govukI18nAttributes(
+      key = 'entered-drop-zone',
+      message = params.enteredDropZoneText
+    ) -}}
+    {{- govukI18nAttributes(
+      key = 'left-drop-zone',
+      message = params.leftDropZoneText
+    ) -}}
   >
-{% endif %}
+{%- endif %}
   <input class="govuk-file-upload {%- if params.classes %} {{ params.classes }}{% endif %} {%- if params.errorMessage %} govuk-file-upload--error{% endif %}" id="{{ id }}" name="{{ params.name }}" type="file"
   {%- if params.value %} value="{{ params.value }}"{% endif %}
   {%- if params.disabled %} disabled{% endif %}
@@ -82,7 +78,7 @@ aria-describedby – for example hints or error messages {% endcomment %}
   {{- govukAttributes(params.attributes) }}>
 {%- if params.javascript %}
   </div>
-{% endif %}
+{%- endif %}
 {%- if params.formGroup.afterInput %}
   {{ params.formGroup.afterInput.html | raw | strip | indent: 2 | default: params.formGroup.afterInput.text }}
 {% endif %}

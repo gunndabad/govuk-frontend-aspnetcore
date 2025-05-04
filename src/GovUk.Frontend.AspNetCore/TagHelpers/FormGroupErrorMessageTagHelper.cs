@@ -72,5 +72,13 @@ public class FormGroupErrorMessageTagHelper : TagHelper
                 childContent?.Snapshot(),
                 output.TagName);
         }
+        else if (context.TryGetContextItem<FormGroupContext3>(out var formGroupContext3))
+        {
+            formGroupContext3.SetErrorMessage(
+                VisuallyHiddenText,
+                new AttributeCollection(output.Attributes),
+                childContent?.ToHtmlString(),
+                output.TagName);
+        }
     }
 }

@@ -106,7 +106,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
         return RenderTemplate("fieldset", options);
     }
 
-    public virtual string GenerateFileUpload(FileUploadOptions2 options)
+    public virtual string GenerateFileUpload(FileUploadOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("file-upload", options);
@@ -279,12 +279,33 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
 
         public static FluidValue GovukI18nAttributes(FunctionArguments args, TemplateContext context)
         {
-            var message = args["message"];
+            var key = args["key"].ToStringValue();
 
-            if (!message.IsNil())
+            if (args.HasNamed("messages"))
             {
-                var attr = $" data-i18n.{args["key"].ToStringValue()}=\"{_encoder.Encode(args["message"].ToStringValue())}\"";
-                return new StringValue(attr, encode: false);
+                var sb = new StringBuilder();
+
+                foreach (var pluralRuleArray in args["messages"].Enumerate(context))
+                {
+                    var pluralRuleParts = pluralRuleArray.Enumerate(context).ToArray();
+                    var pluralRule = pluralRuleParts[0].ToStringValue();
+                    var message = pluralRuleParts[1].ToStringValue();
+
+                    sb.Append($" data-i18n.{key}.{pluralRule}=\"{_encoder.Encode(message)}\"");
+                }
+
+                return new StringValue(sb.ToString(), encode: false);
+            }
+
+            if (args.HasNamed("message"))
+            {
+                var message = args["message"];
+
+                if (!message.IsNil())
+                {
+                    var attr = $" data-i18n.{key}=\"{_encoder.Encode(args["message"].ToStringValue())}\"";
+                    return new StringValue(attr, encode: false);
+                }
             }
 
             return NilValue.Instance;
@@ -310,6 +331,23 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
             ArgumentNullException.ThrowIfNull(jsonSerializerOptions);
 
             _jsonTypeInfo = jsonSerializerOptions.TypeInfoResolver!.GetTypeInfo(Value.GetType(), jsonSerializerOptions)!;
+        }
+
+        public override bool Contains(FluidValue value)
+        {
+            var valueStr = value.ToStringValue();
+            var fixedName = GetMemberNamesFromJsonPath(valueStr);
+            return _jsonTypeInfo.Properties.Any(p => p.Name == fixedName);
+        }
+
+        public override IEnumerable<FluidValue> Enumerate(TemplateContext context)
+        {
+            foreach (var property in _jsonTypeInfo.Properties.OrderBy(p => p.Order))
+            {
+                var key = Create(property.Name, context.Options);
+                var value = Create(property.Get!(Value), context.Options);
+                yield return Create(new[] { key, value }, context.Options);
+            }
         }
 
         protected override FluidValue GetValue(string name, TemplateContext context)

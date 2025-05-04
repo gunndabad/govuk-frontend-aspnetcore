@@ -333,7 +333,7 @@ public class TextInputTagHelperTests
     }
 
     [Fact]
-    public async Task ProcessAsync_WithForAndExplicitLabel_UsesSpecifiedLegend()
+    public async Task ProcessAsync_WithForAndExplicitLabel_UsesSpecifiedLabel()
     {
         // Arrange
         var modelStateValue = "42";
@@ -756,8 +756,6 @@ public class TextInputTagHelperTests
         var modelHelperMock = new Mock<IModelHelper>();
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
 
         var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
