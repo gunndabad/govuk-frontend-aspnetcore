@@ -56,7 +56,7 @@ public class FluidComponentGeneratorTests
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateCookieBanner(options),
-            includeCharacterByCharacterComparison: false);
+            compareWhitespace: false);
 
     [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
@@ -113,7 +113,7 @@ public class FluidComponentGeneratorTests
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
         Func<FluidComponentGenerator, TOptions, IHtmlContent> generateComponent,
-        bool includeCharacterByCharacterComparison = true,
+        bool compareWhitespace = true,
         Predicate<IDiff>? excludeDiff = null,
         Func<string, string>? amendExpectedHtml = null)
     {
@@ -139,7 +139,7 @@ public class FluidComponentGeneratorTests
         AssertEx.HtmlEqual(expectedHtml, html, excludeDiff);
 
         // For exact character-by-character equality
-        if (includeCharacterByCharacterComparison)
+        if (compareWhitespace)
         {
             Assert.Equal(expectedHtml, html);
         }
