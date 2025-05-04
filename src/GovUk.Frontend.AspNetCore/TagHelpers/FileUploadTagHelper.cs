@@ -43,12 +43,7 @@ public class FileUploadTagHelper : TagHelper
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public FileUploadTagHelper()
-        : this(new FluidComponentGenerator(), modelHelper: new DefaultModelHelper())
-    {
-    }
-
-    internal FileUploadTagHelper(IComponentGenerator2 componentGenerator)
+    public FileUploadTagHelper(IComponentGenerator2 componentGenerator)
         : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
