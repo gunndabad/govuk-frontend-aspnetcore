@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -33,15 +36,11 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
 
         foreach (var attribute in tagHelperAttributes)
         {
+            var attributeValue = attribute.Value is IHtmlContent htmlContent ? WebUtility.HtmlDecode(htmlContent.ToHtmlString()) : attribute.Value;
+
             var encodedAttribute = new EncodedAttribute(
                 attribute.Name,
-                attribute.Value switch
-                {
-                    _ when attribute.ValueStyle is HtmlAttributeValueStyle.Minimized => true,
-                    IHtmlContent htmlContent => htmlContent.ToHtmlString(),
-                    string str => str,
-                    var obj => obj?.ToString()
-                },
+                attributeValue,
                 Optional: attribute.ValueStyle is HtmlAttributeValueStyle.Minimized);
 
             _attributes.Add(encodedAttribute.Name, encodedAttribute);
@@ -60,7 +59,7 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
     {
         if (_attributes.Remove(name, out var attribute))
         {
-            value = attribute.Value as string;
+            value = attribute.Value?.ToString();
             return true;
         }
 

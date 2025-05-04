@@ -1,0 +1,13 @@
+﻿@page
+@{
+    var linkVariable = "foo?bar=baz&qux=foo";
+    var dataAttrValue = "Foo & Bar";
+}
+
+<govuk-back-link href="foo?bar=baz&qux=foo" data-testid="String" data-foo="Foo & Bar" />
+
+<govuk-back-link href="@linkVariable" data-testid="Variable" data-foo="@dataAttrValue" />
+
+<a href="foo?bar=baz&qux=foo" data-testid="AnchorString" data-foo="Foo & Bar">Link</a>
+
+<a href="@linkVariable" data-testid="AnchorVariable" data-foo="@dataAttrValue">Link</a>

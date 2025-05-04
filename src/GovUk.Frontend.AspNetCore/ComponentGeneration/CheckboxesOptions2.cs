@@ -10,13 +10,19 @@ public record CheckboxesOptions2
     public FieldsetOptions2? Fieldset { get; set; }
     public HintOptions2? Hint { get; set; }
     public ErrorMessageOptions2? ErrorMessage { get; set; }
-    public FormGroupOptions2? FormGroup { get; set; }
+    public CheckboxesOptionsFormGroup? FormGroup { get; set; }
     public string? IdPrefix { get; set; }
     public string? Name { get; set; }
     public IReadOnlyCollection<CheckboxesOptions2Item>? Items { get; set; }
     public IReadOnlyCollection<string>? Values { get; set; }
     public string? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
+}
+
+public record CheckboxesOptionsFormGroup : FormGroupOptions2
+{
+    public TextHtmlAndAttributesOptions? BeforeInputs { get; set; }
+    public TextHtmlAndAttributesOptions? AfterInputs { get; set; }
 }
 
 public record CheckboxesOptions2Item
