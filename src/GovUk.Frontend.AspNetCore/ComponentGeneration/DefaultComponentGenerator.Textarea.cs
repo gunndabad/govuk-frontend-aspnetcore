@@ -13,23 +13,24 @@ public partial class DefaultComponentGenerator
         options.Validate();
 
         var describedBy = options.DescribedBy ?? new HtmlString(null);
+        var id = options.Id ?? options.Name;
 
         return new HtmlTagBuilder(FormGroupElement)
             .WithCssClass("govuk-form-group")
             .WhenNotNull(options.ErrorMessage, (_, b) => b.WithCssClass("govuk-form-group--error"))
             .WithCssClasses(ExplodeClasses(options.FormGroup?.Classes?.ToHtmlString()))
             .WithAttributes(options.FormGroup?.Attributes)
-            .WithAppendedHtml(GenerateLabel(options.Label! with { For = options.Id! }))
+            .WithAppendedHtml(GenerateLabel(options.Label! with { For = id }))
             .WhenNotNull(options.Hint, (hint, b) =>
             {
-                var hintId = new HtmlString(options.Id + "-hint");
+                var hintId = new HtmlString(id + "-hint");
                 AppendToDescribedBy(ref describedBy, hintId);
 
                 b.WithAppendedHtml(GenerateHint(hint with { Id = hintId }));
             })
             .WhenNotNull(options.ErrorMessage, (error, b) =>
             {
-                var errorId = new HtmlString(options.Id + "-error");
+                var errorId = new HtmlString(id + "-error");
                 AppendToDescribedBy(ref describedBy, errorId);
 
                 b.WithAppendedHtml(GenerateErrorMessage(error with { Id = errorId }));
@@ -41,7 +42,7 @@ public partial class DefaultComponentGenerator
                 .WithCssClass("govuk-textarea")
                 .WhenNotNull(options.ErrorMessage, (_, b) => b.WithCssClass("govuk-textarea--error"))
                 .WithCssClasses(ExplodeClasses(options.Classes?.ToHtmlString()))
-                .WithAttribute("id", options.Id!)
+                .WithAttribute("id", id!)
                 .WithAttribute("name", options.Name!)
                 .WithAttribute("rows", (options.Rows ?? 5).ToString(), encodeValue: false)
                 .WhenNotNull(options.Spellcheck, (spellcheck, b) => b.WithAttribute("spellcheck", spellcheck == true ? "true" : "false", encodeValue: false))

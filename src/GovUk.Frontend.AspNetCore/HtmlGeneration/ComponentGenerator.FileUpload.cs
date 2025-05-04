@@ -10,14 +10,15 @@ internal partial class ComponentGenerator
 
     public TagBuilder GenerateFileUpload(
         bool haveError,
-        string id,
+        string? id,
         string name,
         string describedBy,
         bool disabled,
         AttributeDictionary attributes)
     {
-        Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);
+
+        id ??= name;
 
         var tagBuilder = new TagBuilder(FileUploadElement);
         tagBuilder.MergeAttributes(attributes);

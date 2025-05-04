@@ -13,16 +13,17 @@ internal partial class ComponentGenerator
 
     public TagBuilder GenerateSelect(
         bool haveError,
-        string id,
+        string? id,
         string name,
         string? describedBy,
         bool disabled,
         IEnumerable<SelectItem> items,
         AttributeDictionary? attributes)
     {
-        Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);
         Guard.ArgumentNotNull(nameof(items), items);
+
+        id ??= name;
 
         var tagBuilder = new TagBuilder("select");
         tagBuilder.MergeOptionalAttributes(attributes);

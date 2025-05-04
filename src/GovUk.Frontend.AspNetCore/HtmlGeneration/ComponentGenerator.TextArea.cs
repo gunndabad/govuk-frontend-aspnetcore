@@ -12,7 +12,7 @@ internal partial class ComponentGenerator
 
     public virtual TagBuilder GenerateTextArea(
         bool haveError,
-        string id,
+        string? id,
         string name,
         int rows,
         string describedBy,
@@ -22,9 +22,10 @@ internal partial class ComponentGenerator
         IHtmlContent content,
         AttributeDictionary? attributes)
     {
-        Guard.ArgumentNotNull(nameof(id), id);
         Guard.ArgumentNotNull(nameof(name), name);
         Guard.ArgumentNotNull(nameof(content), content);
+
+        id ??= name;
 
         var tagBuilder = new TagBuilder(TextAreaElement);
         tagBuilder.MergeOptionalAttributes(attributes);

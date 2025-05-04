@@ -14,6 +14,7 @@ public partial class DefaultComponentGenerator
         options.Validate();
 
         var hasNoLimit = options.MaxLength is null && options.MaxWords is null;
+        var id = options.Id ?? options.Name;
 
         IHtmlContent? textareaDescriptionText = null;
         if (!hasNoLimit)
@@ -28,9 +29,9 @@ public partial class DefaultComponentGenerator
 
         return GenerateTextarea(new TextareaOptions
         {
-            Id = options.Id,
+            Id = id,
             Name = options.Name,
-            DescribedBy = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
+            DescribedBy = new HtmlString($"{id!.ToHtmlString()}-info"),
             Rows = options.Rows,
             Spellcheck = options.Spellcheck,
             Value = options.Value,
@@ -67,7 +68,7 @@ public partial class DefaultComponentGenerator
                             {
                                 Attributes = options.CountMessage?.Attributes,
                                 Html = textareaDescriptionText,
-                                Id = new HtmlString($"{options.Id!.ToHtmlString()}-info"),
+                                Id = new HtmlString($"{id!.ToHtmlString()}-info"),
                                 Classes = new HtmlString(
                                     $"govuk-character-count__message {options.CountMessage?.Classes?.ToHtmlString()}".TrimEnd())
                             },
@@ -76,7 +77,7 @@ public partial class DefaultComponentGenerator
                 }
             },
             Classes = new HtmlString($"govuk-js-character-count {options.Classes?.ToHtmlString()}".TrimEnd()),
-            Label = (options.Label ?? new LabelOptions()) with { For = options.Id },
+            Label = (options.Label ?? new LabelOptions()) with { For = id },
             Hint = options.Hint,
             ErrorMessage = options.ErrorMessage,
             Attributes = options.Attributes

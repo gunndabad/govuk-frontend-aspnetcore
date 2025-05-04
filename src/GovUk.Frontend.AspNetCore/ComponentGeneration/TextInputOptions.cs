@@ -29,11 +29,6 @@ public record TextInputOptions
 
     internal void Validate()
     {
-        if (Id is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Id)} must be specified.");
-        }
-
         if (Name is null)
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified.");

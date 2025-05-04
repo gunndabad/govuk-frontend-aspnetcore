@@ -11,19 +11,21 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
+                var id = options.Id ?? options.Name;
+
                 var attributes = options.Attributes.ToAttributesDictionary()
                     .MergeAttribute("class", options.Classes);
 
                 var labelOptions = options.Label != null ?
-                    options.Label with { For = options.Id } :
+                    options.Label with { For = id } :
                     null;
 
                 var hintOptions = options.Hint != null ?
-                    options.Hint with { Id = options.Id + "-hint" } :
+                    options.Hint with { Id = id + "-hint" } :
                     null;
 
                 var errorMessageOptions = options.ErrorMessage != null ?
-                    options.ErrorMessage with { Id = options.Id + "-error" } :
+                    options.ErrorMessage with { Id = id + "-error" } :
                     null;
 
                 return GenerateFormGroup(
