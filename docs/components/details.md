@@ -38,9 +38,9 @@
 
 ### `<govuk-details>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `open` | `bool` | Whether the details element should be expanded. The default is `false`. |
+| Attribute | Type   | Description                                                             |
+|-----------|--------|-------------------------------------------------------------------------|
+| `open`    | `bool` | Whether the details element should be expanded. The default is `false`. |
 
 ### `<govuk-details-summary>`
 

@@ -49,8 +49,8 @@ Check out the [max words validator](../validation/maxwords.md) for adding server
 The content is the HTML to use within the component's label.\
 Must be inside a `<govuk-character-count>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute         | Type   | Description                                                                      |
+|-------------------|--------|----------------------------------------------------------------------------------|
 | `is-page-heading` | `bool` | Whether the label also acts as the heading for the page. The default is `false`. |
 
 ### `<govuk-character-count-hint>`
@@ -72,8 +72,8 @@ If the `for` attribute is specified on the parent `<govuk-character-count>` then
 If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
 `<govuk-character-count-error-message visually-hidden-text="Error" />`.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute              | Type     | Description                                                                       |
+|------------------------|----------|-----------------------------------------------------------------------------------|
 | `visually-hidden-text` | `string` | The visually hidden prefix used before the error message. The default is `Error`. |
 
 ### `<govuk-character-count-value>`

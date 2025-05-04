@@ -19,8 +19,8 @@
 
 ### `<govuk-panel>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute       | Type  | Description                                                                     |
+|-----------------|-------|---------------------------------------------------------------------------------|
 | `heading-level` | `int` | The heading level. Must be between `1` and `6` (inclusive). The default is `1`. |
 
 ### `<govuk-panel-title>`

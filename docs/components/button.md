@@ -60,22 +60,22 @@ There are two tag helpers for the button component. `<govuk-button>` generates a
 
 The content is the HTML to use within the generated button.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `disabled` | `bool` | Whether the button should be disabled. The default is `false`. |
-| `id` | `string` | The `id` attribute for the button. |
-| `is-start-button` | `bool` | Whether this button is the main call to action on your service's start page. The default is `false`. |
-| `prevent-double-click` | `bool` | Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times. The default is `false` but can be configured globally by setting the `DefaultButtonPreventDoubleClick` property on `GovUkFrontendAspNetCoreOptions`. |
-| `type` | `string` | The `type` attribute for the generated `button` element. |
-| (link attributes) | | If specified generates a `formaction` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| Attribute              | Type     | Description                                                                                                                                                                                                                                              |
+|------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `disabled`             | `bool`   | Whether the button should be disabled. The default is `false`.                                                                                                                                                                                           |
+| `id`                   | `string` | The `id` attribute for the button.                                                                                                                                                                                                                       |
+| `is-start-button`      | `bool`   | Whether this button is the main call to action on your service's start page. The default is `false`.                                                                                                                                                     |
+| `prevent-double-click` | `bool`   | Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times. The default is `false` but can be configured globally by setting the `DefaultButtonPreventDoubleClick` property on `GovUkFrontendAspNetCoreOptions`. |
+| `type`                 | `string` | The `type` attribute for the generated `button` element.                                                                                                                                                                                                 |
+| (link attributes)      |          | If specified generates a `formaction` attribute using the specified values. See [documentation on links](../links.md) for more information.                                                                                                              |
 
 ### `<govuk-button-link>`
 
 The content is the HTML to use within the generated link.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `disabled` | `bool` | Whether the button should be disabled. The default is `false`. |
-| `id` | `string` | The `id` attribute for the button. |
-| `is-start-button` | `bool` | Whether this button is the main call to action on your service's start page. The default is `false`. |
-| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| Attribute         | Type     | Description                                                                                                                            |
+|-------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `disabled`        | `bool`   | Whether the button should be disabled. The default is `false`.                                                                         |
+| `id`              | `string` | The `id` attribute for the button.                                                                                                     |
+| `is-start-button` | `bool`   | Whether this button is the main call to action on your service's start page. The default is `false`.                                   |
+| (link attributes) |          | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |

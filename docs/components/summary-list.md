@@ -147,10 +147,10 @@ Must be inside a `<govuk-summary-list-row>` element.
 
 ### `<govuk-summary-list-row-action>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
-| `visually-hidden-text` | `string` | The visually hidden text for the link. |
+| Attribute              | Type     | Description                                                                                                                            |
+|------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------|
+| (link attributes)      |          | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| `visually-hidden-text` | `string` | The visually hidden text for the link.                                                                                                 |
 
 The content is the HTML to use within the generated link.\
 Must be inside a `<govuk-summary-list-row-actions>` element.
@@ -161,8 +161,8 @@ Must contain a `<govuk-summary-list>` as its final child element.
 
 ### `<govuk-summary-card-title>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute       | Type  | Description                                                                     |
+|-----------------|-------|---------------------------------------------------------------------------------|
 | `heading-level` | `int` | The heading level. Must be between `1` and `6` (inclusive). The default is `2`. |
 
 The content is the HTML to use for the card's title.\
@@ -175,10 +175,10 @@ Must be inside a `<govuk-summary-card>` element.
 
 ### `<govuk-summary-card-action>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
-| `visually-hidden-text` | `string` | The visually hidden text for the link. |
+| Attribute              | Type     | Description                                                                                                                            |
+|------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------|
+| (link attributes)      |          | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| `visually-hidden-text` | `string` | The visually hidden text for the link.                                                                                                 |
 
 The content is the HTML to use within the generated link.\
 Must be inside a `<govuk-summary-card-actions>` element.

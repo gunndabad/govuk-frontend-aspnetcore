@@ -110,24 +110,24 @@
 
 ### `<govuk-accordion>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `id` | `string` | *Required* The `id` attribute for the accordion. Must be unique across the domain of your service. Cannot be `null` or empty. |
-| `heading-level` | `int` | The heading level. Must be between `1` and `6` (inclusive). The default is `2`. |
-| `remember-expanded` | `bool` | Whether the expanded/collapsed state of the accordion should be saved when a user leaves the page and restored when they return. The default is `true`. |
-| `hide-all-sections-text` | `string` | The text content of the 'Hide all sections' button at the top of the accordion when all sections are expanded. |
-| `hide-section-text` | `string` | 	The text content of the 'Hide' button within each section of the accordion, which is visible when the section is expanded. |
-| `hide-section-aria-label-text` | `string` | The text made available to assistive technologies, like screen-readers, as the final part of the toggle's accessible name when the section is expanded. The defaults is 'Hide this section'. |
-| `show-all-sections-text` | `string` | The text content of the 'Show all sections' button at the top of the accordion when at least one section is collapsed. |
-| `show-section-text` | `string` | 	The text content of the 'Show' button within each section of the accordion, which is visible when the section is collapsed. |
-| `hide-section-aria-label-text` | `string` | The text made available to assistive technologies, like screen-readers, as the final part of the toggle's accessible name when the section is collapsed. The defaults is 'Show this section'. |
+| Attribute                      | Type       | Description                                                                                                                                                                                   |
+|--------------------------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                           | `string`   |  *Required* The `id` attribute for the accordion. Must be unique across the domain of your service. Cannot be `null` or empty.                                                                |
+| `heading-level`                | `int`      | The heading level. Must be between `1` and `6` (inclusive). The default is `2`.                                                                                                               |
+| `remember-expanded`            | `bool`     | Whether the expanded/collapsed state of the accordion should be saved when a user leaves the page and restored when they return. The default is `true`.                                       |
+| `hide-all-sections-text`       | `string`   | The text content of the 'Hide all sections' button at the top of the accordion when all sections are expanded.                                                                                |
+| `hide-section-text`            | `string`   | 	The text content of the 'Hide' button within each section of the accordion, which is visible when the section is expanded.                                                                   |
+| `hide-section-aria-label-text` | `string`   | The text made available to assistive technologies, like screen-readers, as the final part of the toggle's accessible name when the section is expanded. The defaults is 'Hide this section'.  |
+| `show-all-sections-text`       | `string`   | The text content of the 'Show all sections' button at the top of the accordion when at least one section is collapsed.                                                                        |
+| `show-section-text`            | `string`   | 	The text content of the 'Show' button within each section of the accordion, which is visible when the section is collapsed.                                                                  |
+| `hide-section-aria-label-text` | `string`   | The text made available to assistive technologies, like screen-readers, as the final part of the toggle's accessible name when the section is collapsed. The defaults is 'Show this section'. |
 
 ### `<govuk-accordion-item>`
 
 Must be inside a `<govuk-accordion>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute  | Type   | Description                                                                       |
+|------------|--------|-----------------------------------------------------------------------------------|
 | `expanded` | `bool` | Whether the section should be expanded upon initial load. The default is `false`. |
 
 ### `<govuk-accordion-item-heading>`

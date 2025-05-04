@@ -28,19 +28,19 @@
 
 ### `<govuk-tabs>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `id` | `string` | The `id` attribute for the main tabs component. |
+| Attribute   | Type     | Description                                                                                                   |
+|-------------|----------|---------------------------------------------------------------------------------------------------------------|
+| `id`        | `string` | The `id` attribute for the main tabs component.                                                               |
 | `id-prefix` | `string` | The prefix to use when generating IDs for the items. Required unless every item specifies the `id` attribute. |
-| `title` | `string` | The title for the tabs table of contents. The default is `Contents`. |
+| `title`     | `string` | The title for the tabs table of contents. The default is `Contents`.                                          |
 
 ### `<govuk-tabs-item>`
 
 The content is the HTML of the panel.\
 Must be inside a `<govuk-tabs>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `id` | `string` | The `id` attribute for the tab. Required unless the `id-prefix` attribute is specified on the parent `<govuk-tabs>`.  |
-| `label` | `string` | *Required* The text label of the tab. |
-| (link attributes) | | Additional attributes to add to the generated link to this tab.  |
+| Attribute         | Type     | Description                                                                                                          |
+|-------------------|----------|----------------------------------------------------------------------------------------------------------------------|
+| `id`              | `string` | The `id` attribute for the tab. Required unless the `id-prefix` attribute is specified on the parent `<govuk-tabs>`. |
+| `label`           | `string` | *Required* The text label of the tab.                                                                                |
+| (link attributes) |          | Additional attributes to add to the generated link to this tab.                                                      |

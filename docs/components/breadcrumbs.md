@@ -18,17 +18,17 @@
 
 ### `<govuk-breadcrumbs>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| `collapse-on-mobile` | `bool` | When true, the breadcrumbs will collapse to the first and last item only on tablet breakpoint and below. Default is `false`. |
-| `label-text` | `string` | The plain text label identifying the landmark to screen readers. Defaults to 'Breadcrumb'. |
+| Attribute            | Type     | Description                                                                                                                  |
+|----------------------|----------|------------------------------------------------------------------------------------------------------------------------------|
+| `collapse-on-mobile` | `bool`   | When true, the breadcrumbs will collapse to the first and last item only on tablet breakpoint and below. Default is `false`. |
+| `label-text`         | `string` | The plain text label identifying the landmark to screen readers. Defaults to 'Breadcrumb'.                                   |
 
 ### `<govuk-breadcrumbs-item>`
 
 Content is the HTML to use within the breadcrumbs item.\
 Must be inside a `<govuk-breadcrumbs>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| (link attributes) | | See [documentation on links](../links.md) for more information |
-| `link-*` | | Additional attributes to be applied to the item's hyperlink. |
+| Attribute         | Type | Description                                                    |
+|-------------------|------|----------------------------------------------------------------|
+| (link attributes) |      | See [documentation on links](../links.md) for more information |
+| `link-*`          |      | Additional attributes to be applied to the item's hyperlink.   |

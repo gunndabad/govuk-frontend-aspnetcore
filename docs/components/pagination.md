@@ -49,17 +49,17 @@
 
 ### `<govuk-pagination>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute        | Type     | Description                                                                                |
+|------------------|----------|--------------------------------------------------------------------------------------------|
 | `landmark-label` | `string` | The label for the navigation landmark that wraps the pagination. The default is `results`. |
 
 ### `<govuk-pagination-previous>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
-| `label-text` | `string` | The optional label that goes underneath the link to the previous page, providing further context for the user about where the link goes. |
-| `link-*` | | Additional attributes to add to the generated `<a>` element. |
+| Attribute         | Type     | Description                                                                                                                              |
+|-------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------|
+| (link attributes) |          | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information.   |
+| `label-text`      | `string` | The optional label that goes underneath the link to the previous page, providing further context for the user about where the link goes. |
+| `link-*`          |          | Additional attributes to add to the generated `<a>` element.                                                                             |
 
 The content is the text for the link to the previous page. The default is `Previous page`.\
 Must be inside a `<govuk-pagination>` element.
