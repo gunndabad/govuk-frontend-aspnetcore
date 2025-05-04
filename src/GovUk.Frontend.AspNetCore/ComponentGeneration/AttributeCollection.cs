@@ -18,17 +18,38 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 [JsonConverter(typeof(AttributeCollectionJsonConverter))]
 public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, string?>>
 {
-    private readonly Dictionary<string, EncodedAttribute> _attributes;
+    private readonly Dictionary<string, Attribute> _attributes;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AttributeCollection"/> class.
+    /// Initializes a new emty instance of the <see cref="AttributeCollection"/> class.
     /// </summary>
     public AttributeCollection()
     {
         _attributes = new();
     }
 
-    internal AttributeCollection(IEnumerable<TagHelperAttribute> tagHelperAttributes)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AttributeCollection"/> class
+    /// with the attributes in the specified <paramref name="attributes"/>.
+    /// </summary>
+    /// <param name="attributes">The existing attributes.</param>
+    public AttributeCollection(IDictionary<string, string?>? attributes)
+    {
+        if (attributes is null)
+        {
+            _attributes = new();
+            return;
+        }
+
+        _attributes = attributes.ToDictionary(a => a.Key, a => new Attribute(a.Key, a.Value, Optional: false));
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AttributeCollection"/> class
+    /// with the attributes in the specified <paramref name="tagHelperAttributes"/>.
+    /// </summary>
+    /// <param name="tagHelperAttributes">The <see cref="TagHelperAttribute" />s to copy attributes from.</param>
+    public AttributeCollection(IEnumerable<TagHelperAttribute> tagHelperAttributes)
     {
         ArgumentNullException.ThrowIfNull(tagHelperAttributes);
 
@@ -38,7 +59,7 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         {
             var attributeValue = attribute.Value is IHtmlContent htmlContent ? WebUtility.HtmlDecode(htmlContent.ToHtmlString()) : attribute.Value;
 
-            var encodedAttribute = new EncodedAttribute(
+            var encodedAttribute = new Attribute(
                 attribute.Name,
                 attributeValue,
                 Optional: attribute.ValueStyle is HtmlAttributeValueStyle.Minimized);
@@ -47,13 +68,20 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         }
     }
 
-    internal AttributeCollection(IEnumerable<EncodedAttribute> attributes)
+    internal AttributeCollection(IEnumerable<Attribute> attributes)
     {
         ArgumentNullException.ThrowIfNull(attributes);
         _attributes = attributes.ToDictionary(a => a.Name, a => a);
     }
 
-    internal IReadOnlyCollection<EncodedAttribute> GetAttributes() => _attributes.Values;
+    /// <summary>
+    /// Creates a new <see cref="AttributeCollection"/> with a copy of the attributes from this instance.
+    /// </summary>
+    /// <returns>A new <see cref="AttributeCollection"/>.</returns>
+    public AttributeCollection Clone() =>
+        new(_attributes.Values.Select(a => new Attribute(a.Name, a.Value, a.Optional)));
+
+    internal IReadOnlyCollection<Attribute> GetAttributes() => _attributes.Values;
 
     internal bool Remove(string name, out string? value)
     {
@@ -67,7 +95,7 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         return false;
     }
 
-    internal sealed record EncodedAttribute(string Name, object? Value, bool Optional);
+    internal sealed record Attribute(string Name, object? Value, bool Optional);
 
     /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
     public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
@@ -105,7 +133,7 @@ internal class AttributeCollectionJsonConverter : JsonConverter<AttributeCollect
             throw new JsonException();
         }
 
-        var attributes = new List<AttributeCollection.EncodedAttribute>();
+        var attributes = new List<AttributeCollection.Attribute>();
 
         while (reader.Read())
         {
