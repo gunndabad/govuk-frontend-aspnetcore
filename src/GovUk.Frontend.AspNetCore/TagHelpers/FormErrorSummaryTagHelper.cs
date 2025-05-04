@@ -17,7 +17,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 [HtmlTargetElement("form")]
 public class FormErrorSummaryTagHelper : TagHelper
 {
-    private const string PrependErrorSummaryAttributeName = "gfa-prepend-error-summary";
+    private const string PrependErrorSummaryAttributeName = "prepend-error-summary";
 
     private readonly GovUkFrontendAspNetCoreOptions _options;
     private readonly IGovUkHtmlGenerator _htmlGenerator;

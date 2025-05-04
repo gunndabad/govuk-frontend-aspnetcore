@@ -14,11 +14,9 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 public class TitleTagHelper : TagHelper
 {
     private const string DefaultErrorPrefix = "Error:";
-    private const string ErrorPrefixAttributeName = "gfa-error-prefix";
+    private const string ErrorPrefixAttributeName = "error-prefix";
 
     private readonly GovUkFrontendAspNetCoreOptions _options;
-
-    private string? _errorPrefix = DefaultErrorPrefix;
 
     /// <summary>
     /// Creates a new <see cref="TitleTagHelper"/>.
@@ -35,11 +33,7 @@ public class TitleTagHelper : TagHelper
     ///  The default is <c>Error:</c>.
     /// </remarks>
     [HtmlAttributeName(ErrorPrefixAttributeName)]
-    public string? ErrorPrefix
-    {
-        get => _errorPrefix;
-        set => _errorPrefix = value;
-    }
+    public string? ErrorPrefix { get; set; }
 
     /// <summary>
     /// Gets the <see cref="ViewContext"/> of the executing view.
@@ -54,9 +48,10 @@ public class TitleTagHelper : TagHelper
     {
         await base.ProcessAsync(context, output);
 
-        if (_options.PrependErrorToTitle && !string.IsNullOrEmpty(ErrorPrefix) && ViewContext!.ViewData.GetPageHasErrors())
+        if (_options.PrependErrorToTitle && ViewContext!.ViewData.GetPageHasErrors())
         {
-            output.PreContent.Append(ErrorPrefix + " ");
+            var errorPrefix = ErrorPrefix ?? DefaultErrorPrefix;
+            output.PreContent.Append(errorPrefix + " ");
         }
     }
 }

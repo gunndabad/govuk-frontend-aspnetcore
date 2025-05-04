@@ -7,6 +7,10 @@
 #### `asp-for` attributes
 The `asp-for` attribute is now obsolete; the `for` attribute should be used in its place.
 
+#### `gfa-` attributes
+- The `gfa-prepend-error-summary` attribute on `<form>`s is now named `prepend-error-summary`.
+- The `gfa-error-prefix` attribute on `<title>` is now named `error-prefix`.
+
 ### Fixes
 
 #### Source map errors
