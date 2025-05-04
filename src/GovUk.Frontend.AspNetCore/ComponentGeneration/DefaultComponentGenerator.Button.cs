@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
-public partial class DefaultComponentGenerator
+partial class DefaultComponentGenerator
 {
     /// <inheritdoc/>
     public virtual HtmlTagBuilder GenerateButton(ButtonOptions options)

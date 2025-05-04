@@ -2,7 +2,7 @@ using System;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
-public partial class DefaultComponentGenerator
+partial class DefaultComponentGenerator
 {
     internal const string TagElement = "strong";
 

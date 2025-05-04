@@ -23,12 +23,19 @@ public class ButtonTagHelper : TagHelper
     private const string TypeAttributeName = "type";
     private const string ValueAttributeName = "value";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly ILegacyComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="ButtonTagHelper"/>.
     /// </summary>
-    public ButtonTagHelper(IComponentGenerator componentGenerator)
+    public ButtonTagHelper() : this(new DefaultComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="ButtonTagHelper"/>.
+    /// </summary>
+    internal ButtonTagHelper(ILegacyComponentGenerator componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;

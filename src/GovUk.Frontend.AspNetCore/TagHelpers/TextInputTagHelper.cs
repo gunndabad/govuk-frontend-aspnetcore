@@ -57,7 +57,7 @@ public class TextInputTagHelper : TagHelper
     private const string TypeAttributeName = "type";
     private const string ValueAttributeName = "value";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly ILegacyComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
 
     private string? _value;
@@ -66,12 +66,20 @@ public class TextInputTagHelper : TagHelper
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public TextInputTagHelper(IComponentGenerator componentGenerator)
+    public TextInputTagHelper()
+        : this(new DefaultComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates an <see cref="TextInputTagHelper"/>.
+    /// </summary>
+    internal TextInputTagHelper(ILegacyComponentGenerator componentGenerator)
         : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
 
-    internal TextInputTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
+    internal TextInputTagHelper(ILegacyComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
         _componentGenerator = componentGenerator;
         _modelHelper = modelHelper;

@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
-/// <summary>
-/// Default implementation of <see cref="IComponentGenerator"/>.
-/// </summary>
-public partial class DefaultComponentGenerator : IComponentGenerator
+internal partial class DefaultComponentGenerator : ILegacyComponentGenerator
 {
     internal const string FormGroupElement = "div";
 

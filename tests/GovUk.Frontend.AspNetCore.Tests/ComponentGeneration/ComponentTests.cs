@@ -73,7 +73,7 @@ public class ComponentTests
 
     private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
-        Func<IComponentGenerator, TOptions, string> generateComponent,
+        Func<ILegacyComponentGenerator, TOptions, string> generateComponent,
         Predicate<IDiff>? excludeDiff = null)
     {
         var html = generateComponent(_componentGenerator, testCaseData.Options);

@@ -17,12 +17,19 @@ public class ButtonLinkTagHelper : TagHelper
     private const string IdAttributeName = "id";
     private const string IsStartButtonAttributeName = "is-start-button";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly ILegacyComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a <see cref="ButtonLinkTagHelper"/>.
     /// </summary>
-    public ButtonLinkTagHelper(IComponentGenerator componentGenerator)
+    public ButtonLinkTagHelper() : this(new DefaultComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates a <see cref="ButtonLinkTagHelper"/>.
+    /// </summary>
+    internal ButtonLinkTagHelper(ILegacyComponentGenerator componentGenerator)
     {
         _componentGenerator = componentGenerator;
     }

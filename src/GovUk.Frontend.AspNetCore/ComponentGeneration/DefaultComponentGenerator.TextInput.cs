@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
-public partial class DefaultComponentGenerator
+partial class DefaultComponentGenerator
 {
     internal const bool InputDefaultDisabled = false;
     internal const string InputDefaultType = "text";

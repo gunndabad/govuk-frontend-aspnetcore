@@ -13,12 +13,19 @@ public class TagTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tag";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly ILegacyComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="TagTagHelper"/>.
     /// </summary>
-    public TagTagHelper(IComponentGenerator componentGenerator)
+    public TagTagHelper() : this(new DefaultComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="TagTagHelper"/>.
+    /// </summary>
+    internal TagTagHelper(ILegacyComponentGenerator componentGenerator)
     {
         _componentGenerator = componentGenerator;
     }

@@ -3,7 +3,7 @@ using System;
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
 /// <summary>
-/// The exception that is thrown when invalid options are passed to <see cref="IComponentGenerator"/>.
+/// The exception that is thrown when invalid options are passed to <see cref="ILegacyComponentGenerator"/>.
 /// </summary>
 public class InvalidOptionsException : Exception
 {

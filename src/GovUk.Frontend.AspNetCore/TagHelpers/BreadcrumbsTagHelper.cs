@@ -18,12 +18,19 @@ public class BreadcrumbsTagHelper : TagHelper
     private const string CollapseOnMobileAttributeName = "collapse-on-mobile";
     private const string LabelTextAttributeName = "label-text";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly ILegacyComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="ButtonTagHelper"/>.
     /// </summary>
-    public BreadcrumbsTagHelper(IComponentGenerator componentGenerator)
+    public BreadcrumbsTagHelper() : this(new DefaultComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="ButtonTagHelper"/>.
+    /// </summary>
+    internal BreadcrumbsTagHelper(ILegacyComponentGenerator componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;

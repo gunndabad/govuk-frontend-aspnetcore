@@ -44,7 +44,7 @@ public class CharacterCountTagHelper : TagHelper
     private const string TextareaAttributesPrefix = "textarea-";
     private const string ThresholdAttributeName = "threshold";
 
-    private readonly IComponentGenerator _componentGenerator;
+    private readonly ILegacyComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
 
     private decimal? _threshold;
@@ -54,12 +54,20 @@ public class CharacterCountTagHelper : TagHelper
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public CharacterCountTagHelper(IComponentGenerator componentGenerator)
+    public CharacterCountTagHelper()
+        : this(new DefaultComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates an <see cref="TextInputTagHelper"/>.
+    /// </summary>
+    internal CharacterCountTagHelper(ILegacyComponentGenerator componentGenerator)
         : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
 
-    internal CharacterCountTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
+    internal CharacterCountTagHelper(ILegacyComponentGenerator componentGenerator, IModelHelper modelHelper)
     {
         _componentGenerator = componentGenerator;
         _modelHelper = modelHelper;

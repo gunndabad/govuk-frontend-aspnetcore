@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
-public partial class DefaultComponentGenerator
+partial class DefaultComponentGenerator
 {
     internal const string TaskListElement = "ul";
 
