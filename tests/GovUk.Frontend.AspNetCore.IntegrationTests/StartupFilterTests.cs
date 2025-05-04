@@ -74,6 +74,12 @@ public class StartupFilterTestFixture : ServerFixture
 
     public HttpClient HttpClient { get; }
 
+    public override Task DisposeAsync()
+    {
+        HttpClient.Dispose();
+        return base.DisposeAsync();
+    }
+
     protected override void Configure(IApplicationBuilder app)
     {
         base.Configure(app);

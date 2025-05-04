@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 
@@ -9,7 +10,8 @@ internal static class ComponentOptionsJsonSerializerOptions
         var serializerOptions = new JsonSerializerOptions()
         {
             PropertyNameCaseInsensitive = false,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver()
         };
 
         Instance = serializerOptions;

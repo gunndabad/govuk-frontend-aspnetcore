@@ -3,9 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Fluid;
 using Fluid.Values;
@@ -20,7 +22,6 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
     private readonly FluidParser _parser;
     private readonly ConcurrentDictionary<string, IFluidTemplate> _templates;
     private readonly TemplateOptions _templateOptions;
-    private readonly JsonSerializerOptions _optionsJsonSerializerOptions;
 
     public FluidComponentGenerator()
     {
@@ -30,7 +31,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
             AllowParentheses = true
         });
 
-        _optionsJsonSerializerOptions = ComponentOptionsJsonSerializerOptions.Instance;
+        var optionsJsonSerializerOptions = ComponentOptionsJsonSerializerOptions.Instance;
 
         _templates = new ConcurrentDictionary<string, IFluidTemplate>();
 
@@ -47,25 +48,13 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
 
         _templateOptions.ValueConverters.Add(v =>
         {
-            if (v is JsonElement jsonElement)
+            // If the object is an Options class, convert its property names to camel case
+            if (v.GetType().Namespace?.StartsWith(GetType().Namespace!) == true)
             {
-                var dictionary = jsonElement.EnumerateObject().ToDictionary(p => p.Name, p => CreateValueFromJson(p.Value));
-                return FluidValue.Create(dictionary, _templateOptions);
+                return new ConvertNamesFromJsonTypeInfoObjectValue(v, optionsJsonSerializerOptions);
             }
 
             return null;
-
-            object? CreateValueFromJson(JsonElement element) => element.ValueKind switch
-            {
-                JsonValueKind.Object => element.EnumerateObject().ToDictionary(p => p.Name, p => CreateValueFromJson(p.Value)),
-                JsonValueKind.Array => element.EnumerateArray().Select(CreateValueFromJson),
-                JsonValueKind.String => element.GetString(),
-                JsonValueKind.Number => element.GetDecimal(),  // REVIEW
-                JsonValueKind.True => true,
-                JsonValueKind.False => false,
-                JsonValueKind.Null => null,
-                _ => throw new ArgumentException($"Unrecognized {nameof(JsonValueKind)}: '{element.ValueKind}'.", nameof(element))
-            };
         });
     }
 
@@ -167,8 +156,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
         context.SetValue("govukI18nAttributes", new FunctionValue(Functions.GovukI18nAttributes));
         context.SetValue("ifelse", new FunctionValue(Functions.IfElse));
         context.SetValue("istruthy", new FunctionValue(Functions.IsTruthy));
-        var componentParams = JsonSerializer.SerializeToElement(componentOptions, _optionsJsonSerializerOptions);
-        context.SetValue("params", componentParams);  // To match the nunjucks templates
+        context.SetValue("params", componentOptions);  // To match the nunjucks templates
 
         var template = GetTemplate(templateName);
         return template.Render(context, _encoder).TrimStart();
@@ -243,7 +231,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
                 result.Add(name, value);
             }
 
-            return DictionaryValue.Create(result, context.Options);
+            return FluidValue.Create(result, context.Options);
         }
 
         public static FluidValue GovukAttributes(FunctionArguments args, TemplateContext context)
@@ -257,40 +245,20 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
             {
                 attributesHtml = attrsArg.ToStringValue();
             }
-            else if (attrsArg.Type is FluidValues.Dictionary)
+            else if (attrsArg.Type is FluidValues.Object && attrsArg.ToObjectValue() is AttributeCollection attributeCollection)
             {
                 var sb = new StringBuilder();
 
-                foreach (ArrayValue kvp in attrsArg.Enumerate(context))
+                foreach (var attribute in attributeCollection.GetAttributes())
                 {
-                    var optional = false;
-                    FluidValue? attributeValue = null;
-                    var elements = kvp.Enumerate(context).GetEnumerator();
-
-                    elements.MoveNext();
-                    var attributeName = elements.Current.ToStringValue();
-
-                    elements.MoveNext();
-                    var attributeValueFluidValue = elements.Current;
-
-                    if (attributeValueFluidValue.Type == FluidValues.Object)
-                    {
-                        // TODO Unpack value and optional
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        attributeValue = attributeValueFluidValue;
-                    }
-
                     sb.Append(' ');
-                    sb.Append(_encoder.Encode(attributeName));
+                    sb.Append(_encoder.Encode(attribute.Name));
 
-                    if (!optional && !attributeValue.Equals(BooleanValue.True))
+                    if (!attribute.Optional || attribute.Value is not true)
                     {
                         sb.Append('=');
                         sb.Append('"');
-                        sb.Append(_encoder.Encode(attributeValue.ToStringValue()));
+                        sb.Append(_encoder.Encode(attribute.Value?.ToString() ?? string.Empty));
                         sb.Append('"');
                     }
                 }
@@ -330,6 +298,47 @@ internal partial class FluidComponentGenerator : IComponentGenerator2
         public static FluidValue IsTruthy(FunctionArguments args, TemplateContext context)
         {
             return FluidValue.Create(args.At(0).ToBooleanValue(), context.Options);
+        }
+    }
+
+    private class ConvertNamesFromJsonTypeInfoObjectValue : ObjectValueBase
+    {
+        private readonly JsonTypeInfo _jsonTypeInfo;
+
+        public ConvertNamesFromJsonTypeInfoObjectValue(object value, JsonSerializerOptions jsonSerializerOptions) : base(value)
+        {
+            ArgumentNullException.ThrowIfNull(jsonSerializerOptions);
+
+            _jsonTypeInfo = jsonSerializerOptions.TypeInfoResolver!.GetTypeInfo(Value.GetType(), jsonSerializerOptions)!;
+        }
+
+        protected override FluidValue GetValue(string name, TemplateContext context)
+        {
+            var fixedName = GetMemberNamesFromJsonPath(name);
+            return base.GetValue(fixedName, context);
+        }
+
+        public override ValueTask<FluidValue> GetValueAsync(string name, TemplateContext context)
+        {
+            var fixedName = GetMemberNamesFromJsonPath(name);
+            return base.GetValueAsync(fixedName, context);
+        }
+
+        private string GetMemberNamesFromJsonPath(string name)
+        {
+            var property = _jsonTypeInfo.Properties.SingleOrDefault(p => p.Name == name);
+            if (property is null)
+            {
+                throw new InvalidOperationException($"Cannot find property with name '{name}' on {_jsonTypeInfo.Type.Name}.");
+            }
+
+            var memberName = (property.AttributeProvider as MemberInfo)?.Name;
+            if (memberName is null)
+            {
+                throw new InvalidOperationException($"Cannot get member name for property '{name}' on {_jsonTypeInfo.Type.Name}.");
+            }
+
+            return memberName;
         }
     }
 }
