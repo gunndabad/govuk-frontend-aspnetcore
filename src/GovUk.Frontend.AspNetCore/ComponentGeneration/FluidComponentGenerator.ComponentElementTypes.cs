@@ -5,5 +5,6 @@ internal partial class FluidComponentGenerator
     internal static class ComponentElementTypes
     {
         public const string BackLink = "a";
+        public const string Breadcrumbs = "nav";
     }
 }

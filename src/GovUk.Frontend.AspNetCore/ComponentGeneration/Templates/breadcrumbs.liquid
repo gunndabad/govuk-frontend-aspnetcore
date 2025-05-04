@@ -13,7 +13,7 @@
   <ol class="govuk-breadcrumbs__list">
 {%- for item in params.items %}
   {%- if item.href %}
-    <li class="govuk-breadcrumbs__list-item">
+    <li class="govuk-breadcrumbs__list-item" {{- govukAttributes(item.itemAttributes) }}>
       <a class="govuk-breadcrumbs__link" href="{{ item.href }}" {{- govukAttributes(item.attributes) }}>
         {{- item.html | raw | default: item.text -}}
       </a>

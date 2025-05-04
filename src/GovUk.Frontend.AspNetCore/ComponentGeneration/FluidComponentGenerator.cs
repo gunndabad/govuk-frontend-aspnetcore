@@ -64,7 +64,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator
         return RenderTemplate("back-link", options);
     }
 
-    public virtual IHtmlContent GenerateBreadcrumbs(BreadcrumbsOptions2 options)
+    public virtual IHtmlContent GenerateBreadcrumbs(BreadcrumbsOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("breadcrumbs", options);

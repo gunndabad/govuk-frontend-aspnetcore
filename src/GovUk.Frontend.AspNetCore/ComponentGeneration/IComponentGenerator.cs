@@ -23,7 +23,7 @@ public interface IComponentGenerator
     /// Generates a breadcrumbs component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    IHtmlContent GenerateBreadcrumbs(BreadcrumbsOptions2 options);
+    IHtmlContent GenerateBreadcrumbs(BreadcrumbsOptions options);
 
     /// <summary>
     /// Generates a button component.

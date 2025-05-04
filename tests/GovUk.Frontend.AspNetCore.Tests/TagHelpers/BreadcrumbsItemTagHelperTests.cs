@@ -47,7 +47,7 @@ public class BreadcrumbsItemTagHelperTests
         // Assert
         var lastItem = breadcrumbsContext.Items.Last();
         Assert.Null(lastItem.Href);
-        Assert.Equal(content, lastItem.Html?.ToHtmlString());
+        Assert.Equal(content, lastItem.Html);
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public class BreadcrumbsItemTagHelperTests
 
         // Assert
         var lastItem = breadcrumbsContext.Items.Last();
-        Assert.Equal(href, lastItem.Href?.ToHtmlString());
-        Assert.Equal(content, lastItem.Html?.ToHtmlString());
+        Assert.Equal(href, lastItem.Href);
+        Assert.Equal(content, lastItem.Html);
     }
 }

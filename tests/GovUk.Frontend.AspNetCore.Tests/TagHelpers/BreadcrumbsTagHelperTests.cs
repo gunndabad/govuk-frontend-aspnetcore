@@ -21,17 +21,17 @@ public class BreadcrumbsTagHelperTests
         [
             new BreadcrumbsOptionsItem()
             {
-                Href = new HtmlString("first"),
-                Html = new HtmlString("First")
+                Href = "first",
+                Html = "First"
             },
             new BreadcrumbsOptionsItem()
             {
-                Href = new HtmlString("second"),
-                Html = new HtmlString("Second")
+                Href = "second",
+                Html = "Second"
             },
             new BreadcrumbsOptionsItem()
             {
-                Html = new HtmlString("Last")
+                Html = "Last"
             }
         ];
 
@@ -60,7 +60,7 @@ public class BreadcrumbsTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
         BreadcrumbsOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateBreadcrumbs(It.IsAny<BreadcrumbsOptions>())).Callback<BreadcrumbsOptions>(o => actualOptions = o);
 
@@ -82,6 +82,6 @@ public class BreadcrumbsTagHelperTests
             item => Assert.Same(items[0], item),
             item => Assert.Same(items[1], item),
             item => Assert.Same(items[2], item));
-        Assert.Equal(labelText, actualOptions.LabelText?.ToHtmlString());
+        Assert.Equal(labelText, actualOptions.LabelText);
     }
 }

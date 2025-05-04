@@ -37,15 +37,15 @@ public class BreadcrumbsItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("href", out var href);
 
         breadcrumbsContext.AddItem(new BreadcrumbsOptionsItem()
         {
             ItemAttributes = attributes,
             Href = href,
-            Attributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(LinkAttributes),
-            Html = childContent
+            Attributes = new AttributeCollection(LinkAttributes),
+            Html = childContent.ToHtmlString()
         });
 
         output.SuppressOutput();

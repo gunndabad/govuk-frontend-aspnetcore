@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.AspNetCore.Routing.Patterns;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -10,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(BreadcrumbsItemTagHelper.TagName/*, BreadcrumbsItemTagHelper.ShortTagName*/)]
-[OutputElementHint(DefaultComponentGenerator.BreadcrumbsElement)]
+[OutputElementHint(FluidComponentGenerator.ComponentElementTypes.Breadcrumbs)]
 public class BreadcrumbsTagHelper : TagHelper
 {
     internal const string TagName = "govuk-breadcrumbs";
@@ -18,19 +19,12 @@ public class BreadcrumbsTagHelper : TagHelper
     private const string CollapseOnMobileAttributeName = "collapse-on-mobile";
     private const string LabelTextAttributeName = "label-text";
 
-    private readonly ILegacyComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="ButtonTagHelper"/>.
     /// </summary>
-    public BreadcrumbsTagHelper() : this(new DefaultComponentGenerator())
-    {
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="ButtonTagHelper"/>.
-    /// </summary>
-    internal BreadcrumbsTagHelper(ILegacyComponentGenerator componentGenerator)
+    public BreadcrumbsTagHelper(IComponentGenerator componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;
@@ -64,18 +58,18 @@ public class BreadcrumbsTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateBreadcrumbs(new BreadcrumbsOptions
+        var component = _componentGenerator.GenerateBreadcrumbs(new BreadcrumbsOptions()
         {
             CollapseOnMobile = CollapseOnMobile,
             Classes = classes,
             Attributes = attributes,
             Items = breadcrumbsContext.Items,
-            LabelText = LabelText.EncodeHtml()
+            LabelText = LabelText
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
     }
 }
