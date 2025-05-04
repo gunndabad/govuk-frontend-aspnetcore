@@ -7,7 +7,9 @@ Targets GOV.UK Frontend v5.9.0.
 ### Tag helper changes
 
 #### `<govuk-file-upload>` tag helper
-JavaScript enhancements can be enabled by setting the `javascript` attribute to `true.
+JavaScript enhancements can be enabled by setting the `javascript-enhancements` attribute to `true`.
+This can be configured globally by setting the `DefaultFileUploadJavaScriptEnhancements` property on `GovUkFrontendAspNetCoreOptions`.
+
 A `multiple` attribute has also been added.
 
 ### Breaking changes

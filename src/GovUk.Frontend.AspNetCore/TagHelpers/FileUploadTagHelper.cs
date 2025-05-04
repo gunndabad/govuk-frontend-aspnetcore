@@ -32,7 +32,7 @@ public class FileUploadTagHelper : TagHelper
     private const string ForAttributeName = "for";
     private const string IdAttributeName = "id";
     private const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
-    private const string JavaScriptAttributeName = "javascript";
+    private const string JavaScriptEnhancementsAttributeName = "javascript-enhancements";
     private const string LabelClassAttributeName = "label-class";
     private const string MultipleAttributeName = "multiple";
     private const string NameAttributeName = "name";
@@ -116,8 +116,11 @@ public class FileUploadTagHelper : TagHelper
     /// <summary>
     /// Whether to enable JavaScript enhancements for the component.
     /// </summary>
-    [HtmlAttributeName(JavaScriptAttributeName)]
-    public bool? JavaScript { get; set; }
+    /// <remarks>
+    /// The default is set for the application in <see cref="GovUkFrontendAspNetCoreOptions.DefaultFileUploadJavaScriptEnhancements"/>.
+    /// </remarks>
+    [HtmlAttributeName(JavaScriptEnhancementsAttributeName)]
+    public bool? JavaScriptEnhancements { get; set; }
 
     /// <summary>
     /// Additional classes for the generated <c>label</c> element.
@@ -193,7 +196,7 @@ public class FileUploadTagHelper : TagHelper
             Hint = hintOptions,
             ErrorMessage = errorMessageOptions,
             FormGroup = formGroupOptions,
-            JavaScript = JavaScript,
+            JavaScript = JavaScriptEnhancements,
             ChooseFilesButtonText = null,
             DropInstructionText = null,
             MultipleFilesChosenText = null,

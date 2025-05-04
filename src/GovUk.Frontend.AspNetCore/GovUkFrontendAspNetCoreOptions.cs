@@ -71,6 +71,11 @@ public class GovUkFrontendAspNetCoreOptions
     public bool? DefaultButtonPreventDoubleClick { get; set; }
 
     /// <summary>
+    /// The default value for <see cref="FileUploadTagHelper.JavaScriptEnhancements"/>.
+    /// </summary>
+    public bool? DefaultFileUploadJavaScriptEnhancements { get; set; }
+
+    /// <summary>
     /// A delegate for retrieving a CSP nonce for the current request.
     /// </summary>
     /// <remarks>
