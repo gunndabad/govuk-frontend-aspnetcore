@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -34,6 +35,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
     [Obsolete("Use the 'for' attribute instead.", DiagnosticId = DiagnosticIds.UseForAttributeInstead)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public ModelExpression? AspFor
     {
         get => For;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -55,6 +56,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
     /// </summary>
     [HtmlAttributeName(AspForAttributeName)]
     [Obsolete("Use the 'for' attribute instead.", DiagnosticId = DiagnosticIds.UseForAttributeInstead)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public ModelExpression? AspFor
     {
         get => For;
