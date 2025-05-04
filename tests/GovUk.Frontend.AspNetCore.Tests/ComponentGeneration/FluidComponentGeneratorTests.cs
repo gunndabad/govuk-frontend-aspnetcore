@@ -72,8 +72,8 @@ public class FluidComponentGeneratorTests
             (generator, options) => generator.GenerateFieldset(options));
 
     [Theory]
-    [ComponentFixtureData("file-upload", typeof(FileUploadOptions2), exclude: ["with value"])]
-    public void FileUpload(ComponentTestCaseData<FileUploadOptions2> data) =>
+    [ComponentFixtureData("file-upload", typeof(FileUploadOptions), only: "translated")]
+    public void FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateFileUpload(options),

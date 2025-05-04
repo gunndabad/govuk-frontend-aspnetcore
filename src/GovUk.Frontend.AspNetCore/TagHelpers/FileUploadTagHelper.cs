@@ -1,7 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -11,39 +18,75 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName)]
-public class FileUploadTagHelper : FormGroupTagHelperBase
+public class FileUploadTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-file-upload-error-message";
     internal const string HintTagName = "govuk-file-upload-hint";
     internal const string LabelTagName = "govuk-file-upload-label";
     internal const string TagName = "govuk-file-upload";
 
+    private const string AspForAttributeName = "asp-for";
     private const string AttributesPrefix = "input-";
+    private const string DescribedByAttributeName = "described-by";
     private const string DisabledAttributeName = "disabled";
+    private const string ForAttributeName = "for";
     private const string IdAttributeName = "id";
+    private const string IgnoreModelStateErrorsAttributeName = "ignore-modelstate-errors";
+    private const string JavaScriptAttributeName = "javascript";
     private const string LabelClassAttributeName = "label-class";
+    private const string MultipleAttributeName = "multiple";
     private const string NameAttributeName = "name";
+
+    private readonly IComponentGenerator2 _componentGenerator;
+    private readonly IModelHelper _modelHelper;
 
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
     public FileUploadTagHelper()
-        : this(htmlGenerator: null, modelHelper: null)
+        : this(new FluidComponentGenerator(), modelHelper: new DefaultModelHelper())
     {
     }
 
-    internal FileUploadTagHelper(IGovUkHtmlGenerator? htmlGenerator = null, IModelHelper? modelHelper = null)
-        : base(
-              htmlGenerator ?? new ComponentGenerator(),
-              modelHelper ?? new DefaultModelHelper())
+    internal FileUploadTagHelper(IComponentGenerator2 componentGenerator)
+        : this(componentGenerator, modelHelper: new DefaultModelHelper())
     {
     }
+
+    internal FileUploadTagHelper(IComponentGenerator2 componentGenerator, IModelHelper modelHelper)
+    {
+        _componentGenerator = componentGenerator;
+        _modelHelper = modelHelper;
+    }
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(AspForAttributeName)]
+    [Obsolete("Use the 'for' attribute instead.")]
+    public ModelExpression? AspFor
+    {
+        get => For;
+        set => For = value;
+    }
+
+    /// <summary>
+    /// One or more element IDs to add to the <c>aria-describedby</c> attribute of the generated <c>input</c> element.
+    /// </summary>
+    [HtmlAttributeName(DescribedByAttributeName)]
+    public string? DescribedBy { get; set; }
 
     /// <summary>
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
     public bool Disabled { get; set; } = ComponentGenerator.FileUploadDefaultDisabled;
+
+    /// <summary>
+    /// An expression to be evaluated against the current model.
+    /// </summary>
+    [HtmlAttributeName(ForAttributeName)]
+    public ModelExpression? For { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.
@@ -55,16 +98,38 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
     public string? Id { get; set; }
 
     /// <summary>
+    /// Whether the <see cref="ModelStateEntry.Errors"/> for the <see cref="AspFor"/> expression should be used
+    /// to deduce an error message.
+    /// </summary>
+    /// <remarks>
+    /// <para>When there are multiple errors in the <see cref="ModelErrorCollection"/> the first is used.</para>
+    /// </remarks>
+    [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
+    public bool? IgnoreModelStateErrors { get; set; }
+
+    /// <summary>
     /// Additional attributes to add to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DictionaryAttributePrefix = AttributesPrefix)]
     public IDictionary<string, string?> InputAttributes { get; set; } = new Dictionary<string, string?>();
 
     /// <summary>
+    /// Whether to enable JavaScript enhancements for the component.
+    /// </summary>
+    [HtmlAttributeName(JavaScriptAttributeName)]
+    public bool? JavaScript { get; set; }
+
+    /// <summary>
     /// Additional classes for the generated <c>label</c> element.
     /// </summary>
     [HtmlAttributeName(LabelClassAttributeName)]
     public string? LabelClass { get; set; }
+
+    /// <summary>
+    /// The <c>multiple</c> attribute for the generated <c>input</c> element.
+    /// </summary>
+    [HtmlAttributeName(MultipleAttributeName)]
+    public bool? Multiple { get; set; }
 
     /// <summary>
     /// The <c>name</c> attribute for the generated <c>input</c> element.
@@ -75,83 +140,98 @@ public class FileUploadTagHelper : FormGroupTagHelperBase
     [HtmlAttributeName(NameAttributeName)]
     public string? Name { get; set; }
 
-    private protected override FormGroupContext CreateFormGroupContext() => new FileUploadContext();
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
 
-    private protected override IHtmlContent GenerateFormGroupContent(
-        TagHelperContext tagHelperContext,
-        FormGroupContext formGroupContext,
-        TagHelperOutput tagHelperOutput,
-        IHtmlContent childContent,
-        out bool haveError)
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var contentBuilder = new HtmlContentBuilder();
+        var fileUploadContext = new FileUploadContext();
 
-        var label = GenerateLabel(formGroupContext, LabelClass);
-        contentBuilder.AppendHtml(label);
-
-        var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        using (context.SetScopedContextItem(fileUploadContext))
+        using (context.SetScopedContextItem(typeof(FormGroupContext3), fileUploadContext))
         {
-            contentBuilder.AppendHtml(hint);
+            await output.GetChildContentAsync();
         }
 
-        var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        var name = ResolveName();
+        var id = ResolveId(name);
+        var labelOptions = fileUploadContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
+        var hintOptions = fileUploadContext.GetHintOptions(For, _modelHelper);
+        var errorMessageOptions = fileUploadContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
+
+        if (LabelClass is not null)
         {
-            contentBuilder.AppendHtml(errorMessage);
+            labelOptions.Classes = (labelOptions.Classes + " " + LabelClass).TrimStart();
         }
 
-        haveError = errorMessage != null;
-
-        var inputTagBuilder = GenerateFileUpload(haveError);
-        contentBuilder.AppendHtml(inputTagBuilder);
-
-        return contentBuilder;
-
-        TagBuilder GenerateFileUpload(bool haveError)
+        var formGroupAttributes = new AttributeCollection(output.Attributes);
+        formGroupAttributes.Remove("class", out var formGroupClasses);
+        var formGroupOptions = new FileUploadOptionsFormGroup()
         {
-            var resolvedId = ResolveIdPrefix();
-            var resolvedName = ResolveName();
+            Attributes = formGroupAttributes,
+            Classes = formGroupClasses
+        };
 
-            return Generator.GenerateFileUpload(
-                haveError,
-                resolvedId,
-                resolvedName,
-                DescribedBy,
-                Disabled,
-                InputAttributes.ToAttributeDictionary());
+        var attributes = new AttributeCollection(InputAttributes);
+        attributes.Remove("class", out var classes);
+
+        var component = _componentGenerator.GenerateFileUpload(new FileUploadOptions
+        {
+            Id = id,
+            Name = name,
+            Value = null,
+            Disabled = Disabled,
+            Multiple = Multiple,
+            DescribedBy = DescribedBy,
+            Label = labelOptions,
+            Hint = hintOptions,
+            ErrorMessage = errorMessageOptions,
+            FormGroup = formGroupOptions,
+            JavaScript = JavaScript,
+            ChooseFilesButtonText = null,
+            DropInstructionText = null,
+            MultipleFilesChosenText = null,
+            NoFileChosenText = null,
+            EnteredDropZoneText = null,
+            LeftDropZoneText = null,
+            Classes = classes,
+            Attributes = attributes
+        });
+
+        output.ApplyComponentHtml(component);
+
+        if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
+        {
+            Debug.Assert(errorMessageOptions.Html is not null);
+            containerErrorContext.AddError(new HtmlString(errorMessageOptions.Html!), href: new HtmlString("#" + id));
         }
     }
 
-    private protected override string ResolveIdPrefix()
+    private string ResolveId(string name)
     {
-        if (Id != null)
+        if (Id is not null)
         {
             return Id;
         }
 
-        if (Name == null && For == null)
-        {
-            throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
-                IdAttributeName,
-                NameAttributeName,
-                AspForAttributeName);
-        }
-
-        var resolvedName = ResolveName();
-
-        return TagBuilder.CreateSanitizedId(resolvedName, Constants.IdAttributeDotReplacement);
+        return TagBuilder.CreateSanitizedId(name, Constants.IdAttributeDotReplacement);
     }
 
     private string ResolveName()
     {
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,
                 AspForAttributeName);
         }
 
-        return Name ?? ModelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
+        return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 }

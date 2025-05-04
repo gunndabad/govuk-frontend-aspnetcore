@@ -69,6 +69,7 @@ class Program
             ("ErrorSummary/ErrorSummaryWithTitle", "error-summary-with-title.png"),
             ("Fieldset/Fieldset", "fieldset.png"),
             ("FileUpload/FileUpload", "file-upload.png"),
+            ("FileUpload/FileUploadWithJavascriptEnhancements", "file-upload-with-javascript.png"),
             ("FileUpload/FileUploadWithErrors", "file-upload-with-errors.png"),
             ("InsetText/InsetText", "inset-text.png"),
             ("NotificationBanner/NotificationBanner", "notification-banner.png"),

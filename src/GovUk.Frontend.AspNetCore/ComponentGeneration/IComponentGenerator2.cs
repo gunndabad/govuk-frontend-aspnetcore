@@ -10,4 +10,10 @@ internal interface IComponentGenerator2
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
     string GenerateBackLink(BackLinkOptions options);
+
+    /// <summary>
+    /// Generates a file upload component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    string GenerateFileUpload(FileUploadOptions options);
 }

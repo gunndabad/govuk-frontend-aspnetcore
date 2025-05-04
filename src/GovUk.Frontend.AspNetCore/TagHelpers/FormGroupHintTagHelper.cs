@@ -52,6 +52,13 @@ public class FormGroupHintTagHelper : TagHelper
                 childContent?.Snapshot(),
                 output.TagName);
         }
+        else if (context.TryGetContextItem<FormGroupContext3>(out var formGroupContext3))
+        {
+            formGroupContext3.SetHint(
+                new AttributeCollection(output.Attributes),
+                childContent?.ToHtmlString(),
+                output.TagName);
+        }
 
         output.SuppressOutput();
     }

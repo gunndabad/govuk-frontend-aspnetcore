@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -12,109 +16,690 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class FileUploadTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var id = "my-id";
+        var describedBy = "describedby";
+        var name = "my-name";
+        var disabled = true;
+        var multiple = true;
+        var labelClass = "additional-label-class";
+        var classes = "custom-class";
+        var dataFooAttrValue = "foo";
+        var labelHtml = "The label";
+        var hintHtml = "The hint";
+
         var context = new TagHelperContext(
-            tagName: "govuk-file-upload",
+            tagName: "govuk-input",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
             uniqueId: "test");
 
         var output = new TagHelperOutput(
-            "govuk-file-upload",
+            "govuk-input",
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var fileUploadContext = context.GetContextItem<FileUploadContext>();
+                var inputContext = context.GetContextItem<FileUploadContext>();
 
-                fileUploadContext.SetLabel(
+                inputContext.SetLabel(
                     isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                    attributes: new AttributeCollection(),
+                    labelHtml,
+                    FileUploadTagHelper.LabelTagName);
 
-                fileUploadContext.SetHint(
-                    attributes: null,
-                    content: new HtmlString("The hint"));
+                inputContext.SetHint(
+                    attributes: new AttributeCollection(),
+                    hintHtml,
+                    FileUploadTagHelper.HintTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new FileUploadTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            Id = "my-id",
-            DescribedBy = "describedby",
-            Name = "my-id",
-            LabelClass = "additional-label-class"
+            Id = id,
+            DescribedBy = describedBy,
+            Name = name,
+            Multiple = multiple,
+            Disabled = disabled,
+            LabelClass = labelClass,
+            ViewContext = new ViewContext(),
+            InputAttributes = new Dictionary<string, string?>()
+            {
+                { "class", classes },
+                { "data-foo", dataFooAttrValue },
+            }
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group"">
-    <label for=""my-id"" class=""govuk-label additional-label-class"">The label</label>
-    <div id=""my-id-hint"" class=""govuk-hint"">The hint</div>
-    <input aria-describedby=""describedby my-id-hint"" class=""govuk-file-upload"" id=""my-id"" name=""my-id"" type=""file"">
-</div>";
+        Assert.NotNull(actualOptions);
+        Assert.Equal(id, actualOptions.Id);
+        Assert.Equal(name, actualOptions.Name);
+        Assert.Equal(multiple, actualOptions.Multiple);
+        Assert.Equal(disabled, actualOptions.Disabled);
+        Assert.Equal(describedBy, actualOptions.DescribedBy);
+        Assert.Equal(labelHtml, actualOptions.Label?.Html);
+        Assert.Equal(hintHtml, actualOptions.Hint?.Html);
+        Assert.Null(actualOptions.ErrorMessage);
+        Assert.Equal(classes, actualOptions.Classes);
 
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions.Attributes);
+        Assert.Collection(actualOptions.Attributes, kvp =>
+        {
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(dataFooAttrValue, kvp.Value);
+        });
     }
 
     [Fact]
-    public async Task ProcessAsync_WithError_RendersExpectedOutput()
+    public async Task ProcessAsync_WithErrorMessage_GeneratesOptionsWithErrorMessage()
     {
         // Arrange
+        var id = "my-id";
+        var name = "my-name";
+        var labelHtml = "The label";
+        var errorHtml = "The error message";
+        var errorVht = "visually hidden text";
+        var errorDataFooAttribute = "bar";
+
         var context = new TagHelperContext(
-            tagName: "govuk-file-upload",
+            tagName: "govuk-input",
             allAttributes: new TagHelperAttributeList(),
             items: new Dictionary<object, object>(),
             uniqueId: "test");
 
         var output = new TagHelperOutput(
-            "govuk-file-upload",
+            "govuk-input",
             attributes: new TagHelperAttributeList(),
             getChildContentAsync: (useCachedResult, encoder) =>
             {
-                var fileUploadContext = context.GetContextItem<FileUploadContext>();
+                var inputContext = context.GetContextItem<FileUploadContext>();
 
-                fileUploadContext.SetLabel(
+                inputContext.SetLabel(
                     isPageHeading: false,
-                    attributes: null,
-                    content: new HtmlString("The label"));
+                    new AttributeCollection(),
+                    labelHtml,
+                    FileUploadTagHelper.LabelTagName);
 
-                fileUploadContext.SetErrorMessage(
-                    visuallyHiddenText: null,
-                    attributes: null,
-                    content: new HtmlString("The error"));
+                inputContext.SetErrorMessage(
+                    visuallyHiddenText: errorVht,
+                    attributes: new AttributeCollection(
+                        new AttributeCollection.Attribute("data-foo", errorDataFooAttribute, Optional: false)),
+                    errorHtml,
+                    FileUploadTagHelper.ErrorMessageTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new FileUploadTagHelper(new ComponentGenerator(), new DefaultModelHelper())
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
-            Id = "my-id",
-            DescribedBy = "describedby",
-            Name = "my-id"
+            Id = id,
+            Name = name,
+            ViewContext = new ViewContext()
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-form-group govuk-form-group--error"">
-    <label for=""my-id"" class=""govuk-label"">The label</label>
-    <p id=""my-id-error"" class=""govuk-error-message"">
-        <span class=""govuk-visually-hidden"">Error:</span>
-        The error
-    </p>
-    <input aria-describedby=""describedby my-id-error"" class=""govuk-file-upload govuk-file-upload--error"" id=""my-id"" name=""my-id"" type=""file"">
-</div>";
+        Assert.NotNull(actualOptions?.ErrorMessage);
+        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html);
+        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText);
+        Assert.NotNull(actualOptions.ErrorMessage.Attributes);
+        Assert.Collection(actualOptions.ErrorMessage.Attributes, kvp =>
+        {
+            Assert.Equal("data-foo", kvp.Key);
+            Assert.Equal(errorDataFooAttribute, kvp.Value);
+        });
+    }
 
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+    [Fact]
+    public async Task ProcessAsync_WithFor_GeneratesOptionsFromModelMetadata()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var description = "The hint";
+        var modelStateError = "The error message";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(description);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions);
+        Assert.NotNull(actualOptions.Id);
+        Assert.NotNull(actualOptions.Name);
+        Assert.Equal(displayName, actualOptions.Label?.Html);
+        Assert.Equal(description, actualOptions.Hint?.Html);
+        Assert.Equal(modelStateError, actualOptions.ErrorMessage?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitLabel_UsesSpecifiedLabel()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var modelStateDisplayName = "ModelState label";
+        var labelHtml = "Explicit label";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var inputContext = context.GetContextItem<FileUploadContext>();
+
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    new AttributeCollection(),
+                    labelHtml,
+                    FileUploadTagHelper.LabelTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateDisplayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(labelHtml, actualOptions?.Label?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitHint_UsesSpecifiedHint()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateDescription = "The hint";
+        var hintHtml = "Explicit hint";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var inputContext = context.GetContextItem<FileUploadContext>();
+
+                inputContext.SetHint(new AttributeCollection(), hintHtml, FileUploadTagHelper.HintTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetDescription(/*modelExplorer: */It.IsAny<ModelExplorer>()))
+            .Returns(modelStateDescription);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(hintHtml, actualOptions?.Hint?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndExplicitErrorMessage_UsesSpecifiedErrorMessage()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateError = "ModelState error";
+        var errorHtml = "Explicit error";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var inputContext = context.GetContextItem<FileUploadContext>();
+
+                inputContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    new AttributeCollection(),
+                    errorHtml,
+                    FileUploadTagHelper.ErrorMessageTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndNoExplicitErrorMessageAndIgnoreModelStateErrorTrue_DoesNotRenderErrorMessage()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateError = "ModelState error";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+            IgnoreModelStateErrors = true
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Null(actualOptions?.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithForAndAndExplicitErrorMessageAndIgnoreModelStateErrorTrue_DoesRenderErrorMessage()
+    {
+        // Arrange
+        var modelStateValue = "42";
+        var displayName = "The label";
+        var modelStateError = "ModelState error";
+        var errorHtml = "Explicit error";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var inputContext = context.GetContextItem<FileUploadContext>();
+
+                inputContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    new AttributeCollection(),
+                    errorHtml,
+                    FileUploadTagHelper.ErrorMessageTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        modelHelperMock
+            .Setup(mock => mock.GetFullHtmlFieldName(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(nameof(Model.SimpleProperty));
+
+        modelHelperMock
+            .Setup(mock => mock.GetDisplayName(
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(displayName);
+
+        modelHelperMock
+            .Setup(mock => mock.GetValidationMessage(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateError);
+
+        modelHelperMock
+            .Setup(mock => mock.GetModelValue(
+                /*viewContext: */It.IsAny<ViewContext>(),
+                /*modelExplorer: */It.IsAny<ModelExplorer>(),
+                /*expression: */It.IsAny<string>()))
+            .Returns(modelStateValue);
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.SimpleProperty));
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        FileUploadOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
+            ViewContext = new ViewContext(),
+            IgnoreModelStateErrors = true
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WithError_AddsErrorWithCorrectFieldIdToContainerErrorContext()
+    {
+        // Arrange
+        var formErrorContext = new ContainerErrorContext();
+
+        var id = "my-id";
+        var name = "my-name";
+        var labelHtml = "The label";
+        var errorHtml = "The error message";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-input",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ContainerErrorContext), formErrorContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-input",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var inputContext = context.GetContextItem<FileUploadContext>();
+
+                inputContext.SetLabel(
+                    isPageHeading: false,
+                    new AttributeCollection(),
+                    labelHtml,
+                    FileUploadTagHelper.LabelTagName);
+
+                inputContext.SetErrorMessage(
+                    visuallyHiddenText: null,
+                    new AttributeCollection(),
+                    errorHtml,
+                    FileUploadTagHelper.ErrorMessageTagName);
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var modelHelperMock = new Mock<IModelHelper>();
+
+        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+
+        var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        {
+            Id = id,
+            Name = name,
+            ViewContext = new ViewContext()
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Collection(
+            formErrorContext.Errors,
+            error =>
+            {
+                Assert.Equal(errorHtml, error.Content.ToHtmlString());
+                Assert.Equal($"#{id}", error.Href?.ToHtmlString());
+            });
+    }
+
+    private class Model
+    {
+        public string? SimpleProperty { get; set; }
     }
 }

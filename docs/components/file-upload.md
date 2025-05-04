@@ -23,6 +23,16 @@
 
 ![File upload](../images/file-upload-with-errors.png)
 
+## Example - with JavaScript enhancements
+
+```razor
+<govuk-file-upload name="FileUpload1" javascript="true">
+     <govuk-file-upload-label>Upload a file</govuk-file-upload-label>
+ </govuk-file-upload>
+```
+
+![File upload](../images/file-upload-with-javascript.png)
+
 
 ## API
 
@@ -34,26 +44,28 @@
 | `disabled`                 | `bool`            | Whether the input should be disabled. The default is `false`.                                                                                                           |
 | `for`                      | `ModelExpression` | The model expression used to generate the `name` and `id` attributes as well as the error message content. See [documentation on forms](forms.md) for more information. |
 | `id`                       | `string`          | The `id` attribute for the generated `input` element. If not specified then a value is generated from the `name` attribute.                                             |
-| `ignore-modelstate-errors` | `bool`            | Whether ModelState errors on the ModelExpression specified by the `for` attribute should be ignored when generating an error message. The default is `false`.           |
+| `ignore-modelstate-errors` | `bool`            | Whether ModelState errors on the ModelExpression specified by the `asp-for` attribute should be ignored when generating an error message. The default is `false`.       |
 | `input-*`                  |                   | Additional attributes to add to the generated `input` element.                                                                                                          |
+| `javascript`               | `bool?`           |  Whether to enable JavaScript enhancements for the component.                                                                                                           |
 | `label-class`              | `string`          | Additional classes for the generated `label` element.                                                                                                                   |
-| `name`                     | `string`          | The `name` attribute for the generated `input` element. Required unless the `for` attribute is specified.                                                               |
+| `multiple`                 | `bool?`           | The `multiple` attribute for the generated `input` element.                                                                                                             |
+| `name`                     | `string`          | The `name` attribute for the generated `input` element. Required unless the `asp-for` attribute is specified.                                                           |
 
 ### `<govuk-file-upload-label>`
 
 The content is the HTML to use within the component's label.\
 Must be inside a `<govuk-file-upload>` element.
 
-| Attribute         | Type   | Description                                                                      |
-|-------------------|--------|----------------------------------------------------------------------------------|
-| `is-page-heading` | `bool` | Whether the label also acts as the heading for the page. The default is `false`. |
+| Attribute          | Type   | Description                                                                      |
+|--------------------|--------|----------------------------------------------------------------------------------|
+| `is-page-heading`  | `bool` | Whether the label also acts as the heading for the page. The default is `false`. |
 
 ### `<govuk-file-upload-hint>`
 
 The content is the HTML to use within the component's hint.\
 Must be inside a `<govuk-file-upload>` element.
 
-If the `for` attribute is specified on the parent `<govuk-file-upload>` then content for the hint will be generated from the model expression.\
+If the `asp-for` attribute is specified on the parent `<govuk-file-upload>` then content for the hint will be generated from the model expression.\
 If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
 `<govuk-file-upload-hint class="some-additional-class" />`.
 
@@ -62,7 +74,7 @@ If you want to retain the generated content and specify additional attributes th
 The content is the HTML to use within the component's error message.\
 Must be inside a `<govuk-file-upload>` element.
 
-If the `for` attribute is specified on the parent `<govuk-file-upload>` then content for the error message will be generated from the model expression.
+If the `asp-for` attribute is specified on the parent `<govuk-file-upload>` then content for the error message will be generated from the model expression.
 (To prevent this set `ignore-modelstate-errors` on the parent `<govuk-file-upload>` to `false`.) Specifying any content here will override any generated error message.\
 If you want to retain the generated content and specify additional attributes then use a self-closing tag e.g.
 `<govuk-file-upload-error-message visually-hidden-text="Error" />`.
