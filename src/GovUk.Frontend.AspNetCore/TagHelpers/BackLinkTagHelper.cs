@@ -20,7 +20,15 @@ public class BackLinkTagHelper : TagHelper
     /// <summary>
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    public BackLinkTagHelper(IComponentGenerator2 componentGenerator)
+    public BackLinkTagHelper()
+        : this(new FluidComponentGenerator())
+    {
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="BackLinkTagHelper"/>.
+    /// </summary>
+    internal BackLinkTagHelper(IComponentGenerator2 componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;

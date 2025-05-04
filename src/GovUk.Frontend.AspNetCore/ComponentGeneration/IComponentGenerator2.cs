@@ -3,7 +3,7 @@ namespace GovUk.Frontend.AspNetCore.ComponentGeneration;
 /// <summary>
 /// Generates GOV.UK Design System components.
 /// </summary>
-public interface IComponentGenerator2
+internal interface IComponentGenerator2
 {
     /// <summary>
     /// Generates a back link component.
