@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.ComponentGeneration;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -16,7 +17,7 @@ public class FluidComponentGeneratorTests
 
     [Theory]
     [ComponentFixtureData("accordion", typeof(AccordionOptions2), exclude: ["with falsy values"])]
-    public void Accordion(ComponentTestCaseData<AccordionOptions2> data) =>
+    public Task Accordion(ComponentTestCaseData<AccordionOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateAccordion(options),
@@ -24,35 +25,35 @@ public class FluidComponentGeneratorTests
 
     [Theory]
     [ComponentFixtureData("back-link", typeof(BackLinkOptions))]
-    public void BackLink(ComponentTestCaseData<BackLinkOptions> data) =>
+    public Task BackLink(ComponentTestCaseData<BackLinkOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateBackLink(options));
 
     [Theory]
     [ComponentFixtureData("breadcrumbs", typeof(BreadcrumbsOptions))]
-    public void Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions> data) =>
+    public Task Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateBreadcrumbs(options));
 
     [Theory]
     [ComponentFixtureData("button", typeof(ButtonOptions2))]
-    public void Button(ComponentTestCaseData<ButtonOptions2> data) =>
+    public Task Button(ComponentTestCaseData<ButtonOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateButton(options));
 
     [Theory]
     [ComponentFixtureData("checkboxes", typeof(CheckboxesOptions2), exclude: ["with falsy values"])]
-    public void Checkboxes(ComponentTestCaseData<CheckboxesOptions2> data) =>
+    public Task Checkboxes(ComponentTestCaseData<CheckboxesOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateCheckboxes(options));
 
     [Theory]
     [ComponentFixtureData("cookie-banner", typeof(CookieBannerOptions))]
-    public void CookieBanner(ComponentTestCaseData<CookieBannerOptions> data) =>
+    public Task CookieBanner(ComponentTestCaseData<CookieBannerOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateCookieBanner(options),
@@ -60,21 +61,21 @@ public class FluidComponentGeneratorTests
 
     [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
-    public void ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
+    public Task ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateErrorMessage(options));
 
     [Theory]
     [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]
-    public void Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
+    public Task Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateFieldset(options));
 
     [Theory]
     [ComponentFixtureData("file-upload", typeof(FileUploadOptions), only: "translated")]
-    public void FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
+    public Task FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateFileUpload(options),
@@ -82,7 +83,7 @@ public class FluidComponentGeneratorTests
 
     [Theory]
     [ComponentFixtureData("hint", typeof(HintOptions2))]
-    public void Hint(ComponentTestCaseData<HintOptions2> data) =>
+    public Task Hint(ComponentTestCaseData<HintOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateHint(options),
@@ -97,27 +98,27 @@ public class FluidComponentGeneratorTests
 
     [Theory]
     [ComponentFixtureData("label", typeof(LabelOptions2))]
-    public void Label(ComponentTestCaseData<LabelOptions2> data) =>
+    public Task Label(ComponentTestCaseData<LabelOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateLabel(options));
 
     [Theory]
     [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
-    public void WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
+    public Task WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateWarningText(options),
             amendExpectedHtml: html => html.Replace("£", "&#xA3;").Replace("’", "&#x2019;"));
 
-    private void CheckComponentHtmlMatchesExpectedHtml<TOptions>(
+    private async Task CheckComponentHtmlMatchesExpectedHtml<TOptions>(
         ComponentTestCaseData<TOptions> testCaseData,
-        Func<FluidComponentGenerator, TOptions, IHtmlContent> generateComponent,
+        Func<FluidComponentGenerator, TOptions, ValueTask<IHtmlContent>> generateComponent,
         bool compareWhitespace = true,
         Predicate<IDiff>? excludeDiff = null,
         Func<string, string>? amendExpectedHtml = null)
     {
-        var html = generateComponent(_componentGenerator, testCaseData.Options).ToHtmlString();
+        var html = (await generateComponent(_componentGenerator, testCaseData.Options)).ToHtmlString();
 
         // Some of the fixtures have characters with different encodings to what we produce;
         // normalize those before comparing:

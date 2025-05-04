@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Fluid;
 using Fluid.Values;
 using Microsoft.AspNetCore.Html;
@@ -52,73 +53,73 @@ internal partial class FluidComponentGenerator : IComponentGenerator
         });
     }
 
-    public virtual IHtmlContent GenerateAccordion(AccordionOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateAccordion(AccordionOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("accordion", options);
     }
 
-    public virtual IHtmlContent GenerateBackLink(BackLinkOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateBackLink(BackLinkOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("back-link", options);
     }
 
-    public virtual IHtmlContent GenerateBreadcrumbs(BreadcrumbsOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateBreadcrumbs(BreadcrumbsOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("breadcrumbs", options);
     }
 
-    public virtual IHtmlContent GenerateButton(ButtonOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateButton(ButtonOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("button", options);
     }
 
-    public virtual IHtmlContent GenerateCheckboxes(CheckboxesOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateCheckboxes(CheckboxesOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("checkboxes", options);
     }
 
-    public virtual IHtmlContent GenerateCookieBanner(CookieBannerOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateCookieBanner(CookieBannerOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("cookie-banner", options);
     }
 
-    public virtual IHtmlContent GenerateErrorMessage(ErrorMessageOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateErrorMessage(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("error-message", options);
     }
 
-    public virtual IHtmlContent GenerateFieldset(FieldsetOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateFieldset(FieldsetOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("fieldset", options);
     }
 
-    public virtual IHtmlContent GenerateFileUpload(FileUploadOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateFileUpload(FileUploadOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("file-upload", options);
     }
 
-    public virtual IHtmlContent GenerateHint(HintOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateHint(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("hint", options);
     }
 
-    public virtual IHtmlContent GenerateLabel(LabelOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateLabel(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("label", options);
     }
 
-    public virtual IHtmlContent GenerateWarningText(WarningTextOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateWarningText(WarningTextOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("warning-text", options);
@@ -142,7 +143,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator
             return template;
         });
 
-    private IHtmlContent RenderTemplate(string templateName, object componentOptions)
+    private async ValueTask<IHtmlContent> RenderTemplate(string templateName, object componentOptions)
     {
         var context = new TemplateContext(_templateOptions);
         context.SetValue("dict", new FunctionValue(Functions.Dict));
@@ -153,6 +154,7 @@ internal partial class FluidComponentGenerator : IComponentGenerator
         context.SetValue("params", componentOptions);  // To match the nunjucks templates
 
         var template = GetTemplate(templateName);
-        return new HtmlString(template.Render(context, _encoder).TrimStart());
+        var result = await template.RenderAsync(context, _encoder);
+        return new HtmlString(result.TrimStart());
     }
 }

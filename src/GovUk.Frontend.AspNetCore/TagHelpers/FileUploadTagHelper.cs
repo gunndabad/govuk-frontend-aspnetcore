@@ -182,7 +182,7 @@ public class FileUploadTagHelper : TagHelper
         var attributes = new AttributeCollection(InputAttributes);
         attributes.Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateFileUpload(new FileUploadOptions
+        var component = await _componentGenerator.GenerateFileUpload(new FileUploadOptions
         {
             Id = id,
             Name = name,
