@@ -30,13 +30,6 @@ public class ComponentTests
             (generator, options) => generator.GenerateCharacterCount(options).ToHtmlString());
 
     [Theory]
-    [ComponentFixtureData("exit-this-page", typeof(ExitThisPageOptions), exclude: ["testing"])]
-    public void ExitThisPage(ComponentTestCaseData<ExitThisPageOptions> data) =>
-        CheckComponentHtmlMatchesExpectedHtml(
-            data,
-            (generator, options) => generator.GenerateExitThisPage(options).ToHtmlString());
-
-    [Theory]
     [ComponentFixtureData("tag", typeof(TagOptions))]
     public void Tag(ComponentTestCaseData<TagOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

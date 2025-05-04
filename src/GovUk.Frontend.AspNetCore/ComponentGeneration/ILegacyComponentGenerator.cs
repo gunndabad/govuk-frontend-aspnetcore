@@ -18,12 +18,6 @@ internal interface ILegacyComponentGenerator
     HtmlTagBuilder GenerateCharacterCount(CharacterCountOptions options);
 
     /// <summary>
-    /// Generates an exit this page component.
-    /// </summary>
-    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
-    HtmlTagBuilder GenerateExitThisPage(ExitThisPageOptions options);
-
-    /// <summary>
     /// Generates a tag component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
