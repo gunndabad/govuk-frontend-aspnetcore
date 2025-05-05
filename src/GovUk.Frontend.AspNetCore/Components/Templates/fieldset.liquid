@@ -11,7 +11,7 @@
     </h1>
   {% else %}
     {{ params.legend.html | raw | strip | indent: 4 | default: params.legend.text }}
-  {% endif -%}
+  {% endif %}
   </legend>
   {%- endif -%}
 {% if params.html %}

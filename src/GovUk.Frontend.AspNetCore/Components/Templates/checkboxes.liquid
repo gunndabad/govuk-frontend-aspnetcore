@@ -17,20 +17,20 @@ aria-describedby – for example hints or error messages {% endcomment %}
 {% comment %} fieldset is false by default {% endcomment %}
 {% assign hasFieldset = istruthy(params.fieldset) %}
 
-{%- macro _checkboxItem(params, item, index) -%}
-  {%- comment %} If the user explicitly sets an id, use this instead of the regular idPrefix {% endcomment %}
-  {%- comment %} The first id should not have a number suffix so it's easy to link to from the error summary component {% endcomment %}
-  {%- assign itemId = item.id | default: (idPrefix | append: ifelse((index > 1), ('-' | append: index), '')) %}
-  {%- assign itemName = item.name | default: params.name %}
-  {%- assign conditionalId = "conditional-" | append: itemId %}
-  {%- if item.divider -%}
+{%- macro _checkboxItem(params, item, index) %}
+  {%- comment %} If the user explicitly sets an id, use this instead of the regular idPrefix {% endcomment -%}
+  {%- comment %} The first id should not have a number suffix so it's easy to link to from the error summary component {% endcomment -%}
+  {% assign itemId = item.id | default: (idPrefix | append: ifelse((index > 1), ('-' | append: index), '')) %}
+  {% assign itemName = item.name | default: params.name %}
+  {% assign conditionalId = "conditional-" | append: itemId %}
+  {%- if item.divider %}
     <div class="govuk-checkboxes__divider">{{ item.divider }}</div>
-  {%- else %}
-    {%- assign isChecked = item.checked | default: (params.values contains item.value and item.checked != false) | default: false %}
-    {%- assign hasHint = istruthy((item.hint.text or item.hint.html)) %}
-    {%- assign itemHintId = ifelse(hasHint, (itemId | append: "-item-hint"), "") %}
-    {%- assign itemDescribedBy = ifelse(hasFieldset, "", describedBy) %}
-    {%- assign itemDescribedBy = (itemDescribedBy | append: " " | append: itemHintId) | strip -%}
+  {% else %}
+    {% assign isChecked = item.checked | default: (params.values contains item.value and item.checked != false) | default: false %}
+    {% assign hasHint = istruthy((item.hint.text or item.hint.html)) %}
+    {% assign itemHintId = ifelse(hasHint, (itemId | append: "-item-hint"), "") %}
+    {% assign itemDescribedBy = ifelse(hasFieldset, "", describedBy) %}
+    {% assign itemDescribedBy = (itemDescribedBy | append: " " | append: itemHintId) | strip %}
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="{{ itemId }}" name="{{ itemName }}" type="checkbox" value="{{ item.value }}"
         {%- if isChecked %} checked{% endif -%}
@@ -45,7 +45,7 @@ aria-describedby – for example hints or error messages {% endcomment %}
         classes = (('govuk-checkboxes__label' | append: (' ' | append: item.label.classes)) | rstrip),
         attributes = item.label.attributes,
         for = itemId)) | strip | indent: 6 }}
-      {%- if hasHint %}
+      {% if hasHint %}
       {{ govukHint(dict(
         id = itemHintId,
         classes = (('govuk-checkboxes__hint' | append: (' ' | append: item.hint.classes))| rstrip),
@@ -53,19 +53,19 @@ aria-describedby – for example hints or error messages {% endcomment %}
         html = item.hint.html,
         text = item.hint.text
         )) | strip | indent: 6 }}
-      {%- endif %}
+      {% endif %}
     </div>
-    {%- if item.conditional.html != blank %}
+    {% if item.conditional.html != blank %}
     <div class="govuk-checkboxes__conditional {%- if isChecked == false %} govuk-checkboxes__conditional--hidden{% endif %}" id="{{ conditionalId }}">
       {{ item.conditional.html | raw | strip }}
     </div>
-    {%- endif %}
-  {%- endif %}
+    {% endif %}
+  {% endif %}
 {%- endmacro -%}
 
 {% comment %} Capture the HTML so we can optionally nest it in a fieldset {% endcomment %}
 {% capture innerHtml %}
-{%- if params.hint %}
+{% if params.hint %}
   {% assign hintId = idPrefix | append: '-hint' %}
   {% assign describedBy = (describedBy | append: ' ' | append: hintId | lstrip) %}
   {{ govukHint(dict(
@@ -74,10 +74,10 @@ aria-describedby – for example hints or error messages {% endcomment %}
     attributes = params.hint.attributes,
     html = params.hint.html,
     text = params.hint.text)) | strip | indent: 2 }}
-{%- endif %}
-{%- if params.errorMessage %}
-  {%- assign errorId = idPrefix | append: '-error' %}
-  {%- assign describedBy = (describedBy | append: ' ' | append: errorId | lstrip) %}
+{% endif %}
+{% if params.errorMessage %}
+  {% assign errorId = idPrefix | append: '-error' %}
+  {% assign describedBy = (describedBy | append: ' ' | append: errorId | lstrip) %}
   {{ govukErrorMessage(dict(
     id = errorId,
     classes = params.errorMessage.classes,
@@ -85,33 +85,33 @@ aria-describedby – for example hints or error messages {% endcomment %}
     html = params.errorMessage.html,
     text = params.errorMessage.text,
     visuallyHiddenText = params.errorMessage.visuallyHiddenText)) | strip | indent: 2 }}
-{%- endif %}
+{% endif %}
   <div class="govuk-checkboxes {%- if params.classes %} {{ params.classes }}{% endif %}"
     {{- govukAttributes(params.attributes) }} data-module="govuk-checkboxes">
     {%- if params.formGroup.beforeInputs %}
     {{ params.formGroup.beforeInputs.html | raw | strip | indent: 4 | default: params.formGroup.beforeInputs.text }}
     {% endif %}
-    {%- for item in params.items %}
+    {% for item in params.items %}
     {% if item %}
       {{- _checkboxItem(params, item, forloop.index) -}}
     {% endif -%}
     {% endfor %}
-    {%- if params.formGroup.afterInputs %}
+    {% if params.formGroup.afterInputs %}
     {{ params.formGroup.afterInputs.html | raw | strip | indent: 4 | default: params.formGroup.afterInputs.text }}
     {% endif %}
   </div>
-{% endcapture %}
+{% endcapture -%}
 
 <div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %} {%- if params.formGroup.classes %} {{ params.formGroup.classes }}{% endif %}"
   {{- govukAttributes(params.formGroup.attributes) }}>
-{%- if hasFieldset %}
+{% if hasFieldset %}
   {{ govukFieldset(dict(
     describedBy = describedBy,
     classes = params.fieldset.classes,
     attributes = params.fieldset.attributes,
     legend = params.fieldset.legend,
     html = (innerHtml | strip))) | strip | indent: 2 }}
-{%- else %}
+{% else %}
   {{ innerHtml | strip -}}
 {% endif %}
 </div>

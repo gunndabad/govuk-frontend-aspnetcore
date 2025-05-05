@@ -10,24 +10,24 @@
     </h2>
     <div class="govuk-error-summary__body">
       {% if params.descriptionHtml or params.descriptionText %}
-        <p {{- govukAttributes(params.descriptionAttributes) }}>
-          {{ params.descriptionHtml | raw | strip | indent: 8 | default: params.descriptionText }}
-        </p>
+      <p {{- govukAttributes(params.descriptionAttributes) }}>
+        {{ params.descriptionHtml | raw | strip | indent: 8 | default: params.descriptionText }}
+      </p>
       {% endif %}
       {% if params.errorList %}
         <ul class="govuk-list govuk-error-summary__list">
-          {% for item in params.errorList %}
-            <li {{- govukAttributes(item.itemAttributes) }}>
-              {% if item.href %}
-                <a href="{{ item.href }}"
-                  {{- govukAttributes(item.attributes) }}>
-                  {{- item.html | raw | strip | indent: 12 | default: item.text -}}
-                </a>
-              {% else %}
-                {{ item.html | raw | strip | indent: 10 | default: item.text }}
-              {% endif %}
-            </li>
-          {% endfor %}
+        {% for item in params.errorList %}
+          <li {{- govukAttributes(item.itemAttributes) }}>
+          {% if item.href %}
+            <a href="{{ item.href }}"
+              {{- govukAttributes(item.attributes) }}>
+              {{- item.html | raw | strip | indent: 12 | default: item.text -}}
+            </a>
+          {% else %}
+            {{ item.html | raw | strip | indent: 10 | default: item.text }}
+          {% endif %}
+          </li>
+        {% endfor %}
         </ul>
       {% endif %}
     </div>

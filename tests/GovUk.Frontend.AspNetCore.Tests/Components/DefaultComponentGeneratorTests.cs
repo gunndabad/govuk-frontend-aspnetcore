@@ -57,7 +57,7 @@ public class DefaultComponentGeneratorTests
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateCookieBanner(options),
-            compareWhitespace: false);
+            amendExpectedHtml: html => Regex.Replace(html, "</div>\n\n\n  </div>\n</div>$", "</div>\n\n  </div>\n</div>"));
 
     [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
@@ -71,8 +71,7 @@ public class DefaultComponentGeneratorTests
     public Task ErrorSummary(ComponentTestCaseData<ErrorSummaryOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateErrorSummary(options),
-            compareWhitespace: false);
+            (generator, options) => generator.GenerateErrorSummary(options));
 
     [Theory]
     [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]

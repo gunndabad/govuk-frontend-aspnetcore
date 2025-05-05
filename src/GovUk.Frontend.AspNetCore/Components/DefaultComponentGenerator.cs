@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Fluid;
+using Fluid.Ast;
 using Fluid.Values;
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.FileProviders;
+using Parlot;
 
 namespace GovUk.Frontend.AspNetCore.Components;
 
@@ -35,6 +39,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
 
         _templateOptions = new TemplateOptions();
         _templateOptions.MemberAccessStrategy = new UnsafeMemberAccessStrategy();
+        _templateOptions.Trimming = TrimmingFlags.TagLeft;
 
         _templateOptions.FileProvider = new ManifestEmbeddedFileProvider(
             typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
