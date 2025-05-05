@@ -11,6 +11,8 @@ internal class ContainerErrorContext
 
     public IReadOnlyCollection<(string Html, string? Href)> Errors => _errors.AsReadOnly();
 
+    public bool ErrorSummaryHasBeenRendered { get; set; }
+
     public void AddError(string html, string? href)
     {
         ArgumentNullException.ThrowIfNull(html);

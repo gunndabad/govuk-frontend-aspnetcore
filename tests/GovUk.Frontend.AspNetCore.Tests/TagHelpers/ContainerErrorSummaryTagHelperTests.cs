@@ -73,6 +73,7 @@ public class ContainerErrorSummaryTagHelperTests
         {
             Assert.NotNull(actualOptions);
             Assert.NotNull(actualOptions.ErrorList);
+            Assert.True(containerErrorContext.ErrorSummaryHasBeenRendered);
 
             Assert.Collection(
                 actualOptions.ErrorList,
@@ -81,6 +82,10 @@ public class ContainerErrorSummaryTagHelperTests
                     Assert.Equal(errorHref, error.Href);
                     Assert.Equal(errorHtml, error.Html);
                 });
+        }
+        else
+        {
+            Assert.False(containerErrorContext.ErrorSummaryHasBeenRendered);
         }
     }
 }

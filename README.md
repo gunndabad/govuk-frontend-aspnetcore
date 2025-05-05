@@ -65,28 +65,29 @@ In your `_Layout.cshtml` file:
 
 The view can be customised by defining the following sections and `ViewData`/`ViewBag` variables.
 
-| Section name | Description |
-| --- | --- |
+| Section name  | Description                                                                                                                                                                                                                                               |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | BeforeContent | Add content that needs to appear outside <main> element. <br /> For example: The [back link](docs/components/back-link.md) component, [breadcrumbs](docs/components/breadcrumbs.md) component, [phase banner](docs/components/phase-banner.md) component. |
-| BodyEnd | Add content just before the closing `</body>` element. |
-| BodyStart | Add content after the opening `<body>` element. <br/> For example: The cookie banner component. |
-| Footer | Override the default footer component. |
-| Head | Add additional items inside the <head> element. <br /> For example: `<meta name="description" content="My page description">` |
-| Header | Override the default header component. |
-| HeadIcons | Override the default icons used for GOV.UK branded pages. <br /> For example: `<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />` |
-| SkipLink | Override the default [skip link](docs/components/skip-link.md) component. |
+| BodyEnd       | Add content just before the closing `</body>` element.                                                                                                                                                                                                    |
+| BodyStart     | Add content after the opening `<body>` element. <br/> For example: The cookie banner component.                                                                                                                                                           |
+| Footer        | Override the default footer component.                                                                                                                                                                                                                    |
+| Head          | Add additional items inside the <head> element. <br /> For example: `<meta name="description" content="My page description">`                                                                                                                             |
+| Header        | Override the default header component.                                                                                                                                                                                                                    |
+| HeadIcons     | Override the default icons used for GOV.UK branded pages. <br /> For example: `<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />`                                                                                                       |
+| SkipLink      | Override the default [skip link](docs/components/skip-link.md) component.                                                                                                                                                                                 |
 
-| `ViewData` key | Type | Description |
-| --- | --- | --- |
-| BodyClasses | `string` | Add class(es) to the `<body>` element. |
-| ContainerClasses | `string` | Add class(es) to the container. This is useful if you want to make the page wrapper a fixed width. |
-| HtmlClasses | `string` | Add class(es) to the `<html>` element. |
-| HtmlLang | `string` | Set the language of the whole document. If your `<title>` and `<main>` element are in a different language to the rest of the page, use `HtmlLang` to set the language of the rest of the page. |
-| MainClasses | `string` | Add class(es) to the `<main>` element. |
-| MainLang | `string` | Set the language of the `<main>` element if it's different to `HtmlLang`. |
-| OpengraphImageUrl | `string` | Set the URL for the Open Graph image meta tag. The URL must be absolute, including the protocol and domain name. |
-| Title | `string` | Override the default page title (`<title>` element). |
-| ThemeColor | `string` | Set the toolbar [colour on some devices](https://developers.google.com/web/updates/2014/11/Support-for-theme-color-in-Chrome-39-for-Android). |
+| `ViewData` key            | Type     | Description                                                                                                                                                                                     |
+|---------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| PrependErrorSummaryToMain | `bool`   | Whether an error summary should be prepended to the `<main>` element.                                                                                                                           |
+| BodyClasses               | `string` | Add class(es) to the `<body>` element.                                                                                                                                                          |
+| ContainerClasses          | `string` | Add class(es) to the container. This is useful if you want to make the page wrapper a fixed width.                                                                                              |
+| HtmlClasses               | `string` | Add class(es) to the `<html>` element.                                                                                                                                                          |
+| HtmlLang                  | `string` | Set the language of the whole document. If your `<title>` and `<main>` element are in a different language to the rest of the page, use `HtmlLang` to set the language of the rest of the page. |
+| MainClasses               | `string` | Add class(es) to the `<main>` element.                                                                                                                                                          |
+| MainLang                  | `string` | Set the language of the `<main>` element if it's different to `HtmlLang`.                                                                                                                       |
+| OpengraphImageUrl         | `string` | Set the URL for the Open Graph image meta tag. The URL must be absolute, including the protocol and domain name.                                                                                |
+| Title                     | `string` | Override the default page title (`<title>` element).                                                                                                                                            |
+| ThemeColor                | `string` | Set the toolbar [colour on some devices](https://developers.google.com/web/updates/2014/11/Support-for-theme-color-in-Chrome-39-for-Android).                                                   |
 
 #### Create your own Razor view
 

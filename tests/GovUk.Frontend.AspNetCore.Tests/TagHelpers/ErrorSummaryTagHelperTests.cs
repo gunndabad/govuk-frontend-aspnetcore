@@ -1,14 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
-using HtmlAgilityPack;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
 using Xunit;
@@ -61,6 +54,9 @@ public class ErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
+        var viewContext = TestUtils.CreateViewContext();
+        var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
+
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
@@ -68,7 +64,7 @@ public class ErrorSummaryTagHelperTests
         var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
             DisableAutoFocus = disableAutoFocus,
-            ViewContext = TestUtils.CreateViewContext()
+            ViewContext = viewContext
         };
 
         // Act
@@ -90,6 +86,7 @@ public class ErrorSummaryTagHelperTests
                 Assert.Equal(secondErrorHtml, error.Html);
             });
         Assert.Equal(disableAutoFocus, actualOptions.DisableAutoFocus);
+        Assert.True(containerErrorContext.ErrorSummaryHasBeenRendered);
     }
 
     [Fact]
@@ -230,6 +227,7 @@ public class ErrorSummaryTagHelperTests
                 Assert.Equal(itemErrorHref, error.Href);
                 Assert.Equal(itemErrorHtml, error.Html);
             });
+        Assert.True(containerErrorContext.ErrorSummaryHasBeenRendered);
     }
 
     [Fact]
@@ -285,5 +283,41 @@ public class ErrorSummaryTagHelperTests
                 Assert.Equal(containerErrorContextErrorHref, error.Href);
                 Assert.Equal(containerErrorContextErrorHtml, error.Html);
             });
+        Assert.True(containerErrorContext.ErrorSummaryHasBeenRendered);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_DoesNotHaveTitleOrDescriptionOrItemsRendersNothing()
+    {
+        // Arrange
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var viewContext = TestUtils.CreateViewContext();
+        var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
+
+        var tagHelper = new ErrorSummaryTagHelper(new DefaultComponentGenerator())
+        {
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.Null(output.TagName);
+        Assert.False(containerErrorContext.ErrorSummaryHasBeenRendered);
     }
 }

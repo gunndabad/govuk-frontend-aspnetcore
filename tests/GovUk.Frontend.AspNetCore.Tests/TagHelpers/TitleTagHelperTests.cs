@@ -42,8 +42,9 @@ public class TitleTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var viewContext = new ViewContext();
-        viewContext.ViewData.SetPageHasErrors(pageHasErrors);
+        var viewContext = TestUtils.CreateViewContext();
+        var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
+        containerErrorContext.ErrorSummaryHasBeenRendered = pageHasErrors;
 
         var tagHelper = new TitleTagHelper(options)
         {

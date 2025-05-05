@@ -48,7 +48,9 @@ public class TitleTagHelper : TagHelper
     {
         await base.ProcessAsync(context, output);
 
-        if (_options.PrependErrorToTitle && ViewContext!.ViewData.GetPageHasErrors())
+        var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+
+        if (_options.PrependErrorToTitle && containerErrorContext.ErrorSummaryHasBeenRendered)
         {
             var errorPrefix = ErrorPrefix ?? DefaultErrorPrefix;
             output.PreContent.Append(errorPrefix + " ");

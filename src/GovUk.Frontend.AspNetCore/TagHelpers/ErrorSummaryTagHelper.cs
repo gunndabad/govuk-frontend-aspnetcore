@@ -57,6 +57,8 @@ public class ErrorSummaryTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
+        var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+
         IReadOnlyCollection<ErrorSummaryOptionsErrorItem> errorList;
 
         if (errorSummaryContext.HaveExplicitItems)
@@ -74,7 +76,6 @@ public class ErrorSummaryTagHelper : TagHelper
         }
         else
         {
-            var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
             errorList = containerErrorContext.GetErrorList();
         }
 
@@ -86,7 +87,7 @@ public class ErrorSummaryTagHelper : TagHelper
             return;
         }
 
-        ViewContext!.ViewData.SetPageHasErrors(true);
+        containerErrorContext.ErrorSummaryHasBeenRendered = true;
 
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);

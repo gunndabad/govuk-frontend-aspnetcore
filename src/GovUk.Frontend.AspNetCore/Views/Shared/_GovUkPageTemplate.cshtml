@@ -71,7 +71,10 @@
     <div class="govuk-width-container @ViewBag.ContainerClasses">
         @RenderSection("BeforeContent", required: false)
         <main class="govuk-main-wrapper @ViewBag.MainClasses" id="main-content" role="main" lang="@ViewBag.MainLang">
-            <govuk-error-summary/>
+            @if (ViewBag.PrependErrorSummaryToMain is true or null && !Context.GetContainerErrorContext().ErrorSummaryHasBeenRendered)
+            {
+                <govuk-error-summary/>
+            }
 
             @RenderBody()
         </main>

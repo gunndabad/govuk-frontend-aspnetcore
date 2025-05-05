@@ -70,7 +70,7 @@ public class ContainerErrorSummaryTagHelper : TagHelper
             return;
         }
 
-        ViewContext!.ViewData.SetPageHasErrors(true);
+        containerErrorContext.ErrorSummaryHasBeenRendered = true;
 
         var errorSummary = await _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions
         {
