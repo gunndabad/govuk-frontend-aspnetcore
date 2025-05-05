@@ -1,9 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -19,23 +19,18 @@ public class FormErrorSummaryTagHelper : TagHelper
 {
     private const string PrependErrorSummaryAttributeName = "prepend-error-summary";
 
-    private readonly GovUkFrontendAspNetCoreOptions _options;
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
     /// <summary>
     /// Creates a <see cref="FormErrorSummaryTagHelper"/>.
     /// </summary>
-    public FormErrorSummaryTagHelper(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
-        : this(optionsAccessor, htmlGenerator: null)
+    public FormErrorSummaryTagHelper(IComponentGenerator componentGenerator, IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
-    }
-
-    internal FormErrorSummaryTagHelper(
-        IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor,
-        IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _options = Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor).Value;
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(optionsAccessor);
+        _componentGenerator = componentGenerator;
+        _optionsAccessor = optionsAccessor;
     }
 
     /// <summary>
@@ -60,7 +55,7 @@ public class FormErrorSummaryTagHelper : TagHelper
     {
         await output.GetChildContentAsync();
 
-        var prependErrorSummary = PrependErrorSummary ?? _options.PrependErrorSummaryToForms;
+        var prependErrorSummary = PrependErrorSummary ?? _optionsAccessor.Value.PrependErrorSummaryToForms;
         if (!prependErrorSummary)
         {
             return;
@@ -74,20 +69,28 @@ public class FormErrorSummaryTagHelper : TagHelper
 
         ViewContext!.ViewData.SetPageHasErrors(true);
 
-        var errorItems = containerErrorContext.Errors.Select(i => new ErrorSummaryItem()
+        var errorSummary = await _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions
         {
-            Content = new HtmlString(i.Html),
-            Href = i.Href
+            TitleText = null,
+            TitleHtml = DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,
+            DescriptionText = null,
+            DescriptionHtml = null,
+            ErrorList = containerErrorContext.Errors
+                .Select(i => new ErrorSummaryOptionsErrorItem
+                {
+                    Href = i.Href,
+                    Text = null,
+                    Html = i.Html,
+                    Attributes = null,
+                    ItemAttributes = null
+                })
+                .ToList(),
+            Classes = null,
+            Attributes = null,
+            DisableAutoFocus = null,
+            TitleAttributes = null,
+            DescriptionAttributes = null
         });
-
-        var errorSummary = _htmlGenerator.GenerateErrorSummary(
-            disableAutofocus: null,  // TODO Should we have an attribute to configure this?
-            titleContent: new HtmlString(HtmlEncoder.Default.Encode(ComponentGenerator.ErrorSummaryDefaultTitle)),
-            titleAttributes: null,
-            descriptionContent: null,
-            descriptionAttributes: null,
-            attributes: null,
-            items: errorItems);
 
         output.PreContent.AppendHtml(errorSummary);
     }

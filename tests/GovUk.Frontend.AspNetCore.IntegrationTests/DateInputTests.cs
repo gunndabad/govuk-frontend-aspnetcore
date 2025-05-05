@@ -200,7 +200,6 @@ public class DateInputTestsFixture : ServerFixture
             .AddMvc()
             .AddRazorOptions(options =>
             {
-                options.ViewLocationFormats.Clear();
                 options.ViewLocationFormats.Add("/DateInputTestsViews/{0}.cshtml");
             });
     }

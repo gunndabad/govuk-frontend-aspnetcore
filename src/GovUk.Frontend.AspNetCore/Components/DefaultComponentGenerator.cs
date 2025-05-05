@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 internal partial class DefaultComponentGenerator : IComponentGenerator
 {
+    internal const string DefaultErrorSummaryTitleHtml = "There is a problem";
+
     private static readonly HtmlEncoder _encoder = HtmlEncoder.Default;
 
     private readonly FluidParser _parser;
@@ -93,6 +96,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("error-message", options);
+    }
+
+    public virtual ValueTask<IHtmlContent> GenerateErrorSummary(ErrorSummaryOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("error-summary", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateFieldset(FieldsetOptions2 options)

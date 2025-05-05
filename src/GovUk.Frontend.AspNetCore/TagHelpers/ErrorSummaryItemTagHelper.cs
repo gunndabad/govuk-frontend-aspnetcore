@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
+using AttributeCollection = GovUk.Frontend.AspNetCore.Components.AttributeCollection;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -100,11 +101,11 @@ public class ErrorSummaryItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        IHtmlContent itemContent;
+        string itemHtml;
 
         if (output.TagMode == TagMode.StartTagAndEndTag)
         {
-            itemContent = childContent.Snapshot();
+            itemHtml = childContent.ToHtmlString();
         }
         else
         {
@@ -120,7 +121,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
                 return;
             }
 
-            itemContent = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
+            itemHtml = HtmlEncoder.Default.Encode(validationMessage);
         }
 
         string? resolvedHref = null;
@@ -173,13 +174,12 @@ public class ErrorSummaryItemTagHelper : TagHelper
             resolvedHref = $"#{errorFieldId}";
         }
 
-        errorSummaryContext.AddItem(new ErrorSummaryItem()
-        {
-            Content = itemContent,
-            Attributes = output.Attributes.ToAttributeDictionary(),
-            Href = resolvedHref,
-            LinkAttributes = LinkAttributes.ToAttributeDictionary()
-        });
+        errorSummaryContext.AddItem(
+            new ErrorSummaryContextItem(
+                resolvedHref,
+                itemHtml,
+                new AttributeCollection(output.Attributes),
+                new AttributeCollection(LinkAttributes)));
 
         output.SuppressOutput();
 

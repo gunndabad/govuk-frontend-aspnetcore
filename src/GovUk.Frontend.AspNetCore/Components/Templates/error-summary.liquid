@@ -1,0 +1,35 @@
+<div class="govuk-error-summary
+  {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {%- if params.disableAutoFocus == true or params.disableAutoFocus == false %} data-disable-auto-focus="{{ params.disableAutoFocus }}"{% endif %}
+  {{- govukAttributes(params.attributes) }} data-module="govuk-error-summary">
+  {% comment %} Keep the role="alert" in a seperate child container to prevent a race condition between
+  the focusing js at the alert, resulting in information getting missed in screen reader announcements {% endcomment %}
+  <div role="alert">
+    <h2 class="govuk-error-summary__title" {{- govukAttributes(params.titleAttributes) }}>
+      {{ params.titleHtml | raw | strip | indent: 6 | default: params.titleText }}
+    </h2>
+    <div class="govuk-error-summary__body">
+      {% if params.descriptionHtml or params.descriptionText %}
+        <p {{- govukAttributes(params.descriptionAttributes) }}>
+          {{ params.descriptionHtml | raw | strip | indent: 8 | default: params.descriptionText }}
+        </p>
+      {% endif %}
+      {% if params.errorList %}
+        <ul class="govuk-list govuk-error-summary__list">
+          {% for item in params.errorList %}
+            <li {{- govukAttributes(item.itemAttributes) }}>
+              {% if item.href %}
+                <a href="{{ item.href }}"
+                  {{- govukAttributes(item.attributes) }}>
+                  {{- item.html | raw | strip | indent: 12 | default: item.text -}}
+                </a>
+              {% else %}
+                {{ item.html | raw | strip | indent: 10 | default: item.text }}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>

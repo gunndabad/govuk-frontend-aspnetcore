@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.TagHelpers;
@@ -18,6 +19,8 @@ public class ErrorSummaryItemTagHelperTests
     public async Task ProcessAsync_AddsItemToContext()
     {
         // Arrange
+        var errorMessage = "Error message";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -35,7 +38,7 @@ public class ErrorSummaryItemTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Error message");
+                tagHelperContent.SetContent(errorMessage);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -52,7 +55,7 @@ public class ErrorSummaryItemTagHelperTests
             errorSummaryContext.Items,
             item =>
             {
-                Assert.Equal("Error message", item.Content?.ToHtmlString());
+                Assert.Equal(HtmlEncoder.Default.Encode(errorMessage), item.Html);
             });
     }
 
@@ -98,6 +101,8 @@ public class ErrorSummaryItemTagHelperTests
     public async Task ProcessAsync_ForSpecified_UsesModelStateErrorMessageForContent()
     {
         // Arrange
+        var errorMessage = "ModelState error message";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -127,7 +132,7 @@ public class ErrorSummaryItemTagHelperTests
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
 
-        viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
+        viewContext.ModelState.AddModelError(nameof(Model.Field), errorMessage);
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
@@ -143,7 +148,7 @@ public class ErrorSummaryItemTagHelperTests
             errorSummaryContext.Items,
             item =>
             {
-                Assert.Equal("ModelState error message", item.Content?.ToHtmlString());
+                Assert.Equal(HtmlEncoder.Default.Encode(errorMessage), item.Html);
             });
     }
 
@@ -151,6 +156,9 @@ public class ErrorSummaryItemTagHelperTests
     public async Task ProcessAsync_BothContentAndAspNetForSpecified_UsesContent()
     {
         // Arrange
+        var modelStateErrorMessage = "ModelState error message";
+        var explicitErrorMessage = "Error message";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -168,7 +176,7 @@ public class ErrorSummaryItemTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Error message");
+                tagHelperContent.SetContent(explicitErrorMessage);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -180,7 +188,7 @@ public class ErrorSummaryItemTagHelperTests
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
 
-        viewContext.ModelState.AddModelError(nameof(Model.Field), "ModelState error message");
+        viewContext.ModelState.AddModelError(nameof(Model.Field), modelStateErrorMessage);
 
         var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
         {
@@ -196,7 +204,7 @@ public class ErrorSummaryItemTagHelperTests
             errorSummaryContext.Items,
             item =>
             {
-                Assert.Equal("Error message", item.Content?.ToHtmlString());
+                Assert.Equal(explicitErrorMessage, item.Html);
             });
     }
 

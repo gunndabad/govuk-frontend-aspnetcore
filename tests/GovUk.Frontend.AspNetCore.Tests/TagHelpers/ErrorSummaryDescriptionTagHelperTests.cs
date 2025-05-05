@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -12,6 +13,8 @@ public class ErrorSummaryDescriptionTagHelperTests
     public async Task ProcessAsync_AddsDescriptionToContext()
     {
         // Arrange
+        var descriptionContent = "Description content";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -29,7 +32,7 @@ public class ErrorSummaryDescriptionTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Description content");
+                tagHelperContent.SetContent(descriptionContent);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,6 +42,6 @@ public class ErrorSummaryDescriptionTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Description content", errorSummaryContext?.Description?.Content?.ToHtmlString());
+        Assert.Equal(HtmlEncoder.Default.Encode(descriptionContent), errorSummaryContext.Description?.Html);
     }
 }

@@ -66,15 +66,6 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent content,
         AttributeDictionary attributes);
 
-    TagBuilder GenerateErrorSummary(
-        bool? disableAutofocus,
-        IHtmlContent titleContent,
-        AttributeDictionary titleAttributes,
-        IHtmlContent descriptionContent,
-        AttributeDictionary descriptionAttributes,
-        AttributeDictionary attributes,
-        IEnumerable<ErrorSummaryItem> items);
-
     TagBuilder GenerateFieldset(
         string describedBy,
         string role,

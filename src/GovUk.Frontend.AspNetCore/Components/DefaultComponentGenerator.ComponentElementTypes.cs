@@ -6,5 +6,6 @@ internal partial class DefaultComponentGenerator
     {
         public const string BackLink = "a";
         public const string Breadcrumbs = "nav";
+        public const string ErrorSummary = "div";
     }
 }

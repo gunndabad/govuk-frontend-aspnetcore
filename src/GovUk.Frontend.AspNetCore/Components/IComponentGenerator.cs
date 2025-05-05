@@ -51,6 +51,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateErrorMessage(ErrorMessageOptions2 options);
 
     /// <summary>
+    /// Generates an error summary component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateErrorSummary(ErrorSummaryOptions options);
+
+    /// <summary>
     /// Generates a fieldset component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

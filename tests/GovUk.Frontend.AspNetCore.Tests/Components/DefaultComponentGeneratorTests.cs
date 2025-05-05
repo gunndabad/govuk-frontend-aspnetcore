@@ -67,6 +67,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateErrorMessage(options));
 
     [Theory]
+    [ComponentFixtureData("error-summary", typeof(ErrorSummaryOptions))]
+    public Task ErrorSummary(ComponentTestCaseData<ErrorSummaryOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateErrorSummary(options),
+            compareWhitespace: false);
+
+    [Theory]
     [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]
     public Task Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

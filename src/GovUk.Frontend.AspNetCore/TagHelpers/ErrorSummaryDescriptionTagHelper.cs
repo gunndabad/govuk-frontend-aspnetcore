@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -23,7 +24,9 @@ public class ErrorSummaryDescriptionTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        errorSummaryContext.SetDescription(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
+        errorSummaryContext.SetDescription(
+            new AttributeCollection(output.Attributes),
+            childContent.ToHtmlString());
 
         output.SuppressOutput();
     }

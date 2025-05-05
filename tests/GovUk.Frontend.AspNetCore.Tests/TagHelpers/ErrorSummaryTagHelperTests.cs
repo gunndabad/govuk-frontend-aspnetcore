@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -16,9 +18,15 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class ErrorSummaryTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var firstErrorHtml = "First error";
+        var firstErrorHref = "#FirstError";
+        var secondErrorHtml = "Second error";
+        var secondErrorHref = "#SecondError";
+        var disableAutoFocus = true;
+
         var context = new TagHelperContext(
             tagName: "govuk-error-summary",
             allAttributes: new TagHelperAttributeList(),
@@ -32,143 +40,56 @@ public class ErrorSummaryTagHelperTests
             {
                 var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
-                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
+                errorSummaryContext.SetTitle(new AttributeCollection(), "Title");
+                errorSummaryContext.SetDescription(new AttributeCollection(), "Description");
 
-                errorSummaryContext.AddItem(new ErrorSummaryItem()
-                {
-                    Content = new HtmlString("First message"),
-                    Href = "#Field1"
-                });
+                errorSummaryContext.AddItem(
+                    new ErrorSummaryContextItem(
+                        firstErrorHref,
+                        firstErrorHtml,
+                        new AttributeCollection(),
+                        new AttributeCollection()));
 
-                errorSummaryContext.AddItem(new ErrorSummaryItem()
-                {
-                    Content = new HtmlString("Second message"),
-                    Href = "#Field2"
-                });
+                errorSummaryContext.AddItem(
+                    new ErrorSummaryContextItem(
+                        secondErrorHref,
+                        secondErrorHtml,
+                        new AttributeCollection(),
+                        new AttributeCollection()));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper()
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ErrorSummaryOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+
+        var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
-            ViewContext = new ViewContext()
+            DisableAutoFocus = disableAutoFocus,
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-error-summary"" data-module=""govuk-error-summary"">
-    <div role=""alert"">
-        <h2 class=""govuk-error-summary__title"">Title</h2>
-        <div class=""govuk-error-summary__body"">
-            <p>Description</p>
-            <ul class=""govuk-error-summary__list govuk-list"">
-                <li><a href=""#Field1"">First message</a></li>
-                <li><a href=""#Field2"">Second message</a></li>
-            </ul>
-        </div>
-    </div>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
-    }
-
-    [Fact]
-    public async Task ProcessAsync_WithDisableAutoFocus_RendersDataAttribute()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-error-summary",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-error-summary",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
+        Assert.NotNull(actualOptions);
+        Assert.NotNull(actualOptions.ErrorList);
+        Assert.Collection(
+            actualOptions.ErrorList,
+            error =>
             {
-                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
-
-                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
-                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
-
-                errorSummaryContext.AddItem(new ErrorSummaryItem()
-                {
-                    Content = new HtmlString("First message"),
-                    Href = "#Field1"
-                });
-
-                errorSummaryContext.AddItem(new ErrorSummaryItem()
-                {
-                    Content = new HtmlString("Second message"),
-                    Href = "#Field2"
-                });
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
-            });
-
-        var tagHelper = new ErrorSummaryTagHelper()
-        {
-            DisableAutoFocus = true,
-            ViewContext = new ViewContext()
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        Assert.NotNull(element.GetAttribute("data-disable-auto-focus"));
-    }
-
-    [Fact]
-    public async Task ProcessAsync_ItemWithEmptyLink_DoesNotRenderAnchorTag()
-    {
-        // Arrange
-        var context = new TagHelperContext(
-            tagName: "govuk-error-summary",
-            allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>(),
-            uniqueId: "test");
-
-        var output = new TagHelperOutput(
-            "govuk-error-summary",
-            attributes: new TagHelperAttributeList(),
-            getChildContentAsync: (useCachedResult, encoder) =>
+                Assert.Equal(firstErrorHref, error.Href);
+                Assert.Equal(firstErrorHtml, error.Html);
+            },
+            error =>
             {
-                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
-
-                errorSummaryContext.SetTitle(new AttributeDictionary(), new HtmlString("Title"));
-                errorSummaryContext.SetDescription(new AttributeDictionary(), new HtmlString("Description"));
-
-                errorSummaryContext.AddItem(new ErrorSummaryItem()
-                {
-                    Content = new HtmlString("Message"),
-                    Href = null
-                });
-
-                var tagHelperContent = new DefaultTagHelperContent();
-                return Task.FromResult<TagHelperContent>(tagHelperContent);
+                Assert.Equal(secondErrorHref, error.Href);
+                Assert.Equal(secondErrorHtml, error.Html);
             });
-
-        var tagHelper = new ErrorSummaryTagHelper()
-        {
-            ViewContext = new ViewContext()
-        };
-
-        // Act
-        await tagHelper.ProcessAsync(context, output);
-
-        // Assert
-        var element = output.RenderToElement();
-        var itemElement = element.QuerySelector("li");
-        Assert.NotEqual("a", itemElement.FirstChild.NodeName, StringComparer.OrdinalIgnoreCase);
+        Assert.Equal(disableAutoFocus, actualOptions.DisableAutoFocus);
     }
 
     [Fact]
@@ -188,28 +109,31 @@ public class ErrorSummaryTagHelperTests
             {
                 var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
 
-                errorSummaryContext.AddItem(new ErrorSummaryItem()
-                {
-                    Content = new HtmlString("First message")
-                });
+                errorSummaryContext.AddItem(
+                    new ErrorSummaryContextItem(
+                        "#Href",
+                        "Content",
+                        new AttributeCollection(),
+                        new AttributeCollection()));
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator())
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ErrorSummaryOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+
+        var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
-            ViewContext = new ViewContext()
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var html = output.ToHtmlString();
-        var node = HtmlNode.CreateNode(html);
-        var h2 = node.ChildNodes.FindFirst("h2");
-        Assert.Equal("There is a problem", h2.InnerHtml);
+        Assert.Equal("There is a problem", actualOptions?.TitleHtml);
     }
 
     [Fact]
@@ -231,7 +155,7 @@ public class ErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper(new ComponentGenerator());
+        var tagHelper = new ErrorSummaryTagHelper(new DefaultComponentGenerator());
 
         // Act
         await tagHelper.ProcessAsync(context, output);

@@ -1,4 +1,5 @@
 using System;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
@@ -14,13 +15,16 @@ public class ErrorSummaryContextTests
     public void AddItem_AddsItemToItems()
     {
         // Arrange
+        var errorMessageHtml = "Error message";
+        var href = "#TheField";
+
         var context = new ErrorSummaryContext();
 
-        var item = new ErrorSummaryItem()
-        {
-            Content = new HtmlString("An error message"),
-            Href = "#TheField"
-        };
+        var item = new ErrorSummaryContextItem(
+            href,
+            errorMessageHtml,
+            new AttributeCollection(),
+            new AttributeCollection());
 
         // Act
         context.AddItem(item);
@@ -30,8 +34,8 @@ public class ErrorSummaryContextTests
             context.Items,
             item =>
             {
-                Assert.Equal("An error message", item.Content?.ToHtmlString());
-                Assert.Equal("#TheField", item.Href);
+                Assert.Equal(errorMessageHtml, item.Html);
+                Assert.Equal(href, item.Href);
             });
     }
 
@@ -39,13 +43,15 @@ public class ErrorSummaryContextTests
     public void SetDescription_SetsDescriptionOnContext()
     {
         // Arrange
+        var descriptionHtml = "Description";
+
         var context = new ErrorSummaryContext();
 
         // Act
-        context.SetDescription(new AttributeDictionary(), content: new HtmlString("Description"));
+        context.SetDescription(new AttributeCollection(), descriptionHtml);
 
         // Assert
-        Assert.Equal("Description", context.Description?.Content?.ToHtmlString());
+        Assert.Equal(descriptionHtml, context.Description?.Html);
     }
 
     [Fact]
@@ -53,10 +59,10 @@ public class ErrorSummaryContextTests
     {
         // Arrange
         var context = new ErrorSummaryContext();
-        context.SetDescription(new AttributeDictionary(), content: new HtmlString("Existing description"));
+        context.SetDescription(new AttributeCollection(), html: "Existing description");
 
         // Act
-        var ex = Record.Exception(() => context.SetDescription(new AttributeDictionary(), content: new HtmlString("Description")));
+        var ex = Record.Exception(() => context.SetDescription(new AttributeCollection(), html: "Description"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -67,13 +73,15 @@ public class ErrorSummaryContextTests
     public void SetTitle_SetsTitleOnContext()
     {
         // Arrange
+        var titleHtml = "Title";
+
         var context = new ErrorSummaryContext();
 
         // Act
-        context.SetTitle(new AttributeDictionary(), content: new HtmlString("Title"));
+        context.SetTitle(new AttributeCollection(), titleHtml);
 
         // Assert
-        Assert.Equal("Title", context.Title?.Content?.ToHtmlString());
+        Assert.Equal(titleHtml, context.Title?.Html);
     }
 
     [Fact]
@@ -81,10 +89,10 @@ public class ErrorSummaryContextTests
     {
         // Arrange
         var context = new ErrorSummaryContext();
-        context.SetTitle(new AttributeDictionary(), content: new HtmlString("Existing title"));
+        context.SetTitle(new AttributeCollection(), html: "Existing title");
 
         // Act
-        var ex = Record.Exception(() => context.SetTitle(new AttributeDictionary(), content: new HtmlString("Title")));
+        var ex = Record.Exception(() => context.SetTitle(new AttributeCollection(), html: "Title"));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);

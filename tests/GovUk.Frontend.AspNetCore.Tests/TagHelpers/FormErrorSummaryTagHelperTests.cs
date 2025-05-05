@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
+using Moq;
 using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
@@ -19,7 +19,7 @@ public class FormErrorSummaryTagHelperTests
     [InlineData(true, null, true)]
     [InlineData(true, false, false)]
     [InlineData(true, true, true)]
-    public async Task ProcessAsync_GeneratesExpectedOutput(
+    public async Task ProcessAsync_RendersWhenExpected(
         bool prepentErrorSummaryToFormsOption,
         bool? prependErrorSummary,
         bool expectErrorSummary)
@@ -29,6 +29,9 @@ public class FormErrorSummaryTagHelperTests
         {
             PrependErrorSummaryToForms = prepentErrorSummaryToFormsOption
         });
+
+        var errorHtml = "Error message";
+        var errorHref = "#Field";
 
         var context = new TagHelperContext(
             tagName: "form",
@@ -45,11 +48,15 @@ public class FormErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ErrorSummaryOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+
         var viewContext = TestUtils.CreateViewContext();
         var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
-        containerErrorContext.AddError("Content", "href");
+        containerErrorContext.AddError(errorHtml, errorHref);
 
-        var tagHelper = new FormErrorSummaryTagHelper(options)
+        var tagHelper = new FormErrorSummaryTagHelper(componentGeneratorMock.Object, options)
         {
             PrependErrorSummary = prependErrorSummary,
             ViewContext = viewContext
@@ -61,5 +68,19 @@ public class FormErrorSummaryTagHelperTests
         // Assert
         var html = output.RenderToElement();
         Assert.Equal(expectErrorSummary ? 1 : 0, html.ChildElementCount);
+
+        if (expectErrorSummary)
+        {
+            Assert.NotNull(actualOptions);
+            Assert.NotNull(actualOptions.ErrorList);
+
+            Assert.Collection(
+                actualOptions.ErrorList,
+                error =>
+                {
+                    Assert.Equal(errorHref, error.Href);
+                    Assert.Equal(errorHtml, error.Html);
+                });
+        }
     }
 }

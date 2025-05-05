@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -7,29 +8,30 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class ErrorSummaryContext
 {
-    private readonly List<ErrorSummaryItem> _items;
+    private readonly List<ErrorSummaryContextItem> _items;
 
     public ErrorSummaryContext()
     {
-        _items = new List<ErrorSummaryItem>();
+        _items = new List<ErrorSummaryContextItem>();
     }
 
-    public IReadOnlyCollection<ErrorSummaryItem> Items => _items;
+    public IReadOnlyCollection<ErrorSummaryContextItem> Items => _items;
 
-    public (AttributeDictionary Attributes, IHtmlContent Content)? Description { get; private set; }
+    public (AttributeCollection Attributes, string Html)? Description { get; private set; }
 
-    public (AttributeDictionary Attributes, IHtmlContent Content)? Title { get; private set; }
+    public (AttributeCollection Attributes, string Html)? Title { get; private set; }
 
-    public void AddItem(ErrorSummaryItem item)
+    public void AddItem(ErrorSummaryContextItem item)
     {
-        Guard.ArgumentNotNull(nameof(item), item);
+        ArgumentNullException.ThrowIfNull(item);
 
         _items.Add(item);
     }
 
-    public void SetDescription(AttributeDictionary attributes, IHtmlContent content)
+    public void SetDescription(AttributeCollection attributes, string html)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Description != null)
         {
@@ -38,12 +40,13 @@ internal class ErrorSummaryContext
                 ErrorSummaryTagHelper.TagName);
         }
 
-        Description = (attributes, content);
+        Description = (attributes, html);
     }
 
-    public void SetTitle(AttributeDictionary attributes, IHtmlContent content)
+    public void SetTitle(AttributeCollection attributes, string html)
     {
-        Guard.ArgumentNotNull(nameof(content), content);
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
         if (Title != null)
         {
@@ -52,6 +55,12 @@ internal class ErrorSummaryContext
                 ErrorSummaryTagHelper.TagName);
         }
 
-        Title = (attributes, content);
+        Title = (attributes, html);
     }
 }
+
+internal record ErrorSummaryContextItem(
+    string? Href,
+    string Html,
+    AttributeCollection Attributes,
+    AttributeCollection ItemAttributes);

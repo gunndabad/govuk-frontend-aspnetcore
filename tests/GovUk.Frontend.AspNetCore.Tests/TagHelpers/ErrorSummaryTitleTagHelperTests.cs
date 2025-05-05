@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -12,6 +13,8 @@ public class ErrorSummaryTitleTagHelperTests
     public async Task ProcessAsync_AddsTitleToContext()
     {
         // Arrange
+        var titleContent = "Title content";
+
         var errorSummaryContext = new ErrorSummaryContext();
 
         var context = new TagHelperContext(
@@ -29,7 +32,7 @@ public class ErrorSummaryTitleTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Title content");
+                tagHelperContent.SetContent(titleContent);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
@@ -39,6 +42,6 @@ public class ErrorSummaryTitleTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal("Title content", errorSummaryContext?.Title?.Content?.ToHtmlString());
+        Assert.Equal(HtmlEncoder.Default.Encode("Title content"), errorSummaryContext.Title?.Html);
     }
 }
