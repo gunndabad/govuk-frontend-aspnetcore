@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Html;
-
 namespace GovUk.Frontend.AspNetCore.Components;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -7,15 +5,7 @@ namespace GovUk.Frontend.AspNetCore.Components;
 public record TagOptions
 {
     public string? Text { get; set; }
-    public IHtmlContent? Html { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
-
-    internal void Validate(string? messageSuffix = null)
-    {
-        if (Html.NormalizeEmptyString() is null && Text.NormalizeEmptyString() is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Html)} or {nameof(Text)} must be specified{(messageSuffix is not null ? " " + messageSuffix : "")}.");
-        }
-    }
+    public string? Html { get; set; }
+    public string? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }

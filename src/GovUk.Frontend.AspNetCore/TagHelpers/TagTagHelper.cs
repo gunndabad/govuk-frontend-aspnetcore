@@ -8,24 +8,17 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS tag component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(LegacyComponentGenerator.TagElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.Tag)]
 public class TagTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tag";
 
-    private readonly ILegacyComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="TagTagHelper"/>.
     /// </summary>
-    public TagTagHelper() : this(new LegacyComponentGenerator())
-    {
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="TagTagHelper"/>.
-    /// </summary>
-    internal TagTagHelper(ILegacyComponentGenerator componentGenerator)
+    public TagTagHelper(IComponentGenerator componentGenerator)
     {
         _componentGenerator = componentGenerator;
     }
@@ -33,24 +26,24 @@ public class TagTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = (await output.GetChildContentAsync()).Snapshot();
+        var content = (await output.GetChildContentAsync()).Snapshot();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateTag(new TagOptions()
+        var component = await _componentGenerator.GenerateTag(new TagOptions()
         {
             Text = null,
-            Html = childContent,
+            Html = content.ToHtmlString(),
             Attributes = attributes,
             Classes = classes
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
     }
 }

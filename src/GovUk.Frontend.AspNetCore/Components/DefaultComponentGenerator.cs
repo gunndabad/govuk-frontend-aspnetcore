@@ -133,6 +133,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("label", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateTag(TagOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("tag", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateWarningText(WarningTextOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

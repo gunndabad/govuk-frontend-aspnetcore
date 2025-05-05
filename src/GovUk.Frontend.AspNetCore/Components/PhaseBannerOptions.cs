@@ -23,7 +23,5 @@ public record PhaseBannerOptions
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Tag)} must be specified.");
         }
-
-        Tag.Validate();
     }
 }

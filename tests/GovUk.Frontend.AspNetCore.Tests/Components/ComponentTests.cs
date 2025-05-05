@@ -23,13 +23,6 @@ public class ComponentTests
             (generator, options) => generator.GenerateCharacterCount(options).ToHtmlString());
 
     [Theory]
-    [ComponentFixtureData("tag", typeof(TagOptions))]
-    public void Tag(ComponentTestCaseData<TagOptions> data) =>
-        CheckComponentHtmlMatchesExpectedHtml(
-            data,
-            (generator, options) => generator.GenerateTag(options).ToHtmlString());
-
-    [Theory]
     [ComponentFixtureData("textarea", typeof(TextareaOptions))]
     public void Textarea(ComponentTestCaseData<TextareaOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

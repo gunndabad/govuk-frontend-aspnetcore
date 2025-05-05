@@ -12,12 +12,6 @@ internal interface ILegacyComponentGenerator
     HtmlTagBuilder GenerateCharacterCount(CharacterCountOptions options);
 
     /// <summary>
-    /// Generates a tag component.
-    /// </summary>
-    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
-    HtmlTagBuilder GenerateTag(TagOptions options);
-
-    /// <summary>
     /// Generates a textarea component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>

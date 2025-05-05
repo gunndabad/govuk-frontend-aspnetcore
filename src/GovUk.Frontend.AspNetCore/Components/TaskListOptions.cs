@@ -87,7 +87,5 @@ public record TaskListOptionsItemStatus
         {
             throw new InvalidOptionsException(GetType(), $"{nameof(Tag)}, {nameof(Html)} or {nameof(Text)} must be specified on item {itemIndex}'s {nameof(TaskListOptionsItem.Status)}.");
         }
-
-        Tag?.Validate(messageSuffix: $"on item {itemIndex}'s {nameof(TaskListOptionsItem.Status)}");
     }
 }

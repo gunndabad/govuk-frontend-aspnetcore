@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
@@ -14,7 +15,7 @@ public class TagTagHelperTests
     public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
-        var html = "A tag";
+        var content = "A tag";
 
         var context = new TagHelperContext(
             tagName: "govuk-tag",
@@ -28,11 +29,11 @@ public class TagTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent(html);
+                tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         TagOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateTag(It.IsAny<TagOptions>())).Callback<TagOptions>(o => actualOptions = o);
 
@@ -43,6 +44,6 @@ public class TagTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions);
-        Assert.Equal(html, actualOptions!.Html?.ToHtmlString());
+        Assert.Equal(HtmlEncoder.Default.Encode(content), actualOptions!.Html);
     }
 }

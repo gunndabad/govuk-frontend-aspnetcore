@@ -111,6 +111,13 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateLabel(options));
 
     [Theory]
+    [ComponentFixtureData("tag", typeof(TagOptions))]
+    public Task Tag(ComponentTestCaseData<TagOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTag(options));
+
+    [Theory]
     [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
     public Task WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
