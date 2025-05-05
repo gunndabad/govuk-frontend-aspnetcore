@@ -10,7 +10,7 @@ using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
-public class FormErrorSummaryTagHelperTests
+public class ContainerErrorSummaryTagHelperTests
 {
     [Theory]
     [InlineData(false, null, false)]
@@ -56,7 +56,7 @@ public class FormErrorSummaryTagHelperTests
         var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
         containerErrorContext.AddError(errorHtml, errorHref);
 
-        var tagHelper = new FormErrorSummaryTagHelper(componentGeneratorMock.Object, options)
+        var tagHelper = new ContainerErrorSummaryTagHelper(componentGeneratorMock.Object, options)
         {
             PrependErrorSummary = prependErrorSummary,
             ViewContext = viewContext

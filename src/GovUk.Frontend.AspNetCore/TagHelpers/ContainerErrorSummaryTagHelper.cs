@@ -12,10 +12,11 @@ using Microsoft.Extensions.Options;
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 /// <summary>
-/// <see cref="ITagHelper"/> implementation targeting &lt;form&gt; elements that prepends a GDS error summary component to the form.
+/// <see cref="ITagHelper"/> implementation targeting &lt;form&gt; elements and elements with a 'prepend-error-summary' attribute.
 /// </summary>
 [HtmlTargetElement("form")]
-public class FormErrorSummaryTagHelper : TagHelper
+[HtmlTargetElement("*", Attributes = PrependErrorSummaryAttributeName)]
+public class ContainerErrorSummaryTagHelper : TagHelper
 {
     private const string PrependErrorSummaryAttributeName = "prepend-error-summary";
 
@@ -23,9 +24,9 @@ public class FormErrorSummaryTagHelper : TagHelper
     private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
     /// <summary>
-    /// Creates a <see cref="FormErrorSummaryTagHelper"/>.
+    /// Creates a <see cref="ContainerErrorSummaryTagHelper"/>.
     /// </summary>
-    public FormErrorSummaryTagHelper(IComponentGenerator componentGenerator, IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+    public ContainerErrorSummaryTagHelper(IComponentGenerator componentGenerator, IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         ArgumentNullException.ThrowIfNull(optionsAccessor);
@@ -55,7 +56,9 @@ public class FormErrorSummaryTagHelper : TagHelper
     {
         await output.GetChildContentAsync();
 
-        var prependErrorSummary = PrependErrorSummary ?? _optionsAccessor.Value.PrependErrorSummaryToForms;
+        var prependErrorSummary = PrependErrorSummary ??
+            (output.TagName.Equals("form", StringComparison.OrdinalIgnoreCase) && _optionsAccessor.Value.PrependErrorSummaryToForms);
+
         if (!prependErrorSummary)
         {
             return;

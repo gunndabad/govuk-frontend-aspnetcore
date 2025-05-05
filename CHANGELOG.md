@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### New features
+
+#### Error summary
+- Any element can have can an error summary prepended by setting `prepend-error-summary` to `true`.
+- Any errors from partial views or view components will now be included in the generated error summary.
+
 ### Breaking changes
 
 #### `asp-for` attributes
@@ -12,9 +18,6 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 - The `gfa-error-prefix` attribute on `<title>` is now named `error-prefix`.
 
 ### Fixes
-
-#### Error summary
-Any errors from partial views or view components will now be included in the generated error summary.
 
 #### Source map errors
 The hosted CSS and JavaScript files no longer have source maps.
