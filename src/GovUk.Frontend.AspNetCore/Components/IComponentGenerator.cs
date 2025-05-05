@@ -81,6 +81,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options);
 
     /// <summary>
+    /// Generates a service navigation component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options);
+
+    /// <summary>
     /// Generates a tag component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
