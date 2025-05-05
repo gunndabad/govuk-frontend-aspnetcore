@@ -21,7 +21,7 @@ internal partial class DefaultComponentGenerator
             return FluidValue.Create(result, context.Options);
         }
 
-        public static FluidValue GovukAttributes(FunctionArguments args, TemplateContext context)
+        public static async ValueTask<FluidValue> GovukAttributes(FunctionArguments args, TemplateContext context)
         {
             // https://github.com/alphagov/govuk-frontend/blob/v5.8.0/packages/govuk-frontend/src/govuk/macros/attributes.njk
 
@@ -38,6 +38,11 @@ internal partial class DefaultComponentGenerator
 
                 foreach (var attribute in attributeCollection.GetAttributes())
                 {
+                    if (attribute.Optional && attribute.Value is false or null)
+                    {
+                        continue;
+                    }
+
                     sb.Append(' ');
                     sb.Append(_encoder.Encode(attribute.Name));
 
@@ -46,6 +51,48 @@ internal partial class DefaultComponentGenerator
                         sb.Append('=');
                         sb.Append('"');
                         sb.Append(_encoder.Encode(attribute.Value?.ToString() ?? string.Empty));
+                        sb.Append('"');
+                    }
+                }
+
+                attributesHtml = sb.ToString();
+            }
+            else if (attrsArg.Type is FluidValues.Dictionary)
+            {
+                var sb = new StringBuilder();
+
+                foreach (var attributeKvp in attrsArg.Enumerate(context))
+                {
+                    var attributeName = (await attributeKvp.GetIndexAsync(NumberValue.Create(0), context)).ToStringValue();
+
+                    bool optional = false;
+
+                    FluidValue attributeValue;
+                    var valueFluidValue = await attributeKvp.GetIndexAsync(NumberValue.Create(1), context);
+
+                    if (valueFluidValue.Type == FluidValues.Dictionary)
+                    {
+                        attributeValue = await valueFluidValue.GetValueAsync("value", context);
+                        optional = (await valueFluidValue.GetValueAsync("optional", context)).ToBooleanValue();
+                    }
+                    else
+                    {
+                        attributeValue = valueFluidValue;
+                    }
+
+                    if (optional && !attributeValue.ToBooleanValue())
+                    {
+                        continue;
+                    }
+
+                    sb.Append(' ');
+                    sb.Append(_encoder.Encode(attributeName));
+
+                    if (!optional || !attributeValue.Equals(BooleanValue.True))
+                    {
+                        sb.Append('=');
+                        sb.Append('"');
+                        sb.Append(_encoder.Encode(attributeValue.ToStringValue()));
                         sb.Append('"');
                     }
                 }
@@ -106,6 +153,11 @@ internal partial class DefaultComponentGenerator
         public static FluidValue IsTruthy(FunctionArguments args, TemplateContext context)
         {
             return FluidValue.Create(args.At(0).ToBooleanValue(), context.Options);
+        }
+
+        public static FluidValue Not(FunctionArguments args, TemplateContext context)
+        {
+            return FluidValue.Create(!args.At(0).ToBooleanValue(), context.Options);
         }
     }
 }

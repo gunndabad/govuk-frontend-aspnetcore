@@ -43,6 +43,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateButtonAsync(options));
 
     [Theory]
+    [ComponentFixtureData("character-count", typeof(CharacterCountOptions2))]
+    public Task CharacterCount(ComponentTestCaseData<CharacterCountOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateCharacterCountAsync(options),
+            amendExpectedHtml: html => html.Replace("Street\nLondon\nNW1 6XE\n", "Street&#xA;London&#xA;NW1 6XE&#xA;"));
+
+    [Theory]
     [ComponentFixtureData("checkboxes", typeof(CheckboxesOptions2), exclude: ["with falsy values"])]
     public Task Checkboxes(ComponentTestCaseData<CheckboxesOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

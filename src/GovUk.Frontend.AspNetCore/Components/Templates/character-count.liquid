@@ -1,0 +1,120 @@
+{% from "hint.macro" import govukHint %}
+{% from "textarea.macro" import govukTextarea %}
+
+{% comment %}
+  If the limit is set in JavaScript, we won't be able to interpolate the message
+  until JavaScript, so we only set a text if the `maxlength` or `maxwords` options
+  were provided to the macro.
+{% endcomment %}
+{%- assign hasNoLimit = (not(params.maxwords) and not(params.maxlength)) -%}
+{%- assign textareaDescriptionLength = params.maxwords | default: params.maxlength -%}
+{%- assign textareaDescriptionText = params.textareaDescriptionText | default: ('You can enter up to %{count} ' | append: (ifelse(params.maxwords, 'words', 'characters'))) -%}
+{%- assign textareaDescriptionTextNoLimit = ifelse(hasNoLimit, '', (textareaDescriptionText | replace: '%{count}', textareaDescriptionLength)) -%}
+{%- assign id = params.id | default: params.name -%}
+
+{%- capture countMessageHtml %}
+{{ govukHint(dict(
+  text = textareaDescriptionTextNoLimit,
+  id = (id | append: '-info'),
+  classes = ('govuk-character-count__message' | append: ' ' | append: params.countMessage.classes | rstrip),
+  attributes = params.countMessage.attributes
+)) | strip }}
+{% if params.formGroup.afterInput %}
+  {{- params.formGroup.afterInput.html | raw | strip | default: params.formGroup.afterInput.text }}
+{% endif -%}
+{% endcapture -%}
+
+{%- capture attributesHtml %}
+  {{- govukAttributes(dict(
+    data-module = "govuk-character-count",
+    data-maxlength = dict(
+      value = params.maxlength,
+      optional = true
+    ),
+    data-threshold = dict(
+      value = params.threshold,
+      optional = true
+    ),
+    data-maxwords = dict(
+      value = params.maxwords,
+      optional = true
+    )
+  )) -}}
+
+  {% comment %}
+    Without maxlength or maxwords, we can't guess if the component will count words or characters.
+    We can't guess a default textarea description to be interpolated in JavaScript
+    once the maximum gets configured there.
+    So we only add the attribute if a textarea description was explicitely provided.
+  {% endcomment %}
+  {%- if hasNoLimit and params.textareaDescriptionText %}
+    {{- govukI18nAttributes(
+      key = 'textarea-description',
+      messages = dict(other = params.textareaDescriptionText)
+    ) -}}
+  {% endif -%}
+
+  {{- govukI18nAttributes(
+    key = 'characters-under-limit',
+    messages = params.charactersUnderLimitText
+  ) -}}
+
+  {{- govukI18nAttributes(
+    key = 'characters-at-limit',
+    message = params.charactersAtLimitText
+  ) -}}
+
+  {{- govukI18nAttributes(
+    key = 'characters-over-limit',
+    messages = params.charactersOverLimitText
+  ) -}}
+
+  {{- govukI18nAttributes(
+    key = 'words-under-limit',
+    messages = params.wordsUnderLimitText
+  ) -}}
+
+  {{- govukI18nAttributes(
+    key = 'words-at-limit',
+    message = params.wordsAtLimitText
+  ) -}}
+
+  {{- govukI18nAttributes(
+    key = 'words-over-limit',
+    messages = params.wordsOverLimitText
+  ) -}}
+{% endcapture -%}
+
+{% comment %} Append form group attributes onto attributes set above {% endcomment %}
+{%- for name in params.formGroup.attributes %}
+  {% assign attributesHtml = attributesHtml | append: " " | append: name | escape | append: '="' | append: value | escape | append: '"' %}
+{% endfor -%}
+
+{{ govukTextarea(dict(
+  id = id,
+  name = params.name,
+  describedBy = (id | append: '-info'),
+  rows = params.rows,
+  spellcheck = params.spellcheck,
+  value = params.value,
+  formGroup = dict(
+    classes = ('govuk-character-count' | append: ' ' | append: params.formGroup.classes | rstrip),
+    attributes = attributesHtml,
+    beforeInput = params.formGroup.beforeInput,
+    afterInput = dict(
+      html = countMessageHtml
+    )
+  ),
+  classes = ('govuk-js-character-count' | append: ' ' | append: params.classes | rstrip),
+  label = dict(
+    html = params.label.html,
+    text = params.label.text,
+    classes = params.label.classes,
+    isPageHeading = params.label.isPageHeading,
+    attributes = params.label.attributes,
+    for = id
+  ),
+  hint = params.hint,
+  errorMessage = params.errorMessage,
+  attributes = params.attributes
+)) | strip }}
