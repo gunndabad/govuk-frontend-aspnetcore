@@ -59,7 +59,7 @@ public class ErrorSummaryTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummaryAsync(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
 
         var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
@@ -119,7 +119,7 @@ public class ErrorSummaryTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummaryAsync(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
 
         var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
@@ -207,7 +207,7 @@ public class ErrorSummaryTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummaryAsync(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
 
         var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {
@@ -263,7 +263,7 @@ public class ErrorSummaryTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ErrorSummaryOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummaryAsync(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
 
         var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
         {

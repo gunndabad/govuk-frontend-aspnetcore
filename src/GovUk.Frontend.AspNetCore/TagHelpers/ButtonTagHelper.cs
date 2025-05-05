@@ -92,7 +92,7 @@ public class ButtonTagHelper : TagHelper
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = await _componentGenerator.GenerateButton(new ButtonOptions()
+        var component = await _componentGenerator.GenerateButtonAsync(new ButtonOptions()
         {
             Element = Element,
             Html = content.ToHtmlString(),

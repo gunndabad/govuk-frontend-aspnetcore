@@ -61,85 +61,85 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         });
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateAccordion(AccordionOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateAccordionAsync(AccordionOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("accordion", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateBackLink(BackLinkOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateBackLinkAsync(BackLinkOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("back-link", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateBreadcrumbs(BreadcrumbsOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateBreadcrumbsAsync(BreadcrumbsOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("breadcrumbs", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateButton(ButtonOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateButtonAsync(ButtonOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("button", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateCheckboxes(CheckboxesOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("checkboxes", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateCookieBanner(CookieBannerOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateCookieBannerAsync(CookieBannerOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("cookie-banner", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateErrorMessage(ErrorMessageOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("error-message", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateErrorSummary(ErrorSummaryOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateErrorSummaryAsync(ErrorSummaryOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("error-summary", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateFieldset(FieldsetOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("fieldset", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateFileUpload(FileUploadOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateFileUploadAsync(FileUploadOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("file-upload", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateHint(HintOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("hint", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateLabel(LabelOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("label", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateTag(TagOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateTagAsync(TagOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("tag", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateWarningText(WarningTextOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateWarningTextAsync(WarningTextOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("warning-text", options);

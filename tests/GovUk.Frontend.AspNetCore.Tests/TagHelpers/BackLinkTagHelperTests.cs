@@ -44,7 +44,7 @@ public class BackLinkTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         BackLinkOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateBackLink(It.IsAny<BackLinkOptions>())).Callback<BackLinkOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateBackLinkAsync(It.IsAny<BackLinkOptions>())).Callback<BackLinkOptions>(o => actualOptions = o);
 
         var tagHelper = new BackLinkTagHelper(componentGeneratorMock.Object);
 

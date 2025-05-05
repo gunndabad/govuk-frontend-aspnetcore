@@ -72,7 +72,7 @@ public class ContainerErrorSummaryTagHelper : TagHelper
 
         containerErrorContext.ErrorSummaryHasBeenRendered = true;
 
-        var errorSummary = await _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions
+        var errorSummary = await _componentGenerator.GenerateErrorSummaryAsync(new ErrorSummaryOptions
         {
             TitleText = null,
             TitleHtml = DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,

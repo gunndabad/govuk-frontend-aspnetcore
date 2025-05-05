@@ -20,7 +20,7 @@ public class DefaultComponentGeneratorTests
     public Task Accordion(ComponentTestCaseData<AccordionOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateAccordion(options),
+            (generator, options) => generator.GenerateAccordionAsync(options),
             amendExpectedHtml: data.Name is "default" or "with translations" ? html => html.Replace("’", "&#x2019;") : null);
 
     [Theory]
@@ -28,35 +28,35 @@ public class DefaultComponentGeneratorTests
     public Task BackLink(ComponentTestCaseData<BackLinkOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateBackLink(options));
+            (generator, options) => generator.GenerateBackLinkAsync(options));
 
     [Theory]
     [ComponentFixtureData("breadcrumbs", typeof(BreadcrumbsOptions))]
     public Task Breadcrumbs(ComponentTestCaseData<BreadcrumbsOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateBreadcrumbs(options));
+            (generator, options) => generator.GenerateBreadcrumbsAsync(options));
 
     [Theory]
     [ComponentFixtureData("button", typeof(ButtonOptions))]
     public Task Button(ComponentTestCaseData<ButtonOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateButton(options));
+            (generator, options) => generator.GenerateButtonAsync(options));
 
     [Theory]
     [ComponentFixtureData("checkboxes", typeof(CheckboxesOptions2), exclude: ["with falsy values"])]
     public Task Checkboxes(ComponentTestCaseData<CheckboxesOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateCheckboxes(options));
+            (generator, options) => generator.GenerateCheckboxesAsync(options));
 
     [Theory]
     [ComponentFixtureData("cookie-banner", typeof(CookieBannerOptions))]
     public Task CookieBanner(ComponentTestCaseData<CookieBannerOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateCookieBanner(options),
+            (generator, options) => generator.GenerateCookieBannerAsync(options),
             amendExpectedHtml: html => Regex.Replace(html, "</div>\n\n\n  </div>\n</div>$", "</div>\n\n  </div>\n</div>"));
 
     [Theory]
@@ -64,28 +64,28 @@ public class DefaultComponentGeneratorTests
     public Task ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateErrorMessage(options));
+            (generator, options) => generator.GenerateErrorMessageAsync(options));
 
     [Theory]
     [ComponentFixtureData("error-summary", typeof(ErrorSummaryOptions))]
     public Task ErrorSummary(ComponentTestCaseData<ErrorSummaryOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateErrorSummary(options));
+            (generator, options) => generator.GenerateErrorSummaryAsync(options));
 
     [Theory]
     [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]
     public Task Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateFieldset(options));
+            (generator, options) => generator.GenerateFieldsetAsync(options));
 
     [Theory]
     [ComponentFixtureData("file-upload", typeof(FileUploadOptions), only: "translated")]
     public Task FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateFileUpload(options),
+            (generator, options) => generator.GenerateFileUploadAsync(options),
             amendExpectedHtml: html => html.Replace("C:&#x5C;fakepath&#x5C;myphoto.jpg", "C:\\fakepath\\myphoto.jpg"));
 
     [Theory]
@@ -93,7 +93,7 @@ public class DefaultComponentGeneratorTests
     public Task Hint(ComponentTestCaseData<HintOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateHint(options),
+            (generator, options) => generator.GenerateHintAsync(options),
             amendExpectedHtml:
                 // Account for weird encoding differences
                 data.Name == "default" ?
@@ -108,21 +108,21 @@ public class DefaultComponentGeneratorTests
     public Task Label(ComponentTestCaseData<LabelOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateLabel(options));
+            (generator, options) => generator.GenerateLabelAsync(options));
 
     [Theory]
     [ComponentFixtureData("tag", typeof(TagOptions))]
     public Task Tag(ComponentTestCaseData<TagOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateTag(options));
+            (generator, options) => generator.GenerateTagAsync(options));
 
     [Theory]
     [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
     public Task WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateWarningText(options),
+            (generator, options) => generator.GenerateWarningTextAsync(options),
             amendExpectedHtml: html => html.Replace("£", "&#xA3;").Replace("’", "&#x2019;"));
 
     private async Task CheckComponentHtmlMatchesExpectedHtml<TOptions>(

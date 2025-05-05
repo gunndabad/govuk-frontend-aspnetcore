@@ -62,7 +62,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -148,7 +148,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -233,7 +233,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -310,7 +310,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -383,7 +383,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -463,7 +463,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -534,7 +534,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
@@ -615,7 +615,7 @@ public class FileUploadTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateFileUploadAsync(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {

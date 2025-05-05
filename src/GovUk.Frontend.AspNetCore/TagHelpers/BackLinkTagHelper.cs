@@ -45,7 +45,7 @@ public class BackLinkTagHelper : TagHelper
         attributes.Remove("class", out var classes);
         attributes.Remove("href", out var href);
 
-        var component = await _componentGenerator.GenerateBackLink(new BackLinkOptions()
+        var component = await _componentGenerator.GenerateBackLinkAsync(new BackLinkOptions()
         {
             Html = content?.ToHtmlString(),
             Href = href,

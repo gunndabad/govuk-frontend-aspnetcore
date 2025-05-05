@@ -92,7 +92,7 @@ public class ErrorSummaryTagHelper : TagHelper
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = await _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions()
+        var component = await _componentGenerator.GenerateErrorSummaryAsync(new ErrorSummaryOptions()
         {
             TitleText = null,
             TitleHtml = errorSummaryContext.Title?.Html ?? DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,

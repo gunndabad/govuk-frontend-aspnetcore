@@ -53,7 +53,7 @@ public class ButtonLinkTagHelper : TagHelper
         attributes.Remove("class", out var classes);
         attributes.Remove("href", out var href);
 
-        var component = await _componentGenerator.GenerateButton(new ButtonOptions()
+        var component = await _componentGenerator.GenerateButtonAsync(new ButtonOptions()
         {
             Element = Element,
             Html = content.ToHtmlString(),

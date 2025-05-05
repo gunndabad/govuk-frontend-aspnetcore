@@ -62,7 +62,7 @@ public class BreadcrumbsTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         BreadcrumbsOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateBreadcrumbs(It.IsAny<BreadcrumbsOptions>())).Callback<BreadcrumbsOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateBreadcrumbsAsync(It.IsAny<BreadcrumbsOptions>())).Callback<BreadcrumbsOptions>(o => actualOptions = o);
 
         var tagHelper = new BreadcrumbsTagHelper(componentGeneratorMock.Object)
         {

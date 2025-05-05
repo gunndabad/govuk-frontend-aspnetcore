@@ -35,7 +35,7 @@ public class TagTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         TagOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTag(It.IsAny<TagOptions>())).Callback<TagOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateTagAsync(It.IsAny<TagOptions>())).Callback<TagOptions>(o => actualOptions = o);
 
         var tagHelper = new TagTagHelper(componentGeneratorMock.Object);
 

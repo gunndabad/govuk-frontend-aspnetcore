@@ -48,7 +48,7 @@ public class ButtonTagHelperTests
 
         var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ButtonOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateButtonAsync(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
 
         var tagHelper = new ButtonTagHelper(componentGeneratorMock.Object)
         {

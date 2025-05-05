@@ -36,7 +36,7 @@ public class TagTagHelper : TagHelper
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = await _componentGenerator.GenerateTag(new TagOptions()
+        var component = await _componentGenerator.GenerateTagAsync(new TagOptions()
         {
             Text = null,
             Html = content.ToHtmlString(),
