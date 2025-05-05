@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Changes to defaults
+
+#### Error summary generation on `<form>`s
+Error summaries are no longer prepended to forms by default;
+they are prepended to the `<main>` element if you're using the `_GovUkPageTemplate` layout view.
+You can restore the old behaviour by setting `PrependErrorSummaryToForms` to `true` on `GovUkFrontendAspNetCoreOptions`.
+
 ### New features
 
 #### Error summary

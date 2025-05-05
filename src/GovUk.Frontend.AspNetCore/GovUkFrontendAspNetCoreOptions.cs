@@ -25,7 +25,7 @@ public class GovUkFrontendAspNetCoreOptions
             new DateOnlyDateInputModelConverter()
         };
 
-        PrependErrorSummaryToForms = true;
+        PrependErrorSummaryToForms = false;
         PrependErrorToTitle = true;
         StaticAssetsContentPath = "/assets";
         CompiledContentPath = "/govuk";
@@ -93,7 +93,7 @@ public class GovUkFrontendAspNetCoreOptions
     /// </summary>
     /// <remarks>
     /// <para>This can be overriden on a form-by-form basis by setting the <c>gfa-prepend-error-summary</c> attribute.</para>
-    /// <para>The default is <c>true</c>.</para>
+    /// <para>The default is <c>false</c>.</para>
     /// </remarks>
     public bool PrependErrorSummaryToForms { get; set; }
 
