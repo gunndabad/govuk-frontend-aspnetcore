@@ -124,6 +124,17 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateTagAsync(options));
 
     [Theory]
+    [ComponentFixtureData("textarea", typeof(TextareaOptions2))]
+    public Task Textarea(ComponentTestCaseData<TextareaOptions2> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTextareaAsync(options),
+            amendExpectedHtml: html => html
+                .Replace("’", "&#x2019;")
+                .Replace("‘", "&#x2018;")
+                .Replace("Street\nLondon\nNW1 6XE\n", "Street&#xA;London&#xA;NW1 6XE&#xA;"));
+
+    [Theory]
     [ComponentFixtureData("warning-text", typeof(WarningTextOptions))]
     public Task WarningText(ComponentTestCaseData<WarningTextOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

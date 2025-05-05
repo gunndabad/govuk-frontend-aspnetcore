@@ -1,0 +1,56 @@
+{% from "error-message.macro" import govukErrorMessage %}
+{% from "fieldset.macro" import govukFieldset %}
+{% from "hint.macro" import govukHint %}
+{% from "label.macro" import govukLabel %}
+
+{% comment %} a record of other elements that we need to associate with the input using
+  aria-describedby – for example hints or error messages -{% endcomment %}
+{% assign describedBy = params.describedBy | default: "" %}
+{%- assign id = params.id | default: params.name -%}
+
+<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %} {%- if params.formGroup.classes %} {{ params.formGroup.classes }}{% endif %}"
+  {{- govukAttributes(params.formGroup.attributes) }}>
+  {{ govukLabel(dict(
+    html = params.label.html,
+    text = params.label.text,
+    classes = params.label.classes,
+    isPageHeading = params.label.isPageHeading,
+    attributes = params.label.attributes,
+    for = id
+  )) | strip | indent: 2 }}
+{% if params.hint %}
+  {% assign hintId = id | append: '-hint' %}
+  {% assign describedBy = describedBy | append: ' ' | append: hintId | lstrip %}
+  {{ govukHint(dict(
+    id = hintId,
+    classes = params.hint.classes,
+    attributes = params.hint.attributes,
+    html = params.hint.html,
+    text = params.hint.text
+  )) | strip | indent: 2 }}
+{% endif %}
+{% if params.errorMessage %}
+  {% assign errorId = id | append: '-error' %}
+  {% assign describedBy = describedBy | append: ' ' | append: errorId | lstrip %}
+  {{ govukErrorMessage(dict(
+    id = errorId,
+    classes = params.errorMessage.classes,
+    attributes = params.errorMessage.attributes,
+    html = params.errorMessage.html,
+    text = params.errorMessage.text,
+    visuallyHiddenText = params.errorMessage.visuallyHiddenText
+  )) | strip | indent: 2 }}
+{% endif %}
+{% if params.formGroup.beforeInput %}
+  {{ params.formGroup.beforeInput.html | raw | strip | indent: 2 | default: params.formGroup.beforeInput.text }}
+{% endif %}
+  <textarea class="govuk-textarea {%- if params.errorMessage %} govuk-textarea--error{% endif %} {%- if params.classes %} {{ params.classes }}{% endif %}" id="{{ id }}" name="{{ params.name }}" rows="{{ params.rows | default: 5 }}"
+  {%- if (params.spellcheck == false) or (params.spellcheck == true) %} spellcheck="{{ params.spellcheck }}"{% endif %}
+  {%- if params.disabled %} disabled{% endif %}
+  {%- if describedBy != blank %} aria-describedby="{{ describedBy }}"{% endif %}
+  {%- if params.autocomplete %} autocomplete="{{ params.autocomplete }}"{% endif %}
+  {{- govukAttributes(params.attributes) }}>{{ params.value }}</textarea>
+{% if params.formGroup.afterInput %}
+  {{ params.formGroup.afterInput.html | raw | strip | indent: 2 | default: params.formGroup.afterInput.text }}
+{% endif %}
+</div>
