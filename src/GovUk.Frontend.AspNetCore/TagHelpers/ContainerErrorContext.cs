@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GovUk.Frontend.AspNetCore.Components;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -15,4 +17,16 @@ internal class ContainerErrorContext
 
         _errors.Add((html, href));
     }
+
+    public IReadOnlyCollection<ErrorSummaryOptionsErrorItem> GetErrorList() =>
+        Errors
+            .Select(i => new ErrorSummaryOptionsErrorItem()
+            {
+                Href = i.Href,
+                Text = null,
+                Html = i.Html,
+                Attributes = null,
+                ItemAttributes = null
+            })
+            .ToList();
 }

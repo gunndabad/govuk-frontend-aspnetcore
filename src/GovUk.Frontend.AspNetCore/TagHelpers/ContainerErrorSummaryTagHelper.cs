@@ -78,16 +78,7 @@ public class ContainerErrorSummaryTagHelper : TagHelper
             TitleHtml = DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,
             DescriptionText = null,
             DescriptionHtml = null,
-            ErrorList = containerErrorContext.Errors
-                .Select(i => new ErrorSummaryOptionsErrorItem
-                {
-                    Href = i.Href,
-                    Text = null,
-                    Html = i.Html,
-                    Attributes = null,
-                    ItemAttributes = null
-                })
-                .ToList(),
+            ErrorList = containerErrorContext.GetErrorList(),
             Classes = null,
             Attributes = null,
             DisableAutoFocus = null,

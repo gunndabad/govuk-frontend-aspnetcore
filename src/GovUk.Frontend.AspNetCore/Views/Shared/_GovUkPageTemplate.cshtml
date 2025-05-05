@@ -70,7 +70,9 @@
 
     <div class="govuk-width-container @ViewBag.ContainerClasses">
         @RenderSection("BeforeContent", required: false)
-        <main class="govuk-main-wrapper @ViewBag.MainClasses" id="main-content" role="main" lang="@ViewBag.MainLang" prepend-error-summary="true">
+        <main class="govuk-main-wrapper @ViewBag.MainClasses" id="main-content" role="main" lang="@ViewBag.MainLang">
+            <govuk-error-summary/>
+
             @RenderBody()
         </main>
     </div>

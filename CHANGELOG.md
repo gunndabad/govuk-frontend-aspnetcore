@@ -14,6 +14,7 @@ You can restore the old behaviour by setting `PrependErrorSummaryToForms` to `tr
 #### Error summary
 - Any element can have can an error summary prepended by setting `prepend-error-summary` to `true`.
 - Any errors from partial views or view components will now be included in the generated error summary.
+- `<govuk-error-summary>` will populate its items automatically if no `<govuk-error-summary-item>`s are specified.
 
 ### Breaking changes
 

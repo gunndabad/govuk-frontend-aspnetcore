@@ -57,6 +57,7 @@ public class ErrorSummaryItemTagHelperTests
             {
                 Assert.Equal(HtmlEncoder.Default.Encode(errorMessage), item.Html);
             });
+        Assert.True(errorSummaryContext.HaveExplicitItems);
     }
 
     [Fact]
@@ -150,6 +151,52 @@ public class ErrorSummaryItemTagHelperTests
             {
                 Assert.Equal(HtmlEncoder.Default.Encode(errorMessage), item.Html);
             });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_ForSpecifiedAndModelStateHasNoError_SetsHaveExplicitItemsOnContext()
+    {
+        // Arrange
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary-item",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>()
+            {
+                { typeof(ErrorSummaryContext), errorSummaryContext }
+            },
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary-item",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+        output.TagMode = TagMode.SelfClosing;
+
+        var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
+            .GetExplorerForProperty(nameof(Model.Field));
+
+        var viewContext = new ViewContext();
+
+        var options = Options.Create(new GovUkFrontendAspNetCoreOptions());
+        var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
+
+        var tagHelper = new ErrorSummaryItemTagHelper(options, dateInputParseErrorsProvider)
+        {
+            For = new ModelExpression(nameof(Model.Field), modelExplorer),
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.True(errorSummaryContext.HaveExplicitItems);
     }
 
     [Fact]

@@ -93,6 +93,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
         }
 
         var errorSummaryContext = context.GetContextItem<ErrorSummaryContext>();
+        errorSummaryContext.HaveExplicitItems = true;
 
         var childContent = await output.GetChildContentAsync();
 

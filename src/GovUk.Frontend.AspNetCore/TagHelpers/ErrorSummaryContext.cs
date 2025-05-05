@@ -15,6 +15,8 @@ internal class ErrorSummaryContext
         _items = new List<ErrorSummaryContextItem>();
     }
 
+    public bool HaveExplicitItems { get; set; }
+
     public IReadOnlyCollection<ErrorSummaryContextItem> Items => _items;
 
     public (AttributeCollection Attributes, string Html)? Description { get; private set; }
@@ -26,6 +28,7 @@ internal class ErrorSummaryContext
         ArgumentNullException.ThrowIfNull(item);
 
         _items.Add(item);
+        HaveExplicitItems = true;
     }
 
     public void SetDescription(AttributeCollection attributes, string html)

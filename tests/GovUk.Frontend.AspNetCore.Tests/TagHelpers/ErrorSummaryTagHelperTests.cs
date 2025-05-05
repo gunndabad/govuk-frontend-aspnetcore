@@ -155,7 +155,10 @@ public class ErrorSummaryTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new ErrorSummaryTagHelper(new DefaultComponentGenerator());
+        var tagHelper = new ErrorSummaryTagHelper(new DefaultComponentGenerator())
+        {
+            ViewContext = TestUtils.CreateViewContext()
+        };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
@@ -163,5 +166,124 @@ public class ErrorSummaryTagHelperTests
         // Assert
         var html = output.ToHtmlString();
         Assert.Empty(html);
+    }
+
+    [Fact]
+    public async Task ProcessAsync_HasExplicitItemsDoesNotGetErrorsFromContainerErrorContext()
+    {
+        // Arrange
+        var containerErrorContextErrorHtml = "First error";
+        var containerErrorContextErrorHref = "#FirstError";
+        var itemErrorHtml = "Item error";
+        var itemErrorHref = "#ItemError";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                errorSummaryContext.SetTitle(new AttributeCollection(), "Title");
+                errorSummaryContext.SetDescription(new AttributeCollection(), "Description");
+
+                errorSummaryContext.AddItem(
+                    new ErrorSummaryContextItem(
+                        itemErrorHref,
+                        itemErrorHtml,
+                        new AttributeCollection(),
+                        new AttributeCollection()));
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var viewContext = TestUtils.CreateViewContext();
+        var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
+        containerErrorContext.AddError(containerErrorContextErrorHtml, containerErrorContextErrorHref);
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ErrorSummaryOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+
+        var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
+        {
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions);
+        Assert.NotNull(actualOptions.ErrorList);
+        Assert.Collection(
+            actualOptions.ErrorList,
+            error =>
+            {
+                Assert.Equal(itemErrorHref, error.Href);
+                Assert.Equal(itemErrorHtml, error.Html);
+            });
+    }
+
+    [Fact]
+    public async Task ProcessAsync_DoesNotHaveExplicitItemsGetsErrorsFromContainerErrorContext()
+    {
+        // Arrange
+        var containerErrorContextErrorHtml = "First error";
+        var containerErrorContextErrorHref = "#FirstError";
+
+        var context = new TagHelperContext(
+            tagName: "govuk-error-summary",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
+
+        var output = new TagHelperOutput(
+            "govuk-error-summary",
+            attributes: new TagHelperAttributeList(),
+            getChildContentAsync: (useCachedResult, encoder) =>
+            {
+                var errorSummaryContext = (ErrorSummaryContext)context.Items[typeof(ErrorSummaryContext)];
+
+                errorSummaryContext.SetTitle(new AttributeCollection(), "Title");
+                errorSummaryContext.SetDescription(new AttributeCollection(), "Description");
+
+                var tagHelperContent = new DefaultTagHelperContent();
+                return Task.FromResult<TagHelperContent>(tagHelperContent);
+            });
+
+        var viewContext = TestUtils.CreateViewContext();
+        var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
+        containerErrorContext.AddError(containerErrorContextErrorHtml, containerErrorContextErrorHref);
+
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        ErrorSummaryOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateErrorSummary(It.IsAny<ErrorSummaryOptions>())).Callback<ErrorSummaryOptions>(o => actualOptions = o);
+
+        var tagHelper = new ErrorSummaryTagHelper(componentGeneratorMock.Object)
+        {
+            ViewContext = viewContext
+        };
+
+        // Act
+        await tagHelper.ProcessAsync(context, output);
+
+        // Assert
+        Assert.NotNull(actualOptions);
+        Assert.NotNull(actualOptions.ErrorList);
+        Assert.Collection(
+            actualOptions.ErrorList,
+            error =>
+            {
+                Assert.Equal(containerErrorContextErrorHref, error.Href);
+                Assert.Equal(containerErrorContextErrorHtml, error.Html);
+            });
     }
 }

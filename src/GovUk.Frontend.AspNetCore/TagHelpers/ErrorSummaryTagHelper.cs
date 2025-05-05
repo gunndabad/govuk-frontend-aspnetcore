@@ -57,9 +57,30 @@ public class ErrorSummaryTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
+        IReadOnlyCollection<ErrorSummaryOptionsErrorItem> errorList;
+
+        if (errorSummaryContext.HaveExplicitItems)
+        {
+            errorList = errorSummaryContext.Items
+                .Select(i => new ErrorSummaryOptionsErrorItem
+                {
+                    Href = i.Href,
+                    Text = null,
+                    Html = i.Html,
+                    Attributes = i.Attributes,
+                    ItemAttributes = i.ItemAttributes
+                })
+                .ToList();
+        }
+        else
+        {
+            var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+            errorList = containerErrorContext.GetErrorList();
+        }
+
         if (errorSummaryContext.Title == null &&
             errorSummaryContext.Description == null &&
-            errorSummaryContext.Items.Count == 0)
+            errorList.Count == 0)
         {
             output.SuppressOutput();
             return;
@@ -70,22 +91,13 @@ public class ErrorSummaryTagHelper : TagHelper
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = await _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions
+        var component = await _componentGenerator.GenerateErrorSummary(new ErrorSummaryOptions()
         {
             TitleText = null,
             TitleHtml = errorSummaryContext.Title?.Html ?? DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,
             DescriptionText = null,
             DescriptionHtml = errorSummaryContext.Description?.Html,
-            ErrorList = errorSummaryContext.Items
-                .Select(i => new ErrorSummaryOptionsErrorItem
-                {
-                    Href = i.Href,
-                    Text = null,
-                    Html = i.Html,
-                    Attributes = i.Attributes,
-                    ItemAttributes = i.ItemAttributes
-                })
-                .ToList(),
+            ErrorList = errorList,
             Classes = classes,
             Attributes = attributes,
             DisableAutoFocus = DisableAutoFocus,

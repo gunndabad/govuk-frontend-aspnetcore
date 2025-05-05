@@ -162,6 +162,9 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
         {
             var error = (await page.TextContentAsync(".govuk-error-message"))?.TrimStart("Error:".ToCharArray());
             Assert.Equal(expectedErrorMessage, error);
+
+            var errorSummaryError = await page.TextContentAsync(".govuk-error-summary__list>li>a");
+            Assert.Equal(expectedErrorMessage, errorSummaryError);
         }
 
         static async Task AssertInput(IElementHandle input, string expectedValue, bool? expectError)
