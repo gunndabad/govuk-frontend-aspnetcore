@@ -17,19 +17,12 @@ public class ButtonLinkTagHelper : TagHelper
     private const string IdAttributeName = "id";
     private const string IsStartButtonAttributeName = "is-start-button";
 
-    private readonly ILegacyComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a <see cref="ButtonLinkTagHelper"/>.
     /// </summary>
-    public ButtonLinkTagHelper() : this(new LegacyComponentGenerator())
-    {
-    }
-
-    /// <summary>
-    /// Creates a <see cref="ButtonLinkTagHelper"/>.
-    /// </summary>
-    internal ButtonLinkTagHelper(ILegacyComponentGenerator componentGenerator)
+    public ButtonLinkTagHelper(IComponentGenerator componentGenerator)
     {
         _componentGenerator = componentGenerator;
     }
@@ -56,21 +49,21 @@ public class ButtonLinkTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
         attributes.Remove("href", out var href);
 
-        var component = _componentGenerator.GenerateButton(new ButtonOptions()
+        var component = await _componentGenerator.GenerateButton(new ButtonOptions()
         {
             Element = Element,
-            Html = content,
+            Html = content.ToHtmlString(),
             Href = href,
             Classes = classes,
             Attributes = attributes,
             IsStartButton = IsStartButton,
-            Id = Id.EncodeHtml()
+            Id = Id
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
     }
 }

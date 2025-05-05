@@ -30,7 +30,7 @@ public interface IComponentGenerator
     /// Generates a button component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateButton(ButtonOptions2 options);
+    ValueTask<IHtmlContent> GenerateButton(ButtonOptions options);
 
     /// <summary>
     /// Generates a checkboxes component.

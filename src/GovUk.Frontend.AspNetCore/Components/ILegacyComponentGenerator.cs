@@ -6,12 +6,6 @@ namespace GovUk.Frontend.AspNetCore.Components;
 internal interface ILegacyComponentGenerator
 {
     /// <summary>
-    /// Generates a button component.
-    /// </summary>
-    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
-    HtmlTagBuilder GenerateButton(ButtonOptions options);
-
-    /// <summary>
     /// Generates a character count component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>

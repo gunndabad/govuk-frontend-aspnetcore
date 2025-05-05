@@ -38,8 +38,8 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateBreadcrumbs(options));
 
     [Theory]
-    [ComponentFixtureData("button", typeof(ButtonOptions2))]
-    public Task Button(ComponentTestCaseData<ButtonOptions2> data) =>
+    [ComponentFixtureData("button", typeof(ButtonOptions))]
+    public Task Button(ComponentTestCaseData<ButtonOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateButton(options));

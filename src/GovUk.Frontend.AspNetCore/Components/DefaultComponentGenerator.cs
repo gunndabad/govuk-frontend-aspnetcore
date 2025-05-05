@@ -79,7 +79,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("breadcrumbs", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateButton(ButtonOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateButton(ButtonOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("button", options);

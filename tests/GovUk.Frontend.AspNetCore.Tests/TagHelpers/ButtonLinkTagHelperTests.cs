@@ -43,7 +43,7 @@ public class ButtonLinkTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         ButtonOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateButton(It.IsAny<ButtonOptions>())).Callback<ButtonOptions>(o => actualOptions = o);
 
@@ -59,18 +59,18 @@ public class ButtonLinkTagHelperTests
         // Assert
         Assert.NotNull(actualOptions);
         Assert.Equal("a", actualOptions!.Element);
-        Assert.Equal(content, actualOptions.Html?.ToHtmlString());
+        Assert.Equal(HtmlEncoder.Default.Encode(content), actualOptions.Html);
         Assert.Null(actualOptions.Text);
         Assert.Null(actualOptions.Name);
         Assert.Null(actualOptions.Type);
         Assert.Null(actualOptions.Value);
         Assert.Null(actualOptions.Disabled);
-        Assert.Equal(href, actualOptions.Href?.ToHtmlString());
-        Assert.Equal(classes, actualOptions.Classes?.ToHtmlString());
+        Assert.Equal(href, actualOptions.Href);
+        Assert.Equal(classes, actualOptions.Classes);
         Assert.NotNull(actualOptions.Attributes);
         Assert.Contains(actualOptions.Attributes, kvp => kvp.Key == "data-foo" && kvp.Value == dataFooAttrValue);
         Assert.Null(actualOptions.PreventDoubleClick);
         Assert.Equal(isStartButton, actualOptions.IsStartButton);
-        Assert.Equal(id, actualOptions.Id?.ToHtmlString());
+        Assert.Equal(id, actualOptions.Id);
     }
 }

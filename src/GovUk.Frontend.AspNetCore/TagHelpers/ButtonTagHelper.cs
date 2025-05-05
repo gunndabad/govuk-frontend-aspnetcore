@@ -23,19 +23,12 @@ public class ButtonTagHelper : TagHelper
     private const string TypeAttributeName = "type";
     private const string ValueAttributeName = "value";
 
-    private readonly ILegacyComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="ButtonTagHelper"/>.
     /// </summary>
-    public ButtonTagHelper() : this(new LegacyComponentGenerator())
-    {
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="ButtonTagHelper"/>.
-    /// </summary>
-    internal ButtonTagHelper(ILegacyComponentGenerator componentGenerator)
+    public ButtonTagHelper(IComponentGenerator componentGenerator)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         _componentGenerator = componentGenerator;
@@ -96,24 +89,24 @@ public class ButtonTagHelper : TagHelper
             content = output.Content;
         }
 
-        var attributes = new EncodedAttributesDictionary(output.Attributes);
+        var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
-        var component = _componentGenerator.GenerateButton(new ButtonOptions()
+        var component = await _componentGenerator.GenerateButton(new ButtonOptions()
         {
             Element = Element,
-            Html = content,
-            Name = Name.EncodeHtml(),
-            Type = Type.EncodeHtml(),
-            Value = Value.EncodeHtml(),
+            Html = content.ToHtmlString(),
+            Name = Name,
+            Type = Type,
+            Value = Value,
             Disabled = Disabled,
             Classes = classes,
             Attributes = attributes,
             PreventDoubleClick = PreventDoubleClick,
             IsStartButton = IsStartButton,
-            Id = Id.EncodeHtml()
+            Id = Id
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
     }
 }
