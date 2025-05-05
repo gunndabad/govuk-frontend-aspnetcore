@@ -18,12 +18,6 @@ internal interface ILegacyComponentGenerator
     HtmlTagBuilder GenerateTag(TagOptions options);
 
     /// <summary>
-    /// Generates a task list component.
-    /// </summary>
-    /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>
-    HtmlTagBuilder GenerateTaskList(TaskListOptions options);
-
-    /// <summary>
     /// Generates a textarea component.
     /// </summary>
     /// <returns>An <see cref="HtmlTagBuilder"/> with the component's HTML.</returns>

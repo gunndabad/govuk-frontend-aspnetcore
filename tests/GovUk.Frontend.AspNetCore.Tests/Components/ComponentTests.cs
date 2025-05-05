@@ -30,13 +30,6 @@ public class ComponentTests
             (generator, options) => generator.GenerateTag(options).ToHtmlString());
 
     [Theory]
-    [ComponentFixtureData("task-list", typeof(TaskListOptions), exclude: ["with empty values"])]
-    public void TaskList(ComponentTestCaseData<TaskListOptions> data) =>
-        CheckComponentHtmlMatchesExpectedHtml(
-            data,
-            (generator, options) => generator.GenerateTaskList(options).ToHtmlString());
-
-    [Theory]
     [ComponentFixtureData("textarea", typeof(TextareaOptions))]
     public void Textarea(ComponentTestCaseData<TextareaOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
