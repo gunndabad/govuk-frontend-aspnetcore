@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing.Patterns;
 
@@ -11,7 +11,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(BreadcrumbsItemTagHelper.TagName/*, BreadcrumbsItemTagHelper.ShortTagName*/)]
-[OutputElementHint(FluidComponentGenerator.ComponentElementTypes.Breadcrumbs)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.Breadcrumbs)]
 public class BreadcrumbsTagHelper : TagHelper
 {
     internal const string TagName = "govuk-breadcrumbs";

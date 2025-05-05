@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,7 +28,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     //TextInputPrefixTagHelper.ShortTagName,
     TextInputSuffixTagHelper.TagName/*,
     TextInputSuffixTagHelper.ShortTagName*/)]
-[OutputElementHint(DefaultComponentGenerator.FormGroupElement)]
+[OutputElementHint(LegacyComponentGenerator.FormGroupElement)]
 public class TextInputTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-input-error-message";
@@ -67,7 +67,7 @@ public class TextInputTagHelper : TagHelper
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
     public TextInputTagHelper()
-        : this(new DefaultComponentGenerator())
+        : this(new LegacyComponentGenerator())
     {
     }
 
@@ -125,7 +125,7 @@ public class TextInputTagHelper : TagHelper
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = DefaultComponentGenerator.InputDefaultDisabled;
+    public bool Disabled { get; set; } = LegacyComponentGenerator.InputDefaultDisabled;
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.

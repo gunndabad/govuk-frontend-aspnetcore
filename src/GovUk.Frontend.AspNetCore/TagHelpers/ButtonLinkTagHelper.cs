@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -22,7 +22,7 @@ public class ButtonLinkTagHelper : TagHelper
     /// <summary>
     /// Creates a <see cref="ButtonLinkTagHelper"/>.
     /// </summary>
-    public ButtonLinkTagHelper() : this(new DefaultComponentGenerator())
+    public ButtonLinkTagHelper() : this(new LegacyComponentGenerator())
     {
     }
 

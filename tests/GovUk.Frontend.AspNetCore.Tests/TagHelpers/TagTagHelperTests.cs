@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
@@ -32,7 +32,7 @@ public class TagTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
         TagOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateTag(It.IsAny<TagOptions>())).Callback<TagOptions>(o => actualOptions = o);
 

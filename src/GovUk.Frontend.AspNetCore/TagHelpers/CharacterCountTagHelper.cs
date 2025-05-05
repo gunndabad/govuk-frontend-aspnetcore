@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -19,7 +19,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, CharacterCountValueTagHelper.TagName)]
-[OutputElementHint(DefaultComponentGenerator.CharacterCountElement)]
+[OutputElementHint(LegacyComponentGenerator.CharacterCountElement)]
 public class CharacterCountTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-character-count-error-message";
@@ -55,7 +55,7 @@ public class CharacterCountTagHelper : TagHelper
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
     public CharacterCountTagHelper()
-        : this(new DefaultComponentGenerator())
+        : this(new LegacyComponentGenerator())
     {
     }
 

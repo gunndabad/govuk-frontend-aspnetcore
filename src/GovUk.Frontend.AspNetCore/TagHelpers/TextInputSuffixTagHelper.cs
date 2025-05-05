@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
 //[HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(DefaultComponentGenerator.InputSuffixElement)]
+[OutputElementHint(LegacyComponentGenerator.InputSuffixElement)]
 public class TextInputSuffixTagHelper : TagHelper
 {
     internal const string TagName = "govuk-input-suffix";

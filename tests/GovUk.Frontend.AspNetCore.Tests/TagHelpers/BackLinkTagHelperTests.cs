@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -42,7 +42,7 @@ public class BackLinkTagHelperTests
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         BackLinkOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateBackLink(It.IsAny<BackLinkOptions>())).Callback<BackLinkOptions>(o => actualOptions = o);
 

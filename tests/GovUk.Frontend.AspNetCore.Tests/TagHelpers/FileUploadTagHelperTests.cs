@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -60,7 +60,7 @@ public class FileUploadTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -146,7 +146,7 @@ public class FileUploadTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -231,7 +231,7 @@ public class FileUploadTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -308,7 +308,7 @@ public class FileUploadTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -381,7 +381,7 @@ public class FileUploadTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -461,7 +461,7 @@ public class FileUploadTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -532,7 +532,7 @@ public class FileUploadTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -613,7 +613,7 @@ public class FileUploadTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         FileUploadOptions? actualOptions = null;
         componentGeneratorMock.Setup(mock => mock.GenerateFileUpload(It.IsAny<FileUploadOptions>())).Callback<FileUploadOptions>(o => actualOptions = o);
 
@@ -671,7 +671,7 @@ public class FileUploadTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<FluidComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
 
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {

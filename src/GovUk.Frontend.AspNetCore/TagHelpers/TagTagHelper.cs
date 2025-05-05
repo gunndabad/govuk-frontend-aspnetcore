@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS tag component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(DefaultComponentGenerator.TagElement)]
+[OutputElementHint(LegacyComponentGenerator.TagElement)]
 public class TagTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tag";
@@ -18,7 +18,7 @@ public class TagTagHelper : TagHelper
     /// <summary>
     /// Creates a new <see cref="TagTagHelper"/>.
     /// </summary>
-    public TagTagHelper() : this(new DefaultComponentGenerator())
+    public TagTagHelper() : this(new LegacyComponentGenerator())
     {
     }
 

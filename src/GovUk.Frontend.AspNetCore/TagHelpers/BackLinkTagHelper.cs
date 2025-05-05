@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.ComponentGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -10,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS back link component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(FluidComponentGenerator.ComponentElementTypes.BackLink)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.BackLink)]
 public class BackLinkTagHelper : TagHelper
 {
     internal const string TagName = "govuk-back-link";
