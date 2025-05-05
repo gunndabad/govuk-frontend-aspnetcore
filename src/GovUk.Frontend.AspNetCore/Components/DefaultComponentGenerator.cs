@@ -81,6 +81,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("button", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateCharacterCountAsync(CharacterCountOptions2 options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("character-count", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -180,6 +186,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         context.SetValue("govukI18nAttributes", new FunctionValue(Functions.GovukI18nAttributes));
         context.SetValue("ifelse", new FunctionValue(Functions.IfElse));
         context.SetValue("istruthy", new FunctionValue(Functions.IsTruthy));
+        context.SetValue("not", new FunctionValue(Functions.Not));
         context.SetValue("params", componentOptions);  // To match the nunjucks templates
 
         var template = GetTemplate(templateName);
