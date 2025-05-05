@@ -154,7 +154,7 @@ public class FileUploadTagHelperTests
         {
             Id = id,
             Name = name,
-            ViewContext = new ViewContext()
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -238,7 +238,7 @@ public class FileUploadTagHelperTests
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
-            ViewContext = new ViewContext(),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -468,7 +468,7 @@ public class FileUploadTagHelperTests
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
-            ViewContext = new ViewContext(),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -620,8 +620,8 @@ public class FileUploadTagHelperTests
         var tagHelper = new FileUploadTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
-            ViewContext = new ViewContext(),
-            IgnoreModelStateErrors = true
+            IgnoreModelStateErrors = true,
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -635,8 +635,6 @@ public class FileUploadTagHelperTests
     public async Task ProcessAsync_WithError_AddsErrorWithCorrectFieldIdToContainerErrorContext()
     {
         // Arrange
-        var formErrorContext = new ContainerErrorContext();
-
         var id = "my-id";
         var name = "my-name";
         var labelHtml = "The label";
@@ -645,10 +643,7 @@ public class FileUploadTagHelperTests
         var context = new TagHelperContext(
             tagName: "govuk-input",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ContainerErrorContext), formErrorContext }
-            },
+            items: new Dictionary<object, object>(),
             uniqueId: "test");
 
         var output = new TagHelperOutput(
@@ -682,7 +677,7 @@ public class FileUploadTagHelperTests
         {
             Id = id,
             Name = name,
-            ViewContext = new ViewContext()
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -690,11 +685,11 @@ public class FileUploadTagHelperTests
 
         // Assert
         Assert.Collection(
-            formErrorContext.Errors,
+            tagHelper.ViewContext.HttpContext.GetContainerErrorContext().Errors,
             error =>
             {
-                Assert.Equal(errorHtml, error.Content.ToHtmlString());
-                Assert.Equal($"#{id}", error.Href?.ToHtmlString());
+                Assert.Equal(errorHtml, error.Html);
+                Assert.Equal($"#{id}", error.Href);
             });
     }
 

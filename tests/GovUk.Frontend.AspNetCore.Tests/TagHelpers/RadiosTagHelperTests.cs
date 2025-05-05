@@ -124,7 +124,8 @@ public class RadiosTagHelperTests
         var tagHelper = new RadiosTagHelper(new ComponentGenerator(), new DefaultModelHelper())
         {
             IdPrefix = "my-id",
-            Name = "testradios"
+            Name = "testradios",
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act

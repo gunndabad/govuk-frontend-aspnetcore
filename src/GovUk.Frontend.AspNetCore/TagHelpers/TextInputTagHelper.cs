@@ -296,10 +296,11 @@ public class TextInputTagHelper : TagHelper
 
         component.WriteTo(output);
 
-        if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
+        if (errorMessageOptions is not null)
         {
             Debug.Assert(errorMessageOptions.Html is not null);
-            containerErrorContext.AddError(errorMessageOptions.Html!, href: new HtmlString("#" + id.ToHtmlString()));
+            var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+            containerErrorContext.AddError(errorMessageOptions.Html!.ToHtmlString(), href: "#" + id);
         }
     }
 

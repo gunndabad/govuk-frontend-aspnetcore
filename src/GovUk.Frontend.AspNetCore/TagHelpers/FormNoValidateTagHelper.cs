@@ -29,7 +29,7 @@ public class FormNovalidateTagHelper : TagHelper
         {
             if (!output.Attributes.ContainsName("novalidate"))
             {
-                output.Attributes.Add("novalidate", string.Empty);
+                output.Attributes.Add(new TagHelperAttribute("novalidate", null, HtmlAttributeValueStyle.Minimized));
             }
         }
     }

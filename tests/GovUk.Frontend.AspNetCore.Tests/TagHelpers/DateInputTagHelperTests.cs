@@ -433,7 +433,8 @@ public class DateInputTagHelperTests
         {
             Id = "my-id",
             NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Value = new DateOnly(2020, 4, 1),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -495,7 +496,8 @@ public class DateInputTagHelperTests
         {
             Id = "my-id",
             NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Value = new DateOnly(2020, 4, 1),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -853,7 +855,8 @@ public class DateInputTagHelperTests
             Id = "my-id",
             DescribedBy = "describedby",
             NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Value = new DateOnly(2020, 4, 1),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -924,7 +927,7 @@ public class DateInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
             .GetExplorerForProperty(nameof(Model.Date));
 
-        var viewContext = new ViewContext();
+        var viewContext = TestUtils.CreateViewContext();
 
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
 
@@ -992,7 +995,7 @@ public class DateInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model() { Date = new DateOnly(2020, 4, 1) })
             .GetExplorerForProperty(nameof(Model.Date));
 
-        var viewContext = new ViewContext();
+        var viewContext = TestUtils.CreateViewContext();
 
         var dateInputParseErrorsProvider = new DateInputParseErrorsProvider();
 
@@ -1041,15 +1044,10 @@ public class DateInputTagHelperTests
         string expectedErrorFieldId)
     {
         // Arrange
-        var formErrorContext = new ContainerErrorContext();
-
         var context = new TagHelperContext(
             tagName: "govuk-date-input",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ContainerErrorContext), formErrorContext }
-            },
+            items: new Dictionary<object, object>(),
             uniqueId: "test");
 
         var output = new TagHelperOutput(
@@ -1069,7 +1067,8 @@ public class DateInputTagHelperTests
             Id = "my-id",
             DescribedBy = "describedby",
             NamePrefix = "my-name",
-            Value = new DateOnly(2020, 4, 1)
+            Value = new DateOnly(2020, 4, 1),
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -1077,11 +1076,11 @@ public class DateInputTagHelperTests
 
         // Assert
         Assert.Collection(
-            formErrorContext.Errors,
+            tagHelper.ViewContext.HttpContext.GetContainerErrorContext().Errors,
             error =>
             {
-                Assert.Equal("Error", error.Content.ToHtmlString());
-                Assert.Equal("#" + expectedErrorFieldId, error.Href?.ToHtmlString());
+                Assert.Equal("Error", error.Html);
+                Assert.Equal("#" + expectedErrorFieldId, error.Href);
             });
     }
 

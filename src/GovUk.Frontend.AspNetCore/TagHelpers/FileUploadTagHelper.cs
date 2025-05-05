@@ -207,10 +207,11 @@ public class FileUploadTagHelper : TagHelper
 
         output.ApplyComponentHtml(component);
 
-        if (errorMessageOptions is not null && context.TryGetContextItem<ContainerErrorContext>(out var containerErrorContext))
+        if (errorMessageOptions is not null)
         {
             Debug.Assert(errorMessageOptions.Html is not null);
-            containerErrorContext.AddError(new HtmlString(errorMessageOptions.Html!), href: new HtmlString("#" + id));
+            var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+            containerErrorContext.AddError(errorMessageOptions.Html!, href: "#" + id);
         }
     }
 

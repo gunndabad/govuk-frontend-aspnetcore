@@ -137,7 +137,8 @@ public class SelectTagHelperTests
         {
             Id = "my-id",
             DescribedBy = "describedby",
-            Name = "my-name"
+            Name = "my-name",
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act

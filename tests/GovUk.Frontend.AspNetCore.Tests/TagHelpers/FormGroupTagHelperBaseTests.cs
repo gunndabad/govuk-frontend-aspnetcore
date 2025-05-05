@@ -50,7 +50,8 @@ public class FormGroupTagHelperBaseTests
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
-            Id = "test"
+            Id = "test",
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -64,15 +65,10 @@ public class FormGroupTagHelperBaseTests
     public void GenerateErrorMessage_AddsErrorToFormErrorContext()
     {
         // Arrange
-        var formErrorContext = new ContainerErrorContext();
-
         var tagHelperContext = new TagHelperContext(
             tagName: "test",
             allAttributes: new TagHelperAttributeList(),
-            items: new Dictionary<object, object>()
-            {
-                { typeof(ContainerErrorContext), formErrorContext }
-            },
+            items: new Dictionary<object, object>(),
             uniqueId: "test");
 
         var formGroupContext = new TestFormGroupContext();
@@ -82,7 +78,8 @@ public class FormGroupTagHelperBaseTests
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
-            Id = "test"
+            Id = "test",
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
@@ -90,10 +87,10 @@ public class FormGroupTagHelperBaseTests
 
         // Assert
         Assert.Collection(
-            formErrorContext.Errors,
+            tagHelper.ViewContext.HttpContext.GetContainerErrorContext().Errors,
             error =>
             {
-                Assert.Equal("Error message", error.Content.ToHtmlString());
+                Assert.Equal("Error message", error.Html);
             });
     }
 
@@ -111,7 +108,7 @@ public class FormGroupTagHelperBaseTests
 
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
-        var viewContext = new ViewContext();
+        var viewContext = TestUtils.CreateViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
@@ -146,7 +143,7 @@ public class FormGroupTagHelperBaseTests
 
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
-        var viewContext = new ViewContext();
+        var viewContext = TestUtils.CreateViewContext();
         var modelExpression = nameof(Model.SimpleProperty);
 
         var modelHelper = new Mock<IModelHelper>();
@@ -279,7 +276,8 @@ public class FormGroupTagHelperBaseTests
 
         var tagHelper = new TestFormGroupTagHelper(new ComponentGenerator(), modelHelper.Object)
         {
-            Id = "test"
+            Id = "test",
+            ViewContext = TestUtils.CreateViewContext()
         };
 
         // Act
