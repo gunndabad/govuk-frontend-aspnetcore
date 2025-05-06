@@ -31,6 +31,12 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 The hosted CSS and JavaScript files no longer have source maps.
 Any console errors from browsers failing to download the referenced files should be eliminated.
 
+## 2.9.1
+
+### Fixes
+
+Fix rendering nested form elements.
+
 ## 2.9.0
 
 Targets GOV.UK Frontend v5.9.0.
