@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.9.1
+
+### Fixes
+
+Fix rendering nested form elements.
+
 ## v2.9.0
 
 Targets GOV.UK Frontend v5.9.0.
