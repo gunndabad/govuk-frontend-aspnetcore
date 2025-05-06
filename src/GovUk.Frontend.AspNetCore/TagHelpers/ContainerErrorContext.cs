@@ -30,5 +30,5 @@ internal class ContainerErrorContext
                 Attributes = null,
                 ItemAttributes = null
             })
-            .ToList();
+            .ToArray();
 }

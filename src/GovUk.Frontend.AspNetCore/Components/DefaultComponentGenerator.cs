@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Fluid;
@@ -101,6 +102,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
     public virtual ValueTask<IHtmlContent> GenerateErrorSummaryAsync(ErrorSummaryOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
+        options = options with { ErrorList = options.ErrorList?.ToList() };  // TEMP workaround issue with arrays
         return RenderTemplate("error-summary", options);
     }
 

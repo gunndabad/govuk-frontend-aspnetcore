@@ -72,7 +72,7 @@ public class ErrorSummaryTagHelper : TagHelper
                     Attributes = i.Attributes,
                     ItemAttributes = i.ItemAttributes
                 })
-                .ToList();
+                .ToArray();
         }
         else
         {
