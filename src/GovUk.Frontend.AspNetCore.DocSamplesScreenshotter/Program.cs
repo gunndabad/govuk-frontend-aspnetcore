@@ -35,7 +35,8 @@ class Program
         await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
         var browser = await Puppeteer.LaunchAsync(new LaunchOptions()
         {
-            Headless = true
+            Headless = true,
+            Args = ["--no-sandbox", "--disable-setuid-sandbox"]
         });
 
         await WriteScreenshots(new[]
