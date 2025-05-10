@@ -4,37 +4,43 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record CheckboxesOptions
 {
-    public string? DescribedBy { get; set; }
-    public FieldsetOptions? Fieldset { get; set; }
-    public HintOptions? Hint { get; set; }
-    public ErrorMessageOptions? ErrorMessage { get; set; }
-    public FormGroupOptions? FormGroup { get; set; }
-    public string? IdPrefix { get; set; }
-    public string? Name { get; set; }
+    public TemplateString? DescribedBy { get; set; }
+    public FieldsetOptions2? Fieldset { get; set; }
+    public HintOptions2? Hint { get; set; }
+    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public CheckboxesOptionsFormGroup? FormGroup { get; set; }
+    public TemplateString? IdPrefix { get; set; }
+    public TemplateString? Name { get; set; }
     public IReadOnlyCollection<CheckboxesOptionsItem>? Items { get; set; }
     public IReadOnlyCollection<string>? Values { get; set; }
-    public string? Classes { get; set; }
-    public IReadOnlyDictionary<string, string>? Attributes { get; set; }
+    public TemplateString? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
+}
+
+public record CheckboxesOptionsFormGroup : FormGroupOptions2
+{
+    public TextHtmlAndAttributesOptions? BeforeInputs { get; set; }
+    public TextHtmlAndAttributesOptions? AfterInputs { get; set; }
 }
 
 public record CheckboxesOptionsItem
 {
-    public string? Text { get; set; }
-    public string? Html { get; set; }
-    public string? Id { get; set; }
-    public string? Name { get; set; }
-    public string? Value { get; set; }
-    public LabelOptions? Label { get; set; }
-    public HintOptions? Hint { get; set; }
-    public string? Divider { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? Id { get; set; }
+    public TemplateString? Name { get; set; }
+    public TemplateString? Value { get; set; }
+    public LabelOptions2? Label { get; set; }
+    public HintOptions2? Hint { get; set; }
+    public TemplateString? Divider { get; set; }
     public bool? Checked { get; set; }
     public CheckboxesOptionsItemConditional? Conditional { get; set; }
-    public string? Behaviour { get; set; }
+    public TemplateString? Behaviour { get; set; }
     public bool? Disabled { get; set; }
-    public IReadOnlyDictionary<string, string?>? Attributes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
 
 public record CheckboxesOptionsItemConditional
 {
-    public string? Html { get; set; }
+    public TemplateString? Html { get; set; }
 }

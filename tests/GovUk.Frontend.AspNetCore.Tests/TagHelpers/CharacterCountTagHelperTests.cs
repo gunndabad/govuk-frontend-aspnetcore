@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
@@ -48,12 +49,12 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    attributes: new EncodedAttributesDictionary(),
+                    attributes: new AttributeCollection(),
                     new HtmlString(labelHtml),
                     CharacterCountTagHelper.LabelTagName);
 
                 characterCountContext.SetHint(
-                    attributes: new EncodedAttributesDictionary(),
+                    attributes: new AttributeCollection(),
                     new HtmlString(hintHtml),
                     CharacterCountTagHelper.HintTagName);
 
@@ -65,11 +66,11 @@ public class CharacterCountTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             Name = name,
@@ -102,16 +103,16 @@ public class CharacterCountTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions);
-        Assert.Equal(id, actualOptions.Id?.ToHtmlString());
-        Assert.Equal(name, actualOptions.Name?.ToHtmlString());
+        Assert.Equal(id, actualOptions.Id);
+        Assert.Equal(name, actualOptions.Name);
         Assert.Equal(rows, actualOptions.Rows);
-        Assert.Equal(value, actualOptions.Value?.ToHtmlString());
+        Assert.Equal(value, actualOptions.Value);
         Assert.Equal(maxLength, actualOptions.MaxLength);
         Assert.Equal(threshold, actualOptions.Threshold);
-        Assert.Equal(labelHtml, actualOptions.Label?.Html?.ToHtmlString());
-        Assert.Equal(hintHtml, actualOptions.Hint?.Html?.ToHtmlString());
+        Assert.Equal(labelHtml, actualOptions.Label?.Html);
+        Assert.Equal(hintHtml, actualOptions.Hint?.Html);
         Assert.Null(actualOptions.ErrorMessage);
-        Assert.Equal(classes, actualOptions.Classes?.ToHtmlString());
+        Assert.Equal(classes, actualOptions.Classes);
         Assert.Equal(spellcheck, actualOptions.Spellcheck);
 
         Assert.NotNull(actualOptions.Attributes);
@@ -120,12 +121,12 @@ public class CharacterCountTagHelperTests
         Assert.Contains(actualOptions.Attributes, kvp => kvp.Key == "disabled");
 
         Assert.NotNull(actualOptions.CountMessage);
-        Assert.Equal(countMessageClasses, actualOptions.CountMessage.Classes?.ToHtmlString());
+        Assert.Equal(countMessageClasses, actualOptions.CountMessage.Classes);
         Assert.NotNull(actualOptions.CountMessage.Attributes);
         Assert.Contains(actualOptions.CountMessage.Attributes, kvp => kvp.Key == "data-baz" && kvp.Value == countMessageDataBazAttribute);
 
         Assert.NotNull(actualOptions.FormGroup);
-        Assert.Equal(formGroupClasses, actualOptions.FormGroup.Classes?.ToHtmlString());
+        Assert.Equal(formGroupClasses, actualOptions.FormGroup.Classes);
         Assert.NotNull(actualOptions.FormGroup.Attributes);
         Assert.Contains(actualOptions.FormGroup.Attributes, kvp => kvp.Key == "data-bar" && kvp.Value == formGroupDataBarAttribute);
     }
@@ -154,7 +155,7 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    attributes: new EncodedAttributesDictionary(),
+                    attributes: new AttributeCollection(),
                     new HtmlString(labelHtml),
                     CharacterCountTagHelper.LabelTagName);
 
@@ -164,11 +165,11 @@ public class CharacterCountTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             Name = name,
@@ -209,13 +210,16 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(labelHtml),
                     CharacterCountTagHelper.LabelTagName);
 
                 characterCountContext.SetErrorMessage(
                     visuallyHiddenText: new HtmlString(errorVht),
-                    attributes: new EncodedAttributesDictionaryBuilder().With("data-foo", errorDataFooAttribute, encodeValue: false),
+                    attributes: new AttributeCollection()
+                    {
+                        { "data-foo", errorDataFooAttribute }
+                    },
                     new HtmlString(errorHtml),
                     CharacterCountTagHelper.ErrorMessageTagName);
 
@@ -225,11 +229,11 @@ public class CharacterCountTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             Name = name,
@@ -241,8 +245,8 @@ public class CharacterCountTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions?.ErrorMessage);
-        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html?.ToHtmlString());
-        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText?.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html);
+        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText);
         Assert.NotNull(actualOptions.ErrorMessage.Attributes);
         Assert.Collection(actualOptions.ErrorMessage.Attributes, kvp =>
         {
@@ -310,11 +314,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = TestUtils.CreateViewContext()
@@ -327,10 +331,10 @@ public class CharacterCountTagHelperTests
         Assert.NotNull(actualOptions);
         Assert.NotNull(actualOptions.Id);
         Assert.NotNull(actualOptions.Name);
-        Assert.Equal(modelStateValue, actualOptions.Value?.ToHtmlString());
-        Assert.Equal(displayName, actualOptions.Label?.Html?.ToHtmlString());
-        Assert.Equal(description, actualOptions.Hint?.Html?.ToHtmlString());
-        Assert.Equal(modelStateError, actualOptions.ErrorMessage?.Html?.ToHtmlString());
+        Assert.Equal(modelStateValue, actualOptions.Value);
+        Assert.Equal(displayName, actualOptions.Label?.Html);
+        Assert.Equal(description, actualOptions.Hint?.Html);
+        Assert.Equal(modelStateError, actualOptions.ErrorMessage?.Html);
     }
 
     [Fact]
@@ -384,11 +388,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -398,7 +402,7 @@ public class CharacterCountTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(value, actualOptions?.Value?.ToHtmlString());
+        Assert.Equal(value, actualOptions?.Value);
     }
 
     [Fact]
@@ -424,7 +428,7 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(labelHtml),
                     CharacterCountTagHelper.LabelTagName);
 
@@ -456,11 +460,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -470,7 +474,7 @@ public class CharacterCountTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(labelHtml, actualOptions?.Label?.Html?.ToHtmlString());
+        Assert.Equal(labelHtml, actualOptions?.Label?.Html);
     }
 
     [Fact]
@@ -495,7 +499,7 @@ public class CharacterCountTagHelperTests
             {
                 var characterCountContext = context.GetContextItem<CharacterCountContext>();
 
-                characterCountContext.SetHint(new EncodedAttributesDictionary(), new HtmlString(hintHtml), CharacterCountTagHelper.HintTagName);
+                characterCountContext.SetHint(new AttributeCollection(), new HtmlString(hintHtml), CharacterCountTagHelper.HintTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -529,11 +533,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -543,7 +547,7 @@ public class CharacterCountTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(hintHtml, actualOptions?.Hint?.Html?.ToHtmlString());
+        Assert.Equal(hintHtml, actualOptions?.Hint?.Html);
     }
 
     [Fact]
@@ -570,7 +574,7 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(errorHtml),
                     CharacterCountTagHelper.ErrorMessageTagName);
 
@@ -609,11 +613,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = TestUtils.CreateViewContext()
@@ -623,7 +627,7 @@ public class CharacterCountTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html?.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
     }
 
     [Fact]
@@ -680,11 +684,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -722,7 +726,7 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(errorHtml),
                     CharacterCountTagHelper.ErrorMessageTagName);
 
@@ -761,11 +765,11 @@ public class CharacterCountTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             IgnoreModelStateErrors = true,
@@ -776,7 +780,7 @@ public class CharacterCountTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html?.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
     }
 
     [Fact]
@@ -803,13 +807,13 @@ public class CharacterCountTagHelperTests
 
                 characterCountContext.SetLabel(
                     isPageHeading: false,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(labelHtml),
                     CharacterCountTagHelper.LabelTagName);
 
                 characterCountContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(errorHtml),
                     CharacterCountTagHelper.ErrorMessageTagName);
 
@@ -819,11 +823,11 @@ public class CharacterCountTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
         CharacterCountOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCount(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
+        componentGeneratorMock.Setup(mock => mock.GenerateCharacterCountAsync(It.IsAny<CharacterCountOptions>())).Callback<CharacterCountOptions>(o => actualOptions = o);
 
-        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new CharacterCountTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             Name = name,

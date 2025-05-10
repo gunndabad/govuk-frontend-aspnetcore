@@ -32,10 +32,16 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateButtonAsync(ButtonOptions options);
 
     /// <summary>
+    /// Generates a character count component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateCharacterCountAsync(CharacterCountOptions options);
+
+    /// <summary>
     /// Generates a checkboxes component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions2 options);
+    ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions options);
 
     /// <summary>
     /// Generates a cookie banner component.

@@ -45,7 +45,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         {
             if (v is TemplateString templateString)
             {
-                return templateString.ToFluidValue(_encoder);
+                return templateString.ToFluidValue();
             }
 
             // If the object is an Options class, convert its property names to camel case
@@ -82,13 +82,13 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("button", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateCharacterCountAsync(CharacterCountOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateCharacterCountAsync(CharacterCountOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("character-count", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("checkboxes", options);

@@ -77,6 +77,14 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         _attributes.Add(name, attribute);
     }
 
+    internal void AddBoolean(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+
+        var attribute = new Attribute(name, true, Optional: true);
+        _attributes.Add(name, attribute);
+    }
+
     internal void Set(string name, TemplateString? templateString)
     {
         ArgumentNullException.ThrowIfNull(name);

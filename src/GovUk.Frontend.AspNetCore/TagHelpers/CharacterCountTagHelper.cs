@@ -1,13 +1,14 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using AttributeCollection = GovUk.Frontend.AspNetCore.Components.AttributeCollection;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -16,7 +17,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(LabelTagName, HintTagName, ErrorMessageTagName, CharacterCountValueTagHelper.TagName)]
-[OutputElementHint(LegacyComponentGenerator.CharacterCountElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.CharacterCount)]
 public class CharacterCountTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-character-count-error-message";
@@ -41,33 +42,32 @@ public class CharacterCountTagHelper : TagHelper
     private const string TextareaAttributesPrefix = "textarea-";
     private const string ThresholdAttributeName = "threshold";
 
-    private readonly ILegacyComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
+    private readonly HtmlEncoder _encoder;
 
     private decimal? _threshold;
     private int? _maxLength;
     private int? _maxWords;
 
     /// <summary>
-    /// Creates an <see cref="TextInputTagHelper"/>.
+    /// Creates an <see cref="CharacterCountTagHelper"/>.
     /// </summary>
-    public CharacterCountTagHelper()
-        : this(new LegacyComponentGenerator())
+    public CharacterCountTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
+        : this(componentGenerator, modelHelper: new DefaultModelHelper(), encoder)
     {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
     }
 
-    /// <summary>
-    /// Creates an <see cref="TextInputTagHelper"/>.
-    /// </summary>
-    internal CharacterCountTagHelper(ILegacyComponentGenerator componentGenerator)
-        : this(componentGenerator, modelHelper: new DefaultModelHelper())
+    internal CharacterCountTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper, HtmlEncoder encoder)
     {
-    }
-
-    internal CharacterCountTagHelper(ILegacyComponentGenerator componentGenerator, IModelHelper modelHelper)
-    {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(modelHelper);
+        ArgumentNullException.ThrowIfNull(encoder);
         _componentGenerator = componentGenerator;
         _modelHelper = modelHelper;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -255,12 +255,12 @@ public class CharacterCountTagHelper : TagHelper
         var characterCountContext = new CharacterCountContext();
 
         using (context.SetScopedContextItem(characterCountContext))
-        using (context.SetScopedContextItem(typeof(FormGroupContext2), characterCountContext))
+        using (context.SetScopedContextItem<FormGroupContext3>(characterCountContext))
         {
             await output.GetChildContentAsync();
         }
 
-        var name = ResolveNameUnencoded();
+        var name = ResolveName();
         var id = ResolveId(name);
         var value = ResolveValue(characterCountContext);
         var labelOptions = characterCountContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
@@ -269,23 +269,23 @@ public class CharacterCountTagHelper : TagHelper
 
         if (LabelClass is not null)
         {
-            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass);
+            labelOptions.Classes = labelOptions.Classes?.Concatenate(_encoder, " ", LabelClass);
         }
 
-        var formGroupAttributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(FormGroupAttributes);
+        var formGroupAttributes = new AttributeCollection(FormGroupAttributes);
         formGroupAttributes.Remove("class", out var formGroupClasses);
-        var formGroupOptions = new FormGroupOptions()
+        var formGroupOptions = new CharacterCountOptionsFormGroup()
         {
             Attributes = formGroupAttributes,
             Classes = formGroupClasses
         };
 
-        var attributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(TextAreaAttributes);
+        var attributes = new AttributeCollection(TextAreaAttributes);
         attributes.Remove("class", out var classes);
 
         if (Autocomplete is not null)
         {
-            attributes.Add("autocomplete", Autocomplete!.EncodeHtml()!);
+            attributes.Add("autocomplete", Autocomplete!);
         }
 
         if (Disabled)
@@ -293,14 +293,13 @@ public class CharacterCountTagHelper : TagHelper
             attributes.AddBoolean("disabled");
         }
 
-        var countMessageAttributes =
-            EncodedAttributesDictionary.FromDictionaryWithEncodedValues(CountMessageAttributes);
+        var countMessageAttributes = new AttributeCollection(CountMessageAttributes);
         countMessageAttributes.Remove("class", out var countMessageClasses);
 
-        var component = _componentGenerator.GenerateCharacterCount(new CharacterCountOptions
+        var component = await _componentGenerator.GenerateCharacterCountAsync(new CharacterCountOptions()
         {
             Id = id,
-            Name = name.EncodeHtml(),
+            Name = name,
             Rows = Rows,
             Value = value,
             MaxLength = MaxLength,
@@ -327,27 +326,27 @@ public class CharacterCountTagHelper : TagHelper
             WordsOverLimitText = null
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
 
         if (errorMessageOptions is not null)
         {
             Debug.Assert(errorMessageOptions.Html is not null);
             var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
-            containerErrorContext.AddError(errorMessageOptions.Html!.ToHtmlString(), href: "#" + id);
+            containerErrorContext.AddError(errorMessageOptions.Html, href: "#" + id);
         }
     }
 
-    private IHtmlContent ResolveId(string nameUnencoded)
+    private string ResolveId(string name)
     {
         if (Id is not null)
         {
-            return Id.EncodeHtml();
+            return Id;
         }
 
-        return TagBuilder.CreateSanitizedId(nameUnencoded, Constants.IdAttributeDotReplacement).EncodeHtml();
+        return TagBuilder.CreateSanitizedId(name, Constants.IdAttributeDotReplacement);
     }
 
-    private string ResolveNameUnencoded()
+    private string ResolveName()
     {
         if (Name is null && For is null)
         {
@@ -359,13 +358,13 @@ public class CharacterCountTagHelper : TagHelper
         return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 
-    private IHtmlContent? ResolveValue(CharacterCountContext characterCountContext)
+    private TemplateString? ResolveValue(CharacterCountContext characterCountContext)
     {
         if (characterCountContext.Value is not null)
         {
             return characterCountContext.Value;
         }
 
-        return For is not null ? _modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name).EncodeHtml() : null;
+        return For is not null ? _modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name) : null;
     }
 }

@@ -1,3 +1,4 @@
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -22,7 +23,7 @@ public class CharacterCountValueTagHelper : TagHelper
 
         var characterCountContext = context.GetContextItem<CharacterCountContext>();
 
-        characterCountContext.SetValue(childContent.Snapshot(), output.TagName);
+        characterCountContext.SetValue(childContent.ToTemplateString(), output.TagName);
 
         output.SuppressOutput();
     }

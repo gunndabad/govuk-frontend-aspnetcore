@@ -5,6 +5,7 @@ internal partial class DefaultComponentGenerator
     internal static class ComponentElementTypes
     {
         public const string BackLink = "a";
+        public const string CharacterCount = "div";
         public const string Breadcrumbs = "nav";
         public const string ErrorSummary = "div";
         public const string Tag = "strong";

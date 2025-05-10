@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Encodings.Web;
 using Fluid.Values;
 using Microsoft.AspNetCore.Html;
@@ -53,7 +54,7 @@ public sealed class TemplateString
         }
     }
 
-    internal FluidValue ToFluidValue(HtmlEncoder encoder)
+    internal FluidValue ToFluidValue()
     {
         if (_value is null)
         {
@@ -88,6 +89,33 @@ public sealed class TemplateString
     /// <param name="content">The <see cref="IHtmlContent"/> to create the <see cref="TemplateString"/> from.</param>
     /// <returns>A new <see cref="TemplateString"/> wrapping the specified <see cref="HtmlString"/>.</returns>
     public static implicit operator TemplateString(HtmlString? content) => new(content);
+
+    /// <summary>
+    /// Creates a new <see cref="TemplateString"/> with the content of this <see cref="TemplateString"/> and the
+    /// specified <paramref name="others"/>.
+    /// </summary>
+    /// <param name="encoder">The <see cref="HtmlEncoder"/> to encode values with.</param>
+    /// <param name="others">The additional <see cref="TemplateString"/>s to append.</param>
+    /// <returns>A new <see cref="TemplateString"/>.</returns>
+    public TemplateString Concatenate(HtmlEncoder encoder, params TemplateString[] others)
+    {
+        ArgumentNullException.ThrowIfNull(encoder);
+
+        if (others.Length == 0)
+        {
+            return this;
+        }
+
+        var sb = new StringBuilder();
+        sb.Append(ToHtmlString(encoder));
+
+        foreach (var other in others)
+        {
+            sb.Append(other.ToHtmlString(encoder));
+        }
+
+        return new TemplateString(new HtmlString(sb.ToString()));
+    }
 
     /// <inheritdoc/>
     public override string ToString() => ToHtmlString(_defaultEncoder);
