@@ -4,17 +4,17 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record AccordionOptions2
 {
-    public string? Id { get; set; }
+    public TemplateString? Id { get; set; }
     public int? HeadingLevel { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
     public bool? RememberExpanded { get; set; }
-    public string? HideAllSectionsText { get; set; }
-    public string? HideSectionText { get; set; }
-    public string? HideSectionAriaLabelText { get; set; }
-    public string? ShowAllSectionsText { get; set; }
-    public string? ShowSectionText { get; set; }
-    public string? ShowSectionAriaLabelText { get; set; }
+    public TemplateString? HideAllSectionsText { get; set; }
+    public TemplateString? HideSectionText { get; set; }
+    public TemplateString? HideSectionAriaLabelText { get; set; }
+    public TemplateString? ShowAllSectionsText { get; set; }
+    public TemplateString? ShowSectionText { get; set; }
+    public TemplateString? ShowSectionAriaLabelText { get; set; }
     public IReadOnlyCollection<AccordionOptions2Item>? Items { get; set; }
 }
 
@@ -28,18 +28,18 @@ public record AccordionOptions2Item
 
 public record AccordionOptions2ItemHeading
 {
-    public string? Text { get; set; }
-    public string? Html { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
 }
 
 public record AccordionOptions2ItemSummary
 {
-    public string? Text { get; set; }
-    public string? Html { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
 }
 
 public record AccordionOptions2ItemContent
 {
-    public string? Text { get; set; }
-    public string? Html { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
 }

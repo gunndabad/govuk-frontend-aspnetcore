@@ -41,11 +41,12 @@ public class BackLinkTagHelper : TagHelper
 
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
-        attributes.Remove("href", out var href);
+        attributes.Remove("href", out _);
+        var href = output.GetUrlAttribute("href");
 
         var component = await _componentGenerator.GenerateBackLinkAsync(new BackLinkOptions()
         {
-            Html = content?.ToHtmlString(),
+            Html = content.ToTemplateString(),
             Href = href,
             Classes = classes,
             Attributes = attributes

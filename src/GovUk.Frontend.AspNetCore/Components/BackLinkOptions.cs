@@ -4,9 +4,9 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record BackLinkOptions
 {
-    public string? Html { get; set; }
+    public TemplateString? Html { get; set; }
     public string? Text { get; set; }
-    public string? Href { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Href { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }

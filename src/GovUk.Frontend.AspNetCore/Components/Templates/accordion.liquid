@@ -18,7 +18,7 @@
       {{ item.content.html | raw | strip | indent: 6 }}
     {% elsif item.content.text %}
       <p class="govuk-body">
-        {{ item.content.text | trim | indent: 8 }}
+        {{ item.content.text | strip | indent: 8 }}
       </p>
     {% endif %}
     </div>

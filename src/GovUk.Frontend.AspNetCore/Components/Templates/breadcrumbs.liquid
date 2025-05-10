@@ -20,7 +20,7 @@
     </li>
   {%- else %}
     <li class="govuk-breadcrumbs__list-item" aria-current="page">
-      {{- item.html | safe | default: item.text -}}
+      {{- item.html | raw | default: item.text -}}
     </li>
   {%- endif %}
 {%- endfor %}

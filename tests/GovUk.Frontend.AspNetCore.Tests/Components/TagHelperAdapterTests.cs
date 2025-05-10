@@ -72,13 +72,13 @@ public class TagHelperAdapterTests
             attr =>
             {
                 Assert.Equal("class", attr.Name);
-                Assert.Equal("foo", attr.Value);
+                Assert.Equal("foo", attr.Value?.ToString());
                 Assert.Equal(HtmlAttributeValueStyle.DoubleQuotes, attr.ValueStyle);
             },
             attr =>
             {
                 Assert.Equal("disabled", attr.Name);
-                Assert.Equal("", attr.Value);
+                Assert.Equal("", attr.Value?.ToString());
                 Assert.Equal(HtmlAttributeValueStyle.DoubleQuotes, attr.ValueStyle);
             });
     }

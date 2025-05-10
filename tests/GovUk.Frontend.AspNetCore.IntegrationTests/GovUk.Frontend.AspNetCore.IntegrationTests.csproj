@@ -23,4 +23,10 @@
     <ProjectReference Include="..\GovUk.FrontEnd.AspNetCore.TestCommon\GovUk.FrontEnd.AspNetCore.TestCommon.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="EncodingTests\BackLink\ExpressionHref.cshtml" />
+    <_ContentIncludedByDefault Remove="EncodingTests\BackLink\GeneratedHref.cshtml" />
+    <_ContentIncludedByDefault Remove="EncodingTests\BackLink\StringHref.cshtml" />
+  </ItemGroup>
+
 </Project>

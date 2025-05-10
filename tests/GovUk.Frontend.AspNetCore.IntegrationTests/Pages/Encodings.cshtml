@@ -6,8 +6,12 @@
 
 <govuk-back-link href="foo?bar=baz&qux=foo" data-testid="String" data-foo="Foo & Bar" />
 
-<govuk-back-link href="@linkVariable" data-testid="Variable" data-foo="@dataAttrValue" />
-
 <a href="foo?bar=baz&qux=foo" data-testid="AnchorString" data-foo="Foo & Bar">Link</a>
 
+<govuk-back-link href="@linkVariable" data-testid="Variable" data-foo="@dataAttrValue" />
+
 <a href="@linkVariable" data-testid="AnchorVariable" data-foo="@dataAttrValue">Link</a>
+
+<govuk-back-link asp-page="Empty" asp-route-bar="baz" asp-route-qux="foo" data-testid="GeneratedHref" />
+
+<a asp-page="Empty" asp-route-bar="baz" asp-route-qux="foo" data-testid="AnchorGeneratedHref">Link</a>
