@@ -45,7 +45,7 @@ internal static class TagHelperAdapter
         var tagName = root.TagName;
         var tagMode = root.IsSelfClosing ? TagMode.SelfClosing : TagMode.StartTagAndEndTag;
         var attributes = new TagHelperAttributeList(
-            root.Attributes.Select(a => a.Value is null ? new TagHelperAttribute(a.Name) : new TagHelperAttribute(a.Name, a.Value)));
+            root.Attributes.Select(a => a.Value is null ? new TagHelperAttribute(a.Name) : new TagHelperAttribute(a.Name, new HtmlString(a.Value))));
         var innerHtml = new HtmlString(root.InnerHtml);
 
         return new ComponentTagHelperOutput(tagName, tagMode, attributes, innerHtml);

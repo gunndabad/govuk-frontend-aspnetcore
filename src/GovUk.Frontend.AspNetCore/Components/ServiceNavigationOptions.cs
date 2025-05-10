@@ -4,16 +4,16 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record ServiceNavigationOptions
 {
-    public string? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
-    public string? AriaLabel { get; set; }
-    public string? MenuButtonText { get; set; }
-    public string? MenuButtonLabel { get; set; }
-    public string? NavigationLabel { get; set; }
-    public string? NavigationId { get; set; }
-    public string? NavigationClasses { get; set; }
-    public string? ServiceName { get; set; }
-    public string? ServiceUrl { get; set; }
+    public TemplateString? AriaLabel { get; set; }
+    public TemplateString? MenuButtonText { get; set; }
+    public TemplateString? MenuButtonLabel { get; set; }
+    public TemplateString? NavigationLabel { get; set; }
+    public TemplateString? NavigationId { get; set; }
+    public TemplateString? NavigationClasses { get; set; }
+    public TemplateString? ServiceName { get; set; }
+    public TemplateString? ServiceUrl { get; set; }
     public IReadOnlyCollection<ServiceNavigationOptionsNavigationItem>? Navigation { get; set; }
     public ServiceNavigationOptionsSlots? Slots { get; set; }
 }
@@ -22,16 +22,16 @@ public record ServiceNavigationOptionsNavigationItem
 {
     public bool? Current { get; set; }
     public bool? Active { get; set; }
-    public string? Html { get; set; }
-    public string? Text { get; set; }
-    public string? Href { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Href { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }
 
 public record ServiceNavigationOptionsSlots
 {
-    public string? Start { get; set; }
-    public string? End { get; set; }
-    public string? NavigationStart { get; set; }
-    public string? NavigationEnd { get; set; }
+    public TemplateString? Start { get; set; }
+    public TemplateString? End { get; set; }
+    public TemplateString? NavigationStart { get; set; }
+    public TemplateString? NavigationEnd { get; set; }
 }

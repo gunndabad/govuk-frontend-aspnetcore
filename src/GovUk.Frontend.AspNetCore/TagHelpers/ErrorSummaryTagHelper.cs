@@ -10,7 +10,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS error summary component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[RestrictChildren(ErrorSummaryTitleTagHelper.TagName, ErrorSummaryDescriptionTagHelper.TagName, "govuk-error-summary-item")]
+[RestrictChildren(ErrorSummaryTitleTagHelper.TagName, ErrorSummaryDescriptionTagHelper.TagName, ErrorSummaryItemTagHelper.TagName)]
 [OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.ErrorSummary)]
 public class ErrorSummaryTagHelper : TagHelper
 {
@@ -25,8 +25,8 @@ public class ErrorSummaryTagHelper : TagHelper
     /// </summary>
     public ErrorSummaryTagHelper(IComponentGenerator componentGenerator)
     {
-        _componentGenerator = componentGenerator;
         ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>

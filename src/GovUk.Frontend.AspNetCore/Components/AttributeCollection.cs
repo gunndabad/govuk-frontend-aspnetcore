@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Html;
@@ -50,16 +50,14 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
 
         _attributes = new();
 
-        foreach (var attribute in tagHelperAttributes)
+        foreach (var tagHelperAttribute in tagHelperAttributes)
         {
-            var attributeValue = attribute.Value is IHtmlContent htmlContent ? WebUtility.HtmlDecode(htmlContent.ToHtmlString()) : attribute.Value;
+            var attribute = new Attribute(
+                tagHelperAttribute.Name,
+                tagHelperAttribute.Value,
+                Optional: tagHelperAttribute.ValueStyle is HtmlAttributeValueStyle.Minimized);
 
-            var encodedAttribute = new Attribute(
-                attribute.Name,
-                attributeValue,
-                Optional: attribute.ValueStyle is HtmlAttributeValueStyle.Minimized);
-
-            _attributes.Add(encodedAttribute.Name, encodedAttribute);
+            _attributes.Add(attribute.Name, attribute);
         }
     }
 
@@ -71,6 +69,29 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
 
     internal AttributeCollection(params Attribute[] attributes) : this(attributes.AsEnumerable())
     {
+    }
+
+    internal void Add(string name, TemplateString templateString)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(templateString);
+
+        var attribute = new Attribute(name, templateString, Optional: false);
+        _attributes.Add(name, attribute);
+    }
+
+    internal void Set(string name, TemplateString? templateString)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+
+        if (templateString is null)
+        {
+            _attributes.Remove(name);
+            return;
+        }
+
+        var attribute = new Attribute(name, templateString, Optional: false);
+        _attributes[name] = attribute;
     }
 
     /// <summary>
@@ -94,7 +115,25 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         return false;
     }
 
-    internal sealed record Attribute(string Name, object? Value, bool Optional);
+    internal sealed record Attribute(string Name, object? Value, bool Optional)
+    {
+        public string GetValueHtmlString(HtmlEncoder encoder)
+        {
+            ArgumentNullException.ThrowIfNull(encoder);
+
+            if (Value is TemplateString templateString)
+            {
+                return templateString.ToHtmlString(encoder);
+            }
+
+            if (Value is IHtmlContent htmlContent)
+            {
+                return htmlContent.ToHtmlString(encoder);
+            }
+
+            return Value?.ToString() ?? string.Empty;
+        }
+    }
 
     /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
     public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
@@ -211,6 +250,11 @@ internal class AttributeCollectionJsonConverter : JsonConverter<AttributeCollect
 
         foreach (var attr in value.GetAttributes())
         {
+            if (attr.Value is IHtmlContent)
+            {
+                throw new NotSupportedException("Cannot serialize attributes with an IHtmlContent value.");
+            }
+
             writer.WritePropertyName(attr.Name);
 
             if (attr.Optional)

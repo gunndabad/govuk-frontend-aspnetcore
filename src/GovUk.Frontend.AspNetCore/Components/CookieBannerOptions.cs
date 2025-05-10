@@ -4,33 +4,33 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record CookieBannerOptions
 {
-    public string? AriaLabel { get; set; }
+    public TemplateString? AriaLabel { get; set; }
     public bool? Hidden { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
     public IReadOnlyCollection<CookieBannerOptionsMessage>? Messages { get; set; }
 }
 
 public record CookieBannerOptionsMessage
 {
-    public string? HeadingText { get; set; }
-    public string? HeadingHtml { get; set; }
-    public string? Text { get; set; }
-    public string? Html { get; set; }
+    public TemplateString? HeadingText { get; set; }
+    public TemplateString? HeadingHtml { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
     public IReadOnlyCollection<CookieBannerOptionsMessageAction>? Actions { get; set; }
     public bool? Hidden { get; set; }
-    public string? Role { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Role { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }
 
 public record CookieBannerOptionsMessageAction
 {
-    public string? Text { get; set; }
-    public string? Type { get; set; }
-    public string? Href { get; set; }
-    public string? Name { get; set; }
-    public string? Value { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Type { get; set; }
+    public TemplateString? Href { get; set; }
+    public TemplateString? Name { get; set; }
+    public TemplateString? Value { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }

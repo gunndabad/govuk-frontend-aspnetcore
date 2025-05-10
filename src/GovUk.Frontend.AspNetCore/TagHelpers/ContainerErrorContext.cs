@@ -4,13 +4,13 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class ContainerErrorContext
 {
-    private readonly List<(string Html, string? Href)> _errors = new();
+    private readonly List<(TemplateString Html, TemplateString? Href)> _errors = new();
 
-    public IReadOnlyCollection<(string Html, string? Href)> Errors => _errors.AsReadOnly();
+    public IReadOnlyCollection<(TemplateString Html, TemplateString? Href)> Errors => _errors.AsReadOnly();
 
     public bool ErrorSummaryHasBeenRendered { get; set; }
 
-    public void AddError(string html, string? href)
+    public void AddError(TemplateString html, TemplateString? href)
     {
         ArgumentNullException.ThrowIfNull(html);
 

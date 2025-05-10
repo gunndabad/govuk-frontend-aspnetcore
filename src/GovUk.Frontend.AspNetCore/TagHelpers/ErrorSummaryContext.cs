@@ -15,9 +15,9 @@ internal class ErrorSummaryContext
 
     public IReadOnlyCollection<ErrorSummaryContextItem> Items => _items;
 
-    public (AttributeCollection Attributes, string Html)? Description { get; private set; }
+    public (AttributeCollection Attributes, TemplateString Html)? Description { get; private set; }
 
-    public (AttributeCollection Attributes, string Html)? Title { get; private set; }
+    public (AttributeCollection Attributes, TemplateString Html)? Title { get; private set; }
 
     public void AddItem(ErrorSummaryContextItem item)
     {
@@ -27,7 +27,7 @@ internal class ErrorSummaryContext
         HaveExplicitItems = true;
     }
 
-    public void SetDescription(AttributeCollection attributes, string html)
+    public void SetDescription(AttributeCollection attributes, TemplateString html)
     {
         ArgumentNullException.ThrowIfNull(attributes);
         ArgumentNullException.ThrowIfNull(html);
@@ -42,7 +42,7 @@ internal class ErrorSummaryContext
         Description = (attributes, html);
     }
 
-    public void SetTitle(AttributeCollection attributes, string html)
+    public void SetTitle(AttributeCollection attributes, TemplateString html)
     {
         ArgumentNullException.ThrowIfNull(attributes);
         ArgumentNullException.ThrowIfNull(html);
@@ -59,7 +59,7 @@ internal class ErrorSummaryContext
 }
 
 internal record ErrorSummaryContextItem(
-    string? Href,
-    string Html,
+    TemplateString? Href,
+    TemplateString Html,
     AttributeCollection Attributes,
     AttributeCollection ItemAttributes);

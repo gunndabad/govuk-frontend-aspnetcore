@@ -90,6 +90,11 @@ public class ButtonTagHelper : TagHelper
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
+        if (output.Attributes.ContainsName("formaction"))
+        {
+            attributes.Set("formaction", output.GetUrlAttribute("formaction"));
+        }
+
         var component = await _componentGenerator.GenerateButtonAsync(new ButtonOptions()
         {
             Element = Element,

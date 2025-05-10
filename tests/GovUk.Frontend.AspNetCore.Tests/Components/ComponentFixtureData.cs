@@ -14,7 +14,7 @@ public class ComponentFixtureData : DataAttribute
 
     static ComponentFixtureData()
     {
-        _serializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        _serializerOptions = new JsonSerializerOptions(ComponentOptionsJsonSerializerOptions.Instance);
         _serializerOptions.Converters.Insert(0, new PermissiveStringJsonConverter());
         _serializerOptions.Converters.Add(new EncodedAttributesDictionaryJsonConverter());
         _serializerOptions.Converters.Add(new StringHtmlContentJsonConverter());
