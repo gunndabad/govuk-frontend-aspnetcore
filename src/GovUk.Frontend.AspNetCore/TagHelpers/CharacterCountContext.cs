@@ -1,9 +1,8 @@
 using GovUk.Frontend.AspNetCore.Components;
-using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
-internal class CharacterCountContext : FormGroupContext2
+internal class CharacterCountContext : FormGroupContext3
 {
     protected override IReadOnlyCollection<string> ErrorMessageTagNames => [CharacterCountTagHelper.ErrorMessageTagName];
 
@@ -13,12 +12,12 @@ internal class CharacterCountContext : FormGroupContext2
 
     protected override string RootTagName => CharacterCountTagHelper.TagName;
 
-    public IHtmlContent? Value { get; private set; }
+    public TemplateString? Value { get; private set; }
 
     public override void SetErrorMessage(
-        IHtmlContent? visuallyHiddenText,
-        EncodedAttributesDictionary attributes,
-        IHtmlContent? html,
+        TemplateString? visuallyHiddenText,
+        AttributeCollection attributes,
+        TemplateString? html,
         string tagName)
     {
         if (Value != null)
@@ -31,7 +30,7 @@ internal class CharacterCountContext : FormGroupContext2
         base.SetErrorMessage(visuallyHiddenText, attributes, html, tagName);
     }
 
-    public override void SetHint(EncodedAttributesDictionary attributes, IHtmlContent? html, string tagName)
+    public override void SetHint(AttributeCollection attributes, TemplateString? html, string tagName)
     {
         if (Value != null)
         {
@@ -45,8 +44,8 @@ internal class CharacterCountContext : FormGroupContext2
 
     public override void SetLabel(
         bool isPageHeading,
-        EncodedAttributesDictionary attributes,
-        IHtmlContent? html,
+        AttributeCollection attributes,
+        TemplateString? html,
         string tagName)
     {
         if (Value != null)
@@ -59,7 +58,7 @@ internal class CharacterCountContext : FormGroupContext2
         base.SetLabel(isPageHeading, attributes, html, tagName);
     }
 
-    public void SetValue(IHtmlContent html, string tagName)
+    public void SetValue(TemplateString html, string tagName)
     {
         if (Value != null)
         {

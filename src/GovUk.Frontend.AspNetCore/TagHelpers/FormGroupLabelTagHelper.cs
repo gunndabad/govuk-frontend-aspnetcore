@@ -56,7 +56,6 @@ public class FormGroupLabelTagHelper : TagHelper
 /// <summary>
 /// Represents the label in a GDS form group component.
 /// </summary>
-[HtmlTargetElement(CharacterCountTagHelper.LabelTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(TextInputTagHelper.LabelTagName, ParentTag = TextInputTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.LabelElement)]
 public class FormGroupLabelTagHelper2 : TagHelper
@@ -106,6 +105,7 @@ public class FormGroupLabelTagHelper2 : TagHelper
 /// <summary>
 /// Represents the label in a GDS form group component.
 /// </summary>
+[HtmlTargetElement(CharacterCountTagHelper.LabelTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(FileUploadTagHelper.LabelTagName, ParentTag = FileUploadTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.LabelElement)]
 public class FormGroupLabelTagHelper3 : TagHelper

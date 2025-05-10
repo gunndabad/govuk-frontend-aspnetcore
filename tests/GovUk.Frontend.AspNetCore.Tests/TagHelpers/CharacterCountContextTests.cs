@@ -1,6 +1,5 @@
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
@@ -12,10 +11,10 @@ public class CharacterCountContextTests
         // Arrange
         var context = new CharacterCountContext();
 
-        context.SetValue(new HtmlString("Value"), CharacterCountValueTagHelper.TagName);
+        context.SetValue("Value", CharacterCountValueTagHelper.TagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, new EncodedAttributesDictionary(), new HtmlString("Error"), CharacterCountTagHelper.ErrorMessageTagName));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, new AttributeCollection(), "Error", CharacterCountTagHelper.ErrorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -28,10 +27,10 @@ public class CharacterCountContextTests
         // Arrange
         var context = new CharacterCountContext();
 
-        context.SetValue(new HtmlString("Value"), CharacterCountValueTagHelper.TagName);
+        context.SetValue("Value", CharacterCountValueTagHelper.TagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(new EncodedAttributesDictionary(), new HtmlString("Error"), CharacterCountTagHelper.HintTagName));
+        var ex = Record.Exception(() => context.SetHint(new AttributeCollection(), "Error", CharacterCountTagHelper.HintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -44,10 +43,10 @@ public class CharacterCountContextTests
         // Arrange
         var context = new CharacterCountContext();
 
-        context.SetValue(new HtmlString("Value"), CharacterCountValueTagHelper.TagName);
+        context.SetValue("Value", CharacterCountValueTagHelper.TagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, new EncodedAttributesDictionary(), new HtmlString("Error"), CharacterCountTagHelper.LabelTagName));
+        var ex = Record.Exception(() => context.SetLabel(false, new AttributeCollection(), "Error", CharacterCountTagHelper.LabelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -60,10 +59,10 @@ public class CharacterCountContextTests
         // Arrange
         var context = new CharacterCountContext();
 
-        context.SetValue(new HtmlString("Existing value"), CharacterCountValueTagHelper.TagName);
+        context.SetValue("Existing value", CharacterCountValueTagHelper.TagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetValue(new HtmlString("Value"), CharacterCountValueTagHelper.TagName));
+        var ex = Record.Exception(() => context.SetValue("Value", CharacterCountValueTagHelper.TagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
