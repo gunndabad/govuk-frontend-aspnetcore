@@ -49,7 +49,6 @@ public class FormGroupHintTagHelper : TagHelper
 /// <summary>
 /// Represents the hint in a GDS form group component.
 /// </summary>
-[HtmlTargetElement(CharacterCountTagHelper.HintTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.HintElement)]
 public class FormGroupHintTagHelper2 : TagHelper
@@ -87,6 +86,7 @@ public class FormGroupHintTagHelper2 : TagHelper
 /// <summary>
 /// Represents the hint in a GDS form group component.
 /// </summary>
+[HtmlTargetElement(CharacterCountTagHelper.HintTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(FileUploadTagHelper.HintTagName, ParentTag = FileUploadTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.HintElement)]
 public class FormGroupHintTagHelper3 : TagHelper

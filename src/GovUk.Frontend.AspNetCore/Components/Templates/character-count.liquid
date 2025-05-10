@@ -9,7 +9,7 @@
 {%- assign hasNoLimit = (not(params.maxwords) and not(params.maxlength)) -%}
 {%- assign textareaDescriptionLength = params.maxwords | default: params.maxlength -%}
 {%- assign textareaDescriptionText = params.textareaDescriptionText | default: ('You can enter up to %{count} ' | append: (ifelse(params.maxwords, 'words', 'characters'))) -%}
-{%- assign textareaDescriptionTextNoLimit = ifelse(hasNoLimit, '', (textareaDescriptionText | replace: '%{count}', textareaDescriptionLength)) -%}
+{%- assign textareaDescriptionTextNoLimit = ifelse(not(hasNoLimit), (textareaDescriptionText | replace: '%{count}', textareaDescriptionLength)) -%}
 {%- assign id = params.id | default: params.name -%}
 
 {%- capture countMessageHtml %}

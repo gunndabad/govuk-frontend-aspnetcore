@@ -83,7 +83,6 @@ public class FormGroupErrorMessageTagHelper : TagHelper
 /// <summary>
 /// Represents the error message in a GDS form group component.
 /// </summary>
-[HtmlTargetElement(CharacterCountTagHelper.ErrorMessageTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.ErrorMessageElement)]
 public class FormGroupErrorMessageTagHelper2 : TagHelper
@@ -138,6 +137,7 @@ public class FormGroupErrorMessageTagHelper2 : TagHelper
 /// <summary>
 /// Represents the error message in a GDS form group component.
 /// </summary>
+[HtmlTargetElement(CharacterCountTagHelper.ErrorMessageTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(FileUploadTagHelper.ErrorMessageTagName, ParentTag = FileUploadTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.ErrorMessageElement)]
 public class FormGroupErrorMessageTagHelper3 : TagHelper

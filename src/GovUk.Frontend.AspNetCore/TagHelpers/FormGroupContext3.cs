@@ -10,11 +10,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal abstract class FormGroupContext3
 {
-    internal record LabelInfo(bool IsPageHeading, AttributeCollection Attributes, string? Html, string TagName);
+    internal record LabelInfo(bool IsPageHeading, AttributeCollection Attributes, TemplateString? Html, string TagName);
 
-    internal record HintInfo(AttributeCollection Attributes, string? Html, string TagName);
+    internal record HintInfo(AttributeCollection Attributes, TemplateString? Html, string TagName);
 
-    internal record ErrorMessageInfo(string? VisuallyHiddenText, AttributeCollection Attributes, string? Html, string TagName);
+    internal record ErrorMessageInfo(TemplateString? VisuallyHiddenText, AttributeCollection Attributes, TemplateString? Html, string TagName);
 
     // internal for testing
     internal LabelInfo? Label;
@@ -36,7 +36,7 @@ internal abstract class FormGroupContext3
         string inputId,
         string forAttributeName)
     {
-        string? html = Label?.Html;
+        var html = Label?.Html;
 
         if (html is null)
         {
@@ -49,7 +49,7 @@ internal abstract class FormGroupContext3
             var displayName = modelHelper.GetDisplayName(@for!.ModelExplorer, @for.Name) ??
                 throw new InvalidOperationException("Cannot deduce content for the label.");
 
-            html = HtmlEncoder.Default.Encode(displayName);
+            html = displayName;
         }
 
         var attributes = Label?.Attributes.Clone() ?? new AttributeCollection();
@@ -68,7 +68,7 @@ internal abstract class FormGroupContext3
 
     public HintOptions2? GetHintOptions(ModelExpression? @for, IModelHelper modelHelper)
     {
-        string? html = Hint?.Html;
+        var html = Hint?.Html;
 
         if (html is null && @for is not null)
         {
@@ -76,7 +76,7 @@ internal abstract class FormGroupContext3
 
             if (description is not null)
             {
-                html = HtmlEncoder.Default.Encode(description);
+                html = description;
             }
         }
 
@@ -105,7 +105,7 @@ internal abstract class FormGroupContext3
 
     public ErrorMessageOptions2? GetErrorMessageOptions(ModelExpression? @for, ViewContext viewContext, IModelHelper modelHelper, bool? ignoreModelStateErrors)
     {
-        string? html = ErrorMessage?.Html;
+        var html = ErrorMessage?.Html;
 
         if (html is null && @for is not null && ignoreModelStateErrors != true)
         {
@@ -113,7 +113,7 @@ internal abstract class FormGroupContext3
 
             if (validationMessage is not null)
             {
-                html = HtmlEncoder.Default.Encode(validationMessage);
+                html = validationMessage;
             }
         }
 
@@ -137,9 +137,9 @@ internal abstract class FormGroupContext3
     }
 
     public virtual void SetErrorMessage(
-        string? visuallyHiddenText,
+        TemplateString? visuallyHiddenText,
         AttributeCollection attributes,
-        string? html,
+        TemplateString? html,
         string tagName)
     {
         if (ErrorMessage is not null)
@@ -152,7 +152,7 @@ internal abstract class FormGroupContext3
 
     public virtual void SetHint(
         AttributeCollection attributes,
-        string? html,
+        TemplateString? html,
         string tagName)
     {
         if (Hint is not null)
@@ -171,7 +171,7 @@ internal abstract class FormGroupContext3
     public virtual void SetLabel(
         bool isPageHeading,
         AttributeCollection attributes,
-        string? html,
+        TemplateString? html,
         string tagName)
     {
         if (Label is not null)

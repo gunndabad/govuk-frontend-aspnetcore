@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Html;
+using System.Text.Json.Serialization;
 
 namespace GovUk.Frontend.AspNetCore.Components;
 
@@ -6,52 +6,47 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record CharacterCountOptions
 {
-    public IHtmlContent? Id { get; set; }
-    public IHtmlContent? Name { get; set; }
+    public TemplateString? Id { get; set; }
+    public TemplateString? Name { get; set; }
     public int? Rows { get; set; }
-    public IHtmlContent? Value { get; set; }
+    public TemplateString? Value { get; set; }
+    [JsonPropertyName("maxlength")]
     public int? MaxLength { get; set; }
+    [JsonPropertyName("maxwords")]
     public int? MaxWords { get; set; }
     public decimal? Threshold { get; set; }
-    public LabelOptions? Label { get; set; }
-    public HintOptions? Hint { get; set; }
-    public ErrorMessageOptions? ErrorMessage { get; set; }
-    public FormGroupOptions? FormGroup { get; set; }
-    public IHtmlContent? Classes { get; set; }
+    public LabelOptions2? Label { get; set; }
+    public HintOptions2? Hint { get; set; }
+    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public CharacterCountOptionsFormGroup? FormGroup { get; set; }
+    public TemplateString? Classes { get; set; }
     public bool? Spellcheck { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
     public CharacterCountCountOptionsMessage? CountMessage { get; set; }
-    public IHtmlContent? TextareaDescriptionText { get; set; }
+    public TemplateString? TextareaDescriptionText { get; set; }
     public CharacterCountOptionsLocalizedText? CharactersUnderLimitText { get; set; }
-    public IHtmlContent? CharactersAtLimitText { get; set; }
+    public TemplateString? CharactersAtLimitText { get; set; }
     public CharacterCountOptionsLocalizedText? CharactersOverLimitText { get; set; }
     public CharacterCountOptionsLocalizedText? WordsUnderLimitText { get; set; }
-    public IHtmlContent? WordsAtLimitText { get; set; }
+    public TemplateString? WordsAtLimitText { get; set; }
     public CharacterCountOptionsLocalizedText? WordsOverLimitText { get; set; }
-
-    internal void Validate()
-    {
-        if (Label is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Label)} must be specified.");
-        }
-
-        if (Name is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified.");
-        }
-    }
 }
 
 public record CharacterCountCountOptionsMessage
 {
-    public IHtmlContent? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
     [NonStandardParameter]
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
 
 public record CharacterCountOptionsLocalizedText
 {
-    public IHtmlContent? One { get; set; }
-    public IHtmlContent? Other { get; set; }
+    public TemplateString? Other { get; set; }
+    public TemplateString? One { get; set; }
+}
+
+public record CharacterCountOptionsFormGroup : FormGroupOptions2
+{
+    public TextHtmlAndAttributesOptions? BeforeInput { get; set; }
+    public TextHtmlAndAttributesOptions? AfterInput { get; set; }
 }
