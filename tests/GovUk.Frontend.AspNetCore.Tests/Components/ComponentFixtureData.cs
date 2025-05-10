@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using AngleSharp.Dom;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 using Xunit.Sdk;
@@ -18,6 +19,8 @@ public class ComponentFixtureData : DataAttribute
         _serializerOptions.Converters.Insert(0, new PermissiveStringJsonConverter());
         _serializerOptions.Converters.Add(new EncodedAttributesDictionaryJsonConverter());
         _serializerOptions.Converters.Add(new StringHtmlContentJsonConverter());
+        _serializerOptions.Converters.Add(new AttributeCollectionJsonConverter());
+        _serializerOptions.Converters.Add(new TemplateStringJsonConverter());
     }
 
     private readonly string _componentName;

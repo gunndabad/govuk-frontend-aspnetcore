@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Fluid.Values;
 using Microsoft.AspNetCore.Html;
 
@@ -10,7 +8,6 @@ namespace GovUk.Frontend.AspNetCore.Components;
 /// <summary>
 /// Contains either an unencoded <see cref="System.String" /> or an <see cref="IHtmlContent"/>.
 /// </summary>
-[JsonConverter(typeof(TemplateStringJsonConverter))]
 [DebuggerDisplay("{ToString()}")]
 public sealed class TemplateString
 {
@@ -124,27 +121,4 @@ public static class TemplateStringExtensions
     /// <param name="content">The <see cref="IHtmlContent"/> to create the <see cref="TemplateString"/> from.</param>
     /// <returns>A new <see cref="TemplateString"/> wrapping the specified <see cref="IHtmlContent"/>.</returns>
     public static TemplateString ToTemplateString(this IHtmlContent? content) => new(content);
-}
-
-internal class TemplateStringJsonConverter : JsonConverter<TemplateString>
-{
-    public override TemplateString? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType == JsonTokenType.Null)
-        {
-            return null;
-        }
-
-        if (reader.TokenType is JsonTokenType.Number or JsonTokenType.String or JsonTokenType.False or JsonTokenType.True)
-        {
-            return new TemplateString(JsonSerializer.Deserialize(ref reader, typeof(string), options) as string);
-        }
-
-        throw new NotSupportedException($"Cannot create a {nameof(TemplateString)} from a {reader.TokenType}.");
-    }
-
-    public override void Write(Utf8JsonWriter writer, TemplateString value, JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
-    }
 }
