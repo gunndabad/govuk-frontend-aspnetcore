@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.Components;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -51,7 +52,8 @@ public class ButtonLinkTagHelper : TagHelper
 
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
-        attributes.Remove("href", out var href);
+        attributes.Remove("href", out _);
+        var href = output.GetUrlAttribute("href");
 
         var component = await _componentGenerator.GenerateButtonAsync(new ButtonOptions()
         {

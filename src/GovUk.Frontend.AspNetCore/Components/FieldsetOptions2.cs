@@ -4,20 +4,20 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record FieldsetOptions2
 {
-    public string? DescribedBy { get; set; }
+    public TemplateString? DescribedBy { get; set; }
     public FieldsetOptions2Legend? Legend { get; set; }
-    public string? Role { get; set; }
-    public string? Html { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Role { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }
 
 public record FieldsetOptions2Legend
 {
-    public string? Text { get; set; }
-    public string? Html { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
     public bool? IsPageHeading { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
 
     [NonStandardParameter]
     public EncodedAttributesDictionary? Attributes { get; set; }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -38,7 +39,8 @@ public class BreadcrumbsItemTagHelper : TagHelper
         }
 
         var attributes = new AttributeCollection(output.Attributes);
-        attributes.Remove("href", out var href);
+        attributes.Remove("href", out _);
+        var href = output.GetUrlAttribute("href");
 
         breadcrumbsContext.AddItem(new BreadcrumbsOptionsItem()
         {

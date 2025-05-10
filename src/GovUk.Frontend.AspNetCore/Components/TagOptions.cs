@@ -4,8 +4,8 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record TagOptions
 {
-    public string? Text { get; set; }
-    public string? Html { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }

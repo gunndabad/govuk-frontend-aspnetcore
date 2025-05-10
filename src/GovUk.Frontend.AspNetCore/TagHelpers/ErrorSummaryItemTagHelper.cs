@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using Microsoft.AspNetCore.Html;
@@ -125,12 +126,11 @@ public class ErrorSummaryItemTagHelper : TagHelper
             itemHtml = HtmlEncoder.Default.Encode(validationMessage);
         }
 
-        string? resolvedHref = null;
+        TemplateString? resolvedHref = null;
 
-        if (output.Attributes.TryGetAttribute("href", out var hrefAttribute))
+        if (output.Attributes.ContainsName("href"))
         {
-            resolvedHref = hrefAttribute.Value.ToString();
-            output.Attributes.Remove(hrefAttribute);
+            resolvedHref = output.GetUrlAttribute("href");
         }
         else if (For != null)
         {

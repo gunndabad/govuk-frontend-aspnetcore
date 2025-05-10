@@ -6,12 +6,12 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public record ErrorSummaryOptions
 {
-    public string? TitleText { get; set; }
-    public string? TitleHtml { get; set; }
-    public string? DescriptionText { get; set; }
-    public string? DescriptionHtml { get; set; }
+    public TemplateString? TitleText { get; set; }
+    public TemplateString? TitleHtml { get; set; }
+    public TemplateString? DescriptionText { get; set; }
+    public TemplateString? DescriptionHtml { get; set; }
     public IReadOnlyCollection<ErrorSummaryOptionsErrorItem>? ErrorList { get; set; }
-    public string? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
     public bool? DisableAutoFocus { get; set; }
 
@@ -23,9 +23,9 @@ public record ErrorSummaryOptions
 
 public record ErrorSummaryOptionsErrorItem
 {
-    public string? Href { get; set; }
-    public string? Text { get; set; }
-    public string? Html { get; set; }
+    public TemplateString? Href { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
     public AttributeCollection? Attributes { get; set; }
 
     [NonStandardParameter]

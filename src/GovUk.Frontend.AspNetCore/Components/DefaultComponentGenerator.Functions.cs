@@ -55,7 +55,7 @@ internal partial class DefaultComponentGenerator
                     {
                         sb.Append('=');
                         sb.Append('"');
-                        sb.Append(_encoder.Encode(attribute.Value?.ToString() ?? string.Empty));
+                        sb.Append(attribute.GetValueHtmlString(_encoder));
                         sb.Append('"');
                     }
                 }

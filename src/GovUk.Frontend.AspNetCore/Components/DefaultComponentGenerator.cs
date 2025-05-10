@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -47,6 +48,11 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
 
         _templateOptions.ValueConverters.Add(v =>
         {
+            if (v is TemplateString templateString)
+            {
+                return templateString.ToFluidValue(_encoder);
+            }
+
             // If the object is an Options class, convert its property names to camel case
             if (v.GetType().Namespace?.StartsWith(GetType().Namespace!) == true)
             {

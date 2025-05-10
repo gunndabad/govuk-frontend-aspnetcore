@@ -1,0 +1,18 @@
+﻿@page
+@{
+    Layout = null;
+}
+
+<govuk-summary-list>
+    <govuk-summary-list-row>
+        <govuk-summary-list-row-key>
+            Key
+        </govuk-summary-list-row-key>
+        <govuk-summary-list-row-value>
+            Value
+        </govuk-summary-list-row-value>
+        <govuk-summary-list-row-actions>
+            <govuk-summary-list-row-action asp-page="/Empty" asp-route-foo="bar" asp-route-baz="qux" visually-hidden-text="name">Change</govuk-summary-list-row-action>
+        </govuk-summary-list-row-actions>
+    </govuk-summary-list-row>
+</govuk-summary-list>
