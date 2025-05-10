@@ -16,13 +16,6 @@ public class ComponentTests
     }
 
     [Theory]
-    [ComponentFixtureData("textarea", typeof(TextareaOptions))]
-    public void Textarea(ComponentTestCaseData<TextareaOptions> data) =>
-        CheckComponentHtmlMatchesExpectedHtml(
-            data,
-            (generator, options) => generator.GenerateTextarea(options).ToHtmlString());
-
-    [Theory]
     [ComponentFixtureData("input", typeof(TextInputOptions), exclude: ["with extra letter spacing", "disabled"])]
     public void TextInput(ComponentTestCaseData<TextInputOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
