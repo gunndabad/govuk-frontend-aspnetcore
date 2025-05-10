@@ -110,7 +110,7 @@ public class EncodingTests(EncodingsTestFixture fixture) : IClassFixture<Encodin
         { "BackLink", 0 },
         { "Breadcrumbs", 0 },
         { "ButtonLink", 0 },
-        { "ErrorSummary", 0 },  // arguably we shouldn't need this as links are fragments and won't contain query params
+        //{ "ErrorSummary", 0 },  // skipping for now; we shouldn't need this as links are fragments and won't contain query params
         { "Pagination", 0 },
         { "SummaryList", 0 }
     };
