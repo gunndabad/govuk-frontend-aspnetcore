@@ -149,7 +149,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("tag", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateTextareaAsync(TextareaOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateTextareaAsync(TextareaOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("textarea", options);

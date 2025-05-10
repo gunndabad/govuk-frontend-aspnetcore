@@ -1,36 +1,27 @@
-using Microsoft.AspNetCore.Html;
-
 namespace GovUk.Frontend.AspNetCore.Components;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 public record TextareaOptions
 {
-    public IHtmlContent? Id { get; set; }
-    public IHtmlContent? Name { get; set; }
+    public TemplateString? Id { get; set; }
+    public TemplateString? Name { get; set; }
     public bool? Spellcheck { get; set; }
     public int? Rows { get; set; }
-    public IHtmlContent? Value { get; set; }
+    public TemplateString? Value { get; set; }
     public bool? Disabled { get; set; }
-    public IHtmlContent? DescribedBy { get; set; }
-    public LabelOptions? Label { get; set; }
-    public HintOptions? Hint { get; set; }
-    public ErrorMessageOptions? ErrorMessage { get; set; }
-    public FormGroupOptions? FormGroup { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public IHtmlContent? Autocomplete { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public TemplateString? DescribedBy { get; set; }
+    public LabelOptions2? Label { get; set; }
+    public HintOptions2? Hint { get; set; }
+    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public TextAreaOptionsFormGroup? FormGroup { get; set; }
+    public TemplateString? Classes { get; set; }
+    public TemplateString? Autocomplete { get; set; }
+    public AttributeCollection? Attributes { get; set; }
+}
 
-    internal void Validate()
-    {
-        if (Label is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Label)} must be specified.");
-        }
-
-        if (Name is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Name)} must be specified.");
-        }
-    }
+public record TextAreaOptionsFormGroup : FormGroupOptions2
+{
+    public TextHtmlAndAttributesOptions? BeforeInput { get; set; }
+    public TextHtmlAndAttributesOptions? AfterInput { get; set; }
 }

@@ -132,8 +132,8 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateTagAsync(options));
 
     [Theory]
-    [ComponentFixtureData("textarea", typeof(TextareaOptions2))]
-    public Task Textarea(ComponentTestCaseData<TextareaOptions2> data) =>
+    [ComponentFixtureData("textarea", typeof(TextareaOptions))]
+    public Task Textarea(ComponentTestCaseData<TextareaOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateTextareaAsync(options),
