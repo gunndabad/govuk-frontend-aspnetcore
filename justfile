@@ -3,6 +3,10 @@ set shell := ["pwsh", "-nop", "-c"]
 default:
   @just --list
 
+# Install local tools
+install-tools:
+  @dotnet tool restore
+
 # Install Playwright
 install-playwright:
   @dotnet build tests/GovUk.Frontend.AspNetCore.IntegrationTests -c Release -v quiet --nologo
@@ -33,7 +37,7 @@ integration-tests *ARGS:
 
 # Format the C# code
 format *ARGS:
-  @dotnet format {{ARGS}}
+  @dotnet dotnet-format {{ARGS}}
 
 # Package the library
 pack *ARGS:
