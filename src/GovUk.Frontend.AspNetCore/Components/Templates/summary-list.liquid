@@ -1,0 +1,93 @@
+{%- macro _actionLink(action, cardTitle) %}
+  <a class="govuk-link {%- if action.classes %} {{ action.classes }}{% endif %}" href="{{ action.href }}"
+    {{- govukAttributes(action.attributes) }}>
+    {{- action.html | raw | indent: 4 | default: action.text -}}
+    {%- if action.visuallyHiddenText != blank or cardTitle -%}
+    <span class="govuk-visually-hidden">
+      {%- if action.visuallyHiddenText %} {{ action.visuallyHiddenText }}{% endif -%}
+      {%- if cardTitle %} ({{ cardTitle.html | indent: 6 | raw | default: cardTitle.text }}){% endif -%}
+    </span>
+    {%- endif -%}
+  </a>
+{% endmacro -%}
+
+{%- macro _summaryCard(params, cardContents) %}
+{%- assign headingLevel = params.title.headingLevel | default: 2 -%}
+
+<div class="govuk-summary-card {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- govukAttributes(params.attributes) }}>
+  <div class="govuk-summary-card__title-wrapper">
+  {% if params.title %}
+    <h{{ headingLevel }} class="govuk-summary-card__title {%- if params.title.classes %} {{ params.title.classes }}{% endif %}">
+      {{ params.title.html | raw | strip | indent: 6 | default: params.title.text }}
+    </h{{ headingLevel }}>
+  {% endif %}
+  {% if params.actions.items.size %}
+    {% if params.actions.items.size == 1 %}
+    <div class="govuk-summary-card__actions {%- if params.actions.classes %} {{ params.actions.classes }}{% endif %}">
+      {{ _actionLink(params.actions.items[0], params.title) | strip | indent: 4 }}
+    </div>
+    {% else %}
+    <ul class="govuk-summary-card__actions {%- if params.actions.classes %} {{ params.actions.classes }}{% endif %}">
+      {% for action in params.actions.items %}
+      <li class="govuk-summary-card__action">
+        {{ _actionLink(action, params.title) | strip | indent: 8 }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endif %}
+  </div>
+
+  <div class="govuk-summary-card__content">
+    {{ cardContents | strip }}
+  </div>
+</div>
+{% endmacro -%}
+
+{% comment %} Determine if we need 2 or 3 columns {% endcomment %}
+{%- assign anyRowHasActions = false %}
+{% for row in params.rows %}
+  {% assign anyRowHasActions = ifelse((row.actions.items), true, anyRowHasActions) %}
+{% endfor -%}
+
+{%- capture summaryList -%}
+<dl class="govuk-summary-list {%- if params.classes %} {{ params.classes }}{% endif %}" {{- govukAttributes(params.attributes) }}>
+{% for row in params.rows %}
+  {% if row %}
+  <div class="govuk-summary-list__row {%- if anyRowHasActions and not(row.actions.items) %} govuk-summary-list__row--no-actions{% endif %} {%- if row.classes %} {{ row.classes }}{% endif %}">
+    <dt class="govuk-summary-list__key {%- if row.key.classes %} {{ row.key.classes }}{% endif %}">
+      {{ row.key.html | raw | strip | indent: 6 | default: row.key.text }}
+    </dt>
+    <dd class="govuk-summary-list__value {%- if row.value.classes %} {{ row.value.classes }}{% endif %}">
+      {{ row.value.html | raw | strip | indent: 6 | default: row.value.text }}
+    </dd>
+    {% if row.actions.items.size > 0 %}
+    <dd class="govuk-summary-list__actions {%- if row.actions.classes %} {{ row.actions.classes }}{% endif %}">
+      {% if row.actions.items.size == 1 %}
+      {{ _actionLink(row.actions.items[0], params.card.title) | strip | indent: 6 }}
+      {% else %}
+      <ul class="govuk-summary-list__actions-list">
+        {% for action in row.actions.items %}
+        <li class="govuk-summary-list__actions-list-item">
+          {{ _actionLink(action, params.card.title) | strip | indent: 8 }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </dd>
+    {% endif %}
+  </div>
+  {% endif %}
+{% endfor %}
+</dl>
+{%- endcapture %}
+
+{%- if params.card -%}
+  {% capture cardContents %}
+    {{ summaryList | raw | strip | indent: 4 }}
+  {% endcapture %}
+  {{ _summaryCard(params.card, cardContents) -}}
+{%- else -%}
+  {{ summaryList | raw | strip }}
+{%- endif %}
