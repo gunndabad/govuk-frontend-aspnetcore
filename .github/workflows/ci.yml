@@ -3,23 +3,23 @@ name: ci
 on:
   push:
     branches:
-    - dev
-    - main
+      - dev
+      - main
     tags:
-    - v*
+      - v*
     paths-ignore:
-    - docs/**
-    - LICENSE
-    - '**.md'
+      - docs/**
+      - LICENSE
+      - "**.md"
   pull_request:
     branches:
-    - dev
-    - main
-    - v1.0
+      - dev
+      - main
+      - v1.0
     paths-ignore:
-    - docs/**
-    - LICENSE
-    - '**.md'
+      - docs/**
+      - LICENSE
+      - "**.md"
 
 jobs:
   build:
@@ -30,45 +30,44 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        submodules: recursive
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: recursive
 
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-          8.0.x
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
 
-    - name: Restore
-      run: dotnet restore
+      - name: Restore
+        run: dotnet restore
 
-    - name: Format
-      run: dotnet format --verify-no-changes
+      - name: Format
+        run: dotnet format --verify-no-changes
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
 
-    - name: Install Playwright
-      run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install
+      - name: Install Playwright
+        run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install
 
-    - name: Test
-      run: |
-        dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
-        dotnet test tests/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
-        dotnet test tests/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
+      - name: Test
+        run: |
+          dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
+          dotnet test tests/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
+          dotnet test tests/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
 
-    - name: Package
-      run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
-      env:
-        MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
+      - name: Package
+        run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
+        env:
+          MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
 
-    - name: Publish package artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: GovUk.Frontend.AspNetCore.nupkg
-        path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
-
+      - name: Publish package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GovUk.Frontend.AspNetCore.nupkg
+          path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
 
   release:
     name: "Release"
@@ -77,12 +76,12 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
-    - name: Download package artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: GovUk.Frontend.AspNetCore.nupkg
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: GovUk.Frontend.AspNetCore.nupkg
 
-    - name: Publish package to NuGet
-      run: dotnet nuget push **/*.nupkg --api-key $NUGET_TOKEN --source https://api.nuget.org/v3/index.json --skip-duplicate
-      env:
+      - name: Publish package to NuGet
+        run: dotnet nuget push **/*.nupkg --api-key $NUGET_TOKEN --source https://api.nuget.org/v3/index.json --skip-duplicate
+        env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
