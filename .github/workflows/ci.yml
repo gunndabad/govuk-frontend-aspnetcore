@@ -35,31 +35,33 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - uses: extractions/setup-just@v2
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             8.0.x
 
       - name: Restore
-        run: dotnet restore
+        run: just restore
 
       - name: Format
-        run: dotnet format --verify-no-changes
+        run: just format --verify-no-changes
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: just build --configuration Release --no-restore
 
       - name: Install Playwright
-        run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install chromium
+        run: just install-playwright
 
       - name: Test
         run: |
-          dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
-          dotnet test tests/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
-          dotnet test tests/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
+          just unit-tests --configuration Release --no-build
+          just conformance-tests --configuration Release --no-build
+          just integration-tests --configuration Release --no-build
 
       - name: Package
-        run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
+        run: just pack --configuration Release --no-build
         env:
           MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
 
