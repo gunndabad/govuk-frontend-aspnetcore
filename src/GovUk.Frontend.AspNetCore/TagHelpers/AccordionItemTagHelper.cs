@@ -22,7 +22,7 @@ public class AccordionItemTagHelper : TagHelper
     /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(ExpandedAttributeName)]
-    public bool Expanded { get; set; } = ComponentGenerator.AccordionItemDefaultExpanded;
+    public bool? Expanded { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -40,7 +40,7 @@ public class AccordionItemTagHelper : TagHelper
 
         accordionContext.AddItem(new AccordionItem()
         {
-            Expanded = Expanded,
+            Expanded = Expanded ?? ComponentGenerator.AccordionItemDefaultExpanded,
             HeadingContent = itemContext.Heading!.Value.Content,
             HeadingAttributes = itemContext.Heading.Value.Attributes,
             SummaryContent = itemContext.Summary?.Content,

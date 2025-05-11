@@ -20,8 +20,6 @@ public class TabsTagHelper : TagHelper
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-    private string _title = ComponentGenerator.TabsDefaultTitle;
-
     /// <summary>
     /// Creates a new <see cref="TabsTagHelper"/>.
     /// </summary>
@@ -57,11 +55,7 @@ public class TabsTagHelper : TagHelper
     /// The default is 'Contents'.
     /// </remarks>
     [HtmlAttributeName(TitleAttributeName)]
-    public string Title
-    {
-        get => _title;
-        set => _title = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? Title { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -76,7 +70,7 @@ public class TabsTagHelper : TagHelper
         var tagBuilder = _htmlGenerator.GenerateTabs(
             Id,
             IdPrefix,
-            Title,
+            Title ?? ComponentGenerator.TabsDefaultTitle,
             output.Attributes.ToAttributeDictionary(),
             tabsContext.Items);
 

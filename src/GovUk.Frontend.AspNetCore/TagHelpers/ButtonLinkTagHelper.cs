@@ -36,7 +36,7 @@ public class ButtonLinkTagHelper : TagHelper
     /// Whether this button is the main call to action on your service's start page.
     /// </summary>
     [HtmlAttributeName(IsStartButtonAttributeName)]
-    public bool IsStartButton { get; set; } = false;
+    public bool? IsStartButton { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

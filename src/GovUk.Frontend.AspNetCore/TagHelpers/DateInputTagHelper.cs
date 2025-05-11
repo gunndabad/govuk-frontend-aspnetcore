@@ -76,7 +76,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> elements.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.DateInputDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the main component.
@@ -225,7 +225,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
         return Generator.GenerateDateInput(
             resolvedId,
-            Disabled,
+            Disabled ?? ComponentGenerator.DateInputDefaultDisabled,
             day,
             month,
             year,

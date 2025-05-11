@@ -16,7 +16,6 @@ public class WarningTextTagHelper : TagHelper
     private const string IconFallbackTextAttributeName = "icon-fallback-text";
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
-    private string _iconFallbackText = ComponentGenerator.WarningTextDefaultIconFallbackText;
 
     /// <summary>
     /// Creates a new <see cref="WarningTextTagHelper"/>.
@@ -34,15 +33,8 @@ public class WarningTextTagHelper : TagHelper
     /// <summary>
     /// The fallback text for the icon.
     /// </summary>
-    /// <remarks>
-    /// Cannot be <c>null</c> or empty.
-    /// </remarks>
     [HtmlAttributeName(IconFallbackTextAttributeName)]
-    public string IconFallbackText
-    {
-        get => _iconFallbackText;
-        set => _iconFallbackText = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? IconFallbackText { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -55,7 +47,7 @@ public class WarningTextTagHelper : TagHelper
         }
 
         var tagBuilder = _htmlGenerator.GenerateWarningText(
-            IconFallbackText,
+            IconFallbackText ?? ComponentGenerator.WarningTextDefaultIconFallbackText,
             childContent,
             output.Attributes.ToAttributeDictionary());
 

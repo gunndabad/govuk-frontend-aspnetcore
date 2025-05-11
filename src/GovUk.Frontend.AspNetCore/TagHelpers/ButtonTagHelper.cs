@@ -36,7 +36,7 @@ public class ButtonTagHelper : TagHelper
     /// Whether the button should be disabled.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = false;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>button</c> element.
@@ -54,7 +54,7 @@ public class ButtonTagHelper : TagHelper
     /// Whether this button is the main call to action on your service's start page.
     /// </summary>
     [HtmlAttributeName(IsStartButtonAttributeName)]
-    public bool IsStartButton { get; set; } = false;
+    public bool? IsStartButton { get; set; }
 
     /// <summary>
     /// Whether to prevent accidental double clicks on submit buttons from submitting forms multiple times.

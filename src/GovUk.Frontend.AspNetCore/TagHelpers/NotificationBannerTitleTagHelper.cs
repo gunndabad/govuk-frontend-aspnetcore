@@ -14,8 +14,8 @@ public class NotificationBannerTitleTagHelper : TagHelper
     private const string HeadingLevelAttributeName = "heading-level";
     private const string IdAttributeName = "heading-level";
 
-    private int _headingLevel = ComponentGenerator.NotificationBannerDefaultTitleHeadingLevel;
-    private string _id = ComponentGenerator.NotificationBannerDefaultTitleId;
+    private int? _headingLevel;
+    private string? _id;
 
     /// <summary>
     /// Creates a new <see cref="NotificationBannerTitleTagHelper"/>.
@@ -31,7 +31,7 @@ public class NotificationBannerTitleTagHelper : TagHelper
     /// Must be between <c>1</c> and <c>6</c> (inclusive). The default is <c>2</c>.
     /// </remarks>
     [HtmlAttributeName(HeadingLevelAttributeName)]
-    public int HeadingLevel
+    public int? HeadingLevel
     {
         get => _headingLevel;
         set
@@ -56,7 +56,7 @@ public class NotificationBannerTitleTagHelper : TagHelper
     /// Cannot be <c>null</c> or empty.
     /// </remarks>
     [HtmlAttributeName(IdAttributeName)]
-    public string Id
+    public string? Id
     {
         get => _id;
         set => _id = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
@@ -76,7 +76,10 @@ public class NotificationBannerTitleTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        notificationBannerContext.SetTitle(Id, HeadingLevel, childContent?.Snapshot());
+        notificationBannerContext.SetTitle(
+            Id ?? ComponentGenerator.NotificationBannerDefaultTitleId,
+            HeadingLevel ?? ComponentGenerator.NotificationBannerDefaultTitleHeadingLevel,
+            childContent?.Snapshot());
 
         output.SuppressOutput();
     }

@@ -52,7 +52,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>textarea</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.TextAreaDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>textarea</c> element.
@@ -85,7 +85,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
     /// The default is <c>5</c>.
     /// </remarks>
     [HtmlAttributeName(RowsAttributeName)]
-    public int Rows { get; set; } = ComponentGenerator.TextAreaDefaultRows;
+    public int? Rows { get; set; }
 
     /// <summary>
     /// The <c>spellcheck</c> attribute for the generated <c>textarea</c> element.
@@ -150,11 +150,11 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
                 haveError,
                 resolvedId,
                 resolvedName,
-                Rows,
+                Rows ?? ComponentGenerator.TextAreaDefaultRows,
                 DescribedBy,
                 Autocomplete,
                 Spellcheck,
-                Disabled,
+                Disabled ?? ComponentGenerator.TextAreaDefaultDisabled,
                 resolvedContent,
                 resolvedTextAreaAttributes);
         }

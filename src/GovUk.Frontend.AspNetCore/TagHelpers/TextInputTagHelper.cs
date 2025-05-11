@@ -122,7 +122,7 @@ public class TextInputTagHelper : TagHelper
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = LegacyComponentGenerator.InputDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.

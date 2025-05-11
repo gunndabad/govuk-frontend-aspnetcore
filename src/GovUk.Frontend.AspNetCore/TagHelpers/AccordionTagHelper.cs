@@ -115,7 +115,7 @@ public class AccordionTagHelper : TagHelper
     /// The default is <c>true</c>.
     /// </remarks>
     [HtmlAttributeName(RememberExpandedAttributeName)]
-    public bool RememberExpanded { get; set; } = ComponentGenerator.AccordionDefaultRememberExpanded;
+    public bool? RememberExpanded { get; set; }
 
     /// <summary>
     /// The text content of the &quot;Show all sections&quot; button at the top of the accordion, which is visible when the
@@ -160,7 +160,7 @@ public class AccordionTagHelper : TagHelper
             Id,
             HeadingLevel,
             output.Attributes.ToAttributeDictionary(),
-            RememberExpanded,
+            RememberExpanded ?? ComponentGenerator.AccordionDefaultRememberExpanded,
             ShowAllSectionsText,
             ShowSectionText,
             ShowSectionAriaLabelText,
