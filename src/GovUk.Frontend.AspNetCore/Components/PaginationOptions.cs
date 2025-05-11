@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Html;
-
 namespace GovUk.Frontend.AspNetCore.Components;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -9,97 +7,52 @@ public record PaginationOptions
     public IReadOnlyCollection<PaginationOptionsItem>? Items { get; set; }
     public PaginationOptionsPrevious? Previous { get; set; }
     public PaginationOptionsNext? Next { get; set; }
-    public IHtmlContent? LandmarkLabel { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
-
-    internal void Validate()
-    {
-        Previous?.Validate();
-
-        if (Items is not null)
-        {
-            var i = 0;
-            foreach (var item in Items)
-            {
-                item.Validate(i++);
-            }
-        }
-
-        Next?.Validate();
-    }
+    public TemplateString? LandmarkLabel { get; set; }
+    public TemplateString? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
 
 public record PaginationOptionsItem
 {
-    public IHtmlContent? Number { get; set; }
-    public IHtmlContent? VisuallyHiddenText { get; set; }
-    public IHtmlContent? Href { get; set; }
+    public TemplateString? Number { get; set; }
+    public TemplateString? VisuallyHiddenText { get; set; }
+    public TemplateString? Href { get; set; }
     public bool? Current { get; set; }
     public bool? Ellipsis { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
-
-    internal void Validate(int itemIndex)
-    {
-        if (Href.NormalizeEmptyString() is null && Ellipsis != true)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Href)} must be specified unless {nameof(Ellipsis)} is {true} on item {itemIndex}.");
-        }
-
-        if (Number.NormalizeEmptyString() is null && Ellipsis != true)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Number)} must be specified unless {nameof(Ellipsis)} is {true} on item {itemIndex}.");
-        }
-    }
+    public AttributeCollection? Attributes { get; set; }
 }
 
 public record PaginationOptionsPrevious : IPaginationOptionsLink
 {
-    public string? Text { get; set; }
-    public IHtmlContent? Html { get; set; }
-    public IHtmlContent? LabelText { get; set; }
-    public IHtmlContent? Href { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? LabelText { get; set; }
+    public TemplateString? Href { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 
     [NonStandardParameter]
-    public EncodedAttributesDictionary? ContainerAttributes { get; set; }
-
-    internal void Validate()
-    {
-        if (Href is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Href)} must be specified.");
-        }
-    }
+    public AttributeCollection? ContainerAttributes { get; set; }
 }
 
 public record PaginationOptionsNext : IPaginationOptionsLink
 {
-    public string? Text { get; set; }
-    public IHtmlContent? Html { get; set; }
-    public IHtmlContent? LabelText { get; set; }
-    public IHtmlContent? Href { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? LabelText { get; set; }
+    public TemplateString? Href { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 
     [NonStandardParameter]
-    public EncodedAttributesDictionary? ContainerAttributes { get; set; }
-
-    internal void Validate()
-    {
-        if (Href is null)
-        {
-            throw new InvalidOptionsException(GetType(), $"{nameof(Href)} must be specified.");
-        }
-    }
+    public AttributeCollection? ContainerAttributes { get; set; }
 }
 
 internal interface IPaginationOptionsLink
 {
-    string? Text { get; set; }
-    IHtmlContent? Html { get; set; }
-    IHtmlContent? LabelText { get; set; }
-    IHtmlContent? Href { get; set; }
-    EncodedAttributesDictionary? Attributes { get; set; }
+    TemplateString? Text { get; set; }
+    TemplateString? Html { get; set; }
+    TemplateString? LabelText { get; set; }
+    TemplateString? Href { get; set; }
+    AttributeCollection? Attributes { get; set; }
 
-    EncodedAttributesDictionary? ContainerAttributes { get; set; }
+    AttributeCollection? ContainerAttributes { get; set; }
 }

@@ -143,6 +143,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("service-navigation", options);
     }
 
+    public ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplate("pagination", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateTagAsync(TagOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

@@ -117,6 +117,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateLabelAsync(options));
 
     [Theory]
+    [ComponentFixtureData("pagination", typeof(PaginationOptions))]
+    public Task Pagination(ComponentTestCaseData<PaginationOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GeneratePaginationAsync(options),
+            amendExpectedHtml: html => html.Replace("précédente", "pr&#xE9;c&#xE9;dente"));
+
+    [Theory]
     [ComponentFixtureData("service-navigation", typeof(ServiceNavigationOptions))]
     public Task ServiceNavigation(ComponentTestCaseData<ServiceNavigationOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
