@@ -21,7 +21,7 @@ public class RadiosFieldsetLegendTagHelper : TagHelper
     /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(IsPageHeadingAttributeName)]
-    public bool IsPageHeading { get; set; } = ComponentGenerator.FieldsetLegendDefaultIsPageHeading;
+    public bool? IsPageHeading { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -37,7 +37,10 @@ public class RadiosFieldsetLegendTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        fieldsetContext.SetLegend(IsPageHeading, output.Attributes.ToAttributeDictionary(), content: childContent);
+        fieldsetContext.SetLegend(
+            IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
+            output.Attributes.ToAttributeDictionary(),
+            content: childContent);
 
         output.SuppressOutput();
     }

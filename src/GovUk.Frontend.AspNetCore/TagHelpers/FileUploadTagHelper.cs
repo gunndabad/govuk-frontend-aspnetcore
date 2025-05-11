@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -74,7 +73,7 @@ public class FileUploadTagHelper : TagHelper
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>input</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.FileUploadDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// An expression to be evaluated against the current model.

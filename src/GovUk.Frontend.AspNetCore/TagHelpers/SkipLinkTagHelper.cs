@@ -17,8 +17,6 @@ public class SkipLinkTagHelper : TagHelper
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
 
-    private string _href = ComponentGenerator.SkipLinkDefaultHref;
-
     /// <summary>
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
@@ -37,14 +35,9 @@ public class SkipLinkTagHelper : TagHelper
     /// </summary>
     /// <remarks>
     /// The default is <c>&quot;#content&quot;</c>.
-    /// Cannot be <c>null</c> or empty.
     /// </remarks>
     [HtmlAttributeName(HrefAttributeName)]
-    public string Href
-    {
-        get => _href;
-        set => _href = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? Href { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -56,7 +49,10 @@ public class SkipLinkTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateSkipLink(Href, childContent, output.Attributes.ToAttributeDictionary());
+        var tagBuilder = _htmlGenerator.GenerateSkipLink(
+            Href ?? ComponentGenerator.SkipLinkDefaultHref,
+            childContent,
+            output.Attributes.ToAttributeDictionary());
 
         output.TagName = tagBuilder.TagName;
         output.TagMode = TagMode.StartTagAndEndTag;

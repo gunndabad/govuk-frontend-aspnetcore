@@ -11,7 +11,7 @@ public class SummaryCardTitleTagHelper : TagHelper
 {
     internal const string TagName = "govuk-summary-card-title";
 
-    private int _headingLevel = ComponentGenerator.SummaryCardDefaultHeadingLevel;
+    private int? _headingLevel;
 
     /// <summary>
     /// The heading level.
@@ -20,7 +20,7 @@ public class SummaryCardTitleTagHelper : TagHelper
     /// Must be between <c>1</c> and <c>6</c> (inclusive). The default is <c>2</c>.
     /// </remarks>
     [HtmlAttributeName("heading-level")]
-    public int HeadingLevel
+    public int? HeadingLevel
     {
         get => _headingLevel;
         set

@@ -101,7 +101,7 @@
         <govuk-checkboxes-item value="portugal">Portugal</govuk-checkboxes-item>
         <govuk-checkboxes-item value="spain">Spain</govuk-checkboxes-item>
         <govuk-checkboxes-divider>or</govuk-checkboxes-divider>
-        <govuk-checkboxes-item value="none" behavior="Exclusive">No, I will not be travelling to any of these countries</govuk-checkboxes-item>
+        <govuk-checkboxes-item value="none" behavior="CheckboxesItemBehavior.Exclusive">No, I will not be travelling to any of these countries</govuk-checkboxes-item>
     </govuk-checkboxes-fieldset>
 </govuk-checkboxes>
 ```

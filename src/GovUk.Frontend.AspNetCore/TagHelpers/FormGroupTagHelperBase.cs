@@ -55,7 +55,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     /// <para>The default is <c>false</c>.</para>
     /// </remarks>
     [HtmlAttributeName(IgnoreModelStateErrorsAttributeName)]
-    public bool IgnoreModelStateErrors { get; set; } = false;
+    public bool? IgnoreModelStateErrors { get; set; }
 
     /// <summary>
     /// Gets the <see cref="ViewContext"/> of the executing view.

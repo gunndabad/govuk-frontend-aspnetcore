@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -104,7 +103,7 @@ public class CharacterCountTagHelper : TagHelper
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>textarea</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.TextAreaDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// Additional attributes to add to the generated form-group wrapper element.
@@ -199,7 +198,7 @@ public class CharacterCountTagHelper : TagHelper
     /// The default is <c>5</c>.
     /// </remarks>
     [HtmlAttributeName(RowsAttributeName)]
-    public int Rows { get; set; } = ComponentGenerator.TextAreaDefaultRows;
+    public int? Rows { get; set; }
 
     /// <summary>
     /// The <c>spellcheck</c> attribute for the generated <c>textarea</c> element.
@@ -288,7 +287,7 @@ public class CharacterCountTagHelper : TagHelper
             attributes.Add("autocomplete", Autocomplete!);
         }
 
-        if (Disabled)
+        if (Disabled == true)
         {
             attributes.AddBoolean("disabled");
         }

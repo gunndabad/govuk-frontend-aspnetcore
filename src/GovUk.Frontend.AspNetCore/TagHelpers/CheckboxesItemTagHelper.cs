@@ -41,7 +41,7 @@ public class CheckboxesItemTagHelper : TagHelper
     /// <remarks>
     /// The default is <see cref="CheckboxesItemBehavior.Default"/>.
     /// </remarks>
-    public CheckboxesItemBehavior Behavior { get; set; } = ComponentGenerator.CheckboxesItemDefaultBehavior;
+    public CheckboxesItemBehavior? Behavior { get; set; }
 
     /// <summary>
     /// Whether the item should be checked.
@@ -61,7 +61,7 @@ public class CheckboxesItemTagHelper : TagHelper
     /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.CheckboxesItemDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.
@@ -147,7 +147,7 @@ public class CheckboxesItemTagHelper : TagHelper
         checkboxesContext.AddItem(new CheckboxesItem()
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
-            Behavior = Behavior,
+            Behavior = Behavior ?? ComponentGenerator.CheckboxesItemDefaultBehavior,
             Checked = resolvedChecked,
             Conditional = itemContext.Conditional != null ?
                 new CheckboxesItemConditional()
@@ -156,7 +156,7 @@ public class CheckboxesItemTagHelper : TagHelper
                     Attributes = itemContext.Conditional.Value.Attributes
                 } :
                 null,
-            Disabled = Disabled,
+            Disabled = Disabled ?? ComponentGenerator.CheckboxesItemDefaultDisabled,
             Hint = itemContext.Hint != null ?
                 new CheckboxesItemHint()
                 {

@@ -48,7 +48,7 @@ public class RadiosItemTagHelper : TagHelper
     /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.RadiosItemDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.
@@ -120,7 +120,7 @@ public class RadiosItemTagHelper : TagHelper
                     Attributes = itemContext.Conditional.Value.Attributes
                 } :
                 null,
-            Disabled = Disabled,
+            Disabled = Disabled ?? ComponentGenerator.RadiosItemDefaultDisabled,
             Hint = itemContext.Hint != null ?
                 new RadiosItemHint()
                 {

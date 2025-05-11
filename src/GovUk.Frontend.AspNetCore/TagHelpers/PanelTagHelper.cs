@@ -17,7 +17,7 @@ public class PanelTagHelper : TagHelper
     private const string HeadingLevelAttributeName = "heading-level";
 
     private readonly IGovUkHtmlGenerator _htmlGenerator;
-    private int _headingLevel = ComponentGenerator.PanelDefaultHeadingLevel;
+    private int? _headingLevel;
 
     /// <summary>
     /// Creates a new <see cref="PanelTagHelper"/>.
@@ -39,7 +39,7 @@ public class PanelTagHelper : TagHelper
     /// Must be between <c>1</c> and <c>6</c> (inclusive). The default is <c>1</c>.
     /// </remarks>
     [HtmlAttributeName(HeadingLevelAttributeName)]
-    public int HeadingLevel
+    public int? HeadingLevel
     {
         get => _headingLevel;
         set
@@ -69,7 +69,7 @@ public class PanelTagHelper : TagHelper
         panelContext.ThrowIfNotComplete();
 
         var tagBuilder = _htmlGenerator.GeneratePanel(
-            HeadingLevel,
+            HeadingLevel ?? ComponentGenerator.PanelDefaultHeadingLevel,
             panelContext.Title,
             panelContext.Body,
             output.Attributes.ToAttributeDictionary());

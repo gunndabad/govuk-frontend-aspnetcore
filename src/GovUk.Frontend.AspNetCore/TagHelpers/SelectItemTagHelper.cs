@@ -19,8 +19,7 @@ public class SelectItemTagHelper : TagHelper
     private const string ValueAttributeName = "value";
 
     private readonly IModelHelper _modelHelper;
-    private string _value = ComponentGenerator.SelectItemDefaultValue;
-    private bool _selected = ComponentGenerator.SelectItemDefaultSelected;
+    private bool? _selected;
     private bool _selectedSpecified = false;
 
     /// <summary>
@@ -40,7 +39,7 @@ public class SelectItemTagHelper : TagHelper
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>option</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.SelectItemDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// Whether the item should be selected.
@@ -51,12 +50,12 @@ public class SelectItemTagHelper : TagHelper
     /// attribute with the model expression's value.
     /// </remarks>
     [HtmlAttributeName(SelectedAttributeName)]
-    public bool Selected
+    public bool? Selected
     {
         get => _selected;
         set
         {
-            _selectedSpecified = true;
+            _selectedSpecified = value is not null;
             _selected = value;
         }
     }
@@ -65,12 +64,7 @@ public class SelectItemTagHelper : TagHelper
     /// The <c>value</c> attribute for the item.
     /// </summary>
     [HtmlAttributeName(ValueAttributeName)]
-    [DisallowNull]
-    public string Value
-    {
-        get => _value;
-        set => _value = Guard.ArgumentNotNull(nameof(value), value);
-    }
+    public string? Value { get; set; }
 
     /// <summary>
     /// Gets the <see cref="ViewContext"/> of the executing view.
@@ -103,8 +97,8 @@ public class SelectItemTagHelper : TagHelper
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
             Content = childContent.Snapshot(),
-            Disabled = Disabled,
-            Selected = resolvedSelected,
+            Disabled = Disabled ?? ComponentGenerator.SelectItemDefaultDisabled,
+            Selected = resolvedSelected ?? ComponentGenerator.SelectItemDefaultSelected,
             Value = Value
         });
 

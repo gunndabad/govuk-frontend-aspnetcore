@@ -54,7 +54,7 @@ public class SelectTagHelper : FormGroupTagHelperBase
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>select</c> element.
     /// </summary>
     [HtmlAttributeName(DisabledAttributeName)]
-    public bool Disabled { get; set; } = ComponentGenerator.SelectDefaultDisabled;
+    public bool? Disabled { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>select</c> element.
@@ -131,7 +131,7 @@ public class SelectTagHelper : FormGroupTagHelperBase
                 resolvedId,
                 resolvedName,
                 DescribedBy,
-                Disabled,
+                Disabled ?? ComponentGenerator.SelectDefaultDisabled,
                 selectContext.Items,
                 SelectAttributes.ToAttributeDictionary());
         }

@@ -25,7 +25,7 @@ public class FieldsetLegendTagHelper : TagHelper
     /// Whether the legend also acts as the heading for the page.
     /// </summary>
     [HtmlAttributeName(IsPageHeadingAttributeName)]
-    public bool IsPageHeading { get; set; } = ComponentGenerator.FieldsetLegendDefaultIsPageHeading;
+    public bool? IsPageHeading { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -40,7 +40,7 @@ public class FieldsetLegendTagHelper : TagHelper
         }
 
         fieldsetContext.SetLegend(
-            IsPageHeading,
+            IsPageHeading ?? ComponentGenerator.FieldsetLegendDefaultIsPageHeading,
             output.Attributes.ToAttributeDictionary(),
             childContent.Snapshot());
 

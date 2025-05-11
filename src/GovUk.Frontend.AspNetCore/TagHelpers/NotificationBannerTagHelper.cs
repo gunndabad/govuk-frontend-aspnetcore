@@ -55,7 +55,7 @@ public class NotificationBannerTagHelper : TagHelper
     /// The type of notification.
     /// </summary>
     [HtmlAttributeName(TypeAttributeName)]
-    public NotificationBannerType Type { get; set; } = ComponentGenerator.NotificationBannerDefaultType;
+    public NotificationBannerType? Type { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -75,7 +75,7 @@ public class NotificationBannerTagHelper : TagHelper
         }
 
         var tagBuilder = _htmlGenerator.GenerateNotificationBanner(
-            Type,
+            Type ?? ComponentGenerator.NotificationBannerDefaultType,
             Role,
             DisableAutoFocus,
             notificationBannerContext.Title?.Id,

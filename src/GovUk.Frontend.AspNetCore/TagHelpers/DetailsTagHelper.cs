@@ -38,7 +38,7 @@ public class DetailsTagHelper : TagHelper
     /// The default is <c>false</c>.
     /// </remarks>
     [HtmlAttributeName(OpenAttributeName)]
-    public bool Open { get; set; } = ComponentGenerator.DetailsDefaultOpen;
+    public bool? Open { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -53,7 +53,7 @@ public class DetailsTagHelper : TagHelper
         detailsContext.ThrowIfNotComplete();
 
         var tagBuilder = _htmlGenerator.GenerateDetails(
-            Open,
+            Open ?? ComponentGenerator.DetailsDefaultOpen,
             detailsContext.Summary?.Content,
             detailsContext.Summary?.Attributes,
             detailsContext.Text?.Content,
