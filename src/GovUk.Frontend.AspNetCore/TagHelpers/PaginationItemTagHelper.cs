@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using AttributeCollection = GovUk.Frontend.AspNetCore.Components.AttributeCollection;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -17,7 +19,7 @@ public class PaginationItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-pagination-item";
 
-    private const string IsCurrentAttributeName = "is-current";
+    private const string CurrentAttributeName = "current";
     private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
 
     /// <summary>
@@ -26,8 +28,22 @@ public class PaginationItemTagHelper : TagHelper
     /// <remarks>
     /// By default this is determined by comparing the current URL to this item's generated <c>href</c> attribute.
     /// </remarks>
-    [HtmlAttributeName(IsCurrentAttributeName)]
-    public bool? IsCurrent { get; set; }
+    [HtmlAttributeName(CurrentAttributeName)]
+    public bool? Current { get; set; }
+
+    /// <summary>
+    /// Whether this item is the current page the user is on.
+    /// </summary>
+    /// <remarks>
+    /// By default this is determined by comparing the current URL to this item's generated <c>href</c> attribute.
+    /// </remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("Use the 'current' attribute instead.", DiagnosticId = DiagnosticIds.UseCurrentAttributeInstead)]
+    public bool? IsCurrent
+    {
+        get => Current;
+        set => Current = value;
+    }
 
     /// <summary>
     /// The visually hidden text for the pagination item.
@@ -63,7 +79,7 @@ public class PaginationItemTagHelper : TagHelper
         attributes.Remove("href", out _);
         var href = output.GetUrlAttribute("href");
 
-        var current = IsCurrent == true || ItemIsCurrentPage();
+        var current = Current == true || ItemIsCurrentPage();
 
         paginationContext.AddItem(new PaginationOptionsItem()
         {

@@ -34,7 +34,7 @@ public class PaginationItemTagHelperTests
 
         var tagHelper = new PaginationItemTagHelper()
         {
-            IsCurrent = true
+            Current = true
         };
 
         // Act

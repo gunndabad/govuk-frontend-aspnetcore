@@ -25,6 +25,9 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 - The `gfa-prepend-error-summary` attribute on `<form>`s is now named `prepend-error-summary`.
 - The `gfa-error-prefix` attribute on `<title>` is now named `error-prefix`.
 
+#### `is-current` on `<govuk-pagination-item>`
+`is-current` has been renamed to `current`.
+
 ### Fixes
 
 #### Source map errors
