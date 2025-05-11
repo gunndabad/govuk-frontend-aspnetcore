@@ -137,15 +137,16 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplate("label", options);
     }
 
-    public ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options)
+    public virtual ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplate("service-navigation", options);
     }
 
-    public ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options)
+    public virtual ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
+        options = options with { Items = options.Items?.ToList() };  // TEMP workaround issue with arrays
         return RenderTemplate("pagination", options);
     }
 

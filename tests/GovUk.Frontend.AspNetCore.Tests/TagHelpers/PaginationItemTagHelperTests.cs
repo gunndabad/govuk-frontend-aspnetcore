@@ -1,4 +1,5 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -44,9 +45,9 @@ public class PaginationItemTagHelperTests
             paginationContext.Items,
             item =>
             {
-                var paginationItem = Assert.IsType<PaginationItem>(item);
-                Assert.True(paginationItem.IsCurrent);
-                Assert.Equal("Page 42", paginationItem.Number?.ToHtmlString());
+                var paginationItem = Assert.IsType<PaginationOptionsItem>(item);
+                Assert.True(paginationItem.Current);
+                Assert.Equal("Page 42", paginationItem.Number?.ToHtmlString(HtmlEncoder.Default));
             });
     }
 }

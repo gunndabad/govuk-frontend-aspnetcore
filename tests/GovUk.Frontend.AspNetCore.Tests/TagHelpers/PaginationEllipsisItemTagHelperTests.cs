@@ -1,4 +1,4 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -38,6 +38,10 @@ public class PaginationEllipsisItemTagHelperTests
         // Assert
         Assert.Collection(
             paginationContext.Items,
-            item => Assert.IsType<PaginationItemEllipsis>(item));
+            i =>
+            {
+                var item = Assert.IsType<PaginationOptionsItem>(i);
+                Assert.True(item.Ellipsis);
+            });
     }
 }

@@ -1,4 +1,4 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -7,7 +7,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents the link to the previous page in a GDS pagination component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = PaginationTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.PaginationPreviousElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.PaginationPrevious)]
 public class PaginationPreviousTagHelper : TagHelper
 {
     internal const string TagName = "govuk-pagination-previous";
@@ -41,21 +41,18 @@ public class PaginationPreviousTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        string? href = null;
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("href", out _);
+        var href = output.GetUrlAttribute("href");
 
-        if (output.Attributes.TryGetAttribute("href", out var hrefAttribute))
+        paginationContext.SetPrevious(new PaginationOptionsPrevious()
         {
-            href = hrefAttribute.Value.ToString();
-            output.Attributes.Remove(hrefAttribute);
-        }
-
-        paginationContext.SetPrevious(new PaginationPrevious()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
+            Attributes = new AttributeCollection(LinkAttributes),
+            ContainerAttributes = attributes,
             Href = href,
             LabelText = LabelText,
-            LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
-            Text = childContent
+            Html = childContent?.ToTemplateString(),
+            Text = null
         });
 
         output.SuppressOutput();

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -11,7 +12,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents an item in a GDS pagination component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = PaginationTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.PaginationItemElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.PaginationItem)]
 public class PaginationItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-pagination-item";
@@ -58,22 +59,18 @@ public class PaginationItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        string? href = null;
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("href", out _);
+        var href = output.GetUrlAttribute("href");
 
-        if (output.Attributes.TryGetAttribute("href", out var hrefAttribute))
+        var current = IsCurrent == true || ItemIsCurrentPage();
+
+        paginationContext.AddItem(new PaginationOptionsItem()
         {
-            href = hrefAttribute.Value.ToString();
-            output.Attributes.Remove(hrefAttribute);
-        }
-
-        bool isCurrent = IsCurrent == true || ItemIsCurrentPage();
-
-        paginationContext.AddItem(new PaginationItem()
-        {
-            Attributes = output.Attributes.ToAttributeDictionary(),
+            Attributes = attributes,
             Href = href,
-            IsCurrent = isCurrent,
-            Number = childContent,
+            Current = current,
+            Number = childContent.ToTemplateString(),
             VisuallyHiddenText = VisuallyHiddenText
         });
 
@@ -82,7 +79,7 @@ public class PaginationItemTagHelper : TagHelper
         bool ItemIsCurrentPage()
         {
             var currentUrl = ViewContext!.HttpContext.Request.GetEncodedPathAndQuery();
-            return href == currentUrl;
+            return href?.ToHtmlString(HtmlEncoder.Default) == currentUrl;
         }
     }
 }
