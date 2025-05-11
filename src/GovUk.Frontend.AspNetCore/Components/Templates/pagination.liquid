@@ -1,4 +1,4 @@
-{% assign blockLevel = not(params.items) and (params.next or params.previous) -%}
+{% assign blockLevel = not((params.items.size > 0)) and (params.next or params.previous) -%}
 
 {%- capture arrowPrevious -%}
   <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
@@ -14,7 +14,7 @@
 
 {%- macro _arrowLink(link, type, content) %}
   {% assign arrowType = ifelse((type == "prev"), arrowPrevious, arrowNext) %}
-  <div class="govuk-pagination__{{ type }}">
+  <div class="govuk-pagination__{{ type }}" {{- govukAttributes(link.containerAttributes) }}>
     <a class="govuk-link govuk-pagination__link" href="{{ link.href }}" rel="{{ type }}"
       {{- govukAttributes(link.attributes) }}>
       {% if blockLevel or type == "prev" %}
@@ -64,7 +64,7 @@
     {{ _arrowLink(previous, "prev", previousLinkContent) }}
   {%- endif %}
 
-  {%- if params.items %}
+  {%- if params.items.size > 0 %}
   <ul class="govuk-pagination__list">
   {% for item in params.items %}
     {{ _pageItem(item) | indent: 2 }}

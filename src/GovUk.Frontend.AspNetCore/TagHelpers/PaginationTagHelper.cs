@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -14,27 +13,22 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     PaginationItemTagHelper.TagName,
     PaginationEllipsisItemTagHelper.TagName,
     PaginationNextTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.PaginationElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.Pagination)]
 public class PaginationTagHelper : TagHelper
 {
     internal const string TagName = "govuk-pagination";
 
     private const string LandmarkLabelAttributeName = "landmark-label";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
-    private string? _landmarkLabel = ComponentGenerator.PaginationDefaultLandmarkLabel;
+    private readonly IComponentGenerator _componentGenerator;
 
     /// <summary>
     /// Creates a new <see cref="PaginationTagHelper"/>.
     /// </summary>
-    public PaginationTagHelper()
-        : this(htmlGenerator: null)
+    public PaginationTagHelper(IComponentGenerator componentGenerator)
     {
-    }
-
-    internal PaginationTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
     }
 
     /// <summary>
@@ -46,11 +40,7 @@ public class PaginationTagHelper : TagHelper
     /// </remarks>
     [DisallowNull]
     [HtmlAttributeName(LandmarkLabelAttributeName)]
-    public string? LandmarkLabel
-    {
-        get => _landmarkLabel;
-        set => _landmarkLabel = Guard.ArgumentNotNullOrEmpty(nameof(value), value);
-    }
+    public string? LandmarkLabel { get; set; }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -62,18 +52,19 @@ public class PaginationTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var tagBuilder = _htmlGenerator.GeneratePagination(
-            paginationContext.Items,
-            paginationContext.Previous,
-            paginationContext.Next,
-            LandmarkLabel,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("classes", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = await _componentGenerator.GeneratePaginationAsync(new PaginationOptions()
+        {
+            Items = paginationContext.Items.OfType<PaginationOptionsItem>().ToArray(),
+            Previous = paginationContext.Previous,
+            Next = paginationContext.Next,
+            LandmarkLabel = LandmarkLabel,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.ApplyComponentHtml(component);
     }
 }

@@ -1,4 +1,4 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
 
@@ -11,10 +11,10 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.SetNext(new PaginationNext());
+        context.SetNext(new PaginationOptionsNext());
 
         // Act
-        var ex = Record.Exception(() => context.AddItem(new PaginationItemEllipsis()));
+        var ex = Record.Exception(() => context.AddItem(new PaginationOptionsItem() { Ellipsis = true }));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -26,17 +26,17 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.AddItem(new PaginationItem()
+        context.AddItem(new PaginationOptionsItem()
         {
             Number = new HtmlString("1"),
-            IsCurrent = true
+            Current = true
         });
 
         // Act
-        var ex = Record.Exception(() => context.AddItem(new PaginationItem()
+        var ex = Record.Exception(() => context.AddItem(new PaginationOptionsItem()
         {
             Number = new HtmlString("2"),
-            IsCurrent = true
+            Current = true
         }));
 
         // Assert
@@ -49,7 +49,7 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        var item = new PaginationItemEllipsis();
+        var item = new PaginationOptionsItem() { Ellipsis = true };
 
         // Act
         context.AddItem(item);
@@ -63,10 +63,10 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.SetNext(new PaginationNext());
+        context.SetNext(new PaginationOptionsNext());
 
         // Act
-        var ex = Record.Exception(() => context.SetNext(new PaginationNext()));
+        var ex = Record.Exception(() => context.SetNext(new PaginationOptionsNext()));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -78,7 +78,7 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        var next = new PaginationNext();
+        var next = new PaginationOptionsNext();
 
         // Act
         context.SetNext(next);
@@ -92,10 +92,10 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.SetNext(new PaginationNext());
+        context.SetNext(new PaginationOptionsNext());
 
         // Act
-        var ex = Record.Exception(() => context.SetPrevious(new PaginationPrevious()));
+        var ex = Record.Exception(() => context.SetPrevious(new PaginationOptionsPrevious()));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -107,10 +107,10 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.SetPrevious(new PaginationPrevious());
+        context.SetPrevious(new PaginationOptionsPrevious());
 
         // Act
-        var ex = Record.Exception(() => context.SetPrevious(new PaginationPrevious()));
+        var ex = Record.Exception(() => context.SetPrevious(new PaginationOptionsPrevious()));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -122,14 +122,14 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        context.AddItem(new PaginationItem()
+        context.AddItem(new PaginationOptionsItem()
         {
             Number = new HtmlString("1"),
-            IsCurrent = true
+            Current = true
         });
 
         // Act
-        var ex = Record.Exception(() => context.SetPrevious(new PaginationPrevious()));
+        var ex = Record.Exception(() => context.SetPrevious(new PaginationOptionsPrevious()));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -141,7 +141,7 @@ public class PaginationContextTests
     {
         // Arrange
         var context = new PaginationContext();
-        var previous = new PaginationPrevious();
+        var previous = new PaginationOptionsPrevious();
 
         // Act
         context.SetPrevious(previous);

@@ -1,30 +1,30 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class PaginationContext
 {
-    private readonly List<PaginationItemBase> _items = new();
+    private readonly List<IPaginationOptionsItem> _items = new();
 
-    public IReadOnlyCollection<PaginationItemBase> Items => _items.AsReadOnly();
+    public IReadOnlyCollection<IPaginationOptionsItem> Items => _items.AsReadOnly();
 
-    public PaginationNext? Next { get; private set; }
+    public PaginationOptionsNext? Next { get; private set; }
 
-    public PaginationPrevious? Previous { get; private set; }
+    public PaginationOptionsPrevious? Previous { get; private set; }
 
-    public void AddItem(PaginationItemBase item)
+    public void AddItem(IPaginationOptionsItem item)
     {
-        Guard.ArgumentNotNull(nameof(item), item);
+        ArgumentNullException.ThrowIfNull(item);
 
         if (Next is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
-                item is PaginationItemEllipsis ? PaginationEllipsisItemTagHelper.TagName : PaginationItemTagHelper.TagName,
+                item is PaginationOptionsItem { Ellipsis: true } ? PaginationEllipsisItemTagHelper.TagName : PaginationItemTagHelper.TagName,
                 PaginationNextTagHelper.TagName);
         }
 
         // Only one 'current' item is allowed.
-        if (item is PaginationItem paginationItem && paginationItem.IsCurrent && _items.OfType<PaginationItem>().Any(i => i.IsCurrent))
+        if (item is PaginationOptionsItem { Current: true } && _items.Any(i => i is PaginationOptionsItem { Current: true }))
         {
             throw new InvalidOperationException($"Only one current {PaginationItemTagHelper.TagName} is permitted.");
         }
@@ -32,9 +32,9 @@ internal class PaginationContext
         _items.Add(item);
     }
 
-    public void SetNext(PaginationNext next)
+    public void SetNext(PaginationOptionsNext next)
     {
-        Guard.ArgumentNotNull(nameof(next), next);
+        ArgumentNullException.ThrowIfNull(next);
 
         if (Next is not null)
         {
@@ -44,15 +44,15 @@ internal class PaginationContext
         Next = next;
     }
 
-    public void SetPrevious(PaginationPrevious previous)
+    public void SetPrevious(PaginationOptionsPrevious previous)
     {
-        Guard.ArgumentNotNull(nameof(previous), previous);
+        ArgumentNullException.ThrowIfNull(previous);
 
         if (_items.Count != 0)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 PaginationPreviousTagHelper.TagName,
-                _items[0] is PaginationItemEllipsis ? PaginationEllipsisItemTagHelper.TagName : PaginationItemTagHelper.TagName);
+                _items[0] is PaginationOptionsItem { Ellipsis: true } ? PaginationEllipsisItemTagHelper.TagName : PaginationItemTagHelper.TagName);
         }
 
         if (Next is not null)

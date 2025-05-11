@@ -8,6 +8,11 @@ internal partial class DefaultComponentGenerator
         public const string CharacterCount = "div";
         public const string Breadcrumbs = "nav";
         public const string ErrorSummary = "div";
+        public const string Pagination = "nav";
+        public const string PaginationEllipsis = "li";
+        public const string PaginationItem = "li";
+        public const string PaginationNext = "div";
+        public const string PaginationPrevious = "div";
         public const string Tag = "strong";
     }
 }

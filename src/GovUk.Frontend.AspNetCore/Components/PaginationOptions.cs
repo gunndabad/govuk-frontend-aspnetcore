@@ -12,7 +12,7 @@ public record PaginationOptions
     public AttributeCollection? Attributes { get; set; }
 }
 
-public record PaginationOptionsItem
+public record PaginationOptionsItem : IPaginationOptionsItem
 {
     public TemplateString? Number { get; set; }
     public TemplateString? VisuallyHiddenText { get; set; }
@@ -22,7 +22,7 @@ public record PaginationOptionsItem
     public AttributeCollection? Attributes { get; set; }
 }
 
-public record PaginationOptionsPrevious : IPaginationOptionsLink
+public record PaginationOptionsPrevious : IPaginationOptionsItem
 {
     public TemplateString? Text { get; set; }
     public TemplateString? Html { get; set; }
@@ -34,7 +34,7 @@ public record PaginationOptionsPrevious : IPaginationOptionsLink
     public AttributeCollection? ContainerAttributes { get; set; }
 }
 
-public record PaginationOptionsNext : IPaginationOptionsLink
+public record PaginationOptionsNext : IPaginationOptionsItem
 {
     public TemplateString? Text { get; set; }
     public TemplateString? Html { get; set; }
@@ -46,13 +46,6 @@ public record PaginationOptionsNext : IPaginationOptionsLink
     public AttributeCollection? ContainerAttributes { get; set; }
 }
 
-internal interface IPaginationOptionsLink
+internal interface IPaginationOptionsItem
 {
-    TemplateString? Text { get; set; }
-    TemplateString? Html { get; set; }
-    TemplateString? LabelText { get; set; }
-    TemplateString? Href { get; set; }
-    AttributeCollection? Attributes { get; set; }
-
-    AttributeCollection? ContainerAttributes { get; set; }
 }
