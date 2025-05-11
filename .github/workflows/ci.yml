@@ -52,6 +52,32 @@ jobs:
     - name: Install Playwright
       run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install
 
+    - name: Check documentation images
+      id: check_doc_images
+      run: |
+        dotnet run --project src/GovUk.Frontend.AspNetCore.DocSamplesScreenshotter -c Release
+
+        changes=$(git status --porcelain docs/images | cut -c 4-)
+        if [ -n "$changes" ]
+        then
+          echo "::error ::Documentation images are stale"
+          mkdir doc_delta
+
+          while IFS= read -r file; do
+            cp $file doc_delta/
+          done <<< "$changes"
+
+          exit 1
+        fi
+
+    - name: Upload documentation image differences artifact
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: differences
+        path: doc_delta
+        if-no-files-found: ignore
+
     - name: Test
       run: |
         dotnet test tests/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build

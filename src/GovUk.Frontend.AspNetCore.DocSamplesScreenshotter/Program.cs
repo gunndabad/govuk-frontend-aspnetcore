@@ -35,7 +35,14 @@ class Program
         await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultRevision);
         var browser = await Puppeteer.LaunchAsync(new LaunchOptions()
         {
-            Headless = true
+            Headless = true,
+            Args = ["--no-sandbox", "--disable-setuid-sandbox"],
+            DefaultViewport = new ViewPortOptions
+            {
+                Width = 1024,
+                Height = 768 * 2,
+                DeviceScaleFactor = 1
+            }
         });
 
         await WriteScreenshots(new[]
