@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -38,6 +39,21 @@ public class ContainerErrorSummaryTagHelper : TagHelper
     /// </remarks>
     [HtmlAttributeName(PrependErrorSummaryAttributeName)]
     public bool? PrependErrorSummary { get; set; }
+
+    /// <summary>
+    /// Whether to prepend an error summary component to this form.
+    /// </summary>
+    /// <remarks>
+    /// The default is set for the application in <see cref="GovUkFrontendAspNetCoreOptions.PrependErrorSummaryToForms"/>.
+    /// </remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete("Use the 'prepend-error-summary' attribute instead.", DiagnosticId = DiagnosticIds.UsePrependErrorSummaryAttributeInstead)]
+    [HtmlAttributeName("gfa-" + PrependErrorSummaryAttributeName)]
+    public bool? GfaPrependErrorSummary
+    {
+        get => PrependErrorSummary;
+        set => PrependErrorSummary = value;
+    }
 
     /// <summary>
     /// Gets the <see cref="ViewContext"/> of the executing view.
