@@ -1,4 +1,3 @@
-using System.Linq;
 using AngleSharp;
 using AngleSharp.Dom;
 

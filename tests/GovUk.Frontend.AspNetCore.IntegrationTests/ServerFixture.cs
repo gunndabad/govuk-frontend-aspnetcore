@@ -1,13 +1,5 @@
-using System;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Playwright;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.IntegrationTests;
 

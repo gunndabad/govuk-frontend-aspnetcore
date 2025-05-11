@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using GovUk.Frontend.AspNetCore.Validation;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.Validation;
 

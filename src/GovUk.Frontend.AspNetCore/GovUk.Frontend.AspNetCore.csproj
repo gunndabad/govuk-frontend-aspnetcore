@@ -21,6 +21,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

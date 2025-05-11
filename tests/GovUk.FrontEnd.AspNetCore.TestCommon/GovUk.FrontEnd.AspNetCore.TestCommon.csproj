@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
     <IsTestProject>false</IsTestProject>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;

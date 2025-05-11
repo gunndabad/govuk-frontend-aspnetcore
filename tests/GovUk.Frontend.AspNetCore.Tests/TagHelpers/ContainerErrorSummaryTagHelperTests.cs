@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
-using Moq;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 

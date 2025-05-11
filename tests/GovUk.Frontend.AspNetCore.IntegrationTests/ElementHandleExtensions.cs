@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.Playwright;
 
 namespace GovUk.Frontend.AspNetCore.IntegrationTests;

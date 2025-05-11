@@ -1,6 +1,5 @@
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.Components;
 

@@ -1,8 +1,6 @@
 using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 

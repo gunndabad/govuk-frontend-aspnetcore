@@ -1,11 +1,8 @@
-using System;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
-using Xunit;
+using Match = System.Text.RegularExpressions.Match;
 
 namespace GovUk.Frontend.AspNetCore.Tests.Components;
 

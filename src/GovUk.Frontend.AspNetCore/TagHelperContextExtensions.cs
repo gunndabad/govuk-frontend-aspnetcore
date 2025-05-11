@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;

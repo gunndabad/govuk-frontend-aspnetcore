@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;

@@ -1,7 +1,6 @@
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.Components;
 

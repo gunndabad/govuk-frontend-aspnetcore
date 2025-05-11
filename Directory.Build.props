@@ -6,7 +6,13 @@
     <Nullable>enable</Nullable>
     <GovUkFrontendVersion>5.9.0</GovUkFrontendVersion>
 
+    <IsTestProject Condition="'$(IsTestProject)' == '' and $(MSBuildProjectName.EndsWith('Tests'))">true</IsTestProject>
+
     <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib', 'govuk-frontend-$(GovUkFrontendVersion)'))</_NpmLibDirectory>
     <GovUkFrontendLibrary>$([MSBuild]::NormalizeDirectory('$(_NpmLibDirectory)', 'node_modules', 'govuk-frontend', 'dist', 'govuk'))</GovUkFrontendLibrary>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <Using Include="Xunit" />
+  </ItemGroup>
 </Project>

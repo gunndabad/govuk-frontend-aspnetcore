@@ -1,11 +1,5 @@
-using System;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 

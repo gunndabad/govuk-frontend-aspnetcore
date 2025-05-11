@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 using GovUk.Frontend.AspNetCore.Tests.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -10,8 +6,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Moq;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests.ModelBinding;
 

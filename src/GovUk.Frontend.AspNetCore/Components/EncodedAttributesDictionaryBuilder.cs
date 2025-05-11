@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.Components;

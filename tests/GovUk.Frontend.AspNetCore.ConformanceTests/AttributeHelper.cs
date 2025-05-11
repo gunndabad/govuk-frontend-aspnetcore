@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;

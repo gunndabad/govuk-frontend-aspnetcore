@@ -1,5 +1,3 @@
-using System;
-
 namespace GovUk.Frontend.AspNetCore.ModelBinding;
 
 internal class DateOnlyDateInputModelConverter : DateInputModelConverter

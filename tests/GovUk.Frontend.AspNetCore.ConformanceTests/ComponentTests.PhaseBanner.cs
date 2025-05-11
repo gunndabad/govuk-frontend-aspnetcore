@@ -1,6 +1,3 @@
-using GovUk.Frontend.AspNetCore;
-using Xunit;
-
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 
 public partial class ComponentTests

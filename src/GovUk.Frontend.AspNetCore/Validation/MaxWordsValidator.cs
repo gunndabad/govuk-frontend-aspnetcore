@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 
 namespace GovUk.Frontend.AspNetCore.Validation;

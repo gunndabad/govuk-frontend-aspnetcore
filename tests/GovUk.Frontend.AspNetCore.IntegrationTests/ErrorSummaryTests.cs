@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using AngleSharp.Dom;
 using GovUk.Frontend.AspNetCore.TestCommon;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.IntegrationTests;
 

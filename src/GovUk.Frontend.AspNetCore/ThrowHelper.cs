@@ -1,5 +1,3 @@
-using System;
-
 namespace GovUk.Frontend.AspNetCore;
 
 internal static class ThrowHelper

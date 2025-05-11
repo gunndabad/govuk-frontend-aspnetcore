@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace GovUk.Frontend.AspNetCore.ConformanceTests.OptionsJson;
 
 public class Textarea

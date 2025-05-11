@@ -1,8 +1,5 @@
-using System.Linq;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 

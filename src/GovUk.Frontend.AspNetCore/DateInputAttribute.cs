@@ -1,4 +1,3 @@
-using System;
 using GovUk.Frontend.AspNetCore.ModelBinding;
 
 namespace GovUk.Frontend.AspNetCore;

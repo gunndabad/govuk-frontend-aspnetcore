@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
 namespace GovUk.Frontend.AspNetCore.DocSamples;
 
 public class Program

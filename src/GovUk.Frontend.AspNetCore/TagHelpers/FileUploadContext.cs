@@ -1,6 +1,3 @@
-
-using System.Collections.Generic;
-
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class FileUploadContext : FormGroupContext3

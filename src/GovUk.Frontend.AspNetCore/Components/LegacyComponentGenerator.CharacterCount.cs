@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.Components;

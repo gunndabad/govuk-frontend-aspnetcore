@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace GovUk.Frontend.AspNetCore.ConformanceTests;
 
 internal static class CollectionExtensions

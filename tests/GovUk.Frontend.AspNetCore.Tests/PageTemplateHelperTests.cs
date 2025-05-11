@@ -1,7 +1,5 @@
-using System.Linq;
 using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace GovUk.Frontend.AspNetCore.Tests;
 
