@@ -98,6 +98,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options);
 
     /// <summary>
+    /// Generates a summary list component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateSummaryListAsync(SummaryListOptions options);
+
+    /// <summary>
     /// Generates a tag component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

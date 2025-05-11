@@ -133,6 +133,14 @@ public class DefaultComponentGeneratorTests
             compareWhitespace: false);
 
     [Theory]
+    [ComponentFixtureData("summary-list", typeof(SummaryListOptions), exclude: "with falsy values")]
+    public Task SummaryList(ComponentTestCaseData<SummaryListOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateSummaryListAsync(options),
+            amendExpectedHtml: html => html.Replace("Gatsby’s", "Gatsby&#x2019;s"));
+
+    [Theory]
     [ComponentFixtureData("tag", typeof(TagOptions))]
     public Task Tag(ComponentTestCaseData<TagOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
