@@ -50,7 +50,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Install Playwright
-        run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install
+        run: pwsh ./tests/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/net8.0/playwright.ps1 install chromium
 
       - name: Test
         run: |
