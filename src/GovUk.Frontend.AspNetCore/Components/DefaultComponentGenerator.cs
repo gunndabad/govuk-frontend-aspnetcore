@@ -167,6 +167,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("label", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateNotificationBannerAsync(NotificationBannerOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("notification-banner", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

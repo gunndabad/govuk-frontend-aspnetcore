@@ -1,0 +1,47 @@
+{%- if params.type == "success" %}
+  {% assign successBanner = true %}
+{% endif %}
+
+{%- if successBanner %}
+  {% assign typeClass = "govuk-notification-banner--" | append: params.type %}
+{% endif %}
+
+{%- if params.role %}
+  {% assign role = params.role %}
+{% elsif successBanner %}
+  {%- comment %} If type is success, add `role="alert"` to prioritise the information in the notification banner to users of assistive technologies {% endcomment -%}
+  {% assign role = "alert" %}
+{% else %}
+  {% comment %} Otherwise add `role="region"` to make the notification banner a landmark to help users of assistive technologies to navigate to the banner {% endcomment -%}
+  {% assign role = "region" %}
+{% endif %}
+
+{%- if params.titleHtml %}
+  {% assign title = params.titleHtml | raw %}
+{%- elsif params.titleText %}
+  {% assign title = params.titleText %}
+{%- elsif successBanner %}
+  {% assign title = "Success" %}
+{%- else %}
+  {% assign title = "Important" %}
+{%- endif -%}
+
+<div class="govuk-notification-banner {%- if typeClass %} {{ typeClass }}{% endif %}{% if params.classes %} {{ params.classes }}{% endif %}" role="{{ role }}" aria-labelledby="{{ params.titleId | default: "govuk-notification-banner-title" }}" data-module="govuk-notification-banner"
+  {%- if params.disableAutoFocus == true or params.disableAutoFocus == false %} data-disable-auto-focus="{{ params.disableAutoFocus }}"{% endif %}
+  {{- govukAttributes(params.attributes) }}>
+  <div class="govuk-notification-banner__header">
+    <h{{ params.titleHeadingLevel | default: 2 }} class="govuk-notification-banner__title" id="{{ params.titleId | default: "govuk-notification-banner-title" }}">
+      {{ title }}
+    </h{{ params.titleHeadingLevel | default: 2 }}>
+  </div>
+  <div class="govuk-notification-banner__content">
+  {% if params.html %}
+    {{ params.html | raw | strip | indent: 4 }}
+  {% elsif params.text %}
+    {% comment %} Set default style for single line content {% endcomment %}
+    <p class="govuk-notification-banner__heading">
+      {{ params.text | strip | indent: 6 }}
+    </p>
+  {% endif %}
+  </div>
+</div>

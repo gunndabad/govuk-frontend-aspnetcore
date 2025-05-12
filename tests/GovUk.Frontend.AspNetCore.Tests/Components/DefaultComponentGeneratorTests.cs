@@ -167,6 +167,13 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateLabelAsync(options));
 
     [Theory]
+    [ComponentFixtureData("notification-banner", typeof(NotificationBannerOptions))]
+    public Task NotificationBanner(ComponentTestCaseData<NotificationBannerOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateNotificationBannerAsync(options));
+
+    [Theory]
     [ComponentFixtureData("pagination", typeof(PaginationOptions))]
     public Task Pagination(ComponentTestCaseData<PaginationOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
