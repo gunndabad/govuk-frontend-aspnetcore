@@ -21,7 +21,7 @@ internal partial class DefaultComponentGenerator
             return FluidValue.Create(result, context.Options);
         }
 
-        public static async ValueTask<FluidValue> GovukAttributes(FunctionArguments args, TemplateContext context)
+        public static async ValueTask<FluidValue> GovukAttributesAsync(FunctionArguments args, TemplateContext context)
         {
             // https://github.com/alphagov/govuk-frontend/blob/v5.8.0/packages/govuk-frontend/src/govuk/macros/attributes.njk
 

@@ -37,9 +37,9 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
             typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
             root: "Components/Templates");
 
-        _templateOptions.Filters.AddFilter("nj_default", Filters.Default);
-        _templateOptions.Filters.AddFilter("indent", Filters.Indent);
-        _templateOptions.Filters.AddFilter("strip", Filters.Strip);
+        _templateOptions.Filters.AddFilter("nj_default", Filters.DefaultAsync);
+        _templateOptions.Filters.AddFilter("indent", Filters.IndentAsync);
+        _templateOptions.Filters.AddFilter("strip", Filters.StripAsync);
 
         _templateOptions.ValueConverters.Add(v =>
         {
@@ -61,117 +61,117 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
     public virtual ValueTask<IHtmlContent> GenerateAccordionAsync(AccordionOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("accordion", options);
+        return RenderTemplateAsync("accordion", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateBackLinkAsync(BackLinkOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("back-link", options);
+        return RenderTemplateAsync("back-link", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateBreadcrumbsAsync(BreadcrumbsOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("breadcrumbs", options);
+        return RenderTemplateAsync("breadcrumbs", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateButtonAsync(ButtonOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("button", options);
+        return RenderTemplateAsync("button", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateCharacterCountAsync(CharacterCountOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("character-count", options);
+        return RenderTemplateAsync("character-count", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateCheckboxesAsync(CheckboxesOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("checkboxes", options);
+        return RenderTemplateAsync("checkboxes", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateCookieBannerAsync(CookieBannerOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("cookie-banner", options);
+        return RenderTemplateAsync("cookie-banner", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("error-message", options);
+        return RenderTemplateAsync("error-message", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateErrorSummaryAsync(ErrorSummaryOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         options = options with { ErrorList = options.ErrorList?.ToList() };  // TEMP workaround issue with arrays
-        return RenderTemplate("error-summary", options);
+        return RenderTemplateAsync("error-summary", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("fieldset", options);
+        return RenderTemplateAsync("fieldset", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateFileUploadAsync(FileUploadOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("file-upload", options);
+        return RenderTemplateAsync("file-upload", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("hint", options);
+        return RenderTemplateAsync("hint", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("label", options);
+        return RenderTemplateAsync("label", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("service-navigation", options);
+        return RenderTemplateAsync("service-navigation", options);
     }
 
     public virtual ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         options = options with { Items = options.Items?.ToList() };  // TEMP workaround issue with arrays
-        return RenderTemplate("pagination", options);
+        return RenderTemplateAsync("pagination", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateSummaryListAsync(SummaryListOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("summary-list", options);
+        return RenderTemplateAsync("summary-list", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateTagAsync(TagOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("tag", options);
+        return RenderTemplateAsync("tag", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateTextareaAsync(TextareaOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("textarea", options);
+        return RenderTemplateAsync("textarea", options);
     }
 
     public virtual ValueTask<IHtmlContent> GenerateWarningTextAsync(WarningTextOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        return RenderTemplate("warning-text", options);
+        return RenderTemplateAsync("warning-text", options);
     }
 
     private IFluidTemplate GetTemplate(string templateName) =>
@@ -192,11 +192,11 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
             return template;
         });
 
-    private async ValueTask<IHtmlContent> RenderTemplate(string templateName, object componentOptions)
+    private async ValueTask<IHtmlContent> RenderTemplateAsync(string templateName, object componentOptions)
     {
         var context = new TemplateContext(_templateOptions);
         context.SetValue("dict", new FunctionValue(Functions.Dict));
-        context.SetValue("govukAttributes", new FunctionValue(Functions.GovukAttributes));
+        context.SetValue("govukAttributes", new FunctionValue(Functions.GovukAttributesAsync));
         context.SetValue("govukI18nAttributes", new FunctionValue(Functions.GovukI18nAttributes));
         context.SetValue("ifelse", new FunctionValue(Functions.IfElse));
         context.SetValue("istruthy", new FunctionValue(Functions.IsTruthy));

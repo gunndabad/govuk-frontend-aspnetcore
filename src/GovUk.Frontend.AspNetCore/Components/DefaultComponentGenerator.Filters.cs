@@ -8,7 +8,7 @@ internal partial class DefaultComponentGenerator
 {
     private static class Filters
     {
-        public static ValueTask<FluidValue> Default(FluidValue input, FilterArguments arguments, TemplateContext context)
+        public static ValueTask<FluidValue> DefaultAsync(FluidValue input, FilterArguments arguments, TemplateContext context)
         {
             // Mirror the nunjucks default filter (which looks for undefined only);
             // in our case we'll look for null.
@@ -21,7 +21,7 @@ internal partial class DefaultComponentGenerator
             return input;
         }
 
-        public static ValueTask<FluidValue> Indent(FluidValue input, FilterArguments arguments, TemplateContext context)
+        public static ValueTask<FluidValue> IndentAsync(FluidValue input, FilterArguments arguments, TemplateContext context)
         {
             var indentFirstLine = arguments["indent_first"]?.ToBooleanValue() ?? false;
 
@@ -56,7 +56,7 @@ internal partial class DefaultComponentGenerator
             return new StringValue(sb.ToString(), encode);
         }
 
-        public static ValueTask<FluidValue> Strip(FluidValue input, FilterArguments arguments, TemplateContext context)
+        public static ValueTask<FluidValue> StripAsync(FluidValue input, FilterArguments arguments, TemplateContext context)
         {
             var encode = input is not StringValue stringValue || stringValue.Encode;
             return new StringValue(input.ToStringValue().Trim(), encode);
