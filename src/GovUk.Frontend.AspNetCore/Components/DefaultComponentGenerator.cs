@@ -179,6 +179,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("service-navigation", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GeneratePanelAsync(PanelOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("panel", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
