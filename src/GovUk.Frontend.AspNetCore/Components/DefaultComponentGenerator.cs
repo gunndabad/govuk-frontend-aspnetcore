@@ -100,6 +100,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("cookie-banner", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateDetailsAsync(DetailsOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("details", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);

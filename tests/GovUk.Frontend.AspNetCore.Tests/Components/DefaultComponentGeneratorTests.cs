@@ -65,6 +65,14 @@ public class DefaultComponentGeneratorTests
             amendExpectedHtml: html => Regex.Replace(html, "</div>\n\n\n  </div>\n</div>$", "</div>\n\n  </div>\n</div>"));
 
     [Theory]
+    [ComponentFixtureData("details", typeof(DetailsOptions))]
+    public Task Details(ComponentTestCaseData<DetailsOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateDetailsAsync(options),
+            amendExpectedHtml: html => html.Replace("’", "&#x2019;"));
+
+    [Theory]
     [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
     public Task ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
