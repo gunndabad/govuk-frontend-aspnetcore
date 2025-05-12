@@ -50,6 +50,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateCookieBannerAsync(CookieBannerOptions options);
 
     /// <summary>
+    /// Generates a details component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateDetailsAsync(DetailsOptions options);
+
+    /// <summary>
     /// Generates an error message component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
