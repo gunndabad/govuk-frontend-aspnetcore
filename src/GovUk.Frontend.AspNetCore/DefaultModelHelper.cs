@@ -29,7 +29,7 @@ internal class DefaultModelHelper : IModelHelper
 
         var displayName = modelExplorer.Metadata.DisplayName ?? modelExplorer.Metadata.PropertyName;
 
-        if (displayName != null && expression != null)
+        if (displayName is not null && expression is not null)
         {
             displayName = displayName.Split('.').Last();
         }
@@ -53,11 +53,11 @@ internal class DefaultModelHelper : IModelHelper
         viewContext.ViewData.ModelState.TryGetValue(fullName, out var entry);
 
         var value = string.Empty;
-        if (entry != null && entry.AttemptedValue != null)
+        if (entry is not null && entry.AttemptedValue is not null)
         {
             value = entry.AttemptedValue;
         }
-        else if (modelExplorer.Model != null)
+        else if (modelExplorer.Model is not null)
         {
             value = modelExplorer.Model.ToString();
         }
@@ -82,12 +82,12 @@ internal class DefaultModelHelper : IModelHelper
         var modelErrors = viewContext.ViewData.ModelState.TryGetValue(fullName, out var entry) ? entry.Errors : null;
 
         ModelError? modelError = null;
-        if (modelErrors != null && modelErrors.Count != 0)
+        if (modelErrors is not null && modelErrors.Count != 0)
         {
             modelError = modelErrors.FirstOrDefault(m => !string.IsNullOrEmpty(m.ErrorMessage)) ?? modelErrors[0];
         }
 
-        if (modelError == null)
+        if (modelError is null)
         {
             return null;
         }

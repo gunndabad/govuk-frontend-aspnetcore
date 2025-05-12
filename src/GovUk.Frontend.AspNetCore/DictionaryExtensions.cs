@@ -9,7 +9,7 @@ internal static class DictionaryExtensions
     {
         var attributeDictionary = new AttributeDictionary();
 
-        if (dictionary != null)
+        if (dictionary is not null)
         {
             foreach (var kvp in dictionary)
             {

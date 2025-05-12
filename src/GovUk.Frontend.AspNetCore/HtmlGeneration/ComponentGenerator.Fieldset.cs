@@ -35,7 +35,7 @@ internal partial class ComponentGenerator
             tagBuilder.Attributes.Add("aria-describedby", describedBy);
         }
 
-        if (legendContent != null)
+        if (legendContent is not null)
         {
             var legend = new TagBuilder(FieldsetLegendElement);
             legend.MergeOptionalAttributes(legendAttributes);

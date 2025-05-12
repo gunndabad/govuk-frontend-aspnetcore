@@ -18,7 +18,7 @@ public partial class ComponentTests
                 var legendIsPageHeading = options.Legend?.IsPageHeading ??
                     ComponentGenerator.FieldsetLegendDefaultIsPageHeading;
 
-                var legendContent = options.Legend != null ?
+                var legendContent = options.Legend is not null ?
                     TextOrHtmlHelper.GetHtmlContent(options.Legend.Text, options.Legend.Html) :
                     null;
 

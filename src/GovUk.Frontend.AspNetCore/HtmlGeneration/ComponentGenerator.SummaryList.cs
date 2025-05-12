@@ -31,25 +31,25 @@ internal partial class ComponentGenerator
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Key)} cannot be null.",
                 row.Key,
-                row.Key != null);
+                row.Key is not null);
 
             Guard.ArgumentValidNotNull(
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Key)}.{nameof(SummaryListRow.Key.Content)} cannot be null.",
                 row.Key.Content,
-                row.Key.Content != null);
+                row.Key.Content is not null);
 
             Guard.ArgumentValidNotNull(
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Value)} cannot be null.",
                 row.Value,
-                row.Value != null);
+                row.Value is not null);
 
             Guard.ArgumentValidNotNull(
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListRow.Value)}.{nameof(SummaryListRow.Value.Content)} cannot be null.",
                 row.Value.Content,
-                row.Value.Content != null);
+                row.Value.Content is not null);
 
             var thisRowHasActions = row.Actions?.Items?.Any() == true;
 
@@ -120,14 +120,14 @@ internal partial class ComponentGenerator
                 nameof(rows),
                 $"Row {rowIndex} is not valid; {nameof(SummaryListAction.Content)} cannot be null.",
                 action.Content,
-                action.Content != null);
+                action.Content is not null);
 
             var anchor = new TagBuilder(SummaryListRowActionElement);
             anchor.MergeOptionalAttributes(action.Attributes);
             anchor.MergeCssClass("govuk-link");
             anchor.InnerHtml.AppendHtml(action.Content);
 
-            if (action.VisuallyHiddenText != null)
+            if (action.VisuallyHiddenText is not null)
             {
                 var vht = new TagBuilder("span");
                 vht.MergeCssClass("govuk-visually-hidden");

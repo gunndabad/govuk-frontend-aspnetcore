@@ -21,7 +21,7 @@ internal class SummaryCardContext
         Guard.ArgumentNotNull(nameof(content), content);
         Guard.ArgumentNotNull(nameof(attributes), attributes);
 
-        if (Title != null)
+        if (Title is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryCardTitleTagHelper.TagName,
@@ -63,7 +63,7 @@ internal class SummaryCardContext
     {
         Guard.ArgumentNotNull(nameof(attributes), attributes);
 
-        if (ActionsAttributes != null)
+        if (ActionsAttributes is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryCardActionsTagHelper.TagName,
@@ -91,7 +91,7 @@ internal class SummaryCardContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (SummaryList != null)
+        if (SummaryList is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListTagHelper.TagName,
@@ -103,7 +103,7 @@ internal class SummaryCardContext
 
     public void ThrowIfNotComplete()
     {
-        if (SummaryList == null)
+        if (SummaryList is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(SummaryListTagHelper.TagName);
         }

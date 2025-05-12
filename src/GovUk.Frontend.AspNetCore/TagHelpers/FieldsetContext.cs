@@ -14,7 +14,7 @@ internal class FieldsetContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Legend != null)
+        if (Legend is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 FieldsetLegendTagHelper.TagName,
@@ -26,7 +26,7 @@ internal class FieldsetContext
 
     public void ThrowIfNotComplete()
     {
-        if (Legend == null)
+        if (Legend is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(FieldsetLegendTagHelper.TagName);
         }

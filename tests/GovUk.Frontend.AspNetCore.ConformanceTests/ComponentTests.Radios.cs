@@ -19,18 +19,18 @@ public partial class ComponentTests
 
                 var items = options.Items
                     .Select((item, index) =>
-                        item.Divider != null ?
+                        item.Divider is not null ?
                             (RadiosItemBase)new RadiosItemDivider() { Content = new HtmlString(item.Divider) } :
                             (RadiosItemBase)new RadiosItem()
                             {
-                                Conditional = item.Conditional?.Html != null ?
+                                Conditional = item.Conditional?.Html is not null ?
                                     new RadiosItemConditional()
                                     {
                                         Content = new HtmlString(item.Conditional.Html)
                                     } :
                                     null,
                                 LabelContent = TextOrHtmlHelper.GetHtmlContent(item.Text, item.Html),
-                                Hint = item.Hint != null ?
+                                Hint = item.Hint is not null ?
                                     new RadiosItemHint()
                                     {
                                         Attributes = item.Hint.Attributes?.ToAttributesDictionary(),
@@ -50,11 +50,11 @@ public partial class ComponentTests
                 var attributes = options.Attributes.ToAttributesDictionary()
                    .MergeAttribute("class", options.Classes);
 
-                var hintOptions = options.Hint != null ?
+                var hintOptions = options.Hint is not null ?
                     options.Hint with { Id = idPrefix + "-hint" } :
                     null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
+                var errorMessageOptions = options.ErrorMessage is not null ?
                     options.ErrorMessage with { Id = idPrefix + "-error" } :
                     null;
 

@@ -138,20 +138,20 @@ public abstract class FormGroupTagHelperBase : TagHelper
         var content = formGroupContext.ErrorMessage?.Content;
         var attributes = formGroupContext.ErrorMessage?.Attributes;
 
-        if (content == null && For != null && IgnoreModelStateErrors != true)
+        if (content is null && For is not null && IgnoreModelStateErrors != true)
         {
             var validationMessage = ModelHelper.GetValidationMessage(
                 ViewContext!,
                 For!.ModelExplorer,
                 For.Name);
 
-            if (validationMessage != null)
+            if (validationMessage is not null)
             {
                 content = new HtmlString(HtmlEncoder.Default.Encode(validationMessage));
             }
         }
 
-        if (content != null)
+        if (content is not null)
         {
             AddErrorToFormErrorContext();
 
@@ -183,17 +183,17 @@ public abstract class FormGroupTagHelperBase : TagHelper
         var content = formGroupContext.Hint?.Content;
         var attributes = formGroupContext.Hint?.Attributes;
 
-        if (content == null && For != null)
+        if (content is null && For is not null)
         {
             var description = ModelHelper.GetDescription(For.ModelExplorer);
 
-            if (description != null)
+            if (description is not null)
             {
                 content = new HtmlString(HtmlEncoder.Default.Encode(description));
             }
         }
 
-        if (content != null)
+        if (content is not null)
         {
             var resolvedIdPrefix = ResolveIdPrefix();
             var hintId = resolvedIdPrefix + "-hint";
@@ -209,7 +209,7 @@ public abstract class FormGroupTagHelperBase : TagHelper
     internal IHtmlContent GenerateLabel(FormGroupContext formGroupContext, string? labelClass)
     {
         // We need some content for the label; if AspFor is null then label content must have been specified
-        if (For == null && formGroupContext.Label?.Content == null)
+        if (For is null && formGroupContext.Label?.Content is null)
         {
             throw new InvalidOperationException(
                 $"Label content must be specified when the '{AspForAttributeName}' attribute is not specified.");

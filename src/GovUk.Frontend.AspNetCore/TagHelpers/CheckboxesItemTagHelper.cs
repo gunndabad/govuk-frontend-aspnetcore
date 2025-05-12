@@ -115,14 +115,14 @@ public class CheckboxesItemTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (Value == null)
+        if (Value is null)
         {
             throw ExceptionHelper.TheAttributeMustBeSpecified(ValueAttributeName);
         }
 
         var checkboxesContext = context.GetContextItem<CheckboxesContext>();
 
-        if (Name == null && checkboxesContext.Name == null && checkboxesContext.AspFor == null)
+        if (Name is null && checkboxesContext.Name is null && checkboxesContext.AspFor is null)
         {
             throw new InvalidOperationException($"The '{NameAttributeName}' attribute must be specified on each item when not specified on the parent <{CheckboxesTagHelper.TagName}>.");
         }
@@ -141,7 +141,7 @@ public class CheckboxesItemTagHelper : TagHelper
         }
 
         var resolvedChecked = Checked ??
-            (checkboxesContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null) ??
+            (checkboxesContext.AspFor is not null ? (bool?)DoesModelMatchItemValue() : null) ??
             ComponentGenerator.CheckboxesItemDefaultChecked;
 
         checkboxesContext.AddItem(new CheckboxesItem()
@@ -149,7 +149,7 @@ public class CheckboxesItemTagHelper : TagHelper
             Attributes = output.Attributes.ToAttributeDictionary(),
             Behavior = Behavior ?? ComponentGenerator.CheckboxesItemDefaultBehavior,
             Checked = resolvedChecked,
-            Conditional = itemContext.Conditional != null ?
+            Conditional = itemContext.Conditional is not null ?
                 new CheckboxesItemConditional()
                 {
                     Content = itemContext.Conditional.Value.Content,
@@ -157,7 +157,7 @@ public class CheckboxesItemTagHelper : TagHelper
                 } :
                 null,
             Disabled = Disabled ?? ComponentGenerator.CheckboxesItemDefaultDisabled,
-            Hint = itemContext.Hint != null ?
+            Hint = itemContext.Hint is not null ?
                 new CheckboxesItemHint()
                 {
                     Content = itemContext.Hint.Value.Content,

@@ -22,7 +22,7 @@ internal partial class ComponentGenerator
     {
         Guard.ArgumentNotNull(nameof(items), items);
 
-        var isConditional = items.OfType<CheckboxesItem>().Any(i => i.Conditional != null);
+        var isConditional = items.OfType<CheckboxesItem>().Any(i => i.Conditional is not null);
 
         var tagBuilder = new TagBuilder(CheckboxesElement);
         tagBuilder.MergeOptionalAttributes(attributes);
@@ -56,7 +56,7 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItemDivider.Content)} cannot be null.",
                 divider.Content,
-                divider.Content != null);
+                divider.Content is not null);
 
             var dividerTagBuilder = new TagBuilder(CheckboxesDividerItemElement);
             dividerTagBuilder.MergeOptionalAttributes(divider.Attributes);
@@ -72,17 +72,17 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Value)} cannot be null.",
                 item.Value,
-                item.Value != null);
+                item.Value is not null);
 
             Guard.ArgumentValid(
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Name)} cannot be null when {nameof(name)} is null.",
-                item.Name != null || name != null);
+                item.Name is not null || name is not null);
 
             Guard.ArgumentValid(
                 nameof(items),
                 $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Id)} cannot be null when {nameof(idPrefix)} is null.",
-                item.Id != null || idPrefix != null);
+                item.Id is not null || idPrefix is not null);
 
             var itemId = item.Id ?? (itemIndex == 0 ? idPrefix : $"{idPrefix}-{itemIndex + 1}");
             var hintId = itemId + "-item-hint";
@@ -113,7 +113,7 @@ internal partial class ComponentGenerator
                 input.Attributes.Add("disabled", "disabled");
             }
 
-            if (item.Conditional != null)
+            if (item.Conditional is not null)
             {
                 input.Attributes.Add("data-aria-controls", conditionalId);
             }
@@ -125,7 +125,7 @@ internal partial class ComponentGenerator
 
             var itemDescribedBy = !hasFieldset ? describedBy : null;
 
-            if (item.Hint != null)
+            if (item.Hint is not null)
             {
                 AppendToDescribedBy(ref itemDescribedBy, hintId);
             }
@@ -138,19 +138,19 @@ internal partial class ComponentGenerator
             itemTagBuilder.InnerHtml.AppendHtml(input);
 
             var label = GenerateLabel(itemId, isPageHeading: false, content: item.LabelContent, item.LabelAttributes);
-            if (label != null)
+            if (label is not null)
             {
                 label.MergeCssClass("govuk-checkboxes__label");
                 itemTagBuilder.InnerHtml.AppendHtml(label);
             }
 
-            if (item.Hint != null)
+            if (item.Hint is not null)
             {
                 Guard.ArgumentValidNotNull(
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Hint)}.{nameof(CheckboxesItemHint.Content)} cannot be null.",
                     item.Hint.Content,
-                    item.Hint.Content != null);
+                    item.Hint.Content is not null);
 
                 var hint = GenerateHint(hintId, item.Hint.Content, item.Hint.Attributes);
                 hint.MergeCssClass("govuk-checkboxes__hint");
@@ -159,13 +159,13 @@ internal partial class ComponentGenerator
 
             tagBuilder.InnerHtml.AppendHtml(itemTagBuilder);
 
-            if (item.Conditional != null)
+            if (item.Conditional is not null)
             {
                 Guard.ArgumentValidNotNull(
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(CheckboxesItem.Conditional.Content)} cannot be null.",
                     item.Conditional.Content,
-                    item.Conditional.Content != null);
+                    item.Conditional.Content is not null);
 
                 var conditional = new TagBuilder("div");
                 conditional.MergeOptionalAttributes(item.Conditional.Attributes);

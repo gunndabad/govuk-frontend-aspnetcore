@@ -26,7 +26,7 @@ internal partial class ComponentGenerator
         tagBuilder.MergeCssClass("govuk-tabs");
         tagBuilder.Attributes.Add("data-module", "govuk-tabs");
 
-        if (id != null)
+        if (id is not null)
         {
             tagBuilder.Attributes.Add("id", id);
         }
@@ -46,7 +46,7 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(TabsItem.Label)} cannot be null.",
                 item.Label,
-                item.Label != null);
+                item.Label is not null);
 
             var itemId = itemIds[index];
 
@@ -79,7 +79,7 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(TabsItem.PanelContent)} cannot be null.",
                 item.PanelContent,
-                item.PanelContent != null);
+                item.PanelContent is not null);
 
             var itemId = itemIds[index];
 
@@ -105,12 +105,12 @@ internal partial class ComponentGenerator
         string[] ResolveItemIds() => items
             .Select((item, index) =>
             {
-                if (item.Id != null)
+                if (item.Id is not null)
                 {
                     return item.Id;
                 }
 
-                if (idPrefix == null)
+                if (idPrefix is null)
                 {
                     throw new ArgumentException(
                         $"Item {index} is not valid; {nameof(TabsItem.Id)} must be specified when {nameof(idPrefix)} is null.",

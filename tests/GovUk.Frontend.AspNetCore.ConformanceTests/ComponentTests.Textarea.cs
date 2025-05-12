@@ -17,15 +17,15 @@ public partial class ComponentTests
                 var attributes = options.Attributes.ToAttributesDictionary()
                     .MergeAttribute("class", options.Classes);
 
-                var labelOptions = options.Label != null ?
+                var labelOptions = options.Label is not null ?
                     options.Label with { For = id } :
                     null;
 
-                var hintOptions = options.Hint != null ?
+                var hintOptions = options.Hint is not null ?
                     options.Hint with { Id = id + "-hint" } :
                     null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
+                var errorMessageOptions = options.ErrorMessage is not null ?
                     options.ErrorMessage with { Id = id + "-error" } :
                     null;
 

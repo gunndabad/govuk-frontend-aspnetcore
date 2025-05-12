@@ -9,7 +9,7 @@ public static class AttributeHelper
         string key,
         object value)
     {
-        if (value == null)
+        if (value is null)
         {
             return attributes;
         }
@@ -43,7 +43,7 @@ public static class AttributeHelper
     {
         var attributeDictionary = new AttributeDictionary();
 
-        if (attributes != null)
+        if (attributes is not null)
         {
             foreach (var kvp in attributes)
             {

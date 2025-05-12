@@ -55,7 +55,7 @@ public partial class ComponentTests
 
                 var summaryList = generator.GenerateSummaryList(rows, attributes);
 
-                if (options.Card != null)
+                if (options.Card is not null)
                 {
                     return generator
                         .GenerateSummaryCard(

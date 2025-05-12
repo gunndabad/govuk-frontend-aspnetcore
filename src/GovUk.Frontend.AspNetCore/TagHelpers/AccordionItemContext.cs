@@ -14,19 +14,19 @@ internal class AccordionItemContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Heading != null)
+        if (Heading is not null)
         {
             throw new InvalidOperationException(
                 $"Only one <{AccordionItemHeadingTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
         }
 
-        if (Summary != null)
+        if (Summary is not null)
         {
             throw new InvalidOperationException(
                 $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemSummaryTagHelper.TagName}>.");
         }
 
-        if (Content != null)
+        if (Content is not null)
         {
             throw new InvalidOperationException(
                 $"<{AccordionItemHeadingTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>.");
@@ -40,13 +40,13 @@ internal class AccordionItemContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Summary != null)
+        if (Summary is not null)
         {
             throw new InvalidOperationException(
                 $"Only one <{AccordionItemSummaryTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
         }
 
-        if (Content != null)
+        if (Content is not null)
         {
             throw new InvalidOperationException(
                 $"<{AccordionItemSummaryTagHelper.TagName}> must be specified before <{AccordionItemContentTagHelper.TagName}>.");
@@ -60,7 +60,7 @@ internal class AccordionItemContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Content != null)
+        if (Content is not null)
         {
             throw new InvalidOperationException(
                 $"Only one <{AccordionItemContentTagHelper.TagName}> is permitted for each <{AccordionItemTagHelper.TagName}>.");
@@ -71,12 +71,12 @@ internal class AccordionItemContext
 
     public void ThrowIfIncomplete()
     {
-        if (Heading == null)
+        if (Heading is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(AccordionItemHeadingTagHelper.TagName);
         }
 
-        if (Content == null)
+        if (Content is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(AccordionItemContentTagHelper.TagName);
         }

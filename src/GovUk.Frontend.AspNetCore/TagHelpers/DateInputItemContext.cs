@@ -21,7 +21,7 @@ internal class DateInputItemContext
         Guard.ArgumentNotNull(nameof(content), content);
         Guard.ArgumentNotNull(nameof(attributes), attributes);
 
-        if (Label != null)
+        if (Label is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(_labelTagName, _itemTagName);
         }

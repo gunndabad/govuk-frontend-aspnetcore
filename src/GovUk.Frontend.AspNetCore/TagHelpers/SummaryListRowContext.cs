@@ -32,7 +32,7 @@ internal class SummaryListRowContext
     {
         Guard.ArgumentNotNull(nameof(attributes), attributes);
 
-        if (ActionsAttributes != null)
+        if (ActionsAttributes is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListRowActionsTagHelper.TagName,
@@ -54,21 +54,21 @@ internal class SummaryListRowContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Key != null)
+        if (Key is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListRowKeyTagHelper.TagName,
                 SummaryListRowTagHelper.TagName);
         }
 
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowKeyTagHelper.TagName,
                 SummaryListRowValueTagHelper.TagName);
         }
 
-        if (ActionsAttributes != null)
+        if (ActionsAttributes is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowKeyTagHelper.TagName,
@@ -90,14 +90,14 @@ internal class SummaryListRowContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 SummaryListRowValueTagHelper.TagName,
                 SummaryListRowTagHelper.TagName);
         }
 
-        if (ActionsAttributes != null)
+        if (ActionsAttributes is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 SummaryListRowValueTagHelper.TagName,
@@ -116,7 +116,7 @@ internal class SummaryListRowContext
 
     public void ThrowIfIncomplete()
     {
-        if (Key == null)
+        if (Key is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(SummaryListRowKeyTagHelper.TagName);
         }

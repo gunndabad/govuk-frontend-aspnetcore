@@ -11,7 +11,7 @@ public static class TagBuilderExtensions
 
     public static void AddAttributes(this TagBuilder tagBuilder, IDictionary<string, object> attributes)
     {
-        if (attributes == null)
+        if (attributes is null)
         {
             return;
         }

@@ -42,7 +42,7 @@ public class TabsItemTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (Label == null)
+        if (Label is null)
         {
             throw ExceptionHelper.TheAttributeMustBeSpecified(LabelAttributeName);
         }

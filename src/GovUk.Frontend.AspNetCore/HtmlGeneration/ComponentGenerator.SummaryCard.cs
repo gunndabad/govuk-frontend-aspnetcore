@@ -21,7 +21,7 @@ internal partial class ComponentGenerator
             nameof(summaryList),
             $"Summary card is not valid; {nameof(summaryList)} cannot be null.",
             summaryList,
-            summaryList != null);
+            summaryList is not null);
 
         var tagBuilder = new TagBuilder(SummaryCardElement);
         tagBuilder.MergeOptionalAttributes(attributes);
@@ -81,24 +81,24 @@ internal partial class ComponentGenerator
             nameof(SummaryCard.Actions),
             $"Action {actionIndex} is not valid; {nameof(SummaryListAction.Content)} cannot be null.",
             action.Content,
-            action.Content != null);
+            action.Content is not null);
 
         var anchor = new TagBuilder(SummaryListRowActionElement);
         anchor.MergeOptionalAttributes(action.Attributes);
         anchor.MergeCssClass("govuk-link");
         anchor.InnerHtml.AppendHtml(action.Content);
 
-        if (action.VisuallyHiddenText != null || title?.Content != null)
+        if (action.VisuallyHiddenText is not null || title?.Content is not null)
         {
             var vht = new TagBuilder("span");
             vht.MergeCssClass("govuk-visually-hidden");
 
-            if (action.VisuallyHiddenText != null)
+            if (action.VisuallyHiddenText is not null)
             {
                 vht.InnerHtml.Append(action.VisuallyHiddenText);
             }
 
-            if (title?.Content != null)
+            if (title?.Content is not null)
             {
                 vht.InnerHtml.Append(" (");
                 vht.InnerHtml.AppendHtml(title.Content);

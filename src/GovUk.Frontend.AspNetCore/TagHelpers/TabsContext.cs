@@ -19,7 +19,7 @@ internal class TabsContext
     {
         Guard.ArgumentNotNull(nameof(item), item);
 
-        if (item.Id == null && !_haveIdPrefix)
+        if (item.Id is null && !_haveIdPrefix)
         {
             throw new InvalidOperationException(
                 $"Item must have the '{TabsItemTagHelper.IdAttributeName}' attribute specified.");

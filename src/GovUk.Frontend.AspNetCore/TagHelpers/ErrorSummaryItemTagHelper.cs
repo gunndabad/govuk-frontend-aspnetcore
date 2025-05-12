@@ -81,7 +81,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (output.TagMode == TagMode.SelfClosing && For == null)
+        if (output.TagMode == TagMode.SelfClosing && For is null)
         {
             throw new InvalidOperationException(
                 $"Content is required when the '{ForAttributeName}' attribute is not specified.");
@@ -105,14 +105,14 @@ public class ErrorSummaryItemTagHelper : TagHelper
         }
         else
         {
-            Debug.Assert(For != null);
+            Debug.Assert(For is not null);
 
             var validationMessage = _modelHelper.GetValidationMessage(
                 ViewContext!,
                 For!.ModelExplorer,
                 For.Name);
 
-            if (validationMessage == null)
+            if (validationMessage is null)
             {
                 return;
             }
@@ -126,7 +126,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
         {
             resolvedHref = output.GetUrlAttribute("href");
         }
-        else if (For != null)
+        else if (For is not null)
         {
             var errorFieldId = TagBuilder.CreateSanitizedId(
                 _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name),
@@ -180,7 +180,7 @@ public class ErrorSummaryItemTagHelper : TagHelper
 
         bool IsModelExpressionForDate()
         {
-            Debug.Assert(For != null);
+            Debug.Assert(For is not null);
 
             var modelType = Nullable.GetUnderlyingType(For!.Metadata.ModelType) ?? For!.Metadata.ModelType;
             return _options.DateInputModelConverters.Any(c => c.CanConvertModelType(modelType));

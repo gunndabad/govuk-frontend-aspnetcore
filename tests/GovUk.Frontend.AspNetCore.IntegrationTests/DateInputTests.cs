@@ -152,7 +152,7 @@ public class DateInputTests : IClassFixture<DateInputTestsFixture>
             input => AssertInput(input, expectedMonth, expectMonthToHaveError),
             input => AssertInput(input, expectedYear, expectYearToHaveError));
 
-        if (expectedErrorMessage != null)
+        if (expectedErrorMessage is not null)
         {
             var error = (await page.TextContentAsync(".govuk-error-message"))?.TrimStart("Error:".ToCharArray());
             Assert.Equal(expectedErrorMessage, error);

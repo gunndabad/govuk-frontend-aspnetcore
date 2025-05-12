@@ -112,17 +112,17 @@ public class DateInputModelBinderTests
 
         var valueProvider = new SimpleValueProvider();
 
-        if (day != null)
+        if (day is not null)
         {
             valueProvider.Add("TheModelName.Day", day);
         }
 
-        if (month != null)
+        if (month is not null)
         {
             valueProvider.Add("TheModelName.Month", month);
         }
 
-        if (year != null)
+        if (year is not null)
         {
             valueProvider.Add("TheModelName.Year", year);
         }

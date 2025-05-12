@@ -15,7 +15,7 @@ public class StringFileProvider : IFileProvider
 
     public void Add(string path, string value)
     {
-        if (path == null)
+        if (path is null)
         {
             throw new ArgumentNullException(nameof(path));
         }
@@ -25,7 +25,7 @@ public class StringFileProvider : IFileProvider
             throw new ArgumentException($"{nameof(path)} must start with '/'.", nameof(path));
         }
 
-        if (value == null)
+        if (value is null)
         {
             throw new ArgumentNullException(nameof(value));
         }

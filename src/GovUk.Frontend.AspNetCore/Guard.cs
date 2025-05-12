@@ -8,7 +8,7 @@ internal static class Guard
     public static T ArgumentNotNull<T>(string argName, [NotNull] T? argValue)
         where T : class
     {
-        if (argValue == null)
+        if (argValue is null)
         {
             throw new ArgumentNullException(argName);
         }
@@ -22,7 +22,7 @@ internal static class Guard
         [NotNull] T? testValue)
         where T : struct
     {
-        if (testValue == null)
+        if (testValue is null)
         {
             throw new ArgumentException(message, argName);
         }
@@ -32,7 +32,7 @@ internal static class Guard
 
     public static string ArgumentNotNullOrEmpty(string argName, [NotNull] string? argValue)
     {
-        if (argValue == null)
+        if (argValue is null)
         {
             throw new ArgumentNullException(argName);
         }
@@ -76,7 +76,7 @@ internal static class Guard
         bool test)
         where T : class
     {
-        if (testValue == null || !test)
+        if (testValue is null || !test)
         {
             throw new ArgumentException(message, argName);
         }

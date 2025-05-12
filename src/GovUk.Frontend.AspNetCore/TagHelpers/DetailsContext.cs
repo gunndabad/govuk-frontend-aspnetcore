@@ -14,12 +14,12 @@ internal class DetailsContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Summary != null)
+        if (Summary is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(DetailsSummaryTagHelper.TagName, DetailsTagHelper.TagName);
         }
 
-        if (Text != null)
+        if (Text is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(DetailsSummaryTagHelper.TagName, DetailsTextTagHelper.TagName);
         }
@@ -32,7 +32,7 @@ internal class DetailsContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Text != null)
+        if (Text is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(DetailsTextTagHelper.TagName, DetailsTagHelper.TagName);
         }
@@ -42,12 +42,12 @@ internal class DetailsContext
 
     public void ThrowIfNotComplete()
     {
-        if (Summary == null)
+        if (Summary is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(DetailsSummaryTagHelper.TagName);
         }
 
-        if (Text == null)
+        if (Text is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(DetailsTextTagHelper.TagName);
         }

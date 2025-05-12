@@ -85,7 +85,7 @@ public class RadiosItemTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (Value == null)
+        if (Value is null)
         {
             throw ExceptionHelper.TheAttributeMustBeSpecified(ValueAttributeName);
         }
@@ -106,14 +106,14 @@ public class RadiosItemTagHelper : TagHelper
         }
 
         var resolvedChecked = Checked ??
-            (radiosContext.AspFor != null ? (bool?)DoesModelMatchItemValue() : null) ??
+            (radiosContext.AspFor is not null ? (bool?)DoesModelMatchItemValue() : null) ??
             ComponentGenerator.RadiosItemDefaultChecked;
 
         radiosContext.AddItem(new RadiosItem()
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
             Checked = resolvedChecked,
-            Conditional = itemContext.Conditional != null ?
+            Conditional = itemContext.Conditional is not null ?
                 new RadiosItemConditional()
                 {
                     Content = itemContext.Conditional.Value.Content,
@@ -121,7 +121,7 @@ public class RadiosItemTagHelper : TagHelper
                 } :
                 null,
             Disabled = Disabled ?? ComponentGenerator.RadiosItemDefaultDisabled,
-            Hint = itemContext.Hint != null ?
+            Hint = itemContext.Hint is not null ?
                 new RadiosItemHint()
                 {
                     Content = itemContext.Hint.Value.Content,

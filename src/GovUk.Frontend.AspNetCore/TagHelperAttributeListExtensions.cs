@@ -19,7 +19,7 @@ public static class TagHelperAttributeListExtensions
     {
         var attributeDictionary = new AttributeDictionary();
 
-        if (list != null)
+        if (list is not null)
         {
             foreach (var attribute in list)
             {
@@ -39,7 +39,7 @@ public static class TagHelperAttributeListExtensions
     {
         var attributeDictionary = new Dictionary<string, string?>();
 
-        if (list != null)
+        if (list is not null)
         {
             foreach (var attribute in list)
             {

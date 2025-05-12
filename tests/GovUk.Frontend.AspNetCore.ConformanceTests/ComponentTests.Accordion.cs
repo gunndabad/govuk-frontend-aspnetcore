@@ -24,12 +24,12 @@ public partial class ComponentTests
                 var items = options.Items
                     .Select(i => new AccordionItem()
                     {
-                        Content = i.Content.Text != null ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Content.Text) + "</p>") :
-                            i.Content.Html != null ? new HtmlString(i.Content.Html) :
+                        Content = i.Content.Text is not null ? new HtmlString("<p class=\"govuk-body\">" + HtmlEncoder.Default.Encode(i.Content.Text) + "</p>") :
+                            i.Content.Html is not null ? new HtmlString(i.Content.Html) :
                             null,
                         Expanded = i.Expanded ?? ComponentGenerator.AccordionItemDefaultExpanded,
-                        HeadingContent = i.Heading != null ? TextOrHtmlHelper.GetHtmlContent(i.Heading.Text, i.Heading.Html) : null,
-                        SummaryContent = i.Summary != null ? TextOrHtmlHelper.GetHtmlContent(i.Summary.Text, i.Summary.Html) : null
+                        HeadingContent = i.Heading is not null ? TextOrHtmlHelper.GetHtmlContent(i.Heading.Text, i.Heading.Html) : null,
+                        SummaryContent = i.Summary is not null ? TextOrHtmlHelper.GetHtmlContent(i.Summary.Text, i.Summary.Html) : null
                     })
                     .OrEmpty();
 

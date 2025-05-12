@@ -24,7 +24,7 @@ internal abstract class FormGroupContext
         AttributeDictionary? attributes,
         IHtmlContent? content)
     {
-        if (ErrorMessage != null)
+        if (ErrorMessage is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(ErrorMessageTagName, RootTagName);
         }
@@ -34,12 +34,12 @@ internal abstract class FormGroupContext
 
     public virtual void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Hint != null)
+        if (Hint is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(HintTagName, RootTagName);
         }
 
-        if (ErrorMessage != null)
+        if (ErrorMessage is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(HintTagName, ErrorMessageTagName);
         }
@@ -49,17 +49,17 @@ internal abstract class FormGroupContext
 
     public virtual void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Label != null)
+        if (Label is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(LabelTagName!, RootTagName);
         }
 
-        if (Hint != null)
+        if (Hint is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(LabelTagName, HintTagName);
         }
 
-        if (ErrorMessage != null)
+        if (ErrorMessage is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(LabelTagName, ErrorMessageTagName);
         }

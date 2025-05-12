@@ -93,7 +93,7 @@ internal static class TagHelperContextExtensions
 
         public void Dispose()
         {
-            if (_previousValue != null)
+            if (_previousValue is not null)
             {
                 _context.Items[_key] = _previousValue;
             }

@@ -114,18 +114,18 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
         contentBuilder.AppendHtml(label);
 
         var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        if (hint is not null)
         {
             contentBuilder.AppendHtml(hint);
         }
 
         var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        if (errorMessage is not null)
         {
             contentBuilder.AppendHtml(errorMessage);
         }
 
-        haveError = errorMessage != null;
+        haveError = errorMessage is not null;
 
         var textAreaTagBuilder = GenerateTextArea(haveError);
         contentBuilder.AppendHtml(textAreaTagBuilder);
@@ -140,7 +140,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
             var resolvedName = ResolveNameUnencoded();
 
             var resolvedContent = textAreaContext.Value ??
-                ((For != null ? ModelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name) : null) ??
+                ((For is not null ? ModelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name) : null) ??
                     string.Empty).EncodeHtml();
 
             var resolvedTextAreaAttributes = TextAreaAttributes.ToAttributeDictionary();
@@ -162,12 +162,12 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
 
     private protected override string ResolveIdPrefix()
     {
-        if (Id != null)
+        if (Id is not null)
         {
             return Id;
         }
 
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
@@ -182,7 +182,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
 
     private string ResolveNameUnencoded()
     {
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,

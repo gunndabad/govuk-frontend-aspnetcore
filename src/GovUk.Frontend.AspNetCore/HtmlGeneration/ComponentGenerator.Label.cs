@@ -19,13 +19,13 @@ internal partial class ComponentGenerator
     {
         TagBuilder? tagBuilder = null;
 
-        if (content != null)
+        if (content is not null)
         {
             tagBuilder = new TagBuilder(LabelElement);
             tagBuilder.MergeOptionalAttributes(attributes);
             tagBuilder.MergeCssClass("govuk-label");
 
-            if (@for != null)
+            if (@for is not null)
             {
                 tagBuilder.Attributes.Add("for", @for);
             }

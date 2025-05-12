@@ -16,7 +16,7 @@ internal class SelectContext : FormGroupContext
 
     public ModelExpression? AspFor { get; }
 
-    public bool HaveModelExpression => AspFor != null;
+    public bool HaveModelExpression => AspFor is not null;
 
     public IReadOnlyCollection<SelectItem> Items => _items;
 

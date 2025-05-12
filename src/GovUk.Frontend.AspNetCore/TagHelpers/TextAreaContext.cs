@@ -17,7 +17,7 @@ internal class TextAreaContext : FormGroupContext
 
     public override void SetErrorMessage(string? visuallyHiddenText, AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 ErrorMessageTagName,
@@ -29,7 +29,7 @@ internal class TextAreaContext : FormGroupContext
 
     public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 HintTagName,
@@ -41,7 +41,7 @@ internal class TextAreaContext : FormGroupContext
 
     public override void SetLabel(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 LabelTagName,
@@ -55,7 +55,7 @@ internal class TextAreaContext : FormGroupContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(TextAreaValueTagHelper.TagName, RootTagName);
         }

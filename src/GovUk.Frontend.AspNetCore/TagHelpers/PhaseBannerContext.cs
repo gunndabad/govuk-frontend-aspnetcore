@@ -12,7 +12,7 @@ internal class PhaseBannerContext
         Guard.ArgumentNotNull(nameof(attributes), attributes);
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Tag != null)
+        if (Tag is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 PhaseBannerTagTagHelper.TagName, PhaseBannerTagHelper.TagName);
@@ -23,7 +23,7 @@ internal class PhaseBannerContext
 
     public void ThrowIfIncomplete()
     {
-        if (Tag == null)
+        if (Tag is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(PhaseBannerTagTagHelper.TagName);
         }

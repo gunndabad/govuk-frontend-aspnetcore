@@ -11,7 +11,7 @@ internal class PanelContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Body != null)
+        if (Body is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(PanelBodyTagHelper.TagName, PanelTagHelper.TagName);
         }
@@ -23,12 +23,12 @@ internal class PanelContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Title != null)
+        if (Title is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(PanelTitleTagHelper.TagName, PanelTagHelper.TagName);
         }
 
-        if (Body != null)
+        if (Body is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(PanelTitleTagHelper.TagName, PanelBodyTagHelper.TagName);
         }
@@ -38,7 +38,7 @@ internal class PanelContext
 
     public void ThrowIfNotComplete()
     {
-        if (Title == null)
+        if (Title is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(PanelTitleTagHelper.TagName);
         }
