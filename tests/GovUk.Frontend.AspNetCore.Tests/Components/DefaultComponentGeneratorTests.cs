@@ -189,6 +189,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GeneratePanelAsync(options));
 
     [Theory]
+    [ComponentFixtureData("phase-banner", typeof(PhaseBannerOptions))]
+    public Task PhaseBanner(ComponentTestCaseData<PhaseBannerOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GeneratePhaseBannerAsync(options),
+            amendExpectedHtml: html => html.Replace("–", "&#x2013;"));
+
+    [Theory]
     [ComponentFixtureData("service-navigation", typeof(ServiceNavigationOptions))]
     public Task ServiceNavigation(ComponentTestCaseData<ServiceNavigationOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

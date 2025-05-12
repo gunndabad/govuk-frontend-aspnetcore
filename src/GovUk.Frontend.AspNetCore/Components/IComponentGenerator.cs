@@ -134,6 +134,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GeneratePanelAsync(PanelOptions options);
 
     /// <summary>
+    /// Generates a phase banner component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GeneratePhaseBannerAsync(PhaseBannerOptions options);
+
+    /// <summary>
     /// Generates a service navigation component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
