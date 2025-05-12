@@ -220,6 +220,13 @@ public class DefaultComponentGeneratorTests
             amendExpectedHtml: html => html.Replace("Gatsby’s", "Gatsby&#x2019;s"));
 
     [Theory]
+    [ComponentFixtureData("tabs", typeof(TabsOptions), exclude: "with falsy values")]
+    public Task Tabs(ComponentTestCaseData<TabsOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTabsAsync(options));
+
+    [Theory]
     [ComponentFixtureData("tag", typeof(TagOptions))]
     public Task Tag(ComponentTestCaseData<TagOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
