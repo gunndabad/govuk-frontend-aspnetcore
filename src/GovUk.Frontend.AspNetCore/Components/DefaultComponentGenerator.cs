@@ -222,6 +222,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("tag", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateTaskListAsync(TaskListOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("task-list", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateTextareaAsync(TextareaOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

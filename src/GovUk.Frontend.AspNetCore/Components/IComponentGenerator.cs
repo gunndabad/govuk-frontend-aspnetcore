@@ -164,6 +164,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateTabsAsync(TabsOptions options);
 
     /// <summary>
+    /// Generates a task list component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateTaskListAsync(TaskListOptions options);
+
+    /// <summary>
     /// Generates a tag component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

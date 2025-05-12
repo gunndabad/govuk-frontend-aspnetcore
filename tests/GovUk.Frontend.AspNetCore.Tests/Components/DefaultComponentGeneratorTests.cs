@@ -234,6 +234,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateTagAsync(options));
 
     [Theory]
+    [ComponentFixtureData("task-list", typeof(TaskListOptions), exclude: "with empty values")]
+    public Task TaskList(ComponentTestCaseData<TaskListOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTaskListAsync(options),
+            amendExpectedHtml: html => html.Replace("£", "&#xA3;"));
+
+    [Theory]
     [ComponentFixtureData("textarea", typeof(TextareaOptions))]
     public Task Textarea(ComponentTestCaseData<TextareaOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
