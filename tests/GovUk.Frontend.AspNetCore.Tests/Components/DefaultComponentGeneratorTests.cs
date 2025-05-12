@@ -182,6 +182,13 @@ public class DefaultComponentGeneratorTests
             amendExpectedHtml: html => html.Replace("précédente", "pr&#xE9;c&#xE9;dente"));
 
     [Theory]
+    [ComponentFixtureData("panel", typeof(PanelOptions))]
+    public Task Panel(ComponentTestCaseData<PanelOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GeneratePanelAsync(options));
+
+    [Theory]
     [ComponentFixtureData("service-navigation", typeof(ServiceNavigationOptions))]
     public Task ServiceNavigation(ComponentTestCaseData<ServiceNavigationOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

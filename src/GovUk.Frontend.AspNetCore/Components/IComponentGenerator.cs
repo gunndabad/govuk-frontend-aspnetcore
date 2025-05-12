@@ -128,6 +128,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options);
 
     /// <summary>
+    /// Generates a panel component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GeneratePanelAsync(PanelOptions options);
+
+    /// <summary>
     /// Generates a service navigation component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

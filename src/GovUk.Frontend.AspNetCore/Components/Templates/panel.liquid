@@ -1,0 +1,14 @@
+{% assign headingLevel = params.headingLevel | default: 1 -%}
+
+<div class="govuk-panel govuk-panel--confirmation
+  {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- govukAttributes(params.attributes) }}>
+  <h{{ headingLevel }} class="govuk-panel__title" {{- govukAttributes(params.titleAttributes) }}>
+    {{ params.titleHtml | raw | default: params.titleText }}
+  </h{{ headingLevel }}>
+  {% if params.html or params.text %}
+  <div class="govuk-panel__body" {{- govukAttributes(params.bodyAttributes) }}>
+    {{ params.html | raw | strip | indent: 4 | default: params.text }}
+  </div>
+  {% endif %}
+</div>
