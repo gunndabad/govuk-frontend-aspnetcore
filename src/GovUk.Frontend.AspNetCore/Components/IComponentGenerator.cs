@@ -74,6 +74,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateFileUploadAsync(FileUploadOptions options);
 
     /// <summary>
+    /// Generates a footer component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateFooterAsync(FooterOptions options);
+
+    /// <summary>
     /// Generates a hint component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

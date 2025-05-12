@@ -86,6 +86,28 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateFieldsetAsync(options));
 
     [Theory]
+    [ComponentFixtureData("footer", typeof(FooterOptions))]
+    public Task Footer(ComponentTestCaseData<FooterOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateFooterAsync(options),
+            amendExpectedHtml: html =>
+            {
+                html = html.Replace("©", "&#xA9;");
+
+                if (data.Name is "with custom HTML content licence and copyright notice")
+                {
+                    html = html.Replace("Mae&#x2019;r", "Mae’r");
+                }
+                else
+                {
+                    html = html.Replace("Mae’r", "Mae&#x2019;r");
+                }
+
+                return html;
+            });
+
+    [Theory]
     [ComponentFixtureData("file-upload", typeof(FileUploadOptions), only: "translated")]
     public Task FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

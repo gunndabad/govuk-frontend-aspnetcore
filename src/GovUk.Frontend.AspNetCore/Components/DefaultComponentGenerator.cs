@@ -125,6 +125,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("file-upload", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateFooterAsync(FooterOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("footer", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
