@@ -1,0 +1,4 @@
+<a href="{{ params.href | default: "#content" }}" class="govuk-skip-link {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- govukAttributes(params.attributes) }} data-module="govuk-skip-link">
+  {{- params.html | raw | default: params.text -}}
+</a>
