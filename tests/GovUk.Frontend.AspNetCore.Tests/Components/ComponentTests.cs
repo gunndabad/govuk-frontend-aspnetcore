@@ -1,6 +1,5 @@
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.TestCommon;
 
 namespace GovUk.Frontend.AspNetCore.Tests.Components;
 

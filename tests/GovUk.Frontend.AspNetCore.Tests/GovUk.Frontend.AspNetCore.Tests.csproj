@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <Using Include="GovUk.Frontend.AspNetCore.TestCommon" />
     <Using Include="Moq" />
   </ItemGroup>
 
