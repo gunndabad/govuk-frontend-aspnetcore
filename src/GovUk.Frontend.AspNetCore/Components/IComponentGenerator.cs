@@ -146,6 +146,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateServiceNavigationAsync(ServiceNavigationOptions options);
 
     /// <summary>
+    /// Generates a skip link component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateSkipLinkAsync(SkipLinkOptions options);
+
+    /// <summary>
     /// Generates a summary list component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

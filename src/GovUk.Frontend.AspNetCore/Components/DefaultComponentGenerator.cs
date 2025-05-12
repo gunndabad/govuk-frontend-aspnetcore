@@ -198,6 +198,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("pagination", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateSkipLinkAsync(SkipLinkOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("skip-link", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateSummaryListAsync(SummaryListOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

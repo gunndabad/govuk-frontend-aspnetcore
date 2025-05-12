@@ -205,6 +205,13 @@ public class DefaultComponentGeneratorTests
             compareWhitespace: false);
 
     [Theory]
+    [ComponentFixtureData("skip-link", typeof(SkipLinkOptions))]
+    public Task SkipLink(ComponentTestCaseData<SkipLinkOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateSkipLinkAsync(options));
+
+    [Theory]
     [ComponentFixtureData("summary-list", typeof(SummaryListOptions), exclude: "with falsy values")]
     public Task SummaryList(ComponentTestCaseData<SummaryListOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
