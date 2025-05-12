@@ -153,6 +153,13 @@ public class DefaultComponentGeneratorTests
                 null);
 
     [Theory]
+    [ComponentFixtureData("inset-text", typeof(InsetTextOptions))]
+    public Task InsetText(ComponentTestCaseData<InsetTextOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateInsetTextAsync(options));
+
+    [Theory]
     [ComponentFixtureData("label", typeof(LabelOptions2))]
     public Task Label(ComponentTestCaseData<LabelOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
