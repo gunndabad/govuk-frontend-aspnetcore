@@ -80,6 +80,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateFooterAsync(FooterOptions options);
 
     /// <summary>
+    /// Generates a header component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateHeaderAsync(HeaderOptions options);
+
+    /// <summary>
     /// Generates a hint component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

@@ -86,6 +86,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateFieldsetAsync(options));
 
     [Theory]
+    [ComponentFixtureData("file-upload", typeof(FileUploadOptions), only: "translated")]
+    public Task FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateFileUploadAsync(options),
+            amendExpectedHtml: html => html.Replace("C:&#x5C;fakepath&#x5C;myphoto.jpg", "C:\\fakepath\\myphoto.jpg"));
+
+    [Theory]
     [ComponentFixtureData("footer", typeof(FooterOptions))]
     public Task Footer(ComponentTestCaseData<FooterOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
@@ -108,12 +116,11 @@ public class DefaultComponentGeneratorTests
             });
 
     [Theory]
-    [ComponentFixtureData("file-upload", typeof(FileUploadOptions), only: "translated")]
-    public Task FileUpload(ComponentTestCaseData<FileUploadOptions> data) =>
+    [ComponentFixtureData("header", typeof(HeaderOptions))]
+    public Task Header(ComponentTestCaseData<HeaderOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
-            (generator, options) => generator.GenerateFileUploadAsync(options),
-            amendExpectedHtml: html => html.Replace("C:&#x5C;fakepath&#x5C;myphoto.jpg", "C:\\fakepath\\myphoto.jpg"));
+            (generator, options) => generator.GenerateHeaderAsync(options));
 
     [Theory]
     [ComponentFixtureData("hint", typeof(HintOptions2))]
