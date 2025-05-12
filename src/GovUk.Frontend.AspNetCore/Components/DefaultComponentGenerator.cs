@@ -119,6 +119,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("error-summary", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateExitThisPageAsync(ExitThisPageOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("exit-this-page", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);

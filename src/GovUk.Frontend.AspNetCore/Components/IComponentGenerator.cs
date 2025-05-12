@@ -68,6 +68,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateErrorSummaryAsync(ErrorSummaryOptions options);
 
     /// <summary>
+    /// Generates an exit this page component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateExitThisPageAsync(ExitThisPageOptions options);
+
+    /// <summary>
     /// Generates a fieldset component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

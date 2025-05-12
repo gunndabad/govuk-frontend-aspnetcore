@@ -87,6 +87,13 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateErrorSummaryAsync(options));
 
     [Theory]
+    [ComponentFixtureData("exit-this-page", typeof(ExitThisPageOptions))]
+    public Task ExitThisPage(ComponentTestCaseData<ExitThisPageOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateExitThisPageAsync(options));
+
+    [Theory]
     [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]
     public Task Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

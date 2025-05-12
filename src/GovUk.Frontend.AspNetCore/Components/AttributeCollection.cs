@@ -136,6 +136,16 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
                 return htmlContent.ToHtmlString(encoder);
             }
 
+            if (Value is true)
+            {
+                return "true";
+            }
+
+            if (Value is false)
+            {
+                return "false";
+            }
+
             return Value?.ToString() ?? string.Empty;
         }
     }

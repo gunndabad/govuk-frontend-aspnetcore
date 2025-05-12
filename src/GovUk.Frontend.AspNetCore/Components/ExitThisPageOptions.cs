@@ -1,24 +1,17 @@
-using Microsoft.AspNetCore.Html;
-
 namespace GovUk.Frontend.AspNetCore.Components;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 public record ExitThisPageOptions
 {
-    public string? Text { get; set; }
-    public IHtmlContent? Html { get; set; }
-    public IHtmlContent? RedirectUrl { get; set; }
-    public IHtmlContent? Id { get; set; }
-    public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
-    public IHtmlContent? ActivatedText { get; set; }
-    public IHtmlContent? TimedOutText { get; set; }
-    public IHtmlContent? PressTwoMoreTimesText { get; set; }
-    public IHtmlContent? PressOneMoreTimeText { get; set; }
-
-    internal void Validate()
-    {
-
-    }
+    public TemplateString? Text { get; set; }
+    public TemplateString? Html { get; set; }
+    public TemplateString? RedirectUrl { get; set; }
+    public TemplateString? Id { get; set; }
+    public TemplateString? Classes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
+    public TemplateString? ActivatedText { get; set; }
+    public TemplateString? TimedOutText { get; set; }
+    public TemplateString? PressTwoMoreTimesText { get; set; }
+    public TemplateString? PressOneMoreTimeText { get; set; }
 }
