@@ -1,0 +1,24 @@
+{% from "button.macro" import govukButton %}
+
+{%- capture defaultHtml %}
+  <span class="govuk-visually-hidden">Emergency</span> Exit this page
+{% endcapture -%}
+
+<div
+  {%- if params.id %} id="{{ params.id }}"{% endif %} class="govuk-exit-this-page {%- if params.classes %} {{ params.classes }}{% endif %}" data-module="govuk-exit-this-page"
+  {{- govukAttributes(params.attributes) -}}
+  {%- if params.activatedText %} data-i18n.activated="{{ params.activatedText }}"{% endif %}
+  {%- if params.timedOutText %} data-i18n.timed-out="{{ params.timedOutText }}"{% endif %}
+  {%- if params.pressTwoMoreTimesText %} data-i18n.press-two-more-times="{{ params.pressTwoMoreTimesText }}"{% endif %}
+  {%- if params.pressOneMoreTimeText %} data-i18n.press-one-more-time="{{ params.pressOneMoreTimeText }}"{% endif -%}
+>
+  {{ govukButton(dict(
+    html = ifelse((params.html or params.text), params.html, defaultHtml),
+    text = params.text,
+    classes = "govuk-button--warning govuk-exit-this-page__button govuk-js-exit-this-page-button",
+    href = (params.redirectUrl | default: "https://www.bbc.co.uk/weather"),
+    attributes = dict(
+      rel = "nofollow noreferrer"
+    )
+  )) | strip | indent: 2 }}
+</div>
