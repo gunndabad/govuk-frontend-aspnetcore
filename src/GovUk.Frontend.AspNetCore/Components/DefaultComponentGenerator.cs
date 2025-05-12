@@ -131,6 +131,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("footer", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateHeaderAsync(HeaderOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("header", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
