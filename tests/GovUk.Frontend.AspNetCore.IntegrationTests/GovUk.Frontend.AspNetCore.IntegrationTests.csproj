@@ -29,4 +29,8 @@
     <_ContentIncludedByDefault Remove="EncodingTests\BackLink\StringHref.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="GovUk.Frontend.AspNetCore.TestCommon" />
+  </ItemGroup>
+
 </Project>
