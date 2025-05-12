@@ -10,7 +10,7 @@ internal class NotificationBannerContext
     {
         Guard.ArgumentNotNullOrEmpty(nameof(id), id);
 
-        if (Title != null)
+        if (Title is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 NotificationBannerTitleTagHelper.TagName,

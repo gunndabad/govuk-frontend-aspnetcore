@@ -54,7 +54,7 @@ internal partial class ComponentGenerator
                 argName,
                 $"{argName} is not valid; {nameof(DateInputItem.LabelContent)} cannot be null.",
                 item.LabelContent,
-                item.LabelContent != null);
+                item.LabelContent is not null);
 
             var div = new TagBuilder("div");
             div.AddCssClass("govuk-date-input__item");

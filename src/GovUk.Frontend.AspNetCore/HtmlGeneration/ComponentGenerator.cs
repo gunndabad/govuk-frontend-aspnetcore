@@ -31,12 +31,12 @@ internal partial class ComponentGenerator : IGovUkHtmlGenerator
 
     private static void AppendToDescribedBy(ref string? describedBy, string value)
     {
-        if (value == null)
+        if (value is null)
         {
             return;
         }
 
-        if (describedBy == null)
+        if (describedBy is null)
         {
             describedBy = value;
         }

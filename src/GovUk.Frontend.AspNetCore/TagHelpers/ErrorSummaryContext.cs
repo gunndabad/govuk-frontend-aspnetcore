@@ -32,7 +32,7 @@ internal class ErrorSummaryContext
         ArgumentNullException.ThrowIfNull(attributes);
         ArgumentNullException.ThrowIfNull(html);
 
-        if (Description != null)
+        if (Description is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 ErrorSummaryDescriptionTagHelper.TagName,
@@ -47,7 +47,7 @@ internal class ErrorSummaryContext
         ArgumentNullException.ThrowIfNull(attributes);
         ArgumentNullException.ThrowIfNull(html);
 
-        if (Title != null)
+        if (Title is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 ErrorSummaryTitleTagHelper.TagName,

@@ -19,19 +19,19 @@ public partial class ComponentTests
 
                 var items = options.Items
                     .Select((item, index) =>
-                        item.Divider != null ?
+                        item.Divider is not null ?
                             (CheckboxesItemBase)new CheckboxesItemDivider() { Content = new HtmlString(item.Divider) } :
                             (CheckboxesItemBase)new CheckboxesItem()
                             {
                                 Behavior = item.Behaviour == "exclusive" ? CheckboxesItemBehavior.Exclusive : CheckboxesItemBehavior.Default,
-                                Conditional = item.Conditional?.Html != null ?
+                                Conditional = item.Conditional?.Html is not null ?
                                     new CheckboxesItemConditional()
                                     {
                                         Content = new HtmlString(item.Conditional.Html)
                                     } :
                                     null,
                                 LabelContent = TextOrHtmlHelper.GetHtmlContent(item.Text, item.Html),
-                                Hint = item.Hint != null ?
+                                Hint = item.Hint is not null ?
                                     new CheckboxesItemHint()
                                     {
                                         Attributes = item.Hint.Attributes?.ToAttributesDictionary(),
@@ -52,11 +52,11 @@ public partial class ComponentTests
                 var attributes = options.Attributes.ToAttributesDictionary()
                    .MergeAttribute("class", options.Classes);
 
-                var hintOptions = options.Hint != null ?
+                var hintOptions = options.Hint is not null ?
                     options.Hint with { Id = idPrefix + "-hint" } :
                     null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
+                var errorMessageOptions = options.ErrorMessage is not null ?
                     options.ErrorMessage with { Id = idPrefix + "-error" } :
                     null;
 
@@ -74,7 +74,7 @@ public partial class ComponentTests
                             idPrefix,
                             options.Name,
                             describedBy,
-                            hasFieldset: options.Fieldset != null,
+                            hasFieldset: options.Fieldset is not null,
                             items: items,
                             attributes: attributes);
                     });

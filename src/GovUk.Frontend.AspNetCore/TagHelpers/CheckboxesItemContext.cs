@@ -12,7 +12,7 @@ internal class CheckboxesItemContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Conditional != null)
+        if (Conditional is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 CheckboxesItemConditionalTagHelper.TagName,
@@ -26,14 +26,14 @@ internal class CheckboxesItemContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Hint != null)
+        if (Hint is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 CheckboxesItemHintTagHelper.TagName,
                 CheckboxesItemTagHelper.TagName);
         }
 
-        if (Conditional != null)
+        if (Conditional is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 CheckboxesItemHintTagHelper.TagName,

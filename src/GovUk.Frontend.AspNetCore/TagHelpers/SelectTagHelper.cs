@@ -103,18 +103,18 @@ public class SelectTagHelper : FormGroupTagHelperBase
         contentBuilder.AppendHtml(label);
 
         var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        if (hint is not null)
         {
             contentBuilder.AppendHtml(hint);
         }
 
         var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        if (errorMessage is not null)
         {
             contentBuilder.AppendHtml(errorMessage);
         }
 
-        haveError = errorMessage != null;
+        haveError = errorMessage is not null;
 
         var selectTagBuilder = GenerateSelect(haveError);
         contentBuilder.AppendHtml(selectTagBuilder);
@@ -139,12 +139,12 @@ public class SelectTagHelper : FormGroupTagHelperBase
 
     private protected override string ResolveIdPrefix()
     {
-        if (Id != null)
+        if (Id is not null)
         {
             return Id;
         }
 
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdAttributeName,
@@ -159,7 +159,7 @@ public class SelectTagHelper : FormGroupTagHelperBase
 
     private string ResolveName()
     {
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 NameAttributeName,

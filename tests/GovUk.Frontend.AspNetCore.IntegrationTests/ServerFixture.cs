@@ -24,14 +24,14 @@ public class ServerFixture : IAsyncLifetime
 
         _disposed = true;
 
-        if (Browser != null)
+        if (Browser is not null)
         {
             await Browser.DisposeAsync();
         }
 
         _playright?.Dispose();
 
-        if (_host != null)
+        if (_host is not null)
         {
             await _host.StopAsync();
             _host.Dispose();

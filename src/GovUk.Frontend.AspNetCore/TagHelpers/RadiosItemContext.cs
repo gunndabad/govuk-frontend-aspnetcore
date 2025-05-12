@@ -12,7 +12,7 @@ internal class RadiosItemContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Conditional != null)
+        if (Conditional is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 RadiosItemConditionalTagHelper.TagName,
@@ -26,14 +26,14 @@ internal class RadiosItemContext
     {
         Guard.ArgumentNotNull(nameof(content), content);
 
-        if (Hint != null)
+        if (Hint is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(
                 RadiosItemHintTagHelper.TagName,
                 RadiosItemTagHelper.TagName);
         }
 
-        if (Conditional != null)
+        if (Conditional is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 RadiosItemHintTagHelper.TagName,

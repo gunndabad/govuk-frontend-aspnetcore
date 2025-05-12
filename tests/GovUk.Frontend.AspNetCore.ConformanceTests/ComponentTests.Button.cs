@@ -22,7 +22,7 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
-                var isButtonLink = options.Element == "a" || options.Href != null;
+                var isButtonLink = options.Element == "a" || options.Href is not null;
 
                 var isStartButton = options.IsStartButton ?? ComponentGenerator.ButtonDefaultIsStartButton;
                 var disabled = options.Disabled ?? ComponentGenerator.ButtonDefaultDisabled;

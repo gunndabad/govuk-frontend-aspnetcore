@@ -76,19 +76,19 @@ public class RadiosTagHelper : FormGroupTagHelperBase
         var contentBuilder = new HtmlContentBuilder();
 
         var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        if (hint is not null)
         {
             contentBuilder.AppendHtml(hint);
         }
 
         var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        if (errorMessage is not null)
         {
             contentBuilder.AppendHtml(errorMessage);
         }
 
-        haveError = errorMessage != null;
-        var haveFieldset = radiosContext.Fieldset != null;
+        haveError = errorMessage is not null;
+        var haveFieldset = radiosContext.Fieldset is not null;
 
         var radiosTagBuilder = GenerateRadios();
         contentBuilder.AppendHtml(radiosTagBuilder);
@@ -124,12 +124,12 @@ public class RadiosTagHelper : FormGroupTagHelperBase
 
     private protected override string ResolveIdPrefix()
     {
-        if (IdPrefix != null)
+        if (IdPrefix is not null)
         {
             return IdPrefix;
         }
 
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             throw ExceptionHelper.AtLeastOneOfAttributesMustBeProvided(
                 IdPrefixAttributeName,
@@ -138,14 +138,14 @@ public class RadiosTagHelper : FormGroupTagHelperBase
         }
 
         TryResolveName(out var resolvedName);
-        Debug.Assert(resolvedName != null);
+        Debug.Assert(resolvedName is not null);
 
         return TagBuilder.CreateSanitizedId(resolvedName!, Constants.IdAttributeDotReplacement);
     }
 
     private bool TryResolveName([NotNullWhen(true)] out string? name)
     {
-        if (Name == null && For == null)
+        if (Name is null && For is null)
         {
             name = default;
             return false;

@@ -37,7 +37,7 @@ internal partial class ComponentGenerator
             tagBuilder.Attributes.Add("data-prevent-double-click", preventDoubleClick.Value ? "true" : "false");
         }
 
-        if (id != null)
+        if (id is not null)
         {
             tagBuilder.Attributes.Add("id", id);
         }
@@ -76,7 +76,7 @@ internal partial class ComponentGenerator
             tagBuilder.MergeCssClass("govuk-button--disabled");
         }
 
-        if (id != null)
+        if (id is not null)
         {
             tagBuilder.Attributes.Add("id", id);
         }

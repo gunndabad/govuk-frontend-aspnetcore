@@ -27,7 +27,7 @@ internal abstract class FormGroupFieldsetContext
 
     public virtual void SetLegend(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Legend != null)
+        if (Legend is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(_legendTagName, _fieldsetTagName);
         }
@@ -37,7 +37,7 @@ internal abstract class FormGroupFieldsetContext
 
     public void ThrowIfNotComplete()
     {
-        if (Legend == null && _aspFor is null)
+        if (Legend is null && _aspFor is null)
         {
             throw ExceptionHelper.AChildElementMustBeProvided(_legendTagName);
         }

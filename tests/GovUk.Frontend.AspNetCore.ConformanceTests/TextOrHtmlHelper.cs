@@ -7,11 +7,11 @@ public static class TextOrHtmlHelper
 {
     public static IHtmlContent GetHtmlContent(string text, string html)
     {
-        if (html != null)
+        if (html is not null)
         {
             return new HtmlString(html);
         }
-        else if (text != null)
+        else if (text is not null)
         {
             return new HtmlString(HtmlEncoder.Default.Encode(text));
         }

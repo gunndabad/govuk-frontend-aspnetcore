@@ -35,7 +35,7 @@ public sealed class SimpleValueProvider : Dictionary<string, object>, IValueProv
     {
         if (TryGetValue(key, out var rawValue))
         {
-            if (rawValue != null && rawValue.GetType().IsArray)
+            if (rawValue is not null && rawValue.GetType().IsArray)
             {
                 var array = (Array)rawValue;
 

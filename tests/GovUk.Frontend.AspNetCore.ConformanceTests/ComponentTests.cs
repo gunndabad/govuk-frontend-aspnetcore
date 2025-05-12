@@ -55,7 +55,7 @@ public partial class ComponentTests
         Fieldset fieldset,
         GenerateFormGroupElement generateElement)
     {
-        var haveError = errorMessage != null;
+        var haveError = errorMessage is not null;
 
         string describedBy = null;
 
@@ -64,13 +64,13 @@ public partial class ComponentTests
 
         var contentBuilder = new HtmlContentBuilder();
 
-        if (label != null)
+        if (label is not null)
         {
             var labelTagBuilder = BuildLabel(_componentGenerator, label);
             contentBuilder.AppendHtml(labelTagBuilder);
         }
 
-        if (hint != null)
+        if (hint is not null)
         {
             var hintTagBuilder = BuildHint(_componentGenerator, hint);
             contentBuilder.AppendHtml(hintTagBuilder);
@@ -78,7 +78,7 @@ public partial class ComponentTests
             AppendToDescribedBy(ref describedBy, hint.Id);
         }
 
-        if (errorMessage != null)
+        if (errorMessage is not null)
         {
             var errorMessageTagBuilder = BuildErrorMessage(_componentGenerator, errorMessage);
             contentBuilder.AppendHtml(errorMessageTagBuilder);
@@ -91,7 +91,7 @@ public partial class ComponentTests
 
         IHtmlContent content = contentBuilder;
 
-        if (fieldset != null)
+        if (fieldset is not null)
         {
             AppendToDescribedBy(ref describedBy, fieldset.DescribedBy);
 

@@ -75,8 +75,8 @@ public class ErrorSummaryTagHelper : TagHelper
             errorList = containerErrorContext.GetErrorList();
         }
 
-        if (errorSummaryContext.Title == null &&
-            errorSummaryContext.Description == null &&
+        if (errorSummaryContext.Title is null &&
+            errorSummaryContext.Description is null &&
             errorList.Count == 0)
         {
             output.SuppressOutput();

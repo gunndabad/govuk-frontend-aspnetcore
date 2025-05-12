@@ -144,7 +144,7 @@ public class AccordionTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        if (Id == null)
+        if (Id is null)
         {
             throw ExceptionHelper.TheAttributeMustBeSpecified(IdAttributeName);
         }

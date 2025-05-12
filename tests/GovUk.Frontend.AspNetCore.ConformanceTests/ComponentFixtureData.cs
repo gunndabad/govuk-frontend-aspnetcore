@@ -42,7 +42,7 @@ public class ComponentFixtureData : DataAttribute
         var fixturesJson = File.ReadAllText(fixturesFile);
         var fixtures = JObject.Parse(fixturesJson).SelectToken("fixtures");
 
-        if (fixtures == null)
+        if (fixtures is null)
         {
             throw new InvalidOperationException($"Couldn't find fixtures in '{fixturesFile}'.");
         }
@@ -53,7 +53,7 @@ public class ComponentFixtureData : DataAttribute
         {
             var name = fixture["name"].ToString();
 
-            if (_exclude.Contains(name) || (_only != null && name != _only))
+            if (_exclude.Contains(name) || (_only is not null && name != _only))
             {
                 continue;
             }

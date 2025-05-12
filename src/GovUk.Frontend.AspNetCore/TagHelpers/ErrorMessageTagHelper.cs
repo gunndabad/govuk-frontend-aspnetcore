@@ -88,27 +88,27 @@ public class ErrorMessageTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        if (childContent == null && For == null)
+        if (childContent is null && For is null)
         {
             throw new InvalidOperationException(
                 $"Cannot determine content. Element must contain content if the '{AspForAttributeName}' attribute is not specified.");
         }
 
         IHtmlContent? resolvedContent = childContent;
-        if (resolvedContent == null && For != null)
+        if (resolvedContent is null && For is not null)
         {
             var validationMessage = _modelHelper.GetValidationMessage(
                 ViewContext!,
                 For.ModelExplorer,
                 For.Name);
 
-            if (validationMessage != null)
+            if (validationMessage is not null)
             {
                 resolvedContent = validationMessage.EncodeHtml();
             }
         }
 
-        if (resolvedContent != null)
+        if (resolvedContent is not null)
         {
             var tagBuilder = _htmlGenerator.GenerateErrorMessage(
                 VisuallyHiddenText,

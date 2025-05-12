@@ -748,18 +748,18 @@ public class FormGroupTagHelperBaseTests
             contentBuilder.AppendHtml(label);
 
             var hint = GenerateHint(tagHelperContext, formGroupContext);
-            if (hint != null)
+            if (hint is not null)
             {
                 contentBuilder.AppendHtml(hint);
             }
 
             var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-            if (errorMessage != null)
+            if (errorMessage is not null)
             {
                 contentBuilder.AppendHtml(errorMessage);
             }
 
-            haveError = errorMessage != null;
+            haveError = errorMessage is not null;
 
             contentBuilder.Append("Test content");
 

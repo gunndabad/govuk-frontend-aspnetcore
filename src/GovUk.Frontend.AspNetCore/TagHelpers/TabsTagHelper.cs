@@ -60,7 +60,7 @@ public class TabsTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var tabsContext = new TabsContext(haveIdPrefix: IdPrefix != null);
+        var tabsContext = new TabsContext(haveIdPrefix: IdPrefix is not null);
 
         using (context.SetScopedContextItem(tabsContext))
         {

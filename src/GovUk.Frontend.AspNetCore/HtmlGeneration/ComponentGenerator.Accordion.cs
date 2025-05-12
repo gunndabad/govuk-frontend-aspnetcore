@@ -86,13 +86,13 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(AccordionItem.Content)} cannot be null.",
                 item.Content,
-                item.Content != null);
+                item.Content is not null);
 
             Guard.ArgumentValidNotNull(
                 nameof(items),
                 $"Item {index} is not valid; {nameof(AccordionItem.HeadingContent)} cannot be null.",
                 item.HeadingContent,
-                item.HeadingContent != null);
+                item.HeadingContent is not null);
 
             var idSuffix = index + 1;
 
@@ -119,7 +119,7 @@ internal partial class ComponentGenerator
             heading.InnerHtml.AppendHtml(headingContent);
             header.InnerHtml.AppendHtml(heading);
 
-            if (item.SummaryContent != null)
+            if (item.SummaryContent is not null)
             {
                 var summaryId = $"{id}-summary-{idSuffix}";
                 var summary = new TagBuilder(AccordionItemSummaryElement);

@@ -53,12 +53,12 @@ internal partial class ComponentGenerator
                 nameof(items),
                 $"Item {index} is not valid; {nameof(SelectItem.Content)} cannot be null.",
                 item.Content,
-                item.Content != null);
+                item.Content is not null);
 
             var option = new TagBuilder("option");
             option.MergeOptionalAttributes(item.Attributes);
 
-            if (item.Value != null)
+            if (item.Value is not null)
             {
                 option.Attributes.Add("value", item.Value);
             }

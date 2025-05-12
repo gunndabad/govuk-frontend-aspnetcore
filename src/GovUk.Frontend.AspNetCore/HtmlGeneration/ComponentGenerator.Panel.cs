@@ -36,7 +36,7 @@ internal partial class ComponentGenerator
         heading.InnerHtml.AppendHtml(titleContent);
         tagBuilder.InnerHtml.AppendHtml(heading);
 
-        if (bodyContent != null)
+        if (bodyContent is not null)
         {
             var body = new TagBuilder("div");
             body.MergeCssClass("govuk-panel__body");

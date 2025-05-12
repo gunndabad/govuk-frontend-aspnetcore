@@ -20,9 +20,9 @@ public partial class ComponentTests
                 var titleContent = TextOrHtmlHelper.GetHtmlContent(options.TitleText, options.TitleHtml);
 
                 // The 'text' option gets wrapped in a <p>
-                var content = options.Html != null ?
+                var content = options.Html is not null ?
                     new HtmlString(options.Html) :
-                    options.Text != null ?
+                    options.Text is not null ?
                     new HtmlString(
                         "<p class=\"govuk-notification-banner__heading\">" +
                         HtmlEncoder.Default.Encode(options.Text) +

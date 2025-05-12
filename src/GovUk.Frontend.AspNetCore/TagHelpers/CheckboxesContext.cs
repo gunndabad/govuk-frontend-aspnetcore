@@ -39,7 +39,7 @@ internal class CheckboxesContext : FormGroupContext
     {
         Guard.ArgumentNotNull(nameof(item), item);
 
-        if (Fieldset != null)
+        if (Fieldset is not null)
         {
             throw new InvalidOperationException($"<{ItemTagName}> must be inside <{FieldsetTagName}>.");
         }
@@ -54,12 +54,12 @@ internal class CheckboxesContext : FormGroupContext
             throw new InvalidOperationException($"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>.");
         }
 
-        if (Fieldset != null)
+        if (Fieldset is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(FieldsetTagName, RootTagName);
         }
 
-        if (Items.Count > 0 || Hint != null || ErrorMessage != null)
+        if (Items.Count > 0 || Hint is not null || ErrorMessage is not null)
         {
             throw new InvalidOperationException($"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>.");
         }
@@ -83,7 +83,7 @@ internal class CheckboxesContext : FormGroupContext
         AttributeDictionary? attributes,
         IHtmlContent? content)
     {
-        if (Fieldset != null)
+        if (Fieldset is not null)
         {
             throw new InvalidOperationException($"<{ErrorMessageTagName}> must be inside <{FieldsetTagName}>.");
         }
@@ -98,7 +98,7 @@ internal class CheckboxesContext : FormGroupContext
 
     public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
     {
-        if (Fieldset != null)
+        if (Fieldset is not null)
         {
             throw new InvalidOperationException($"<{HintTagName}> must be inside <{FieldsetTagName}>.");
         }

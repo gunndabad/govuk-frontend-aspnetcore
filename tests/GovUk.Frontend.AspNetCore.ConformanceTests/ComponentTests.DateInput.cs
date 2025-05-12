@@ -20,7 +20,7 @@ public partial class ComponentTests
             data,
             (generator, options) =>
             {
-                if (options.Fieldset != null)
+                if (options.Fieldset is not null)
                 {
                     options.Fieldset.Role = "group";
                 }
@@ -28,11 +28,11 @@ public partial class ComponentTests
                 var attributes = options.Attributes.ToAttributesDictionary()
                    .MergeAttribute("class", options.Classes);
 
-                var hintOptions = options.Hint != null ?
+                var hintOptions = options.Hint is not null ?
                     options.Hint with { Id = options.Id + "-hint" } :
                     null;
 
-                var errorMessageOptions = options.ErrorMessage != null ?
+                var errorMessageOptions = options.ErrorMessage is not null ?
                     options.ErrorMessage with { Id = options.Id + "-error" } :
                     null;
 
@@ -60,7 +60,7 @@ public partial class ComponentTests
                         {
                             DateInputItem inputItem;
 
-                            if (options.Items != null && options.Items.Count >= index + 1)
+                            if (options.Items is not null && options.Items.Count >= index + 1)
                             {
                                 var item = options.Items[index];
 
@@ -71,7 +71,7 @@ public partial class ComponentTests
                                     Autocomplete = item.Autocomplete,
                                     Id = item.Id,
                                     InputMode = item.InputMode,
-                                    LabelContent = item.Label != null ? new HtmlString(item.Label) : null,
+                                    LabelContent = item.Label is not null ? new HtmlString(item.Label) : null,
                                     Name = item.Name,
                                     Pattern = item.Pattern,
                                     Value = item.Value
@@ -93,7 +93,7 @@ public partial class ComponentTests
                             inputItem.LabelContent ??= new HtmlString(Capitalize(inputItem.Name));
                             inputItem.InputMode ??= ComponentGenerator.DateInputDefaultInputMode;
 
-                            if (options.NamePrefix != null)
+                            if (options.NamePrefix is not null)
                             {
                                 inputItem.Name = $"{options.NamePrefix}-{inputItem.Name}";
                             }

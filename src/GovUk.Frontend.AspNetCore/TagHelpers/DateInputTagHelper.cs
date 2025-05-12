@@ -123,23 +123,23 @@ public class DateInputTagHelper : FormGroupTagHelperBase
         var contentBuilder = new HtmlContentBuilder();
 
         var hint = GenerateHint(tagHelperContext, formGroupContext);
-        if (hint != null)
+        if (hint is not null)
         {
             contentBuilder.AppendHtml(hint);
         }
 
         var errorMessage = GenerateErrorMessage(tagHelperContext, formGroupContext);
-        if (errorMessage != null)
+        if (errorMessage is not null)
         {
             contentBuilder.AppendHtml(errorMessage);
         }
 
-        haveError = errorMessage != null;
+        haveError = errorMessage is not null;
 
         var dateInputTagBuilder = GenerateDateInput(dateInputContext, haveError);
         contentBuilder.AppendHtml(dateInputTagBuilder);
 
-        if (dateInputContext.Fieldset != null)
+        if (dateInputContext.Fieldset is not null)
         {
             var resolvedFieldsetLegendContent = ResolveFieldsetLegendContent(dateInputContext.Fieldset!);
 
@@ -173,7 +173,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
     private protected override string ResolveIdPrefix()
     {
-        if (For == null && Id == null)
+        if (For is null && Id is null)
         {
             ThrowHelper.AtLeastOneOfAttributesMustBeSpecified(AspForAttributeName, IdAttributeName);
         }
@@ -187,16 +187,16 @@ public class DateInputTagHelper : FormGroupTagHelperBase
     private TagBuilder GenerateDateInput(DateInputContext dateInputContext, bool haveError)
     {
         var resolvedId = ResolveIdPrefix();
-        var resolvedName = For != null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, For.Name) : null;
+        var resolvedName = For is not null ? ModelHelper.GetFullHtmlFieldName(ViewContext!, For.Name) : null;
 
         // This is a deliberate deviation from the GDS implementation so it works better with ASP.NET Core's model binding system
-        var resolvedNamePrefix = NamePrefix != null ? NamePrefix + "." :
-            resolvedName != null ? resolvedName + "." :
+        var resolvedNamePrefix = NamePrefix is not null ? NamePrefix + "." :
+            resolvedName is not null ? resolvedName + "." :
             string.Empty;
 
         var dateInputModelConverters = _options.DateInputModelConverters;
 
-        var valueAsDate = GetValueAsDate() ?? (For != null ? GetValueFromModel() : null);
+        var valueAsDate = GetValueAsDate() ?? (For is not null ? GetValueFromModel() : null);
         var errorItems = GetErrorComponents(dateInputContext);
 
         var day = CreateDateInputItem(
@@ -250,7 +250,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             var resolvedItemValue = contextItem?.ValueSpecified == true ? (contextItem.Value?.ToString() ?? string.Empty) :
                 _valueSpecified ? getComponentFromValue(valueAsDate) :
                 contextItem?.ValueSpecified == true ? contextItem.Value?.ToString() :
-                For != null ? GetValueFromModelState() :
+                For is not null ? GetValueFromModelState() :
                 null;
 
             var resolvedItemId = contextItem?.Id ?? $"{resolvedId}.{contextItem?.Name ?? defaultName}";
@@ -281,7 +281,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
             string? GetValueFromModelState()
             {
-                Debug.Assert(For != null);
+                Debug.Assert(For is not null);
 
                 // Can't use ModelHelper.GetModelValue here;
                 // custom Date types may not expose components via Day/Month/Year properties.
@@ -295,7 +295,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
                 var modelStateKey = ModelHelper.GetFullHtmlFieldName(ViewContext!, expression);
 
                 if (ViewContext!.ModelState.TryGetValue(modelStateKey, out var modelStateEntry) &&
-                    modelStateEntry.AttemptedValue != null)
+                    modelStateEntry.AttemptedValue is not null)
                 {
                     return modelStateEntry.AttemptedValue;
                 }
@@ -327,7 +327,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
         DateOnly? GetValueFromModel()
         {
-            Debug.Assert(For != null);
+            Debug.Assert(For is not null);
 
             var modelValue = For!.Model;
             var underlyingModelType = Nullable.GetUnderlyingType(For.ModelExplorer.ModelType) ?? For.ModelExplorer.ModelType;
@@ -353,18 +353,18 @@ public class DateInputTagHelper : FormGroupTagHelperBase
 
     private DateInputErrorComponents GetErrorComponents(DateInputContext dateInputContext)
     {
-        if (dateInputContext.ErrorComponents != null)
+        if (dateInputContext.ErrorComponents is not null)
         {
             return dateInputContext.ErrorComponents.Value;
         }
 
-        if (For == null)
+        if (For is null)
         {
             return DateInputErrorComponents.All;
         }
 
-        Debug.Assert(For != null);
-        Debug.Assert(ViewContext != null);
+        Debug.Assert(For is not null);
+        Debug.Assert(ViewContext is not null);
 
         var fullName = ModelHelper.GetFullHtmlFieldName(ViewContext, For.Name);
 

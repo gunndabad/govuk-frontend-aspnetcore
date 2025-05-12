@@ -42,7 +42,7 @@ internal partial class ComponentGenerator
         var body = new TagBuilder("div");
         body.MergeCssClass("govuk-error-summary__body");
 
-        if (descriptionContent != null)
+        if (descriptionContent is not null)
         {
             var p = new TagBuilder("p");
             p.MergeAttributes(descriptionAttributes);
@@ -65,12 +65,12 @@ internal partial class ComponentGenerator
                     nameof(items),
                     $"Item {itemIndex} is not valid; {nameof(ErrorSummaryItem.Content)} cannot be null.",
                     item.Content,
-                    item.Content != null);
+                    item.Content is not null);
 
                 var li = new TagBuilder("li");
                 li.MergeOptionalAttributes(item.Attributes);
 
-                if (item.Href != null)
+                if (item.Href is not null)
                 {
                     var a = new TagBuilder("a");
                     a.MergeOptionalAttributes(item.LinkAttributes);

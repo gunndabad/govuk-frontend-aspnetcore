@@ -47,7 +47,7 @@ internal partial class ComponentGenerator
         tagBuilder.Attributes.Add("name", name);
         tagBuilder.Attributes.Add("type", type);
 
-        if (value != null)
+        if (value is not null)
         {
             tagBuilder.Attributes.Add("value", value);
         }
@@ -62,7 +62,7 @@ internal partial class ComponentGenerator
             tagBuilder.Attributes.Add("autocomplete", autocomplete);
         }
 
-        if (pattern != null)
+        if (pattern is not null)
         {
             tagBuilder.Attributes.Add("pattern", pattern);
         }
@@ -82,12 +82,12 @@ internal partial class ComponentGenerator
             tagBuilder.Attributes.Add("disabled", "disabled");
         }
 
-        if (prefixContent != null || suffixContent != null)
+        if (prefixContent is not null || suffixContent is not null)
         {
             var wrapper = new TagBuilder("div");
             wrapper.MergeCssClass("govuk-input__wrapper");
 
-            if (prefixContent != null)
+            if (prefixContent is not null)
             {
                 var prefix = new TagBuilder(InputPrefixElement);
                 prefix.MergeOptionalAttributes(prefixAttributes);
@@ -100,7 +100,7 @@ internal partial class ComponentGenerator
 
             wrapper.InnerHtml.AppendHtml(tagBuilder);
 
-            if (suffixContent != null)
+            if (suffixContent is not null)
             {
                 var suffix = new TagBuilder(InputSuffixElement);
                 suffix.MergeOptionalAttributes(suffixAttributes);

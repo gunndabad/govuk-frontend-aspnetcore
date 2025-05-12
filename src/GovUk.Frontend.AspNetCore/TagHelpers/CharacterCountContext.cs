@@ -20,7 +20,7 @@ internal class CharacterCountContext : FormGroupContext3
         TemplateString? html,
         string tagName)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
@@ -32,7 +32,7 @@ internal class CharacterCountContext : FormGroupContext3
 
     public override void SetHint(AttributeCollection attributes, TemplateString? html, string tagName)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
@@ -48,7 +48,7 @@ internal class CharacterCountContext : FormGroupContext3
         TemplateString? html,
         string tagName)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
@@ -60,7 +60,7 @@ internal class CharacterCountContext : FormGroupContext3
 
     public void SetValue(TemplateString html, string tagName)
     {
-        if (Value != null)
+        if (Value is not null)
         {
             throw ExceptionHelper.OnlyOneElementIsPermittedIn(tagName, RootTagName);
         }
