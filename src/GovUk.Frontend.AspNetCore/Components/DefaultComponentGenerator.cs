@@ -155,6 +155,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("hint", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateInsetTextAsync(InsetTextOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("inset-text", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
