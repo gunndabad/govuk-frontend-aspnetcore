@@ -161,6 +161,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("inset-text", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateInputAsync(InputOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("input", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -267,6 +273,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         context.SetValue("ifelse", new FunctionValue(Functions.IfElse));
         context.SetValue("istruthy", new FunctionValue(Functions.IsTruthy));
         context.SetValue("not", new FunctionValue(Functions.Not));
+        context.SetValue("string", new FunctionValue(Functions.String));
         context.SetValue("params", componentOptions);  // To match the nunjucks templates
 
         var template = GetTemplate(templateName);
