@@ -159,5 +159,10 @@ internal partial class DefaultComponentGenerator
         {
             return FluidValue.Create(!args.At(0).ToBooleanValue(), context.Options);
         }
+
+        public static FluidValue String(FunctionArguments args, TemplateContext context)
+        {
+            return StringValue.Create(args.At(0).ToStringValue());
+        }
     }
 }

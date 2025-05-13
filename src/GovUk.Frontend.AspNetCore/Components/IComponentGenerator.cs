@@ -104,6 +104,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options);
 
     /// <summary>
+    /// Generates an input component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateInputAsync(InputOptions options);
+
+    /// <summary>
     /// Generates an inset text component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

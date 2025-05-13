@@ -153,6 +153,20 @@ public class DefaultComponentGeneratorTests
                 null);
 
     [Theory]
+    [ComponentFixtureData("input", typeof(InputOptions))]
+    public Task Input(ComponentTestCaseData<InputOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateInputAsync(options),
+            amendExpectedHtml:
+                data.Name is not "with prefix with html" ?
+                    html => html
+                        .Replace("’", "&#x2019;")
+                        .Replace("‘", "&#x2018;")
+                        .Replace("£", "&#xA3;") :
+                    null);
+
+    [Theory]
     [ComponentFixtureData("inset-text", typeof(InsetTextOptions))]
     public Task InsetText(ComponentTestCaseData<InsetTextOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

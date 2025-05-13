@@ -1,0 +1,130 @@
+{% from "error-message.macro" import govukErrorMessage %}
+{% from "hint.macro" import govukHint %}
+{% from "label.macro" import govukLabel %}
+
+{%- comment %} Set classes for this component {% endcomment %}
+{%- assign classNames = "govuk-input" -%}
+
+{%- if params.classes %}
+  {% assign classNames = classNames | append: " " | append: params.classes %}
+{% endif %}
+
+{%- if params.errorMessage %}
+  {% assign classNames = classNames | append: " govuk-input--error" %}
+{% endif %}
+
+{%- comment %} a record of other elements that we need to associate with the input using
+  aria-describedby – for example hints or error messages {% endcomment -%}
+{% assign describedBy = params.describedBy -%}
+{%- assign id = params.id | default: params.name -%}
+
+{%- assign hasPrefix = params.prefix and (params.prefix.text or params.prefix.html) %}
+{%- assign hasSuffix = params.suffix and (params.suffix.text or params.suffix.html) %}
+{%- assign hasBeforeInput = params.formGroup.beforeInput and (params.formGroup.beforeInput.text or params.formGroup.beforeInput.html) %}
+{%- assign hasAfterInput = params.formGroup.afterInput and (params.formGroup.afterInput.text or params.formGroup.afterInput.html) %}
+
+{%- macro _inputElement(params) -%}
+  <input
+    {{- govukAttributes(dict(
+      class = classNames,
+      id = id,
+      name = params.name,
+      type = (params.type | default: "text"),
+      spellcheck = dict(
+        value = ifelse((params.spellcheck == true or params.spellcheck == false), string(params.spellcheck), false),
+        optional = true
+      ),
+      value = dict(
+        value = params.value,
+        optional = true
+      ),
+      disabled = dict(
+        value = params.disabled,
+        optional = true
+      ),
+      aria-describedby = dict(
+        value = describedBy,
+        optional = true
+      ),
+      autocomplete = dict(
+        value = params.autocomplete,
+        optional = true
+      ),
+      autocapitalize = dict(
+        value = params.autocapitalize,
+        optional = true
+      ),
+      pattern = dict(
+        value = params.pattern,
+        optional = true
+      ),
+      inputmode = dict(
+        value = params.inputmode,
+        optional = true
+      )
+    )) -}}
+
+    {{- govukAttributes(params.attributes) }}>
+{%- endmacro -%}
+
+{%- macro _affixItem(affix, type) %}
+  <div class="govuk-input__{{ type }} {%- if affix.classes %} {{ affix.classes }}{% endif %}" aria-hidden="true" {{- govukAttributes(affix.attributes) }}>
+    {{- affix.html | raw | strip | indent: 4 | default: affix.text -}}
+  </div>
+{%- endmacro -%}
+
+<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %} {%- if params.formGroup.classes %} {{ params.formGroup.classes }}{% endif %}"
+  {{- govukAttributes(params.formGroup.attributes) }}>
+  {{ govukLabel(dict(
+    html = params.label.html,
+    text = params.label.text,
+    classes = params.label.classes,
+    isPageHeading = params.label.isPageHeading,
+    attributes = params.label.attributes,
+    for = id
+  )) | strip | indent: 2 }}
+{% if params.hint %}
+  {% assign hintId = id | append: '-hint' %}
+  {% assign describedBy = (describedBy | append: ' ' | lstrip) | append: hintId %}
+  {{ govukHint(dict(
+    id = hintId,
+    classes = params.hint.classes,
+    attributes = params.hint.attributes,
+    html = params.hint.html,
+    text = params.hint.text
+  )) | strip | indent: 2 }}
+{% endif %}
+{% if params.errorMessage %}
+  {% assign errorId = params.id | append: '-error' %}
+  {% assign describedBy = (describedBy | append: ' ' | lstrip) | append: errorId %}
+  {{ govukErrorMessage(dict(
+    id = errorId,
+    classes = params.errorMessage.classes,
+    attributes = params.errorMessage.attributes,
+    html = params.errorMessage.html,
+    text = params.errorMessage.text,
+    visuallyHiddenText = params.errorMessage.visuallyHiddenText
+  )) | strip | indent: 2 }}
+{% endif %}
+
+{%- if hasPrefix or hasSuffix or hasBeforeInput or hasAfterInput %}
+  <div class="govuk-input__wrapper {%- if params.inputWrapper.classes %} {{ params.inputWrapper.classes }}{% endif %}"
+    {{- govukAttributes(params.inputWrapper.attributes) }}>
+    {% if hasBeforeInput %}
+      {{- params.formGroup.beforeInput.html | raw | strip | indent: 4, indent_first: true | default: params.formGroup.beforeInput.text }}
+    {% endif %}
+    {% if hasPrefix %}
+      {{- _affixItem(params.prefix, "prefix") | indent: 2}}
+    {% endif %}
+    {{ _inputElement(params) }}
+    {% if hasSuffix %}
+      {{- _affixItem(params.suffix, "suffix") | indent: 2 }}
+    {% endif %}
+    {% if hasAfterInput %}
+      {{- params.formGroup.afterInput.html | raw | strip | indent: 4, indent_first: true | default: params.formGroup.afterInput.text }}
+    {% endif %}
+  </div>
+{% else %}
+  {{ _inputElement(params) }}
+{% endif %}
+</div>
