@@ -16,7 +16,6 @@ public class ComponentFixtureData : DataAttribute
     {
         _serializerOptions = new JsonSerializerOptions(ComponentOptionsJsonSerializerOptions.Instance);
         _serializerOptions.Converters.Insert(0, new PermissiveStringJsonConverter());
-        _serializerOptions.Converters.Add(new EncodedAttributesDictionaryJsonConverter());
         _serializerOptions.Converters.Add(new StringHtmlContentJsonConverter());
         _serializerOptions.Converters.Add(new AttributeCollectionJsonConverter());
         _serializerOptions.Converters.Add(new TemplateStringJsonConverter());
@@ -110,20 +109,6 @@ public class ComponentFixtureData : DataAttribute
         }
 
         public override void Write(Utf8JsonWriter writer, string value, JsonSerializerOptions options)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
-    private class EncodedAttributesDictionaryJsonConverter : JsonConverter<EncodedAttributesDictionary>
-    {
-        public override EncodedAttributesDictionary? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            var dictionary = JsonSerializer.Deserialize<Dictionary<string, string?>>(ref reader, options) ?? [];
-            return EncodedAttributesDictionary.FromDictionaryWithEncodedValues(dictionary);
-        }
-
-        public override void Write(Utf8JsonWriter writer, EncodedAttributesDictionary value, JsonSerializerOptions options)
         {
             throw new NotSupportedException();
         }

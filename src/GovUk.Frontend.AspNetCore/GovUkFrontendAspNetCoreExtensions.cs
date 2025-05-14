@@ -43,7 +43,6 @@ public static class GovUkFrontendAspNetCoreExtensions
         services.AddMvcCore();
 
         services.TryAddSingleton<IGovUkHtmlGenerator, ComponentGenerator>();
-        services.TryAddSingleton<ILegacyComponentGenerator, LegacyComponentGenerator>();
         services.TryAddSingleton<IComponentGenerator, DefaultComponentGenerator>();
         services.TryAddSingleton<IModelHelper, DefaultModelHelper>();
         services.AddSingleton<IStartupFilter, GovUkFrontendAspNetCoreStartupFilter>();
