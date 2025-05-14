@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
+using static GovUk.Frontend.AspNetCore.GenerateErrorSummariesOptions;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -12,8 +13,8 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// <see cref="ITagHelper"/> implementation targeting &lt;form&gt; elements and elements with a 'prepend-error-summary' attribute.
 /// </summary>
 [HtmlTargetElement("form")]
-[HtmlTargetElement("*", Attributes = PrependErrorSummaryAttributeName)]
-public class ContainerErrorSummaryTagHelper : TagHelper
+[HtmlTargetElement("main")]
+public class GeneratedErrorSummaryTagHelper : TagHelper
 {
     private const string PrependErrorSummaryAttributeName = "prepend-error-summary";
 
@@ -21,9 +22,9 @@ public class ContainerErrorSummaryTagHelper : TagHelper
     private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
     /// <summary>
-    /// Creates a <see cref="ContainerErrorSummaryTagHelper"/>.
+    /// Creates a <see cref="GeneratedErrorSummaryTagHelper"/>.
     /// </summary>
-    public ContainerErrorSummaryTagHelper(IComponentGenerator componentGenerator, IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+    public GeneratedErrorSummaryTagHelper(IComponentGenerator componentGenerator, IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
         ArgumentNullException.ThrowIfNull(componentGenerator);
         ArgumentNullException.ThrowIfNull(optionsAccessor);
@@ -68,8 +69,11 @@ public class ContainerErrorSummaryTagHelper : TagHelper
     {
         await output.GetChildContentAsync();
 
+        var generateErrorSummariesOptions = _optionsAccessor.Value.GenerateErrorSummaries;
+
         var prependErrorSummary = PrependErrorSummary ??
-            (output.TagName.Equals("form", StringComparison.OrdinalIgnoreCase) && _optionsAccessor.Value.PrependErrorSummaryToForms);
+            (output.TagName.Equals("form", StringComparison.OrdinalIgnoreCase) && generateErrorSummariesOptions.HasFlag(PrependToFormElements)) ||
+            (output.TagName.Equals("main", StringComparison.OrdinalIgnoreCase) && generateErrorSummariesOptions.HasFlag(PrependToMainElement));
 
         if (!prependErrorSummary)
         {
@@ -82,9 +86,9 @@ public class ContainerErrorSummaryTagHelper : TagHelper
             return;
         }
 
-        containerErrorContext.ErrorSummaryHasBeenRendered = true;
+        var disableAutoFocus = generateErrorSummariesOptions.HasFlag(DisableAutoFocus);
 
-        var errorSummary = await _componentGenerator.GenerateErrorSummaryAsync(new ErrorSummaryOptions
+        var errorSummary = await _componentGenerator.GenerateErrorSummaryAsync(new ErrorSummaryOptions()
         {
             TitleText = null,
             TitleHtml = DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,
@@ -93,11 +97,13 @@ public class ContainerErrorSummaryTagHelper : TagHelper
             ErrorList = containerErrorContext.GetErrorList(),
             Classes = null,
             Attributes = null,
-            DisableAutoFocus = null,
+            DisableAutoFocus = disableAutoFocus,
             TitleAttributes = null,
             DescriptionAttributes = null
         });
 
         output.PreContent.AppendHtml(errorSummary);
+
+        containerErrorContext.ErrorSummaryHasBeenRendered = true;
     }
 }

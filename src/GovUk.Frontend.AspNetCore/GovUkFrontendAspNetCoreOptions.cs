@@ -23,7 +23,7 @@ public class GovUkFrontendAspNetCoreOptions
             new DateOnlyDateInputModelConverter()
         };
 
-        PrependErrorSummaryToForms = false;
+        GenerateErrorSummaries = GenerateErrorSummariesOptions.PrependToMainElement;
         PrependErrorToTitle = true;
         StaticAssetsContentPath = "/assets";
         CompiledContentPath = "/govuk";
@@ -93,7 +93,27 @@ public class GovUkFrontendAspNetCoreOptions
     /// <para>This can be overriden on a form-by-form basis by setting the <c>gfa-prepend-error-summary</c> attribute.</para>
     /// <para>The default is <c>false</c>.</para>
     /// </remarks>
-    public bool PrependErrorSummaryToForms { get; set; }
+    [Obsolete("Use GenerateErrorSummaries instead.", DiagnosticId = DiagnosticIds.UseGenerateErrorSummariesInstead)]
+    public bool PrependErrorSummaryToForms
+    {
+        get => GenerateErrorSummaries.HasFlag(GenerateErrorSummariesOptions.PrependToFormElements);
+        set
+        {
+            if (value)
+            {
+                GenerateErrorSummaries |= GenerateErrorSummariesOptions.PrependToFormElements;
+            }
+            else
+            {
+                GenerateErrorSummaries &= ~GenerateErrorSummariesOptions.PrependToFormElements;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Configures automatic error summary generation.
+    /// </summary>
+    public GenerateErrorSummariesOptions GenerateErrorSummaries { get; set; }
 
     /// <summary>
     /// Whether to prepend &quot;Error: &quot; to the &lt;title&gt; element when ModelState is not valid.
