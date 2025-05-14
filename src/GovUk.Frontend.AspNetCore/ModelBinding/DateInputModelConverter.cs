@@ -27,20 +27,4 @@ public abstract class DateInputModelConverter
     /// <param name="model">The model instance to convert.</param>
     /// <returns>The converted model instance.</returns>
     public abstract DateOnly? GetDateFromModel(Type modelType, object model);
-
-    /// <summary>
-    /// Creates an instance of the specified model type from a set of parse errors.
-    /// </summary>
-    /// <remarks>
-    /// The default implementation returns <see langword="false"/>.
-    /// </remarks>
-    /// <param name="modelType">The model type to convert to.</param>
-    /// <param name="errors">The parse errors.</param>
-    /// <param name="model">The converted model instance.</param>
-    /// <returns><see langword="true"/> if a model instance was created; otherwise <see langword="false"/>.</returns>
-    public virtual bool TryCreateModelFromErrors(Type modelType, DateInputParseErrors errors, out object? model)
-    {
-        model = default;
-        return false;
-    }
 }

@@ -154,62 +154,6 @@ public class DateInputModelBinderTests
         Assert.Equal(year, bindingContext.ModelState["TheModelName.Year"]?.AttemptedValue);
     }
 
-    [Fact]
-    public async Task BindModelAsync_MissingOrInvalidComponentsAndConverterCanCreateModelFromErrors_PassesValuesToConverterAndBindsResult()
-    {
-        // Arrange
-        var modelType = typeof(CustomDateType);
-
-        var day = "1";
-        var month = "4";
-        var year = "-1";
-
-        ModelBindingContext bindingContext = new DefaultModelBindingContext()
-        {
-            ActionContext = CreateActionContextWithServices(),
-            ModelMetadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType),
-            ModelName = "TheModelName",
-            ModelState = new ModelStateDictionary(),
-            ValueProvider = new SimpleValueProvider()
-            {
-                { "TheModelName.Day", day },
-                { "TheModelName.Month", month },
-                { "TheModelName.Year", year }
-            }
-        };
-
-        var parseErrors = DateInputParseErrors.InvalidYear;
-        object? modelFromErrors = new CustomDateType() { ParseErrors = parseErrors };
-
-        var converterMock = new Mock<DateInputModelConverter>();
-        converterMock.Setup(mock => mock.CanConvertModelType(modelType)).Returns(true);
-
-        converterMock
-            .Setup(mock => mock.TryCreateModelFromErrors(modelType, parseErrors, out modelFromErrors))
-            .Returns(true)
-            .Verifiable();
-
-        var gfaOptions = Options.Create(new GovUkFrontendAspNetCoreOptions());
-
-        var modelBinder = new DateInputModelConverterModelBinder(converterMock.Object, gfaOptions);
-
-        // Act
-        await modelBinder.BindModelAsync(bindingContext);
-
-        // Assert
-        converterMock.Verify();
-
-        Assert.True(bindingContext.Result.IsModelSet);
-
-        Assert.Same(modelFromErrors, bindingContext.Result.Model);
-
-        Assert.Equal(day, bindingContext.ModelState["TheModelName.Day"]?.AttemptedValue);
-        Assert.Equal(month, bindingContext.ModelState["TheModelName.Month"]?.AttemptedValue);
-        Assert.Equal(year, bindingContext.ModelState["TheModelName.Year"]?.AttemptedValue);
-
-        Assert.Equal(0, bindingContext.ModelState.ErrorCount);
-    }
-
     [Theory]
     [InlineData(DateInputParseErrors.MissingYear, "Date of birth must include a year")]
     [InlineData(DateInputParseErrors.InvalidYear, "Date of birth must be a real date")]

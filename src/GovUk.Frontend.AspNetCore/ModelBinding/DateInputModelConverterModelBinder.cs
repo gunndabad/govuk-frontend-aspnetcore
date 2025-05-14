@@ -69,17 +69,10 @@ internal class DateInputModelConverterModelBinder : IModelBinder
             bindingContext.ModelState.SetModelValue(monthModelName, monthValueProviderResult);
             bindingContext.ModelState.SetModelValue(yearModelName, yearValueProviderResult);
 
-            if (_dateInputModelConverter.TryCreateModelFromErrors(modelType, parseErrors, out var model))
-            {
-                bindingContext.Result = ModelBindingResult.Success(model);
-            }
-            else
-            {
-                var errorMessage = GetModelStateErrorMessage(parseErrors, bindingContext.ModelMetadata);
-                bindingContext.ModelState.AddModelError(bindingContext.ModelName, errorMessage);
+            var errorMessage = GetModelStateErrorMessage(parseErrors, bindingContext.ModelMetadata);
+            bindingContext.ModelState.AddModelError(bindingContext.ModelName, errorMessage);
 
-                bindingContext.Result = ModelBindingResult.Failed();
-            }
+            bindingContext.Result = ModelBindingResult.Failed();
         }
 
         return Task.CompletedTask;
