@@ -12,9 +12,9 @@ public record FileUploadOptions
     public bool? Disabled { get; set; }
     public bool? Multiple { get; set; }
     public TemplateString? DescribedBy { get; set; }
-    public LabelOptions2? Label { get; set; }
-    public HintOptions2? Hint { get; set; }
-    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public LabelOptions? Label { get; set; }
+    public HintOptions? Hint { get; set; }
+    public ErrorMessageOptions? ErrorMessage { get; set; }
     public FileUploadOptionsFormGroup? FormGroup { get; set; }
     [JsonPropertyName("javascript")]
     public bool? JavaScript { get; set; }
@@ -28,7 +28,7 @@ public record FileUploadOptions
     public AttributeCollection? Attributes { get; set; }
 }
 
-public record FileUploadOptionsFormGroup : FormGroupOptions2
+public record FileUploadOptionsFormGroup : FormGroupOptions
 {
     public TextHtmlAndAttributesOptions? BeforeInput { get; set; }
     public TextHtmlAndAttributesOptions? AfterInput { get; set; }

@@ -14,9 +14,9 @@ public record InputOptions
     public TemplateString? Value { get; set; }
     public bool? Disabled { get; set; }
     public TemplateString? DescribedBy { get; set; }
-    public LabelOptions2? Label { get; set; }
-    public HintOptions2? Hint { get; set; }
-    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public LabelOptions? Label { get; set; }
+    public HintOptions? Hint { get; set; }
+    public ErrorMessageOptions? ErrorMessage { get; set; }
     public InputOptionsPrefix? Prefix { get; set; }
     public InputOptionsSuffix? Suffix { get; set; }
     public InputFormGroupOptions? FormGroup { get; set; }
@@ -47,7 +47,7 @@ public record InputOptionsSuffix
     public AttributeCollection? Attributes { get; set; }
 }
 
-public record InputFormGroupOptions : FormGroupOptions2
+public record InputFormGroupOptions : FormGroupOptions
 {
     public TextHtmlAndAttributesOptions? BeforeInput { get; set; }
     public TextHtmlAndAttributesOptions? AfterInput { get; set; }

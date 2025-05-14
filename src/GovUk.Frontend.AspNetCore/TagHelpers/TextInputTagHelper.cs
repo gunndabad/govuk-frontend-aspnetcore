@@ -26,7 +26,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
     //TextInputPrefixTagHelper.ShortTagName,
     TextInputSuffixTagHelper.TagName/*,
     TextInputSuffixTagHelper.ShortTagName*/)]
-[OutputElementHint(LegacyComponentGenerator.FormGroupElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.FormGroup)]
 public class TextInputTagHelper : TagHelper
 {
     internal const string ErrorMessageTagName = "govuk-input-error-message";

@@ -13,8 +13,8 @@ public class DefaultComponentGeneratorTests
     private readonly DefaultComponentGenerator _componentGenerator = new();
 
     [Theory]
-    [ComponentFixtureData("accordion", typeof(AccordionOptions2), exclude: ["with falsy values"])]
-    public Task Accordion(ComponentTestCaseData<AccordionOptions2> data) =>
+    [ComponentFixtureData("accordion", typeof(AccordionOptions), exclude: ["with falsy values"])]
+    public Task Accordion(ComponentTestCaseData<AccordionOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateAccordionAsync(options),
@@ -73,8 +73,8 @@ public class DefaultComponentGeneratorTests
             amendExpectedHtml: html => html.Replace("’", "&#x2019;"));
 
     [Theory]
-    [ComponentFixtureData("error-message", typeof(ErrorMessageOptions2))]
-    public Task ErrorMessage(ComponentTestCaseData<ErrorMessageOptions2> data) =>
+    [ComponentFixtureData("error-message", typeof(ErrorMessageOptions))]
+    public Task ErrorMessage(ComponentTestCaseData<ErrorMessageOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateErrorMessageAsync(options));
@@ -94,8 +94,8 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateExitThisPageAsync(options));
 
     [Theory]
-    [ComponentFixtureData("fieldset", typeof(FieldsetOptions2))]
-    public Task Fieldset(ComponentTestCaseData<FieldsetOptions2> data) =>
+    [ComponentFixtureData("fieldset", typeof(FieldsetOptions))]
+    public Task Fieldset(ComponentTestCaseData<FieldsetOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateFieldsetAsync(options));
@@ -138,8 +138,8 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateHeaderAsync(options));
 
     [Theory]
-    [ComponentFixtureData("hint", typeof(HintOptions2))]
-    public Task Hint(ComponentTestCaseData<HintOptions2> data) =>
+    [ComponentFixtureData("hint", typeof(HintOptions))]
+    public Task Hint(ComponentTestCaseData<HintOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateHintAsync(options),
@@ -174,8 +174,8 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GenerateInsetTextAsync(options));
 
     [Theory]
-    [ComponentFixtureData("label", typeof(LabelOptions2))]
-    public Task Label(ComponentTestCaseData<LabelOptions2> data) =>
+    [ComponentFixtureData("label", typeof(LabelOptions))]
+    public Task Label(ComponentTestCaseData<LabelOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
             data,
             (generator, options) => generator.GenerateLabelAsync(options));

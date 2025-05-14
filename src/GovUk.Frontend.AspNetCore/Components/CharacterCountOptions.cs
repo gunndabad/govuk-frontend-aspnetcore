@@ -15,9 +15,9 @@ public record CharacterCountOptions
     [JsonPropertyName("maxwords")]
     public int? MaxWords { get; set; }
     public decimal? Threshold { get; set; }
-    public LabelOptions2? Label { get; set; }
-    public HintOptions2? Hint { get; set; }
-    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public LabelOptions? Label { get; set; }
+    public HintOptions? Hint { get; set; }
+    public ErrorMessageOptions? ErrorMessage { get; set; }
     public CharacterCountOptionsFormGroup? FormGroup { get; set; }
     public TemplateString? Classes { get; set; }
     public bool? Spellcheck { get; set; }
@@ -45,7 +45,7 @@ public record CharacterCountOptionsLocalizedText
     public TemplateString? One { get; set; }
 }
 
-public record CharacterCountOptionsFormGroup : FormGroupOptions2
+public record CharacterCountOptionsFormGroup : FormGroupOptions
 {
     public TextHtmlAndAttributesOptions? BeforeInput { get; set; }
     public TextHtmlAndAttributesOptions? AfterInput { get; set; }

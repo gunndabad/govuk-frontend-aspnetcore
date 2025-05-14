@@ -16,7 +16,7 @@ public record SelectOptions
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public FormGroupOptions? FormGroup { get; set; }
     public IHtmlContent? Classes { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
 
 public record SelectOptionsItem
@@ -25,5 +25,5 @@ public record SelectOptionsItem
     public string? Text { get; set; }
     public bool? Selected { get; set; }
     public bool? Disabled { get; set; }
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }

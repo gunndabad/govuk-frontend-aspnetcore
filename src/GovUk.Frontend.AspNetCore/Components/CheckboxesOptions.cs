@@ -5,9 +5,9 @@ namespace GovUk.Frontend.AspNetCore.Components;
 public record CheckboxesOptions
 {
     public TemplateString? DescribedBy { get; set; }
-    public FieldsetOptions2? Fieldset { get; set; }
-    public HintOptions2? Hint { get; set; }
-    public ErrorMessageOptions2? ErrorMessage { get; set; }
+    public FieldsetOptions? Fieldset { get; set; }
+    public HintOptions? Hint { get; set; }
+    public ErrorMessageOptions? ErrorMessage { get; set; }
     public CheckboxesOptionsFormGroup? FormGroup { get; set; }
     public TemplateString? IdPrefix { get; set; }
     public TemplateString? Name { get; set; }
@@ -17,7 +17,7 @@ public record CheckboxesOptions
     public AttributeCollection? Attributes { get; set; }
 }
 
-public record CheckboxesOptionsFormGroup : FormGroupOptions2
+public record CheckboxesOptionsFormGroup : FormGroupOptions
 {
     public TextHtmlAndAttributesOptions? BeforeInputs { get; set; }
     public TextHtmlAndAttributesOptions? AfterInputs { get; set; }
@@ -30,8 +30,8 @@ public record CheckboxesOptionsItem
     public TemplateString? Id { get; set; }
     public TemplateString? Name { get; set; }
     public TemplateString? Value { get; set; }
-    public LabelOptions2? Label { get; set; }
-    public HintOptions2? Hint { get; set; }
+    public LabelOptions? Label { get; set; }
+    public HintOptions? Hint { get; set; }
     public TemplateString? Divider { get; set; }
     public bool? Checked { get; set; }
     public CheckboxesOptionsItemConditional? Conditional { get; set; }
