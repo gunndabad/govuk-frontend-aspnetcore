@@ -84,8 +84,6 @@ public class ErrorSummaryTagHelper : TagHelper
             return;
         }
 
-        containerErrorContext.ErrorSummaryHasBeenRendered = true;
-
         var attributes = new AttributeCollection(output.Attributes);
         attributes.Remove("class", out var classes);
 
@@ -104,5 +102,7 @@ public class ErrorSummaryTagHelper : TagHelper
         });
 
         output.ApplyComponentHtml(component, HtmlEncoder.Default);
+
+        containerErrorContext.ErrorSummaryHasBeenRendered = true;
     }
 }

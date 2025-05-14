@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
-public class ContainerErrorSummaryTagHelperTests
+public class GeneratedErrorSummaryTagHelperTests
 {
     [Theory]
     [InlineData(false, null, false)]
@@ -22,7 +22,9 @@ public class ContainerErrorSummaryTagHelperTests
         // Arrange
         var options = Options.Create(new GovUkFrontendAspNetCoreOptions()
         {
+#pragma warning disable GFA0005
             PrependErrorSummaryToForms = prepentErrorSummaryToFormsOption
+#pragma warning restore GFA0005
         });
 
         var errorHtml = "Error message";
@@ -51,7 +53,7 @@ public class ContainerErrorSummaryTagHelperTests
         var containerErrorContext = viewContext.HttpContext.GetContainerErrorContext();
         containerErrorContext.AddError(errorHtml, errorHref);
 
-        var tagHelper = new ContainerErrorSummaryTagHelper(componentGeneratorMock.Object, options)
+        var tagHelper = new GeneratedErrorSummaryTagHelper(componentGeneratorMock.Object, options)
         {
             PrependErrorSummary = prependErrorSummary,
             ViewContext = viewContext

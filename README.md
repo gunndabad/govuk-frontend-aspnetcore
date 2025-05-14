@@ -78,7 +78,6 @@ The view can be customised by defining the following sections and `ViewData`/`Vi
 
 | `ViewData` key            | Type     | Description                                                                                                                                                                                     |
 |---------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| PrependErrorSummaryToMain | `bool`   | Whether an error summary should be prepended to the `<main>` element.                                                                                                                           |
 | BodyClasses               | `string` | Add class(es) to the `<body>` element.                                                                                                                                                          |
 | ContainerClasses          | `string` | Add class(es) to the container. This is useful if you want to make the page wrapper a fixed width.                                                                                              |
 | HtmlClasses               | `string` | Add class(es) to the `<html>` element.                                                                                                                                                          |
