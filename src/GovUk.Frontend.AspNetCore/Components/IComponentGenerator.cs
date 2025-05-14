@@ -11,7 +11,7 @@ public interface IComponentGenerator
     /// Generates an accordion component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateAccordionAsync(AccordionOptions2 options);
+    ValueTask<IHtmlContent> GenerateAccordionAsync(AccordionOptions options);
 
     /// <summary>
     /// Generates a back link component.
@@ -59,7 +59,7 @@ public interface IComponentGenerator
     /// Generates an error message component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions2 options);
+    ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions options);
 
     /// <summary>
     /// Generates an error summary component.
@@ -77,7 +77,7 @@ public interface IComponentGenerator
     /// Generates a fieldset component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions2 options);
+    ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions options);
 
     /// <summary>
     /// Generates a file upload component.
@@ -101,7 +101,7 @@ public interface IComponentGenerator
     /// Generates a hint component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options);
+    ValueTask<IHtmlContent> GenerateHintAsync(HintOptions options);
 
     /// <summary>
     /// Generates an input component.
@@ -119,7 +119,7 @@ public interface IComponentGenerator
     /// Generates a label component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
-    ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options);
+    ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions options);
 
     /// <summary>
     /// Generates a notification banner component.

@@ -8,6 +8,7 @@ internal partial class DefaultComponentGenerator
         public const string CharacterCount = "div";
         public const string Breadcrumbs = "nav";
         public const string ErrorSummary = "div";
+        public const string FormGroup = "div";
         public const string InputPrefix = "div";
         public const string InputSuffix = "div";
         public const string Pagination = "nav";

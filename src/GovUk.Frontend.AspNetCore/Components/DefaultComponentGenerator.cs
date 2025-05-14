@@ -58,7 +58,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         });
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateAccordionAsync(AccordionOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateAccordionAsync(AccordionOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplateAsync("accordion", options);
@@ -106,7 +106,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("details", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateErrorMessageAsync(ErrorMessageOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplateAsync("error-message", options);
@@ -125,7 +125,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("exit-this-page", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateFieldsetAsync(FieldsetOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplateAsync("fieldset", options);
@@ -149,7 +149,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("header", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateHintAsync(HintOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateHintAsync(HintOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplateAsync("hint", options);
@@ -167,7 +167,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("input", options);
     }
 
-    public virtual ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions2 options)
+    public virtual ValueTask<IHtmlContent> GenerateLabelAsync(LabelOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
         return RenderTemplateAsync("label", options);

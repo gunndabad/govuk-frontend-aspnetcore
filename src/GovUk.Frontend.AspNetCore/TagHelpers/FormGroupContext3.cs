@@ -25,7 +25,7 @@ internal abstract class FormGroupContext3
 
     protected abstract string RootTagName { get; }
 
-    public virtual LabelOptions2 GetLabelOptions(
+    public virtual LabelOptions GetLabelOptions(
         ModelExpression? @for,
         ViewContext viewContext,
         IModelHelper modelHelper,
@@ -51,7 +51,7 @@ internal abstract class FormGroupContext3
         var attributes = Label?.Attributes.Clone() ?? new AttributeCollection();
         attributes.Remove("class", out var classes);
 
-        return new LabelOptions2()
+        return new LabelOptions()
         {
             Text = null,
             Html = html,
@@ -62,7 +62,7 @@ internal abstract class FormGroupContext3
         };
     }
 
-    public HintOptions2? GetHintOptions(ModelExpression? @for, IModelHelper modelHelper)
+    public HintOptions? GetHintOptions(ModelExpression? @for, IModelHelper modelHelper)
     {
         var html = Hint?.Html;
 
@@ -89,7 +89,7 @@ internal abstract class FormGroupContext3
         var attributes = Hint?.Attributes.Clone() ?? new AttributeCollection();
         attributes.Remove("class", out var classes);
 
-        return new HintOptions2()
+        return new HintOptions()
         {
             Text = null,
             Html = html,
@@ -99,7 +99,7 @@ internal abstract class FormGroupContext3
         };
     }
 
-    public ErrorMessageOptions2? GetErrorMessageOptions(ModelExpression? @for, ViewContext viewContext, IModelHelper modelHelper, bool? ignoreModelStateErrors)
+    public ErrorMessageOptions? GetErrorMessageOptions(ModelExpression? @for, ViewContext viewContext, IModelHelper modelHelper, bool? ignoreModelStateErrors)
     {
         var html = ErrorMessage?.Html;
 
@@ -121,7 +121,7 @@ internal abstract class FormGroupContext3
         var attributes = ErrorMessage?.Attributes.Clone() ?? new AttributeCollection();
         attributes.Remove("class", out var classes);
 
-        return new ErrorMessageOptions2()
+        return new ErrorMessageOptions()
         {
             Text = null,
             Html = html,

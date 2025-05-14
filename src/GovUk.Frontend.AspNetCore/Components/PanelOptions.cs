@@ -13,8 +13,8 @@ public record PanelOptions
     public AttributeCollection? Attributes { get; set; }
 
     [NonStandardParameter]
-    public EncodedAttributesDictionary? TitleAttributes { get; set; }
+    public AttributeCollection? TitleAttributes { get; set; }
 
     [NonStandardParameter]
-    public EncodedAttributesDictionary? BodyAttributes { get; set; }
+    public AttributeCollection? BodyAttributes { get; set; }
 }
