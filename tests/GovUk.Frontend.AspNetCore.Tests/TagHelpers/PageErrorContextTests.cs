@@ -2,13 +2,13 @@ using GovUk.Frontend.AspNetCore.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
-public class ContainerErrorContextTests
+public class PageErrorContextTests
 {
     [Fact]
     public void AddError_AddsErrorToContext()
     {
         // Arrange
-        var context = new ContainerErrorContext();
+        var context = new PageErrorContext();
         var html = "Content";
         var href = "/foo";
 

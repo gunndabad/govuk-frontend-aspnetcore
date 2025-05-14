@@ -2,7 +2,7 @@ using GovUk.Frontend.AspNetCore.Components;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
-internal class ContainerErrorContext
+internal class PageErrorContext
 {
     private readonly List<(TemplateString Html, TemplateString? Href)> _errors = new();
 
