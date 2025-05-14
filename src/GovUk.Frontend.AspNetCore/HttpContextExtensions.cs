@@ -5,26 +5,26 @@ namespace GovUk.Frontend.AspNetCore;
 
 internal static class HttpContextExtensions
 {
-    internal static ContainerErrorContext GetContainerErrorContext(this HttpContext httpContext)
+    internal static PageErrorContext GetContainerErrorContext(this HttpContext httpContext)
     {
         ArgumentNullException.ThrowIfNull(httpContext);
 
-        if (httpContext.Items.TryGetValue(typeof(ContainerErrorContext), out var containerErrorContextObj) &&
-            containerErrorContextObj is ContainerErrorContext containerErrorContext)
+        if (httpContext.Items.TryGetValue(typeof(PageErrorContext), out var containerErrorContextObj) &&
+            containerErrorContextObj is PageErrorContext containerErrorContext)
         {
             return containerErrorContext;
         }
 
-        containerErrorContext = new ContainerErrorContext();
+        containerErrorContext = new PageErrorContext();
         SetContainerErrorContext(httpContext, containerErrorContext);
         return containerErrorContext;
     }
 
-    internal static void SetContainerErrorContext(this HttpContext httpContext, ContainerErrorContext containerErrorContext)
+    internal static void SetContainerErrorContext(this HttpContext httpContext, PageErrorContext pageErrorContext)
     {
         ArgumentNullException.ThrowIfNull(httpContext);
-        ArgumentNullException.ThrowIfNull(containerErrorContext);
+        ArgumentNullException.ThrowIfNull(pageErrorContext);
 
-        httpContext.Items[typeof(ContainerErrorContext)] = containerErrorContext;
+        httpContext.Items[typeof(PageErrorContext)] = pageErrorContext;
     }
 }
