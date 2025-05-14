@@ -28,6 +28,10 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 #### `is-current` on `<govuk-pagination-item>`
 `is-current` has been renamed to `current`.
 
+#### Date input model binding
+The `TryCreateModelFromErrors` method on `DateInputModelConverter` has been removed;
+model binding when there are parse errors is no longer supported.
+
 ### Fixes
 
 #### Source map errors
