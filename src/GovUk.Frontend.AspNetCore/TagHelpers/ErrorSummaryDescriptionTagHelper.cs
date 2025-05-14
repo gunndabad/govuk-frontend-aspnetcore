@@ -25,7 +25,7 @@ public class ErrorSummaryDescriptionTagHelper : TagHelper
 
         errorSummaryContext.SetDescription(
             new AttributeCollection(output.Attributes),
-            childContent.ToHtmlString());
+            childContent.ToTemplateString());
 
         output.SuppressOutput();
     }

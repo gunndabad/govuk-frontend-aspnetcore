@@ -34,4 +34,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="GovUk.Frontend.AspNetCore.TestCommon" />
+  </ItemGroup>
+
 </Project>

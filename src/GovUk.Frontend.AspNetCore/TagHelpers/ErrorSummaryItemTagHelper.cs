@@ -97,11 +97,11 @@ public class ErrorSummaryItemTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        string itemHtml;
+        TemplateString itemHtml;
 
         if (output.TagMode == TagMode.StartTagAndEndTag)
         {
-            itemHtml = childContent.ToHtmlString();
+            itemHtml = childContent.ToTemplateString();
         }
         else
         {

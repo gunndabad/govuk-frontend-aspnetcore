@@ -65,7 +65,7 @@ public class FormGroupErrorMessageTagHelper : TagHelper
             formGroupContext3.SetErrorMessage(
                 VisuallyHiddenText,
                 new AttributeCollection(output.Attributes),
-                childContent?.ToHtmlString(),
+                childContent?.ToTemplateString(),
                 output.TagName);
         }
     }
@@ -122,7 +122,7 @@ public class FormGroupErrorMessageTagHelper3 : TagHelper
         formGroupContext3.SetErrorMessage(
             VisuallyHiddenText,
             new AttributeCollection(output.Attributes),
-            childContent?.ToHtmlString(),
+            childContent?.ToTemplateString(),
             output.TagName);
     }
 }

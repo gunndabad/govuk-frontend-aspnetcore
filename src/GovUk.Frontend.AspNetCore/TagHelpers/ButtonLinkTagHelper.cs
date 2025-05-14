@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -56,7 +57,7 @@ public class ButtonLinkTagHelper : TagHelper
         var component = await _componentGenerator.GenerateButtonAsync(new ButtonOptions()
         {
             Element = Element,
-            Html = content.ToHtmlString(),
+            Html = content.ToTemplateString(),
             Href = href,
             Classes = classes,
             Attributes = attributes,
@@ -64,6 +65,6 @@ public class ButtonLinkTagHelper : TagHelper
             Id = Id
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -65,6 +66,6 @@ public class PaginationTagHelper : TagHelper
             Attributes = attributes
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
     }
 }

@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -38,11 +39,11 @@ public class TagTagHelper : TagHelper
         var component = await _componentGenerator.GenerateTagAsync(new TagOptions()
         {
             Text = null,
-            Html = content.ToHtmlString(),
+            Html = content.ToTemplateString(),
             Attributes = attributes,
             Classes = classes
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
     }
 }

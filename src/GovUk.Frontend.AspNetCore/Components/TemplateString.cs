@@ -54,7 +54,7 @@ public sealed class TemplateString
         }
     }
 
-    internal FluidValue ToFluidValue()
+    internal FluidValue ToFluidValue(HtmlEncoder encoder)
     {
         if (_value is null)
         {
@@ -67,7 +67,7 @@ public sealed class TemplateString
         }
 
         Debug.Assert(_value is IHtmlContent);
-        var html = ((IHtmlContent)_value).ToHtmlString();
+        var html = ((IHtmlContent)_value).ToHtmlString(encoder);
         return new StringValue(html, encode: false);
     }
 
