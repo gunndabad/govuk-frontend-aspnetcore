@@ -8,18 +8,11 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
 //[HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(LegacyComponentGenerator.InputPrefixElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.InputPrefix)]
 public class TextInputPrefixTagHelper : TagHelper
 {
     internal const string TagName = "govuk-input-prefix";
     //internal const string ShortTagName = ShortTagNames.Prefix;
-
-    /// <summary>
-    /// Creates an <see cref="TextInputPrefixTagHelper"/>.
-    /// </summary>
-    public TextInputPrefixTagHelper()
-    {
-    }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -33,7 +26,18 @@ public class TextInputPrefixTagHelper : TagHelper
             childContent = output.Content;
         }
 
-        inputContext.SetPrefix(new EncodedAttributesDictionary(output.Attributes), childContent, output.TagName);
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
+
+        inputContext.SetPrefix(
+            new InputOptionsPrefix()
+            {
+                Text = null,
+                Html = childContent.ToTemplateString(),
+                Classes = classes,
+                Attributes = attributes
+            },
+            output.TagName);
 
         output.SuppressOutput();
     }

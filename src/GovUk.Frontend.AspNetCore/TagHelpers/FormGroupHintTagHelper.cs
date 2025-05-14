@@ -48,45 +48,9 @@ public class FormGroupHintTagHelper : TagHelper
 /// <summary>
 /// Represents the hint in a GDS form group component.
 /// </summary>
-[HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.HintElement)]
-public class FormGroupHintTagHelper2 : TagHelper
-{
-    /// <summary>
-    /// Creates a <see cref="FormGroupHintTagHelper2"/>.
-    /// </summary>
-    public FormGroupHintTagHelper2()
-    {
-    }
-
-    /// <inheritdoc/>
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
-
-        if (output.Content.IsModified)
-        {
-            childContent = output.Content;
-        }
-
-        var formGroupContext = context.GetContextItem<FormGroupContext2>();
-
-        formGroupContext.SetHint(
-            new EncodedAttributesDictionary(output.Attributes),
-            childContent?.Snapshot(),
-            output.TagName);
-
-        output.SuppressOutput();
-    }
-}
-
-/// <summary>
-/// Represents the hint in a GDS form group component.
-/// </summary>
 [HtmlTargetElement(CharacterCountTagHelper.HintTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(FileUploadTagHelper.HintTagName, ParentTag = FileUploadTagHelper.TagName)]
+[HtmlTargetElement(TextInputTagHelper.HintTagName, ParentTag = TextInputTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.HintElement)]
 public class FormGroupHintTagHelper3 : TagHelper
 {

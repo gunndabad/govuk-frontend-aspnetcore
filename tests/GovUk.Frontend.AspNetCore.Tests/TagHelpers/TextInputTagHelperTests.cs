@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Html;
@@ -45,12 +46,12 @@ public class TextInputTagHelperTests
 
                 inputContext.SetLabel(
                     isPageHeading: false,
-                    attributes: new EncodedAttributesDictionary(),
+                    attributes: new AttributeCollection(),
                     new HtmlString(labelHtml),
                     TextInputTagHelper.LabelTagName);
 
                 inputContext.SetHint(
-                    attributes: new EncodedAttributesDictionary(),
+                    attributes: new AttributeCollection(),
                     new HtmlString(hintHtml),
                     TextInputTagHelper.HintTagName);
 
@@ -60,11 +61,11 @@ public class TextInputTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             DescribedBy = describedBy,
@@ -90,19 +91,19 @@ public class TextInputTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions);
-        Assert.Equal(id, actualOptions.Id?.ToHtmlString());
-        Assert.Equal(name, actualOptions.Name?.ToHtmlString());
-        Assert.Equal(type, actualOptions.Type?.ToHtmlString());
-        Assert.Equal(inputMode, actualOptions.Inputmode?.ToHtmlString());
-        Assert.Equal(value, actualOptions.Value?.ToHtmlString());
+        Assert.Equal(id, actualOptions.Id);
+        Assert.Equal(name, actualOptions.Name);
+        Assert.Equal(type, actualOptions.Type);
+        Assert.Equal(inputMode, actualOptions.InputMode);
+        Assert.Equal(value, actualOptions.Value);
         Assert.Equal(disabled, actualOptions.Disabled);
-        Assert.Equal(describedBy, actualOptions.DescribedBy?.ToHtmlString());
-        Assert.Equal(labelHtml, actualOptions.Label?.Html?.ToHtmlString());
-        Assert.Equal(hintHtml, actualOptions.Hint?.Html?.ToHtmlString());
+        Assert.Equal(describedBy, actualOptions.DescribedBy);
+        Assert.Equal(labelHtml, actualOptions.Label?.Html);
+        Assert.Equal(hintHtml, actualOptions.Hint?.Html);
         Assert.Null(actualOptions.ErrorMessage);
-        Assert.Equal(classes, actualOptions.Classes?.ToHtmlString());
-        Assert.Equal(autocomplete, actualOptions.Autocomplete?.ToHtmlString());
-        Assert.Equal(pattern, actualOptions.Pattern?.ToHtmlString());
+        Assert.Equal(classes, actualOptions.Classes);
+        Assert.Equal(autocomplete, actualOptions.AutoComplete);
+        Assert.Equal(pattern, actualOptions.Pattern);
         Assert.Equal(spellcheck, actualOptions.Spellcheck);
 
         Assert.NotNull(actualOptions.Attributes);
@@ -139,13 +140,16 @@ public class TextInputTagHelperTests
 
                 inputContext.SetLabel(
                     isPageHeading: false,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(labelHtml),
                     TextInputTagHelper.LabelTagName);
 
                 inputContext.SetErrorMessage(
                     visuallyHiddenText: new HtmlString(errorVht),
-                    attributes: new EncodedAttributesDictionaryBuilder().With("data-foo", errorDataFooAttribute, encodeValue: false),
+                    attributes: new AttributeCollection()
+                    {
+                        { "data-foo", errorDataFooAttribute }
+                    },
                     new HtmlString(errorHtml),
                     TextInputTagHelper.ErrorMessageTagName);
 
@@ -155,11 +159,11 @@ public class TextInputTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             Name = name,
@@ -171,8 +175,8 @@ public class TextInputTagHelperTests
 
         // Assert
         Assert.NotNull(actualOptions?.ErrorMessage);
-        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html?.ToHtmlString());
-        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText?.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions.ErrorMessage.Html);
+        Assert.Equal(errorVht, actualOptions.ErrorMessage.VisuallyHiddenText);
         Assert.NotNull(actualOptions.ErrorMessage.Attributes);
         Assert.Collection(actualOptions.ErrorMessage.Attributes, kvp =>
         {
@@ -240,11 +244,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = TestUtils.CreateViewContext()
@@ -257,10 +261,10 @@ public class TextInputTagHelperTests
         Assert.NotNull(actualOptions);
         Assert.NotNull(actualOptions.Id);
         Assert.NotNull(actualOptions.Name);
-        Assert.Equal(modelStateValue, actualOptions.Value?.ToHtmlString());
-        Assert.Equal(displayName, actualOptions.Label?.Html?.ToHtmlString());
-        Assert.Equal(description, actualOptions.Hint?.Html?.ToHtmlString());
-        Assert.Equal(modelStateError, actualOptions.ErrorMessage?.Html?.ToHtmlString());
+        Assert.Equal(modelStateValue, actualOptions.Value);
+        Assert.Equal(displayName, actualOptions.Label?.Html);
+        Assert.Equal(description, actualOptions.Hint?.Html);
+        Assert.Equal(modelStateError, actualOptions.ErrorMessage?.Html);
     }
 
     [Fact]
@@ -310,11 +314,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -325,7 +329,7 @@ public class TextInputTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(value, actualOptions?.Value?.ToHtmlString());
+        Assert.Equal(value, actualOptions?.Value);
     }
 
     [Fact]
@@ -351,7 +355,7 @@ public class TextInputTagHelperTests
 
                 inputContext.SetLabel(
                     isPageHeading: false,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(labelHtml),
                     TextInputTagHelper.LabelTagName);
 
@@ -383,11 +387,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -397,7 +401,7 @@ public class TextInputTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(labelHtml, actualOptions?.Label?.Html?.ToHtmlString());
+        Assert.Equal(labelHtml, actualOptions?.Label?.Html);
     }
 
     [Fact]
@@ -422,7 +426,7 @@ public class TextInputTagHelperTests
             {
                 var inputContext = context.GetContextItem<TextInputContext>();
 
-                inputContext.SetHint(new EncodedAttributesDictionary(), new HtmlString(hintHtml), TextInputTagHelper.HintTagName);
+                inputContext.SetHint(new AttributeCollection(), new HtmlString(hintHtml), TextInputTagHelper.HintTagName);
 
                 var tagHelperContent = new DefaultTagHelperContent();
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
@@ -456,11 +460,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -470,7 +474,7 @@ public class TextInputTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(hintHtml, actualOptions?.Hint?.Html?.ToHtmlString());
+        Assert.Equal(hintHtml, actualOptions?.Hint?.Html);
     }
 
     [Fact]
@@ -497,7 +501,7 @@ public class TextInputTagHelperTests
 
                 inputContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(errorHtml),
                     TextInputTagHelper.ErrorMessageTagName);
 
@@ -536,11 +540,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = TestUtils.CreateViewContext()
@@ -550,7 +554,7 @@ public class TextInputTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html?.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
     }
 
     [Fact]
@@ -607,11 +611,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             ViewContext = new ViewContext(),
@@ -649,7 +653,7 @@ public class TextInputTagHelperTests
 
                 inputContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(errorHtml),
                     TextInputTagHelper.ErrorMessageTagName);
 
@@ -688,11 +692,11 @@ public class TextInputTagHelperTests
         var modelExplorer = new EmptyModelMetadataProvider().GetModelExplorerForType(typeof(Model), new Model())
             .GetExplorerForProperty(nameof(Model.SimpleProperty));
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
-        TextInputOptions? actualOptions = null;
-        componentGeneratorMock.Setup(mock => mock.GenerateTextInput(It.IsAny<TextInputOptions>())).Callback<TextInputOptions>(o => actualOptions = o);
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        InputOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateInputAsync(It.IsAny<InputOptions>())).Callback<InputOptions>(o => actualOptions = o);
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             For = new ModelExpression(nameof(Model.SimpleProperty), modelExplorer),
             IgnoreModelStateErrors = true,
@@ -703,7 +707,7 @@ public class TextInputTagHelperTests
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html?.ToHtmlString());
+        Assert.Equal(errorHtml, actualOptions?.ErrorMessage?.Html);
     }
 
     [Fact]
@@ -730,13 +734,13 @@ public class TextInputTagHelperTests
 
                 inputContext.SetLabel(
                     isPageHeading: false,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(labelHtml),
                     TextInputTagHelper.LabelTagName);
 
                 inputContext.SetErrorMessage(
                     visuallyHiddenText: null,
-                    new EncodedAttributesDictionary(),
+                    new AttributeCollection(),
                     new HtmlString(errorHtml),
                     TextInputTagHelper.ErrorMessageTagName);
 
@@ -746,9 +750,9 @@ public class TextInputTagHelperTests
 
         var modelHelperMock = new Mock<IModelHelper>();
 
-        var componentGeneratorMock = new Mock<LegacyComponentGenerator>() { CallBase = true };
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
 
-        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object)
+        var tagHelper = new TextInputTagHelper(componentGeneratorMock.Object, modelHelperMock.Object, HtmlEncoder.Default)
         {
             Id = id,
             Name = name,

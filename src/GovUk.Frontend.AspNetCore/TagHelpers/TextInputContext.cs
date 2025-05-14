@@ -1,15 +1,15 @@
 using GovUk.Frontend.AspNetCore.Components;
-using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
-internal class TextInputContext : FormGroupContext2
+internal class TextInputContext : FormGroupContext3
 {
-    internal record PrefixSuffixInfo(EncodedAttributesDictionary Attributes, IHtmlContent Html, string TagName);
+    private (InputOptionsPrefix Options, string TagName)? _prefix;
+    private (InputOptionsSuffix Options, string TagName)? _suffix;
 
-    // internal for testing
-    internal PrefixSuffixInfo? Prefix;
-    internal PrefixSuffixInfo? Suffix;
+    public InputOptionsPrefix? Prefix => _prefix?.Options;
+
+    public InputOptionsSuffix? Suffix => _suffix?.Options;
 
     protected override IReadOnlyCollection<string> ErrorMessageTagNames => [/*TextInputTagHelper.ErrorMessageShortTagName, */TextInputTagHelper.ErrorMessageTagName];
 
@@ -23,66 +23,46 @@ internal class TextInputContext : FormGroupContext2
 
     protected override string RootTagName => TextInputTagHelper.TagName;
 
-    public TextInputOptionsPrefix? GetPrefixOptions() => Prefix is not null ?
-        new TextInputOptionsPrefix()
-        {
-            Text = null,
-            Html = Prefix.Html,
-            Attributes = new EncodedAttributesDictionaryBuilder(Prefix.Attributes).Without("class", out var classes),
-            Classes = classes
-        } :
-        null;
-
-    public TextInputOptionsSuffix? GetSuffixOptions() => Suffix is not null ?
-        new TextInputOptionsSuffix()
-        {
-            Text = null,
-            Html = Suffix.Html,
-            Attributes = new EncodedAttributesDictionaryBuilder(Suffix.Attributes).Without("class", out var classes),
-            Classes = classes
-        } :
-        null;
-
     public override void SetErrorMessage(
-        IHtmlContent? visuallyHiddenText,
-        EncodedAttributesDictionary attributes,
-        IHtmlContent? html,
+        TemplateString? visuallyHiddenText,
+        AttributeCollection attributes,
+        TemplateString? html,
         string tagName)
     {
-        if (Prefix is not null)
+        if (_prefix is var (_, prefixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Prefix.TagName);
+                prefixTagName);
         }
 
-        if (Suffix is not null)
+        if (_suffix is var (_, suffixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Suffix.TagName);
+                suffixTagName);
         }
 
         base.SetErrorMessage(visuallyHiddenText, attributes, html, tagName);
     }
 
     public override void SetHint(
-        EncodedAttributesDictionary attributes,
-        IHtmlContent? html,
+        AttributeCollection attributes,
+        TemplateString? html,
         string tagName)
     {
-        if (Prefix is not null)
+        if (_prefix is var (_, prefixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Prefix.TagName);
+                prefixTagName);
         }
 
-        if (Suffix is not null)
+        if (_suffix is var (_, suffixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Suffix.TagName);
+                suffixTagName);
         }
 
         base.SetHint(attributes, html, tagName);
@@ -90,33 +70,31 @@ internal class TextInputContext : FormGroupContext2
 
     public override void SetLabel(
         bool isPageHeading,
-        EncodedAttributesDictionary attributes,
-        IHtmlContent? html,
+        AttributeCollection attributes,
+        TemplateString? html,
         string tagName)
     {
-        if (Prefix is not null)
+        if (_prefix is var (_, prefixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Prefix.TagName);
+                prefixTagName);
         }
 
-        if (Suffix is not null)
+        if (_suffix is var (_, suffixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Suffix.TagName);
+                suffixTagName);
         }
 
         base.SetLabel(isPageHeading, attributes, html, tagName);
     }
 
-    public void SetPrefix(
-        EncodedAttributesDictionary attributes,
-        IHtmlContent html,
-        string tagName)
+    public void SetPrefix(InputOptionsPrefix options, string tagName)
     {
-        ArgumentNullException.ThrowIfNull(html);
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(tagName);
 
         if (Prefix is not null)
         {
@@ -125,22 +103,20 @@ internal class TextInputContext : FormGroupContext2
                 RootTagName);
         }
 
-        if (Suffix is not null)
+        if (_suffix is var (_, suffixTagName))
         {
             throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(
                 tagName,
-                Suffix.TagName);
+                suffixTagName);
         }
 
-        Prefix = new PrefixSuffixInfo(attributes, html, tagName);
+        _prefix = (options, tagName);
     }
 
-    public void SetSuffix(
-        EncodedAttributesDictionary attributes,
-        IHtmlContent html,
-        string tagName)
+    public void SetSuffix(InputOptionsSuffix options, string tagName)
     {
-        ArgumentNullException.ThrowIfNull(html);
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(tagName);
 
         if (Suffix is not null)
         {
@@ -149,6 +125,6 @@ internal class TextInputContext : FormGroupContext2
                 RootTagName);
         }
 
-        Suffix = new PrefixSuffixInfo(attributes, html, tagName);
+        _suffix = (options, tagName);
     }
 }

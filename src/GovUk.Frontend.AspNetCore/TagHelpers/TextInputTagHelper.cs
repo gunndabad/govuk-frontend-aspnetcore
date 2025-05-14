@@ -1,12 +1,13 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using AttributeCollection = GovUk.Frontend.AspNetCore.Components.AttributeCollection;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
@@ -54,8 +55,9 @@ public class TextInputTagHelper : TagHelper
     private const string TypeAttributeName = "type";
     private const string ValueAttributeName = "value";
 
-    private readonly ILegacyComponentGenerator _componentGenerator;
+    private readonly IComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
+    private readonly HtmlEncoder _encoder;
 
     private string? _value;
     private bool _valueSpecified;
@@ -63,23 +65,21 @@ public class TextInputTagHelper : TagHelper
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public TextInputTagHelper()
-        : this(new LegacyComponentGenerator())
+    public TextInputTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
+        : this(componentGenerator, new DefaultModelHelper(), encoder)
     {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
     }
 
-    /// <summary>
-    /// Creates an <see cref="TextInputTagHelper"/>.
-    /// </summary>
-    internal TextInputTagHelper(ILegacyComponentGenerator componentGenerator)
-        : this(componentGenerator, modelHelper: new DefaultModelHelper())
+    internal TextInputTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper, HtmlEncoder encoder)
     {
-    }
-
-    internal TextInputTagHelper(ILegacyComponentGenerator componentGenerator, IModelHelper modelHelper)
-    {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(modelHelper);
+        ArgumentNullException.ThrowIfNull(encoder);
         _componentGenerator = componentGenerator;
         _modelHelper = modelHelper;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -229,61 +229,58 @@ public class TextInputTagHelper : TagHelper
         var textInputContext = new TextInputContext();
 
         using (context.SetScopedContextItem(textInputContext))
-        using (context.SetScopedContextItem(typeof(FormGroupContext2), textInputContext))
+        using (context.SetScopedContextItem(typeof(FormGroupContext3), textInputContext))
         {
             await output.GetChildContentAsync();
         }
 
-        var name = ResolveNameUnencoded();
+        var name = ResolveName();
         var id = ResolveId(name);
         var value = ResolveValue();
         var labelOptions = textInputContext.GetLabelOptions(For, ViewContext!, _modelHelper, id, AspForAttributeName);
         var hintOptions = textInputContext.GetHintOptions(For, _modelHelper);
         var errorMessageOptions = textInputContext.GetErrorMessageOptions(For, ViewContext!, _modelHelper, IgnoreModelStateErrors);
-        var prefixOptions = textInputContext.GetPrefixOptions();
-        var suffixOptions = textInputContext.GetSuffixOptions();
 
         if (LabelClass is not null)
         {
-            labelOptions.Classes = new HtmlString(labelOptions.Classes?.ToHtmlString() + " " + LabelClass.EncodeHtml());
+            labelOptions.Classes = labelOptions.Classes?.Concatenate(_encoder, " ", LabelClass);
         }
 
-        var formGroupAttributes = new EncodedAttributesDictionary(output.Attributes);
+        var formGroupAttributes = new AttributeCollection(output.Attributes);
         formGroupAttributes.Remove("class", out var formGroupClasses);
-        var formGroupOptions = new FormGroupOptions()
+        var formGroupOptions = new InputFormGroupOptions()
         {
             Attributes = formGroupAttributes,
             Classes = formGroupClasses
         };
 
-        var attributes = EncodedAttributesDictionary.FromDictionaryWithEncodedValues(InputAttributes);
+        var attributes = new AttributeCollection(InputAttributes);
         attributes.Remove("class", out var classes);
 
-        var inputWrapperAttributes =
-            EncodedAttributesDictionary.FromDictionaryWithEncodedValues(InputWrapperAttributes);
+        var inputWrapperAttributes = new AttributeCollection(InputWrapperAttributes);
         inputWrapperAttributes.Remove("classes", out var inputWrapperClasses);
 
-        var component = _componentGenerator.GenerateTextInput(new TextInputOptions()
+        var component = await _componentGenerator.GenerateInputAsync(new InputOptions()
         {
             Id = id,
-            Name = name.EncodeHtml(),
-            Type = Type.EncodeHtml(),
-            Inputmode = InputMode.EncodeHtml(),
+            Name = name,
+            Type = Type,
+            InputMode = InputMode,
             Value = value,
             Disabled = Disabled,
-            DescribedBy = DescribedBy.EncodeHtml(),
+            DescribedBy = DescribedBy,
             Label = labelOptions,
             Hint = hintOptions,
             ErrorMessage = errorMessageOptions,
-            Prefix = prefixOptions,
-            Suffix = suffixOptions,
+            Prefix = textInputContext.Prefix,
+            Suffix = textInputContext.Suffix,
             FormGroup = formGroupOptions,
             Classes = classes,
-            Autocomplete = Autocomplete.EncodeHtml(),
-            Pattern = Pattern.EncodeHtml(),
+            AutoComplete = Autocomplete,
+            Pattern = Pattern,
             Spellcheck = Spellcheck,
-            Autocapitalize = Autocapitalize.EncodeHtml(),
-            InputWrapper = new TextInputOptionsInputWrapper()
+            AutoCapitalize = Autocapitalize,
+            InputWrapper = new InputOptionsInputWrapper()
             {
                 Classes = inputWrapperClasses,
                 Attributes = inputWrapperAttributes
@@ -291,27 +288,20 @@ public class TextInputTagHelper : TagHelper
             Attributes = attributes
         });
 
-        component.WriteTo(output);
+        output.ApplyComponentHtml(component);
 
         if (errorMessageOptions is not null)
         {
             Debug.Assert(errorMessageOptions.Html is not null);
             var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
-            containerErrorContext.AddError(errorMessageOptions.Html!.ToHtmlString(), href: "#" + id);
+            containerErrorContext.AddError(errorMessageOptions.Html, href: "#" + id);
         }
     }
 
-    private IHtmlContent ResolveId(string nameUnencoded)
-    {
-        if (Id is not null)
-        {
-            return Id.EncodeHtml();
-        }
+    private string ResolveId(string name) =>
+        Id ?? TagBuilder.CreateSanitizedId(name, Constants.IdAttributeDotReplacement);
 
-        return TagBuilder.CreateSanitizedId(nameUnencoded, Constants.IdAttributeDotReplacement).EncodeHtml();
-    }
-
-    private string ResolveNameUnencoded()
+    private string ResolveName()
     {
         if (Name is null && For is null)
         {
@@ -323,13 +313,13 @@ public class TextInputTagHelper : TagHelper
         return Name ?? _modelHelper.GetFullHtmlFieldName(ViewContext!, For!.Name);
     }
 
-    private IHtmlContent? ResolveValue()
+    private string? ResolveValue()
     {
         if (_valueSpecified)
         {
-            return _value.EncodeHtml();
+            return _value;
         }
 
-        return For is not null ? _modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name).EncodeHtml() : null;
+        return For is not null ? _modelHelper.GetModelValue(ViewContext!, For.ModelExplorer, For.Name) : null;
     }
 }

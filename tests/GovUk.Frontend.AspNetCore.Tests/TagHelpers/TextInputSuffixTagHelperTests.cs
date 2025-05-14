@@ -39,6 +39,6 @@ public class TextInputSuffixTagHelperTests
 
         // Assert
         Assert.NotNull(inputContext.Suffix);
-        Assert.Equal(suffix, inputContext.Suffix!.Html?.ToHtmlString());
+        Assert.Equal(suffix, inputContext.Suffix!.Html);
     }
 }
