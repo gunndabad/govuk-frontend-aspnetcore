@@ -8,32 +8,36 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TextInputTagHelper.TagName)]
 //[HtmlTargetElement(ShortTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(LegacyComponentGenerator.InputSuffixElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.InputSuffix)]
 public class TextInputSuffixTagHelper : TagHelper
 {
     internal const string TagName = "govuk-input-suffix";
     //internal const string ShortTagName = ShortTagNames.Suffix;
-
-    /// <summary>
-    /// Creates an <see cref="TextInputSuffixTagHelper"/>.
-    /// </summary>
-    public TextInputSuffixTagHelper()
-    {
-    }
 
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         var inputContext = context.GetContextItem<TextInputContext>();
 
-        var childContent = (await output.GetChildContentAsync()).Snapshot();
+        var childContent = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
             childContent = output.Content;
         }
 
-        inputContext.SetSuffix(new EncodedAttributesDictionary(output.Attributes), childContent, output.TagName);
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
+
+        inputContext.SetSuffix(
+            new InputOptionsSuffix()
+            {
+                Text = null,
+                Html = childContent.ToTemplateString(),
+                Classes = classes,
+                Attributes = attributes
+            },
+            output.TagName);
 
         output.SuppressOutput();
     }

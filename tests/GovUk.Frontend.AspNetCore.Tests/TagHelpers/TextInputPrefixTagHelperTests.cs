@@ -39,6 +39,6 @@ public class TextInputPrefixTagHelperTests
 
         // Assert
         Assert.NotNull(inputContext.Prefix);
-        Assert.Equal(prefix, inputContext.Prefix?.Html?.ToHtmlString());
+        Assert.Equal(prefix, inputContext.Prefix?.Html);
     }
 }

@@ -60,14 +60,6 @@ public class FormGroupErrorMessageTagHelper : TagHelper
                 output.Attributes.ToAttributeDictionary(),
                 childContent?.Snapshot());
         }
-        else if (context.TryGetContextItem<FormGroupContext2>(out var formGroupContext2))
-        {
-            formGroupContext2.SetErrorMessage(
-                VisuallyHiddenText.EncodeHtml(),
-                new EncodedAttributesDictionary(output.Attributes),
-                childContent?.Snapshot(),
-                output.TagName);
-        }
         else if (context.TryGetContextItem<FormGroupContext3>(out var formGroupContext3))
         {
             formGroupContext3.SetErrorMessage(
@@ -82,62 +74,9 @@ public class FormGroupErrorMessageTagHelper : TagHelper
 /// <summary>
 /// Represents the error message in a GDS form group component.
 /// </summary>
-[HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.ErrorMessageElement)]
-public class FormGroupErrorMessageTagHelper2 : TagHelper
-{
-    private const string VisuallyHiddenTextAttributeName = "visually-hidden-text";
-
-    /// <summary>
-    /// Creates a <see cref="FormGroupErrorMessageTagHelper2"/>.
-    /// </summary>
-    public FormGroupErrorMessageTagHelper2()
-    {
-    }
-
-    /// <summary>
-    /// A visually hidden prefix used before the error message.
-    /// </summary>
-    /// <remarks>
-    /// The default is <c>&quot;Error&quot;</c>.
-    /// </remarks>
-    [HtmlAttributeName(VisuallyHiddenTextAttributeName)]
-    public string? VisuallyHiddenText { get; set; }
-
-    /// <inheritdoc/>
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var childContent = output.TagMode == TagMode.StartTagAndEndTag ?
-            await output.GetChildContentAsync() :
-            null;
-
-        if (output.Content.IsModified)
-        {
-            childContent = output.Content;
-        }
-
-        SetErrorMessage(childContent, context, output);
-
-        output.SuppressOutput();
-    }
-
-    private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
-    {
-        var formGroupContext = context.GetContextItem<FormGroupContext2>();
-
-        formGroupContext.SetErrorMessage(
-            VisuallyHiddenText.EncodeHtml(),
-            new EncodedAttributesDictionary(output.Attributes),
-            childContent?.Snapshot(),
-            output.TagName);
-    }
-}
-
-/// <summary>
-/// Represents the error message in a GDS form group component.
-/// </summary>
 [HtmlTargetElement(CharacterCountTagHelper.ErrorMessageTagName, ParentTag = CharacterCountTagHelper.TagName)]
 [HtmlTargetElement(FileUploadTagHelper.ErrorMessageTagName, ParentTag = FileUploadTagHelper.TagName)]
+[HtmlTargetElement(TextInputTagHelper.ErrorMessageTagName, ParentTag = TextInputTagHelper.TagName)]
 [OutputElementHint(ComponentGenerator.ErrorMessageElement)]
 public class FormGroupErrorMessageTagHelper3 : TagHelper
 {

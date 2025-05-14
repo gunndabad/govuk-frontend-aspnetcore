@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -36,19 +37,26 @@ public class FileUploadTagHelper : TagHelper
 
     private readonly IComponentGenerator _componentGenerator;
     private readonly IModelHelper _modelHelper;
+    private readonly HtmlEncoder _encoder;
 
     /// <summary>
     /// Creates an <see cref="TextInputTagHelper"/>.
     /// </summary>
-    public FileUploadTagHelper(IComponentGenerator componentGenerator)
-        : this(componentGenerator, modelHelper: new DefaultModelHelper())
+    public FileUploadTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
+        : this(componentGenerator, modelHelper: new DefaultModelHelper(), encoder)
     {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
     }
 
-    internal FileUploadTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper)
+    internal FileUploadTagHelper(IComponentGenerator componentGenerator, IModelHelper modelHelper, HtmlEncoder encoder)
     {
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(modelHelper);
+        ArgumentNullException.ThrowIfNull(encoder);
         _componentGenerator = componentGenerator;
         _modelHelper = modelHelper;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -163,7 +171,7 @@ public class FileUploadTagHelper : TagHelper
 
         if (LabelClass is not null)
         {
-            labelOptions.Classes = (labelOptions.Classes + " " + LabelClass).TrimStart();
+            labelOptions.Classes = labelOptions.Classes?.Concatenate(_encoder, " ", LabelClass);
         }
 
         var formGroupAttributes = new AttributeCollection(output.Attributes);
@@ -210,15 +218,8 @@ public class FileUploadTagHelper : TagHelper
         }
     }
 
-    private string ResolveId(string name)
-    {
-        if (Id is not null)
-        {
-            return Id;
-        }
-
-        return TagBuilder.CreateSanitizedId(name, Constants.IdAttributeDotReplacement);
-    }
+    private string ResolveId(string name) =>
+        Id ?? TagBuilder.CreateSanitizedId(name, Constants.IdAttributeDotReplacement);
 
     private string ResolveName()
     {

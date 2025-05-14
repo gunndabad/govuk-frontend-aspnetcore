@@ -39,8 +39,8 @@ internal static class TagHelperContextExtensions
         ArgumentNullException.ThrowIfNull(key);
         ArgumentNullException.ThrowIfNull(value);
 
-        // FormGroupContext and FormGroupContext2 are mutually exclusive
-        if (key is Type keyType && (keyType == typeof(FormGroupContext) || keyType == typeof(FormGroupContext2)))
+        // FormGroupContext and FormGroupContext3 are mutually exclusive
+        if (key is Type keyType && (keyType == typeof(FormGroupContext) || keyType == typeof(FormGroupContext3)))
         {
             key = typeof(FormGroupContextKey);
         }
@@ -58,7 +58,7 @@ internal static class TagHelperContextExtensions
         var key = typeof(TItem);
 
         // FormGroupContext and FormGroupContext2 are mutually exclusive
-        if (key == typeof(FormGroupContext) || key == typeof(FormGroupContext2))
+        if (key == typeof(FormGroupContext) || key == typeof(FormGroupContext3))
         {
             key = typeof(FormGroupContextKey);
         }

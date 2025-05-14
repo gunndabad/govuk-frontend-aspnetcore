@@ -1,6 +1,5 @@
 using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
-using Microsoft.AspNetCore.Html;
 
 namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 
@@ -13,10 +12,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var prefixTagName = TextInputPrefixTagHelper.TagName;
         var errorMessageTagName = TextInputTagHelper.ErrorMessageTagName;
-        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName);
+        context.SetPrefix(new InputOptionsPrefix(), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, new EncodedAttributesDictionary(), new HtmlString("Error"), errorMessageTagName));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, new AttributeCollection(), "Error", errorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -30,10 +29,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var suffixTagName = TextInputSuffixTagHelper.TagName;
         var errorMessageTagName = TextInputTagHelper.ErrorMessageTagName;
-        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName);
+        context.SetSuffix(new InputOptionsSuffix(), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetErrorMessage(null, new EncodedAttributesDictionary(), new HtmlString("Error"), errorMessageTagName));
+        var ex = Record.Exception(() => context.SetErrorMessage(null, new AttributeCollection(), "Error", errorMessageTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -47,10 +46,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var prefixTagName = TextInputPrefixTagHelper.TagName;
         var hintTagName = TextInputTagHelper.HintTagName;
-        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName);
+        context.SetPrefix(new InputOptionsPrefix(), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(new EncodedAttributesDictionary(), new HtmlString("Error"), hintTagName));
+        var ex = Record.Exception(() => context.SetHint(new AttributeCollection(), "Error", hintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -64,10 +63,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var suffixTagName = TextInputSuffixTagHelper.TagName;
         var hintTagName = TextInputTagHelper.ErrorMessageTagName;
-        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName);
+        context.SetSuffix(new InputOptionsSuffix(), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetHint(new EncodedAttributesDictionary(), new HtmlString("Error"), hintTagName));
+        var ex = Record.Exception(() => context.SetHint(new AttributeCollection(), "Error", hintTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -81,10 +80,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var prefixTagName = TextInputPrefixTagHelper.TagName;
         var labelTagName = TextInputTagHelper.LabelTagName;
-        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName);
+        context.SetPrefix(new InputOptionsPrefix(), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, new EncodedAttributesDictionary(), new HtmlString("Error"), labelTagName));
+        var ex = Record.Exception(() => context.SetLabel(false, new AttributeCollection(), "Error", labelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -98,10 +97,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var suffixTagName = TextInputSuffixTagHelper.TagName;
         var labelTagName = TextInputTagHelper.LabelTagName;
-        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName);
+        context.SetSuffix(new InputOptionsSuffix(), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetLabel(false, new EncodedAttributesDictionary(), new HtmlString("Error"), labelTagName));
+        var ex = Record.Exception(() => context.SetLabel(false, new AttributeCollection(), "Error", labelTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -114,10 +113,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
         var prefixTagName = TextInputPrefixTagHelper.TagName;
-        context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Existing prefix"), prefixTagName);
+        context.SetPrefix(new InputOptionsPrefix(), prefixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName));
+        var ex = Record.Exception(() => context.SetPrefix(new InputOptionsPrefix(), prefixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -131,10 +130,10 @@ public class TextInputContextTests
         var context = new TextInputContext();
         var prefixTagName = TextInputPrefixTagHelper.TagName;
         var suffixTagName = TextInputSuffixTagHelper.TagName;
-        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Suffix"), suffixTagName);
+        context.SetSuffix(new InputOptionsSuffix(), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetPrefix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), prefixTagName));
+        var ex = Record.Exception(() => context.SetPrefix(new InputOptionsPrefix(), prefixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
@@ -147,10 +146,10 @@ public class TextInputContextTests
         // Arrange
         var context = new TextInputContext();
         var suffixTagName = TextInputSuffixTagHelper.TagName;
-        context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Existing prefix"), suffixTagName);
+        context.SetSuffix(new InputOptionsSuffix(), suffixTagName);
 
         // Act
-        var ex = Record.Exception(() => context.SetSuffix(new EncodedAttributesDictionary(), new HtmlString("Prefix"), suffixTagName));
+        var ex = Record.Exception(() => context.SetSuffix(new InputOptionsSuffix(), suffixTagName));
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
