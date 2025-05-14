@@ -5,14 +5,14 @@ namespace GovUk.Frontend.AspNetCore.Components;
 public record FieldsetOptions
 {
     public TemplateString? DescribedBy { get; set; }
-    public FieldsetOptions2Legend? Legend { get; set; }
+    public FieldsetOptionsLegend? Legend { get; set; }
     public TemplateString? Role { get; set; }
     public TemplateString? Html { get; set; }
     public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }
 
-public record FieldsetOptions2Legend
+public record FieldsetOptionsLegend
 {
     public TemplateString? Text { get; set; }
     public TemplateString? Html { get; set; }
@@ -20,5 +20,5 @@ public record FieldsetOptions2Legend
     public TemplateString? Classes { get; set; }
 
     [NonStandardParameter]
-    public EncodedAttributesDictionary? Attributes { get; set; }
+    public AttributeCollection? Attributes { get; set; }
 }
