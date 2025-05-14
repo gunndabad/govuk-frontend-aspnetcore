@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using SoftCircuits.HtmlMonkey;
@@ -6,12 +7,13 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 internal static class TagHelperAdapter
 {
-    public static void ApplyComponentHtml(this TagHelperOutput output, IHtmlContent content)
+    public static void ApplyComponentHtml(this TagHelperOutput output, IHtmlContent content, HtmlEncoder encoder)
     {
         ArgumentNullException.ThrowIfNull(output);
         ArgumentNullException.ThrowIfNull(content);
+        ArgumentNullException.ThrowIfNull(encoder);
 
-        var unwrapped = UnwrapComponent(content);
+        var unwrapped = UnwrapComponent(content, encoder);
 
         output.TagName = unwrapped.TagName;
         output.TagMode = unwrapped.TagMode;
@@ -26,14 +28,12 @@ internal static class TagHelperAdapter
         output.Content.AppendHtml(unwrapped.InnerHtml);
     }
 
-    internal static ComponentTagHelperOutput UnwrapComponent(string? html) =>
-        UnwrapComponent(new HtmlString(html));
+    internal static ComponentTagHelperOutput UnwrapComponent(IHtmlContent content, HtmlEncoder encoder) =>
+        UnwrapComponent(content.ToHtmlString(encoder));
 
-    internal static ComponentTagHelperOutput UnwrapComponent(IHtmlContent content)
+    internal static ComponentTagHelperOutput UnwrapComponent(string html)
     {
-        ArgumentNullException.ThrowIfNull(content);
-
-        var html = content.ToHtmlString();
+        ArgumentNullException.ThrowIfNull(html);
 
         if (string.IsNullOrWhiteSpace(html))
         {

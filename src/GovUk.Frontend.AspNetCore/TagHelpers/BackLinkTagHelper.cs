@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -52,6 +53,6 @@ public class BackLinkTagHelper : TagHelper
             Attributes = attributes
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
     }
 }

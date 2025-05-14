@@ -1,5 +1,5 @@
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
-using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.Tests.Components;
@@ -18,7 +18,7 @@ public class TagHelperAdapterTests
         // Assert
         Assert.Null(result.TagName);
         Assert.Empty(result.Attributes);
-        Assert.Equal("", result.InnerHtml.ToHtmlString());
+        Assert.Equal("", result.InnerHtml.ToHtmlString(HtmlEncoder.Default));
     }
 
     [Theory]
@@ -30,7 +30,7 @@ public class TagHelperAdapterTests
         // Arrange
 
         // Act
-        var result = TagHelperAdapter.UnwrapComponent(new HtmlString(html));
+        var result = TagHelperAdapter.UnwrapComponent(html);
 
         // Assert
         Assert.Equal("br", result.TagName);

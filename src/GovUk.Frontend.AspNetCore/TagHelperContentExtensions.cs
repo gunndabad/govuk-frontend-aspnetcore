@@ -6,7 +6,7 @@ namespace GovUk.Frontend.AspNetCore;
 /// <summary>
 /// Utility extensions for <see cref="TagHelperContent"/>.
 /// </summary>
-public static class TagHelperContentExtensions
+internal static class TagHelperContentExtensions
 {
     /// <summary>
     /// Creates a snapshot of the content in a specified <see cref="TagHelperContent"/>.

@@ -97,7 +97,7 @@ public class FormGroupLabelTagHelper3 : TagHelper
         formGroupContext.SetLabel(
             IsPageHeading,
             new AttributeCollection(output.Attributes),
-            childContent?.ToHtmlString(),
+            childContent?.ToTemplateString(),
             output.TagName);
 
         output.SuppressOutput();

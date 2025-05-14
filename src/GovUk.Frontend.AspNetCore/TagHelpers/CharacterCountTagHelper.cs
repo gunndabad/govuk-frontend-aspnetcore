@@ -325,7 +325,7 @@ public class CharacterCountTagHelper : TagHelper
             WordsOverLimitText = null
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
 
         if (errorMessageOptions is not null)
         {

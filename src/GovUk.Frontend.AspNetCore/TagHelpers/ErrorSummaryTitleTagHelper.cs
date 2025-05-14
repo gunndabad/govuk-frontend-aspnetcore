@@ -25,7 +25,7 @@ public class ErrorSummaryTitleTagHelper : TagHelper
 
         errorSummaryContext.SetTitle(
             new AttributeCollection(output.Attributes),
-            childContent.ToHtmlString());
+            childContent.ToTemplateString());
 
         output.SuppressOutput();
     }

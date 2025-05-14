@@ -288,7 +288,7 @@ public class TextInputTagHelper : TagHelper
             Attributes = attributes
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
 
         if (errorMessageOptions is not null)
         {

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -102,6 +103,6 @@ public class ErrorSummaryTagHelper : TagHelper
             DescriptionAttributes = errorSummaryContext?.Description?.Attributes
         });
 
-        output.ApplyComponentHtml(component);
+        output.ApplyComponentHtml(component, HtmlEncoder.Default);
     }
 }

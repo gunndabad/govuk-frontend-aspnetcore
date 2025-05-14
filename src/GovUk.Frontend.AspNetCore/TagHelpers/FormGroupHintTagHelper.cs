@@ -77,7 +77,7 @@ public class FormGroupHintTagHelper3 : TagHelper
 
         formGroupContext.SetHint(
             new AttributeCollection(output.Attributes),
-            childContent?.ToHtmlString(),
+            childContent?.ToTemplateString(),
             output.TagName);
 
         output.SuppressOutput();

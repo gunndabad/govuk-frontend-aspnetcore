@@ -45,7 +45,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         {
             if (v is TemplateString templateString)
             {
-                return templateString.ToFluidValue();
+                return templateString.ToFluidValue(_encoder);
             }
 
             // If the object is an Options class, convert its property names to camel case
