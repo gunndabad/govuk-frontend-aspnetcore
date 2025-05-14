@@ -53,21 +53,12 @@ public class FormGroupErrorMessageTagHelper : TagHelper
 
     private protected virtual void SetErrorMessage(TagHelperContent? childContent, TagHelperContext context, TagHelperOutput output)
     {
-        if (context.TryGetContextItem<FormGroupContext>(out var formGroupContext))
-        {
-            formGroupContext.SetErrorMessage(
+        var formGroupContext = context.GetContextItem<FormGroupContext>();
+
+        formGroupContext.SetErrorMessage(
                 VisuallyHiddenText,
                 output.Attributes.ToAttributeDictionary(),
                 childContent?.Snapshot());
-        }
-        else if (context.TryGetContextItem<FormGroupContext3>(out var formGroupContext3))
-        {
-            formGroupContext3.SetErrorMessage(
-                VisuallyHiddenText,
-                new AttributeCollection(output.Attributes),
-                childContent?.ToTemplateString(),
-                output.TagName);
-        }
     }
 }
 
