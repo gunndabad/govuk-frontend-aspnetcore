@@ -1,0 +1,106 @@
+{% from "error-message.macro" import govukErrorMessage %}
+{% from "fieldset.macro" import govukFieldset %}
+{% from "hint.macro" import govukHint %}
+{% from "label.macro" import govukLabel %}
+{% from "input.macro" import govukInput %}
+
+{%- comment %} a record of other elements that we need to associate with the input using
+  aria-describedby – for example hints or error messages {% endcomment -%}
+{% assign describedBy = params.fieldset.describedBy | default: "" %}
+
+{% comment %} fieldset is false by default {% endcomment %}
+{% assign hasFieldset = istruthy(params.fieldset) %}
+
+{%- if params.items.size > 0 %}
+  {% assign dateInputItems = params.items %}
+{% else %}
+  {% assign dateInputItems = array(
+    dict(
+      name = "day",
+      classes = "govuk-input--width-2"
+    ),
+    dict(
+      name = "month",
+      classes = "govuk-input--width-2"
+    ),
+    dict(
+      name = "year",
+      classes = "govuk-input--width-4"
+    )
+  ) %}
+{% endif %}
+
+{%- comment %} Capture the HTML so we can optionally nest it in a fieldset {% endcomment -%}
+{% capture innerHtml %}
+{% if params.hint %}
+  {% assign hintId = params.id | append: "-hint" %}
+  {% assign describedBy = (describedBy | append: ' ' | append: hintId | lstrip) %}
+  {{ govukHint(dict(
+    id = hintId,
+    classes = params.hint.classes,
+    attributes = params.hint.attributes,
+    html = params.hint.html,
+    text = params.hint.text
+  )) | strip | indent: 2 }}
+{% endif %}
+{% if params.errorMessage %}
+  {% assign errorId = params.id | append: '-error' %}
+  {% assign describedBy = (describedBy | append: ' ' | append: errorId | lstrip) %}
+  {{ govukErrorMessage(dict(
+    id = errorId,
+    classes = params.errorMessage.classes,
+    attributes = params.errorMessage.attributes,
+    html = params.errorMessage.html,
+    text = params.errorMessage.text,
+    visuallyHiddenText = params.errorMessage.visuallyHiddenText
+  )) | strip | indent: 2 }}
+{% endif %}
+  <div class="govuk-date-input {%- if params.classes %} {{ params.classes }}{% endif %}"
+    {{- govukAttributes(params.attributes) -}}
+    {%- if params.id %} id="{{ params.id }}"{% endif %}>
+    {% if params.formGroup.beforeInputs %}
+    {{ params.formGroup.beforeInputs.html | raw | strip | indent: 4 | default: params.formGroup.beforeInputs.text }}
+    {% endif %}
+    {% for item in dateInputItems %}
+    <div class="govuk-date-input__item">
+      {{ govukInput(dict(
+        label = dict(
+          text = (item.label | default: (item.name | capitalize)),
+          classes = "govuk-date-input__label"
+        ),
+        id = (item.id | default: (params.id | append: "-" | append: item.name)),
+        classes = ("govuk-date-input__input " | append: (" " | append: item.classes | lstrip)),
+        name = (ifelse(params.namePrefix, (params.namePrefix | append: "-"), "") | append: item.name),
+        value = item.value,
+        type = "text",
+        inputmode = (item.inputmode | default: "numeric"),
+        autocomplete = item.autocomplete,
+        pattern = item.pattern,
+        attributes = item.attributes
+      )) | strip | indent: 6 }}
+    </div>
+    {% endfor %}
+    {% if params.formGroup.afterInputs %}
+    {{ params.formGroup.afterInputs.html | raw | strip | indent: 4 | default: params.formGroup.afterInputs.text }}
+    {% endif %}
+  </div>
+{% endcapture -%}
+
+<div class="govuk-form-group {%- if params.errorMessage %} govuk-form-group--error{% endif %} {%- if params.formGroup.classes %} {{ params.formGroup.classes }}{% endif %}" {{- govukAttributes(params.formGroup.attributes) }}>
+{% if hasFieldset %}
+  {% comment %} We override the fieldset's role to 'group' because otherwise JAWS does not
+    announce the description for a fieldset comprised of text inputs, but
+    adding the role to the fieldset always makes the output overly verbose for
+    radio buttons or checkboxes. {% endcomment %}
+  {{ govukFieldset(dict(
+    describedBy = describedBy,
+    classes = params.fieldset.classes,
+    role = 'group',
+    attributes = params.fieldset.attributes,
+    legend = params.fieldset.legend,
+    html = (innerHtml | strip)
+  )) | strip | indent: 2 }}
+{% else %}
+  {{ innerHtml | raw | strip }}
+{% endif %}
+</div>

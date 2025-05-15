@@ -8,6 +8,18 @@ internal partial class DefaultComponentGenerator
 {
     private static class Functions
     {
+        public static FluidValue Array(FunctionArguments args, TemplateContext context)
+        {
+            var result = new List<FluidValue>();
+
+            foreach (var item in args.Values)
+            {
+                result.Add(item);
+            }
+
+            return FluidValue.Create(result, context.Options);
+        }
+
         public static FluidValue Dict(FunctionArguments args, TemplateContext context)
         {
             var result = new Dictionary<string, FluidValue>();

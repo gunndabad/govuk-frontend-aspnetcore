@@ -50,6 +50,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateCookieBannerAsync(CookieBannerOptions options);
 
     /// <summary>
+    /// Generates a date input component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateDateInputAsync(DateInputOptions options);
+
+    /// <summary>
     /// Generates a details component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>
