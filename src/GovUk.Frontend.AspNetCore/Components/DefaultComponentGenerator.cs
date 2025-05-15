@@ -100,6 +100,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("cookie-banner", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateDateInputAsync(DateInputOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("date-input", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateDetailsAsync(DetailsOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -267,6 +273,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
     private async ValueTask<IHtmlContent> RenderTemplateAsync(string templateName, object componentOptions)
     {
         var context = new TemplateContext(_templateOptions);
+        context.SetValue("array", new FunctionValue(Functions.Array));
         context.SetValue("dict", new FunctionValue(Functions.Dict));
         context.SetValue("govukAttributes", new FunctionValue(Functions.GovukAttributesAsync));
         context.SetValue("govukI18nAttributes", new FunctionValue(Functions.GovukI18nAttributes));

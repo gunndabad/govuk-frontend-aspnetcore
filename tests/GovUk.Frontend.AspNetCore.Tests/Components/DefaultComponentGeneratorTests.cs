@@ -65,6 +65,13 @@ public class DefaultComponentGeneratorTests
             amendExpectedHtml: html => Regex.Replace(html, "</div>\n\n\n  </div>\n</div>$", "</div>\n\n  </div>\n</div>"));
 
     [Theory]
+    [ComponentFixtureData("date-input", typeof(DateInputOptions))]
+    public Task DateInput(ComponentTestCaseData<DateInputOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateDateInputAsync(options));
+
+    [Theory]
     [ComponentFixtureData("details", typeof(DetailsOptions))]
     public Task Details(ComponentTestCaseData<DetailsOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
