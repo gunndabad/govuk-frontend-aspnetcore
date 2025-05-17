@@ -4,6 +4,6 @@ namespace GovUk.Frontend.AspNetCore.Components;
 
 public abstract record FormGroupOptions
 {
-    public string? Classes { get; set; }
+    public TemplateString? Classes { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }
