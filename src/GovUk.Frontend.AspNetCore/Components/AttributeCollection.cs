@@ -85,15 +85,10 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
         _attributes.Add(name, attribute);
     }
 
-    internal void Set(string name, TemplateString? templateString)
+    internal void Set(string name, TemplateString templateString)
     {
         ArgumentNullException.ThrowIfNull(name);
-
-        if (templateString is null)
-        {
-            _attributes.Remove(name);
-            return;
-        }
+        ArgumentNullException.ThrowIfNull(templateString);
 
         var attribute = new Attribute(name, templateString, Optional: false);
         _attributes[name] = attribute;
@@ -108,11 +103,11 @@ public sealed class AttributeCollection : IEnumerable<KeyValuePair<string, strin
 
     internal IReadOnlyCollection<Attribute> GetAttributes() => _attributes.Values;
 
-    internal bool Remove(string name, out string? value)
+    internal bool Remove(string name, out TemplateString? value)
     {
         if (_attributes.Remove(name, out var attribute))
         {
-            value = attribute.Value?.ToString();
+            value = attribute.Value as TemplateString ?? attribute.Value?.ToString();
             return true;
         }
 
