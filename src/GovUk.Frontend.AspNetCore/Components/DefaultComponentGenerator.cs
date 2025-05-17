@@ -210,6 +210,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("pagination", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GeneratePasswordInputAsync(PasswordInputOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("password-input", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateSkipLinkAsync(SkipLinkOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
