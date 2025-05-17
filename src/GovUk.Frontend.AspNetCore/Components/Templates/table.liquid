@@ -1,0 +1,55 @@
+<table class="govuk-table
+  {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- govukAttributes(params.attributes) }}>
+{% if params.caption %}
+  <caption class="govuk-table__caption
+    {%- if params.captionClasses %} {{ params.captionClasses }}{% endif %}">
+    {{- params.caption -}}
+  </caption>
+{% endif %}
+{% if params.head %}
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+    {% for item in params.head %}
+      <th scope="col" class="govuk-table__header
+        {%- if item.format %} govuk-table__header--{{ item.format }}{% endif %}
+        {%- if item.classes %} {{ item.classes }}{% endif %}"
+        {%- if item.colspan %} colspan="{{ item.colspan }}"{% endif %}
+        {%- if item.rowspan %} rowspan="{{ item.rowspan }}"{% endif %}
+        {{- govukAttributes(item.attributes) }}>
+          {{- item.html | raw | default: item.text -}}
+        </th>
+    {% endfor %}
+    </tr>
+  </thead>
+{% endif %}
+  <tbody class="govuk-table__body">
+{% for row in params.rows %}
+  {% if row %}
+    <tr class="govuk-table__row">
+    {% for cell in row %}
+      {% capture commonAttributes %}
+        {%- if cell.colspan %} colspan="{{ cell.colspan }}"{% endif %}
+        {%- if cell.rowspan %} rowspan="{{ cell.rowspan }}"{% endif %}
+        {{- govukAttributes(cell.attributes) -}}
+      {% endcapture %}
+      {% if forloop.first and params.firstCellIsHeader %}
+      <th scope="row" class="govuk-table__header
+        {%- if cell.classes %} {{ cell.classes }}{% endif %}"
+        {{- commonAttributes | raw }}>
+        {{- cell.html | raw | default: cell.text -}}
+      </th>
+      {% else %}
+      <td class="govuk-table__cell
+        {%- if cell.format %} govuk-table__cell--{{ cell.format }}{% endif %}
+        {%- if cell.classes %} {{ cell.classes }}{% endif %}"
+        {{- commonAttributes | raw }}>
+        {{- cell.html | raw | default: cell.text -}}
+      </td>
+      {% endif %}
+    {% endfor %}
+    </tr>
+  {% endif %}
+{% endfor %}
+  </tbody>
+</table>

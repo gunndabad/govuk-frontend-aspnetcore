@@ -228,6 +228,12 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
         return RenderTemplateAsync("summary-list", options);
     }
 
+    public virtual ValueTask<IHtmlContent> GenerateTableAsync(TableOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        return RenderTemplateAsync("table", options);
+    }
+
     public virtual ValueTask<IHtmlContent> GenerateTabsAsync(TabsOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);

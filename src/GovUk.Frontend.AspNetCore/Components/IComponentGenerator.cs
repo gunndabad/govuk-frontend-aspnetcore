@@ -176,6 +176,12 @@ public interface IComponentGenerator
     ValueTask<IHtmlContent> GenerateSummaryListAsync(SummaryListOptions options);
 
     /// <summary>
+    /// Generates a table component.
+    /// </summary>
+    /// <returns>A <see cref="string"/> with the component's HTML.</returns>
+    ValueTask<IHtmlContent> GenerateTableAsync(TableOptions options);
+
+    /// <summary>
     /// Generates a tabs component.
     /// </summary>
     /// <returns>A <see cref="string"/> with the component's HTML.</returns>

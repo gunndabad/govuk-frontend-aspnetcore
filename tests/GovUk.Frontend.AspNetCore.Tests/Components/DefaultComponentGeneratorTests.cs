@@ -249,6 +249,14 @@ public class DefaultComponentGeneratorTests
             amendExpectedHtml: html => html.Replace("Gatsby’s", "Gatsby&#x2019;s"));
 
     [Theory]
+    [ComponentFixtureData("table", typeof(TableOptions), exclude: "with falsy items")]
+    public Task Table(ComponentTestCaseData<TableOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GenerateTableAsync(options),
+            amendExpectedHtml: html => html.Replace("£", "&#xA3;"));
+
+    [Theory]
     [ComponentFixtureData("tabs", typeof(TabsOptions), exclude: "with falsy values")]
     public Task Tabs(ComponentTestCaseData<TabsOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(
