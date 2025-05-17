@@ -243,7 +243,7 @@ public class TextInputTagHelper : TagHelper
 
         if (LabelClass is not null)
         {
-            labelOptions.Classes = labelOptions.Classes?.Concatenate(_encoder, " ", LabelClass);
+            labelOptions.Classes = labelOptions.Classes.AppendCssClasses(_encoder, LabelClass);
         }
 
         var formGroupAttributes = new AttributeCollection(output.Attributes);
