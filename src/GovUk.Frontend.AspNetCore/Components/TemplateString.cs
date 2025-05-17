@@ -90,33 +90,6 @@ public sealed class TemplateString
     /// <returns>A new <see cref="TemplateString"/> wrapping the specified <see cref="HtmlString"/>.</returns>
     public static implicit operator TemplateString(HtmlString? content) => new(content);
 
-    /// <summary>
-    /// Creates a new <see cref="TemplateString"/> with the content of this <see cref="TemplateString"/> and the
-    /// specified <paramref name="others"/>.
-    /// </summary>
-    /// <param name="encoder">The <see cref="HtmlEncoder"/> to encode values with.</param>
-    /// <param name="others">The additional <see cref="TemplateString"/>s to append.</param>
-    /// <returns>A new <see cref="TemplateString"/>.</returns>
-    public TemplateString Concatenate(HtmlEncoder encoder, params TemplateString[] others)
-    {
-        ArgumentNullException.ThrowIfNull(encoder);
-
-        if (others.Length == 0)
-        {
-            return this;
-        }
-
-        var sb = new StringBuilder();
-        sb.Append(ToHtmlString(encoder));
-
-        foreach (var other in others)
-        {
-            sb.Append(other.ToHtmlString(encoder));
-        }
-
-        return new TemplateString(new HtmlString(sb.ToString()));
-    }
-
     /// <inheritdoc/>
     public override string ToString() => ToHtmlString(_defaultEncoder);
 
@@ -143,6 +116,41 @@ public sealed class TemplateString
 /// </summary>
 public static class TemplateStringExtensions
 {
+    /// <summary>
+    /// Creates a new <see cref="TemplateString"/> with the contents of <paramref name="templateString"/> and the
+    /// specified <paramref name="classNames"/>.
+    /// </summary>
+    /// <param name="templateString">The initial set of CSS class names.</param>
+    /// <param name="encoder">The <see cref="HtmlEncoder"/> to encode values with.</param>
+    /// <param name="classNames">The additional CSS class names to append.</param>
+    /// <returns>A new <see cref="TemplateString"/>.</returns>
+    public static TemplateString AppendCssClasses(this TemplateString? templateString, HtmlEncoder encoder, params TemplateString[] classNames)
+    {
+        ArgumentNullException.ThrowIfNull(encoder);
+
+        var original = templateString?.ToHtmlString(encoder).Trim() ?? "";
+
+        if (classNames.Length == 0)
+        {
+            return original;
+        }
+
+        var sb = new StringBuilder();
+
+        if (original.Length > 0)
+        {
+            sb.Append(original);
+            sb.Append(' ');
+        }
+
+        foreach (var className in classNames)
+        {
+            sb.Append(className.ToHtmlString(encoder));
+        }
+
+        return new TemplateString(new HtmlString(sb.ToString()));
+    }
+
     /// <summary>
     /// Creates a <see cref="TemplateString"/> from <see cref="IHtmlContent"/>.
     /// </summary>
