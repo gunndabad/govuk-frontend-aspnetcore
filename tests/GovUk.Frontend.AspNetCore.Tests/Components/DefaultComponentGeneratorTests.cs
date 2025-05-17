@@ -210,6 +210,14 @@ public class DefaultComponentGeneratorTests
             (generator, options) => generator.GeneratePanelAsync(options));
 
     [Theory]
+    [ComponentFixtureData("password-input", typeof(PasswordInputOptions))]
+    public Task PasswordInput(ComponentTestCaseData<PasswordInputOptions> data) =>
+        CheckComponentHtmlMatchesExpectedHtml(
+            data,
+            (generator, options) => generator.GeneratePasswordInputAsync(options),
+            compareWhitespace: false);
+
+    [Theory]
     [ComponentFixtureData("phase-banner", typeof(PhaseBannerOptions))]
     public Task PhaseBanner(ComponentTestCaseData<PhaseBannerOptions> data) =>
         CheckComponentHtmlMatchesExpectedHtml(

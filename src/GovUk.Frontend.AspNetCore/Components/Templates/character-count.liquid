@@ -87,7 +87,7 @@
 
 {% comment %} Append form group attributes onto attributes set above {% endcomment %}
 {%- for name in params.formGroup.attributes %}
-  {% assign attributesHtml = attributesHtml | append: " " | append: name | escape | append: '="' | append: value | escape | append: '"' %}
+  {% assign attributesHtml = attributesHtml | append: " " | append: name | escape | append: '="' | append: params.formGroup.attributes[name] | escape | append: '"' %}
 {% endfor -%}
 
 {{ govukTextarea(dict(
