@@ -1,5 +1,6 @@
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -15,19 +16,18 @@ public class WarningTextTagHelper : TagHelper
 
     private const string IconFallbackTextAttributeName = "icon-fallback-text";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly HtmlEncoder _encoder;
 
     /// <summary>
     /// Creates a new <see cref="WarningTextTagHelper"/>.
     /// </summary>
-    public WarningTextTagHelper()
-        : this(htmlGenerator: null)
+    public WarningTextTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
     {
-    }
-
-    internal WarningTextTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
+        _componentGenerator = componentGenerator;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -39,23 +39,25 @@ public class WarningTextTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateWarningText(
-            IconFallbackText ?? ComponentGenerator.WarningTextDefaultIconFallbackText,
-            childContent,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = await _componentGenerator.GenerateWarningTextAsync(new WarningTextOptions()
+        {
+            Text = null,
+            Html = content.ToTemplateString(),
+            IconFallbackText = IconFallbackText,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.ApplyComponentHtml(component, _encoder);
     }
 }

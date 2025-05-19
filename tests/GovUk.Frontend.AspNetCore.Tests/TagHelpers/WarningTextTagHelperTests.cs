@@ -1,4 +1,5 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using GovUk.Frontend.AspNetCore.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -7,14 +8,17 @@ namespace GovUk.Frontend.AspNetCore.Tests.TagHelpers;
 public class WarningTextTagHelperTests
 {
     [Fact]
-    public async Task ProcessAsync_GeneratesExpectedOutput()
+    public async Task ProcessAsync_InvokesComponentGeneratorWithExpectedOptions()
     {
         // Arrange
+        var iconFallbackText = "Danger";
+        var content = "Warning message";
+
         var context = new TagHelperContext(
-        tagName: "govuk-warning-text",
-        allAttributes: new TagHelperAttributeList(),
-        items: new Dictionary<object, object>(),
-        uniqueId: "test");
+            tagName: "govuk-warning-text",
+            allAttributes: new TagHelperAttributeList(),
+            items: new Dictionary<object, object>(),
+            uniqueId: "test");
 
         var output = new TagHelperOutput(
             "govuk-warning-text",
@@ -22,28 +26,26 @@ public class WarningTextTagHelperTests
             getChildContentAsync: (useCachedResult, encoder) =>
             {
                 var tagHelperContent = new DefaultTagHelperContent();
-                tagHelperContent.SetContent("Warning message");
+                tagHelperContent.SetContent(content);
                 return Task.FromResult<TagHelperContent>(tagHelperContent);
             });
 
-        var tagHelper = new WarningTextTagHelper(new ComponentGenerator())
+        var componentGeneratorMock = new Mock<DefaultComponentGenerator>() { CallBase = true };
+        WarningTextOptions? actualOptions = null;
+        componentGeneratorMock.Setup(mock => mock.GenerateWarningTextAsync(It.IsAny<WarningTextOptions>())).Callback<WarningTextOptions>(o => actualOptions = o);
+
+        var tagHelper = new WarningTextTagHelper(componentGeneratorMock.Object, HtmlEncoder.Default)
         {
-            IconFallbackText = "Danger"
+            IconFallbackText = iconFallbackText
         };
 
         // Act
         await tagHelper.ProcessAsync(context, output);
 
         // Assert
-        var expectedHtml = @"
-<div class=""govuk-warning-text"">
-    <span aria-hidden=""true"" class=""govuk-warning-text__icon"">!</span>
-        <strong class=""govuk-warning-text__text"">
-        <span class=""govuk-visually-hidden"">Danger</span>
-        Warning message
-    </strong>
-</div>";
-
-        AssertEx.HtmlEqual(expectedHtml, output.ToHtmlString());
+        Assert.NotNull(actualOptions);
+        Assert.Equal(content, actualOptions!.Html);
+        Assert.Null(actualOptions.Text);
+        Assert.Equal(iconFallbackText, actualOptions.IconFallbackText);
     }
 }
