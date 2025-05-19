@@ -63,8 +63,6 @@ internal interface IGovUkHtmlGenerator
 
     TagBuilder GenerateHint(string id, IHtmlContent content, AttributeDictionary attributes);
 
-    TagBuilder GenerateInsetText(string id, IHtmlContent content, AttributeDictionary attributes);
-
     TagBuilder GenerateLabel(
         string @for,
         bool isPageHeading,

@@ -11,6 +11,7 @@ internal partial class DefaultComponentGenerator
         public const string FormGroup = "div";
         public const string InputPrefix = "div";
         public const string InputSuffix = "div";
+        public const string InsetText = "div";
         public const string Pagination = "nav";
         public const string PaginationEllipsis = "li";
         public const string PaginationItem = "li";

@@ -1,5 +1,5 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,26 +8,25 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS inset text component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.InsetTextElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.InsetText)]
 public class InsetTextTagHelper : TagHelper
 {
     internal const string TagName = "govuk-inset-text";
 
     private const string IdAttributeName = "id";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly HtmlEncoder _encoder;
 
     /// <summary>
     /// Creates a new <see cref="InsetTextTagHelper"/>.
     /// </summary>
-    public InsetTextTagHelper()
-        : this(htmlGenerator: null)
+    public InsetTextTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
     {
-    }
-
-    internal InsetTextTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
+        _componentGenerator = componentGenerator;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -39,23 +38,25 @@ public class InsetTextTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateInsetText(
-            Id,
-            childContent,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = await _componentGenerator.GenerateInsetTextAsync(new InsetTextOptions()
+        {
+            Text = null,
+            Html = content.ToTemplateString(),
+            Id = Id,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.ApplyComponentHtml(component, _encoder);
     }
 }
