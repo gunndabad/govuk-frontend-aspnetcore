@@ -1,5 +1,5 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,26 +8,25 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS skip link component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.SkipLinkElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.SkipLink)]
 public class SkipLinkTagHelper : TagHelper
 {
     internal const string TagName = "govuk-skip-link";
 
     private const string HrefAttributeName = "href";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly HtmlEncoder _encoder;
 
     /// <summary>
     /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    public SkipLinkTagHelper()
-        : this(htmlGenerator: null)
+    public SkipLinkTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
     {
-    }
-
-    internal SkipLinkTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
+        _componentGenerator = componentGenerator;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -42,23 +41,25 @@ public class SkipLinkTagHelper : TagHelper
     /// <inheritdoc/>
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var childContent = await output.GetChildContentAsync();
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        var tagBuilder = _htmlGenerator.GenerateSkipLink(
-            Href ?? ComponentGenerator.SkipLinkDefaultHref,
-            childContent,
-            output.Attributes.ToAttributeDictionary());
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = await _componentGenerator.GenerateSkipLinkAsync(new SkipLinkOptions()
+        {
+            Text = null,
+            Html = content.ToTemplateString(),
+            Href = Href,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.ApplyComponentHtml(component, _encoder);
     }
 }

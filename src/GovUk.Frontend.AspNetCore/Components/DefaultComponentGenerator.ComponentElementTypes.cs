@@ -17,6 +17,7 @@ internal partial class DefaultComponentGenerator
         public const string PaginationItem = "li";
         public const string PaginationNext = "div";
         public const string PaginationPrevious = "div";
+        public const string SkipLink = "a";
         public const string Tag = "strong";
         public const string WarningText = "div";
     }
