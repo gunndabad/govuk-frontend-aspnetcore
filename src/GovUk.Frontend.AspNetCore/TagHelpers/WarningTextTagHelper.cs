@@ -1,6 +1,5 @@
 using System.Text.Encodings.Web;
 using GovUk.Frontend.AspNetCore.Components;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Generates a GDS warning text component.
 /// </summary>
 [HtmlTargetElement(TagName)]
-[OutputElementHint(ComponentGenerator.WarningTextElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.WarningText)]
 public class WarningTextTagHelper : TagHelper
 {
     internal const string TagName = "govuk-warning-text";

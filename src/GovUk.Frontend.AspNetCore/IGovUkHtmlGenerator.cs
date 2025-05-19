@@ -21,21 +21,6 @@ internal interface IGovUkHtmlGenerator
         string showSectionAriaLabelText,
         IEnumerable<AccordionItem> items);
 
-    TagBuilder GenerateButton(
-        bool isStartButton,
-        bool disabled,
-        bool? preventDoubleClick,
-        string id,
-        IHtmlContent content,
-        AttributeDictionary attributes);
-
-    TagBuilder GenerateButtonLink(
-        bool isStartButton,
-        bool disabled,
-        string id,
-        IHtmlContent content,
-        AttributeDictionary attributes);
-
     TagBuilder GenerateCheckboxes(
         string idPrefix,
         string name,
@@ -72,14 +57,6 @@ internal interface IGovUkHtmlGenerator
         IHtmlContent legendContent,
         AttributeDictionary legendAttributes,
         IHtmlContent content,
-        AttributeDictionary attributes);
-
-    TagBuilder GenerateFileUpload(
-        bool haveError,
-        string id,
-        string name,
-        string describedBy,
-        bool disabled,
         AttributeDictionary attributes);
 
     TagBuilder GenerateFormGroup(bool haveError, IHtmlContent content, AttributeDictionary attributes);
@@ -144,8 +121,6 @@ internal interface IGovUkHtmlGenerator
         AttributeDictionary attributes,
         IEnumerable<TabsItem> items);
 
-    TagBuilder GenerateTag(IHtmlContent content, AttributeDictionary attributes);
-
     TagBuilder GenerateTextArea(
         bool haveError,
         string id,
@@ -155,11 +130,6 @@ internal interface IGovUkHtmlGenerator
         string autocomplete,
         bool? spellcheck,
         bool disabled,
-        IHtmlContent content,
-        AttributeDictionary attributes);
-
-    TagBuilder GenerateWarningText(
-        string iconFallbackText,
         IHtmlContent content,
         AttributeDictionary attributes);
 }
