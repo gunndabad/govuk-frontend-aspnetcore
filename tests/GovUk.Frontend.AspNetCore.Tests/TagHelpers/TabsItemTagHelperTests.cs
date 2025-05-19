@@ -45,7 +45,7 @@ public class TabsItemTagHelperTests
             {
                 Assert.Equal("item1", item.Id);
                 Assert.Equal("First", item.Label);
-                Assert.Equal(panelContent.ToHtmlString(), item.PanelContent?.ToHtmlString());
+                Assert.Equal(panelContent.ToHtmlString(), item.Panel?.Html);
             });
     }
 
@@ -88,7 +88,7 @@ public class TabsItemTagHelperTests
             {
                 Assert.Null(item.Id);
                 Assert.Equal("First", item.Label);
-                Assert.Equal(panelContent.ToHtmlString(), item.PanelContent?.ToHtmlString());
+                Assert.Equal(panelContent.ToHtmlString(), item.Panel?.Html);
             });
     }
 
@@ -124,7 +124,7 @@ public class TabsItemTagHelperTests
 
         // Assert
         Assert.IsType<InvalidOperationException>(ex);
-        Assert.Equal("Item must have the 'id' attribute specified.", ex.Message);
+        Assert.Equal("Item must have the 'id' attribute specified when parent's 'id-prefix' is not specified.", ex.Message);
     }
 
     [Fact]

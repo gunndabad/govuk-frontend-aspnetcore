@@ -1,5 +1,5 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using System.Text.Encodings.Web;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -9,7 +9,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// </summary>
 [HtmlTargetElement(TagName)]
 [RestrictChildren(TabsItemTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.TabsElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.Tabs)]
 public class TabsTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tabs";
@@ -18,19 +18,18 @@ public class TabsTagHelper : TagHelper
     private const string IdPrefixAttributeName = "id-prefix";
     private const string TitleAttributeName = "title";
 
-    private readonly IGovUkHtmlGenerator _htmlGenerator;
+    private readonly IComponentGenerator _componentGenerator;
+    private readonly HtmlEncoder _encoder;
 
     /// <summary>
     /// Creates a new <see cref="TabsTagHelper"/>.
     /// </summary>
-    public TabsTagHelper()
-        : this(htmlGenerator: null)
+    public TabsTagHelper(IComponentGenerator componentGenerator, HtmlEncoder encoder)
     {
-    }
-
-    internal TabsTagHelper(IGovUkHtmlGenerator? htmlGenerator)
-    {
-        _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        ArgumentNullException.ThrowIfNull(encoder);
+        _componentGenerator = componentGenerator;
+        _encoder = encoder;
     }
 
     /// <summary>
@@ -67,18 +66,19 @@ public class TabsTagHelper : TagHelper
             await output.GetChildContentAsync();
         }
 
-        var tagBuilder = _htmlGenerator.GenerateTabs(
-            Id,
-            IdPrefix,
-            Title ?? ComponentGenerator.TabsDefaultTitle,
-            output.Attributes.ToAttributeDictionary(),
-            tabsContext.Items);
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
 
-        output.TagName = tagBuilder.TagName;
-        output.TagMode = TagMode.StartTagAndEndTag;
+        var component = await _componentGenerator.GenerateTabsAsync(new TabsOptions()
+        {
+            Id = Id,
+            IdPrefix = IdPrefix,
+            Title = Title,
+            Items = tabsContext.Items,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-        output.Attributes.Clear();
-        output.MergeAttributes(tagBuilder);
-        output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+        output.ApplyComponentHtml(component, _encoder);
     }
 }

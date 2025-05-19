@@ -1,30 +1,24 @@
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
 
 internal class TabsContext
 {
-    private readonly List<TabsItem> _items;
-    private readonly bool _haveIdPrefix;
+    private readonly List<TabsOptionsItem> _items;
 
     public TabsContext(bool haveIdPrefix)
     {
-        _items = new List<TabsItem>();
-        _haveIdPrefix = haveIdPrefix;
+        _items = new List<TabsOptionsItem>();
+        HaveIdPrefix = haveIdPrefix;
     }
 
-    public IReadOnlyList<TabsItem> Items => _items;
+    public bool HaveIdPrefix { get; }
 
-    public void AddItem(TabsItem item)
+    public IReadOnlyList<TabsOptionsItem> Items => _items;
+
+    public void AddItem(TabsOptionsItem item)
     {
-        Guard.ArgumentNotNull(nameof(item), item);
-
-        if (item.Id is null && !_haveIdPrefix)
-        {
-            throw new InvalidOperationException(
-                $"Item must have the '{TabsItemTagHelper.IdAttributeName}' attribute specified.");
-        }
-
+        ArgumentNullException.ThrowIfNull(item);
         _items.Add(item);
     }
 }

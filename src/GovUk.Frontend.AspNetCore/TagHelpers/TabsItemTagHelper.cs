@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GovUk.Frontend.AspNetCore.TagHelpers;
@@ -8,7 +8,7 @@ namespace GovUk.Frontend.AspNetCore.TagHelpers;
 /// Represents an item in a GDS tabs component.
 /// </summary>
 [HtmlTargetElement(TagName, ParentTag = TabsTagHelper.TagName)]
-[OutputElementHint(ComponentGenerator.TabsItemPanelElement)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.TabsItemPanel)]
 public class TabsItemTagHelper : TagHelper
 {
     internal const string TagName = "govuk-tabs-item";
@@ -49,20 +49,33 @@ public class TabsItemTagHelper : TagHelper
 
         var tabsContext = context.GetContextItem<TabsContext>();
 
-        var childContent = await output.GetChildContentAsync();
+        if (Id is null && !tabsContext.HaveIdPrefix)
+        {
+            throw new InvalidOperationException(
+                $"Item must have the '{IdAttributeName}' attribute specified when parent's 'id-prefix' is not specified.");
+        }
+
+        var content = await output.GetChildContentAsync();
 
         if (output.Content.IsModified)
         {
-            childContent = output.Content;
+            content = output.Content;
         }
 
-        tabsContext.AddItem(new TabsItem()
+        var attributes = new AttributeCollection(output.Attributes);
+        var itemAttributes = new AttributeCollection(LinkAttributes);
+
+        tabsContext.AddItem(new TabsOptionsItem()
         {
             Id = Id,
             Label = Label,
-            LinkAttributes = LinkAttributes?.ToAttributeDictionary(),
-            PanelAttributes = output.Attributes.ToAttributeDictionary(),
-            PanelContent = childContent.Snapshot()
+            Attributes = itemAttributes,
+            Panel = new TabsOptionsItemPanel()
+            {
+                Text = null,
+                Html = content.ToTemplateString(),
+                Attributes = attributes
+            }
         });
 
         output.SuppressOutput();

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Encodings.Web;
 using Fluid.Values;
@@ -81,14 +82,16 @@ public sealed class TemplateString
     /// </summary>
     /// <param name="value">The unencoded <see cref="String"/>.</param>
     /// <returns></returns>
-    public static implicit operator TemplateString(string? value) => new(value);
+    [return: NotNullIfNotNull(nameof(value))]
+    public static implicit operator TemplateString?(string? value) => value is null ? null : new(value);
 
     /// <summary>
     /// Creates a <see cref="TemplateString"/> from <see cref="HtmlString"/>.
     /// </summary>
     /// <param name="content">The <see cref="IHtmlContent"/> to create the <see cref="TemplateString"/> from.</param>
     /// <returns>A new <see cref="TemplateString"/> wrapping the specified <see cref="HtmlString"/>.</returns>
-    public static implicit operator TemplateString(HtmlString? content) => new(content);
+    [return: NotNullIfNotNull(nameof(content))]
+    public static implicit operator TemplateString?(HtmlString? content) => content is null ? null : new(content);
 
     /// <inheritdoc/>
     public override string ToString() => ToHtmlString(_defaultEncoder);

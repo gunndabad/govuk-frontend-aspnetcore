@@ -18,6 +18,8 @@ internal partial class DefaultComponentGenerator
         public const string PaginationNext = "div";
         public const string PaginationPrevious = "div";
         public const string SkipLink = "a";
+        public const string Tabs = "div";
+        public const string TabsItemPanel = "div";
         public const string Tag = "strong";
         public const string WarningText = "div";
     }

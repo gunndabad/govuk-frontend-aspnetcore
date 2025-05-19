@@ -110,13 +110,6 @@ internal interface IGovUkHtmlGenerator
 
     TagBuilder GenerateSummaryList(IEnumerable<SummaryListRow> rows, AttributeDictionary attributes);
 
-    TagBuilder GenerateTabs(
-        string id,
-        string idPrefix,
-        string title,
-        AttributeDictionary attributes,
-        IEnumerable<TabsItem> items);
-
     TagBuilder GenerateTextArea(
         bool haveError,
         string id,
