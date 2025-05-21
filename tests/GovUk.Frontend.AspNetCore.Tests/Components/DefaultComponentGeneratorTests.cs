@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using AngleSharp.Diffing.Core;
 using GovUk.Frontend.AspNetCore.Components;
+using GovUk.Frontend.AspNetCore.TestCommon;
 using Microsoft.AspNetCore.Html;
 using Match = System.Text.RegularExpressions.Match;
 
@@ -156,12 +157,12 @@ public class DefaultComponentGeneratorTests
         }
 
         // Semantic comparison
-        //AssertEx.HtmlEqual(expectedHtml, html, excludeDiff);
+        AssertEx.HtmlEqual(expectedHtml, html, excludeDiff);
 
         // For exact character-by-character equality
         if (compareWhitespace)
         {
-            Assert.Equal(expectedHtml, html);
+            Assert.Equal(expectedHtml.ReplaceLineEndings(), html.ReplaceLineEndings());
         }
     }
 }
