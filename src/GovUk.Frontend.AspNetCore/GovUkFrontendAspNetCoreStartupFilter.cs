@@ -1,31 +1,56 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 
-namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore;
+
+internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
 {
-    public class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
-    {
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
-        {
-            if (next == null)
-            {
-                throw new ArgumentNullException(nameof(next));
-            }
+    private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
 
-            return app =>
+    public GovUkFrontendAspNetCoreStartupFilter(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
+    {
+        ArgumentNullException.ThrowIfNull(optionsAccessor);
+        _optionsAccessor = optionsAccessor;
+    }
+
+    public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+    {
+        Guard.ArgumentNotNull(nameof(next), next);
+
+        return app =>
+        {
+            if (_optionsAccessor.Value.CompiledContentPath is PathString compiledContentPath)
             {
+                var fileProvider = new ManifestEmbeddedFileProvider(
+                    typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
+                    root: "Content/Compiled");
+
+                app.UseMiddleware<RewriteCompiledAssetsMiddleware>(fileProvider);
+
                 app.UseStaticFiles(new StaticFileOptions()
                 {
-                    FileProvider = new ManifestEmbeddedFileProvider(
-                      typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
-                      root: "Content"),
-                    RequestPath = ""  // important - CSS assumes things are available at the root
+                    FileProvider = fileProvider,
+                    RequestPath = compiledContentPath
                 });
+            }
 
-                next(app);
-            };
-        }
+            if (_optionsAccessor.Value.StaticAssetsContentPath is PathString assetsContentPath)
+            {
+                var fileProvider = new ManifestEmbeddedFileProvider(
+                    typeof(GovUkFrontendAspNetCoreStartupFilter).Assembly,
+                    root: "Content/Assets");
+
+                app.UseStaticFiles(new StaticFileOptions()
+                {
+                    FileProvider = fileProvider,
+                    RequestPath = assetsContentPath
+                });
+            }
+
+            next(app);
+        };
     }
 }

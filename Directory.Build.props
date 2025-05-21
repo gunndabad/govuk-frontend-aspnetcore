@@ -1,14 +1,18 @@
 <Project>
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
     <RepoRoot>$([MSBuild]::EnsureTrailingSlash('$(MSBuildThisFileDirectory)'))</RepoRoot>
+    <Nullable>enable</Nullable>
+    <GovUkFrontendVersion>5.9.0</GovUkFrontendVersion>
+
+    <IsTestProject Condition="'$(IsTestProject)' == '' and $(MSBuildProjectName.EndsWith('Tests'))">true</IsTestProject>
+
+    <_NpmLibDirectory>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'lib', 'govuk-frontend-$(GovUkFrontendVersion)'))</_NpmLibDirectory>
+    <GovUkFrontendLibrary>$([MSBuild]::NormalizeDirectory('$(_NpmLibDirectory)', 'node_modules', 'govuk-frontend', 'dist', 'govuk'))</GovUkFrontendLibrary>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Nullable" Version="1.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <Using Include="Xunit" />
   </ItemGroup>
 </Project>

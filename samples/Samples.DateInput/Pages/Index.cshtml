@@ -4,8 +4,12 @@
     ViewData["Title"] = "Home page";
 }
 
-<form asp-page="Index" novalidate>
-    <govuk-date-input asp-for="DateOfBirth" />
+<form asp-page="Index">
+    <govuk-date-input for="DateOfBirth">
+        <govuk-date-input-fieldset>
+            <govuk-date-input-fieldset-legend is-page-heading="true" class="govuk-fieldset__legend--l" />
+        </govuk-date-input-fieldset>
+    </govuk-date-input>
 
     <govuk-button type="submit">Save</govuk-button>
 </form>

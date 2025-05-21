@@ -1,0 +1,17 @@
+{% if params.html or params.text %}
+{% capture labelHtml %}
+<label class="govuk-label {%- if params.classes %} {{ params.classes }}{% endif %}"
+  {{- govukAttributes(params.attributes) -}}
+  {%- if params.for %} for="{{ params.for }}"{% endif %}>
+  {{ params.html | raw | strip | indent: 2 | default: params.text }}
+</label>
+{% endcapture -%}
+
+{% if params.isPageHeading %}
+<h1 class="govuk-label-wrapper">
+  {{ labelHtml | raw | strip | indent: 2 }}
+</h1>
+{%- else %}
+{{ labelHtml | raw | strip }}
+{%- endif -%}
+{% endif %}

@@ -2,8 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="RepoRoot" Value="$(RepoRoot)" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="PuppeteerSharp" Version="2.0.4" />

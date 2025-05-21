@@ -1,14 +1,21 @@
 ﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.Extensions.Options
-@inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
 @inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
-    ViewData.Add("NoAppendHtmlSnippetsMarker", true);
-    var cspNonce = OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
+    if (ViewBag.AssetPath is null && OptionsAccessor.Value.StaticAssetsContentPath is null)
+    {
+        throw new InvalidOperationException(
+            $"Asset path is not set. Ensure either {nameof(GovUkFrontendAspNetCoreOptions.StaticAssetsContentPath)} on {nameof(GovUkFrontendAspNetCoreOptions)} or ViewBag.AssetPath is set.");
+    }
+
+    var assetPath = ViewBag.AssetPath ?? Context.Request.PathBase + OptionsAccessor.Value.StaticAssetsContentPath!.Value;
+
+    var cspNonce = ViewBag.CspNonce as string ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
-    string themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
+    var themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
+    var ogImage = ViewBag.OpengraphImageUrl ?? $"{Context.Request.Scheme}://{Context.Request.Host}{assetPath}/images/govuk-opengraph-image.png";
 }
 <!DOCTYPE html>
 <html lang="@htmlLang" class="govuk-template @ViewBag.HtmlClasses">
@@ -27,12 +34,11 @@
     }
     else
     {
-        <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon">
-        <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="@themeColor">
-        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
-        <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
-        <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+        <link rel="icon" sizes="48x48" href="@(assetPath)/images/favicon.ico">
+        <link rel="icon" sizes="any" href="@(assetPath)/images/favicon.svg" type="image/svg+xml">
+        <link rel="mask-icon" href="@(assetPath)/images/govuk-icon-mask.svg" color="@themeColor">
+        <link rel="apple-touch-icon" href="@(assetPath)/images/govuk-icon-180.png">
+        <link rel="manifest" href="@(assetPath)/manifest.json">
     }
 
     @if (IsSectionDefined("Head"))
@@ -41,14 +47,14 @@
     }
     else
     {
-        @PageTemplateHelper.GenerateStyleImports()
+        @Html.GovUkFrontendStyleImports(appendVersion: true)
     }
 
-    <meta property="og:image" content="@(ViewBag.OpengraphImageUrl ?? "/assets/images/govuk-opengraph-image.png")">
+    <meta property="og:image" content="@(ogImage)">
 </head>
 
 <body class="govuk-template__body @ViewBag.BodyClasses">
-    @PageTemplateHelper.GenerateJsEnabledScript(cspNonce)
+    @Html.GovUkFrontendJsEnabledScript(cspNonce)
     @RenderSection("BodyStart", required: false)
 
     @if (IsSectionDefined("SkipLink"))
@@ -65,6 +71,11 @@
     <div class="govuk-width-container @ViewBag.ContainerClasses">
         @RenderSection("BeforeContent", required: false)
         <main class="govuk-main-wrapper @ViewBag.MainClasses" id="main-content" role="main" lang="@ViewBag.MainLang">
+            @if (ViewBag.PrependErrorSummaryToMain is true or null && !Context.GetContainerErrorContext().ErrorSummaryHasBeenRendered)
+            {
+                <govuk-error-summary/>
+            }
+
             @RenderBody()
         </main>
     </div>
@@ -77,7 +88,7 @@
     }
     else
     {
-        @PageTemplateHelper.GenerateScriptImports(cspNonce)
+        @Html.GovUkFrontendScriptImports(cspNonce, appendVersion: true)
     }
 </body>
 

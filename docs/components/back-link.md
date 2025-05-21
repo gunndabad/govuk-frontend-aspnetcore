@@ -30,6 +30,6 @@
 
 The content is the HTML to use within the generated link. The default is `Back`.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
-| (link attributes) | | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |
+| Attribute         | Type | Description                                                                                                                            |
+|-------------------|------|----------------------------------------------------------------------------------------------------------------------------------------|
+| (link attributes) |      | If specified generates an `href` attribute using the specified values. See [documentation on links](../links.md) for more information. |

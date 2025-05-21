@@ -3,86 +3,90 @@ name: ci
 on:
   push:
     branches:
-    - dev
-    - main
+      - dev
+      - main
     tags:
-    - v*
+      - v*
     paths-ignore:
-    - docs/**
-    - LICENSE
-    - '**.md'
+      - docs/**
+      - LICENSE
+      - "**.md"
   pull_request:
     branches:
-    - dev
-    - main
-    - v1.0
+      - dev
+      - main
+      - v1.0
     paths-ignore:
-    - docs/**
-    - LICENSE
-    - '**.md'
+      - docs/**
+      - LICENSE
+      - "**.md"
 
 jobs:
   build:
-
     name: "Build & package"
     runs-on: ubuntu-latest
-
     env:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-        submodules: recursive
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: recursive
 
-    - name: Clean
-      run: |
-        dotnet clean --configuration Release
-        dotnet nuget locals all --clear
+      - uses: extractions/setup-just@v2
 
-    - name: Restore
-      run: dotnet restore
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+      - name: Install tools
+        run: just install-tools
 
-    - name: Install Playwright
-      run: pwsh ./test/GovUk.Frontend.AspNetCore.IntegrationTests/bin/Release/netcoreapp3.1/playwright.ps1 install
+      - name: Restore
+        run: just restore
 
-    - name: Test
-      run: |
-        dotnet test test/GovUk.Frontend.AspNetCore.Tests/ --configuration Release --no-build
-        dotnet test test/GovUk.Frontend.AspNetCore.ConformanceTests/ --configuration Release --no-build
-        dotnet test test/GovUk.Frontend.AspNetCore.IntegrationTests/ --configuration Release --no-build
+      - name: Format
+        run: just format --verify-no-changes
 
-    - name: Package
-      run: dotnet pack src/GovUk.Frontend.AspNetCore/ --configuration Release --no-build
-      env:
-        MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
+      - name: Build
+        run: just build --configuration Release --no-restore
 
-    - name: Publish package artifact
-      uses: actions/upload-artifact@v2-preview
-      with:
-        name: GovUk.Frontend.AspNetCore.nupkg
-        path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
+      - name: Install Playwright
+        run: just install-playwright
 
+      - name: Test
+        run: |
+          just unit-tests --configuration Release --no-build
+          just conformance-tests --configuration Release --no-build
+          just integration-tests --configuration Release --no-build
+
+      - name: Package
+        run: just pack --configuration Release --no-build
+        env:
+          MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
+
+      - name: Publish package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GovUk.Frontend.AspNetCore.nupkg
+          path: src/GovUk.Frontend.AspNetCore/bin/Release/*.nupkg
 
   release:
-
     name: "Release"
     runs-on: ubuntu-latest
     needs: build
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
-    - name: Download package artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: GovUk.Frontend.AspNetCore.nupkg
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: GovUk.Frontend.AspNetCore.nupkg
 
-    - name: Publish package to NuGet
-      run: dotnet nuget push **/*.nupkg --api-key $NUGET_TOKEN --source https://api.nuget.org/v3/index.json --skip-duplicate
-      env:
+      - name: Publish package to NuGet
+        run: dotnet nuget push **/*.nupkg --api-key $NUGET_TOKEN --source https://api.nuget.org/v3/index.json --skip-duplicate
+        env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}

@@ -1,24 +1,22 @@
-#nullable enable
 using Microsoft.AspNetCore.Html;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class NotificationBannerContext
 {
-    internal class NotificationBannerContext
+    public (string Id, int HeadingLevel, IHtmlContent? Content)? Title { get; private set; }
+
+    public void SetTitle(string id, int headingLevel, IHtmlContent? content)
     {
-        public (string Id, int HeadingLevel, IHtmlContent? Content)? Title { get; private set; }
+        Guard.ArgumentNotNullOrEmpty(nameof(id), id);
 
-        public void SetTitle(string id, int headingLevel, IHtmlContent? content)
+        if (Title != null)
         {
-            Guard.ArgumentNotNullOrEmpty(nameof(id), id);
-
-            if (Title != null)
-            {
-                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                    NotificationBannerTitleTagHelper.TagName,
-                    NotificationBannerTagHelper.TagName);
-            }
-
-            Title = (id, headingLevel, content);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                NotificationBannerTitleTagHelper.TagName,
+                NotificationBannerTagHelper.TagName);
         }
+
+        Title = (id, headingLevel, content);
     }
 }

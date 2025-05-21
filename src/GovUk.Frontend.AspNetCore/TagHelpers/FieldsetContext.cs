@@ -1,36 +1,34 @@
-#nullable enable
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class FieldsetContext
 {
-    internal class FieldsetContext
+    public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
+
+    public void SetLegend(
+        bool isPageHeading,
+        AttributeDictionary? attributes,
+        IHtmlContent content)
     {
-        public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
+        Guard.ArgumentNotNull(nameof(content), content);
 
-        public void SetLegend(
-            bool isPageHeading,
-            AttributeDictionary? attributes,
-            IHtmlContent content)
+        if (Legend != null)
         {
-            Guard.ArgumentNotNull(nameof(content), content);
-            
-            if (Legend != null)
-            {
-                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                    FieldsetLegendTagHelper.TagName,
-                    FieldsetTagHelper.TagName);
-            }
-
-            Legend = (isPageHeading, attributes, content);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                FieldsetLegendTagHelper.TagName,
+                FieldsetTagHelper.TagName);
         }
 
-        public void ThrowIfNotComplete()
+        Legend = (isPageHeading, attributes, content);
+    }
+
+    public void ThrowIfNotComplete()
+    {
+        if (Legend == null)
         {
-            if (Legend == null)
-            {
-                throw ExceptionHelper.AChildElementMustBeProvided(FieldsetLegendTagHelper.TagName);
-            }
+            throw ExceptionHelper.AChildElementMustBeProvided(FieldsetLegendTagHelper.TagName);
         }
     }
 }

@@ -10,6 +10,8 @@ insert_final_newline = true
 [*.cs]
 indent_size = 4
 dotnet_sort_system_directives_first = true
+csharp_style_namespace_declarations = file_scoped:warning
+dotnet_diagnostic.IDE0005.severity = warning
 
 [*.{xml,config,*proj,nuspec,props,resx,targets,yml,tasks}]
 indent_size = 2
@@ -29,3 +31,10 @@ end_of_line = lf
 
 [*.{razor,cshtml}]
 charset = utf-8-bom
+
+[*.liquid]
+indent_size = 2
+insert_final_newline = false
+
+[justfile]
+indent_size = 2

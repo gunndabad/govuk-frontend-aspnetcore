@@ -5,36 +5,41 @@ VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore", "src\GovUk.Frontend.AspNetCore\GovUk.Frontend.AspNetCore.csproj", "{E44813ED-0397-4BBC-9817-18735FF47916}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.Tests", "test\GovUk.Frontend.AspNetCore.Tests\GovUk.Frontend.AspNetCore.Tests.csproj", "{AB17A248-6FB0-4B01-99C7-05117341A764}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.Tests", "tests\GovUk.Frontend.AspNetCore.Tests\GovUk.Frontend.AspNetCore.Tests.csproj", "{AB17A248-6FB0-4B01-99C7-05117341A764}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22CC9D21-2DEC-4A8C-9C91-34954CCB6626}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		CHANGELOG.md = CHANGELOG.md
 		Directory.Build.props = Directory.Build.props
-		global.json = global.json
+		Directory.Build.targets = Directory.Build.targets
 		LICENSE = LICENSE
 		README.md = README.md
+		justfile = justfile
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.DateInput", "samples\Samples.DateInput\Samples.DateInput.csproj", "{8A31102F-1843-4EEA-BB1A-0F6623E1B37B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{E35F1D11-247E-4AA2-AC23-C4FA59901186}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.FrontEnd.AspNetCore.TestCommon", "test\GovUk.FrontEnd.AspNetCore.TestCommon\GovUk.FrontEnd.AspNetCore.TestCommon.csproj", "{C1A97F71-B436-4681-A611-D38C7B357897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.FrontEnd.AspNetCore.TestCommon", "tests\GovUk.FrontEnd.AspNetCore.TestCommon\GovUk.FrontEnd.AspNetCore.TestCommon.csproj", "{C1A97F71-B436-4681-A611-D38C7B357897}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.ConformanceTests", "test\GovUk.Frontend.AspNetCore.ConformanceTests\GovUk.Frontend.AspNetCore.ConformanceTests.csproj", "{36C36B87-7385-48B1-A82D-ADEDB54D574B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.ConformanceTests", "tests\GovUk.Frontend.AspNetCore.ConformanceTests\GovUk.Frontend.AspNetCore.ConformanceTests.csproj", "{36C36B87-7385-48B1-A82D-ADEDB54D574B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.DocSamples", "src\GovUk.Frontend.AspNetCore.DocSamples\GovUk.Frontend.AspNetCore.DocSamples.csproj", "{1AB2352D-1151-4F82-83F4-5C327A436B70}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.DocSamplesScreenshotter", "src\GovUk.Frontend.AspNetCore.DocSamplesScreenshotter\GovUk.Frontend.AspNetCore.DocSamplesScreenshotter.csproj", "{64A0B1FF-882D-4270-AD3B-A3B6ABD74957}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F85128C9-8470-4F7A-B16F-5AEC17BC0924}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F85128C9-8470-4F7A-B16F-5AEC17BC0924}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{AED24400-DECA-43E7-872C-4ADCFB02A3B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.IntegrationTests", "test\GovUk.Frontend.AspNetCore.IntegrationTests\GovUk.Frontend.AspNetCore.IntegrationTests.csproj", "{AECA829F-DC59-4CA2-88C2-54218D4BD817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GovUk.Frontend.AspNetCore.IntegrationTests", "tests\GovUk.Frontend.AspNetCore.IntegrationTests\GovUk.Frontend.AspNetCore.IntegrationTests.csproj", "{AECA829F-DC59-4CA2-88C2-54218D4BD817}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.MvcStarter", "samples\Samples.MvcStarter\Samples.MvcStarter.csproj", "{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.MvcStarter", "samples\Samples.MvcStarter\Samples.MvcStarter.csproj", "{79C1CB9B-ACE7-4174-B072-F8F0DB2F38C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{884EFCBA-B4CC-4B02-9909-5AB345A6D9F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +164,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{E44813ED-0397-4BBC-9817-18735FF47916} = {884EFCBA-B4CC-4B02-9909-5AB345A6D9F2}
 		{AB17A248-6FB0-4B01-99C7-05117341A764} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}
 		{8A31102F-1843-4EEA-BB1A-0F6623E1B37B} = {E35F1D11-247E-4AA2-AC23-C4FA59901186}
 		{C1A97F71-B436-4681-A611-D38C7B357897} = {F85128C9-8470-4F7A-B16F-5AEC17BC0924}

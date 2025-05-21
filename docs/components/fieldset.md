@@ -17,10 +17,10 @@
 
 ### `<govuk-fieldset>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute      | Type     | Description                                                         |
+|----------------|----------|---------------------------------------------------------------------|
 | `described-by` | `string` | One or more element IDs to add to the `aria-describedby` attribute. |
-| `role` | `string` | The `role` attribute for the fieldset. |
+| `role`         | `string` | The `role` attribute for the fieldset.                              |
 
 ### `<govuk-fieldset-legend>`
 
@@ -28,6 +28,6 @@
 The content is the HTML to use within the legend.\
 Must be inside a `<govuk-fieldset>` element.
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute         | Type      | Description |
+|-------------------|-----------| --- |
 | `is-page-heading` | `boolean` | Whether the legend also acts as the heading for the page. The default is `false`. |

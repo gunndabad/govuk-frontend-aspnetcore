@@ -1,36 +1,36 @@
-#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration
+namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
+
+internal partial class ComponentGenerator
 {
-    public partial class ComponentGenerator
+    internal const string LabelElement = "label";
+    internal const bool LabelDefaultIsPageHeading = false;
+
+    [return: NotNullIfNotNull(nameof(content))]
+    public TagBuilder? GenerateLabel(
+        string? @for,
+        bool isPageHeading,
+        IHtmlContent? content,
+        AttributeDictionary? attributes)
     {
-        internal const string LabelElement = "label";
-        internal const bool LabelDefaultIsPageHeading = false;
+        TagBuilder? tagBuilder = null;
 
-        public TagBuilder? GenerateLabel(
-            string? @for,
-            bool isPageHeading,
-            IHtmlContent? content,
-            AttributeDictionary? attributes)
+        if (content != null)
         {
-            TagBuilder? tagBuilder = null;
+            tagBuilder = new TagBuilder(LabelElement);
+            tagBuilder.MergeOptionalAttributes(attributes);
+            tagBuilder.MergeCssClass("govuk-label");
 
-            if (content != null)
+            if (@for != null)
             {
-                tagBuilder = new TagBuilder(LabelElement);
-                tagBuilder.MergeAttributes(attributes);
-                tagBuilder.MergeCssClass("govuk-label");
-
-                if (@for != null)
-                {
-                    tagBuilder.Attributes.Add("for", @for);
-                }
-
-                tagBuilder.InnerHtml.AppendHtml(content);
+                tagBuilder.Attributes.Add("for", @for);
             }
+
+            tagBuilder.InnerHtml.AppendHtml(content);
 
             if (isPageHeading)
             {
@@ -41,10 +41,8 @@ namespace GovUk.Frontend.AspNetCore.HtmlGeneration
 
                 return heading;
             }
-            else
-            {
-                return tagBuilder;
-            }
         }
+
+        return tagBuilder;
     }
 }

@@ -1,38 +1,36 @@
-#nullable enable
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration
+namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
+
+internal partial class ComponentGenerator
 {
-    public partial class ComponentGenerator
+    internal const string ErrorMessageElement = "p";
+    internal const string ErrorMessageDefaultVisuallyHiddenText = "Error";
+
+    public TagBuilder GenerateErrorMessage(
+        string visuallyHiddenText,
+        IHtmlContent content,
+        AttributeDictionary? attributes)
     {
-        internal const string ErrorMessageElement = "p";
-        internal const string ErrorMessageDefaultVisuallyHiddenText = "Error";
+        Guard.ArgumentNotNull(nameof(content), content);
 
-        public TagBuilder GenerateErrorMessage(
-            string visuallyHiddenText,
-            IHtmlContent content,
-            AttributeDictionary? attributes)
+        var tagBuilder = new TagBuilder(ErrorMessageElement);
+        tagBuilder.MergeOptionalAttributes(attributes);
+        tagBuilder.MergeCssClass("govuk-error-message");
+
+        if (!string.IsNullOrEmpty(visuallyHiddenText))
         {
-            Guard.ArgumentNotNull(nameof(content), content);
+            var vht = new TagBuilder("span");
+            vht.MergeCssClass("govuk-visually-hidden");
+            vht.InnerHtml.Append(visuallyHiddenText + ":");
 
-            var tagBuilder = new TagBuilder(ErrorMessageElement);
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-error-message");
-
-            if (!string.IsNullOrEmpty(visuallyHiddenText))
-            {
-                var vht = new TagBuilder("span");
-                vht.MergeCssClass("govuk-visually-hidden");
-                vht.InnerHtml.Append(visuallyHiddenText + ":");
-
-                tagBuilder.InnerHtml.AppendHtml(vht);
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
+            tagBuilder.InnerHtml.AppendHtml(vht);
         }
+
+        tagBuilder.InnerHtml.AppendHtml(content);
+
+        return tagBuilder;
     }
 }

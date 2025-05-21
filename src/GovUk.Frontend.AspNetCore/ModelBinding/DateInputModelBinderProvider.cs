@@ -1,41 +1,40 @@
-#nullable enable
-using System;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 
-namespace GovUk.Frontend.AspNetCore.ModelBinding
+namespace GovUk.Frontend.AspNetCore.ModelBinding;
+
+/// <summary>
+/// An <see cref="IModelBinderProvider"/> for binding Date input components.
+/// </summary>
+public class DateInputModelBinderProvider : IModelBinderProvider
 {
-    internal class DateInputModelBinderProvider : IModelBinderProvider
+    private readonly IOptions<GovUkFrontendAspNetCoreOptions> _optionsAccessor;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DateInputModelBinderProvider"/> class.
+    /// </summary>
+    public DateInputModelBinderProvider(IOptions<GovUkFrontendAspNetCoreOptions> optionsAccessor)
     {
-        private readonly DateInputModelConverter[] _dateInputModelConverters;
+        Guard.ArgumentNotNull(nameof(optionsAccessor), optionsAccessor);
 
-        public DateInputModelBinderProvider(GovUkFrontendAspNetCoreOptions options)
+        _optionsAccessor = optionsAccessor;
+    }
+
+    /// <inheritdoc/>
+    public IModelBinder? GetBinder(ModelBinderProviderContext context)
+    {
+        Guard.ArgumentNotNull(nameof(context), context);
+
+        var modelType = context.Metadata.UnderlyingOrModelType;
+
+        foreach (var converter in _optionsAccessor.Value.DateInputModelConverters)
         {
-            if (options is null)
+            if (converter.CanConvertModelType(modelType))
             {
-                throw new ArgumentNullException(nameof(options));
+                return new DateInputModelConverterModelBinder(converter, _optionsAccessor);
             }
-
-            _dateInputModelConverters = options.DateInputModelConverters.ToArray();
         }
 
-        public IModelBinder? GetBinder(ModelBinderProviderContext context)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            var modelType = context.Metadata.UnderlyingOrModelType;
-
-            foreach (var converter in _dateInputModelConverters)
-            {
-                if (converter.CanConvertModelType(modelType))
-                {
-                    return new DateInputModelBinder(converter);
-                }
-            }
-
-            return null;
-        }
+        return null;
     }
 }

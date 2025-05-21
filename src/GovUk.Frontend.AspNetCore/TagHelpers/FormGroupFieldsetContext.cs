@@ -1,46 +1,45 @@
-#nullable enable
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal abstract class FormGroupFieldsetContext
 {
-    internal abstract class FormGroupFieldsetContext
+    private readonly string _fieldsetTagName;
+    private readonly string _legendTagName;
+    private readonly ModelExpression? _aspFor;
+
+    protected FormGroupFieldsetContext(
+        string fieldsetTagName,
+        string legendTagName,
+        AttributeDictionary? attributes,
+        ModelExpression? aspFor)
     {
-        private readonly string _fieldsetTagName;
-        private readonly string _legendTagName;
+        _fieldsetTagName = Guard.ArgumentNotNull(nameof(fieldsetTagName), fieldsetTagName);
+        _legendTagName = Guard.ArgumentNotNull(nameof(legendTagName), legendTagName);
+        Attributes = attributes;
+        _aspFor = aspFor;
+    }
 
-        protected FormGroupFieldsetContext(
-            string fieldsetTagName,
-            string legendTagName,
-            AttributeDictionary? attributes)
+    public AttributeDictionary? Attributes { get; private set; }
+
+    public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent? Content)? Legend { get; private set; }
+
+    public virtual void SetLegend(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent? content)
+    {
+        if (Legend != null)
         {
-            _fieldsetTagName = Guard.ArgumentNotNull(nameof(fieldsetTagName), fieldsetTagName);
-            _legendTagName = Guard.ArgumentNotNull(nameof(legendTagName), legendTagName);
-            Attributes = attributes;
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(_legendTagName, _fieldsetTagName);
         }
 
-        public AttributeDictionary? Attributes { get; private set; }
+        Legend = (isPageHeading, attributes, content);
+    }
 
-        public (bool IsPageHeading, AttributeDictionary? Attributes, IHtmlContent Content)? Legend { get; private set; }
-
-        public virtual void SetLegend(bool isPageHeading, AttributeDictionary? attributes, IHtmlContent content)
+    public void ThrowIfNotComplete()
+    {
+        if (Legend == null && _aspFor is null)
         {
-            Guard.ArgumentNotNull(nameof(content), content);
-
-            if (Legend != null)
-            {
-                throw ExceptionHelper.OnlyOneElementIsPermittedIn(_legendTagName, _fieldsetTagName);
-            }
-
-            Legend = (isPageHeading, attributes, content);
-        }
-
-        public void ThrowIfNotComplete()
-        {
-            if (Legend == null)
-            {
-                throw ExceptionHelper.AChildElementMustBeProvided(_legendTagName);
-            }
+            throw ExceptionHelper.AChildElementMustBeProvided(_legendTagName);
         }
     }
 }

@@ -1,26 +1,22 @@
-#nullable enable
-using System;
-using System.Collections.Generic;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class BreadcrumbsContext
 {
-    internal class BreadcrumbsContext
+    private readonly List<BreadcrumbsOptionsItem> _items;
+
+    public BreadcrumbsContext()
     {
-        private readonly List<BreadcrumbsItem> _items;
+        _items = new List<BreadcrumbsOptionsItem>();
+    }
 
-        public BreadcrumbsContext()
-        {
-            _items = new List<BreadcrumbsItem>();
-        }
+    public IReadOnlyCollection<BreadcrumbsOptionsItem> Items => _items;
 
-        public IReadOnlyCollection<BreadcrumbsItem> Items => _items;
+    public void AddItem(BreadcrumbsOptionsItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
 
-        public void AddItem(BreadcrumbsItem item)
-        {
-            Guard.ArgumentNotNull(nameof(item), item);
-
-            _items.Add(item);
-        }
+        _items.Add(item);
     }
 }

@@ -1,25 +1,20 @@
-using System;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore
+namespace GovUk.Frontend.AspNetCore;
+
+/// <summary>
+/// Utility extensions for <see cref="TagHelperContent"/>.
+/// </summary>
+public static class TagHelperContentExtensions
 {
     /// <summary>
-    /// Utility extensions for <see cref="TagHelperContent"/>.
+    /// Creates a snapshot of the content in a specified <see cref="TagHelperContent"/>.
     /// </summary>
-    public static class TagHelperContentExtensions
+    public static IHtmlContent Snapshot(this TagHelperContent content)
     {
-        /// <summary>
-        /// Creates a snapshot of the content in a specified <see cref="TagHelperContent"/>.
-        /// </summary>
-        public static IHtmlContent Snapshot(this TagHelperContent content)
-        {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
+        Guard.ArgumentNotNull(nameof(content), content);
 
-            return new HtmlString(content.GetContent());
-        }
+        return new HtmlString(content.GetContent());
     }
 }

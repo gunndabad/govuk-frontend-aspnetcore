@@ -1,0 +1,28 @@
+{% comment %} Set classes for this component {% endcomment %}
+{%- assign classNames = "govuk-breadcrumbs" -%}
+
+{% if params.classes %}
+  {% assign classNames = classNames | append: " " | append: params.classes %}
+{% endif -%}
+
+{% if params.collapseOnMobile %}
+  {% assign classNames = classNames | append: " govuk-breadcrumbs--collapse-on-mobile" %}
+{% endif -%}
+
+<nav class="{{ classNames }}" {{- govukAttributes(params.attributes) }} aria-label="{{ params.labelText | default: "Breadcrumb" }}">
+  <ol class="govuk-breadcrumbs__list">
+{%- for item in params.items %}
+  {%- if item.href %}
+    <li class="govuk-breadcrumbs__list-item" {{- govukAttributes(item.itemAttributes) }}>
+      <a class="govuk-breadcrumbs__link" href="{{ item.href }}" {{- govukAttributes(item.attributes) }}>
+        {{- item.html | raw | default: item.text -}}
+      </a>
+    </li>
+  {%- else %}
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">
+      {{- item.html | safe | default: item.text -}}
+    </li>
+  {%- endif %}
+{%- endfor %}
+  </ol>
+</nav>

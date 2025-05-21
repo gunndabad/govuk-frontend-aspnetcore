@@ -1,27 +1,32 @@
-#nullable enable
-using System.Threading.Tasks;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Represents the title in the GDS error summary component.
+/// </summary>
+[HtmlTargetElement(TagName, ParentTag = ErrorSummaryTagHelper.TagName)]
+public class ErrorSummaryTitleTagHelper : TagHelper
 {
-    /// <summary>
-    /// Represents the title in the GDS error summary component.
-    /// </summary>
-    [HtmlTargetElement(TagName, ParentTag = ErrorSummaryTagHelper.TagName)]
-    public class ErrorSummaryTitleTagHelper : TagHelper
+    internal const string TagName = "govuk-error-summary-title";
+
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        internal const string TagName = "govuk-error-summary-title";
+        var errorSummaryContext = context.GetContextItem<ErrorSummaryContext>();
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        var childContent = await output.GetChildContentAsync();
+
+        if (output.Content.IsModified)
         {
-            var errorSummaryContext = context.GetContextItem<ErrorSummaryContext>();
-
-            var childContent = await output.GetChildContentAsync();
-
-            errorSummaryContext.SetTitle(output.Attributes.ToAttributeDictionary(), childContent.Snapshot());
-
-            output.SuppressOutput();
+            childContent = output.Content;
         }
+
+        errorSummaryContext.SetTitle(
+            new AttributeCollection(output.Attributes),
+            childContent.ToHtmlString());
+
+        output.SuppressOutput();
     }
 }

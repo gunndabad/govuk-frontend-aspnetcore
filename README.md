@@ -1,9 +1,9 @@
-# ASP.NET Core MVC tag helpers for GOV.UK Design System
+# ASP.NET Core integration for GOV.UK Design System
 
-![ci](https://github.com/gunndabad/govuk-frontend-aspnetcore/workflows/ci/badge.svg)
-![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/GovUk.Frontend.AspNetCore)
+![ci](https://github.com/x-govuk/govuk-frontend-aspnetcore/workflows/ci/badge.svg)
+![NuGet Downloads](https://img.shields.io/nuget/dt/GovUk.Frontend.AspNetCore)
 
-Targets [GDS Frontend v4.2.0](https://github.com/alphagov/govuk-frontend/releases/tag/v4.2.0)
+Targets [GDS Frontend v5.9.0](https://github.com/alphagov/govuk-frontend/releases/tag/v5.8.0)
 
 ## Installation
 
@@ -19,18 +19,14 @@ Or via the .NET Core command line interface:
 
 ### 2. Configure your ASP.NET Core application
 
-Add services to your application's `Startup` class:
+Add services to your application:
 
 ```cs
 using GovUk.Frontend.AspNetCore;
 
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddGovUkFrontend();
-    }
-}
+var builder = WebApplication.CreateBuilder(args);
+//...
+builder.Services.AddGovUkFrontend();
 ```
 
 ### 3. Register tag helpers
@@ -69,59 +65,65 @@ In your `_Layout.cshtml` file:
 
 The view can be customised by defining the following sections and `ViewData`/`ViewBag` variables.
 
-| Section name | Description |
-| --- | --- |
+| Section name  | Description                                                                                                                                                                                                                                               |
+|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | BeforeContent | Add content that needs to appear outside <main> element. <br /> For example: The [back link](docs/components/back-link.md) component, [breadcrumbs](docs/components/breadcrumbs.md) component, [phase banner](docs/components/phase-banner.md) component. |
-| BodyEnd | Add content just before the closing `</body>` element. |
-| BodyStart | Add content after the opening `<body>` element. <br/> For example: The cookie banner component. |
-| Footer | Override the default footer component. |
-| Head | Add additional items inside the <head> element. <br /> For example: `<meta name="description" content="My page description">` |
-| Header | Override the default header component. |
-| HeadIcons | Override the default icons used for GOV.UK branded pages. <br /> For example: `<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />` |
-| SkipLink | Override the default [skip link](docs/components/skip-link.md) component. |
+| BodyEnd       | Add content just before the closing `</body>` element.                                                                                                                                                                                                    |
+| BodyStart     | Add content after the opening `<body>` element. <br/> For example: The cookie banner component.                                                                                                                                                           |
+| Footer        | Override the default footer component.                                                                                                                                                                                                                    |
+| Head          | Add additional items inside the <head> element. <br /> For example: `<meta name="description" content="My page description">`                                                                                                                             |
+| Header        | Override the default header component.                                                                                                                                                                                                                    |
+| HeadIcons     | Override the default icons used for GOV.UK branded pages. <br /> For example: `<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />`                                                                                                       |
+| SkipLink      | Override the default [skip link](docs/components/skip-link.md) component.                                                                                                                                                                                 |
 
-| `ViewData` key | Type | Description |
-| --- | --- | --- |
-| BodyClasses | `string` | Add class(es) to the `<body>` element. |
-| ContainerClasses | `string` | Add class(es) to the container. This is useful if you want to make the page wrapper a fixed width. |
-| HtmlClasses | `string` | Add class(es) to the `<html>` element. |
-| HtmlLang | `string` | Set the language of the whole document. If your `<title>` and `<main>` element are in a different language to the rest of the page, use `HtmlLang` to set the language of the rest of the page. |
-| MainClasses | `string` | Add class(es) to the `<main>` element. |
-| MainLang | `string` | Set the language of the `<main>` element if it's different to `HtmlLang`. |
-| OpengraphImageUrl | `string` | Set the URL for the Open Graph image meta tag. The URL must be absolute, including the protocol and domain name. |
-| Title | `string` | Override the default page title (`<title>` element). |
-| ThemeColor | `string` | Set the toolbar [colour on some devices](https://developers.google.com/web/updates/2014/11/Support-for-theme-color-in-Chrome-39-for-Android). |
+| `ViewData` key            | Type     | Description                                                                                                                                                                                     |
+|---------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| PrependErrorSummaryToMain | `bool`   | Whether an error summary should be prepended to the `<main>` element.                                                                                                                           |
+| BodyClasses               | `string` | Add class(es) to the `<body>` element.                                                                                                                                                          |
+| ContainerClasses          | `string` | Add class(es) to the container. This is useful if you want to make the page wrapper a fixed width.                                                                                              |
+| HtmlClasses               | `string` | Add class(es) to the `<html>` element.                                                                                                                                                          |
+| HtmlLang                  | `string` | Set the language of the whole document. If your `<title>` and `<main>` element are in a different language to the rest of the page, use `HtmlLang` to set the language of the rest of the page. |
+| MainClasses               | `string` | Add class(es) to the `<main>` element.                                                                                                                                                          |
+| MainLang                  | `string` | Set the language of the `<main>` element if it's different to `HtmlLang`.                                                                                                                       |
+| OpengraphImageUrl         | `string` | Set the URL for the Open Graph image meta tag. The URL must be absolute, including the protocol and domain name.                                                                                |
+| Title                     | `string` | Override the default page title (`<title>` element).                                                                                                                                            |
+| ThemeColor                | `string` | Set the toolbar [colour on some devices](https://developers.google.com/web/updates/2014/11/Support-for-theme-color-in-Chrome-39-for-Android).                                                   |
 
 #### Create your own Razor view
 
 If the standard template above is not sufficient, you can create your own Razor view.
 
-By default references to the GDS frontend CSS and script assets will be added automatically to the `<head>` and `<body>` elements.
-
-If you want to control the asset references yourself you can disable the automatic import:
-```cs
-services.AddGovUkFrontend(options => options.AddImportsToHtml = false);
-```
-
-The `PageTemplateHelper` class defines several methods that can simplify the CSS and script imports.
-`GenerateStyleImports` imports CSS stylesheets and should be added to `<head>`.
-`GenerateJsEnabledScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
-`GenerateScriptImports` imports JavaScript files and should be added to the end of `<body>`.
+Extension methods are provided on `IHtmlHelper` that simplify the CSS and script imports.
+`GovUkFrontendStyleImports` imports CSS stylesheets and should be added to `<head>`.
+`GovUkFrontendJsEnabledScript` declares some inline JavaScript that adds the `js-enabled` class to the `<body>` and should be placed at the start of `<body>`.
+`GovUkFrontendScriptImports` imports JavaScript files and should be added to the end of `<body>`.
 
 The latter two methods take an optional `cspNonce` parameter; when provided a `nonce` attribute will be added to the inline scripts.
 
-`PageTemplateHelper` can be injected into your view and used like so:
+Example `_Layout.cshtml` snippet:
 ```razor
-@inject GovUk.Frontend.AspNetCore.PageTemplateHelper PageTemplateHelper
+@using GovUk.Frontend.AspNetCore
 
-@PageTemplateHelper.GenerateStyleImports()
+<!DOCTYPE html>
+<html>
+<head>
+    @Html.GovUkFrontendStyleImports()
+</head>
+<body>
+    @Html.GovUkFrontendJsEnabledScript()
+
+    @RenderBody()
+
+    @Html.GovUkFrontendScriptImports()
+</body>
+</html>
 ```
 
 #### Content security policy (CSP)
 
 There are two built-in mechanisms to help in generating a `script-src` CSP directive that works correctly with the inline scripts used by the page template.
 
-The preferred option is to use the `GetCspScriptHashes` method on `PageTemplateHelper`. This will return a string that can be inserted directly into the `script-src` directive in your CSP.
+The preferred option is to use the `GetCspScriptHashes` extension method on `IHtmlHelper`. This will return a string that can be inserted directly into the `script-src` directive in your CSP.
 
 Alternatively, a CSP nonce can be appended to the generated `script` tags. A delegate must be configured on `GovUkFrontendOptions` that retrieves a nonce for a given `HttpContext`.
 ```cs
@@ -157,12 +159,14 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 - [File upload](docs/components/file-upload.md)
 - [Inset text](docs/components/inset-text.md)
 - [Notification banner](docs/components/notification-banner.md)
+- [Pagination](docs/components/pagination.md)
 - [Panel](docs/components/panel.md)
 - [Phase banner](docs/components/phase-banner.md)
 - [Radios](docs/components/radios.md)
 - [Select](docs/components/select.md)
 - [Skip link](docs/components/skip-link.md)
 - [Summary list](docs/components/summary-list.md)
+- [Tabs](docs/components/tabs.md)
 - [Tag](docs/components/tag.md)
 - [Textarea](docs/components/textarea.md)
 - [Text input](docs/components/text-input.md)

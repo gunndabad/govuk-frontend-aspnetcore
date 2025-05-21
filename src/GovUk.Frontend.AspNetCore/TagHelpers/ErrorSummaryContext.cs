@@ -1,59 +1,65 @@
-#nullable enable
-using System.Collections.Generic;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using GovUk.Frontend.AspNetCore.Components;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class ErrorSummaryContext
 {
-    internal class ErrorSummaryContext
+    private readonly List<ErrorSummaryContextItem> _items;
+
+    public ErrorSummaryContext()
     {
-        private readonly List<ErrorSummaryItem> _items;
+        _items = new List<ErrorSummaryContextItem>();
+    }
 
-        public ErrorSummaryContext()
+    public bool HaveExplicitItems { get; set; }
+
+    public IReadOnlyCollection<ErrorSummaryContextItem> Items => _items;
+
+    public (AttributeCollection Attributes, string Html)? Description { get; private set; }
+
+    public (AttributeCollection Attributes, string Html)? Title { get; private set; }
+
+    public void AddItem(ErrorSummaryContextItem item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+
+        _items.Add(item);
+        HaveExplicitItems = true;
+    }
+
+    public void SetDescription(AttributeCollection attributes, string html)
+    {
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
+
+        if (Description != null)
         {
-            _items = new List<ErrorSummaryItem>();
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                ErrorSummaryDescriptionTagHelper.TagName,
+                ErrorSummaryTagHelper.TagName);
         }
 
-        public IReadOnlyCollection<ErrorSummaryItem> Items => _items;
+        Description = (attributes, html);
+    }
 
-        public (AttributeDictionary Attributes, IHtmlContent Content)? Description { get; private set; }
+    public void SetTitle(AttributeCollection attributes, string html)
+    {
+        ArgumentNullException.ThrowIfNull(attributes);
+        ArgumentNullException.ThrowIfNull(html);
 
-        public (AttributeDictionary Attributes, IHtmlContent Content)? Title { get; private set; }
-
-        public void AddItem(ErrorSummaryItem item)
+        if (Title != null)
         {
-            Guard.ArgumentNotNull(nameof(item), item);
-
-            _items.Add(item);
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(
+                ErrorSummaryTitleTagHelper.TagName,
+                ErrorSummaryTagHelper.TagName);
         }
 
-        public void SetDescription(AttributeDictionary attributes, IHtmlContent content)
-        {
-            Guard.ArgumentNotNull(nameof(content), content);
-
-            if (Description != null)
-            {
-                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                    ErrorSummaryDescriptionTagHelper.TagName,
-                    ErrorSummaryTagHelper.TagName);
-            }
-
-            Description = (attributes, content);
-        }
-
-        public void SetTitle(AttributeDictionary attributes, IHtmlContent content)
-        {
-            Guard.ArgumentNotNull(nameof(content), content);
-
-            if (Title != null)
-            {
-                throw ExceptionHelper.OnlyOneElementIsPermittedIn(
-                    ErrorSummaryTitleTagHelper.TagName,
-                    ErrorSummaryTagHelper.TagName);
-            }
-
-            Title = (attributes, content);
-        }
+        Title = (attributes, html);
     }
 }
+
+internal record ErrorSummaryContextItem(
+    string? Href,
+    string Html,
+    AttributeCollection Attributes,
+    AttributeCollection ItemAttributes);

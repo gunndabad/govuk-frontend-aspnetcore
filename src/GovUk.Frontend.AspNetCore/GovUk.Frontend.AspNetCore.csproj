@@ -1,45 +1,72 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor" InitialTargets="InstallGovUkFrontendPackage">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <Copyright>Copyright © 2020 James Gunn</Copyright>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <Copyright>Copyright © James Gunn</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/gunndabad/govuk-frontend-aspnetcore</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/x-govuk/govuk-frontend-aspnetcore</PackageProjectUrl>
+    <IconUrl>https://avatars.githubusercontent.com/u/60000384?s=200&amp;v=4</IconUrl>
+    <RepositoryUrl>https://github.com/x-govuk/govuk-frontend-aspnetcore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>aspnetcore, taghelpers, gds, gov.uk</PackageTags>
-    <Description>A port of the GOV.UK Design system's components for ASP.NET Core.</Description>
+    <Description>ASP.NET Core integration for GOV.UK Design system</Description>
+    <Authors>James Gunn</Authors>
     <MinVerTagPrefix>v</MinVerTagPrefix>
-    <MinVerMinimumMajorMinor>1.0</MinVerMinimumMajorMinor>
+    <MinVerMinimumMajorMinor>3.0</MinVerMinimumMajorMinor>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <WarningsNotAsErrors>CS1591</WarningsNotAsErrors>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.Tests" />
+    <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.ConformanceTests" />
+    <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.IntegrationTests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Fluid.Core" Version="[2.15.0,3.0)" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageReference Include="MinVer" Version="2.3.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SoftCircuits.HtmlMonkey" Version="3.0.0" />
   </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.2" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.*" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="$(RepoRoot)\lib\govuk-frontend\dist\**\*">
-      <Link>Content/%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <LogicalName>Content/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
+    <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.css">
+      <LinkedName>all.min.css</LinkedName>
+    </_CompiledAssets>
+    <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.js">
+      <LinkedName>all.min.js</LinkedName>
+    </_CompiledAssets>
+
+    <EmbeddedResource Include="$(GovUkFrontendLibrary)assets\**\*">
+      <Link>Content/Assets/%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <LogicalName>Content/Assets/%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="@(_CompiledAssets)">
+      <Link>Content/Compiled/%(LinkedName)</Link>
+      <LogicalName>Content/Compiled/%(LinkedName)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Components\Templates\*.liquid" />
+    <EmbeddedResource Include="Components\Templates\*.liquid" />
   </ItemGroup>
 
 </Project>

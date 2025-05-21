@@ -1,30 +1,28 @@
-#nullable enable
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.HtmlGeneration
+namespace GovUk.Frontend.AspNetCore.HtmlGeneration;
+
+internal partial class ComponentGenerator
 {
-    public partial class ComponentGenerator
+    internal const string HintElement = "div";
+
+    public TagBuilder GenerateHint(string? id, IHtmlContent content, AttributeDictionary? attributes)
     {
-        internal const string HintElement = "div";
+        Guard.ArgumentNotNull(nameof(content), content);
 
-        public TagBuilder GenerateHint(string? id, IHtmlContent content, AttributeDictionary? attributes)
+        var tagBuilder = new TagBuilder(HintElement);
+        tagBuilder.MergeOptionalAttributes(attributes);
+        tagBuilder.MergeCssClass("govuk-hint");
+
+        if (!string.IsNullOrEmpty(id))
         {
-            Guard.ArgumentNotNull(nameof(content), content);
-
-            var tagBuilder = new TagBuilder(HintElement);
-            tagBuilder.MergeAttributes(attributes);
-            tagBuilder.MergeCssClass("govuk-hint");
-
-            if (!string.IsNullOrEmpty(id))
-            {
-                tagBuilder.Attributes.Add("id", id);
-            }
-
-            tagBuilder.InnerHtml.AppendHtml(content);
-
-            return tagBuilder;
+            tagBuilder.Attributes.Add("id", id);
         }
+
+        tagBuilder.InnerHtml.AppendHtml(content);
+
+        return tagBuilder;
     }
 }

@@ -1,81 +1,107 @@
-#nullable enable
-using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using System.Diagnostics.CodeAnalysis;
+using GovUk.Frontend.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Generates a GDS error summary component.
+/// </summary>
+[HtmlTargetElement(TagName)]
+[RestrictChildren(ErrorSummaryTitleTagHelper.TagName, ErrorSummaryDescriptionTagHelper.TagName, "govuk-error-summary-item")]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.ErrorSummary)]
+public class ErrorSummaryTagHelper : TagHelper
 {
+    internal const string TagName = "govuk-error-summary";
+
+    private const string DisableAutoFocusAttributeName = "disable-auto-focus";
+
+    private readonly IComponentGenerator _componentGenerator;
+
     /// <summary>
-    /// Generates a GDS error summary component.
+    /// Creates a new <see cref="ErrorSummaryTagHelper"/>.
     /// </summary>
-    [HtmlTargetElement(TagName)]
-    [RestrictChildren(ErrorSummaryTitleTagHelper.TagName, ErrorSummaryDescriptionTagHelper.TagName, "govuk-error-summary-item")]
-    [OutputElementHint(ComponentGenerator.ErrorSummaryElement)]
-    public class ErrorSummaryTagHelper : TagHelper
+    public ErrorSummaryTagHelper(IComponentGenerator componentGenerator)
     {
-        internal const string TagName = "govuk-error-summary";
+        _componentGenerator = componentGenerator;
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+    }
 
-        private const string DisableAutoFocusAttributeName = "disable-auto-focus";
+    /// <summary>
+    /// Whether to disable the behavior that focuses the error summary when the page loads.
+    /// </summary>
+    [HtmlAttributeName(DisableAutoFocusAttributeName)]
+    public bool? DisableAutoFocus { get; set; }
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
+    /// <summary>
+    /// Gets the <see cref="ViewContext"/> of the executing view.
+    /// </summary>
+    [HtmlAttributeNotBound]
+    [ViewContext]
+    [DisallowNull]
+    public ViewContext? ViewContext { get; set; }
 
-        /// <summary>
-        /// Creates a new <see cref="ErrorSummaryTagHelper"/>.
-        /// </summary>
-        public ErrorSummaryTagHelper()
-            : this(null)
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var errorSummaryContext = new ErrorSummaryContext();
+
+        using (context.SetScopedContextItem(typeof(ErrorSummaryContext), errorSummaryContext))
         {
+            await output.GetChildContentAsync();
         }
 
-        internal ErrorSummaryTagHelper(IGovUkHtmlGenerator? htmlGenerator = null)
+        var containerErrorContext = ViewContext!.HttpContext.GetContainerErrorContext();
+
+        IReadOnlyCollection<ErrorSummaryOptionsErrorItem> errorList;
+
+        if (errorSummaryContext.HaveExplicitItems)
         {
-            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+            errorList = errorSummaryContext.Items
+                .Select(i => new ErrorSummaryOptionsErrorItem
+                {
+                    Href = i.Href,
+                    Text = null,
+                    Html = i.Html,
+                    Attributes = i.Attributes,
+                    ItemAttributes = i.ItemAttributes
+                })
+                .ToArray();
+        }
+        else
+        {
+            errorList = containerErrorContext.GetErrorList();
         }
 
-        /// <summary>
-        /// Whether to disable the behavior that focuses the error summary when the page loads.
-        /// </summary>
-        /// <remarks>
-        /// The default is <c>false</c>.
-        /// </remarks>
-        [HtmlAttributeName(DisableAutoFocusAttributeName)]
-        public bool DisableAutoFocus { get; set; } = ComponentGenerator.ErrorSummaryDefaultDisableAutoFocus;
-
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        if (errorSummaryContext.Title == null &&
+            errorSummaryContext.Description == null &&
+            errorList.Count == 0)
         {
-            var errorSummaryContext = new ErrorSummaryContext();
-
-            using (context.SetScopedContextItem(typeof(ErrorSummaryContext), errorSummaryContext))
-            {
-                await output.GetChildContentAsync();
-            }
-
-            if (errorSummaryContext.Title == null &&
-                errorSummaryContext.Description == null &&
-                errorSummaryContext.Items.Count == 0)
-            {
-                output.SuppressOutput();
-                return;
-            }
-
-            var tagBuilder = _htmlGenerator.GenerateErrorSummary(
-                DisableAutoFocus,
-                errorSummaryContext.Title?.Content ?? new HtmlString(ComponentGenerator.ErrorSummaryDefaultTitle),
-                errorSummaryContext.Title?.Attributes,
-                errorSummaryContext.Description?.Content,
-                errorSummaryContext.Description?.Attributes,
-                output.Attributes.ToAttributeDictionary(),
-                errorSummaryContext.Items);
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
+            output.SuppressOutput();
+            return;
         }
+
+        containerErrorContext.ErrorSummaryHasBeenRendered = true;
+
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
+
+        var component = await _componentGenerator.GenerateErrorSummaryAsync(new ErrorSummaryOptions()
+        {
+            TitleText = null,
+            TitleHtml = errorSummaryContext.Title?.Html ?? DefaultComponentGenerator.DefaultErrorSummaryTitleHtml,
+            DescriptionText = null,
+            DescriptionHtml = errorSummaryContext.Description?.Html,
+            ErrorList = errorList,
+            Classes = classes,
+            Attributes = attributes,
+            DisableAutoFocus = DisableAutoFocus,
+            TitleAttributes = errorSummaryContext?.Title?.Attributes,
+            DescriptionAttributes = errorSummaryContext?.Description?.Attributes
+        });
+
+        output.ApplyComponentHtml(component);
     }
 }

@@ -1,56 +1,56 @@
-#nullable enable
-using System.Threading.Tasks;
-using GovUk.Frontend.AspNetCore.HtmlGeneration;
+using GovUk.Frontend.AspNetCore.Components;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+/// <summary>
+/// Generates a GDS back link component.
+/// </summary>
+[HtmlTargetElement(TagName)]
+[OutputElementHint(DefaultComponentGenerator.ComponentElementTypes.BackLink)]
+public class BackLinkTagHelper : TagHelper
 {
+    internal const string TagName = "govuk-back-link";
+
+    private readonly IComponentGenerator _componentGenerator;
+
     /// <summary>
-    /// Generates a GDS back link component.
+    /// Creates a new <see cref="BackLinkTagHelper"/>.
     /// </summary>
-    [HtmlTargetElement(TagName)]
-    [OutputElementHint(ComponentGenerator.BackLinkElement)]
-    public class BackLinkTagHelper : TagHelper
+    public BackLinkTagHelper(IComponentGenerator componentGenerator)
     {
-        internal const string TagName = "govuk-back-link";
+        ArgumentNullException.ThrowIfNull(componentGenerator);
+        _componentGenerator = componentGenerator;
+    }
 
-        private static readonly HtmlString _defaultContent = new HtmlString(ComponentGenerator.BackLinkDefaultContent);
+    /// <inheritdoc/>
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        IHtmlContent? content = null;
 
-        private readonly IGovUkHtmlGenerator _htmlGenerator;
-
-        /// <summary>
-        /// Creates a new <see cref="BackLinkTagHelper"/>.
-        /// </summary>
-        public BackLinkTagHelper()
-            : this(htmlGenerator: null)
+        if (output.TagMode == TagMode.StartTagAndEndTag)
         {
+            content = await output.GetChildContentAsync();
         }
 
-        internal BackLinkTagHelper(IGovUkHtmlGenerator? htmlGenerator)
+        if (output.Content.IsModified)
         {
-            _htmlGenerator = htmlGenerator ?? new ComponentGenerator();
+            content = output.Content;
         }
 
-        /// <inheritdoc/>
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        var attributes = new AttributeCollection(output.Attributes);
+        attributes.Remove("class", out var classes);
+        attributes.Remove("href", out var href);
+
+        var component = await _componentGenerator.GenerateBackLinkAsync(new BackLinkOptions()
         {
-            IHtmlContent content = _defaultContent;
+            Html = content?.ToHtmlString(),
+            Href = href,
+            Classes = classes,
+            Attributes = attributes
+        });
 
-            if (output.TagMode == TagMode.StartTagAndEndTag)
-            {
-                content = await output.GetChildContentAsync();
-            }
-
-            var tagBuilder = _htmlGenerator.GenerateBackLink(content, output.Attributes.ToAttributeDictionary());
-
-            output.TagName = tagBuilder.TagName;
-            output.TagMode = TagMode.StartTagAndEndTag;
-
-            output.Attributes.Clear();
-            output.MergeAttributes(tagBuilder);
-            output.Content.SetHtmlContent(tagBuilder.InnerHtml);
-        }
+        output.ApplyComponentHtml(component);
     }
 }

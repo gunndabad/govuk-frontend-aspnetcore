@@ -1,125 +1,121 @@
-#nullable enable
-using System;
-using System.Collections.Generic;
 using GovUk.Frontend.AspNetCore.HtmlGeneration;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace GovUk.Frontend.AspNetCore.TagHelpers
+namespace GovUk.Frontend.AspNetCore.TagHelpers;
+
+internal class RadiosContext : FormGroupContext
 {
-    internal class RadiosContext : FormGroupContext
+    private bool _fieldsetIsOpen;
+    private readonly List<RadiosItemBase> _items = new List<RadiosItemBase>();
+
+    public RadiosContext(string? name, ModelExpression? aspFor)
     {
-        private bool _fieldsetIsOpen;
-        private readonly List<RadiosItemBase> _items = new List<RadiosItemBase>();
+        Name = name;
+        AspFor = aspFor;
+    }
 
-        public RadiosContext(string? name, ModelExpression? aspFor)
+    public string? Name { get; }
+
+    public ModelExpression? AspFor { get; }
+
+    public IReadOnlyCollection<RadiosItemBase> Items => _items;
+
+    public FormGroupFieldsetContext? Fieldset { get; private set; }
+
+    protected override string ErrorMessageTagName => RadiosTagHelper.ErrorMessageTagName;
+
+    protected string FieldsetTagName => RadiosFieldsetTagHelper.TagName;
+
+    protected string ItemTagName => RadiosItemTagHelper.TagName;
+
+    protected override string HintTagName => RadiosTagHelper.HintTagName;
+
+    protected override string LabelTagName => throw new NotSupportedException();
+
+    protected override string RootTagName => RadiosTagHelper.TagName;
+
+    public void AddItem(RadiosItemBase item)
+    {
+        Guard.ArgumentNotNull(nameof(item), item);
+
+        if (Fieldset != null)
         {
-            Name = name;
-            AspFor = aspFor;
+            throw new InvalidOperationException($"<{ItemTagName}> must be inside <{FieldsetTagName}>.");
         }
 
-        public string? Name { get; }
+        _items.Add(item);
+    }
 
-        public ModelExpression? AspFor { get; }
-
-        public IReadOnlyCollection<RadiosItemBase> Items => _items;
-
-        public FormGroupFieldsetContext? Fieldset { get; private set; }
-
-        protected override string ErrorMessageTagName => RadiosTagHelper.ErrorMessageTagName;
-
-        protected string FieldsetTagName => RadiosFieldsetTagHelper.TagName;
-
-        protected string ItemTagName => RadiosItemTagHelper.TagName;
-
-        protected override string HintTagName => RadiosTagHelper.HintTagName;
-
-        protected override string LabelTagName => throw new NotSupportedException();
-
-        protected override string RootTagName => RadiosTagHelper.TagName;
-
-        public void AddItem(RadiosItemBase item)
+    public void OpenFieldset()
+    {
+        if (_fieldsetIsOpen)
         {
-            Guard.ArgumentNotNull(nameof(item), item);
-
-            if (Fieldset != null)
-            {
-                throw new InvalidOperationException($"<{ItemTagName}> must be inside <{FieldsetTagName}>.");
-            }
-
-            _items.Add(item);
+            throw new InvalidOperationException($"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>.");
         }
 
-        public void OpenFieldset()
+        if (Fieldset != null)
         {
-            if (_fieldsetIsOpen)
-            {
-                throw new InvalidOperationException($"<{FieldsetTagName}> cannot be nested inside another <{FieldsetTagName}>.");
-            }
-
-            if (Fieldset != null)
-            {
-                throw ExceptionHelper.OnlyOneElementIsPermittedIn(FieldsetTagName, RootTagName);
-            }
-
-            if (Items.Count > 0 || Hint != null || ErrorMessage != null)
-            {
-                throw new InvalidOperationException($"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>.");
-            }
-
-            _fieldsetIsOpen = true;
+            throw ExceptionHelper.OnlyOneElementIsPermittedIn(FieldsetTagName, RootTagName);
         }
 
-        public void CloseFieldset(RadiosFieldsetContext fieldsetContext)
+        if (Items.Count > 0 || Hint != null || ErrorMessage != null)
         {
-            if (!_fieldsetIsOpen)
-            {
-                throw new InvalidOperationException("Fieldset has not been opened.");
-            }
-
-            _fieldsetIsOpen = false;
-            Fieldset = fieldsetContext;
+            throw new InvalidOperationException($"<{FieldsetTagName}> must be the only direct child of the <{RootTagName}>.");
         }
 
-        public override void SetErrorMessage(
-            string? visuallyHiddenText,
-            AttributeDictionary? attributes,
-            IHtmlContent? content)
+        _fieldsetIsOpen = true;
+    }
+
+    public void CloseFieldset(RadiosFieldsetContext fieldsetContext)
+    {
+        if (!_fieldsetIsOpen)
         {
-            if (Fieldset != null)
-            {
-                throw new InvalidOperationException($"<{ErrorMessageTagName}> must be inside <{FieldsetTagName}>.");
-            }
-
-            if (Items.Count > 0)
-            {
-                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(ErrorMessageTagName, ItemTagName);
-            }
-
-            base.SetErrorMessage(visuallyHiddenText, attributes, content);
+            throw new InvalidOperationException("Fieldset has not been opened.");
         }
 
-        public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
+        _fieldsetIsOpen = false;
+        Fieldset = fieldsetContext;
+    }
+
+    public override void SetErrorMessage(
+        string? visuallyHiddenText,
+        AttributeDictionary? attributes,
+        IHtmlContent? content)
+    {
+        if (Fieldset != null)
         {
-            if (Fieldset != null)
-            {
-                throw new InvalidOperationException($"<{HintTagName}> must be inside <{FieldsetTagName}>.");
-            }
-
-            if (Items.Count > 0)
-            {
-                throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(HintTagName, ItemTagName);
-            }
-
-            base.SetHint(attributes, content);
+            throw new InvalidOperationException($"<{ErrorMessageTagName}> must be inside <{FieldsetTagName}>.");
         }
 
-        public override void SetLabel(
-            bool isPageHeading,
-            AttributeDictionary? attributes,
-            IHtmlContent? content)
+        if (Items.Count > 0)
         {
-            throw new NotSupportedException();
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(ErrorMessageTagName, ItemTagName);
         }
+
+        base.SetErrorMessage(visuallyHiddenText, attributes, content);
+    }
+
+    public override void SetHint(AttributeDictionary? attributes, IHtmlContent? content)
+    {
+        if (Fieldset != null)
+        {
+            throw new InvalidOperationException($"<{HintTagName}> must be inside <{FieldsetTagName}>.");
+        }
+
+        if (Items.Count > 0)
+        {
+            throw ExceptionHelper.ChildElementMustBeSpecifiedBefore(HintTagName, ItemTagName);
+        }
+
+        base.SetHint(attributes, content);
+    }
+
+    public override void SetLabel(
+        bool isPageHeading,
+        AttributeDictionary? attributes,
+        IHtmlContent? content)
+    {
+        throw new NotSupportedException();
     }
 }

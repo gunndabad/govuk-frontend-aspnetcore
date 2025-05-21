@@ -16,8 +16,8 @@
 
 ### `<govuk-warning-text>`
 
-| Attribute | Type | Description |
-| --- | --- | --- |
+| Attribute            | Type     | Description                                                           |
+|----------------------|----------|-----------------------------------------------------------------------|
 | `icon-fallback-text` | `string` | *Required* The fallback text for the icon. Cannot be `null` or empty. |
 
 The content is the HTML to use within the generated component.
