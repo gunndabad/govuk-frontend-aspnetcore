@@ -25,7 +25,7 @@ public class CharacterCountTagHelper : TagHelper
     internal const string TagName = "govuk-character-count";
 
     private const string AspForAttributeName = "asp-for";
-    private const string AutocompleteAttributeName = "autocomplete";
+    private const string AutoCompleteAttributeName = "autocomplete";
     private const string CountMessageAttributesPrefix = "count-message-";
     private const string DisabledAttributeName = "disabled";
     private const string ForAttributeName = "for";
@@ -90,8 +90,8 @@ public class CharacterCountTagHelper : TagHelper
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
     /// </summary>
-    [HtmlAttributeName(AutocompleteAttributeName)]
-    public string? Autocomplete { get; set; }
+    [HtmlAttributeName(AutoCompleteAttributeName)]
+    public string? AutoComplete { get; set; }
 
     /// <summary>
     /// Additional attributes to add to the generated count message hint element.
@@ -282,9 +282,9 @@ public class CharacterCountTagHelper : TagHelper
         var attributes = new AttributeCollection(TextAreaAttributes);
         attributes.Remove("class", out var classes);
 
-        if (Autocomplete is not null)
+        if (AutoComplete is not null)
         {
-            attributes.Add("autocomplete", Autocomplete!);
+            attributes.Add("autocomplete", AutoComplete!);
         }
 
         if (Disabled == true)

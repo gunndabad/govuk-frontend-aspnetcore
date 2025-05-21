@@ -268,7 +268,7 @@ public class DateInputTagHelper : FormGroupTagHelperBase
             return new DateInputItem()
             {
                 Attributes = resolvedAttributes.ToAttributeDictionary(),
-                Autocomplete = contextItem?.Autocomplete,
+                Autocomplete = contextItem?.AutoComplete,
                 HaveError = resolvedItemHaveError,
                 Id = resolvedItemId,
                 InputMode = contextItem?.InputMode ?? ComponentGenerator.DateInputDefaultInputMode,

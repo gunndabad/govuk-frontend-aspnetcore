@@ -202,7 +202,7 @@ public class DateInputContextTests
         // Act
         context.SetItem(DateInputItemType.Month, new DateInputContextItem()
         {
-            Autocomplete = "off",
+            AutoComplete = "off",
             Id = "id",
             InputMode = "im",
             LabelContent = new HtmlString("Month"),
@@ -219,7 +219,7 @@ public class DateInputContextTests
             {
                 Assert.Equal(DateInputItemType.Month, kvp.Key);
                 var value = kvp.Value;
-                Assert.Equal("off", value.Autocomplete);
+                Assert.Equal("off", value.AutoComplete);
                 Assert.Equal("id", value.Id);
                 Assert.Equal("im", value.InputMode);
                 Assert.Equal("Month", value.LabelContent?.ToHtmlString());

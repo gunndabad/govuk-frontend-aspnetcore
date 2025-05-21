@@ -36,7 +36,7 @@ public class DateInputItemTagHelperTests
 
         var tagHelper = new DateInputItemTagHelper()
         {
-            Autocomplete = "off",
+            AutoComplete = "off",
             Id = "my-day",
             InputMode = "im",
             Name = "my_day",
@@ -52,7 +52,7 @@ public class DateInputItemTagHelperTests
             dateInputContext.Items.Values,
             item =>
             {
-                Assert.Equal("off", item.Autocomplete);
+                Assert.Equal("off", item.AutoComplete);
                 Assert.Equal("my-day", item.Id);
                 Assert.Equal("im", item.InputMode);
                 Assert.Equal("Label", item.LabelContent?.ToHtmlString());

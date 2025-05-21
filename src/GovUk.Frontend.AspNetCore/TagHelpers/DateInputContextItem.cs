@@ -10,7 +10,7 @@ internal class DateInputContextItem
     public IDictionary<string, string?>? LabelAttributes { get; set; }
     public int? Value { get; set; }
     public bool ValueSpecified { get; set; }
-    public string? Autocomplete { get; set; }
+    public string? AutoComplete { get; set; }
     public string? InputMode { get; set; }
     public string? Pattern { get; set; }
     public IDictionary<string, string?>? Attributes { get; set; }

@@ -39,7 +39,7 @@ public class TextInputTagHelper : TagHelper
 
     private const string AspForAttributeName = "asp-for";
     private const string AttributesPrefix = "input-";
-    private const string AutocompleteAttributeName = "autocomplete";
+    private const string AutoCompleteAttributeName = "autocomplete";
     private const string AutocapitalizeAttributeName = "autocapitalize";
     private const string DescribedByAttributeName = "described-by";
     private const string DisabledAttributeName = "disabled";
@@ -109,8 +109,8 @@ public class TextInputTagHelper : TagHelper
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>input</c> element.
     /// </summary>
-    [HtmlAttributeName(AutocompleteAttributeName)]
-    public string? Autocomplete { get; set; }
+    [HtmlAttributeName(AutoCompleteAttributeName)]
+    public string? AutoComplete { get; set; }
 
     /// <summary>
     /// One or more element IDs to add to the <c>aria-describedby</c> attribute of the generated <c>input</c> element.
@@ -276,7 +276,7 @@ public class TextInputTagHelper : TagHelper
             Suffix = textInputContext.Suffix,
             FormGroup = formGroupOptions,
             Classes = classes,
-            AutoComplete = Autocomplete,
+            AutoComplete = AutoComplete,
             Pattern = Pattern,
             Spellcheck = Spellcheck,
             AutoCapitalize = Autocapitalize,

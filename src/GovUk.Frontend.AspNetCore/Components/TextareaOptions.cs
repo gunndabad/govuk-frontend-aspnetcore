@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace GovUk.Frontend.AspNetCore.Components;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -16,7 +18,8 @@ public record TextareaOptions
     public ErrorMessageOptions? ErrorMessage { get; set; }
     public TextAreaOptionsFormGroup? FormGroup { get; set; }
     public TemplateString? Classes { get; set; }
-    public TemplateString? Autocomplete { get; set; }
+    [JsonPropertyName("autocomplete")]
+    public TemplateString? AutoComplete { get; set; }
     public AttributeCollection? Attributes { get; set; }
 }
 

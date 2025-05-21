@@ -18,7 +18,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
     internal const string LabelTagName = "govuk-textarea-label";
     internal const string TagName = "govuk-textarea";
 
-    private const string AutocompleteAttributeName = "autocomplete";
+    private const string AutoCompleteAttributeName = "autocomplete";
     private const string DisabledAttributeName = "disabled";
     private const string IdAttributeName = "id";
     private const string LabelClassAttributeName = "label-class";
@@ -45,8 +45,8 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>textarea</c> element.
     /// </summary>
-    [HtmlAttributeName(AutocompleteAttributeName)]
-    public string? Autocomplete { get; set; }
+    [HtmlAttributeName(AutoCompleteAttributeName)]
+    public string? AutoComplete { get; set; }
 
     /// <summary>
     /// Whether the <c>disabled</c> attribute should be added to the generated <c>textarea</c> element.
@@ -152,7 +152,7 @@ public class TextAreaTagHelper : FormGroupTagHelperBase
                 resolvedName,
                 Rows ?? ComponentGenerator.TextAreaDefaultRows,
                 DescribedBy,
-                Autocomplete,
+                AutoComplete,
                 Spellcheck,
                 Disabled ?? ComponentGenerator.TextAreaDefaultDisabled,
                 resolvedContent,

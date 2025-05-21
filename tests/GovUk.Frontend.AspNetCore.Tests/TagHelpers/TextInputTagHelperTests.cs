@@ -70,7 +70,7 @@ public class TextInputTagHelperTests
             Id = id,
             DescribedBy = describedBy,
             Name = name,
-            Autocomplete = autocomplete,
+            AutoComplete = autocomplete,
             InputMode = inputMode,
             Pattern = pattern,
             Spellcheck = spellcheck,

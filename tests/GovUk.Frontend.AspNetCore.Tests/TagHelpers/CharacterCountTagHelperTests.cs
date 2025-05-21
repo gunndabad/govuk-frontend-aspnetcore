@@ -75,7 +75,7 @@ public class CharacterCountTagHelperTests
             Id = id,
             Name = name,
             Rows = rows,
-            Autocomplete = autocomplete,
+            AutoComplete = autocomplete,
             CountMessageAttributes = new Dictionary<string, string?>()
             {
                 { "class", countMessageClasses },

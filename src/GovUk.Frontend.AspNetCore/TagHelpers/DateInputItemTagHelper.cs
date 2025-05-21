@@ -23,7 +23,7 @@ public class DateInputItemTagHelper : TagHelper
     internal const string MonthTagName = "govuk-date-input-month";
     internal const string YearTagName = "govuk-date-input-year";
 
-    private const string AutocompleteAttributeName = "autocomplete";
+    private const string AutoCompleteAttributeName = "autocomplete";
     private const string IdAttributeName = "id";
     private const string InputModeAttributeName = "inputmode";
     private const string NameAttributeName = "name";
@@ -43,8 +43,8 @@ public class DateInputItemTagHelper : TagHelper
     /// <summary>
     /// The <c>autocomplete</c> attribute for the generated <c>input</c> element.
     /// </summary>
-    [HtmlAttributeName(AutocompleteAttributeName)]
-    public string? Autocomplete { get; set; }
+    [HtmlAttributeName(AutoCompleteAttributeName)]
+    public string? AutoComplete { get; set; }
 
     /// <summary>
     /// The <c>id</c> attribute for the generated <c>input</c> element.
@@ -123,7 +123,7 @@ public class DateInputItemTagHelper : TagHelper
         var itemContext = new DateInputContextItem()
         {
             Attributes = output.Attributes.ToAttributeDictionary(),
-            Autocomplete = Autocomplete,
+            AutoComplete = AutoComplete,
             Id = Id,
             InputMode = InputMode,
             LabelContent = dateInputItemContext.Label?.Content,
