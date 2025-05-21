@@ -23,11 +23,12 @@ on:
 
 jobs:
   build:
-    name: "Build & package"
-    runs-on: ubuntu-latest
-    env:
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: "Build ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
@@ -64,11 +65,14 @@ jobs:
           just integration-tests --configuration Release --no-build
 
       - name: Package
+        id: package
+        if: matrix.os == 'ubuntu-latest'
         run: just pack --configuration Release --no-build
         env:
           MINVERBUILDMETADATA: ${{ env.GITHUB_RUN_NUMBER }}
 
       - name: Publish package artifact
+        if: steps.package.conclusion == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: GovUk.Frontend.AspNetCore.nupkg
