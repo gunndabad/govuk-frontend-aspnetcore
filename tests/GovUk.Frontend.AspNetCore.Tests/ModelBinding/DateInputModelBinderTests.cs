@@ -104,6 +104,7 @@ public class DateInputModelBinderTests
     [InlineData("1", "13", "2020")]
     [InlineData("1", "4", "0")]
     [InlineData("1", "4", "-1")]
+    [InlineData("1", "4", "15")]
     [InlineData("1", "4", "10000")]
     public async Task BindModelAsync_MissingOrInvalidComponents_FailsBinding(string day, string month, string year)
     {

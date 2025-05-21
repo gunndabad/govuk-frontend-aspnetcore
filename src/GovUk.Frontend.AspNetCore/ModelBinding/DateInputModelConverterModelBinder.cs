@@ -131,7 +131,11 @@ internal class DateInputModelConverterModelBinder : IModelBinder
         {
             errors |= DateInputParseErrors.MissingYear;
         }
-        else if (!TryParseYear(year, out parsedYear) || parsedYear < 1 || parsedYear > 9999)
+        else if (year.Length != 4)
+        {
+            errors |= DateInputParseErrors.InvalidYear;
+        }
+        else if (!TryParseYear(year, out parsedYear))
         {
             errors |= DateInputParseErrors.InvalidYear;
         }
