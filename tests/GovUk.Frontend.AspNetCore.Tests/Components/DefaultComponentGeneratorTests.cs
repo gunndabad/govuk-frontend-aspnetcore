@@ -150,6 +150,9 @@ public class DefaultComponentGeneratorTests
                     return $"&#x{encodedDecimal:X};";
                 });
 
+        // Fixtures contain \n but the current environment may not use that
+        expectedHtml = expectedHtml.Replace("\n", Environment.NewLine);
+
         if (amendExpectedHtml is not null)
         {
             expectedHtml = amendExpectedHtml(expectedHtml);
