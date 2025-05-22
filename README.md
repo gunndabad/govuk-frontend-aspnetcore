@@ -174,3 +174,14 @@ This package serves the GDS Frontend assets (stylesheets, javascript, fonts) ins
 ## Validators
 
 - [Max words validator](docs/validation/maxwords.md)
+
+
+## Building the library
+
+Install [just](https://github.com/casey/just?tab=readme-ov-file#installation) and make sure it's in your `PATH` then run:
+
+```shell
+just install-tools
+```
+
+From there you can run `just build` to build the library and `just test` to run the tests.
