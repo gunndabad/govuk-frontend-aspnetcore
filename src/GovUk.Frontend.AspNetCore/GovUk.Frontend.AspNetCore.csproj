@@ -24,6 +24,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <Target Name="InstallGovUkFrontendPackage" Condition="!Exists('$(GovUkFrontendLibrary)')">
+    <Message Text="Restoring govuk-frontend@$(GovUkFrontendVersion)" />
+    <RemoveDir Directories="$(_NpmLibDirectory)" />
+    <MakeDir Directories="$(_NpmLibDirectory)" />
+    <Exec Command="dotnet libman init -p jsdelivr -d $(_NpmLibDirectory)" WorkingDirectory="$(_NpmLibDirectory)" LogStandardErrorAsError="true" />
+    <Exec Command="dotnet libman install govuk-frontend@$(GovUkFrontendVersion)" WorkingDirectory="$(_NpmLibDirectory)" LogStandardErrorAsError="true" />
+  </Target>
+
   <ItemGroup>
     <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.Tests" />
     <InternalsVisibleTo Include="GovUk.Frontend.AspNetCore.ConformanceTests" />
