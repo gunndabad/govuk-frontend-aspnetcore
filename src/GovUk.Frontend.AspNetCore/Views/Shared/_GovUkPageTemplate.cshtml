@@ -1,6 +1,6 @@
 ﻿@using GovUk.Frontend.AspNetCore
 @using Microsoft.Extensions.Options
-@inject IOptions<GovUk.Frontend.AspNetCore.GovUkFrontendAspNetCoreOptions> OptionsAccessor
+@inject IOptions<GovUkFrontendAspNetCoreOptions> OptionsAccessor
 @addTagHelper *, GovUk.Frontend.AspNetCore
 @{
     if (ViewBag.AssetPath is null && OptionsAccessor.Value.StaticAssetsContentPath is null)
@@ -47,7 +47,7 @@
     }
     else
     {
-        @Html.GovUkFrontendStyleImports(appendVersion: true)
+        @Html.GovUkFrontendStyleImports()
     }
 
     <meta property="og:image" content="@(ogImage)">
@@ -88,7 +88,7 @@
     }
     else
     {
-        @Html.GovUkFrontendScriptImports(cspNonce, appendVersion: true)
+        @Html.GovUkFrontendScriptImports(cspNonce)
     }
 </body>
 

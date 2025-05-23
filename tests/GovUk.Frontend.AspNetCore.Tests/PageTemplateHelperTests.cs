@@ -77,7 +77,7 @@ public class PageTemplateHelperTests
         var result = pageTemplateHelper.GetCspScriptHashes();
 
         // Assert
-        Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo=' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", result);
+        Assert.Equal("'sha256-zOCo0thG2tzE19sia5AxxXH9Fkh4uQ+2OJ80SdH04gg=' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='", result);
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class PageTemplateHelperTests
         var result = pageTemplateHelper.GetInitScriptCspHash();
 
         // Assert
-        Assert.Equal("'sha256-l5MP+9OapFXGxjKMNj/89ExAW2TvAFFoADrbsmtSJXo='", result);
+        Assert.Equal("'sha256-zOCo0thG2tzE19sia5AxxXH9Fkh4uQ+2OJ80SdH04gg='", result);
     }
 
     [Fact]

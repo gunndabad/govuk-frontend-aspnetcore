@@ -18,7 +18,7 @@ internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
 
     public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
     {
-        Guard.ArgumentNotNull(nameof(next), next);
+        ArgumentNullException.ThrowIfNull(next);
 
         return app =>
         {

@@ -70,17 +70,15 @@ public static class HtmlHelperExtensions
     /// </remarks>
     /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
     /// <param name="cspNonce">The CSP nonce attribute to be added to the generated <c>script</c> tag.</param>
-    /// <param name="appendVersion">Whether the file version should be appended to the <c>src</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>script</c> tag.</returns>
     public static IHtmlContent GovUkFrontendScriptImports(
         this IHtmlHelper htmlHelper,
-        string? cspNonce = null,
-        bool appendVersion = true)
+        string? cspNonce = null)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
         var httpContext = htmlHelper.ViewContext.HttpContext;
         var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
-        return pageTemplateHelper.GenerateScriptImports(httpContext.Request.PathBase, cspNonce, appendVersion);
+        return pageTemplateHelper.GenerateScriptImports(httpContext.Request.PathBase, cspNonce);
     }
 
     /// <summary>
@@ -90,13 +88,12 @@ public static class HtmlHelperExtensions
     /// The contents of this property should be inserted in the <c>head</c> tag.
     /// </remarks>
     /// <param name="htmlHelper">The <see cref="IHtmlHelper"/>.</param>
-    /// <param name="appendVersion">Whether the file version should be appended to the <c>href</c> attribute.</param>
     /// <returns><see cref="IHtmlContent"/> containing the <c>link</c> tags.</returns>
-    public static IHtmlContent GovUkFrontendStyleImports(this IHtmlHelper htmlHelper, bool appendVersion = true)
+    public static IHtmlContent GovUkFrontendStyleImports(this IHtmlHelper htmlHelper)
     {
         ArgumentNullException.ThrowIfNull(htmlHelper);
         var httpContext = htmlHelper.ViewContext.HttpContext;
         var pageTemplateHelper = httpContext.RequestServices.GetRequiredService<PageTemplateHelper>();
-        return pageTemplateHelper.GenerateStyleImports(httpContext.Request.PathBase, appendVersion);
+        return pageTemplateHelper.GenerateStyleImports(httpContext.Request.PathBase);
     }
 }

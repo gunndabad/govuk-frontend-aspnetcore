@@ -29,7 +29,7 @@
     <RemoveDir Directories="$(_NpmLibDirectory)" />
     <MakeDir Directories="$(_NpmLibDirectory)" />
     <Exec Command="dotnet libman init -p jsdelivr -d $(_NpmLibDirectory)" WorkingDirectory="$(_NpmLibDirectory)" LogStandardErrorAsError="true" />
-    <Exec Command="dotnet libman install govuk-frontend@$(GovUkFrontendVersion)" WorkingDirectory="$(_NpmLibDirectory)" LogStandardErrorAsError="true" />
+    <Exec Command="dotnet libman install govuk-frontend@$(GovUkFrontendVersion) --files dist/govuk/**" WorkingDirectory="$(_NpmLibDirectory)" LogStandardErrorAsError="true" />
   </Target>
 
   <ItemGroup>
@@ -60,10 +60,10 @@
 
   <ItemGroup>
     <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.css">
-      <LinkedName>all.min.css</LinkedName>
+      <LinkedName>govuk-frontend-$(GovUkFrontendVersion).min.css</LinkedName>
     </_CompiledAssets>
     <_CompiledAssets Include="$(GovUkFrontendLibrary)govuk-frontend.min.js">
-      <LinkedName>all.min.js</LinkedName>
+      <LinkedName>govuk-frontend-$(GovUkFrontendVersion).min.js</LinkedName>
     </_CompiledAssets>
 
     <EmbeddedResource Include="$(GovUkFrontendLibrary)assets\**\*">

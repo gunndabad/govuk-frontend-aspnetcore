@@ -30,6 +30,10 @@ The `asp-for` attribute is now obsolete; the `for` attribute should be used in i
 The `TryCreateModelFromErrors` method on `DateInputModelConverter` has been removed;
 model binding when there are parse errors is no longer supported.
 
+#### `appendVersion`
+The `appendVersion` parameter on the `GenerateScriptImports()` and `GenerateStyleImports()` methods on `PageTemplateHelper` has been removed.
+Similarly, `appendVersion` parameter on the `GovUkFrontendScriptImports()` and `GovUkFrontendStyleImports()` extension methods on `IHtmlHelper` has been removed.
+
 ### Fixes
 
 #### Source map errors

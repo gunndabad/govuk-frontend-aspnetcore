@@ -5,18 +5,18 @@ namespace GovUk.Frontend.AspNetCore.IntegrationTests;
 public class StartupFilterTests
 {
     [Theory]
-    [InlineData("all.min.css")]
-    [InlineData("all.min.js")]
+    [InlineData("govuk-frontend-%version%.min.css")]
+    [InlineData("govuk-frontend-%version%.min.js")]
     public async Task HostsCompiledAssets(string fileName)
     {
         // Arrange
         await using var fixture = new StartupFilterTestFixture(services =>
         {
-            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.CompiledContentPath = "/govuk");
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.CompiledContentPath = "");
         });
         await fixture.InitializeAsync();
 
-        var resolvedPath = $"/govuk/{fileName}";
+        var resolvedPath = $"/{fileName.Replace("%version%", GovUkFrontendInfo.Version)}";
 
         var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
 

@@ -25,41 +25,50 @@ internal class RewriteCompiledAssetsMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (_optionsAccessor.Value.CompiledContentPath is PathString compiledContentPath &&
-            _optionsAccessor.Value.StaticAssetsContentPath is PathString staticAssetsPath)
+        var version = PageTemplateHelper.GovUkFrontendVersion;
+
+        if (_optionsAccessor.Value.CompiledContentPath is PathString compiledContentPath)
         {
-            if (context.Request.Path == compiledContentPath + "/all.min.css")
+            var cssFileName = $"govuk-frontend-{version}.min.css";
+            var jsFileName = $"govuk-frontend-{version}.min.js";
+
+            if (context.Request.Path == compiledContentPath + "/" + cssFileName)
             {
-                var fileInfo = _fileProvider.GetFileInfo("all.min.css");
-
-                using var readStream = fileInfo.CreateReadStream();
-                using var streamReader = new StreamReader(readStream);
-                var css = await streamReader.ReadToEndAsync();
-
-                css = css.Replace("url(/assets/", $"url({context.Request.PathBase}{staticAssetsPath}/");
+                var css = await GetFileContentsAsync(cssFileName);
                 css = css.Replace("/*# sourceMappingURL=govuk-frontend.min.css.map */", "");
 
+                if (_optionsAccessor.Value.StaticAssetsContentPath is PathString staticAssetsPath)
+                {
+                    css = css.Replace("url(/assets/", $"url({context.Request.PathBase}{staticAssetsPath}/");
+                }
+
                 context.Response.Headers.ContentType = new Microsoft.Extensions.Primitives.StringValues("text/css");
+                //context.Response.Headers.CacheControl = "Cache-Control: max-age=31536000, immutable";
                 await context.Response.WriteAsync(css);
                 return;
             }
 
-            if (context.Request.Path == compiledContentPath + "/all.min.js")
+            if (context.Request.Path == compiledContentPath + "/" + jsFileName)
             {
-                var fileInfo = _fileProvider.GetFileInfo("all.min.js");
-
-                using var readStream = fileInfo.CreateReadStream();
-                using var streamReader = new StreamReader(readStream);
-                var css = await streamReader.ReadToEndAsync();
-
-                css = css.Replace("//# sourceMappingURL=govuk-frontend.min.js.map", "");
+                var js = await GetFileContentsAsync(jsFileName);
+                js = js.Replace("//# sourceMappingURL=govuk-frontend.min.js.map", "");
 
                 context.Response.Headers.ContentType = new Microsoft.Extensions.Primitives.StringValues("text/javascript");
-                await context.Response.WriteAsync(css);
+                //context.Response.Headers.CacheControl = "Cache-Control: max-age=31536000, immutable";
+                await context.Response.WriteAsync(js);
                 return;
             }
         }
 
         await _next(context);
+    }
+
+    private async Task<string> GetFileContentsAsync(string fileName)
+    {
+        var fileInfo = _fileProvider.GetFileInfo(fileName);
+
+        await using var readStream = fileInfo.CreateReadStream();
+        using var streamReader = new StreamReader(readStream);
+        return await streamReader.ReadToEndAsync();
     }
 }

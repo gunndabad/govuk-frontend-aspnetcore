@@ -26,7 +26,7 @@ public class GovUkFrontendAspNetCoreOptions
         GenerateErrorSummaries = GenerateErrorSummariesOptions.PrependToMainElement;
         PrependErrorToTitle = true;
         StaticAssetsContentPath = "/assets";
-        CompiledContentPath = "/govuk";
+        CompiledContentPath = "";
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class GovUkFrontendAspNetCoreOptions
     /// </summary>
     /// <remarks>
     /// <para>If this is <c>null</c> the compiled assets will not be served.</para>
-    /// <para>The default is <c>/govuk</c>.</para>
+    /// <para>If the is <c></c> (the default) the compiled assets will be served at the root.</para>
     /// </remarks>
     public PathString? CompiledContentPath { get; set; }
 
