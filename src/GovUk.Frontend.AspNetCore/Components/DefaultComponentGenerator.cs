@@ -49,7 +49,7 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
             }
 
             // If the object is an Options class, convert its property names to camel case
-            if (v.GetType().Namespace?.StartsWith(GetType().Namespace!) == true)
+            if (v.GetType().Namespace?.StartsWith(GetType().Namespace!) == true && !v.GetType().IsArray)
             {
                 return new ConvertNamesFromJsonTypeInfoObjectValue(v, optionsJsonSerializerOptions);
             }
@@ -121,7 +121,6 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
     public virtual ValueTask<IHtmlContent> GenerateErrorSummaryAsync(ErrorSummaryOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        options = options with { ErrorList = options.ErrorList?.ToList() };  // TEMP workaround issue with arrays
         return RenderTemplateAsync("error-summary", options);
     }
 
@@ -206,7 +205,6 @@ internal partial class DefaultComponentGenerator : IComponentGenerator
     public virtual ValueTask<IHtmlContent> GeneratePaginationAsync(PaginationOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
-        options = options with { Items = options.Items?.ToList() };  // TEMP workaround issue with arrays
         return RenderTemplateAsync("pagination", options);
     }
 
