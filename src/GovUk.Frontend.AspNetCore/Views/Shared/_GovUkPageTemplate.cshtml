@@ -10,12 +10,13 @@
     }
 
     var assetPath = ViewBag.AssetPath ?? Context.Request.PathBase + OptionsAccessor.Value.StaticAssetsContentPath!.Value;
+    var assetVersionQueryParam = $"{RewriteCompiledAssetsMiddleware.StaticAssetVersionQueryParamName}={GovUkFrontendInfo.Version}";
 
     var cspNonce = ViewBag.CspNonce as string ?? OptionsAccessor.Value.GetCspNonceForRequest?.Invoke(ViewContext.HttpContext);
 
     var htmlLang = ViewBag.HtmlLang ?? "en";
     var themeColor = ViewBag.ThemeColor ?? "#0b0c0c";
-    var ogImage = ViewBag.OpengraphImageUrl ?? $"{Context.Request.Scheme}://{Context.Request.Host}{assetPath}/images/govuk-opengraph-image.png";
+    var ogImage = ViewBag.OpengraphImageUrl ?? $"{Context.Request.Scheme}://{Context.Request.Host}{assetPath}/images/govuk-opengraph-image.png?{assetVersionQueryParam}";
 }
 <!DOCTYPE html>
 <html lang="@htmlLang" class="govuk-template @ViewBag.HtmlClasses">
@@ -34,11 +35,11 @@
     }
     else
     {
-        <link rel="icon" sizes="48x48" href="@(assetPath)/images/favicon.ico">
-        <link rel="icon" sizes="any" href="@(assetPath)/images/favicon.svg" type="image/svg+xml">
-        <link rel="mask-icon" href="@(assetPath)/images/govuk-icon-mask.svg" color="@themeColor">
-        <link rel="apple-touch-icon" href="@(assetPath)/images/govuk-icon-180.png">
-        <link rel="manifest" href="@(assetPath)/manifest.json">
+        <link rel="icon" sizes="48x48" href="@(assetPath)/images/favicon.ico?@assetVersionQueryParam">
+        <link rel="icon" sizes="any" href="@(assetPath)/images/favicon.svg?@assetVersionQueryParam" type="image/svg+xml">
+        <link rel="mask-icon" href="@(assetPath)/images/govuk-icon-mask.svg?@assetVersionQueryParam" color="@themeColor">
+        <link rel="apple-touch-icon" href="@(assetPath)/images/govuk-icon-180.png?@assetVersionQueryParam">
+        <link rel="manifest" href="@(assetPath)/manifest.json?@assetVersionQueryParam">
     }
 
     @if (IsSectionDefined("Head"))
