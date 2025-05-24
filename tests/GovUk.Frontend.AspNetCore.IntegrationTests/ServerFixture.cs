@@ -64,6 +64,7 @@ public class ServerFixture : IAsyncLifetime
         {
             webBuilder
                 .UseUrls(BaseUrl)
+                .ConfigureLogging(logging => logging.SetMinimumLevel(LogLevel.Warning))
                 .ConfigureServices((context, services) => ConfigureServices(services))
                 .Configure(Configure);
         })
