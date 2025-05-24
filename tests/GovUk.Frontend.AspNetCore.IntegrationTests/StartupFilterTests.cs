@@ -12,11 +12,12 @@ public class StartupFilterTests
         // Arrange
         await using var fixture = new StartupFilterTestFixture(services =>
         {
-            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.CompiledContentPath = "");
+            services.Configure<GovUkFrontendAspNetCoreOptions>(
+                options => options.CompiledContentPath = "/non-standard-compiled");
         });
         await fixture.InitializeAsync();
 
-        var resolvedPath = $"/{fileName.Replace("%version%", GovUkFrontendInfo.Version)}";
+        var resolvedPath = $"/non-standard-compiled/{fileName.Replace("%version%", GovUkFrontendInfo.Version)}";
 
         var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
 
@@ -25,6 +26,7 @@ public class StartupFilterTests
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotEmpty(response.Headers.GetValues("Cache-Control"));
     }
 
     [Theory]
@@ -36,11 +38,12 @@ public class StartupFilterTests
         // Arrange
         await using var fixture = new StartupFilterTestFixture(services =>
         {
-            services.Configure<GovUkFrontendAspNetCoreOptions>(options => options.StaticAssetsContentPath = "/assets");
+            services.Configure<GovUkFrontendAspNetCoreOptions>(
+                options => options.StaticAssetsContentPath = "/non-standard-asset-location");
         });
         await fixture.InitializeAsync();
 
-        var resolvedPath = $"/assets/{fileName}";
+        var resolvedPath = $"/non-standard-asset-location/{fileName}";
 
         var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
 
@@ -49,6 +52,33 @@ public class StartupFilterTests
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task RewritesAssetPathInCssFile()
+    {
+        // Arrange
+        await using var fixture = new StartupFilterTestFixture(services =>
+        {
+            services.Configure<GovUkFrontendAspNetCoreOptions>(options =>
+            {
+                options.CompiledContentPath = "/non-standard-compiled";
+                options.StaticAssetsContentPath = "/non-standard-assets";
+            });
+        });
+        await fixture.InitializeAsync();
+
+        var resolvedPath = $"/non-standard-compiled/govuk-frontend-{GovUkFrontendInfo.Version}.min.css";
+
+        var request = new HttpRequestMessage(HttpMethod.Get, resolvedPath);
+
+        // Act
+        var response = await fixture.HttpClient.SendAsync(request);
+
+        // Assert
+        var css = await response.Content.ReadAsStringAsync();
+        Assert.Contains("/non-standard-assets/", css);
+        Assert.DoesNotContain("/assets", css);
     }
 }
 

@@ -46,7 +46,17 @@ internal class GovUkFrontendAspNetCoreStartupFilter : IStartupFilter
                 app.UseStaticFiles(new StaticFileOptions()
                 {
                     FileProvider = fileProvider,
-                    RequestPath = assetsContentPath
+                    RequestPath = assetsContentPath,
+                    OnPrepareResponse = ctx =>
+                    {
+                        var hasVersionQueryParam =
+                            ctx.Context.Request.Query[RewriteCompiledAssetsMiddleware.StaticAssetVersionQueryParamName].Count != 0;
+
+                        if (hasVersionQueryParam)
+                        {
+                            ctx.Context.Response.Headers.CacheControl = "Cache-Control: max-age=31536000, immutable";
+                        }
+                    }
                 });
             }
 
